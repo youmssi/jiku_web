@@ -10,7 +10,13 @@ export const ROUTES = {
   LOGIN: "/login",
   REGISTER: "/register",
   DASHBOARD: "/dashboard",
+  EVENTS: "/events",
+  EVENTS_NEW: "/events/new",
 } as const;
+
+export function eventEditRoute(id: string): string {
+  return `/events/${id}/edit`;
+}
 
 export const COOKIES = {
   ACCESS_TOKEN: "jiku_access_token",
