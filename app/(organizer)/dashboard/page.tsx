@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { ROUTES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { apiBaseUrl } from "@/lib/api";
 import { getAccessToken } from "@/lib/auth";
@@ -34,7 +35,7 @@ async function authedGet<T>(path: string): Promise<T | null> {
 export default async function DashboardPage() {
   const me = await authedGet<CurrentUser>("/auth/me");
   if (!me) {
-    redirect("/login");
+    redirect(ROUTES.LOGIN);
   }
   const branding = await authedGet<Branding>("/branding");
   const displayName = branding?.displayName ?? "your organization";
