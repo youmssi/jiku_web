@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ROUTES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
@@ -55,8 +56,16 @@ export default async function DashboardPage() {
           </Button>
         </form>
       </div>
-      <div className="mt-8 rounded-lg border border-dashed p-10 text-center text-muted-foreground">
-        Your events and guest management tools will appear here.
+      <div className="mt-8 flex flex-col items-start gap-4 rounded-lg border p-8">
+        <div>
+          <h2 className="text-lg font-medium">Events</h2>
+          <p className="text-sm text-muted-foreground">
+            Create events, configure them, and invite your guests.
+          </p>
+        </div>
+        <Button asChild>
+          <Link href={ROUTES.EVENTS}>Manage events</Link>
+        </Button>
       </div>
     </div>
   );
