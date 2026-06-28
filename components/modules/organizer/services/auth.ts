@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { apiBaseUrl } from "@/lib/api";
+import { ROUTES } from "@/lib/constants";
 import { setAuthCookies, clearAuthCookies, type AuthTokens } from "@/lib/auth";
 import {
   loginSchema,
@@ -31,7 +32,7 @@ export async function registerAction(input: RegisterInput): Promise<ActionResult
   }
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
-  redirect("/dashboard");
+  redirect(ROUTES.DASHBOARD);
 }
 
 export async function loginAction(input: LoginInput): Promise<ActionResult> {
@@ -56,10 +57,10 @@ export async function loginAction(input: LoginInput): Promise<ActionResult> {
   }
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
-  redirect("/dashboard");
+  redirect(ROUTES.DASHBOARD);
 }
 
 export async function logoutAction(): Promise<void> {
   await clearAuthCookies();
-  redirect("/login");
+  redirect(ROUTES.LOGIN);
 }

@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -15,6 +14,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { ROUTES } from "@/lib/constants";
 import { loginAction } from "@/components/modules/organizer/services/auth";
 import {
   loginSchema,
@@ -24,10 +32,14 @@ import {
 export function LoginForm() {
   const [formError, setFormError] = useState<string | null>(null);
   const {
-    register,
+    control,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginInput>({ resolver: zodResolver(loginSchema) });
+    formState: { isSubmitting },
+  } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
+    mode: "onTouched",
+    defaultValues: { email: "", password: "" },
+  });
 
   async function onSubmit(values: LoginInput) {
     setFormError(null);
@@ -41,48 +53,66 @@ export function LoginForm() {
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="text-2xl">Sign in</CardTitle>
-        <CardDescription>Welcome back. Sign in to manage your events.</CardDescription>
+        <CardDescription>
+          Welcome back. Sign in to manage your events.
+        </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <CardContent className="space-y-4">
-          {formError ? (
-            <p
-              role="alert"
-              className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300"
-            >
-              {formError}
-            </p>
-          ) : null}
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" autoComplete="email" {...register("email")} />
-            {errors.email ? (
-              <p className="text-sm text-red-600">{errors.email.message}</p>
+        <CardContent>
+          <FieldGroup>
+            {formError ? (
+              <Alert variant="destructive">
+                <AlertTitle>We couldn&apos;t sign you in</AlertTitle>
+                <AlertDescription>{formError}</AlertDescription>
+              </Alert>
             ) : null}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              {...register("password")}
+            <Controller
+              control={control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="email"
+                    autoComplete="email"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : null}
+                </Field>
+              )}
             />
-            {errors.password ? (
-              <p className="text-sm text-red-600">{errors.password.message}</p>
-            ) : null}
-          </div>
+            <Controller
+              control={control}
+              name="password"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="password"
+                    autoComplete="current-password"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : null}
+                </Field>
+              )}
+            />
+          </FieldGroup>
         </CardContent>
         <CardFooter className="flex flex-col gap-3">
           <Button type="submit" className="w-full" disabled={isSubmitting}>
             {isSubmitting ? "Signing in…" : "Sign in"}
           </Button>
-          <p className="text-sm text-muted-foreground">
-            New to Jikū?{" "}
-            <Link href="/register" className="font-medium underline underline-offset-4">
-              Create an account
-            </Link>
-          </p>
+          <FieldDescription className="text-center">
+            New to Jikū? <Link href={ROUTES.REGISTER}>Create an account</Link>
+          </FieldDescription>
         </CardFooter>
       </form>
     </Card>

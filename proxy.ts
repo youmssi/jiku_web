@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { ACCESS_COOKIE } from "@/lib/auth-constants";
+import { COOKIES, ROUTES } from "@/lib/constants";
 
 /**
  * Guards organizer routes: an unauthenticated visitor to the dashboard is sent to
@@ -8,9 +8,9 @@ import { ACCESS_COOKIE } from "@/lib/auth-constants";
  * it; this is the cheap first gate.
  */
 export function proxy(request: NextRequest): NextResponse {
-  const hasSession = Boolean(request.cookies.get(ACCESS_COOKIE)?.value);
+  const hasSession = Boolean(request.cookies.get(COOKIES.ACCESS_TOKEN)?.value);
   if (!hasSession) {
-    const loginUrl = new URL("/login", request.url);
+    const loginUrl = new URL(ROUTES.LOGIN, request.url);
     return NextResponse.redirect(loginUrl);
   }
   return NextResponse.next();

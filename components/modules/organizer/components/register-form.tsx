@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -15,6 +14,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { ROUTES } from "@/lib/constants";
 import { registerAction } from "@/components/modules/organizer/services/auth";
 import {
   registerSchema,
@@ -24,10 +32,14 @@ import {
 export function RegisterForm() {
   const [formError, setFormError] = useState<string | null>(null);
   const {
-    register,
+    control,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<RegisterInput>({ resolver: zodResolver(registerSchema) });
+    formState: { isSubmitting },
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
+    mode: "onTouched",
+    defaultValues: { name: "", email: "", password: "" },
+  });
 
   async function onSubmit(values: RegisterInput) {
     setFormError(null);
@@ -41,55 +53,85 @@ export function RegisterForm() {
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="text-2xl">Create your organizer account</CardTitle>
-        <CardDescription>Start sending branded invitations in minutes.</CardDescription>
+        <CardDescription>
+          Start sending branded invitations in minutes.
+        </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <CardContent className="space-y-4">
-          {formError ? (
-            <p
-              role="alert"
-              className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300"
-            >
-              {formError}
-            </p>
-          ) : null}
-          <div className="space-y-2">
-            <Label htmlFor="name">Organization name</Label>
-            <Input id="name" autoComplete="organization" {...register("name")} />
-            {errors.name ? (
-              <p className="text-sm text-red-600">{errors.name.message}</p>
+        <CardContent>
+          <FieldGroup>
+            {formError ? (
+              <Alert variant="destructive">
+                <AlertTitle>We couldn&apos;t create your account</AlertTitle>
+                <AlertDescription>{formError}</AlertDescription>
+              </Alert>
             ) : null}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" autoComplete="email" {...register("email")} />
-            {errors.email ? (
-              <p className="text-sm text-red-600">{errors.email.message}</p>
-            ) : null}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              {...register("password")}
+            <Controller
+              control={control}
+              name="name"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Organization name</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    autoComplete="organization"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : null}
+                </Field>
+              )}
             />
-            {errors.password ? (
-              <p className="text-sm text-red-600">{errors.password.message}</p>
-            ) : null}
-          </div>
+            <Controller
+              control={control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="email"
+                    autoComplete="email"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : null}
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="password"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="password"
+                    autoComplete="new-password"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  <FieldDescription>At least 8 characters.</FieldDescription>
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : null}
+                </Field>
+              )}
+            />
+          </FieldGroup>
         </CardContent>
         <CardFooter className="flex flex-col gap-3">
           <Button type="submit" className="w-full" disabled={isSubmitting}>
             {isSubmitting ? "Creating account…" : "Create account"}
           </Button>
-          <p className="text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link href="/login" className="font-medium underline underline-offset-4">
-              Sign in
-            </Link>
-          </p>
+          <FieldDescription className="text-center">
+            Already have an account? <Link href={ROUTES.LOGIN}>Sign in</Link>
+          </FieldDescription>
         </CardFooter>
       </form>
     </Card>

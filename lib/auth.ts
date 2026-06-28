@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { ACCESS_COOKIE, REFRESH_COOKIE } from "@/lib/auth-constants";
+import { COOKIES } from "@/lib/constants";
 
 const ACCESS_MAX_AGE = 60 * 60; // 1 hour, matching the backend access token
 const REFRESH_MAX_AGE = 60 * 60 * 24 * 7; // 7 days, matching the backend refresh token
@@ -17,14 +17,14 @@ export interface AuthTokens {
 export async function setAuthCookies(tokens: AuthTokens): Promise<void> {
   const store = await cookies();
   const secure = process.env.NODE_ENV === "production";
-  store.set(ACCESS_COOKIE, tokens.accessToken, {
+  store.set(COOKIES.ACCESS_TOKEN, tokens.accessToken, {
     httpOnly: true,
     secure,
     sameSite: "lax",
     path: "/",
     maxAge: ACCESS_MAX_AGE,
   });
-  store.set(REFRESH_COOKIE, tokens.refreshToken, {
+  store.set(COOKIES.REFRESH_TOKEN, tokens.refreshToken, {
     httpOnly: true,
     secure,
     sameSite: "lax",
@@ -35,11 +35,11 @@ export async function setAuthCookies(tokens: AuthTokens): Promise<void> {
 
 export async function clearAuthCookies(): Promise<void> {
   const store = await cookies();
-  store.delete(ACCESS_COOKIE);
-  store.delete(REFRESH_COOKIE);
+  store.delete(COOKIES.ACCESS_TOKEN);
+  store.delete(COOKIES.REFRESH_TOKEN);
 }
 
 export async function getAccessToken(): Promise<string | undefined> {
   const store = await cookies();
-  return store.get(ACCESS_COOKIE)?.value;
+  return store.get(COOKIES.ACCESS_TOKEN)?.value;
 }
