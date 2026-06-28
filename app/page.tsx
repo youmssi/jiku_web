@@ -11,12 +11,18 @@ export default function Home() {
           Event invitations, ticketing, RSVP, and check-in — all in one
           white-label platform.
         </p>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap items-center justify-center gap-4">
           <Link
-            href="/dashboard"
+            href="/register"
             className="rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
           >
-            Go to Dashboard
+            Get started
+          </Link>
+          <Link
+            href="/login"
+            className="rounded-full border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-900"
+          >
+            Sign in
           </Link>
         </div>
       </main>
