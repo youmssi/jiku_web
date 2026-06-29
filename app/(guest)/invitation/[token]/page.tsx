@@ -1,22 +1,67 @@
-interface InvitationPageProps {
+import { apiBaseUrl } from "@/lib/api";
+import { RsvpActions } from "@/components/modules/guest/components/rsvp-actions";
+
+interface RsvpView {
+  eventName: string;
+  eventWhen: string | null;
+  eventLocation: string | null;
+  organizerName: string;
+  primaryColor: string;
+  logoUrl: string | null;
+  guestName: string;
+  status: string;
+  ticketCode: string | null;
+}
+
+interface PageProps {
   params: Promise<{ token: string }>;
 }
 
-export default async function InvitationPage({ params }: InvitationPageProps) {
+export default async function InvitationPage({ params }: PageProps) {
   const { token } = await params;
+  const response = await fetch(`${apiBaseUrl()}/rsvp/${token}`, { cache: "no-store" });
+
+  if (!response.ok) {
+    return (
+      <div className="flex flex-1 items-center justify-center px-4 py-16">
+        <div className="max-w-md text-center">
+          <h1 className="text-xl font-semibold">Invitation unavailable</h1>
+          <p className="mt-2 text-muted-foreground">
+            This invitation link is invalid or has expired.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const rsvp = (await response.json()) as RsvpView;
 
   return (
-    <div className="flex flex-1 items-center justify-center px-4">
-      <div className="max-w-md text-center">
-        <h2 className="text-2xl font-semibold text-zinc-800 dark:text-zinc-200">
-          Event Invitation
-        </h2>
-        <p className="mt-2 text-zinc-500 dark:text-zinc-400">
-          Your invitation details and RSVP options will appear here.
-        </p>
-        <p className="mt-6 text-xs text-zinc-400 dark:text-zinc-500">
-          Invitation: {token.slice(0, 12)}...
-        </p>
+    <div className="flex flex-1 items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md rounded-2xl border bg-card p-8 text-center shadow-sm">
+        {rsvp.logoUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={rsvp.logoUrl}
+            alt={rsvp.organizerName}
+            className="mx-auto mb-4 h-12 object-contain"
+          />
+        ) : null}
+        <p className="text-sm text-muted-foreground">{rsvp.organizerName} invites you to</p>
+        <h1 className="mt-1 text-2xl font-semibold">{rsvp.eventName}</h1>
+        <div className="mt-3 space-y-1 text-sm text-muted-foreground">
+          {rsvp.eventWhen ? <p>📅 {rsvp.eventWhen}</p> : null}
+          {rsvp.eventLocation ? <p>📍 {rsvp.eventLocation}</p> : null}
+        </div>
+        <p className="mt-4 text-sm">Hi {rsvp.guestName},</p>
+        <div className="mt-6">
+          <RsvpActions
+            token={token}
+            status={rsvp.status}
+            primaryColor={rsvp.primaryColor}
+            ticketCode={rsvp.ticketCode}
+          />
+        </div>
       </div>
     </div>
   );
