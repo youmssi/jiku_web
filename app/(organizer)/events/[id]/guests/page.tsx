@@ -12,7 +12,7 @@ import {
 import { GuestImport } from "@/components/modules/organizer/components/guest-import";
 import { SendInvitations } from "@/components/modules/organizer/components/send-invitations";
 import { serverFetch } from "@/lib/api-server";
-import { eventEditRoute } from "@/lib/constants";
+import { eventDashboardRoute, eventEditRoute } from "@/lib/constants";
 
 interface Guest {
   id: string;
@@ -58,9 +58,14 @@ export default async function GuestsPage({ params }: PageProps) {
     <div className="mx-auto w-full max-w-4xl px-4 py-10">
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Guests</h1>
-        <Button variant="outline" asChild>
-          <Link href={eventEditRoute(id)}>Back to event</Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" asChild>
+            <Link href={eventDashboardRoute(id)}>Dashboard</Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href={eventEditRoute(id)}>Back to event</Link>
+          </Button>
+        </div>
       </div>
 
       <div className="mt-6 flex flex-col gap-4 rounded-lg border p-4">
