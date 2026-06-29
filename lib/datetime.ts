@@ -5,6 +5,36 @@ function pad(value: number): string {
 }
 
 /**
+ * Formats a UTC ISO instant for display in the given event timezone (never the
+ * viewer's). Returns an empty string for null input.
+ */
+export function formatDateTimeInZone(utcInstant: string | null, timeZone: string): string {
+  if (!utcInstant) {
+    return "";
+  }
+  return new Intl.DateTimeFormat("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone,
+  }).format(new Date(utcInstant));
+}
+
+/** Formats just the time-of-day of a UTC instant in the given event timezone. */
+export function formatTimeInZone(utcInstant: string | null, timeZone: string): string {
+  if (!utcInstant) {
+    return "";
+  }
+  return new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone,
+  }).format(new Date(utcInstant));
+}
+
+/**
  * Converts a `datetime-local` value (a wall-clock with no zone), interpreted in
  * the given IANA timezone, to a UTC ISO instant. Returns null for empty input.
  */
