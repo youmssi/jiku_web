@@ -34,6 +34,36 @@ export interface AttendanceResponse {
   confirmed: number;
 }
 
+/** One guest in the pre-synced offline roster (mirrors the backend RosterEntry). */
+export interface RosterEntry {
+  guestId: string;
+  name: string;
+  email: string | null;
+  phoneNumber: string | null;
+  rsvpStatus: string;
+  ticketCode: string | null;
+  ticketStatus: string | null;
+  checkedInAt: string | null;
+  checkedInBy: string | null;
+}
+
+/** A check-in captured offline, awaiting sync. */
+export interface QueuedCheckIn {
+  id: string;
+  ticketCode: string;
+  scannedAt: string;
+  guestName: string | null;
+}
+
+/** Per-item reconciliation result returned by the sync endpoint. */
+export interface SyncResultEntry {
+  ticketCode: string;
+  outcome: CheckInOutcome;
+  guestName: string | null;
+  checkedInAt: string | null;
+  checkedInBy: string | null;
+}
+
 export interface ValidatorContext {
   eventName: string;
   startDateTime: string | null;

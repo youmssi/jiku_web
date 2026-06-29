@@ -2,8 +2,8 @@
 
 import { useCallback, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { formatDateTimeInZone } from "@/lib/datetime";
-import { useCheckIn } from "@/components/modules/validator/hooks/use-checkin";
+import { formatDateTimeInZone, formatTimeInZone } from "@/lib/datetime";
+import { useOfflineCheckIn } from "@/components/modules/validator/hooks/use-offline-checkin";
 import { CheckInResult } from "@/components/modules/validator/components/checkin-result";
 import { GuestSearch } from "@/components/modules/validator/components/guest-search";
 import type { ValidatorContext } from "@/components/modules/validator/checkin-types";
@@ -34,20 +34,26 @@ interface ValidatorConsoleProps {
 /**
  * Validator check-in console: a camera QR scanner as the primary action with a
  * one-tap search fallback, a live attendance counter, and large glanceable
- * feedback after each check-in. Built on the PWA shell (JIKU-9) for resilience on
- * degraded venue networks.
+ * feedback after each check-in. Pre-sync the roster to keep checking guests in
+ * offline (JIKU-25); queued check-ins flush automatically on reconnection.
  */
 export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
   const [mode, setMode] = useState<Mode>("scan");
+  const [isSyncing, setIsSyncing] = useState(false);
   const {
     result,
     attendance,
     isSubmitting,
     linkInvalid,
+    isOnline,
+    lastSyncedAt,
+    pendingCount,
+    roster,
     checkInByCode,
     checkInByGuest,
+    syncForOffline,
     clearResult,
-  } = useCheckIn(token, { checkedIn: context.checkedIn, confirmed: context.confirmed });
+  } = useOfflineCheckIn(token, { checkedIn: context.checkedIn, confirmed: context.confirmed });
   const lockRef = useRef(false);
 
   const handleDetect = useCallback(
@@ -73,6 +79,15 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
     clearResult();
   }, [clearResult]);
 
+  const onSync = useCallback(async () => {
+    setIsSyncing(true);
+    try {
+      await syncForOffline();
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [syncForOffline]);
+
   const eventWhen = formatDateTimeInZone(context.startDateTime, context.timezone);
 
   return (
@@ -97,6 +112,32 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
         </p>
       </header>
 
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 px-5 py-2 text-xs">
+        <span className="flex items-center gap-2">
+          <span
+            className={`inline-block h-2 w-2 rounded-full ${
+              isOnline ? "bg-green-500" : "bg-amber-500"
+            }`}
+          />
+          <span className="text-zinc-400">
+            {isOnline ? "Online" : "Offline"}
+            {pendingCount > 0 ? ` · ${pendingCount} queued` : ""}
+          </span>
+        </span>
+        <button
+          type="button"
+          onClick={onSync}
+          disabled={isSyncing || !isOnline}
+          className="rounded-md bg-zinc-800 px-3 py-1.5 font-medium text-zinc-200 disabled:opacity-50"
+        >
+          {isSyncing
+            ? "Syncing…"
+            : lastSyncedAt
+              ? `Synced ${formatTimeInZone(lastSyncedAt, context.timezone)} · re-sync`
+              : "Sync for offline use"}
+        </button>
+      </div>
+
       <div className="grid grid-cols-2 gap-1 px-5 pt-4">
         <ModeButton active={mode === "scan"} onClick={() => setMode("scan")}>
           Scan QR
@@ -115,7 +156,13 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
             </p>
           </>
         ) : (
-          <GuestSearch token={token} onSelect={handleSelect} isSubmitting={isSubmitting} />
+          <GuestSearch
+            token={token}
+            onSelect={handleSelect}
+            isSubmitting={isSubmitting}
+            offline={!isOnline}
+            roster={roster}
+          />
         )}
       </main>
 

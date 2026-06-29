@@ -5,6 +5,9 @@ import type {
   AttendanceResponse,
   CheckInResponse,
   GuestMatch,
+  QueuedCheckIn,
+  RosterEntry,
+  SyncResultEntry,
 } from "@/components/modules/validator/checkin-types";
 
 /**
@@ -78,4 +81,25 @@ export async function fetchAttendance(
   token: string,
 ): Promise<ServiceResult<AttendanceResponse>> {
   return call<AttendanceResponse>(`${token}/stats`, { method: "GET" });
+}
+
+export async function fetchRoster(
+  token: string,
+): Promise<ServiceResult<RosterEntry[]>> {
+  return call<RosterEntry[]>(`${token}/roster`, { method: "GET" });
+}
+
+export async function submitSync(
+  token: string,
+  items: QueuedCheckIn[],
+): Promise<ServiceResult<SyncResultEntry[]>> {
+  const payload = items.map((item) => ({
+    ticketCode: item.ticketCode,
+    scannedAt: item.scannedAt,
+  }));
+  return call<SyncResultEntry[]>(`${token}/sync`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ items: payload }),
+  });
 }
