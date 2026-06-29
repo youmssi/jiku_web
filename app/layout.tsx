@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
 
 const dmSansHeading = DM_Sans({subsets:['latin'],variable:'--font-heading'});
 
@@ -19,6 +20,20 @@ export const metadata: Metadata = {
   title: "Jikū — Event Invitations & Ticketing",
   description:
     "White-label platform for event invitation, ticketing, RSVP, and check-in.",
+  applicationName: "Jikū",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Jikū",
+  },
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/apple-icon-180.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0F172A",
 };
 
 export default function RootLayout({
@@ -31,7 +46,10 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, dmSansHeading.variable)}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <ServiceWorkerRegister />
+      </body>
     </html>
   );
 }
