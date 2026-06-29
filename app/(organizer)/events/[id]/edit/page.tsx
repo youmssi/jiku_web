@@ -1,10 +1,13 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { EventWizard } from "@/components/modules/organizer/components/event-wizard";
 import type {
   EventFormValues,
   InvitationChannel,
 } from "@/components/modules/organizer/event-schemas";
 import { serverFetch } from "@/lib/api-server";
+import { eventGuestsRoute } from "@/lib/constants";
 import { utcToLocalInput } from "@/lib/datetime";
 
 interface EventResponse {
@@ -54,7 +57,12 @@ export default async function EditEventPage({ params }: PageProps) {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl justify-center px-4 py-10">
+    <div className="mx-auto w-full max-w-2xl px-4 py-10">
+      <div className="mb-4 flex justify-end">
+        <Button variant="outline" asChild>
+          <Link href={eventGuestsRoute(event.id)}>Manage guests</Link>
+        </Button>
+      </div>
       <EventWizard eventId={event.id} initialValues={values} status={event.status} />
     </div>
   );
