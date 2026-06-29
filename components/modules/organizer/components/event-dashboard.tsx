@@ -20,6 +20,17 @@ export function EventDashboard({ eventId, initial }: EventDashboardProps) {
 
   return (
     <div className="flex flex-col gap-8">
+      {data.deliverability.warn ? (
+        <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200">
+          <p className="font-medium">Some invitations aren&apos;t being delivered</p>
+          <p className="mt-1">
+            About {data.deliverability.bounceRatePercent}% of your recent emails bounced.
+            Check your imported email addresses — repeated bounces can hurt delivery for
+            everyone.
+          </p>
+        </div>
+      ) : null}
+
       <section>
         <SectionHeading>Before the event</SectionHeading>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
