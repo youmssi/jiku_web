@@ -26,6 +26,10 @@ export function eventDashboardRoute(id: string): string {
   return `/events/${id}/dashboard`;
 }
 
+export function eventGuestsExportRoute(id: string): string {
+  return `/api/events/${id}/guests/export`;
+}
+
 export function invitationRoute(token: string): string {
   return `/invitation/${token}`;
 }

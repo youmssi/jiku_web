@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EventDashboard } from "@/components/modules/organizer/components/event-dashboard";
 import { serverFetch } from "@/lib/api-server";
-import { eventGuestsRoute } from "@/lib/constants";
+import { eventGuestsExportRoute, eventGuestsRoute } from "@/lib/constants";
 import type { DashboardData } from "@/components/modules/organizer/dashboard-types";
 
 interface PageProps {
@@ -34,9 +34,16 @@ export default async function EventDashboardPage({ params }: PageProps) {
           <h1 className="text-2xl font-semibold">{data.eventName}</h1>
           <Badge variant="secondary">{data.eventStatus}</Badge>
         </div>
-        <Button variant="outline" asChild>
-          <Link href={eventGuestsRoute(id)}>Guests</Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" asChild>
+            <a href={eventGuestsExportRoute(id)} download>
+              Export guest list
+            </a>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href={eventGuestsRoute(id)}>Guests</Link>
+          </Button>
+        </div>
       </div>
 
       <div className="mt-8">
