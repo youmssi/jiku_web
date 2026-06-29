@@ -18,6 +18,14 @@ export function eventEditRoute(id: string): string {
   return `/events/${id}/edit`;
 }
 
+export function eventGuestsRoute(id: string): string {
+  return `/events/${id}/guests`;
+}
+
+export function invitationRoute(token: string): string {
+  return `/invitation/${token}`;
+}
+
 export const COOKIES = {
   ACCESS_TOKEN: "jiku_access_token",
   REFRESH_TOKEN: "jiku_refresh_token",
