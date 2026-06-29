@@ -26,6 +26,10 @@ export function invitationRoute(token: string): string {
   return `/invitation/${token}`;
 }
 
+export function ticketRoute(token: string): string {
+  return `/invitation/${token}/ticket`;
+}
+
 export const COOKIES = {
   ACCESS_TOKEN: "jiku_access_token",
   REFRESH_TOKEN: "jiku_refresh_token",

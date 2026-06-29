@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { ticketRoute } from "@/lib/constants";
 import {
   confirmRsvpAction,
   declineRsvpAction,
@@ -39,7 +41,9 @@ export function RsvpActions({ token, status, primaryColor, ticketCode }: RsvpAct
           You&apos;re confirmed. See you there!
         </p>
         {ticketCode ? (
-          <p className="rounded-md bg-muted px-3 py-2 font-mono text-sm">Ticket: {ticketCode}</p>
+          <Button asChild style={{ backgroundColor: primaryColor }} className="text-white">
+            <Link href={ticketRoute(token)}>View your ticket</Link>
+          </Button>
         ) : null}
         <Button variant="outline" onClick={() => act("decline")} disabled={isPending}>
           {isPending ? "Updating…" : "I can't make it anymore"}
