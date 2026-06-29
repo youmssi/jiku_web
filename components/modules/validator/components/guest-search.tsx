@@ -1,28 +1,58 @@
 "use client";
 
+import { useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useGuestSearch } from "@/components/modules/validator/hooks/use-guest-search";
+import type { RosterEntry } from "@/components/modules/validator/checkin-types";
 
 interface GuestSearchProps {
   token: string;
   onSelect: (guestId: string) => void;
   isSubmitting: boolean;
+  /** When offline, search filters the pre-synced roster locally instead of the server. */
+  offline: boolean;
+  roster: RosterEntry[];
 }
+
+interface Row {
+  guestId: string;
+  name: string;
+  email: string | null;
+  phoneNumber: string | null;
+  ticketStatus: string | null;
+}
+
+const MIN_QUERY = 2;
 
 /**
  * Manual check-in fallback for the no-ticket case: search by name, email or phone
- * and tap a guest to check them in. One tap from the scanner view, never buried.
+ * and tap a guest to check them in. One tap from the scanner view. Offline, it
+ * filters the locally cached roster for instant results with no network (JIKU-25).
  */
-export function GuestSearch({ token, onSelect, isSubmitting }: GuestSearchProps) {
-  const { query, setQuery, results, isSearching } = useGuestSearch(token);
+export function GuestSearch({ token, onSelect, isSubmitting, offline, roster }: GuestSearchProps) {
+  const search = useGuestSearch(token, !offline);
+
+  const localResults = useMemo<Row[]>(() => {
+    const term = search.query.trim().toLowerCase();
+    if (!offline || term.length < MIN_QUERY) return [];
+    return roster.filter((entry) =>
+      [entry.name, entry.email ?? "", entry.phoneNumber ?? ""].some((field) =>
+        field.toLowerCase().includes(term),
+      ),
+    );
+  }, [offline, roster, search.query]);
+
+  const results: Row[] = offline ? localResults : search.results;
+  const isSearching = offline ? false : search.isSearching;
+  const hasQuery = search.query.trim().length >= MIN_QUERY;
 
   return (
     <div className="flex w-full max-w-sm flex-col gap-3">
       <Input
         autoFocus
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
+        value={search.query}
+        onChange={(event) => search.setQuery(event.target.value)}
         placeholder="Search by name, email or phone"
         className="h-12 border-zinc-700 bg-zinc-900 text-zinc-100 placeholder:text-zinc-500"
       />
@@ -33,7 +63,7 @@ export function GuestSearch({ token, onSelect, isSubmitting }: GuestSearchProps)
         </div>
       ) : null}
 
-      {!isSearching && query.trim().length >= 2 && results.length === 0 ? (
+      {!isSearching && hasQuery && results.length === 0 ? (
         <p className="py-6 text-center text-sm text-zinc-400">No matching guests.</p>
       ) : null}
 
