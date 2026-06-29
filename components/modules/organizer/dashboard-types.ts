@@ -9,9 +9,15 @@ export interface DashboardData {
   pending: number;
   checkedIn: number;
   entrances: EntranceCount[];
+  deliverability: DeliverabilityFlag;
 }
 
 export interface EntranceCount {
   label: string;
   checkedIn: number;
+}
+
+export interface DeliverabilityFlag {
+  bounceRatePercent: number;
+  warn: boolean;
 }
