@@ -12,6 +12,9 @@ async function submit(token: string, action: "confirm" | "decline"): Promise<{ e
   if (response.status === 409) {
     return { error: "This event is full." };
   }
+  if (response.status === 410) {
+    return { error: "This event has been cancelled." };
+  }
   if (!response.ok) {
     return { error: "Something went wrong. Please try again." };
   }

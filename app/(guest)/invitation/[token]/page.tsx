@@ -11,6 +11,7 @@ interface RsvpView {
   guestName: string;
   status: string;
   ticketCode: string | null;
+  eventStatus: string | null;
 }
 
 interface PageProps {
@@ -55,12 +56,23 @@ export default async function InvitationPage({ params }: PageProps) {
         </div>
         <p className="mt-4 text-sm">Hi {rsvp.guestName},</p>
         <div className="mt-6">
-          <RsvpActions
-            token={token}
-            status={rsvp.status}
-            primaryColor={rsvp.primaryColor}
-            ticketCode={rsvp.ticketCode}
-          />
+          {rsvp.eventStatus === "CANCELLED" ? (
+            <div className="rounded-lg bg-muted px-4 py-3 text-sm">
+              <p className="font-medium">This event has been cancelled.</p>
+              <p className="mt-1 text-muted-foreground">
+                Your ticket is no longer valid and there is nothing you need to
+                do. If the event is rescheduled, you will receive a new
+                invitation.
+              </p>
+            </div>
+          ) : (
+            <RsvpActions
+              token={token}
+              status={rsvp.status}
+              primaryColor={rsvp.primaryColor}
+              ticketCode={rsvp.ticketCode}
+            />
+          )}
         </div>
       </div>
     </div>
