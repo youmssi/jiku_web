@@ -30,6 +30,8 @@ export function eventGuestsExportRoute(id: string): string {
   return `/api/events/${id}/guests/export`;
 }
 
+export const PRIVACY_ROUTE = "/privacy";
+
 export function invitationRoute(token: string): string {
   return `/invitation/${token}`;
 }

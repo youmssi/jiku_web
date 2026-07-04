@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { apiBaseUrl } from "@/lib/api";
-import { invitationRoute } from "@/lib/constants";
+import { invitationRoute, PRIVACY_ROUTE } from "@/lib/constants";
 import { TicketCard } from "@/components/modules/guest/components/ticket-card";
 import { DataDeletion } from "@/components/modules/guest/components/data-deletion";
 
@@ -69,6 +69,11 @@ export default async function TicketPage({ params }: PageProps) {
       />
       <div className="w-full max-w-sm">
         <DataDeletion token={token} erased={rsvp.erased} />
+        <p className="mt-4 text-xs text-muted-foreground">
+          <Link href={PRIVACY_ROUTE} className="underline underline-offset-4">
+            How your data is used
+          </Link>
+        </p>
       </div>
     </div>
   );
