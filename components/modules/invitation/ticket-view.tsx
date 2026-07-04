@@ -4,6 +4,7 @@ import { invitationRoute, PRIVACY_ROUTE } from "@/lib/constants";
 import { TicketCard } from "@/components/modules/invitation/ticket-card";
 import { DataDeletion } from "@/components/modules/invitation/data-deletion";
 import type { RsvpView } from "@/components/modules/invitation/schema";
+import { StateMessage } from "@/components/shared/state-message";
 
 /** Guest-facing ticket screen, shown once the guest has confirmed. */
 export async function TicketView({ params }: { params: Promise<{ token: string }> }) {
@@ -12,12 +13,10 @@ export async function TicketView({ params }: { params: Promise<{ token: string }
 
   if (!response.ok) {
     return (
-      <Centered>
-        <h1 className="text-xl font-semibold">Ticket unavailable</h1>
-        <p className="mt-2 text-muted-foreground">
-          This invitation link is invalid or has expired.
-        </p>
-      </Centered>
+      <StateMessage
+        title="Ticket unavailable"
+        description="This invitation link is invalid or has expired."
+      />
     );
   }
 
@@ -25,18 +24,18 @@ export async function TicketView({ params }: { params: Promise<{ token: string }
 
   if (rsvp.status !== "CONFIRMED" || !rsvp.ticketCode) {
     return (
-      <Centered>
-        <h1 className="text-xl font-semibold">No ticket yet</h1>
-        <p className="mt-2 text-muted-foreground">
-          Confirm your attendance to get your ticket.
-        </p>
-        <Link
-          href={invitationRoute(token)}
-          className="mt-4 inline-block text-sm font-medium underline underline-offset-4"
-        >
-          Back to your invitation
-        </Link>
-      </Centered>
+      <StateMessage
+        title="No ticket yet"
+        description="Confirm your attendance to get your ticket."
+        action={
+          <Link
+            href={invitationRoute(token)}
+            className="text-sm font-medium underline underline-offset-4"
+          >
+            Back to your invitation
+          </Link>
+        }
+      />
     );
   }
 
@@ -60,14 +59,6 @@ export async function TicketView({ params }: { params: Promise<{ token: string }
           </Link>
         </p>
       </div>
-    </div>
-  );
-}
-
-function Centered({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex flex-1 items-center justify-center px-4 py-16">
-      <div className="max-w-md text-center">{children}</div>
     </div>
   );
 }

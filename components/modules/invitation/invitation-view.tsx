@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { publicFetch } from "@/lib/api-server";
 import { PRIVACY_ROUTE } from "@/lib/constants";
+import { StateMessage } from "@/components/shared/state-message";
 import { RsvpActions } from "@/components/modules/invitation/rsvp-actions";
 import { DataDeletion } from "@/components/modules/invitation/data-deletion";
 import type { RsvpView } from "@/components/modules/invitation/schema";
@@ -12,14 +13,10 @@ export async function InvitationView({ params }: { params: Promise<{ token: stri
 
   if (!response.ok) {
     return (
-      <div className="flex flex-1 items-center justify-center px-4 py-16">
-        <div className="max-w-md text-center">
-          <h1 className="text-xl font-semibold">Invitation unavailable</h1>
-          <p className="mt-2 text-muted-foreground">
-            This invitation link is invalid or has expired.
-          </p>
-        </div>
-      </div>
+      <StateMessage
+        title="Invitation unavailable"
+        description="This invitation link is invalid or has expired."
+      />
     );
   }
 
