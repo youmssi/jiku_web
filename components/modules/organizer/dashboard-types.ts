@@ -10,6 +10,12 @@ export interface DashboardData {
   checkedIn: number;
   entrances: EntranceCount[];
   deliverability: DeliverabilityFlag;
+  dataRetention: DataRetentionNotice | null;
+}
+
+/** Advance notice that guest data will be anonymized under the retention policy. */
+export interface DataRetentionNotice {
+  anonymizeOn: string;
 }
 
 export interface EntranceCount {
