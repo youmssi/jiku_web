@@ -14,6 +14,7 @@ import { SendInvitations } from "@/components/modules/guest/send-invitations";
 import { serverFetch } from "@/lib/api-server";
 import { eventDashboardRoute, eventEditRoute } from "@/lib/constants";
 import type { Guest, Invitation } from "@/components/modules/guest/schema";
+import { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS } from "@/lib/channels";
 
 function StatusBadge({ status }: { status: string | null }) {
   if (!status) {
@@ -63,14 +64,18 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Contact</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>WhatsApp</TableHead>
+              {INVITATION_CHANNELS.map((channel) => (
+                <TableHead key={channel}>{INVITATION_CHANNEL_LABELS[channel]}</TableHead>
+              ))}
             </TableRow>
           </TableHeader>
           <TableBody>
             {guests.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center text-muted-foreground">
+                <TableCell
+                  colSpan={2 + INVITATION_CHANNELS.length}
+                  className="text-center text-muted-foreground"
+                >
                   No guests yet. Import a CSV to begin.
                 </TableCell>
               </TableRow>
@@ -83,12 +88,11 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
                   <TableCell className="text-muted-foreground">
                     {guest.email ?? guest.phoneNumber}
                   </TableCell>
-                  <TableCell>
-                    <StatusBadge status={statusFor(guest.id, "EMAIL")} />
-                  </TableCell>
-                  <TableCell>
-                    <StatusBadge status={statusFor(guest.id, "WHATSAPP")} />
-                  </TableCell>
+                  {INVITATION_CHANNELS.map((channel) => (
+                    <TableCell key={channel}>
+                      <StatusBadge status={statusFor(guest.id, channel)} />
+                    </TableCell>
+                  ))}
                 </TableRow>
               ))
             )}

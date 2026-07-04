@@ -1,6 +1,6 @@
 "use server";
 
-import { apiBaseUrl } from "@/lib/api";
+import { publicFetch } from "@/lib/api-server";
 import { reportApiError } from "@/lib/action-result";
 import type {
   AttendanceResponse,
@@ -30,10 +30,7 @@ async function call<T>(
 ): Promise<ServiceResult<T>> {
   let response: Response;
   try {
-    response = await fetch(`${apiBaseUrl()}/checkin/${path}`, {
-      ...init,
-      cache: "no-store",
-    });
+    response = await publicFetch(`/checkin/${path}`, init);
   } catch {
     return { error: "Network error. Check your connection and try again." };
   }

@@ -1,17 +1,18 @@
 import { z } from "zod";
 import type { Schema } from "@/lib/api-contract";
+import {
+  INVITATION_CHANNELS,
+  INVITATION_CHANNEL_LABELS,
+  type InvitationChannel,
+} from "@/lib/channels";
 
 /** Full event (backend EventResponse); the list endpoint returns the same shape. */
 export type EventResponse = Schema<"EventResponse">;
 export type EventListItem = EventResponse;
 
-export const INVITATION_CHANNELS = ["EMAIL", "WHATSAPP"] as const;
-export type InvitationChannel = (typeof INVITATION_CHANNELS)[number];
-
-export const INVITATION_CHANNEL_LABELS: Record<InvitationChannel, string> = {
-  EMAIL: "Email",
-  WHATSAPP: "WhatsApp",
-};
+// Channels are a cross-module concern (see lib/channels); re-exported here so event
+// consumers keep importing them from the event contract.
+export { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS, type InvitationChannel };
 
 /** Curated timezone list focused on the target markets, plus a few common ones. */
 export const TIMEZONES = [

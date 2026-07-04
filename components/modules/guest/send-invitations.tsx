@@ -6,11 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { sendInvitationsAction } from "@/components/modules/guest/guest.service";
-
-const CHANNELS = [
-  { value: "EMAIL", label: "Email" },
-  { value: "WHATSAPP", label: "WhatsApp" },
-] as const;
+import { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS } from "@/lib/channels";
 
 export function SendInvitations({ eventId }: { eventId: string }) {
   const [channels, setChannels] = useState<string[]>(["EMAIL"]);
@@ -37,15 +33,15 @@ export function SendInvitations({ eventId }: { eventId: string }) {
 
   return (
     <div className="flex flex-wrap items-center gap-4">
-      {CHANNELS.map((channel) => (
-        <div key={channel.value} className="flex items-center gap-2">
+      {INVITATION_CHANNELS.map((channel) => (
+        <div key={channel} className="flex items-center gap-2">
           <Checkbox
-            id={`channel-${channel.value}`}
-            checked={channels.includes(channel.value)}
-            onCheckedChange={(checked) => toggle(channel.value, checked === true)}
+            id={`channel-${channel}`}
+            checked={channels.includes(channel)}
+            onCheckedChange={(checked) => toggle(channel, checked === true)}
           />
-          <Label htmlFor={`channel-${channel.value}`} className="font-normal">
-            {channel.label}
+          <Label htmlFor={`channel-${channel}`} className="font-normal">
+            {INVITATION_CHANNEL_LABELS[channel]}
           </Label>
         </div>
       ))}

@@ -2,33 +2,22 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ROUTES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
-import { apiBaseUrl } from "@/lib/api";
-import { getAccessToken } from "@/lib/auth";
+import { serverFetch } from "@/lib/api-server";
 import { logoutAction } from "@/components/modules/identity/identity.service";
 import type { CurrentUser, Branding } from "@/components/modules/identity/schema";
 
-async function authedGet<T>(path: string): Promise<T | null> {
-  const token = await getAccessToken();
-  if (!token) {
-    return null;
-  }
-  const response = await fetch(`${apiBaseUrl()}${path}`, {
-    headers: { Authorization: `Bearer ${token}` },
-    cache: "no-store",
-  });
-  if (!response.ok) {
-    return null;
-  }
-  return (await response.json()) as T;
+async function fetchJson<T>(path: string): Promise<T | null> {
+  const response = await serverFetch(path);
+  return response.ok ? ((await response.json()) as T) : null;
 }
 
 /** Signed-in organizer landing screen. */
 export async function OrganizerHome() {
-  const me = await authedGet<CurrentUser>("/auth/me");
+  const me = await fetchJson<CurrentUser>("/auth/me");
   if (!me) {
     redirect(ROUTES.LOGIN);
   }
-  const branding = await authedGet<Branding>("/branding");
+  const branding = await fetchJson<Branding>("/branding");
   const displayName = branding?.displayName ?? "your organization";
 
   return (

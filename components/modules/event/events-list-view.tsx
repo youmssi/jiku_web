@@ -5,19 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { serverFetch } from "@/lib/api-server";
 import { ROUTES, eventEditRoute } from "@/lib/constants";
+import { formatDateTimeInZone } from "@/lib/datetime";
 import type { EventListItem } from "@/components/modules/event/schema";
-
-function formatStart(event: EventListItem): string {
-  if (!event.startDateTime) {
-    return "No date set";
-  }
-  const formatted = new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: event.timezone,
-  }).format(new Date(event.startDateTime));
-  return `${formatted} (${event.timezone})`;
-}
 
 /** Organizer's event list. */
 export async function EventsListView() {
@@ -48,7 +37,11 @@ export async function EventsListView() {
                 <CardHeader className="flex flex-row items-start justify-between gap-4">
                   <div className="space-y-1">
                     <CardTitle className="text-base">{event.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground">{formatStart(event)}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {event.startDateTime
+                        ? formatDateTimeInZone(event.startDateTime, event.timezone)
+                        : "No date set"}
+                    </p>
                   </div>
                   <Badge variant={event.status === "PUBLISHED" ? "default" : "secondary"}>
                     {event.status}

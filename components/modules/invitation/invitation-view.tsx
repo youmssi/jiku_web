@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { apiBaseUrl } from "@/lib/api";
+import { publicFetch } from "@/lib/api-server";
 import { PRIVACY_ROUTE } from "@/lib/constants";
 import { RsvpActions } from "@/components/modules/invitation/rsvp-actions";
 import { DataDeletion } from "@/components/modules/invitation/data-deletion";
@@ -8,7 +8,7 @@ import type { RsvpView } from "@/components/modules/invitation/schema";
 /** Guest-facing invitation screen: event details and RSVP actions. */
 export async function InvitationView({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
-  const response = await fetch(`${apiBaseUrl()}/rsvp/${token}`, { cache: "no-store" });
+  const response = await publicFetch(`/rsvp/${token}`);
 
   if (!response.ok) {
     return (

@@ -14,3 +14,12 @@ export async function serverFetch(path: string, init?: RequestInit): Promise<Res
   }
   return fetch(`${apiBaseUrl()}${path}`, { ...init, headers, cache: "no-store" });
 }
+
+/**
+ * Server-side fetch to a public backend endpoint (no authentication): guest RSVP,
+ * validator check-in and the auth endpoints. Mirrors `serverFetch` (base URL +
+ * no-store default) without attaching a bearer token.
+ */
+export function publicFetch(path: string, init?: RequestInit): Promise<Response> {
+  return fetch(`${apiBaseUrl()}${path}`, { ...init, cache: "no-store" });
+}

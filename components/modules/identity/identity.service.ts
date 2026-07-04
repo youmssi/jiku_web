@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { apiBaseUrl } from "@/lib/api";
+import { publicFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 import { setAuthCookies, clearAuthCookies, type AuthTokens } from "@/lib/auth";
 import { type ActionResult, fail, reportApiError } from "@/lib/action-result";
@@ -17,11 +17,10 @@ export async function registerAction(input: RegisterInput): Promise<ActionResult
   if (!parsed.success) {
     return fail("Please check the form and try again.");
   }
-  const response = await fetch(`${apiBaseUrl()}/auth/register`, {
+  const response = await publicFetch("/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(parsed.data),
-    cache: "no-store",
   });
   if (!response.ok) {
     reportApiError(response);
@@ -41,11 +40,10 @@ export async function loginAction(input: LoginInput): Promise<ActionResult> {
   if (!parsed.success) {
     return fail("Please check the form and try again.");
   }
-  const response = await fetch(`${apiBaseUrl()}/auth/login`, {
+  const response = await publicFetch("/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(parsed.data),
-    cache: "no-store",
   });
   if (!response.ok) {
     if (response.status !== 401 && response.status !== 429) {

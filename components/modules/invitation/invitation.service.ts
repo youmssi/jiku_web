@@ -1,15 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { apiBaseUrl } from "@/lib/api";
+import { publicFetch } from "@/lib/api-server";
 import { invitationRoute } from "@/lib/constants";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 
 async function submit(token: string, action: "confirm" | "decline"): Promise<ActionResult> {
-  const response = await fetch(`${apiBaseUrl()}/rsvp/${token}/${action}`, {
-    method: "POST",
-    cache: "no-store",
-  });
+  const response = await publicFetch(`/rsvp/${token}/${action}`, { method: "POST" });
   if (!response.ok) {
     reportApiError(response);
     return fail(
@@ -29,10 +26,7 @@ export async function declineRsvpAction(token: string): Promise<ActionResult> {
 }
 
 export async function requestErasureAction(token: string): Promise<ActionResult> {
-  const response = await fetch(`${apiBaseUrl()}/rsvp/${token}/erase`, {
-    method: "POST",
-    cache: "no-store",
-  });
+  const response = await publicFetch(`/rsvp/${token}/erase`, { method: "POST" });
   if (!response.ok) {
     reportApiError(response);
     return fail("We couldn't delete your data just now. Please try again.");

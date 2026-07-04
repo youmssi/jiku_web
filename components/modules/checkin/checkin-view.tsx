@@ -1,11 +1,11 @@
-import { apiBaseUrl } from "@/lib/api";
+import { publicFetch } from "@/lib/api-server";
 import { ValidatorConsole } from "@/components/modules/checkin/validator-console";
 import type { ValidatorContext } from "@/components/modules/checkin/schema";
 
 /** Validator check-in screen, authenticated by the link token in the path. */
 export async function CheckinView({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
-  const response = await fetch(`${apiBaseUrl()}/checkin/${token}`, { cache: "no-store" });
+  const response = await publicFetch(`/checkin/${token}`);
 
   if (!response.ok) {
     const revoked = response.status === 403;

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { apiBaseUrl } from "@/lib/api";
+import { publicFetch } from "@/lib/api-server";
 import { invitationRoute, PRIVACY_ROUTE } from "@/lib/constants";
 import { TicketCard } from "@/components/modules/invitation/ticket-card";
 import { DataDeletion } from "@/components/modules/invitation/data-deletion";
@@ -8,7 +8,7 @@ import type { RsvpView } from "@/components/modules/invitation/schema";
 /** Guest-facing ticket screen, shown once the guest has confirmed. */
 export async function TicketView({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
-  const response = await fetch(`${apiBaseUrl()}/rsvp/${token}`, { cache: "no-store" });
+  const response = await publicFetch(`/rsvp/${token}`);
 
   if (!response.ok) {
     return (
