@@ -22,6 +22,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { ROUTES } from "@/lib/constants";
 import { loginAction } from "@/components/modules/identity/identity.service";
 import {
@@ -50,71 +51,72 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle className="text-2xl">Sign in</CardTitle>
-        <CardDescription>
-          Welcome back. Sign in to manage your events.
-        </CardDescription>
-      </CardHeader>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <CardContent>
-          <FieldGroup>
-            {formError ? (
-              <Alert variant="destructive">
-                <AlertTitle>We couldn&apos;t sign you in</AlertTitle>
-                <AlertDescription>{formError}</AlertDescription>
-              </Alert>
-            ) : null}
-            <Controller
-              control={control}
-              name="email"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    type="email"
-                    autoComplete="email"
-                    aria-invalid={fieldState.invalid}
-                  />
-                  {fieldState.invalid ? (
-                    <FieldError errors={[fieldState.error]} />
-                  ) : null}
-                </Field>
-              )}
-            />
-            <Controller
-              control={control}
-              name="password"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    type="password"
-                    autoComplete="current-password"
-                    aria-invalid={fieldState.invalid}
-                  />
-                  {fieldState.invalid ? (
-                    <FieldError errors={[fieldState.error]} />
-                  ) : null}
-                </Field>
-              )}
-            />
-          </FieldGroup>
-        </CardContent>
-        <CardFooter className="flex flex-col gap-3">
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Signing in…" : "Sign in"}
-          </Button>
-          <FieldDescription className="text-center">
-            New to Jikū? <Link href={ROUTES.REGISTER}>Create an account</Link>
-          </FieldDescription>
-        </CardFooter>
-      </form>
-    </Card>
+    <div className="flex flex-1 items-center justify-center px-4 py-12">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl">Sign in</CardTitle>
+          <CardDescription>
+            Welcome back. Sign in to manage your events.
+          </CardDescription>
+        </CardHeader>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <CardContent>
+            <FieldGroup>
+              {formError ? (
+                <Alert variant="destructive">
+                  <AlertTitle>We couldn&apos;t sign you in</AlertTitle>
+                  <AlertDescription>{formError}</AlertDescription>
+                </Alert>
+              ) : null}
+              <Controller
+                control={control}
+                name="email"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      type="email"
+                      autoComplete="email"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid ? (
+                      <FieldError errors={[fieldState.error]} />
+                    ) : null}
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="password"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                    <PasswordInput
+                      {...field}
+                      id={field.name}
+                      autoComplete="current-password"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid ? (
+                      <FieldError errors={[fieldState.error]} />
+                    ) : null}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </CardContent>
+          <CardFooter className="flex flex-col gap-3">
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "Signing in…" : "Sign in"}
+            </Button>
+            <FieldDescription className="text-center">
+              New to Jikū? <Link href={ROUTES.REGISTER}>Create an account</Link>
+            </FieldDescription>
+          </CardFooter>
+        </form>
+      </Card>
+    </div>
   );
 }
