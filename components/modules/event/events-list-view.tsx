@@ -5,15 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { serverFetch } from "@/lib/api-server";
 import { ROUTES, eventEditRoute } from "@/lib/constants";
-
-interface EventListItem {
-  id: string;
-  name: string;
-  status: string;
-  startDateTime: string | null;
-  timezone: string;
-  location: string | null;
-}
+import type { EventListItem } from "@/components/modules/event/schema";
 
 function formatStart(event: EventListItem): string {
   if (!event.startDateTime) {

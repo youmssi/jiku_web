@@ -1,6 +1,7 @@
 "use server";
 
 import { serverFetch } from "@/lib/api-server";
+import { type ActionResult, fromResponse } from "@/lib/action-result";
 import type { DashboardData } from "@/components/modules/dashboard/schema";
 
 /**
@@ -9,10 +10,9 @@ import type { DashboardData } from "@/components/modules/dashboard/schema";
  */
 export async function fetchDashboardAction(
   eventId: string,
-): Promise<{ data?: DashboardData; error?: string }> {
+): Promise<ActionResult<DashboardData>> {
   const response = await serverFetch(`/events/${eventId}/dashboard`);
-  if (!response.ok) {
-    return { error: "Couldn't load the latest metrics." };
-  }
-  return { data: (await response.json()) as DashboardData };
+  return fromResponse<DashboardData>(response, {
+    default: "Couldn't load the latest metrics.",
+  });
 }

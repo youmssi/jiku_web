@@ -1,6 +1,7 @@
 "use server";
 
 import { serverFetch } from "@/lib/api-server";
+import { reportApiError } from "@/lib/action-result";
 import { localInputToUtc } from "@/lib/datetime";
 import {
   eventFormSchema,
@@ -41,6 +42,7 @@ export async function createDraftAction(
     body: JSON.stringify(toPayload(parsed.data)),
   });
   if (!response.ok) {
+    reportApiError(response);
     return { error: "We couldn't save the draft. Please try again." };
   }
   const event = (await response.json()) as { id: string };
@@ -64,6 +66,7 @@ export async function updateDraftAction(
     return { error: "This event can no longer be edited." };
   }
   if (!response.ok) {
+    reportApiError(response);
     return { error: "We couldn't save your changes. Please try again." };
   }
   return {};
@@ -75,6 +78,7 @@ export async function publishEventAction(id: string): Promise<{ error?: string }
     return { error: "The event still needs a name, a start time and an invitation channel." };
   }
   if (!response.ok) {
+    reportApiError(response);
     return { error: "We couldn't publish the event. Please try again." };
   }
   return {};

@@ -1,6 +1,7 @@
 "use server";
 
 import { apiBaseUrl } from "@/lib/api";
+import { reportApiError } from "@/lib/action-result";
 import type {
   AttendanceResponse,
   CheckInResponse,
@@ -40,6 +41,7 @@ async function call<T>(
     return { linkInvalid: true, error: "This check-in link is no longer valid." };
   }
   if (!response.ok) {
+    reportApiError(response);
     return { error: "Something went wrong. Please try again." };
   }
   return { data: (await response.json()) as T };

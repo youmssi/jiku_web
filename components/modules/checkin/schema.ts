@@ -1,78 +1,38 @@
-/**
- * Validator-facing types mirroring the backend check-in API (JIKU-22/23). Shared
- * across the validator module's services, hooks and components.
- */
+import type { Schema } from "@/lib/api-contract";
 
+/**
+ * Validator check-in contract. Response DTOs alias the generated OpenAPI schemas;
+ * `outcome` is refined to the closed set the backend actually returns (springdoc
+ * types the raw enum as `string`). `QueuedCheckIn` is client-only — the offline
+ * queue — and has no backend counterpart.
+ */
 export type CheckInOutcome =
   | "CHECKED_IN"
   | "ALREADY_CHECKED_IN"
   | "CANCELLED"
   | "NOT_FOUND";
 
-export interface CheckInResponse {
+export type CheckInResponse = Omit<Schema<"CheckInResponse">, "outcome"> & {
   outcome: CheckInOutcome;
-  guestName: string | null;
-  ticketCode: string | null;
-  checkedInAt: string | null;
-  checkedInBy: string | null;
-}
+};
 
-export interface GuestMatch {
-  guestId: string;
-  name: string;
-  email: string | null;
-  phoneNumber: string | null;
-  rsvpStatus: string;
-  ticketCode: string | null;
-  ticketStatus: string | null;
-  checkedInAt: string | null;
-  checkedInBy: string | null;
-}
+export type GuestMatch = Schema<"GuestMatch">;
 
-export interface AttendanceResponse {
-  checkedIn: number;
-  confirmed: number;
-}
+/** Same backend row shape as GuestMatch; kept distinct per its own endpoint. */
+export type RosterEntry = Schema<"RosterEntry">;
 
-/** One guest in the pre-synced offline roster (mirrors the backend RosterEntry). */
-export interface RosterEntry {
-  guestId: string;
-  name: string;
-  email: string | null;
-  phoneNumber: string | null;
-  rsvpStatus: string;
-  ticketCode: string | null;
-  ticketStatus: string | null;
-  checkedInAt: string | null;
-  checkedInBy: string | null;
-}
+export type AttendanceResponse = Schema<"AttendanceResponse">;
 
-/** A check-in captured offline, awaiting sync. */
+export type ValidatorContext = Schema<"ValidatorContextResponse">;
+
+export type SyncResultEntry = Omit<Schema<"SyncResultEntry">, "outcome"> & {
+  outcome: CheckInOutcome;
+};
+
+/** A check-in captured offline, awaiting sync (client-only). */
 export interface QueuedCheckIn {
   id: string;
   ticketCode: string;
   scannedAt: string;
   guestName: string | null;
-}
-
-/** Per-item reconciliation result returned by the sync endpoint. */
-export interface SyncResultEntry {
-  ticketCode: string;
-  outcome: CheckInOutcome;
-  guestName: string | null;
-  checkedInAt: string | null;
-  checkedInBy: string | null;
-}
-
-export interface ValidatorContext {
-  eventName: string;
-  startDateTime: string | null;
-  timezone: string;
-  eventLocation: string | null;
-  organizerName: string;
-  primaryColor: string;
-  logoUrl: string | null;
-  validatorLabel: string;
-  checkedIn: number;
-  confirmed: number;
 }

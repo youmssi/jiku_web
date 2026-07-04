@@ -25,7 +25,7 @@ export function RsvpActions({ token, status, primaryColor, ticketCode }: RsvpAct
     startTransition(async () => {
       const result =
         action === "confirm" ? await confirmRsvpAction(token) : await declineRsvpAction(token);
-      if (result.error) {
+      if (!result.ok) {
         toast.error(result.error);
         return;
       }

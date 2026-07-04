@@ -33,9 +33,9 @@ export function DataDeletion({ token, erased }: { token: string; erased: boolean
 
   function onConfirm() {
     startTransition(async () => {
-      const { error } = await requestErasureAction(token);
-      if (error) {
-        toast.error(error);
+      const result = await requestErasureAction(token);
+      if (!result.ok) {
+        toast.error(result.error);
         return;
       }
       setDone(true);

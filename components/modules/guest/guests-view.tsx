@@ -13,20 +13,7 @@ import { GuestImport } from "@/components/modules/guest/guest-import";
 import { SendInvitations } from "@/components/modules/guest/send-invitations";
 import { serverFetch } from "@/lib/api-server";
 import { eventDashboardRoute, eventEditRoute } from "@/lib/constants";
-
-interface Guest {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string | null;
-  phoneNumber: string | null;
-}
-
-interface Invitation {
-  guestId: string;
-  channel: string;
-  status: string;
-}
+import type { Guest, Invitation } from "@/components/modules/guest/schema";
 
 function StatusBadge({ status }: { status: string | null }) {
   if (!status) {

@@ -26,12 +26,12 @@ export function SendInvitations({ eventId }: { eventId: string }) {
 
   function onSend() {
     startTransition(async () => {
-      const { queued, error } = await sendInvitationsAction(eventId, channels);
-      if (error) {
-        toast.error(error);
+      const outcome = await sendInvitationsAction(eventId, channels);
+      if (!outcome.ok) {
+        toast.error(outcome.error);
         return;
       }
-      toast.success(`Queued ${queued} invitation(s).`);
+      toast.success(`Queued ${outcome.data.queued} invitation(s).`);
     });
   }
 

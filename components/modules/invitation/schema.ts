@@ -1,13 +1,9 @@
-/** Guest-facing RSVP view for one invitation (mirrors the backend RsvpView). */
-export interface RsvpView {
-  eventName: string;
-  eventWhen: string | null;
-  eventLocation: string | null;
-  organizerName: string;
-  primaryColor: string;
-  logoUrl: string | null;
-  guestName: string;
-  status: string;
-  ticketCode: string | null;
-  erased: boolean;
-}
+import type { Schema } from "@/lib/api-contract";
+
+/**
+ * Guest-facing RSVP view. Aliases the backend RsvpView and adds `erased`: the spec
+ * snapshot was generated from a docs branch that predates guest self-erasure, so
+ * that field is not yet in the schema. Once the API docs include it, regenerate
+ * api-types.ts and drop the intersection.
+ */
+export type RsvpView = Schema<"RsvpView"> & { erased: boolean };

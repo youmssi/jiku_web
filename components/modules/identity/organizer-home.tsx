@@ -5,18 +5,7 @@ import { Button } from "@/components/ui/button";
 import { apiBaseUrl } from "@/lib/api";
 import { getAccessToken } from "@/lib/auth";
 import { logoutAction } from "@/components/modules/identity/identity.service";
-
-interface CurrentUser {
-  userId: string;
-  tenantId: string;
-  role: string;
-}
-
-interface Branding {
-  displayName: string;
-  primaryColor: string;
-  logoUrl: string | null;
-}
+import type { CurrentUser, Branding } from "@/components/modules/identity/schema";
 
 async function authedGet<T>(path: string): Promise<T | null> {
   const token = await getAccessToken();

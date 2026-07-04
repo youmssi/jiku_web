@@ -1,4 +1,9 @@
 import { z } from "zod";
+import type { Schema } from "@/lib/api-contract";
+
+/** Full event (backend EventResponse); the list endpoint returns the same shape. */
+export type EventResponse = Schema<"EventResponse">;
+export type EventListItem = EventResponse;
 
 export const INVITATION_CHANNELS = ["EMAIL", "WHATSAPP"] as const;
 export type InvitationChannel = (typeof INVITATION_CHANNELS)[number];

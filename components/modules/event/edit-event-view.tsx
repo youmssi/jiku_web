@@ -2,29 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { EventWizard } from "@/components/modules/event/event-wizard";
-import type { EventFormValues, InvitationChannel } from "@/components/modules/event/schema";
+import type { EventFormValues, EventResponse } from "@/components/modules/event/schema";
 import { serverFetch } from "@/lib/api-server";
 import { eventGuestsRoute } from "@/lib/constants";
 import { utcToLocalInput } from "@/lib/datetime";
-
-interface EventResponse {
-  id: string;
-  name: string;
-  description: string | null;
-  startDateTime: string | null;
-  endDateTime: string | null;
-  timezone: string;
-  location: string | null;
-  status: string;
-  settings: {
-    placementEnabled: boolean;
-    transferAllowed: boolean;
-    transferDeadline: string | null;
-    overbookingAllowed: boolean;
-    maxOverbookingCount: number | null;
-  };
-  invitationChannels: InvitationChannel[];
-}
 
 /** Edit-event screen: loads the event server-side and hydrates the wizard. */
 export async function EditEventView({ params }: { params: Promise<{ id: string }> }) {

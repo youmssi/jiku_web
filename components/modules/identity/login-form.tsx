@@ -45,7 +45,7 @@ export function LoginForm() {
   async function onSubmit(values: LoginInput) {
     setFormError(null);
     const result = await loginAction(values);
-    if (result?.error) {
+    if (!result.ok) {
       setFormError(result.error);
     }
   }

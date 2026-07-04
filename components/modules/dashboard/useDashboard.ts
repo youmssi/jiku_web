@@ -22,9 +22,9 @@ export function useDashboard(eventId: string, initial: DashboardData) {
 
     async function poll() {
       if (document.visibilityState === "hidden") return;
-      const { data: next } = await fetchDashboardAction(eventId);
-      if (active && next) {
-        setData(next);
+      const result = await fetchDashboardAction(eventId);
+      if (active && result.ok) {
+        setData(result.data);
         setUpdatedAt(Date.now());
       }
     }

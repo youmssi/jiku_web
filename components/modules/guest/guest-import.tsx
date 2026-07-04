@@ -12,19 +12,18 @@ export function GuestImport({ eventId }: { eventId: string }) {
 
   function onSubmit(formData: FormData) {
     startTransition(async () => {
-      const { result, error } = await importGuestsAction(eventId, formData);
-      if (error) {
-        toast.error(error);
+      const outcome = await importGuestsAction(eventId, formData);
+      if (!outcome.ok) {
+        toast.error(outcome.error);
         return;
       }
-      if (result) {
-        toast.success(
-          `Imported ${result.imported} guest(s) — ${result.failed} failed, ` +
-            `${result.skippedDuplicates} duplicate(s).`,
-        );
-        if (inputRef.current) {
-          inputRef.current.value = "";
-        }
+      const result = outcome.data;
+      toast.success(
+        `Imported ${result.imported} guest(s) — ${result.failed} failed, ` +
+          `${result.skippedDuplicates} duplicate(s).`,
+      );
+      if (inputRef.current) {
+        inputRef.current.value = "";
       }
     });
   }

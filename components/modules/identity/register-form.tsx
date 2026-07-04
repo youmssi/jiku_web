@@ -45,7 +45,7 @@ export function RegisterForm() {
   async function onSubmit(values: RegisterInput) {
     setFormError(null);
     const result = await registerAction(values);
-    if (result?.error) {
+    if (!result.ok) {
       setFormError(result.error);
     }
   }
