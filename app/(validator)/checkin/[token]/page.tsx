@@ -1,6 +1,6 @@
 import { apiBaseUrl } from "@/lib/api";
-import { ValidatorConsole } from "@/components/modules/validator/components/validator-console";
-import type { ValidatorContext } from "@/components/modules/validator/checkin-types";
+import { ValidatorConsole } from "@/components/modules/checkin";
+import type { ValidatorContext } from "@/components/modules/checkin";
 
 interface CheckinPageProps {
   params: Promise<{ token: string }>;

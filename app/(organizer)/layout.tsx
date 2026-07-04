@@ -1,5 +1,5 @@
 import { Toaster } from "@/components/ui/sonner";
-import { SupportButton } from "@/components/modules/organizer/components/support-button";
+import { SupportButton } from "@/components/shared/support-button";
 
 export default function OrganizerLayout({
   children,

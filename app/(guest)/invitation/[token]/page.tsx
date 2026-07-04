@@ -1,21 +1,8 @@
 import Link from "next/link";
 import { apiBaseUrl } from "@/lib/api";
 import { PRIVACY_ROUTE } from "@/lib/constants";
-import { RsvpActions } from "@/components/modules/guest/components/rsvp-actions";
-import { DataDeletion } from "@/components/modules/guest/components/data-deletion";
-
-interface RsvpView {
-  eventName: string;
-  eventWhen: string | null;
-  eventLocation: string | null;
-  organizerName: string;
-  primaryColor: string;
-  logoUrl: string | null;
-  guestName: string;
-  status: string;
-  ticketCode: string | null;
-  erased: boolean;
-}
+import { RsvpActions, DataDeletion } from "@/components/modules/invitation";
+import type { RsvpView } from "@/components/modules/invitation";
 
 interface PageProps {
   params: Promise<{ token: string }>;

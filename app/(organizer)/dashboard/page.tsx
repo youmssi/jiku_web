@@ -4,7 +4,7 @@ import { ROUTES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { apiBaseUrl } from "@/lib/api";
 import { getAccessToken } from "@/lib/auth";
-import { logoutAction } from "@/components/modules/organizer/services/auth";
+import { logoutAction } from "@/components/modules/identity";
 
 interface CurrentUser {
   userId: string;

@@ -1,11 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { EventWizard } from "@/components/modules/organizer/components/event-wizard";
-import type {
-  EventFormValues,
-  InvitationChannel,
-} from "@/components/modules/organizer/event-schemas";
+import { EventWizard } from "@/components/modules/event";
+import type { EventFormValues, InvitationChannel } from "@/components/modules/event";
 import { serverFetch } from "@/lib/api-server";
 import { eventGuestsRoute } from "@/lib/constants";
 import { utcToLocalInput } from "@/lib/datetime";

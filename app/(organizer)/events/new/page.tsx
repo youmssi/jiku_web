@@ -1,5 +1,4 @@
-import { EventWizard } from "@/components/modules/organizer/components/event-wizard";
-import { emptyEventValues } from "@/components/modules/organizer/event-schemas";
+import { EventWizard, emptyEventValues } from "@/components/modules/event";
 
 export default function NewEventPage() {
   return (

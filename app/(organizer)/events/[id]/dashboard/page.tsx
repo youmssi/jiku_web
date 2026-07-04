@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { EventDashboard } from "@/components/modules/organizer/components/event-dashboard";
+import { EventDashboard } from "@/components/modules/dashboard";
 import { serverFetch } from "@/lib/api-server";
 import { eventGuestsExportRoute, eventGuestsRoute } from "@/lib/constants";
-import type { DashboardData } from "@/components/modules/organizer/dashboard-types";
+import type { DashboardData } from "@/components/modules/dashboard";
 
 interface PageProps {
   params: Promise<{ id: string }>;

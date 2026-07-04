@@ -9,8 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { GuestImport } from "@/components/modules/organizer/components/guest-import";
-import { SendInvitations } from "@/components/modules/organizer/components/send-invitations";
+import { GuestImport, SendInvitations } from "@/components/modules/guest";
 import { serverFetch } from "@/lib/api-server";
 import { eventDashboardRoute, eventEditRoute } from "@/lib/constants";
 
