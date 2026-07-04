@@ -1,6 +1,15 @@
 import Link from "next/link";
+import { Download, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import {
   Table,
   TableBody,
@@ -9,12 +18,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AddGuest } from "@/components/modules/guest/add-guest";
 import { GuestImport } from "@/components/modules/guest/guest-import";
 import { SendInvitations } from "@/components/modules/guest/send-invitations";
 import { serverFetch } from "@/lib/api-server";
 import { eventDashboardRoute, eventEditRoute } from "@/lib/constants";
 import type { Guest, Invitation } from "@/components/modules/guest/schema";
 import { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS } from "@/lib/channels";
+
+const CSV_TEMPLATE_HREF = "/templates/guest-import-template.csv";
 
 function StatusBadge({ status }: { status: string | null }) {
   if (!status) {
@@ -53,34 +66,63 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col gap-4 rounded-lg border p-4">
-        <GuestImport eventId={id} />
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Add guests</CardTitle>
+          <CardDescription>
+            Import a CSV for bulk invitations, or add a single guest by hand.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="upload">
+            <TabsList>
+              <TabsTrigger value="upload">Upload CSV</TabsTrigger>
+              <TabsTrigger value="manual">Add manually</TabsTrigger>
+            </TabsList>
+            <TabsContent value="upload" className="mt-4 flex flex-col gap-4">
+              <GuestImport eventId={id} />
+              <Button variant="outline" size="sm" className="self-start" asChild>
+                <a href={CSV_TEMPLATE_HREF} download>
+                  <Download className="size-4" />
+                  Download CSV template
+                </a>
+              </Button>
+            </TabsContent>
+            <TabsContent value="manual" className="mt-4">
+              <AddGuest eventId={id} />
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      <div className="mt-6 rounded-lg border p-4">
         <SendInvitations eventId={id} />
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-lg border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Contact</TableHead>
-              {INVITATION_CHANNELS.map((channel) => (
-                <TableHead key={channel}>{INVITATION_CHANNEL_LABELS[channel]}</TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {guests.length === 0 ? (
+      {guests.length === 0 ? (
+        <Empty className="mt-6 border">
+          <EmptyMedia variant="icon">
+            <Users />
+          </EmptyMedia>
+          <EmptyTitle>No guests yet</EmptyTitle>
+          <EmptyDescription>
+            Import a CSV or add a guest by hand to start building your list.
+          </EmptyDescription>
+        </Empty>
+      ) : (
+        <div className="mt-6 overflow-hidden rounded-lg border">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell
-                  colSpan={2 + INVITATION_CHANNELS.length}
-                  className="text-center text-muted-foreground"
-                >
-                  No guests yet. Import a CSV to begin.
-                </TableCell>
+                <TableHead>Name</TableHead>
+                <TableHead>Contact</TableHead>
+                {INVITATION_CHANNELS.map((channel) => (
+                  <TableHead key={channel}>{INVITATION_CHANNEL_LABELS[channel]}</TableHead>
+                ))}
               </TableRow>
-            ) : (
-              guests.map((guest) => (
+            </TableHeader>
+            <TableBody>
+              {guests.map((guest) => (
                 <TableRow key={guest.id}>
                   <TableCell>
                     {guest.firstName} {guest.lastName}
@@ -94,11 +136,11 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </div>
   );
 }

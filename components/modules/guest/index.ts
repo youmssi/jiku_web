@@ -1,4 +1,5 @@
 // Guest module — organizer-side guest list management (CSV import, invitations).
+export { AddGuest } from "./add-guest";
 export { GuestImport } from "./guest-import";
 export { SendInvitations } from "./send-invitations";
 export { GuestsView } from "./guests-view";

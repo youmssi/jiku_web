@@ -6,6 +6,17 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -69,7 +80,8 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
     handleSubmit,
     trigger,
     getValues,
-    formState: { isSubmitting },
+    reset,
+    formState: { isSubmitting, isDirty },
   } = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
     mode: "onTouched",
@@ -112,6 +124,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
         setFormError(result.error);
         return;
       }
+      reset(values);
       toast.success("Draft saved");
     } else {
       const result = await createDraftAction(values);
@@ -449,12 +462,45 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                   Next
                 </Button>
               ) : null}
-              <Button type="submit" disabled={isSubmitting || isPublished}>
+              {!isPublished ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => reset()}
+                  disabled={!isDirty || isSubmitting || isPublishing}
+                >
+                  Cancel
+                </Button>
+              ) : null}
+              <Button
+                type="submit"
+                disabled={isSubmitting || isPublished || !isDirty}
+              >
                 {isSubmitting ? "Saving…" : "Save draft"}
               </Button>
-              <Button type="button" onClick={onPublish} disabled={!canPublish || isPublishing}>
-                {isPublishing ? "Publishing…" : "Publish"}
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button type="button" disabled={!canPublish || isPublishing}>
+                    {isPublishing ? "Publishing…" : "Publish"}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Publish this event?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Publishing makes the event live and locks its details — you
+                      won&apos;t be able to edit it afterwards. Guests can start
+                      receiving invitations.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Keep editing</AlertDialogCancel>
+                    <AlertDialogAction onClick={onPublish}>
+                      Publish event
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
           {!isPublished && publishBlockers.length > 0 ? (
