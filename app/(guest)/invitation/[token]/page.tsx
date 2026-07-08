@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { apiBaseUrl } from "@/lib/api";
+import { PRIVACY_ROUTE } from "@/lib/constants";
 import { RsvpActions } from "@/components/modules/guest/components/rsvp-actions";
 import { DataDeletion } from "@/components/modules/guest/components/data-deletion";
 
@@ -77,6 +79,11 @@ export default async function InvitationPage({ params }: PageProps) {
           )}
         </div>
         <DataDeletion token={token} erased={rsvp.erased} />
+        <p className="mt-4 text-xs text-muted-foreground">
+          <Link href={PRIVACY_ROUTE} className="underline underline-offset-4">
+            How your data is used
+          </Link>
+        </p>
       </div>
     </div>
   );
