@@ -39,6 +39,7 @@ interface ValidatorConsoleProps {
  */
 export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
   const [mode, setMode] = useState<Mode>("scan");
+  const eventCancelled = context.eventStatus === "CANCELLED";
   const [isSyncing, setIsSyncing] = useState(false);
   const {
     result,
@@ -176,6 +177,16 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
           <p className="mt-2 max-w-xs text-zinc-400">
             This check-in link has been revoked or has expired. Ask the organizer
             for a new one.
+          </p>
+        </div>
+      ) : null}
+
+      {eventCancelled ? (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-zinc-950 px-6 text-center">
+          <h2 className="text-2xl font-semibold">{context.eventName} has been cancelled</h2>
+          <p className="mt-2 max-w-xs text-zinc-400">
+            The organizer cancelled this event, so check-in is closed and no
+            ticket is valid for entry.
           </p>
         </div>
       ) : null}
