@@ -41,6 +41,10 @@ export function EventDashboard({ eventId, initial }: EventDashboardProps) {
               new Date(data.dataRetention.anonymizeOn),
             )}
             . Your attendance totals are kept.
+          </p>
+        </div>
+      ) : null}
+
       {data.usage && !data.usage.withinAllowance ? (
         <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200">
           <p className="font-medium">You&apos;ve reached this event&apos;s guest allowance</p>

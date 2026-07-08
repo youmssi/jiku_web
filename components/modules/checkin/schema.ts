@@ -10,6 +10,7 @@ export type CheckInOutcome =
   | "CHECKED_IN"
   | "ALREADY_CHECKED_IN"
   | "CANCELLED"
+  | "EVENT_CANCELLED"
   | "NOT_FOUND";
 
 export type CheckInResponse = Omit<Schema<"CheckInResponse">, "outcome"> & {
@@ -23,7 +24,10 @@ export type RosterEntry = Schema<"RosterEntry">;
 
 export type AttendanceResponse = Schema<"AttendanceResponse">;
 
-export type ValidatorContext = Schema<"ValidatorContextResponse">;
+/** ValidatorContextResponse plus server-sent fields not yet in the OpenAPI spec. */
+export type ValidatorContext = Schema<"ValidatorContextResponse"> & {
+  eventStatus?: string | null;
+};
 
 export type SyncResultEntry = Omit<Schema<"SyncResultEntry">, "outcome"> & {
   outcome: CheckInOutcome;
