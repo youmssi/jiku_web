@@ -31,6 +31,16 @@ export function EventDashboard({ eventId, initial }: EventDashboardProps) {
         </div>
       ) : null}
 
+      {data.dataRetention ? (
+        <div className="rounded-xl border border-blue-300 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-200">
+          <p className="font-medium">Guest data will be anonymized soon</p>
+          <p className="mt-1">
+            Under the retention policy, this event&apos;s guest personal data (names,
+            emails, phone numbers) will be anonymized on{" "}
+            {new Intl.DateTimeFormat("en", { dateStyle: "long" }).format(
+              new Date(data.dataRetention.anonymizeOn),
+            )}
+            . Your attendance totals are kept.
       {data.usage && !data.usage.withinAllowance ? (
         <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200">
           <p className="font-medium">You&apos;ve reached this event&apos;s guest allowance</p>
