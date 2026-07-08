@@ -26,6 +26,10 @@ export function eventDashboardRoute(id: string): string {
   return `/events/${id}/dashboard`;
 }
 
+export function billingRoute(id: string): string {
+  return `/events/${id}/billing`;
+}
+
 export function eventGuestsExportRoute(id: string): string {
   return `/api/events/${id}/guests/export`;
 }
