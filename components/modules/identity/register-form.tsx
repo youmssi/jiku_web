@@ -59,7 +59,7 @@ export function RegisterForm() {
             Start sending branded invitations in minutes.
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-(--card-spacing)">
           <CardContent>
             <FieldGroup>
               {formError ? (

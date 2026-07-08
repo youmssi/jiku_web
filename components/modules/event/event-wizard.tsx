@@ -203,7 +203,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
           Step {step + 1} of {STEPS.length}: {STEPS[step]}
         </CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit(onSaveDraft, onInvalid)} noValidate>
+      <form onSubmit={handleSubmit(onSaveDraft, onInvalid)} noValidate className="flex flex-col gap-(--card-spacing)">
         <CardContent>
           <FieldGroup>
             {formError ? (

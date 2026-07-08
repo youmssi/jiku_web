@@ -2,14 +2,15 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { JikūLogo } from "@/components/ui/jiku-logo";
 import { ROUTES } from "@/lib/constants";
 
 const NAV_LINKS = [
   { label: "Features", href: "#features" },
-  { label: "How it works", href: "#how-it-works" },
   { label: "Pricing", href: "#pricing" },
+  { label: "Docs", href: "#how-it-works" },
 ] as const;
 
 export function Navigation() {
@@ -35,38 +36,65 @@ export function Navigation() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+      className={`fixed inset-x-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60"
-          : "bg-transparent"
+          ? "top-4 px-4"
+          : "top-0 px-0"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+      <nav
+        className={`mx-auto flex items-center justify-between transition-all duration-500 ${
+          isScrolled || isMobileOpen
+            ? "h-14 max-w-6xl rounded-2xl border border-border/30 bg-background/80 px-6 shadow-lg shadow-black/5 backdrop-blur-xl"
+            : "h-20 max-w-7xl bg-transparent px-6"
+        }`}
+      >
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <Sparkles className="size-5 text-primary" />
-          <span className="text-lg font-semibold tracking-tight">Jikū</span>
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <JikūLogo
+            variant="mark"
+            className={`text-foreground transition-all duration-500 ${
+              isScrolled ? "size-6" : "size-7"
+            }`}
+          />
+          <span
+            className={`font-semibold tracking-tight transition-all duration-500 ${
+              isScrolled ? "text-base" : "text-lg"
+            }`}
+          >
+            Jikū
+          </span>
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-10 md:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {link.label}
+              <span className="absolute -bottom-1 left-0 h-px w-0 bg-foreground transition-all duration-300 group-hover:w-full" />
             </Link>
           ))}
-        </nav>
+        </div>
 
         {/* Desktop CTAs */}
         <div className="hidden items-center gap-3 md:flex">
-          <Button variant="ghost" size="sm" asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+            className="rounded-full"
+          >
             <Link href={ROUTES.LOGIN}>Sign in</Link>
           </Button>
-          <Button size="sm" className="rounded-full" asChild>
+          <Button
+            size="sm"
+            className="rounded-full bg-foreground text-background hover:bg-foreground/90 shadow-sm"
+            asChild
+          >
             <Link href={ROUTES.REGISTER}>Get started</Link>
           </Button>
         </div>
@@ -80,29 +108,36 @@ export function Navigation() {
         >
           {isMobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
-      </div>
+      </nav>
 
       {/* Mobile menu overlay */}
       {isMobileOpen && (
-        <div className="fixed inset-0 z-40 flex flex-col bg-background pt-20 md:hidden">
-          <nav className="flex flex-col gap-4 px-6 pb-8">
+        <div className="fixed inset-0 z-40 flex flex-col bg-background pt-24 md:hidden">
+          <nav className="flex flex-col gap-6 px-8 pb-8">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsMobileOpen(false)}
-                className="text-lg font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="text-3xl font-semibold tracking-tight text-foreground transition-colors hover:text-muted-foreground"
               >
                 {link.label}
               </Link>
             ))}
-            <hr className="my-4 border-border" />
-            <Button variant="outline" asChild className="w-full justify-center">
+            <hr className="my-4 border-border/50" />
+            <Button
+              variant="outline"
+              asChild
+              className="w-full justify-center rounded-full"
+            >
               <Link href={ROUTES.LOGIN} onClick={() => setIsMobileOpen(false)}>
                 Sign in
               </Link>
             </Button>
-            <Button asChild className="w-full justify-center rounded-full">
+            <Button
+              asChild
+              className="w-full justify-center rounded-full bg-foreground text-background hover:bg-foreground/90"
+            >
               <Link href={ROUTES.REGISTER} onClick={() => setIsMobileOpen(false)}>
                 Get started
               </Link>

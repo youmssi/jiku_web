@@ -59,7 +59,7 @@ export function LoginForm() {
             Welcome back. Sign in to manage your events.
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-(--card-spacing)">
           <CardContent>
             <FieldGroup>
               {formError ? (
