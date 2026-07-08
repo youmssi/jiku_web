@@ -30,6 +30,10 @@ export function billingRoute(id: string): string {
   return `/events/${id}/billing`;
 }
 
+export function billingReceiptRoute(paymentId: string): string {
+  return `/api/billing/payments/${paymentId}/receipt`;
+}
+
 export function eventGuestsExportRoute(id: string): string {
   return `/api/events/${id}/guests/export`;
 }
