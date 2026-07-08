@@ -1,0 +1,21 @@
+import { z } from "zod";
+import type { Schema } from "@/lib/api-contract";
+
+/** Signed-in user identity (backend MeResponse) and public branding. */
+export type CurrentUser = Schema<"MeResponse">;
+export type Branding = Schema<"BrandingResponse">;
+
+export const registerSchema = z.object({
+  name: z.string().min(1, "Organization name is required"),
+  email: z.string().email("Enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export type RegisterInput = z.infer<typeof registerSchema>;
+
+export const loginSchema = z.object({
+  email: z.string().email("Enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+export type LoginInput = z.infer<typeof loginSchema>;

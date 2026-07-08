@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, DM_Sans } from "next/font/google";
+import { Geist, Geist_Mono, DM_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const dmSansHeading = DM_Sans({subsets:['latin'],variable:'--font-heading'});
 
@@ -44,7 +46,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, dmSansHeading.variable)}
+      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, dmSansHeading.variable, "font-sans", inter.variable)}
     >
       <body className="min-h-full flex flex-col">
         {children}

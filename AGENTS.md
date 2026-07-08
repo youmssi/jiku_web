@@ -44,45 +44,42 @@ app/
 
 ## Component Layers (Strict One-Directional Dependency)
 
+Modules are split **by business domain, not by role**. Each module is a FLAT folder
+with the same five file kinds — copy `components/modules/identity/` when adding one.
+
 ```
 components/
-├── shared/                    # Cross-role: types, hooks, utilities
+├── shared/                    # Cross-cutting: SupportButton, service worker, shared types
 │   └── index.ts               # Barrel: Role, ApiResponse<T>, etc.
 ├── ui/                        # shadcn/ui primitives (no domain logic)
-│   └── index.ts               # Barrel: Button, Input, Card, etc.
-└── modules/
-    ├── organizer/             # Organizer-specific
-    │   ├── components/        # UI components
-    │   ├── hooks/             # TanStack Query hooks (data/cache)
-    │   └── services/          # ky API calls
-    ├── guest/                 # Guest-specific
-    │   ├── components/
-    │   ├── hooks/
-    │   └── services/
-    └── validator/             # Validator-specific (offline-sync critical)
-        ├── components/
-        ├── hooks/
-        └── services/
+└── modules/<domain>/          # identity · event · guest · dashboard · invitation · checkin
+    ├── schema.ts              # CONTRACT — Zod schemas + inferred types / DTOs (backend mirror)
+    ├── <domain>.service.ts    # SERVICE  — all endpoints of the scope (Server Actions / fetch);
+    │                          #            the ONLY layer that inspects HTTP statuses
+    ├── use<Domain>.ts         # CACHE    — client polling/cache hooks (optional)
+    ├── <feature>.tsx          # COMPONENT— UI + validation only; never raw fetch
+    └── index.ts               # BARREL   — public surface (components, hooks, public types)
 ```
 
 **Layer dependency direction (strict, one-way):**
 
 ```
-Routing (app/) → Component (modules/{role}/components/)
-               → Cache/Data (modules/{role}/hooks/)
-               → Service (modules/{role}/services/)
+Routing (app/) → Component (<feature>.tsx) → Cache (use<Domain>.ts) → Service (<domain>.service.ts) → Contract (schema.ts)
 ```
 
-- **Routing layer** (`app/`) — route resolution, params, search params, auth/token checks, renders the module's top-level component. No business logic, no presentation logic.
-- **Component layer** — UI components per role. Never makes API calls directly.
-- **Cache layer** (`hooks/`) — TanStack Query hooks for data fetching, caching, mutations. Never used for single-action buttons or static content.
-- **Service layer** (`services/`) — API calls using `ky`. Never imported inside Server Components or Server Actions directly.
+- **Routing layer** (`app/`) — route resolution, params, guards; renders the module's top-level component **imported from the module barrel**. No business logic, no presentation logic.
+- **Component layer** (`<feature>.tsx`) — UI + validation only. Never makes API calls directly.
+- **Cache layer** (`use<Domain>.ts`) — client-side polling/cache hooks. Never used for single-action buttons or static content.
+- **Service layer** (`<domain>.service.ts`) — Server Actions / `fetch`; the sole place HTTP statuses are inspected and turned into user-ready messages.
+- **Contract layer** (`schema.ts`) — Zod schemas and types mirroring the backend.
+
+**Boundary rule:** other layers import a module only through its `index.ts` barrel. Files inside a module import each other by direct relative/`@/` path; deep paths never cross a module boundary.
 
 **Omission rules:**
-- A module **may** skip the hooks layer if nothing changes after initial load (e.g., guest ticket page)
-- A module **may** skip separate services if a single Server Action covers its one mutation (e.g., RSVP confirm/decline)
+- A module **may** skip the cache hook if nothing changes after initial load (e.g., the guest ticket page)
+- A module **may** skip a separate service if a single Server Action covers its one mutation (e.g., RSVP confirm/decline)
 - The **component layer is never omitted**
-- The **validator module's service/cache separation must never be collapsed** due to offline-sync requirements
+- The **checkin module's service/cache separation must never be collapsed** due to offline-sync requirements
 
 ## Rendering Strategy per Route Group
 
@@ -120,7 +117,7 @@ Routing (app/) → Component (modules/{role}/components/)
 
 5. **Server Components first** — Default to a Server Component. Mark `"use client"` only for interactivity, browser APIs, or client-side state. Justify in PR description if not obvious.
 
-6. **No direct cross-module access** — `organizer/` code never imports from `guest/` internals. Shared code goes in `components/shared/`.
+6. **No direct cross-module access** — a module never imports another module's internal files; consume its `index.ts` barrel instead. Shared code goes in `components/shared/`.
 
 ## Deployment
 
