@@ -2,7 +2,7 @@
 // The public surface other layers consume; internal files import each other directly.
 export { LoginForm } from "./login-form";
 export { RegisterForm } from "./register-form";
-export { OrganizerHome } from "./organizer-home";
+
 export { logoutAction } from "./identity.service";
 
 export { loginSchema, registerSchema } from "./schema";
