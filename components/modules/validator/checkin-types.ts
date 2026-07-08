@@ -7,6 +7,7 @@ export type CheckInOutcome =
   | "CHECKED_IN"
   | "ALREADY_CHECKED_IN"
   | "CANCELLED"
+  | "EVENT_CANCELLED"
   | "NOT_FOUND";
 
 export interface CheckInResponse {
@@ -66,6 +67,8 @@ export interface SyncResultEntry {
 
 export interface ValidatorContext {
   eventName: string;
+  /** The event's lifecycle status; CANCELLED means check-in is closed for good. */
+  eventStatus: string;
   startDateTime: string | null;
   timezone: string;
   eventLocation: string | null;
