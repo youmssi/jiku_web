@@ -13,6 +13,7 @@ interface RsvpView {
   guestName: string;
   status: string;
   ticketCode: string | null;
+  eventStatus: string | null;
 }
 
 interface PageProps {
@@ -35,6 +36,18 @@ export default async function TicketPage({ params }: PageProps) {
   }
 
   const rsvp = (await response.json()) as RsvpView;
+
+  if (rsvp.eventStatus === "CANCELLED") {
+    return (
+      <Centered>
+        <h1 className="text-xl font-semibold">This event has been cancelled</h1>
+        <p className="mt-2 text-muted-foreground">
+          Your ticket is no longer valid and there is nothing you need to do. If
+          the event is rescheduled, you will receive a new invitation.
+        </p>
+      </Centered>
+    );
+  }
 
   if (rsvp.status !== "CONFIRMED" || !rsvp.ticketCode) {
     return (
