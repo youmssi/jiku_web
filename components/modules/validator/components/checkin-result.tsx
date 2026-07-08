@@ -59,6 +59,12 @@ export function CheckInResult({ result, timezone, onDismiss }: CheckInResultProp
         </p>
       ) : null}
 
+      {result.outcome === "EVENT_CANCELLED" ? (
+        <p className="mt-3 text-lg text-white/90">
+          This event has been cancelled — no ticket is valid for entry.
+        </p>
+      ) : null}
+
       <Button
         variant="secondary"
         className="mt-10 h-12 px-8 text-base"
@@ -74,5 +80,6 @@ const STYLES: Record<CheckInResponse["outcome"], Style> = {
   CHECKED_IN: { bg: "bg-green-600", glyph: "✓", title: "Checked in" },
   ALREADY_CHECKED_IN: { bg: "bg-amber-500", glyph: "!", title: "Already checked in" },
   CANCELLED: { bg: "bg-zinc-700", glyph: "✕", title: "Ticket cancelled" },
+  EVENT_CANCELLED: { bg: "bg-red-700", glyph: "✕", title: "Event cancelled" },
   NOT_FOUND: { bg: "bg-red-600", glyph: "✕", title: "Not found" },
 };
