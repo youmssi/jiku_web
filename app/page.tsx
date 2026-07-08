@@ -7,11 +7,11 @@ import { PricingSection } from "@/components/modules/landing/pricing-section";
 import { CtaSection } from "@/components/modules/landing/cta-section";
 import { FooterSection } from "@/components/modules/landing/footer-section";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <>
       <Navigation />
-      <main className="flex-1">
+      <main>
         <HeroSection />
         <FeaturesSection />
         <HowItWorksSection />
@@ -20,6 +20,6 @@ export default function Home() {
         <CtaSection />
       </main>
       <FooterSection />
-    </div>
+    </>
   );
 }

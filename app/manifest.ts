@@ -25,6 +25,7 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/png",
         purpose: "maskable",
       },
+      { src: "/jiku-logo.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
     ],
   };
 }

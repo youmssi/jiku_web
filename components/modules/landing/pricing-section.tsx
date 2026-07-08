@@ -1,16 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { JikūLogo } from "@/components/ui/jiku-logo";
+import { useOnScreen } from "@/hooks/use-on-screen";
 import { ROUTES } from "@/lib/constants";
 
+// ─── Data ─────────────────────────────────────────────────────────
 interface PricingTier {
   name: string;
   description: string;
-  price: string;
+  monthly: string;
+  yearly: string;
   period: string;
   features: string[];
   highlighted: boolean;
@@ -21,7 +24,8 @@ const TIERS: PricingTier[] = [
   {
     name: "Free",
     description: "Perfect for testing the waters with small events.",
-    price: "$0",
+    monthly: "$0",
+    yearly: "$0",
     period: "/month",
     features: [
       "Up to 100 guests per event",
@@ -37,7 +41,8 @@ const TIERS: PricingTier[] = [
   {
     name: "Pro",
     description: "For growing organizers who need more reach.",
-    price: "$29",
+    monthly: "$29",
+    yearly: "$19",
     period: "/month",
     features: [
       "Up to 2,000 guests per event",
@@ -53,13 +58,14 @@ const TIERS: PricingTier[] = [
   {
     name: "Enterprise",
     description: "For agencies and large-scale events.",
-    price: "$99",
+    monthly: "$99",
+    yearly: "$79",
     period: "/month",
     features: [
       "Unlimited guests per event",
       "All communication channels",
       "Custom subdomain or domain",
-      "Advanced analytics",
+      "Advanced analytics & exports",
       "Dedicated account manager",
       "99.9% SLA guarantee",
     ],
@@ -68,123 +74,156 @@ const TIERS: PricingTier[] = [
   },
 ];
 
-function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.15 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+// ─── Pricing Card ─────────────────────────────────────────────────
+function PricingCard({ tier, index, yearly }: { tier: PricingTier; index: number; yearly: boolean }) {
+  const { ref, visible } = useOnScreen(0.1);
+  const price = yearly ? tier.yearly : tier.monthly;
+  const savings = tier.monthly !== "$0" && tier.yearly !== tier.monthly
+    ? `Save $${(parseInt(tier.monthly.replace("$", "")) - parseInt(tier.yearly.replace("$", ""))) * 12}/yr`
+    : null;
 
   return (
-    <Card
+    <div
       ref={ref}
-      className={`relative flex flex-col border-border/50 transition-all duration-700 ${
+      className={`group relative flex flex-col rounded-2xl border bg-card/50 p-8 transition-all duration-700 ${
         tier.highlighted
-          ? "border-primary/40 shadow-xl shadow-primary/10 scale-105"
-          : "hover:border-primary/30"
-      } ${isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-100"}`}
-      style={{ transitionDelay: `${index * 150}ms` }}
+          ? "border-primary/30 shadow-xl shadow-primary/10 scale-[1.02] lg:scale-105"
+          : "border-border/40 hover:border-primary/20 hover:shadow-lg"
+      }`}
+      style={{
+        transitionDelay: `${index * 100}ms`,
+        transform: visible ? "translateY(0)" : "translateY(24px)",
+        opacity: visible ? 1 : 0,
+      }}
     >
+      {/* Most popular badge */}
       {tier.highlighted && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-semibold text-primary-foreground">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-primary to-primary/80 px-4 py-1 text-xs font-semibold text-primary-foreground shadow-lg shadow-primary/25">
           Most popular
         </div>
       )}
 
-      <CardContent className="flex flex-col gap-6 p-6">
-        <div>
-          <CardTitle className="text-xl">{tier.name}</CardTitle>
-          <CardDescription className="mt-1 text-sm text-muted-foreground">
-            {tier.description}
-          </CardDescription>
-        </div>
+      {/* Header */}
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold">{tier.name}</h3>
+        <p className="mt-1 text-sm text-muted-foreground">{tier.description}</p>
+      </div>
 
-        <div className="flex items-baseline gap-1">
-          <span className="text-4xl font-bold tracking-tight">{tier.price}</span>
-          <span className="text-sm text-muted-foreground">{tier.period}</span>
-        </div>
+      {/* Price */}
+      <div className="mb-8 flex items-baseline gap-1">
+        <span className="text-4xl font-bold tracking-tight">{price}</span>
+        <span className="text-sm text-muted-foreground">{tier.period}</span>
+        {savings && (
+          <span className="ml-auto rounded-full bg-green-500/10 px-2.5 py-0.5 text-[11px] font-medium text-green-600 dark:text-green-400">
+            {savings}
+          </span>
+        )}
+      </div>
 
-        <ul className="flex-1 space-y-3">
-          {tier.features.map((feature) => (
-            <li key={feature} className="flex items-start gap-3 text-sm">
-              <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
+      {/* Features */}
+      <ul className="mb-8 flex-1 space-y-3.5">
+        {tier.features.map((feature) => (
+          <li key={feature} className="flex items-start gap-3 text-sm">
+            <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+            <span>{feature}</span>
+          </li>
+        ))}
+      </ul>
 
-        <Button
-          asChild
-          variant={tier.highlighted ? "default" : "outline"}
-          className={`w-full rounded-full ${tier.highlighted ? "shadow-lg shadow-primary/25" : ""}`}
-        >
-          <Link href={ROUTES.REGISTER}>{tier.cta}</Link>
-        </Button>
-      </CardContent>
-    </Card>
+      {/* CTA */}
+      <Button
+        asChild
+        variant={tier.highlighted ? "default" : "outline"}
+        className={`w-full rounded-full ${
+          tier.highlighted
+            ? "bg-foreground text-background hover:bg-foreground/90 shadow-lg shadow-foreground/15"
+            : ""
+        }`}
+      >
+        <Link href={tier.highlighted ? ROUTES.REGISTER : ROUTES.LOGIN}>
+          {tier.cta}
+        </Link>
+      </Button>
+    </div>
   );
 }
 
-export function PricingSection() {
-  const headingRef = useRef<HTMLDivElement>(null);
-  const [headingVisible, setHeadingVisible] = useState(false);
+// ─── Toggle component ─────────────────────────────────────────────
+function BillingToggle({ yearly, onChange }: { yearly: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <div className="inline-flex items-center gap-3 rounded-full border border-border/30 bg-card/50 p-1 shadow-sm">
+      <button
+        type="button"
+        onClick={() => onChange(false)}
+        className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ${
+          !yearly
+            ? "bg-foreground text-background shadow-sm"
+            : "text-muted-foreground hover:text-foreground"
+        }`}
+      >
+        Monthly
+      </button>
+      <button
+        type="button"
+        onClick={() => onChange(true)}
+        className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ${
+          yearly
+            ? "bg-foreground text-background shadow-sm"
+            : "text-muted-foreground hover:text-foreground"
+        }`}
+      >
+        Yearly
+        <span className="ml-1.5 rounded-full bg-green-500/20 px-1.5 py-0.5 text-[10px] font-semibold text-green-600 dark:text-green-400">
+          -34%
+        </span>
+      </button>
+    </div>
+  );
+}
 
-  useEffect(() => {
-    const el = headingRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setHeadingVisible(true);
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.2 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+// ─── Pricing Section ──────────────────────────────────────────────
+export function PricingSection() {
+  const [yearly, setYearly] = useState(false);
+  const { ref, visible } = useOnScreen(0.1);
 
   return (
-    <section id="pricing" className="border-t border-border/40 py-24">
+    <section id="pricing" className="border-t border-border/30 py-24">
       <div className="mx-auto max-w-7xl px-6">
+        {/* Heading */}
         <div
-          ref={headingRef}
-          className={`mx-auto max-w-2xl text-center transition-all duration-700 ${
-            headingVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          }`}
+          ref={ref}
+          className="mx-auto max-w-2xl text-center transition-all duration-700"
+          style={{
+            transform: visible ? "translateY(0)" : "translateY(24px)",
+            opacity: visible ? 1 : 0,
+          }}
         >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary shadow-sm shadow-primary/5">
+            <JikūLogo variant="mark" className="size-3.5" />
             Simple pricing
           </div>
           <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
             Pay only for what you need
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <p className="mt-4 text-base text-muted-foreground sm:text-lg">
             Start free and upgrade as your events grow. No hidden fees, no
             surprise charges.
           </p>
+
+          {/* Billing toggle */}
+          <div className="mt-8 flex justify-center">
+            <BillingToggle yearly={yearly} onChange={setYearly} />
+          </div>
         </div>
 
-        <div className="mt-16 grid gap-8 md:grid-cols-3 lg:mx-auto lg:max-w-5xl">
+        {/* Pricing cards */}
+        <div className="mt-12 grid gap-6 md:grid-cols-3 lg:mx-auto lg:max-w-5xl">
           {TIERS.map((tier, i) => (
-            <PricingCard key={tier.name} tier={tier} index={i} />
+            <PricingCard key={tier.name} tier={tier} index={i} yearly={yearly} />
           ))}
         </div>
 
+        {/* Footnote */}
         <p className="mt-10 text-center text-sm text-muted-foreground">
           All plans include a 14-day free trial. No credit card required.
         </p>
