@@ -6,6 +6,17 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -45,6 +56,7 @@ import {
   type EventFormValues,
 } from "@/components/modules/event/schema";
 import {
+  cancelEventAction,
   createDraftAction,
   publishEventAction,
   updateDraftAction,
@@ -63,6 +75,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
   const [step, setStep] = useState(0);
   const [formError, setFormError] = useState<string | null>(null);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
 
   const {
     control,
@@ -82,6 +95,9 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
   const watchedStart = useWatch({ control, name: "startLocal" });
   const watchedChannels = useWatch({ control, name: "invitationChannels" });
   const isPublished = status === "PUBLISHED";
+  const isCancelled = status === "CANCELLED";
+  // Published events are read-only; cancelled events are terminal.
+  const isLocked = isPublished || isCancelled;
 
   const publishBlockers: string[] = [];
   if (!eventId) {
@@ -96,7 +112,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
   if (!watchedChannels || watchedChannels.length === 0) {
     publishBlockers.push("at least one invitation channel");
   }
-  const canPublish = Boolean(eventId) && publishBlockers.length === 0 && !isPublished;
+  const canPublish = Boolean(eventId) && publishBlockers.length === 0 && !isLocked;
 
   async function goToSettings() {
     if (await trigger(["name", "timezone"])) {
@@ -155,6 +171,26 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
     }
   }
 
+  async function onCancelEvent() {
+    if (!eventId) {
+      return;
+    }
+    setFormError(null);
+    setIsCancelling(true);
+    try {
+      const result = await cancelEventAction(eventId);
+      if (result.error) {
+        setFormError(result.error);
+        return;
+      }
+      toast.success("Event cancelled — guests are being notified");
+      router.push(ROUTES.EVENTS);
+      router.refresh();
+    } finally {
+      setIsCancelling(false);
+    }
+  }
+
   return (
     <Card className="w-full max-w-2xl">
       <CardHeader>
@@ -182,6 +218,15 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                 </AlertDescription>
               </Alert>
             ) : null}
+            {isCancelled ? (
+              <Alert variant="destructive">
+                <AlertTitle>This event has been cancelled</AlertTitle>
+                <AlertDescription>
+                  All tickets were invalidated and every invited guest has been
+                  notified. A cancelled event cannot be edited or re-published.
+                </AlertDescription>
+              </Alert>
+            ) : null}
 
             {step === 0 ? (
               <>
@@ -195,7 +240,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                         {...field}
                         id={field.name}
                         aria-invalid={fieldState.invalid}
-                        disabled={isPublished}
+                        disabled={isLocked}
                       />
                       {fieldState.invalid ? (
                         <FieldError errors={[fieldState.error]} />
@@ -209,7 +254,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                   render={({ field }) => (
                     <Field>
                       <FieldLabel htmlFor={field.name}>Description</FieldLabel>
-                      <Textarea {...field} id={field.name} rows={3} disabled={isPublished} />
+                      <Textarea {...field} id={field.name} rows={3} disabled={isLocked} />
                     </Field>
                   )}
                 />
@@ -222,7 +267,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                       <Select
                         value={field.value}
                         onValueChange={field.onChange}
-                        disabled={isPublished}
+                        disabled={isLocked}
                       >
                         <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
                           <SelectValue placeholder="Select a timezone" />
@@ -254,7 +299,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                         {...field}
                         id={field.name}
                         type="datetime-local"
-                        disabled={isPublished}
+                        disabled={isLocked}
                       />
                     </Field>
                   )}
@@ -269,7 +314,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                         {...field}
                         id={field.name}
                         type="datetime-local"
-                        disabled={isPublished}
+                        disabled={isLocked}
                       />
                     </Field>
                   )}
@@ -280,7 +325,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                   render={({ field }) => (
                     <Field>
                       <FieldLabel htmlFor={field.name}>Location</FieldLabel>
-                      <Input {...field} id={field.name} disabled={isPublished} />
+                      <Input {...field} id={field.name} disabled={isLocked} />
                     </Field>
                   )}
                 />
@@ -304,7 +349,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                         id={field.name}
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        disabled={isPublished}
+                        disabled={isLocked}
                       />
                     </Field>
                   )}
@@ -324,7 +369,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                         id={field.name}
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        disabled={isPublished}
+                        disabled={isLocked}
                       />
                     </Field>
                   )}
@@ -340,7 +385,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                           {...field}
                           id={field.name}
                           type="datetime-local"
-                          disabled={isPublished}
+                          disabled={isLocked}
                         />
                         <FieldDescription>
                           After this time, transfers are closed.
@@ -364,7 +409,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                         id={field.name}
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        disabled={isPublished}
+                        disabled={isLocked}
                       />
                     </Field>
                   )}
@@ -387,7 +432,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                               event.target.value === "" ? null : Number(event.target.value),
                             )
                           }
-                          disabled={isPublished}
+                          disabled={isLocked}
                         />
                       </Field>
                     )}
@@ -416,7 +461,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                                     : field.value.filter((value) => value !== channel),
                                 )
                               }
-                              disabled={isPublished}
+                              disabled={isLocked}
                             />
                             <FieldLabel
                               htmlFor={`channel-${channel}`}
@@ -449,15 +494,41 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                   Next
                 </Button>
               ) : null}
-              <Button type="submit" disabled={isSubmitting || isPublished}>
+              <Button type="submit" disabled={isSubmitting || isLocked}>
                 {isSubmitting ? "Saving…" : "Save draft"}
               </Button>
-              <Button type="button" onClick={onPublish} disabled={!canPublish || isPublishing}>
-                {isPublishing ? "Publishing…" : "Publish"}
-              </Button>
+              {isPublished ? (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button type="button" variant="destructive" disabled={isCancelling}>
+                      {isCancelling ? "Cancelling…" : "Cancel event"}
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Cancel this event?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This cannot be undone. Every issued ticket becomes invalid
+                        immediately, no more RSVPs are accepted, and all invited
+                        guests are notified that the event will not take place.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Keep the event</AlertDialogCancel>
+                      <AlertDialogAction onClick={onCancelEvent}>
+                        Cancel the event
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              ) : (
+                <Button type="button" onClick={onPublish} disabled={!canPublish || isPublishing}>
+                  {isPublishing ? "Publishing…" : "Publish"}
+                </Button>
+              )}
             </div>
           </div>
-          {!isPublished && publishBlockers.length > 0 ? (
+          {!isLocked && publishBlockers.length > 0 ? (
             <FieldDescription className="w-full">
               To publish: {publishBlockers.join(", ")}.
             </FieldDescription>
