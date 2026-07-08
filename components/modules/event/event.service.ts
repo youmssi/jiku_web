@@ -83,3 +83,14 @@ export async function publishEventAction(id: string): Promise<{ error?: string }
   }
   return {};
 }
+
+export async function cancelEventAction(id: string): Promise<{ error?: string }> {
+  const response = await serverFetch(`/events/${id}/cancel`, { method: "POST" });
+  if (response.status === 409) {
+    return { error: "Only a published event can be cancelled." };
+  }
+  if (!response.ok) {
+    return { error: "We couldn't cancel the event. Please try again." };
+  }
+  return {};
+}
