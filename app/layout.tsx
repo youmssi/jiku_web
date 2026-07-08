@@ -4,9 +4,12 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
-const dmSansHeading = DM_Sans({subsets:['latin'],variable:'--font-heading'});
+const dmSansHeading = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-heading",
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,23 +22,75 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jikū — Event Invitations & Ticketing",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://jiku.app",
+  ),
+  title: {
+    default: "Jikū — Event Invitations, Ticketing & Check-in Platform",
+    template: "%s · Jikū",
+  },
   description:
-    "White-label platform for event invitation, ticketing, RSVP, and check-in.",
+    "White-label platform for event invitation, ticketing, RSVP, and check-in. Send invitations via email and WhatsApp, issue digital QR tickets, and check guests in — online or offline.",
   applicationName: "Jikū",
+  keywords: [
+    "event management",
+    "invitation platform",
+    "ticketing",
+    "RSVP",
+    "QR code tickets",
+    "check-in app",
+    "offline check-in",
+    "WhatsApp invitations",
+    "event technology",
+    "white-label event platform",
+  ],
+  authors: [{ name: "Jikū" }],
+  creator: "Jikū",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Jikū",
   },
+  openGraph: {
+    type: "website",
+    siteName: "Jikū",
+    title: "Jikū — Event Invitations, Ticketing & Check-in Platform",
+    description:
+      "White-label platform for event invitation, ticketing, RSVP, and check-in. Send invitations, issue QR tickets, and check guests in — online or offline.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jikū — Event Invitations, Ticketing & Check-in Platform",
+    description:
+      "White-label platform for event invitation, ticketing, RSVP, and check-in.",
+  },
   icons: {
-    icon: "/icon-192.png",
-    apple: "/apple-icon-180.png",
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon-180.png", sizes: "180x180", type: "image/png" }],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0F172A",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F172A" },
+  ],
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -46,9 +101,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, dmSansHeading.variable, "font-sans", inter.variable)}
+      className={cn(
+        "h-full",
+        "antialiased",
+        geistSans.variable,
+        geistMono.variable,
+        dmSansHeading.variable,
+        "font-sans",
+        inter.variable,
+      )}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="flex min-h-full flex-col">
         {children}
         <ServiceWorkerRegister />
       </body>
