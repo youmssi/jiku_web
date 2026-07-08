@@ -6,7 +6,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { getOrganizerContext } from "@/components/modules/identity";
+import { getOrganizerContext } from "@/components/modules/identity/organizer-context";
 import { ROUTES } from "@/lib/constants";
 
 export default async function OrganizerAppLayout({
