@@ -1,5 +1,6 @@
 import { apiBaseUrl } from "@/lib/api";
 import { RsvpActions } from "@/components/modules/guest/components/rsvp-actions";
+import { DataDeletion } from "@/components/modules/guest/components/data-deletion";
 
 interface RsvpView {
   eventName: string;
@@ -11,6 +12,7 @@ interface RsvpView {
   guestName: string;
   status: string;
   ticketCode: string | null;
+  erased: boolean;
   eventStatus: string | null;
 }
 
@@ -74,6 +76,7 @@ export default async function InvitationPage({ params }: PageProps) {
             />
           )}
         </div>
+        <DataDeletion token={token} erased={rsvp.erased} />
       </div>
     </div>
   );

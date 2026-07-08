@@ -2,6 +2,7 @@ import Link from "next/link";
 import { apiBaseUrl } from "@/lib/api";
 import { invitationRoute } from "@/lib/constants";
 import { TicketCard } from "@/components/modules/guest/components/ticket-card";
+import { DataDeletion } from "@/components/modules/guest/components/data-deletion";
 
 interface RsvpView {
   eventName: string;
@@ -13,6 +14,7 @@ interface RsvpView {
   guestName: string;
   status: string;
   ticketCode: string | null;
+  erased: boolean;
   eventStatus: string | null;
 }
 
@@ -67,7 +69,7 @@ export default async function TicketPage({ params }: PageProps) {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center px-4 py-10">
+    <div className="flex flex-1 flex-col items-center justify-center px-4 py-10">
       <TicketCard
         ticketCode={rsvp.ticketCode}
         eventName={rsvp.eventName}
@@ -78,6 +80,9 @@ export default async function TicketPage({ params }: PageProps) {
         logoUrl={rsvp.logoUrl}
         guestName={rsvp.guestName}
       />
+      <div className="w-full max-w-sm">
+        <DataDeletion token={token} erased={rsvp.erased} />
+      </div>
     </div>
   );
 }

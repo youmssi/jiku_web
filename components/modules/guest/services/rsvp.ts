@@ -29,3 +29,15 @@ export async function confirmRsvpAction(token: string): Promise<{ error?: string
 export async function declineRsvpAction(token: string): Promise<{ error?: string }> {
   return submit(token, "decline");
 }
+
+export async function requestErasureAction(token: string): Promise<{ error?: string }> {
+  const response = await fetch(`${apiBaseUrl()}/rsvp/${token}/erase`, {
+    method: "POST",
+    cache: "no-store",
+  });
+  if (!response.ok) {
+    return { error: "We couldn't delete your data just now. Please try again." };
+  }
+  revalidatePath(invitationRoute(token));
+  return {};
+}
