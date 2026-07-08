@@ -1,29 +1,26 @@
 import Link from "next/link";
+import { Download, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AddGuest } from "@/components/modules/guest/add-guest";
 import { GuestImport } from "@/components/modules/guest/guest-import";
+import { GuestsTable, type GuestRow } from "@/components/modules/guest/guests-table";
 import { SendInvitations } from "@/components/modules/guest/send-invitations";
 import { serverFetch } from "@/lib/api-server";
 import { eventDashboardRoute, eventEditRoute } from "@/lib/constants";
 import type { Guest, Invitation } from "@/components/modules/guest/schema";
-import { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS } from "@/lib/channels";
+import { INVITATION_CHANNELS } from "@/lib/channels";
 
-function StatusBadge({ status }: { status: string | null }) {
-  if (!status) {
-    return <span className="text-muted-foreground">—</span>;
-  }
-  const variant =
-    status === "SENT" ? "default" : status === "FAILED" ? "destructive" : "secondary";
-  return <Badge variant={variant}>{status}</Badge>;
-}
+const CSV_TEMPLATE_HREF = "/templates/guest-import-template.csv";
 
 /** Guest-list management for one event: import, invitations and the roster table. */
 export async function GuestsView({ params }: { params: Promise<{ id: string }> }) {
@@ -38,6 +35,15 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
   const statusFor = (guestId: string, channel: string): string | null =>
     invitations.find((invitation) => invitation.guestId === guestId && invitation.channel === channel)
       ?.status ?? null;
+
+  const rows: GuestRow[] = guests.map((guest) => ({
+    id: guest.id,
+    name: `${guest.firstName} ${guest.lastName}`.trim(),
+    contact: guest.email ?? guest.phoneNumber ?? "—",
+    statuses: Object.fromEntries(
+      INVITATION_CHANNELS.map((channel) => [channel, statusFor(guest.id, channel)]),
+    ),
+  }));
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-10">
@@ -58,47 +64,21 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
         <SendInvitations eventId={id} />
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-lg border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Contact</TableHead>
-              {INVITATION_CHANNELS.map((channel) => (
-                <TableHead key={channel}>{INVITATION_CHANNEL_LABELS[channel]}</TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {guests.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={2 + INVITATION_CHANNELS.length}
-                  className="text-center text-muted-foreground"
-                >
-                  No guests yet. Import a CSV to begin.
-                </TableCell>
-              </TableRow>
-            ) : (
-              guests.map((guest) => (
-                <TableRow key={guest.id}>
-                  <TableCell>
-                    {guest.firstName} {guest.lastName}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {guest.email ?? guest.phoneNumber}
-                  </TableCell>
-                  {INVITATION_CHANNELS.map((channel) => (
-                    <TableCell key={channel}>
-                      <StatusBadge status={statusFor(guest.id, channel)} />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      {guests.length === 0 ? (
+        <Empty className="mt-6 border">
+          <EmptyMedia variant="icon">
+            <Users />
+          </EmptyMedia>
+          <EmptyTitle>No guests yet</EmptyTitle>
+          <EmptyDescription>
+            Import a CSV or add a guest by hand to start building your list.
+          </EmptyDescription>
+        </Empty>
+      ) : (
+        <div className="mt-6">
+          <GuestsTable rows={rows} />
+        </div>
+      )}
     </div>
   );
 }
