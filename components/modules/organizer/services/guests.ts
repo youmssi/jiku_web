@@ -33,7 +33,7 @@ export async function importGuestsAction(
 export async function sendInvitationsAction(
   eventId: string,
   channels: string[],
-): Promise<{ queued?: number; error?: string }> {
+): Promise<{ queued?: number; error?: string; paywall?: boolean }> {
   if (channels.length === 0) {
     return { error: "Select at least one channel." };
   }
@@ -41,6 +41,18 @@ export async function sendInvitationsAction(
   const response = await serverFetch(`/events/${eventId}/invitations/send?${params.toString()}`, {
     method: "POST",
   });
+  // 402 Payment Required: the send would exceed the event's guest allowance. The
+  // backend is the authority here; surface its message and flag the paywall so the
+  // UI can offer a path to purchase capacity.
+  if (response.status === 402) {
+    const body = (await response.json().catch(() => null)) as { message?: string } | null;
+    return {
+      paywall: true,
+      error:
+        body?.message ??
+        "This event's guest allowance would be exceeded. Purchase additional capacity to send.",
+    };
+  }
   if (!response.ok) {
     return { error: "We couldn't send the invitations. Please try again." };
   }

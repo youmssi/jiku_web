@@ -7,6 +7,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Emit a self-contained server (.next/standalone) so the production container
+  // ships only the compiled app and its runtime dependencies, not node_modules.
+  // Vercel ignores this setting; it only affects self-hosted/container builds.
+  output: "standalone",
   async headers() {
     return [
       {

@@ -57,7 +57,15 @@ export default async function EventsPage() {
                     <CardTitle className="text-base">{event.name}</CardTitle>
                     <p className="text-sm text-muted-foreground">{formatStart(event)}</p>
                   </div>
-                  <Badge variant={event.status === "PUBLISHED" ? "default" : "secondary"}>
+                  <Badge
+                    variant={
+                      event.status === "PUBLISHED"
+                        ? "default"
+                        : event.status === "CANCELLED"
+                          ? "destructive"
+                          : "secondary"
+                    }
+                  >
                     {event.status}
                   </Badge>
                 </CardHeader>
