@@ -2,11 +2,60 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { JikūLogo } from "@/components/ui/jiku-logo";
+import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants";
 import type { LandingContent } from "./content";
+
+// ─── Language switch ───────────────────────────────────────────────
+// The two locales live at separate static routes (`/` and `/en`), so
+// toggling navigates rather than flipping client-side state. The Switch's
+// checked position always reflects the *current* locale (checked = EN),
+// and clicking either side label or the thumb navigates to the other page.
+function LanguageSwitch({
+  switchLocale,
+  large = false,
+}: {
+  switchLocale: LandingContent["nav"]["switchLocale"];
+  large?: boolean;
+}) {
+  const router = useRouter();
+  const targetLocale = switchLocale.label.toLowerCase();
+  const isCurrentlyEn = targetLocale === "fr";
+
+  return (
+    <div className="flex items-center gap-2">
+      <span
+        className={cn(
+          "font-semibold transition-colors",
+          large ? "text-lg" : "text-xs",
+          !isCurrentlyEn ? "text-foreground" : "text-muted-foreground",
+        )}
+      >
+        FR
+      </span>
+      <Switch
+        checked={isCurrentlyEn}
+        onCheckedChange={() => router.push(switchLocale.href)}
+        aria-label={switchLocale.ariaLabel}
+        size={large ? "default" : "sm"}
+      />
+      <span
+        className={cn(
+          "font-semibold transition-colors",
+          large ? "text-lg" : "text-xs",
+          isCurrentlyEn ? "text-foreground" : "text-muted-foreground",
+        )}
+      >
+        EN
+      </span>
+    </div>
+  );
+}
 
 export function Navigation({ content }: { content: LandingContent["nav"] }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -73,35 +122,26 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
         </div>
 
         {/* Desktop CTAs */}
-        <div className="hidden items-center gap-3 md:flex">
-          <Link
-            href={content.switchLocale.href}
-            aria-label={content.switchLocale.ariaLabel}
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            {content.switchLocale.label}
-          </Link>
+        <div className="hidden items-center gap-4 md:flex">
+          <LanguageSwitch switchLocale={content.switchLocale} />
           <Button variant="ghost" size="sm" asChild className="rounded-full">
             <Link href={ROUTES.LOGIN}>{content.signIn}</Link>
           </Button>
-          <Button
-            size="sm"
-            className="rounded-full bg-foreground text-background hover:bg-foreground/90 shadow-sm"
-            asChild
-          >
+          <Button size="sm" className="rounded-full shadow-sm" asChild>
             <Link href={ROUTES.REGISTER}>{content.register}</Link>
           </Button>
         </div>
 
         {/* Mobile menu toggle */}
-        <button
-          type="button"
-          className="relative z-50 flex size-10 items-center justify-center md:hidden"
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative z-50 md:hidden"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           aria-label={isMobileOpen ? content.menuClose : content.menuOpen}
         >
           {isMobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-        </button>
+        </Button>
       </nav>
 
       {/* Mobile menu overlay */}
@@ -118,24 +158,16 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href={content.switchLocale.href}
-              aria-label={content.switchLocale.ariaLabel}
-              onClick={() => setIsMobileOpen(false)}
-              className="text-3xl font-semibold tracking-tight text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {content.switchLocale.label}
-            </Link>
+            <div onClick={() => setIsMobileOpen(false)}>
+              <LanguageSwitch switchLocale={content.switchLocale} large />
+            </div>
             <hr className="my-4 border-border/50" />
             <Button variant="outline" asChild className="w-full justify-center rounded-full">
               <Link href={ROUTES.LOGIN} onClick={() => setIsMobileOpen(false)}>
                 {content.signIn}
               </Link>
             </Button>
-            <Button
-              asChild
-              className="w-full justify-center rounded-full bg-foreground text-background hover:bg-foreground/90"
-            >
+            <Button asChild className="w-full justify-center rounded-full">
               <Link href={ROUTES.REGISTER} onClick={() => setIsMobileOpen(false)}>
                 {content.register}
               </Link>

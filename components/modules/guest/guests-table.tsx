@@ -2,6 +2,7 @@
 
 import { type ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -12,6 +13,17 @@ export interface GuestRow {
   name: string;
   contact: string;
   statuses: Record<string, string | null>;
+}
+
+function initials(name: string): string {
+  return (
+    name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((word) => word[0]?.toUpperCase() ?? "")
+      .join("") || "?"
+  );
 }
 
 function StatusBadge({ status }: { status: string | null }) {
@@ -35,6 +47,14 @@ const COLUMNS: ColumnDef<GuestRow>[] = [
         Name
         <ArrowUpDown className="size-3.5" />
       </Button>
+    ),
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2.5">
+        <Avatar className="size-7">
+          <AvatarFallback className="text-[0.65rem]">{initials(row.original.name)}</AvatarFallback>
+        </Avatar>
+        <span className="font-medium">{row.original.name}</span>
+      </div>
     ),
   },
   {

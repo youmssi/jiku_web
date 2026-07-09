@@ -54,7 +54,7 @@ function StepCard({
       </div>
 
       {!isLast && (
-        <div className="hidden lg:flex justify-center py-4">
+        <div className="flex justify-center py-4 lg:hidden">
           <div className="flex h-10 w-px items-center justify-center bg-gradient-to-b from-primary/30 via-primary/20 to-transparent">
             <ArrowDown className="size-4 text-primary/40 animate-bounce" />
           </div>
@@ -81,7 +81,7 @@ export function HowItWorksSection({ content }: { content: LandingContent["howItW
           </p>
         </div>
 
-        <div className="mt-16 grid gap-6 lg:grid-cols-4 lg:gap-0">
+        <div className="mt-16 grid gap-6 lg:grid-cols-4 lg:gap-8">
           {content.steps.map((step, i) => (
             <StepCard
               key={step.title}

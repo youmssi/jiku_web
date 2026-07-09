@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 import { EventDashboard } from "@/components/modules/dashboard/event-dashboard";
 import { serverFetch } from "@/lib/api-server";
 import { eventGuestsExportRoute, eventGuestsRoute } from "@/lib/constants";
@@ -30,7 +31,7 @@ export async function DashboardView({ params }: { params: Promise<{ id: string }
           <h1 className="text-2xl font-semibold">{data.eventName}</h1>
           <Badge variant="secondary">{data.eventStatus}</Badge>
         </div>
-        <div className="flex gap-2">
+        <ButtonGroup>
           <Button variant="outline" asChild>
             <a href={eventGuestsExportRoute(id)} download>
               Export guest list
@@ -39,7 +40,7 @@ export async function DashboardView({ params }: { params: Promise<{ id: string }
           <Button variant="outline" asChild>
             <Link href={eventGuestsRoute(id)}>Guests</Link>
           </Button>
-        </div>
+        </ButtonGroup>
       </div>
 
       <div className="mt-8">

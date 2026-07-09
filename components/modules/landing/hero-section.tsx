@@ -9,20 +9,25 @@ import { useOnScreen } from "@/hooks/use-on-screen";
 import { ROUTES } from "@/lib/constants";
 import type { LandingContent } from "./content";
 
-// ─── Character-by-character animation ─────────────────────────────
-// The swap is reveal-only: the next word appears immediately with a staggered
-// character rise, so the headline never sits with a blank gap (a full-page
-// screenshot at any moment always shows a word).
+// ─── Word-swap animation ────────────────────────────────────────────
+// The gradient/clip classes live on this same animated element, not a
+// wrapping ancestor: an `inline-block` (or transformed) descendant of a
+// separate `background-clip: text` ancestor renders fully invisible in
+// Chromium (confirmed in isolation — the bug is unrelated to animation
+// timing; a static inline-block child alone reproduces it). Keeping the
+// gradient and the animation on one element avoids that nesting entirely.
 function AnimatedWord({ words }: { words: string[] }) {
   const [index, setIndex] = useState(0);
-  const [phase, setPhase] = useState<"entering" | "visible">("visible");
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     let reveal: ReturnType<typeof setTimeout> | undefined;
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % words.length);
-      setPhase("entering");
-      reveal = setTimeout(() => setPhase("visible"), 50);
+      setVisible(false);
+      reveal = setTimeout(() => {
+        setIndex((prev) => (prev + 1) % words.length);
+        setVisible(true);
+      }, 200);
     }, 3200);
     return () => {
       clearInterval(interval);
@@ -30,26 +35,15 @@ function AnimatedWord({ words }: { words: string[] }) {
     };
   }, [words.length]);
 
-  const chars = words[index].split("");
-
   return (
     <span
-      className="relative inline-flex overflow-hidden align-bottom"
-      style={{ height: "1.05em" }}
+      className="inline-block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent transition-all duration-300 ease-out"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(0.3em)",
+      }}
     >
-      {chars.map((char, i) => (
-        <span
-          key={`${index}-${i}`}
-          className="inline-block transition-all duration-300"
-          style={{
-            opacity: phase === "entering" ? 0 : 1,
-            transform: phase === "entering" ? "translateY(0.5em)" : "translateY(0)",
-            transitionDelay: phase === "entering" ? "0ms" : `${i * 35}ms`,
-          }}
-        >
-          {char}
-        </span>
-      ))}
+      {words[index]}
     </span>
   );
 }
@@ -119,16 +113,14 @@ export function HeroSection({ content }: { content: LandingContent["hero"] }) {
 
         {/* Main headline */}
         <h1
-          className={`mx-auto max-w-5xl text-balance text-[clamp(2.5rem,8vw,5.5rem)] font-bold leading-[0.95] tracking-tight transition-all delay-200 duration-700 ${
+          className={`mx-auto max-w-5xl text-balance text-[clamp(2.5rem,8vw,5.5rem)] font-bold leading-[0.95] tracking-tight transition-all delay-200 duration-700 text-foreground ${
             visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
           {content.headlinePrefix}
-          <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/50 bg-clip-text text-transparent">
-            <AnimatedWord words={content.headlineWords} />
-          </span>
+          <AnimatedWord words={content.headlineWords} />
           <br />
-          <span className="text-muted-foreground/60">{content.headlineSuffix}</span>
+          <span className="text-foreground/70">{content.headlineSuffix}</span>
         </h1>
 
         {/* Subtitle */}

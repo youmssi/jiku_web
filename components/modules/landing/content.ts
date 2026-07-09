@@ -90,7 +90,7 @@ export interface LandingContent {
 const fr: LandingContent = {
   htmlLang: "fr",
   meta: {
-    title: "Jikū — Invitations, billetterie et check-in pour vos événements",
+    title: "Jikū : invitations, billetterie et check-in pour vos événements",
     description:
       "Envoyez vos invitations par e-mail et WhatsApp, suivez les confirmations, générez des billets QR et contrôlez les entrées même sans réseau. Gratuit jusqu'à 100 invités.",
     keywords: [
@@ -125,10 +125,10 @@ const fr: LandingContent = {
     headlineWords: ["invitations", "billets", "RSVP", "entrées"],
     headlineSuffix: "enfin simples.",
     subtitle:
-      "Envoyez vos invitations par e-mail et WhatsApp, suivez les confirmations, générez des billets QR infalsifiables et contrôlez les entrées — même quand le réseau tombe. Le tout à vos couleurs, sous votre nom.",
+      "Envoyez vos invitations par e-mail et WhatsApp, suivez les confirmations, générez des billets QR infalsifiables et contrôlez les entrées, même quand le réseau tombe. Le tout à vos couleurs, sous votre nom.",
     primaryCta: "Créer mon premier événement",
     secondaryCta: "Voir les fonctionnalités",
-    ctaNote: "Gratuit jusqu'à 100 invités — sans carte bancaire",
+    ctaNote: "Gratuit jusqu'à 100 invités, sans carte bancaire",
     truths: [
       { value: "E-mail + WhatsApp", label: "Deux canaux d'invitation" },
       { value: "Billets QR signés", label: "Uniques et infalsifiables" },
@@ -178,7 +178,7 @@ const fr: LandingContent = {
     badge: "Simple, de bout en bout",
     heading: "De la liste d'invités au check-in en quatre étapes",
     subheading:
-      "Aucune compétence technique nécessaire — si vous savez remplir un tableur, vous savez utiliser Jikū.",
+      "Aucune compétence technique nécessaire : si vous savez remplir un tableur, vous savez utiliser Jikū.",
     steps: [
       {
         title: "Créez votre événement",
@@ -198,7 +198,7 @@ const fr: LandingContent = {
       {
         title: "Contrôlez les entrées",
         description:
-          "Vos contrôleurs scannent les billets depuis leur propre téléphone, via un simple lien — avec ou sans connexion.",
+          "Vos contrôleurs scannent les billets depuis leur propre téléphone, via un simple lien, avec ou sans connexion.",
       },
     ],
   },
@@ -206,7 +206,7 @@ const fr: LandingContent = {
     badge: "Pensé pour vos événements",
     heading: "Du mariage de 150 invités au gala de 10 000",
     subheading:
-      "Le même outil, du dîner de famille à l'événement professionnel — seul le nombre d'invités change.",
+      "Le même outil, du dîner de famille à l'événement professionnel. Seul le nombre d'invités change.",
     cases: [
       {
         title: "Mariages & célébrations",
@@ -216,7 +216,7 @@ const fr: LandingContent = {
       {
         title: "Conférences & séminaires",
         description:
-          "Importez la liste des participants, envoyez les accès en une fois, suivez la présence en direct — même quand le Wi-Fi du centre de conférence flanche.",
+          "Importez la liste des participants, envoyez les accès en une fois, suivez la présence en direct, même quand le Wi-Fi du centre de conférence flanche.",
       },
       {
         title: "Galas & concerts",
@@ -235,7 +235,7 @@ const fr: LandingContent = {
     badge: "Tarifs",
     heading: "Un prix par événement. Pas d'abonnement.",
     subheading:
-      "Vous payez pour l'événement que vous organisez, rien d'autre. Toutes les fonctionnalités sont incluses à chaque niveau — seule la taille change.",
+      "Vous payez pour l'événement que vous organisez, rien d'autre. Toutes les fonctionnalités sont incluses à chaque niveau. Seule la taille change.",
     perEvent: "par événement",
     upToTemplate: "Jusqu'à {guests} invités",
     tiers: [
@@ -273,7 +273,7 @@ const fr: LandingContent = {
       {
         question: "Comment les invitations WhatsApp sont-elles envoyées ?",
         answer:
-          "Via l'API officielle WhatsApp Business. Chaque invité reçoit un message individuel avec son lien personnel — rien à voir avec un message transféré de groupe en groupe.",
+          "Via l'API officielle WhatsApp Business. Chaque invité reçoit un message individuel avec son lien personnel, rien à voir avec un message transféré de groupe en groupe.",
       },
       {
         question: "Qu'est-ce que la marque blanche, concrètement ?",
@@ -301,7 +301,7 @@ const fr: LandingContent = {
   },
   footer: {
     description:
-      "Invitations, billetterie, RSVP et check-in en marque blanche — pensé pour les organisateurs d'événements en Afrique francophone.",
+      "Invitations, billetterie, RSVP et check-in en marque blanche, pensé pour les organisateurs d'événements en Afrique francophone.",
     groups: [
       {
         title: "Produit",
@@ -333,7 +333,7 @@ const fr: LandingContent = {
 const en: LandingContent = {
   htmlLang: "en",
   meta: {
-    title: "Jikū — Event Invitations, Ticketing & Check-in",
+    title: "Jikū: Event Invitations, Ticketing & Check-in",
     description:
       "Send invitations by email and WhatsApp, track RSVPs, issue QR tickets, and check guests in even when the network drops. Free for up to 100 guests.",
     keywords: [
@@ -368,10 +368,10 @@ const en: LandingContent = {
     headlineWords: ["invitations", "tickets", "RSVPs", "check-ins"],
     headlineSuffix: "finally simple.",
     subtitle:
-      "Send invitations by email and WhatsApp, track confirmations, issue tamper-proof QR tickets, and check guests in — even when the network drops. All under your own brand.",
+      "Send invitations by email and WhatsApp, track confirmations, issue tamper-proof QR tickets, and check guests in, even when the network drops. All under your own brand.",
     primaryCta: "Create my first event",
     secondaryCta: "See the features",
-    ctaNote: "Free for up to 100 guests — no card required",
+    ctaNote: "Free for up to 100 guests, no card required",
     truths: [
       { value: "Email + WhatsApp", label: "Two invitation channels" },
       { value: "Signed QR tickets", label: "Unique and tamper-proof" },
@@ -403,7 +403,7 @@ const en: LandingContent = {
       {
         title: "Check-in without a network",
         description:
-          "The guest list syncs to the validator's phone ahead of time. Connection drops on the day? Keep scanning — everything syncs when it returns.",
+          "The guest list syncs to the validator's phone ahead of time. Connection drops on the day? Keep scanning. Everything syncs when it returns.",
       },
       {
         title: "Your brand, not ours",
@@ -421,7 +421,7 @@ const en: LandingContent = {
     badge: "Simple, end to end",
     heading: "From guest list to check-in in four steps",
     subheading:
-      "No technical skills needed — if you can fill in a spreadsheet, you can run Jikū.",
+      "No technical skills needed: if you can fill in a spreadsheet, you can run Jikū.",
     steps: [
       {
         title: "Create your event",
@@ -441,7 +441,7 @@ const en: LandingContent = {
       {
         title: "Check guests in",
         description:
-          "Your staff scan tickets from their own phones through a simple link — with or without a connection.",
+          "Your staff scan tickets from their own phones through a simple link, with or without a connection.",
       },
     ],
   },
@@ -449,7 +449,7 @@ const en: LandingContent = {
     badge: "Built for real events",
     heading: "From a 150-guest wedding to a 10,000-guest gala",
     subheading:
-      "The same tool for a family dinner or a professional event — only the guest count changes.",
+      "The same tool for a family dinner or a professional event. Only the guest count changes.",
     cases: [
       {
         title: "Weddings & celebrations",
@@ -459,7 +459,7 @@ const en: LandingContent = {
       {
         title: "Conferences & seminars",
         description:
-          "Import the attendee list, send access in one go, track attendance live — even when the venue Wi-Fi gives up.",
+          "Import the attendee list, send access in one go, track attendance live, even when the venue Wi-Fi gives up.",
       },
       {
         title: "Galas & concerts",
@@ -478,7 +478,7 @@ const en: LandingContent = {
     badge: "Pricing",
     heading: "One price per event. No subscription.",
     subheading:
-      "You pay for the event you're running, nothing else. Every feature is included at every tier — only the size changes.",
+      "You pay for the event you're running, nothing else. Every feature is included at every tier. Only the size changes.",
     perEvent: "per event",
     upToTemplate: "Up to {guests} guests",
     tiers: [
@@ -516,7 +516,7 @@ const en: LandingContent = {
       {
         question: "How are WhatsApp invitations sent?",
         answer:
-          "Through the official WhatsApp Business API. Each guest receives an individual message with their personal link — nothing like a message forwarded from group to group.",
+          "Through the official WhatsApp Business API. Each guest receives an individual message with their personal link, nothing like a message forwarded from group to group.",
       },
       {
         question: "What does white-label actually mean?",
@@ -544,7 +544,7 @@ const en: LandingContent = {
   },
   footer: {
     description:
-      "White-label invitations, ticketing, RSVP, and check-in — built for event organizers in Francophone Africa.",
+      "White-label invitations, ticketing, RSVP, and check-in, built for event organizers in Francophone Africa.",
     groups: [
       {
         title: "Product",

@@ -26,11 +26,11 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://jiku.app",
   ),
   title: {
-    default: "Jikū — Event Invitations, Ticketing & Check-in Platform",
+    default: "Jikū: Event Invitations, Ticketing & Check-in Platform",
     template: "%s · Jikū",
   },
   description:
-    "White-label platform for event invitation, ticketing, RSVP, and check-in. Send invitations via email and WhatsApp, issue digital QR tickets, and check guests in — online or offline.",
+    "White-label platform for event invitation, ticketing, RSVP, and check-in. Send invitations via email and WhatsApp, issue digital QR tickets, and check guests in online or offline.",
   applicationName: "Jikū",
   keywords: [
     "event management",
@@ -54,13 +54,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Jikū",
-    title: "Jikū — Event Invitations, Ticketing & Check-in Platform",
+    title: "Jikū: Event Invitations, Ticketing & Check-in Platform",
     description:
-      "White-label platform for event invitation, ticketing, RSVP, and check-in. Send invitations, issue QR tickets, and check guests in — online or offline.",
+      "White-label platform for event invitation, ticketing, RSVP, and check-in. Send invitations, issue QR tickets, and check guests in online or offline.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jikū — Event Invitations, Ticketing & Check-in Platform",
+    title: "Jikū: Event Invitations, Ticketing & Check-in Platform",
     description:
       "White-label platform for event invitation, ticketing, RSVP, and check-in.",
   },
@@ -94,6 +94,7 @@ export const viewport: Viewport = {
   ],
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

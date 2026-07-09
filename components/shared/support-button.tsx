@@ -20,7 +20,7 @@ export function SupportButton() {
   const whatsApp = supportWhatsAppLink();
 
   return (
-    <div className="fixed bottom-4 right-4 z-40">
+    <div className="fixed bottom-20 right-4 z-40 md:bottom-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size="sm" variant="secondary" className="shadow-md">

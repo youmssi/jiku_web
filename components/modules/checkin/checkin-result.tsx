@@ -55,13 +55,13 @@ export function CheckInResult({ result, timezone, onDismiss }: CheckInResultProp
 
       {result.outcome === "CANCELLED" ? (
         <p className="mt-3 text-lg text-white/90">
-          This ticket was cancelled — the guest declined.
+          This ticket was cancelled: the guest declined.
         </p>
       ) : null}
 
       {result.outcome === "EVENT_CANCELLED" ? (
         <p className="mt-3 text-lg text-white/90">
-          This event has been cancelled — no ticket is valid for entry.
+          This event has been cancelled: no ticket is valid for entry.
         </p>
       ) : null}
 
