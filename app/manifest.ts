@@ -7,7 +7,7 @@ import type { MetadataRoute } from "next";
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Jikū — Event Invitations & Ticketing",
+    name: "Jikū: Event Invitations & Ticketing",
     short_name: "Jikū",
     description:
       "White-label platform for event invitation, ticketing, RSVP, and check-in.",

@@ -7,7 +7,18 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/api/", "/login", "/register", "/invitation/", "/checkin/", "/offline"],
+      // Authenticated app areas and tokenized guest/validator links carry no
+      // indexable content; /register stays crawlable as a conversion page.
+      disallow: [
+        "/api/",
+        "/login",
+        "/dashboard",
+        "/events",
+        "/settings",
+        "/invitation/",
+        "/checkin/",
+        "/offline",
+      ],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
   };

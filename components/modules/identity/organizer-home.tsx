@@ -21,7 +21,7 @@ export async function OrganizerHome() {
       </div>
       <p className="mt-4 rounded-md bg-muted px-4 py-3 text-sm text-muted-foreground">
         New here? Anytime you need help, use the <strong>Help &amp; support</strong>{" "}
-        button in the bottom-right corner — we&apos;re a message away.
+        button in the bottom-right corner. We&apos;re a message away.
       </p>
       <div className="mt-8 flex flex-col items-start gap-4 rounded-lg border p-8">
         <div>

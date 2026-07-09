@@ -5,13 +5,14 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { billingReceiptRoute } from "@/lib/constants";
-import { purchaseTierAction } from "@/components/modules/organizer/services/billing";
+import { formatLocalDateTime } from "@/lib/datetime";
+import { purchaseTierAction } from "./billing.service";
 import type {
   PaymentHistoryItem,
   PaymentInstruction,
   TierCatalog,
   UsageAllowance,
-} from "@/components/modules/organizer/billing-types";
+} from "./schema";
 
 interface BillingViewProps {
   eventId: string;
@@ -22,12 +23,6 @@ interface BillingViewProps {
 
 function formatAmount(minor: number, currency: string): string {
   return `${(minor / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })} ${currency}`;
-}
-
-function formatDate(iso: string): string {
-  return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(
-    new Date(iso),
-  );
 }
 
 export function BillingView({ eventId, usage, catalog, payments }: BillingViewProps) {
@@ -135,7 +130,7 @@ export function BillingView({ eventId, usage, catalog, payments }: BillingViewPr
               <tbody className="divide-y">
                 {payments.map((payment) => (
                   <tr key={payment.paymentId}>
-                    <td className="px-4 py-2">{formatDate(payment.createdAt)}</td>
+                    <td className="px-4 py-2">{formatLocalDateTime(payment.createdAt)}</td>
                     <td className="px-4 py-2">{payment.eventName}</td>
                     <td className="px-4 py-2">{payment.tier}</td>
                     <td className="px-4 py-2">

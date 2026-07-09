@@ -1,57 +1,49 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { useOnScreen } from "@/hooks/use-on-screen";
 import { ROUTES } from "@/lib/constants";
+import type { LandingContent } from "./content";
 
-// ─── Character-by-character animation ─────────────────────────────
-function AnimatedWord() {
-  const words = ["invitations", "ticketing", "RSVP", "check-in"];
+// ─── Word-swap animation ────────────────────────────────────────────
+// The gradient/clip classes live on this same animated element, not a
+// wrapping ancestor: an `inline-block` (or transformed) descendant of a
+// separate `background-clip: text` ancestor renders fully invisible in
+// Chromium (confirmed in isolation — the bug is unrelated to animation
+// timing; a static inline-block child alone reproduces it). Keeping the
+// gradient and the animation on one element avoids that nesting entirely.
+function AnimatedWord({ words }: { words: string[] }) {
   const [index, setIndex] = useState(0);
-  const [phase, setPhase] = useState<"entering" | "visible" | "leaving">("visible");
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase("visible"), 100);
+    let reveal: ReturnType<typeof setTimeout> | undefined;
     const interval = setInterval(() => {
-      setPhase("leaving");
-      setTimeout(() => {
+      setVisible(false);
+      reveal = setTimeout(() => {
         setIndex((prev) => (prev + 1) % words.length);
-        setPhase("entering");
-        setTimeout(() => setPhase("visible"), 50);
-      }, 400);
+        setVisible(true);
+      }, 200);
     }, 3200);
     return () => {
-      clearTimeout(t1);
       clearInterval(interval);
+      clearTimeout(reveal);
     };
-  }, []);
-
-  const chars = words[index].split("");
+  }, [words.length]);
 
   return (
-    <span className="relative inline-flex overflow-hidden" style={{ height: "1.1em" }}>
-      {chars.map((char, i) => (
-        <span
-          key={`${index}-${i}`}
-          className="inline-block transition-all duration-300"
-          style={{
-            opacity: phase === "leaving" ? 0 : 1,
-            transform:
-              phase === "entering"
-                ? "translateY(0.4em)"
-                : phase === "leaving"
-                  ? "translateY(-0.4em)"
-                  : "translateY(0)",
-            transitionDelay: phase === "entering" ? `${i * 40}ms` : "0ms",
-          }}
-        >
-          {char}
-        </span>
-      ))}
+    <span
+      className="inline-block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent transition-all duration-300 ease-out"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(0.3em)",
+      }}
+    >
+      {words[index]}
     </span>
   );
 }
@@ -60,7 +52,6 @@ function AnimatedWord() {
 function BackgroundGrid() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-[0.04]">
-      {/* Vertical lines */}
       <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="hero-grid" width="80" height="80" patternUnits="userSpaceOnUse">
@@ -69,7 +60,6 @@ function BackgroundGrid() {
         </defs>
         <rect width="100%" height="100%" fill="url(#hero-grid)" />
       </svg>
-      {/* Gradient overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
     </div>
   );
@@ -86,14 +76,11 @@ function GradientOrbs() {
   );
 }
 
-// ─── Premium stat item ────────────────────────────────────────────
-function StatItem({ value, label, delay }: { value: string; label: string; delay: string }) {
+// ─── Product truth item (no invented metrics — capabilities only) ──
+function TruthItem({ value, label }: { value: string; label: string }) {
   return (
-    <div
-      className="text-center transition-all duration-700"
-      style={{ transitionDelay: delay }}
-    >
-      <div className="bg-gradient-to-b from-foreground to-foreground/60 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl">
+    <div className="text-center">
+      <div className="bg-gradient-to-b from-foreground to-foreground/60 bg-clip-text text-lg font-bold tracking-tight text-transparent sm:text-xl">
         {value}
       </div>
       <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{label}</div>
@@ -102,7 +89,7 @@ function StatItem({ value, label, delay }: { value: string; label: string; delay
 }
 
 // ─── Hero Section ─────────────────────────────────────────────────
-export function HeroSection() {
+export function HeroSection({ content }: { content: LandingContent["hero"] }) {
   const { ref, visible } = useOnScreen(0.05);
 
   return (
@@ -121,21 +108,19 @@ export function HeroSection() {
           }`}
         >
           <JikūLogo variant="mark" className="size-3.5" />
-          White-label event platform
+          {content.badge}
         </div>
 
         {/* Main headline */}
         <h1
-          className={`mx-auto max-w-5xl text-balance text-[clamp(2.5rem,8vw,5.5rem)] font-bold leading-[0.95] tracking-tight transition-all delay-200 duration-700 ${
+          className={`mx-auto max-w-5xl text-balance text-[clamp(2.5rem,8vw,5.5rem)] font-bold leading-[0.95] tracking-tight transition-all delay-200 duration-700 text-foreground ${
             visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          Event{" "}
-          <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/50 bg-clip-text text-transparent">
-            <AnimatedWord />
-          </span>
+          {content.headlinePrefix}
+          <AnimatedWord words={content.headlineWords} />
           <br />
-          <span className="text-muted-foreground/60">made simple.</span>
+          <span className="text-foreground/70">{content.headlineSuffix}</span>
         </h1>
 
         {/* Subtitle */}
@@ -144,9 +129,7 @@ export function HeroSection() {
             visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          Send invitations via email and WhatsApp, manage RSVPs, issue digital
-          tickets with QR codes, and check guests in — online or offline. All
-          under your own brand.
+          {content.subtitle}
         </p>
 
         {/* CTA buttons */}
@@ -162,7 +145,7 @@ export function HeroSection() {
           >
             <Link href={ROUTES.REGISTER}>
               <span className="relative z-10 flex items-center gap-2">
-                Start free — no credit card
+                {content.primaryCta}
                 <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
               </span>
               <span className="absolute inset-0 z-0 bg-gradient-to-r from-primary to-primary/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -176,21 +159,28 @@ export function HeroSection() {
           >
             <Link href="#features">
               <QrCode className="mr-2 size-4" />
-              See features
+              {content.secondaryCta}
             </Link>
           </Button>
         </div>
 
-        {/* Stats row */}
+        <p
+          className={`mt-6 text-sm text-muted-foreground transition-all delay-700 duration-700 ${
+            visible ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {content.ctaNote}
+        </p>
+
+        {/* Product truths row */}
         <div
           className={`mt-16 grid grid-cols-2 gap-8 border-t border-border/30 pt-12 sm:grid-cols-4 transition-all delay-[900ms] duration-700 ${
             visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          <StatItem value="50K+" label="Invitations sent" delay="0ms" />
-          <StatItem value="1.2K+" label="Events managed" delay="100ms" />
-          <StatItem value="200K+" label="Guests checked in" delay="200ms" />
-          <StatItem value="99.9%" label="Offline reliability" delay="300ms" />
+          {content.truths.map((truth) => (
+            <TruthItem key={truth.value} value={truth.value} label={truth.label} />
+          ))}
         </div>
       </div>
     </section>

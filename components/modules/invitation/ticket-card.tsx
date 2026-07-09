@@ -68,7 +68,7 @@ export function TicketCard({
         </div>
 
         <p className="mt-4 text-center text-xs text-muted-foreground">
-          Save or screenshot this ticket — it works offline and you can show it at
+          Save or screenshot this ticket. It works offline and you can show it at
           the entrance.
         </p>
       </div>

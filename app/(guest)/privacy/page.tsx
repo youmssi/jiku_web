@@ -23,7 +23,7 @@ export default function PrivacyNoticePage() {
           <h2 className="font-medium">Who has your data</h2>
           <p className="mt-1 text-muted-foreground">
             The event organizer added your name and contact details so they could
-            invite you and manage the event. They decide how your data is used — they
+            invite you and manage the event. They decide how your data is used, and they
             are the ones responsible for it.
           </p>
         </section>

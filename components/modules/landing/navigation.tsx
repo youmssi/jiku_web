@@ -2,18 +2,62 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { JikūLogo } from "@/components/ui/jiku-logo";
+import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants";
+import type { LandingContent } from "./content";
 
-const NAV_LINKS = [
-  { label: "Features", href: "#features" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Docs", href: "#how-it-works" },
-] as const;
+// ─── Language switch ───────────────────────────────────────────────
+// The two locales live at separate static routes (`/` and `/en`), so
+// toggling navigates rather than flipping client-side state. The Switch's
+// checked position always reflects the *current* locale (checked = EN),
+// and clicking either side label or the thumb navigates to the other page.
+function LanguageSwitch({
+  switchLocale,
+  large = false,
+}: {
+  switchLocale: LandingContent["nav"]["switchLocale"];
+  large?: boolean;
+}) {
+  const router = useRouter();
+  const targetLocale = switchLocale.label.toLowerCase();
+  const isCurrentlyEn = targetLocale === "fr";
 
-export function Navigation() {
+  return (
+    <div className="flex items-center gap-2">
+      <span
+        className={cn(
+          "font-semibold transition-colors",
+          large ? "text-lg" : "text-xs",
+          !isCurrentlyEn ? "text-foreground" : "text-muted-foreground",
+        )}
+      >
+        FR
+      </span>
+      <Switch
+        checked={isCurrentlyEn}
+        onCheckedChange={() => router.push(switchLocale.href)}
+        aria-label={switchLocale.ariaLabel}
+        size={large ? "default" : "sm"}
+      />
+      <span
+        className={cn(
+          "font-semibold transition-colors",
+          large ? "text-lg" : "text-xs",
+          isCurrentlyEn ? "text-foreground" : "text-muted-foreground",
+        )}
+      >
+        EN
+      </span>
+    </div>
+  );
+}
+
+export function Navigation({ content }: { content: LandingContent["nav"] }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -37,9 +81,7 @@ export function Navigation() {
   return (
     <header
       className={`fixed inset-x-0 z-50 transition-all duration-500 ${
-        isScrolled
-          ? "top-4 px-4"
-          : "top-0 px-0"
+        isScrolled ? "top-4 px-4" : "top-0 px-0"
       }`}
     >
       <nav
@@ -67,54 +109,46 @@ export function Navigation() {
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden items-center gap-10 md:flex">
-          {NAV_LINKS.map((link) => (
+        <div className="hidden items-center gap-8 md:flex">
+          {content.links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className="relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {link.label}
-              <span className="absolute -bottom-1 left-0 h-px w-0 bg-foreground transition-all duration-300 group-hover:w-full" />
             </Link>
           ))}
         </div>
 
         {/* Desktop CTAs */}
-        <div className="hidden items-center gap-3 md:flex">
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-            className="rounded-full"
-          >
-            <Link href={ROUTES.LOGIN}>Sign in</Link>
+        <div className="hidden items-center gap-4 md:flex">
+          <LanguageSwitch switchLocale={content.switchLocale} />
+          <Button variant="ghost" size="sm" asChild className="rounded-full">
+            <Link href={ROUTES.LOGIN}>{content.signIn}</Link>
           </Button>
-          <Button
-            size="sm"
-            className="rounded-full bg-foreground text-background hover:bg-foreground/90 shadow-sm"
-            asChild
-          >
-            <Link href={ROUTES.REGISTER}>Get started</Link>
+          <Button size="sm" className="rounded-full shadow-sm" asChild>
+            <Link href={ROUTES.REGISTER}>{content.register}</Link>
           </Button>
         </div>
 
         {/* Mobile menu toggle */}
-        <button
-          type="button"
-          className="relative z-50 flex size-10 items-center justify-center md:hidden"
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative z-50 md:hidden"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
-          aria-label={isMobileOpen ? "Close menu" : "Open menu"}
+          aria-label={isMobileOpen ? content.menuClose : content.menuOpen}
         >
           {isMobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-        </button>
+        </Button>
       </nav>
 
       {/* Mobile menu overlay */}
       {isMobileOpen && (
         <div className="fixed inset-0 z-40 flex flex-col bg-background pt-24 md:hidden">
           <nav className="flex flex-col gap-6 px-8 pb-8">
-            {NAV_LINKS.map((link) => (
+            {content.links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -124,22 +158,18 @@ export function Navigation() {
                 {link.label}
               </Link>
             ))}
+            <div onClick={() => setIsMobileOpen(false)}>
+              <LanguageSwitch switchLocale={content.switchLocale} large />
+            </div>
             <hr className="my-4 border-border/50" />
-            <Button
-              variant="outline"
-              asChild
-              className="w-full justify-center rounded-full"
-            >
+            <Button variant="outline" asChild className="w-full justify-center rounded-full">
               <Link href={ROUTES.LOGIN} onClick={() => setIsMobileOpen(false)}>
-                Sign in
+                {content.signIn}
               </Link>
             </Button>
-            <Button
-              asChild
-              className="w-full justify-center rounded-full bg-foreground text-background hover:bg-foreground/90"
-            >
+            <Button asChild className="w-full justify-center rounded-full">
               <Link href={ROUTES.REGISTER} onClick={() => setIsMobileOpen(false)}>
-                Get started
+                {content.register}
               </Link>
             </Button>
           </nav>

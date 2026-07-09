@@ -125,7 +125,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
     setFormError(null);
     if (eventId) {
       const result = await updateDraftAction(eventId, values);
-      if (result.error) {
+      if (!result.ok) {
         setFormError(result.error);
         return;
       }
@@ -133,13 +133,13 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
       toast.success("Draft saved");
     } else {
       const result = await createDraftAction(values);
-      if (result.error) {
+      if (!result.ok) {
         setFormError(result.error);
         return;
       }
       toast.success("Draft created");
-      if (result.id) {
-        router.replace(eventEditRoute(result.id));
+      if (result.data?.id) {
+        router.replace(eventEditRoute(result.data.id));
       }
     }
   }
@@ -157,12 +157,12 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
     setIsPublishing(true);
     try {
       const saved = await updateDraftAction(eventId, getValues());
-      if (saved.error) {
+      if (!saved.ok) {
         setFormError(saved.error);
         return;
       }
       const result = await publishEventAction(eventId);
-      if (result.error) {
+      if (!result.ok) {
         setFormError(result.error);
         return;
       }
@@ -181,11 +181,11 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
     setIsCancelling(true);
     try {
       const result = await cancelEventAction(eventId);
-      if (result.error) {
+      if (!result.ok) {
         setFormError(result.error);
         return;
       }
-      toast.success("Event cancelled — guests are being notified");
+      toast.success("Event cancelled, guests are being notified");
       router.push(ROUTES.EVENTS);
       router.refresh();
     } finally {
@@ -547,7 +547,7 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                     <AlertDialogHeader>
                       <AlertDialogTitle>Publish this event?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        Publishing makes the event live and locks its details — you
+                        Publishing makes the event live and locks its details. You
                         won&apos;t be able to edit it afterwards. Guests can start
                         receiving invitations.
                       </AlertDialogDescription>

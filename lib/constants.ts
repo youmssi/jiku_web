@@ -12,6 +12,7 @@ export const ROUTES = {
   DASHBOARD: "/dashboard",
   EVENTS: "/events",
   EVENTS_NEW: "/events/new",
+  SETTINGS: "/settings",
 } as const;
 
 export function eventEditRoute(id: string): string {

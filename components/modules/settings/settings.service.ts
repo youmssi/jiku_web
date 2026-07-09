@@ -1,0 +1,114 @@
+"use server";
+
+import { serverFetch } from "@/lib/api-server";
+import { fail, reportApiError } from "@/lib/action-result";
+import type {
+  BrandingResponse,
+  ProviderSettingsResponse,
+  UpdateBrandingRequest,
+  UpdateEmailProviderRequest,
+  UpdateWhatsAppProviderRequest,
+  TestSendResponse,
+} from "./schema";
+
+// ─── Branding ───────────────────────────────────────────────────────────────
+
+export async function fetchBrandingAction(): Promise<
+  { ok: true; data: BrandingResponse } | { ok: false }
+> {
+  const response = await serverFetch("/branding");
+  if (!response.ok) return { ok: false };
+  return { ok: true, data: (await response.json()) as BrandingResponse };
+}
+
+export async function updateBrandingAction(
+  input: UpdateBrandingRequest,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const response = await serverFetch("/branding", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("We couldn't save your branding. Please try again.");
+  }
+  return { ok: true };
+}
+
+// ─── Provider settings ──────────────────────────────────────────────────────
+
+export async function fetchProviderSettingsAction(): Promise<
+  { ok: true; data: ProviderSettingsResponse } | { ok: false }
+> {
+  const response = await serverFetch("/settings/providers");
+  if (!response.ok) return { ok: false };
+  return {
+    ok: true,
+    data: (await response.json()) as ProviderSettingsResponse,
+  };
+}
+
+export async function updateEmailProviderAction(
+  input: UpdateEmailProviderRequest,
+): Promise<
+  { ok: true; data: ProviderSettingsResponse } | { ok: false; error: string }
+> {
+  const response = await serverFetch("/settings/providers/email", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("We couldn't save your email settings. Please try again.");
+  }
+  return { ok: true, data: (await response.json()) as ProviderSettingsResponse };
+}
+
+export async function updateWhatsAppProviderAction(
+  input: UpdateWhatsAppProviderRequest,
+): Promise<
+  { ok: true; data: ProviderSettingsResponse } | { ok: false; error: string }
+> {
+  const response = await serverFetch("/settings/providers/whatsapp", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("We couldn't save your WhatsApp settings. Please try again.");
+  }
+  return { ok: true, data: (await response.json()) as ProviderSettingsResponse };
+}
+
+export async function removeProviderAction(
+  channel: string,
+): Promise<
+  { ok: true; data: ProviderSettingsResponse } | { ok: false; error: string }
+> {
+  const response = await serverFetch(`/settings/providers/${channel}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("We couldn't remove the provider configuration.");
+  }
+  return { ok: true, data: (await response.json()) as ProviderSettingsResponse };
+}
+
+export async function testSendAction(
+  channel: string,
+  recipient: string,
+): Promise<{ ok: true; data: TestSendResponse } | { ok: false; error: string }> {
+  const response = await serverFetch(`/settings/providers/${channel}/test`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ recipient }),
+  });
+  if (!response.ok) {
+    return { ok: false, error: "The test message could not be sent." };
+  }
+  return { ok: true, data: (await response.json()) as TestSendResponse };
+}

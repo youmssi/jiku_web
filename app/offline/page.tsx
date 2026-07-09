@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Offline — Jikū",
+  title: "Offline: Jikū",
 };
 
 /**
@@ -18,7 +18,7 @@ export default function OfflinePage() {
         <h1 className="mt-3 text-2xl font-semibold">You&apos;re offline</h1>
         <p className="mt-2 text-zinc-400">
           This page isn&apos;t available without a connection. Reconnect and try
-          again — pages you&apos;ve already opened will keep working.
+          again. Pages you&apos;ve already opened will keep working.
         </p>
       </div>
     </div>

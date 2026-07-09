@@ -1,7 +1,7 @@
 "use server";
 
 import { serverFetch } from "@/lib/api-server";
-import { reportApiError } from "@/lib/action-result";
+import { type ActionResult, fail, reportApiError } from "@/lib/action-result";
 import { localInputToUtc } from "@/lib/datetime";
 import {
   eventFormSchema,
@@ -31,10 +31,10 @@ function toPayload(values: EventFormValues) {
 
 export async function createDraftAction(
   values: EventFormValues,
-): Promise<{ error?: string; id?: string }> {
+): Promise<ActionResult<{ id: string }>> {
   const parsed = eventFormSchema.safeParse(values);
   if (!parsed.success) {
-    return { error: "Please check the form and try again." };
+    return fail("Please check the form and try again.");
   }
   const response = await serverFetch("/events", {
     method: "POST",
@@ -43,19 +43,19 @@ export async function createDraftAction(
   });
   if (!response.ok) {
     reportApiError(response);
-    return { error: "We couldn't save the draft. Please try again." };
+    return fail("We couldn't save the draft. Please try again.");
   }
   const event = (await response.json()) as { id: string };
-  return { id: event.id };
+  return { ok: true, data: event };
 }
 
 export async function updateDraftAction(
   id: string,
   values: EventFormValues,
-): Promise<{ error?: string }> {
+): Promise<ActionResult> {
   const parsed = eventFormSchema.safeParse(values);
   if (!parsed.success) {
-    return { error: "Please check the form and try again." };
+    return fail("Please check the form and try again.");
   }
   const response = await serverFetch(`/events/${id}`, {
     method: "PUT",
@@ -63,34 +63,34 @@ export async function updateDraftAction(
     body: JSON.stringify(toPayload(parsed.data)),
   });
   if (response.status === 409) {
-    return { error: "This event can no longer be edited." };
+    return fail("This event can no longer be edited.");
   }
   if (!response.ok) {
     reportApiError(response);
-    return { error: "We couldn't save your changes. Please try again." };
+    return fail("We couldn't save your changes. Please try again.");
   }
-  return {};
+  return { ok: true, data: null };
 }
 
-export async function publishEventAction(id: string): Promise<{ error?: string }> {
+export async function publishEventAction(id: string): Promise<ActionResult> {
   const response = await serverFetch(`/events/${id}/publish`, { method: "POST" });
   if (response.status === 422) {
-    return { error: "The event still needs a name, a start time and an invitation channel." };
+    return fail("The event still needs a name, a start time and an invitation channel.");
   }
   if (!response.ok) {
     reportApiError(response);
-    return { error: "We couldn't publish the event. Please try again." };
+    return fail("We couldn't publish the event. Please try again.");
   }
-  return {};
+  return { ok: true, data: null };
 }
 
-export async function cancelEventAction(id: string): Promise<{ error?: string }> {
+export async function cancelEventAction(id: string): Promise<ActionResult> {
   const response = await serverFetch(`/events/${id}/cancel`, { method: "POST" });
   if (response.status === 409) {
-    return { error: "Only a published event can be cancelled." };
+    return fail("Only a published event can be cancelled.");
   }
   if (!response.ok) {
-    return { error: "We couldn't cancel the event. Please try again." };
+    return fail("We couldn't cancel the event. Please try again.");
   }
-  return {};
+  return { ok: true, data: null };
 }

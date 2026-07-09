@@ -30,7 +30,7 @@ export function RsvpActions({ token, status, primaryColor, ticketCode }: RsvpAct
         return;
       }
       setCurrent(action === "confirm" ? "CONFIRMED" : "DECLINED");
-      toast.success(action === "confirm" ? "You're confirmed — see you there!" : "You've declined.");
+      toast.success(action === "confirm" ? "You're confirmed, see you there!" : "You've declined.");
     });
   }
 

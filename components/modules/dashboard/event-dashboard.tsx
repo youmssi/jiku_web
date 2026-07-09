@@ -25,7 +25,7 @@ export function EventDashboard({ eventId, initial }: EventDashboardProps) {
           <p className="font-medium">Some invitations aren&apos;t being delivered</p>
           <p className="mt-1">
             About {data.deliverability.bounceRatePercent}% of your recent emails bounced.
-            Check your imported email addresses — repeated bounces can hurt delivery for
+            Check your imported email addresses. Repeated bounces can hurt delivery for
             everyone.
           </p>
         </div>
@@ -68,7 +68,7 @@ export function EventDashboard({ eventId, initial }: EventDashboardProps) {
           <p className="mt-3 text-sm text-muted-foreground">
             {data.usage.invited} of {data.usage.allowance} invitations used
             {data.usage.remaining > 0
-              ? ` — ${data.usage.remaining} remaining on the ${data.usage.tier.toLowerCase()} tier`
+              ? `, ${data.usage.remaining} remaining on the ${data.usage.tier.toLowerCase()} tier`
               : ` on the ${data.usage.tier.toLowerCase()} tier`}
             .
           </p>

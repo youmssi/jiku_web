@@ -1,4 +1,4 @@
-/** Billing types mirroring the backend billing API (JIKU-32/33/35). */
+// CONTRACT — types mirroring the backend billing API (JIKU-32/33/35).
 
 export interface UsageAllowance {
   invitedGuests: number;
