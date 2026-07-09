@@ -6,14 +6,9 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { ROUTES } from "@/lib/constants";
+import type { LandingContent } from "./content";
 
-const NAV_LINKS = [
-  { label: "Features", href: "#features" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Docs", href: "#how-it-works" },
-] as const;
-
-export function Navigation() {
+export function Navigation({ content }: { content: LandingContent["nav"] }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -37,9 +32,7 @@ export function Navigation() {
   return (
     <header
       className={`fixed inset-x-0 z-50 transition-all duration-500 ${
-        isScrolled
-          ? "top-4 px-4"
-          : "top-0 px-0"
+        isScrolled ? "top-4 px-4" : "top-0 px-0"
       }`}
     >
       <nav
@@ -67,35 +60,36 @@ export function Navigation() {
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden items-center gap-10 md:flex">
-          {NAV_LINKS.map((link) => (
+        <div className="hidden items-center gap-8 md:flex">
+          {content.links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className="relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {link.label}
-              <span className="absolute -bottom-1 left-0 h-px w-0 bg-foreground transition-all duration-300 group-hover:w-full" />
             </Link>
           ))}
         </div>
 
         {/* Desktop CTAs */}
         <div className="hidden items-center gap-3 md:flex">
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-            className="rounded-full"
+          <Link
+            href={content.switchLocale.href}
+            aria-label={content.switchLocale.ariaLabel}
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            <Link href={ROUTES.LOGIN}>Sign in</Link>
+            {content.switchLocale.label}
+          </Link>
+          <Button variant="ghost" size="sm" asChild className="rounded-full">
+            <Link href={ROUTES.LOGIN}>{content.signIn}</Link>
           </Button>
           <Button
             size="sm"
             className="rounded-full bg-foreground text-background hover:bg-foreground/90 shadow-sm"
             asChild
           >
-            <Link href={ROUTES.REGISTER}>Get started</Link>
+            <Link href={ROUTES.REGISTER}>{content.register}</Link>
           </Button>
         </div>
 
@@ -104,7 +98,7 @@ export function Navigation() {
           type="button"
           className="relative z-50 flex size-10 items-center justify-center md:hidden"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
-          aria-label={isMobileOpen ? "Close menu" : "Open menu"}
+          aria-label={isMobileOpen ? content.menuClose : content.menuOpen}
         >
           {isMobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
@@ -114,7 +108,7 @@ export function Navigation() {
       {isMobileOpen && (
         <div className="fixed inset-0 z-40 flex flex-col bg-background pt-24 md:hidden">
           <nav className="flex flex-col gap-6 px-8 pb-8">
-            {NAV_LINKS.map((link) => (
+            {content.links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -124,14 +118,18 @@ export function Navigation() {
                 {link.label}
               </Link>
             ))}
-            <hr className="my-4 border-border/50" />
-            <Button
-              variant="outline"
-              asChild
-              className="w-full justify-center rounded-full"
+            <Link
+              href={content.switchLocale.href}
+              aria-label={content.switchLocale.ariaLabel}
+              onClick={() => setIsMobileOpen(false)}
+              className="text-3xl font-semibold tracking-tight text-muted-foreground transition-colors hover:text-foreground"
             >
+              {content.switchLocale.label}
+            </Link>
+            <hr className="my-4 border-border/50" />
+            <Button variant="outline" asChild className="w-full justify-center rounded-full">
               <Link href={ROUTES.LOGIN} onClick={() => setIsMobileOpen(false)}>
-                Sign in
+                {content.signIn}
               </Link>
             </Button>
             <Button
@@ -139,7 +137,7 @@ export function Navigation() {
               className="w-full justify-center rounded-full bg-foreground text-background hover:bg-foreground/90"
             >
               <Link href={ROUTES.REGISTER} onClick={() => setIsMobileOpen(false)}>
-                Get started
+                {content.register}
               </Link>
             </Button>
           </nav>
