@@ -82,6 +82,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export const viewport: Viewport = {
@@ -100,7 +103,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="fr"
       className={cn(
         "h-full",
         "antialiased",
