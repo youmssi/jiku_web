@@ -1,7 +1,7 @@
 "use server";
 
 import { serverFetch } from "@/lib/api-server";
-import type { PaymentInitiation } from "@/components/modules/organizer/billing-types";
+import type { PaymentInitiation } from "./schema";
 
 export async function purchaseTierAction(
   eventId: string,

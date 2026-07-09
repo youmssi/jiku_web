@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
 import { serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
-import { BillingView } from "@/components/modules/organizer/components/billing-view";
+import { BillingView } from "@/components/modules/billing";
 import type {
   PaymentHistoryItem,
   TierCatalog,
   UsageAllowance,
-} from "@/components/modules/organizer/billing-types";
+} from "@/components/modules/billing";
 
 interface PageProps {
   params: Promise<{ id: string }>;

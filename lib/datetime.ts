@@ -22,6 +22,21 @@ export function formatDateTimeInZone(utcInstant: string | null, timeZone: string
   }).format(new Date(utcInstant));
 }
 
+/**
+ * Formats a UTC ISO instant in the viewer's own locale and timezone. Only for
+ * organizer-facing convenience data (their own payments, send timestamps) —
+ * anything a guest or validator sees must use the event-timezone formatters.
+ */
+export function formatLocalDateTime(utcInstant: string | null): string {
+  if (!utcInstant) {
+    return "";
+  }
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(utcInstant));
+}
+
 /** Formats just the time-of-day of a UTC instant in the given event timezone. */
 export function formatTimeInZone(utcInstant: string | null, timeZone: string): string {
   if (!utcInstant) {
