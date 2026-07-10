@@ -13,9 +13,18 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { AccountMenu } from "@/components/shared/account-menu";
-import { ORGANIZER_NAV_ITEMS, organizerInitials } from "@/components/shared/organizer-nav";
+import {
+  currentEventId,
+  EVENT_SUB_NAV_ITEMS,
+  ORGANIZER_NAV_ITEMS,
+  organizerInitials,
+} from "@/components/shared/organizer-nav";
+import { ROUTES } from "@/lib/constants";
 
 interface AppSidebarProps {
   brandName: string;
@@ -26,6 +35,7 @@ interface AppSidebarProps {
 /** Desktop navigation chrome; collapses to a Sheet drawer below `md` (see AGENTS.md nav decision: mobile uses BottomNav instead). */
 export function AppSidebar({ brandName, logoUrl, role }: AppSidebarProps) {
   const pathname = usePathname();
+  const eventId = currentEventId(pathname);
 
   return (
     <Sidebar collapsible="offcanvas">
@@ -48,11 +58,13 @@ export function AppSidebar({ brandName, logoUrl, role }: AppSidebarProps) {
             <SidebarMenu>
               {ORGANIZER_NAV_ITEMS.map((item) => {
                 const Icon = item.icon;
+                const isEventsItem = item.href === ROUTES.EVENTS;
+
                 return (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
                       asChild
-                      isActive={item.match(pathname)}
+                      isActive={item.match(pathname) || (isEventsItem && eventId !== null)}
                       tooltip={item.label}
                     >
                       <Link href={item.href}>
@@ -60,6 +72,27 @@ export function AppSidebar({ brandName, logoUrl, role }: AppSidebarProps) {
                         <span>{item.label}</span>
                       </Link>
                     </SidebarMenuButton>
+
+                    {isEventsItem && eventId !== null && (
+                      <SidebarMenuSub>
+                        {EVENT_SUB_NAV_ITEMS.map((subItem) => {
+                          const SubIcon = subItem.icon;
+                          return (
+                            <SidebarMenuSubItem key={subItem.label}>
+                              <SidebarMenuSubButton
+                                asChild
+                                isActive={subItem.match(pathname, eventId)}
+                              >
+                                <Link href={subItem.href(eventId)}>
+                                  <SubIcon />
+                                  <span>{subItem.label}</span>
+                                </Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          );
+                        })}
+                      </SidebarMenuSub>
+                    )}
                   </SidebarMenuItem>
                 );
               })}

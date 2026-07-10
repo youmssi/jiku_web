@@ -1,10 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { EventWizard } from "@/components/modules/event/event-wizard";
+import { EventSubNav } from "@/components/shared/event-sub-nav";
 import type { EventFormValues, EventResponse } from "@/components/modules/event/schema";
 import { serverFetch } from "@/lib/api-server";
-import { eventGuestsRoute } from "@/lib/constants";
 import { utcToLocalInput } from "@/lib/datetime";
 
 /** Edit-event screen: loads the event server-side and hydrates the wizard. */
@@ -33,11 +31,7 @@ export async function EditEventView({ params }: { params: Promise<{ id: string }
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-10">
-      <div className="mb-4 flex justify-end">
-        <Button variant="outline" asChild>
-          <Link href={eventGuestsRoute(event.id)}>Manage guests</Link>
-        </Button>
-      </div>
+      <EventSubNav eventId={event.id} />
       <EventWizard eventId={event.id} initialValues={values} status={event.status} />
     </div>
   );

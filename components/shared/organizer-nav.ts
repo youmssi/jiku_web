@@ -1,5 +1,11 @@
-import { CalendarDays, LayoutDashboard, Settings } from "lucide-react";
-import { ROUTES } from "@/lib/constants";
+import { CalendarDays, ChartColumn, LayoutDashboard, Settings, Users } from "lucide-react";
+import {
+  eventAnalyticsRoute,
+  eventDashboardRoute,
+  eventEditRoute,
+  eventGuestsRoute,
+  ROUTES,
+} from "@/lib/constants";
 
 export interface OrganizerNavItem {
   label: string;
@@ -33,6 +39,54 @@ export const ORGANIZER_NAV_ITEMS: OrganizerNavItem[] = [
     match: (pathname) => pathname === ROUTES.SETTINGS || pathname.startsWith(`${ROUTES.SETTINGS}/`),
   },
 ];
+
+export interface EventSubNavItem {
+  label: string;
+  href: (eventId: string) => string;
+  icon: typeof LayoutDashboard;
+  match: (pathname: string, eventId: string) => boolean;
+}
+
+/**
+ * Sub-navigation for one selected event, shown as a SidebarMenuSub under "Events"
+ * on desktop (expand-in-place) and as a horizontal EventSubNav strip on every
+ * per-event page (desktop + mobile, since the sidebar's sub-menu has no mobile
+ * equivalent under the bottom-tab-bar nav strategy).
+ */
+export const EVENT_SUB_NAV_ITEMS: EventSubNavItem[] = [
+  {
+    label: "Dashboard",
+    href: eventDashboardRoute,
+    icon: LayoutDashboard,
+    match: (pathname, eventId) => pathname === eventDashboardRoute(eventId),
+  },
+  {
+    label: "Analytics",
+    href: eventAnalyticsRoute,
+    icon: ChartColumn,
+    match: (pathname, eventId) => pathname === eventAnalyticsRoute(eventId),
+  },
+  {
+    label: "Guests",
+    href: eventGuestsRoute,
+    icon: Users,
+    match: (pathname, eventId) => pathname === eventGuestsRoute(eventId),
+  },
+  {
+    label: "Settings",
+    href: eventEditRoute,
+    icon: Settings,
+    match: (pathname, eventId) => pathname === eventEditRoute(eventId),
+  },
+];
+
+/** Extracts the event id from a pathname like `/events/{id}/...`, or null outside that shape. */
+export function currentEventId(pathname: string): string | null {
+  const match = pathname.match(/^\/events\/([^/]+)(?:\/|$)/);
+  const id = match?.[1];
+  if (!id || id === "new") return null;
+  return id;
+}
 
 export function organizerInitials(name: string): string {
   return (
