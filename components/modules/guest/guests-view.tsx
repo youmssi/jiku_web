@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Download, Users, FileSpreadsheet } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
 import {
   Empty,
   EmptyContent,
@@ -15,8 +14,8 @@ import { AddGuest } from "@/components/modules/guest/add-guest";
 import { GuestImport } from "@/components/modules/guest/guest-import";
 import { GuestsTable, type GuestRow } from "@/components/modules/guest/guests-table";
 import { SendInvitations } from "@/components/modules/guest/send-invitations";
+import { EventSubNav } from "@/components/shared/event-sub-nav";
 import { serverFetch } from "@/lib/api-server";
-import { eventDashboardRoute, eventEditRoute } from "@/lib/constants";
 import type { Guest, Invitation } from "@/components/modules/guest/schema";
 import { INVITATION_CHANNELS } from "@/lib/channels";
 
@@ -49,14 +48,10 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
     <div className="mx-auto w-full max-w-5xl px-4 py-10">
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Guests</h1>
-        <ButtonGroup>
-          <Button variant="outline" asChild>
-            <Link href={eventDashboardRoute(id)}>Dashboard</Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href={eventEditRoute(id)}>Back to event</Link>
-          </Button>
-        </ButtonGroup>
+      </div>
+
+      <div className="mt-6">
+        <EventSubNav eventId={id} />
       </div>
 
       <Tabs defaultValue="import" className="mt-6">

@@ -1,10 +1,9 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
 import { EventDashboard } from "@/components/modules/dashboard/event-dashboard";
+import { EventSubNav } from "@/components/shared/event-sub-nav";
 import { serverFetch } from "@/lib/api-server";
-import { eventGuestsExportRoute, eventGuestsRoute } from "@/lib/constants";
+import { eventGuestsExportRoute } from "@/lib/constants";
 import type { DashboardData } from "@/components/modules/dashboard/schema";
 import { StateMessage } from "@/components/shared/state-message";
 
@@ -31,19 +30,18 @@ export async function DashboardView({ params }: { params: Promise<{ id: string }
           <h1 className="text-2xl font-semibold">{data.eventName}</h1>
           <Badge variant="secondary">{data.eventStatus}</Badge>
         </div>
-        <ButtonGroup>
-          <Button variant="outline" asChild>
-            <a href={eventGuestsExportRoute(id)} download>
-              Export guest list
-            </a>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href={eventGuestsRoute(id)}>Guests</Link>
-          </Button>
-        </ButtonGroup>
+        <Button variant="outline" asChild>
+          <a href={eventGuestsExportRoute(id)} download>
+            Export guest list
+          </a>
+        </Button>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-6">
+        <EventSubNav eventId={id} />
+      </div>
+
+      <div className="mt-2">
         <EventDashboard eventId={id} initial={data} />
       </div>
     </div>
