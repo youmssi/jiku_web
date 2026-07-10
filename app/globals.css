@@ -128,3 +128,17 @@
     @apply font-sans;
   }
 }
+
+/* One-time diagonal light sweep on mount — used by the guest ticket card. */
+@keyframes ticket-shine {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+@utility animate-ticket-shine {
+  animation: ticket-shine 1.4s 0.2s ease-out 1;
+}
