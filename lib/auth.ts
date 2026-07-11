@@ -43,3 +43,29 @@ export async function getAccessToken(): Promise<string | undefined> {
   const store = await cookies();
   return store.get(COOKIES.ACCESS_TOKEN)?.value;
 }
+
+/**
+ * Platform-admin session (JIKU-46): a separate httpOnly cookie so the admin and
+ * organizer sessions never cross. Access token only — the short session is
+ * deliberate for a back-office; an expired admin simply logs in again.
+ */
+export async function setAdminAuthCookie(accessToken: string): Promise<void> {
+  const store = await cookies();
+  store.set(COOKIES.ADMIN_ACCESS_TOKEN, accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: ACCESS_MAX_AGE,
+  });
+}
+
+export async function clearAdminAuthCookie(): Promise<void> {
+  const store = await cookies();
+  store.delete(COOKIES.ADMIN_ACCESS_TOKEN);
+}
+
+export async function getAdminAccessToken(): Promise<string | undefined> {
+  const store = await cookies();
+  return store.get(COOKIES.ADMIN_ACCESS_TOKEN)?.value;
+}
