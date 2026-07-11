@@ -40,7 +40,14 @@ export async function TicketView({ params }: { params: Promise<{ token: string }
   }
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center px-4 py-10">
+    <div className="relative flex flex-1 flex-col items-center justify-center overflow-hidden px-4 py-10">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          backgroundImage: `radial-gradient(60% 50% at 50% 0%, ${rsvp.primaryColor}14, transparent)`,
+        }}
+      />
       <TicketCard
         ticketCode={rsvp.ticketCode}
         eventName={rsvp.eventName}
