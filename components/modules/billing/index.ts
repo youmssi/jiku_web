@@ -1,6 +1,8 @@
-// Billing module — event usage allowance, capacity purchase, payment history (JIKU-32/33/35).
+// Billing module — usage allowance, activation requests, payment history (JIKU-32/33/35/45).
 export { BillingView } from "./billing-view";
 export type {
+  ManualPaymentInstructions,
+  PayeeDetails,
   PaymentHistoryItem,
   PaymentInitiation,
   PaymentInstruction,

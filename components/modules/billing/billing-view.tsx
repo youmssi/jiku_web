@@ -6,10 +6,11 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { billingReceiptRoute } from "@/lib/constants";
 import { formatLocalDateTime } from "@/lib/datetime";
-import { purchaseTierAction } from "./billing.service";
+import { ActivationInstructions } from "./activation-instructions";
+import { requestActivationAction } from "./billing.service";
 import type {
+  ManualPaymentInstructions,
   PaymentHistoryItem,
-  PaymentInstruction,
   TierCatalog,
   UsageAllowance,
 } from "./schema";
@@ -19,26 +20,27 @@ interface BillingViewProps {
   usage: UsageAllowance;
   catalog: TierCatalog;
   payments: PaymentHistoryItem[];
+  /** The event's open activation request, when one exists (JIKU-45). */
+  activation: ManualPaymentInstructions | null;
 }
 
 function formatAmount(minor: number, currency: string): string {
   return `${(minor / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })} ${currency}`;
 }
 
-export function BillingView({ eventId, usage, catalog, payments }: BillingViewProps) {
-  const [instruction, setInstruction] = useState<PaymentInstruction | null>(null);
+export function BillingView({ eventId, usage, catalog, payments, activation }: BillingViewProps) {
+  const [request, setRequest] = useState<ManualPaymentInstructions | null>(activation);
   const [isPending, startTransition] = useTransition();
 
-  function buy(tier: string) {
-    setInstruction(null);
+  function requestTier(tier: string) {
     startTransition(async () => {
-      const { initiation, error } = await purchaseTierAction(eventId, tier);
+      const { instructions, error } = await requestActivationAction(eventId, tier);
       if (error) {
         toast.error(error);
         return;
       }
-      if (initiation) {
-        setInstruction(initiation.instruction);
+      if (instructions) {
+        setRequest(instructions);
       }
     });
   }
@@ -67,48 +69,40 @@ export function BillingView({ eventId, usage, catalog, payments }: BillingViewPr
         </div>
       </section>
 
-      <section>
-        <SectionHeading>Add capacity</SectionHeading>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {catalog.tiers.map((tier) => (
-            <div key={tier.name} className="flex flex-col justify-between rounded-xl border p-4">
-              <div>
-                <p className="font-medium">{tier.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  Up to {tier.maxGuests.toLocaleString()} invited guests
-                </p>
+      {request ? (
+        <section>
+          <SectionHeading>Your activation request</SectionHeading>
+          <ActivationInstructions instructions={request} />
+        </section>
+      ) : (
+        <section>
+          <SectionHeading>Add capacity</SectionHeading>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {catalog.tiers.map((tier) => (
+              <div key={tier.name} className="flex flex-col justify-between rounded-xl border p-4">
+                <div>
+                  <p className="font-medium">{tier.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Up to {tier.maxGuests.toLocaleString()} invited guests
+                  </p>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-lg font-semibold">
+                    {formatAmount(tier.priceMinor, catalog.currency)}
+                  </span>
+                  <Button size="sm" onClick={() => requestTier(tier.name)} disabled={isPending}>
+                    {isPending ? "Requesting…" : "Request activation"}
+                  </Button>
+                </div>
               </div>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-lg font-semibold">
-                  {formatAmount(tier.priceMinor, catalog.currency)}
-                </span>
-                <Button size="sm" onClick={() => buy(tier.name)} disabled={isPending}>
-                  {isPending ? "Starting…" : "Purchase"}
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-        {instruction ? (
-          <div className="mt-4 rounded-lg border border-blue-300 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-200">
-            <p className="font-medium">Complete your payment</p>
-            {instruction.type === "REDIRECT" ? (
-              <p className="mt-1">
-                Continue on your Mobile Money provider:{" "}
-                <a href={instruction.value} className="underline underline-offset-4">
-                  open payment
-                </a>
-                . Your capacity unlocks automatically once the payment is confirmed.
-              </p>
-            ) : (
-              <p className="mt-1">
-                Follow the prompt on your phone ({instruction.value}). Your capacity unlocks
-                automatically once the payment is confirmed.
-              </p>
-            )}
+            ))}
           </div>
-        ) : null}
-      </section>
+          <p className="mt-3 text-xs text-muted-foreground">
+            You&apos;ll receive payment instructions (Mobile Money or bank transfer) with a
+            reference; your capacity is unlocked by our team once the transfer arrives.
+          </p>
+        </section>
+      )}
 
       <section>
         <SectionHeading>Payment history</SectionHeading>
