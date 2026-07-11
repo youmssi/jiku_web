@@ -60,6 +60,15 @@ export interface LandingContent {
     /** Capacity line per tier; `{guests}` is replaced with the tier's guest count. */
     upToTemplate: string;
     tiers: { name: string; price: string; guests: string; highlighted: boolean; cta: string }[];
+    /** Negotiated offer card: custom pricing, optional on-premise hosting, sales contact. */
+    enterprise: {
+      name: string;
+      priceLabel: string;
+      capacity: string;
+      description: string;
+      cta: string;
+      mailSubject: string;
+    };
     highlightLabel: string;
     everyEventIncludesTitle: string;
     everyEventIncludes: string[];
@@ -243,6 +252,15 @@ const fr: LandingContent = {
       { name: "Standard", price: "5 000 FCFA", guests: "2 000", highlighted: true, cta: "Créer mon événement" },
       { name: "Premium", price: "20 000 FCFA", guests: "10 000", highlighted: false, cta: "Créer mon événement" },
     ],
+    enterprise: {
+      name: "Entreprise",
+      priceLabel: "Sur devis",
+      capacity: "Capacité sur mesure",
+      description:
+        "Offre négociée selon vos besoins : volumes supérieurs, accompagnement dédié, et hébergement on-premise (sur votre propre infrastructure) selon l'offre.",
+      cta: "Contacter l'équipe commerciale",
+      mailSubject: "Jikū — demande d'offre Entreprise / On-premise",
+    },
     highlightLabel: "Le plus courant",
     everyEventIncludesTitle: "Chaque événement inclut :",
     everyEventIncludes: [
@@ -253,7 +271,7 @@ const fr: LandingContent = {
       "Tableau de bord en temps réel",
       "Export CSV des invités",
     ],
-    note: "Prix de lancement en FCFA (XOF). Le niveau requis dépend du nombre d'invités de l'événement ; vous pouvez augmenter la capacité d'un événement à tout moment.",
+    note: "Prix de lancement en FCFA (XOF). Le niveau requis dépend du nombre d'invités de l'événement ; vous pouvez augmenter la capacité d'un événement à tout moment. L'offre Entreprise (y compris l'hébergement on-premise) est à tarification personnalisée, via l'équipe commerciale.",
   },
   faq: {
     badge: "Questions fréquentes",
@@ -289,6 +307,11 @@ const fr: LandingContent = {
         question: "Que deviennent les données de mes invités ?",
         answer:
           "Chaque invité peut demander la suppression de ses données personnelles depuis sa page d'invitation. Après l'événement, les données personnelles sont automatiquement anonymisées à l'issue de la période de rétention, comme décrit dans notre politique de confidentialité.",
+      },
+      {
+        question: "Proposez-vous un hébergement on-premise ?",
+        answer:
+          "Oui, dans le cadre de l'offre Entreprise : selon l'offre retenue, Jikū peut être déployé sur votre propre infrastructure. Cette offre est à tarification personnalisée — contactez l'équipe commerciale pour un devis adapté à vos besoins.",
       },
     ],
   },
@@ -486,6 +509,15 @@ const en: LandingContent = {
       { name: "Standard", price: "5,000 FCFA", guests: "2,000", highlighted: true, cta: "Create my event" },
       { name: "Premium", price: "20,000 FCFA", guests: "10,000", highlighted: false, cta: "Create my event" },
     ],
+    enterprise: {
+      name: "Enterprise",
+      priceLabel: "Custom pricing",
+      capacity: "Tailored capacity",
+      description:
+        "A negotiated offer built around your needs: higher volumes, dedicated support, and on-premise hosting (on your own infrastructure) depending on the offer.",
+      cta: "Contact the sales team",
+      mailSubject: "Jikū — Enterprise / On-premise inquiry",
+    },
     highlightLabel: "Most common",
     everyEventIncludesTitle: "Every event includes:",
     everyEventIncludes: [
@@ -496,7 +528,7 @@ const en: LandingContent = {
       "Real-time dashboard",
       "Guest list CSV export",
     ],
-    note: "Launch pricing in FCFA (XOF). The tier you need depends on the event's guest count; you can upgrade an event's capacity at any time.",
+    note: "Launch pricing in FCFA (XOF). The tier you need depends on the event's guest count; you can upgrade an event's capacity at any time. The Enterprise offer (including on-premise hosting) has custom pricing through the sales team.",
   },
   faq: {
     badge: "Frequently asked",
@@ -532,6 +564,11 @@ const en: LandingContent = {
         question: "What happens to my guests' data?",
         answer:
           "Any guest can request deletion of their personal data from their invitation page. After the event, personal data is automatically anonymized at the end of the retention period, as described in our privacy policy.",
+      },
+      {
+        question: "Do you offer on-premise hosting?",
+        answer:
+          "Yes, as part of the Enterprise offer: depending on the offer, Jikū can be deployed on your own infrastructure. This offer has custom pricing — contact the sales team for a quote tailored to your needs.",
       },
     ],
   },
