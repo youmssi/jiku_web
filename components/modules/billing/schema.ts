@@ -39,6 +39,25 @@ export interface PaymentInstruction {
   value: string;
 }
 
+export interface PayeeDetails {
+  payeeName: string | null;
+  mobileMoneyNumber: string | null;
+  mobileMoneyOperator: string | null;
+  bankDetails: string | null;
+}
+
+// Manual (concierge) activation request (JIKU-41/45): the client prepays the
+// displayed payee quoting the reference; the team confirms and unlocks.
+export interface ManualPaymentInstructions {
+  paymentId: string;
+  reference: string;
+  tier: string;
+  amountMinor: number;
+  currency: string;
+  status: string;
+  payee: PayeeDetails;
+}
+
 export interface PaymentInitiation {
   paymentId: string;
   status: string;
