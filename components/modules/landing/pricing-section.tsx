@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Building2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { ROUTES } from "@/lib/constants";
+import { salesMailto } from "@/lib/support";
 import type { LandingContent } from "./content";
 
 /**
@@ -63,6 +64,39 @@ function TierCard({
   );
 }
 
+/**
+ * The negotiated offer stands apart from the self-serve tiers: no per-event
+ * price, capacity and terms set per client, on-premise hosting depending on the
+ * offer, and the CTA reaches the sales mailbox instead of registration.
+ */
+function EnterpriseCard({ enterprise }: { enterprise: LandingContent["pricing"]["enterprise"] }) {
+  return (
+    <div className="relative flex flex-col rounded-2xl border border-border/40 bg-card/50 p-7 transition-all duration-500 hover:border-primary/20 hover:shadow-lg">
+      <div className="mb-6">
+        <h3 className="flex items-center gap-2 text-lg font-semibold">
+          <Building2 className="size-4 text-primary" />
+          {enterprise.name}
+        </h3>
+        <p className="mt-1 text-sm text-muted-foreground">{enterprise.capacity}</p>
+      </div>
+
+      <div className="mb-6">
+        <div className="whitespace-nowrap text-3xl font-bold tracking-tight sm:text-4xl">
+          {enterprise.priceLabel}
+        </div>
+      </div>
+
+      <p className="mb-8 text-sm text-muted-foreground">{enterprise.description}</p>
+
+      <div className="mt-auto">
+        <Button asChild variant="outline" className="w-full rounded-full">
+          <a href={salesMailto(enterprise.mailSubject)}>{enterprise.cta}</a>
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 export function PricingSection({ content }: { content: LandingContent["pricing"] }) {
   return (
     <section id="pricing" className="border-t border-border/30 py-24">
@@ -80,7 +114,7 @@ export function PricingSection({ content }: { content: LandingContent["pricing"]
           </p>
         </div>
 
-        <div className="mx-auto mt-16 grid max-w-4xl gap-6 md:grid-cols-3">
+        <div className="mx-auto mt-16 grid max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-4">
           {content.tiers.map((tier) => (
             <TierCard
               key={tier.name}
@@ -90,6 +124,7 @@ export function PricingSection({ content }: { content: LandingContent["pricing"]
               highlightLabel={content.highlightLabel}
             />
           ))}
+          <EnterpriseCard enterprise={content.enterprise} />
         </div>
 
         {/* Shared feature list — same features at every tier */}

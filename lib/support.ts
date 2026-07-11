@@ -22,3 +22,15 @@ export function supportWhatsAppLink(): string | null {
   const number = supportWhatsApp();
   return number ? `https://wa.me/${number}` : null;
 }
+
+/**
+ * Sales contact for enterprise / on-premise inquiries (JIKU-44). Falls back to
+ * the support mailbox so the CTA never points at an unmonitored address.
+ */
+export function salesEmail(): string {
+  return process.env.NEXT_PUBLIC_SALES_EMAIL ?? supportEmail();
+}
+
+export function salesMailto(subject: string): string {
+  return `mailto:${salesEmail()}?subject=${encodeURIComponent(subject)}`;
+}
