@@ -8,7 +8,7 @@ interface PageProps {
   searchParams: Promise<{ query?: string }>;
 }
 
-export default async function AdminTenantsPage({ searchParams }: PageProps) {
+export default async function AdminTenantsPage({ searchParams }: Readonly<PageProps>) {
   const { query } = await searchParams;
   const params = new URLSearchParams({ size: "50" });
   if (query) params.set("query", query);

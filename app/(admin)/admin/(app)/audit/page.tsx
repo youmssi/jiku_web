@@ -8,7 +8,7 @@ interface PageProps {
   searchParams: Promise<{ action?: string }>;
 }
 
-export default async function AdminAuditPage({ searchParams }: PageProps) {
+export default async function AdminAuditPage({ searchParams }: Readonly<PageProps>) {
   const { action } = await searchParams;
   const params = new URLSearchParams({ size: "100" });
   if (action) params.set("action", action);

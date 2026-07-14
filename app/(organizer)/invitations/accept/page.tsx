@@ -13,7 +13,7 @@ interface PageProps {
 }
 
 /** The emailed invitation link lands here (JIKU-50). */
-export default async function AcceptInvitationPage({ searchParams }: PageProps) {
+export default async function AcceptInvitationPage({ searchParams }: Readonly<PageProps>) {
   const { token } = await searchParams;
   const preview = token ? await loadPreview(token) : null;
 

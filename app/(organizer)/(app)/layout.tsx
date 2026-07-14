@@ -1,7 +1,5 @@
 import { redirect } from "next/navigation";
-import { AccountMenu } from "@/components/shared/account-menu";
-import { AppSidebar } from "@/components/shared/app-sidebar";
-import { BottomNav } from "@/components/shared/bottom-nav";
+import { AccountMenu, AppSidebar, BottomNav } from "@/components/shared";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,

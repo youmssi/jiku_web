@@ -8,7 +8,7 @@ interface PageProps {
   searchParams: Promise<{ status?: string }>;
 }
 
-export default async function AdminPaymentsPage({ searchParams }: PageProps) {
+export default async function AdminPaymentsPage({ searchParams }: Readonly<PageProps>) {
   const { status } = await searchParams;
   const params = new URLSearchParams({ size: "50", status: status ?? "PENDING" });
 

@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, DM_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
+import { ServiceWorkerRegister } from "@/components/shared";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -23,7 +23,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://jiku.app",
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://jiku-web.vercel.app",
   ),
   title: {
     default: "Jikū: Event Invitations, Ticketing & Check-in Platform",

@@ -3,7 +3,7 @@ import { AdminLoginForm } from "@/components/modules/admin";
 import { getAdminAccessToken } from "@/lib/auth";
 import { ADMIN_ROUTES } from "@/lib/constants";
 
-export const metadata = { title: "Jikū — Administration", robots: { index: false } };
+export const metadata = { title: "Jikū - Administration", robots: { index: false } };
 
 export default async function AdminLoginPage() {
   if (await getAdminAccessToken()) {

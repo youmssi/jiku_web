@@ -26,6 +26,6 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jiku.app";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jiku-web.vercel.app";
   return <LandingPage locale="fr" siteUrl={siteUrl} />;
 }

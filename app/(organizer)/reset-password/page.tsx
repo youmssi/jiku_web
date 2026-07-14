@@ -6,7 +6,7 @@ interface PageProps {
   searchParams: Promise<{ token?: string }>;
 }
 
-export default async function ResetPasswordPage({ searchParams }: PageProps) {
+export default async function ResetPasswordPage({ searchParams }: Readonly<PageProps>) {
   const { token } = await searchParams;
   if (!token) {
     redirect(ROUTES.FORGOT_PASSWORD);

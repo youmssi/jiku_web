@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { StateMessage } from "@/components/shared/state-message";
+import { StateMessage } from "@/components/shared";
 import { reportError } from "@/lib/report-error";
 
 /**
