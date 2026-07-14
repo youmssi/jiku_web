@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -29,4 +30,8 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// i18n foundation (mirrors Tûm): locale segment in the URL for non-default
+// locales, message catalogs under messages/, request config in i18n/request.ts.
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+
+export default withNextIntl(nextConfig);

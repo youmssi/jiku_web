@@ -42,12 +42,20 @@ pnpm build
 ```
 web/
 ├── app/                          # ROUTING LAYER — route groups, params, guards
-│   ├── (organizer)/              # /dashboard, /events, /events/[id]/...
-│   ├── (guest)/                  # /invitation/[token], /privacy
-│   ├── (validator)/              # /checkin/[token]
-│   ├── layout.tsx                # Root layout
-│   ├── page.tsx                  # Landing page
+│   ├── [locale]/                 # i18n segment: "/" = fr (default), "/en/..." = en
+│   │   ├── (organizer)/          # /dashboard, /events, /events/[id]/...
+│   │   │   ├── (auth)/           # /login, /register, password reset, verify email
+│   │   │   └── (app)/            # authenticated organizer app
+│   │   ├── (guest)/              # /invitation/[token], /privacy
+│   │   ├── (validator)/          # /checkin/[token]
+│   │   ├── (admin)/              # /admin/... platform admin desk
+│   │   ├── layout.tsx            # Root layout (locale-aware)
+│   │   └── page.tsx              # Landing page (both locales)
+│   ├── api/                      # BFF route handlers (locale-agnostic)
 │   └── globals.css               # Global styles & Tailwind
+├── i18n/                         # next-intl config: routing, request, navigation
+├── messages/                     # translation catalogs (fr.json, en.json)
+├── proxy.ts                      # locale resolution + organizer session guard
 ├── components/
 │   ├── ui/                       # shadcn/ui primitives (no domain logic)
 │   ├── shared/                   # cross-cutting: SupportButton, service worker, shared types
@@ -97,6 +105,7 @@ Layer dependency is one-way — routing → component → cache → service → 
 
 - **Server Components** are the default; use `"use client"` only when interactivity or browser APIs are needed
 - **Route groups** (parentheses syntax) keep URL paths clean while allowing per-role layouts
+- **i18n (next-intl)** — locales live in `i18n/routing.ts` (`fr` default, unprefixed; `/en/...` prefixed). Import `Link`/`useRouter`/`redirect` from `@/i18n/navigation` (not `next/link` / `next/navigation`) so the active locale survives navigation, and put user-facing strings in `messages/<locale>.json` (`useTranslations` / `getTranslations`)
 - **No hardcoded config** — environment variables via `.env` files only
 - **API calls** go through service layers, never directly in components
 
