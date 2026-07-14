@@ -8,6 +8,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { OrgSwitcher } from "@/components/modules/identity";
 import { getOrganizerContext } from "@/components/modules/identity/organizer-context";
 import { ROUTES } from "@/lib/constants";
 
@@ -25,6 +26,10 @@ export default async function OrganizerAppLayout({
   if (!context) {
     redirect(ROUTES.LOGIN);
   }
+  // A fresh account has no organization yet — onboarding creates the first one.
+  if (!context.activeTenantId) {
+    redirect(ROUTES.ONBOARDING);
+  }
 
   return (
     <SidebarProvider>
@@ -37,7 +42,14 @@ export default async function OrganizerAppLayout({
         <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="hidden md:inline-flex" />
           <Separator orientation="vertical" className="hidden h-5 md:block" />
-          <span className="text-sm font-medium">{context.brandName}</span>
+          {context.memberships.length > 1 ? (
+            <OrgSwitcher
+              memberships={context.memberships}
+              activeTenantId={context.activeTenantId}
+            />
+          ) : (
+            <span className="text-sm font-medium">{context.brandName}</span>
+          )}
           <div className="ml-auto md:hidden">
             <AccountMenu
               brandName={context.brandName}
