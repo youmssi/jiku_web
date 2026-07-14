@@ -24,13 +24,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { ROUTES } from "@/lib/constants";
+import { GoogleButton } from "@/components/modules/identity/google-button";
 import { loginAction } from "@/components/modules/identity/identity.service";
 import {
   loginSchema,
   type LoginInput,
 } from "@/components/modules/identity/schema";
 
-export function LoginForm() {
+export function LoginForm({ next }: { next?: string }) {
   const [formError, setFormError] = useState<string | null>(null);
   const {
     control,
@@ -44,7 +45,7 @@ export function LoginForm() {
 
   async function onSubmit(values: LoginInput) {
     setFormError(null);
-    const result = await loginAction(values);
+    const result = await loginAction(values, next);
     if (!result.ok) {
       setFormError(result.error);
     }
@@ -99,6 +100,9 @@ export function LoginForm() {
                       autoComplete="current-password"
                       aria-invalid={fieldState.invalid}
                     />
+                    <FieldDescription>
+                      <Link href={ROUTES.FORGOT_PASSWORD}>Forgot your password?</Link>
+                    </FieldDescription>
                     {fieldState.invalid ? (
                       <FieldError errors={[fieldState.error]} />
                     ) : null}
@@ -111,6 +115,7 @@ export function LoginForm() {
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Signing in…" : "Sign in"}
             </Button>
+            <GoogleButton next={next} />
             <FieldDescription className="text-center">
               New to Jikū? <Link href={ROUTES.REGISTER}>Create an account</Link>
             </FieldDescription>

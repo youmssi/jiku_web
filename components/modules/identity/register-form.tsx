@@ -24,13 +24,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { ROUTES } from "@/lib/constants";
+import { GoogleButton } from "@/components/modules/identity/google-button";
 import { registerAction } from "@/components/modules/identity/identity.service";
 import {
   registerSchema,
   type RegisterInput,
 } from "@/components/modules/identity/schema";
 
-export function RegisterForm() {
+export function RegisterForm({ next }: { next?: string }) {
   const [formError, setFormError] = useState<string | null>(null);
   const {
     control,
@@ -39,12 +40,12 @@ export function RegisterForm() {
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
     mode: "onTouched",
-    defaultValues: { name: "", email: "", password: "" },
+    defaultValues: { email: "", password: "" },
   });
 
   async function onSubmit(values: RegisterInput) {
     setFormError(null);
-    const result = await registerAction(values);
+    const result = await registerAction(values, next);
     if (!result.ok) {
       setFormError(result.error);
     }
@@ -54,9 +55,9 @@ export function RegisterForm() {
     <div className="flex flex-1 items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl">Create your organizer account</CardTitle>
+          <CardTitle className="text-2xl">Create your account</CardTitle>
           <CardDescription>
-            Start sending branded invitations in minutes.
+            One account, then your organization — invitations follow in minutes.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-(--card-spacing)">
@@ -68,24 +69,6 @@ export function RegisterForm() {
                   <AlertDescription>{formError}</AlertDescription>
                 </Alert>
               ) : null}
-              <Controller
-                control={control}
-                name="name"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Organization name</FieldLabel>
-                    <Input
-                      {...field}
-                      id={field.name}
-                      autoComplete="organization"
-                      aria-invalid={fieldState.invalid}
-                    />
-                    {fieldState.invalid ? (
-                      <FieldError errors={[fieldState.error]} />
-                    ) : null}
-                  </Field>
-                )}
-              />
               <Controller
                 control={control}
                 name="email"
@@ -130,6 +113,7 @@ export function RegisterForm() {
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Creating account…" : "Create account"}
             </Button>
+            <GoogleButton next={next} />
             <FieldDescription className="text-center">
               Already have an account? <Link href={ROUTES.LOGIN}>Sign in</Link>
             </FieldDescription>

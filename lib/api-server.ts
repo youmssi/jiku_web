@@ -1,5 +1,5 @@
 import { apiBaseUrl } from "@/lib/api";
-import { getAccessToken } from "@/lib/auth";
+import { getAccessToken, getAdminAccessToken } from "@/lib/auth";
 
 /** Abort a backend call that hangs, so a slow upstream can't stall a render. */
 const TIMEOUT_MS = 10_000;
@@ -65,4 +65,18 @@ export async function serverFetch(path: string, init: RequestInit = {}): Promise
  */
 export function publicFetch(path: string, init: RequestInit = {}): Promise<Response> {
   return request(path, init);
+}
+
+/**
+ * Server-side fetch attaching the platform-admin token (JIKU-46). Kept apart from
+ * `serverFetch` so an admin call can never silently fall back to an organizer
+ * session or vice versa.
+ */
+export async function adminFetch(path: string, init: RequestInit = {}): Promise<Response> {
+  const authHeaders = new Headers();
+  const token = await getAdminAccessToken();
+  if (token) {
+    authHeaders.set("Authorization", `Bearer ${token}`);
+  }
+  return request(path, init, authHeaders);
 }

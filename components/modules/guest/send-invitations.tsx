@@ -59,7 +59,7 @@ export function SendInvitations({ eventId }: { eventId: string }) {
           <p className="font-medium">Guest allowance reached</p>
           <p className="mt-1">{paywallMessage}</p>
           <Button asChild variant="outline" size="sm" className="mt-3">
-            <Link href={billingRoute(eventId)}>Purchase more capacity</Link>
+            <Link href={billingRoute(eventId)}>Request more capacity</Link>
           </Button>
         </div>
       ) : null}
