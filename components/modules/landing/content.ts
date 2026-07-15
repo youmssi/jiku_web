@@ -259,7 +259,7 @@ const fr: LandingContent = {
       description:
         "Offre négociée selon vos besoins : volumes supérieurs, accompagnement dédié, et hébergement on-premise (sur votre propre infrastructure) selon l'offre.",
       cta: "Contacter l'équipe commerciale",
-      mailSubject: "Jikū — demande d'offre Entreprise / On-premise",
+      mailSubject: "Jikū - demande d'offre Entreprise / On-premise",
     },
     highlightLabel: "Le plus courant",
     everyEventIncludesTitle: "Chaque événement inclut :",
@@ -311,7 +311,7 @@ const fr: LandingContent = {
       {
         question: "Proposez-vous un hébergement on-premise ?",
         answer:
-          "Oui, dans le cadre de l'offre Entreprise : selon l'offre retenue, Jikū peut être déployé sur votre propre infrastructure. Cette offre est à tarification personnalisée — contactez l'équipe commerciale pour un devis adapté à vos besoins.",
+          "Oui, dans le cadre de l'offre Entreprise : selon l'offre retenue, Jikū peut être déployé sur votre propre infrastructure. Cette offre est à tarification personnalisée, contactez l'équipe commerciale pour un devis adapté à vos besoins.",
       },
     ],
   },
@@ -516,7 +516,7 @@ const en: LandingContent = {
       description:
         "A negotiated offer built around your needs: higher volumes, dedicated support, and on-premise hosting (on your own infrastructure) depending on the offer.",
       cta: "Contact the sales team",
-      mailSubject: "Jikū — Enterprise / On-premise inquiry",
+      mailSubject: "Jikū - Enterprise / On-premise inquiry",
     },
     highlightLabel: "Most common",
     everyEventIncludesTitle: "Every event includes:",
@@ -568,7 +568,7 @@ const en: LandingContent = {
       {
         question: "Do you offer on-premise hosting?",
         answer:
-          "Yes, as part of the Enterprise offer: depending on the offer, Jikū can be deployed on your own infrastructure. This offer has custom pricing — contact the sales team for a quote tailored to your needs.",
+          "Yes, as part of the Enterprise offer: depending on the offer, Jikū can be deployed on your own infrastructure. This offer has custom pricing,  contact the sales team for a quote tailored to your needs.",
       },
     ],
   },
