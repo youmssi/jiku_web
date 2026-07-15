@@ -201,7 +201,7 @@ export async function createOrgAction(input: CreateOrgInput): Promise<ActionResu
     }
     return fail(
       response.status === 403
-        ? "Verify your email address first — check your inbox for the confirmation link."
+        ? "Verify your email address first, check your inbox for the confirmation link."
         : "We couldn't create the organization. Please try again.",
     );
   }

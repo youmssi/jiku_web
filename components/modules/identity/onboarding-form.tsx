@@ -64,7 +64,7 @@ export function OnboardingForm({ email }: { email: string }) {
         <CardHeader>
           <CardTitle className="text-2xl">Create your organization</CardTitle>
           <CardDescription>
-            Signed in as {email}. Name the organization your events will live under —
+            Signed in as {email}. Name the organization your events will live under,
             you can invite your team right after.
           </CardDescription>
         </CardHeader>
