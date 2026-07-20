@@ -2,7 +2,7 @@
 
 import { serverFetch } from "@/lib/api-server";
 import { type ActionResult, fromResponse } from "@/lib/action-result";
-import type { DashboardData } from "@/components/modules/dashboard/schema";
+import type { AnalyticsData, DashboardData } from "@/components/modules/dashboard/schema";
 
 /**
  * Fetches an event's live dashboard metrics. Called once server-side for the
@@ -14,5 +14,15 @@ export async function fetchDashboardAction(
   const response = await serverFetch(`/events/${eventId}/dashboard`);
   return fromResponse<DashboardData>(response, {
     default: "Couldn't load the latest metrics.",
+  });
+}
+
+/** Fetches an event's trend data (check-in timeline, channel breakdown, guest growth). */
+export async function fetchAnalyticsAction(
+  eventId: string,
+): Promise<ActionResult<AnalyticsData>> {
+  const response = await serverFetch(`/events/${eventId}/analytics`);
+  return fromResponse<AnalyticsData>(response, {
+    default: "Couldn't load this event's trend data.",
   });
 }

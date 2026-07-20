@@ -1,6 +1,6 @@
 "use client";
 
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, XAxis } from "recharts";
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   ChartContainer,
   ChartLegend,
@@ -9,7 +9,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import type { ChannelBreakdown, DateCount, TimeBucket } from "@/components/modules/analytics/schema";
+import type { ChannelBreakdown, DateCount, TimeBucket } from "@/components/modules/dashboard/schema";
 
 // ─── Check-in timeline ──────────────────────────────────────────────
 
@@ -110,49 +110,6 @@ export function GuestGrowthChart({ daily }: { daily: DateCount[] }) {
           stroke="var(--color-total)"
         />
       </AreaChart>
-    </ChartContainer>
-  );
-}
-
-// ─── RSVP funnel (donut) ─────────────────────────────────────────────
-
-const funnelConfig = {
-  confirmed: { label: "Confirmed", color: "var(--chart-1)" },
-  declined: { label: "Declined", color: "var(--chart-5)" },
-  pending: { label: "No response", color: "var(--chart-3)" },
-} satisfies ChartConfig;
-
-export function RsvpFunnelChart({
-  confirmed,
-  declined,
-  pending,
-}: {
-  confirmed: number;
-  declined: number;
-  pending: number;
-}) {
-  const total = confirmed + declined + pending;
-  if (total === 0) {
-    return <EmptyChart message="Invite guests to see RSVP breakdown." />;
-  }
-  // Recharts renders zero-value pie slices as visible artifacts (a stray sliver)
-  // rather than nothing, so only pass the categories that actually have guests.
-  const data = [
-    { key: "confirmed", value: confirmed, fill: "var(--color-confirmed)" },
-    { key: "declined", value: declined, fill: "var(--color-declined)" },
-    { key: "pending", value: pending, fill: "var(--color-pending)" },
-  ].filter((entry) => entry.value > 0);
-  return (
-    <ChartContainer config={funnelConfig} className="mx-auto aspect-square h-[220px]">
-      <PieChart>
-        <ChartTooltip content={<ChartTooltipContent nameKey="key" hideLabel />} />
-        <Pie data={data} dataKey="value" nameKey="key" innerRadius={55} strokeWidth={4}>
-          {data.map((entry) => (
-            <Cell key={entry.key} fill={entry.fill} />
-          ))}
-        </Pie>
-        <ChartLegend content={<ChartLegendContent nameKey="key" />} />
-      </PieChart>
     </ChartContainer>
   );
 }

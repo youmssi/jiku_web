@@ -1,16 +1,20 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EventDashboard } from "@/components/modules/dashboard/event-dashboard";
+import { fetchAnalyticsAction } from "@/components/modules/dashboard/dashboard.service";
 import { EventSubNav } from "@/components/shared/event-sub-nav";
 import { serverFetch } from "@/lib/api-server";
 import { eventGuestsExportRoute } from "@/lib/constants";
 import type { DashboardData } from "@/components/modules/dashboard/schema";
 import { StateMessage } from "@/components/shared/state-message";
 
-/** Live event dashboard: server-rendered snapshot, then client polling. */
+/** Event overview: server-rendered live snapshot plus trend charts, then client polling for the snapshot. */
 export async function DashboardView({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const response = await serverFetch(`/events/${id}/dashboard`);
+  const [response, analyticsResult] = await Promise.all([
+    serverFetch(`/events/${id}/dashboard`),
+    fetchAnalyticsAction(id),
+  ]);
 
   if (!response.ok) {
     return (
@@ -22,9 +26,10 @@ export async function DashboardView({ params }: { params: Promise<{ id: string }
   }
 
   const data = (await response.json()) as DashboardData;
+  const analytics = analyticsResult.ok ? analyticsResult.data : null;
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-10">
+    <div className="mx-auto w-full max-w-5xl px-4 py-10">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-semibold">{data.eventName}</h1>
@@ -42,7 +47,7 @@ export async function DashboardView({ params }: { params: Promise<{ id: string }
       </div>
 
       <div className="mt-2">
-        <EventDashboard eventId={id} initial={data} />
+        <EventDashboard eventId={id} initial={data} analytics={analytics} />
       </div>
     </div>
   );
