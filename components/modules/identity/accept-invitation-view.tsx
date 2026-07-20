@@ -62,7 +62,7 @@ export function AcceptInvitationView({ token, preview, authenticated }: AcceptIn
           ) : (
             <>
               <p className="text-sm text-muted-foreground">
-                Sign in — or create an account with the invited address — to accept.
+                Sign in or create an account with the invited address to accept.
               </p>
               <Button asChild className="w-full">
                 <Link href={`${ROUTES.LOGIN}?next=${encodeURIComponent(next)}`}>Sign in</Link>
