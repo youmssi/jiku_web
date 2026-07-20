@@ -6,7 +6,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { OrgSwitcher } from "@/components/modules/identity";
 import { getOrganizerContext } from "@/components/modules/identity/organizer-context";
 import { ROUTES } from "@/lib/constants";
 
@@ -35,24 +34,21 @@ export default async function OrganizerAppLayout({
         brandName={context.brandName}
         logoUrl={context.logoUrl}
         role={context.role}
+        memberships={context.memberships}
+        activeTenantId={context.activeTenantId}
       />
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="hidden md:inline-flex" />
           <Separator orientation="vertical" className="hidden h-5 md:block" />
-          {context.memberships.length > 1 ? (
-            <OrgSwitcher
-              memberships={context.memberships}
-              activeTenantId={context.activeTenantId}
-            />
-          ) : (
-            <span className="text-sm font-medium">{context.brandName}</span>
-          )}
+          <span className="text-sm font-medium md:hidden">{context.brandName}</span>
           <div className="ml-auto md:hidden">
             <AccountMenu
               brandName={context.brandName}
               logoUrl={context.logoUrl}
               role={context.role}
+              memberships={context.memberships}
+              activeTenantId={context.activeTenantId}
               variant="compact"
             />
           </div>

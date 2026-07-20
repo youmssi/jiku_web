@@ -24,16 +24,19 @@ import {
   ORGANIZER_NAV_ITEMS,
   organizerInitials,
 } from "@/components/shared/organizer-nav";
+import type { Membership } from "@/components/modules/identity";
 import { ROUTES } from "@/lib/constants";
 
 interface AppSidebarProps {
   brandName: string;
   logoUrl?: string | null;
   role: string;
+  memberships: Membership[];
+  activeTenantId: string;
 }
 
 /** Desktop navigation chrome; collapses to a Sheet drawer below `md` (see AGENTS.md nav decision: mobile uses BottomNav instead). */
-export function AppSidebar({ brandName, logoUrl, role }: AppSidebarProps) {
+export function AppSidebar({ brandName, logoUrl, role, memberships, activeTenantId }: AppSidebarProps) {
   const pathname = usePathname();
   const eventId = currentEventId(pathname);
 
@@ -104,7 +107,13 @@ export function AppSidebar({ brandName, logoUrl, role }: AppSidebarProps) {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <AccountMenu brandName={brandName} logoUrl={logoUrl} role={role} />
+            <AccountMenu
+              brandName={brandName}
+              logoUrl={logoUrl}
+              role={role}
+              memberships={memberships}
+              activeTenantId={activeTenantId}
+            />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
