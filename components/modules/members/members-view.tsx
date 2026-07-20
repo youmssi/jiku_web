@@ -5,6 +5,17 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -111,16 +122,32 @@ export function MembersView({ members, invitations, currentUserId }: MembersView
                 </SelectContent>
               </Select>
               {member.userId !== currentUserId ? (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label={`Remove ${member.email}`}
-                  onClick={() =>
-                    void run(() => removeMemberAction(member.userId), "Member removed.")
-                  }
-                >
-                  <Trash2 className="size-4" />
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label={`Remove ${member.email}`}>
+                      <Trash2 className="size-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Remove {member.email}?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        They&apos;ll immediately lose access to this organization. You can invite them
+                        again later.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() =>
+                          void run(() => removeMemberAction(member.userId), "Member removed.")
+                        }
+                      >
+                        Remove member
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               ) : (
                 <span className="w-9 text-center text-xs text-muted-foreground">you</span>
               )}
