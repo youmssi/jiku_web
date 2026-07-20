@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -21,13 +22,18 @@ import {
   resendVerificationAction,
 } from "@/components/modules/identity/identity.service";
 import { createOrgSchema, type CreateOrgInput } from "@/components/modules/identity/schema";
+import { ROUTES } from "@/lib/constants";
 
 /**
  * First-run onboarding (JIKU-52): the account exists, the organization doesn't.
  * A 403 from org creation means the email isn't verified yet — the resend
  * affordance lives right next to the error it fixes.
+ *
+ * `canCancel` is true when the account already runs at least one organization
+ * (reached via the account menu's "New organization" entry) — those visitors
+ * need a way back to where they were instead of being stranded here.
  */
-export function OnboardingForm({ email }: { email: string }) {
+export function OnboardingForm({ email, canCancel }: { email: string; canCancel: boolean }) {
   const [formError, setFormError] = useState<string | null>(null);
   const [resent, setResent] = useState(false);
   const {
@@ -112,6 +118,11 @@ export function OnboardingForm({ email }: { email: string }) {
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Creating…" : "Create organization"}
             </Button>
+            {canCancel ? (
+              <Button asChild type="button" variant="outline" className="w-full">
+                <Link href={ROUTES.DASHBOARD}>Cancel</Link>
+              </Button>
+            ) : null}
             <FieldDescription className="text-center">
               Wrong account?{" "}
               <button type="button" className="underline" onClick={() => void logoutAction()}>

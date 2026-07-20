@@ -13,5 +13,5 @@ export default async function OnboardingPage() {
   if (!context) {
     redirect(ROUTES.LOGIN);
   }
-  return <OnboardingForm email={context.email} />;
+  return <OnboardingForm email={context.email} canCancel={Boolean(context.activeTenantId)} />;
 }
