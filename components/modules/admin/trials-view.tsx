@@ -9,7 +9,8 @@ import { formatLocalDateTime } from "@/lib/datetime";
 import { ActionDialog } from "./action-dialog";
 import { endTrialAction, grantTrialAction } from "./admin.service";
 import { AdminTable, EmptyRow, StatusBadge } from "./admin-ui";
-import type { AdminTrial } from "./schema";
+import { TenantCombobox } from "./tenant-combobox";
+import type { AdminTrial, TenantDirectoryEntry } from "./schema";
 
 export function TrialsView({ trials }: { trials: AdminTrial[] }) {
   return (
@@ -58,7 +59,7 @@ export function TrialsView({ trials }: { trials: AdminTrial[] }) {
 }
 
 function GrantTrialForm() {
-  const [tenantId, setTenantId] = useState("");
+  const [tenant, setTenant] = useState<TenantDirectoryEntry | null>(null);
   const [eventId, setEventId] = useState("");
   const [tier, setTier] = useState("STANDARD");
   const [expiresAt, setExpiresAt] = useState("");
@@ -66,9 +67,13 @@ function GrantTrialForm() {
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
+    if (!tenant) {
+      toast.error("Pick an organization first.");
+      return;
+    }
     startTransition(async () => {
       const { error } = await grantTrialAction({
-        tenantId: tenantId.trim(),
+        tenantId: tenant.id,
         eventId: eventId.trim(),
         tier,
         expiresAt: new Date(expiresAt).toISOString(),
@@ -78,7 +83,7 @@ function GrantTrialForm() {
         return;
       }
       toast.success("Trial granted — the organizer has been notified.");
-      setTenantId("");
+      setTenant(null);
       setEventId("");
       setExpiresAt("");
     });
@@ -87,8 +92,8 @@ function GrantTrialForm() {
   return (
     <form onSubmit={submit} className="grid gap-3 rounded-xl border p-4 sm:grid-cols-2 lg:grid-cols-5">
       <div className="grid gap-1.5">
-        <Label htmlFor="trial-tenant">Tenant id</Label>
-        <Input id="trial-tenant" value={tenantId} onChange={(e) => setTenantId(e.target.value)} required />
+        <Label htmlFor="trial-tenant">Organization</Label>
+        <TenantCombobox id="trial-tenant" value={tenant} onChange={setTenant} />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="trial-event">Event id</Label>
