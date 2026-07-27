@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { serverFetch } from "@/lib/api-server";
 import { eventGuestsRoute } from "@/lib/constants";
-import { type ActionResult, fail, fromResponse } from "@/lib/action-result";
-import type { ImportResult, SingleGuestInput } from "@/components/modules/guest/schema";
+import { type ActionResult, fail, fromResponse, reportApiError } from "@/lib/action-result";
+import type { Guest, ImportResult, SingleGuestInput } from "@/components/modules/guest/schema";
 
 export async function importGuestsAction(
   eventId: string,
@@ -56,23 +56,85 @@ export async function addGuestAction(
   return result;
 }
 
+export async function removeGuestAction(
+  eventId: string,
+  guestId: string,
+): Promise<ActionResult<null>> {
+  const response = await serverFetch(`/events/${eventId}/guests/${guestId}`, {
+    method: "DELETE",
+  });
+  if (response.ok) {
+    revalidatePath(eventGuestsRoute(eventId));
+    return { ok: true, data: null };
+  }
+  reportApiError(response);
+  return fail(
+    response.status === 409
+      ? "This guest has already been invited and can no longer be removed. Exclude them instead."
+      : "We couldn't remove this guest. Please try again.",
+  );
+}
+
+export async function setGuestExclusionAction(
+  eventId: string,
+  guestId: string,
+  excluded: boolean,
+): Promise<ActionResult<Guest>> {
+  const response = await serverFetch(`/events/${eventId}/guests/${guestId}/exclusion`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ excluded }),
+  });
+  const result = await fromResponse<Guest>(response, {
+    default: excluded
+      ? "We couldn't exclude this guest. Please try again."
+      : "We couldn't include this guest again. Please try again.",
+  });
+  if (result.ok) {
+    revalidatePath(eventGuestsRoute(eventId));
+  }
+  return result;
+}
+
+export interface SendInvitationsFailure {
+  ok: false;
+  error: string;
+  /** True when the failure is the guest-allowance paywall (JIKU-34), not a generic error. */
+  paywall: boolean;
+}
+
 export async function sendInvitationsAction(
   eventId: string,
   channels: string[],
-): Promise<ActionResult<{ queued: number }>> {
+): Promise<{ ok: true; data: { queued: number } } | SendInvitationsFailure> {
   if (channels.length === 0) {
-    return fail("Select at least one channel.");
+    return { ok: false, error: "Select at least one channel.", paywall: false };
   }
   const params = new URLSearchParams({ channels: channels.join(",") });
   const response = await serverFetch(
     `/events/${eventId}/invitations/send?${params.toString()}`,
     { method: "POST" },
   );
-  const result = await fromResponse<{ queued: number }>(response, {
-    default: "We couldn't send the invitations. Please try again.",
-  });
-  if (result.ok) {
+  if (response.ok) {
+    const data = (await response.json()) as { queued: number };
     revalidatePath(eventGuestsRoute(eventId));
+    return { ok: true, data };
   }
-  return result;
+  reportApiError(response);
+  if (response.status === 402) {
+    const detail = await response
+      .json()
+      .then((body: { detail?: string }) => body.detail)
+      .catch(() => undefined);
+    return {
+      ok: false,
+      paywall: true,
+      error: detail ?? "This event's guest allowance has been reached.",
+    };
+  }
+  return {
+    ok: false,
+    paywall: false,
+    error: "We couldn't send the invitations. Please try again.",
+  };
 }

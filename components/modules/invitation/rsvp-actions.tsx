@@ -9,17 +9,30 @@ import {
   confirmRsvpAction,
   declineRsvpAction,
 } from "@/components/modules/invitation/invitation.service";
+import { TransferTicketDialog } from "@/components/modules/invitation/transfer-ticket-dialog";
 
 interface RsvpActionsProps {
   token: string;
   status: string;
   primaryColor: string;
   ticketCode: string | null;
+  /** Whether the organizer allows transferring this event's tickets, and until when. */
+  transferAllowed: boolean;
+  transferDeadline: string | null;
 }
 
-export function RsvpActions({ token, status, primaryColor, ticketCode }: RsvpActionsProps) {
+export function RsvpActions({
+  token,
+  status,
+  primaryColor,
+  ticketCode,
+  transferAllowed,
+  transferDeadline,
+}: RsvpActionsProps) {
   const [current, setCurrent] = useState(status);
   const [isPending, startTransition] = useTransition();
+  const canTransfer =
+    transferAllowed && (!transferDeadline || new Date(transferDeadline) > new Date());
 
   function act(action: "confirm" | "decline") {
     startTransition(async () => {
@@ -45,6 +58,7 @@ export function RsvpActions({ token, status, primaryColor, ticketCode }: RsvpAct
             <Link href={ticketRoute(token)}>View your ticket</Link>
           </Button>
         ) : null}
+        {canTransfer ? <TransferTicketDialog token={token} /> : null}
         <Button variant="outline" onClick={() => act("decline")} disabled={isPending}>
           {isPending ? "Updating…" : "I can't make it anymore"}
         </Button>

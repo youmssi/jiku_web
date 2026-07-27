@@ -19,28 +19,29 @@ Jikū is a white-label SaaS platform for event invitation, ticketing, RSVP, and 
 
 ## Route Groups (App Router)
 
-Routes are organized by role using Next.js route groups (parentheses syntax), which keep URL paths clean while allowing per-role layouts:
+Routes are organized by role using Next.js route groups (parentheses syntax) inside a locale segment (next-intl). The default locale (`fr`) serves unprefixed; other locales are prefixed (`/en/...`):
 
 ```
 app/
-├── (organizer)/           → URLs: /dashboard, /events, etc.
-│   ├── dashboard/page.tsx → /dashboard
-│   └── layout.tsx         → Organizer-specific layout
-├── (guest)/               → URLs: /invitation/[token], etc.
-│   ├── invitation/[token]/page.tsx → /invitation/:token
-│   └── layout.tsx         → Guest-facing layout (light, branded)
-├── (validator)/           → URLs: /checkin/[token], etc.
-│   ├── checkin/[token]/page.tsx   → /checkin/:token
-│   └── layout.tsx         → Validator layout (dark, scanning-optimized)
-├── layout.tsx             → Root layout (Geist fonts, global styles)
-├── page.tsx               → Landing page (/)
+├── [locale]/              → i18n segment ("/" = fr default, "/en/..." = en)
+│   ├── (organizer)/       → URLs: /dashboard, /events, etc.
+│   │   ├── (auth)/        → /login, /register, /forgot-password, /reset-password, /verify-email
+│   │   ├── (app)/         → authenticated app: /dashboard, /events, /settings
+│   │   └── layout.tsx     → Organizer-specific layout
+│   ├── (guest)/           → URLs: /invitation/[token], /privacy
+│   ├── (validator)/       → URLs: /checkin/[token]
+│   ├── (admin)/           → URLs: /admin/... (platform admin desk)
+│   ├── layout.tsx         → Root layout (fonts, metadata, NextIntlClientProvider)
+│   └── page.tsx           → Landing page (both locales)
+├── api/                   → BFF route handlers (locale-agnostic)
 └── globals.css            → Tailwind imports & CSS variables
 ```
 
 **Key rules:**
-- Route groups do **not** affect the URL path — `(organizer)/dashboard` serves at `/dashboard`
+- Route groups do **not** affect the URL path — `(organizer)/(app)/dashboard` serves at `/dashboard`
 - Each group has its own `layout.tsx` for role-specific chrome
 - Dynamic route params use the `Promise`-based API (Next.js 16): `params: Promise<{ token: string }>` + `const { token } = await params`
+- **i18n:** locale config lives in `i18n/routing.ts`; message catalogs in `messages/<locale>.json`. Import `Link` / `useRouter` / `usePathname` / `redirect` from `@/i18n/navigation` (never `next/link` or `next/navigation` for user-facing routes) so the active locale is preserved. `proxy.ts` composes locale resolution with the organizer session guard.
 
 ## Component Layers (Strict One-Directional Dependency)
 

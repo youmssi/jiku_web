@@ -1,19 +1,29 @@
 "use client";
 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDashboard } from "@/components/modules/dashboard/useDashboard";
-import type { DashboardData } from "@/components/modules/dashboard/schema";
+import {
+  CheckInTimelineChart,
+  ChannelBreakdownChart,
+  GuestGrowthChart,
+} from "@/components/modules/dashboard/dashboard-charts";
+import type { AnalyticsData, DashboardData } from "@/components/modules/dashboard/schema";
 
 interface EventDashboardProps {
   eventId: string;
   initial: DashboardData;
+  /** Trend charts shown alongside the live snapshot; null when unavailable. */
+  analytics: AnalyticsData | null;
 }
 
 /**
- * Live event dashboard. Seeded by the server snapshot and polled client-side, it
- * separates pre-event metrics (invitations, RSVPs) from the day-of metric
- * (check-ins) since they matter to the organizer at different times.
+ * Event overview: one page combining the live snapshot (polled client-side) with
+ * trend charts (fetched once at load), so an organizer doesn't have to choose
+ * between "what's happening now" and "how did we get here." Pre-event metrics
+ * and the day-of check-in metric each keep their own section since they matter
+ * to the organizer at different times.
  */
-export function EventDashboard({ eventId, initial }: EventDashboardProps) {
+export function EventDashboard({ eventId, initial, analytics }: EventDashboardProps) {
   const { data, updatedAt } = useDashboard(eventId, initial);
   const checkInPct =
     data.confirmed > 0 ? Math.round((data.checkedIn / data.confirmed) * 100) : 0;
@@ -73,6 +83,28 @@ export function EventDashboard({ eventId, initial }: EventDashboardProps) {
             .
           </p>
         ) : null}
+        {analytics ? (
+          <div className="mt-4 grid gap-4 lg:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Guest list growth</CardTitle>
+                <CardDescription>Cumulative guests imported ahead of the event.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <GuestGrowthChart daily={analytics.guestGrowth} />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Delivery by channel</CardTitle>
+                <CardDescription>Email and WhatsApp, sent vs. pending vs. failed.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChannelBreakdownChart channels={analytics.channelBreakdown} />
+              </CardContent>
+            </Card>
+          </div>
+        ) : null}
       </section>
 
       <section>
@@ -118,6 +150,18 @@ export function EventDashboard({ eventId, initial }: EventDashboardProps) {
             )}
           </div>
         </div>
+
+        {analytics ? (
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle>Check-in timeline</CardTitle>
+              <CardDescription>Arrivals by hour, in the event&apos;s own timezone.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <CheckInTimelineChart buckets={analytics.checkInTimeline} />
+            </CardContent>
+          </Card>
+        ) : null}
       </section>
 
       <p className="text-xs text-muted-foreground">

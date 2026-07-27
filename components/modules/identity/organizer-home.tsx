@@ -14,9 +14,12 @@ export async function OrganizerHome() {
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12">
       <div>
-        <h1 className="text-2xl font-semibold">Welcome, {context.brandName}</h1>
+        <h1 className="text-2xl font-semibold">
+          Welcome, {context.fullName ?? context.email}
+        </h1>
         <p className="text-sm text-muted-foreground">
-          You are signed in as {context.role.toLowerCase().replace(/_/g, " ")}.
+          You are signed in as {context.role.toLowerCase().replace(/_/g, " ")} of{" "}
+          {context.brandName}.
         </p>
       </div>
       <p className="mt-4 rounded-md bg-muted px-4 py-3 text-sm text-muted-foreground">

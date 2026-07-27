@@ -1,6 +1,6 @@
-import { CalendarDays, ChartColumn, LayoutDashboard, Settings, Users } from "lucide-react";
+import { CalendarDays, CreditCard, LayoutDashboard, Settings, Users } from "lucide-react";
 import {
-  eventAnalyticsRoute,
+  billingRoute,
   eventDashboardRoute,
   eventEditRoute,
   eventGuestsRoute,
@@ -33,6 +33,12 @@ export const ORGANIZER_NAV_ITEMS: OrganizerNavItem[] = [
     match: (pathname) => pathname === ROUTES.EVENTS || pathname.startsWith(`${ROUTES.EVENTS}/`),
   },
   {
+    label: "Billing",
+    href: ROUTES.BILLING,
+    icon: CreditCard,
+    match: (pathname) => pathname === ROUTES.BILLING || pathname.startsWith(`${ROUTES.BILLING}/`),
+  },
+  {
     label: "Settings",
     href: ROUTES.SETTINGS,
     icon: Settings,
@@ -61,16 +67,16 @@ export const EVENT_SUB_NAV_ITEMS: EventSubNavItem[] = [
     match: (pathname, eventId) => pathname === eventDashboardRoute(eventId),
   },
   {
-    label: "Analytics",
-    href: eventAnalyticsRoute,
-    icon: ChartColumn,
-    match: (pathname, eventId) => pathname === eventAnalyticsRoute(eventId),
-  },
-  {
     label: "Guests",
     href: eventGuestsRoute,
     icon: Users,
     match: (pathname, eventId) => pathname === eventGuestsRoute(eventId),
+  },
+  {
+    label: "Billing",
+    href: billingRoute,
+    icon: CreditCard,
+    match: (pathname, eventId) => pathname === billingRoute(eventId),
   },
   {
     label: "Settings",

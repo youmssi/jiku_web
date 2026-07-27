@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useRef, useTransition } from "react";
+import { useCallback, useState, useTransition } from "react";
 import { useDropzone } from "react-dropzone";
 import Papa from "papaparse";
 import Link from "next/link";
@@ -274,7 +274,6 @@ function ReviewDialog({
 }
 
 export function GuestImport({ eventId }: { eventId: string }) {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
   const [isParsing, setIsParsing] = useState(false);
   const [parsed, setParsed] = useState<ParsedFile | null>(null);
@@ -297,18 +296,17 @@ export function GuestImport({ eventId }: { eventId: string }) {
     [handleFile],
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
     onDrop,
     accept: { "text/csv": [".csv"], "text/comma-separated-values": [".csv"] },
     multiple: false,
-    noClick: true,
+    noClick: false,
     noKeyboard: true,
   });
 
   function clearFile() {
     setParsed(null);
     setReviewOpen(false);
-    if (inputRef.current) inputRef.current.value = "";
   }
 
   function onConfirmImport() {
@@ -358,17 +356,6 @@ export function GuestImport({ eventId }: { eventId: string }) {
         }`}
       >
         <input {...getInputProps()} />
-        <input
-          ref={inputRef}
-          type="file"
-          name="file"
-          accept=".csv,text/csv"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) handleFile(f);
-          }}
-        />
 
         {!parsed ? (
           <Empty className="border-0 p-0">
@@ -402,7 +389,7 @@ export function GuestImport({ eventId }: { eventId: string }) {
                       className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
                       onClick={(e) => {
                         e.stopPropagation();
-                        inputRef.current?.click();
+                        open();
                       }}
                     >
                       browse

@@ -2,20 +2,21 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/routing";
 import type { LandingContent } from "./content";
 
 // ─── Language switch ───────────────────────────────────────────────
-// The two locales live at separate static routes (`/` and `/en`), so
-// toggling navigates rather than flipping client-side state. The Switch's
-// checked position always reflects the *current* locale (checked = EN),
-// and clicking either side label or the thumb navigates to the other page.
+// Toggling swaps the /[locale] segment of the current URL via the next-intl
+// router, which also updates the locale cookie — a plain router.push("/")
+// would be bounced back to the cookie's locale by the proxy. The Switch's
+// checked position always reflects the *current* locale (checked = EN).
 function LanguageSwitch({
   switchLocale,
   large = false,
@@ -24,7 +25,8 @@ function LanguageSwitch({
   large?: boolean;
 }) {
   const router = useRouter();
-  const targetLocale = switchLocale.label.toLowerCase();
+  const pathname = usePathname();
+  const targetLocale = switchLocale.label.toLowerCase() as Locale;
   const isCurrentlyEn = targetLocale === "fr";
 
   return (
@@ -40,7 +42,7 @@ function LanguageSwitch({
       </span>
       <Switch
         checked={isCurrentlyEn}
-        onCheckedChange={() => router.push(switchLocale.href)}
+        onCheckedChange={() => router.replace(pathname, { locale: targetLocale })}
         aria-label={switchLocale.ariaLabel}
         size={large ? "default" : "sm"}
       />

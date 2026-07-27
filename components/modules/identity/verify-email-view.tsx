@@ -39,7 +39,7 @@ export function VerifyEmailView({ token }: { token: string | null }) {
               <Alert>
                 <AlertTitle>Your email is verified</AlertTitle>
                 <AlertDescription>
-                  You&apos;re all set — continue to your account to create your organization.
+                  You&apos;re all set, continue to your account to create your organization.
                 </AlertDescription>
               </Alert>
               <Button asChild className="w-full">

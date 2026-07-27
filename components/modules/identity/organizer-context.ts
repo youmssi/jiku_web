@@ -6,6 +6,8 @@ export interface OrganizerContext {
   userId: string;
   role: string;
   email: string;
+  /** The person's display name; falls back to the email when never provided. */
+  fullName: string | null;
   brandName: string;
   logoUrl: string | null;
   /** All organizations the user belongs to; empty until onboarding (JIKU-48). */
@@ -36,6 +38,7 @@ export async function getOrganizerContext(): Promise<OrganizerContext | null> {
     userId: me.userId,
     role: me.role,
     email: me.email,
+    fullName: me.fullName ?? null,
     brandName: branding?.displayName ?? active?.tenantName ?? "Your organization",
     logoUrl: branding?.logoUrl ?? null,
     memberships: me.memberships,

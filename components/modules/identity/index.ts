@@ -7,10 +7,9 @@ export { ForgotPasswordForm } from "./forgot-password-form";
 export { ResetPasswordForm } from "./reset-password-form";
 export { VerifyEmailView } from "./verify-email-view";
 export { OnboardingForm } from "./onboarding-form";
-export { OrgSwitcher } from "./org-switcher";
 export { AcceptInvitationView } from "./accept-invitation-view";
 
-export { logoutAction } from "./identity.service";
+export { logoutAction, switchOrgAction } from "./identity.service";
 
 export { loginSchema, registerSchema } from "./schema";
 export type {
