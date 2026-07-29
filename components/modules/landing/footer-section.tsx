@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { JikūLogo } from "@/components/ui/jiku-logo";
+import { TrackedAnchor } from "@/components/shared";
 import { PRIVACY_ROUTE } from "@/lib/constants";
+import { supportWhatsAppLink } from "@/lib/support";
 import type { LandingContent } from "./content";
 
 export function FooterSection({ content }: { content: LandingContent["footer"] }) {
+  const whatsApp = supportWhatsAppLink();
   return (
     <footer className="border-t border-border/30">
       <div className="mx-auto max-w-7xl px-6 py-16">
@@ -50,6 +53,21 @@ export function FooterSection({ content }: { content: LandingContent["footer"] }
             <Link href={PRIVACY_ROUTE} className="hover:text-foreground transition-colors">
               {content.privacy}
             </Link>
+            {whatsApp ? (
+              <>
+                <span className="text-border/40">·</span>
+                <TrackedAnchor
+                  href={whatsApp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  eventName="whatsapp_click"
+                  eventProperties={{ location: "footer" }}
+                  className="hover:text-foreground transition-colors"
+                >
+                  WhatsApp
+                </TrackedAnchor>
+              </>
+            ) : null}
             <span className="text-border/40">·</span>
             <span>{content.tagline}</span>
           </div>

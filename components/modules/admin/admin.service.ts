@@ -135,3 +135,18 @@ export async function interruptAgreementAction(
 ): Promise<ActionResult> {
   return adminMutation(`/admin/agreements/${agreementId}/interrupt`, { reason });
 }
+
+export async function cancelBookingAction(bookingId: string): Promise<ActionResult> {
+  return adminMutation(`/admin/bookings/${bookingId}/cancel`, {});
+}
+
+export async function verifyBookingPaymentAction(declarationId: string): Promise<ActionResult> {
+  return adminMutation(`/admin/booking-payments/${declarationId}/verify`, {});
+}
+
+export async function rejectBookingPaymentAction(
+  declarationId: string,
+  reason: string,
+): Promise<ActionResult> {
+  return adminMutation(`/admin/booking-payments/${declarationId}/reject`, { reason });
+}

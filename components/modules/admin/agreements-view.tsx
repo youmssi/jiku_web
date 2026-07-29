@@ -99,8 +99,9 @@ function CreateAgreementForm() {
         kind,
         periodStart: new Date(periodStart).toISOString(),
         periodEnd: new Date(`${periodEnd}T23:59:59Z`).toISOString(),
-        amountMinor: amount.trim() ? Math.round(Number(amount) * 100) : null,
-        currency: amount.trim() ? "XOF" : null,
+        // GNF has no minor unit, so the typed amount is the full amount, not centimes.
+        amountMinor: amount.trim() ? Math.round(Number(amount)) : null,
+        currency: amount.trim() ? "GNF" : null,
         notes: notes.trim() || null,
       });
       if (error) {
@@ -155,7 +156,7 @@ function CreateAgreementForm() {
         />
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor="agr-amount">Amount (XOF, optional)</Label>
+        <Label htmlFor="agr-amount">Amount (GNF, optional)</Label>
         <Input
           id="agr-amount"
           type="number"

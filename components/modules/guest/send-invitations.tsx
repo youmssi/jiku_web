@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { trackEvent } from "@/lib/analytics";
 import { sendInvitationsAction } from "@/components/modules/guest/guest.service";
 import { INVITATION_CHANNEL_LABELS, type InvitationChannel } from "@/lib/channels";
 import { billingRoute, eventEditRoute } from "@/lib/constants";
@@ -57,6 +58,7 @@ export function SendInvitations({
         }
         return;
       }
+      trackEvent("invitation_sent", { channel: channels.join(","), count: outcome.data.queued });
       toast.success(`Queued ${outcome.data.queued} invitation(s).`);
     });
   }

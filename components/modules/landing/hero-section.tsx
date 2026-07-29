@@ -6,6 +6,7 @@ import { ArrowRight, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { useOnScreen } from "@/hooks/use-on-screen";
+import { trackEvent } from "@/lib/analytics";
 import { ROUTES } from "@/lib/constants";
 import type { LandingContent } from "./content";
 
@@ -143,7 +144,10 @@ export function HeroSection({ content }: { content: LandingContent["hero"] }) {
             size="lg"
             className="group relative h-12 overflow-hidden rounded-full px-8 text-base shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30"
           >
-            <Link href={ROUTES.REGISTER}>
+            <Link
+              href={ROUTES.REGISTER}
+              onClick={() => trackEvent("cta_click", { location: "hero", label: content.primaryCta })}
+            >
               <span className="relative z-10 flex items-center gap-2">
                 {content.primaryCta}
                 <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />

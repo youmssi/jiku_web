@@ -61,7 +61,7 @@ export function TrialsView({ trials }: { trials: AdminTrial[] }) {
 function GrantTrialForm() {
   const [tenant, setTenant] = useState<TenantDirectoryEntry | null>(null);
   const [eventId, setEventId] = useState("");
-  const [tier, setTier] = useState("STANDARD");
+  const [tier, setTier] = useState("BRONZE");
   const [expiresAt, setExpiresAt] = useState("");
   const [isPending, startTransition] = useTransition();
 
@@ -107,8 +107,9 @@ function GrantTrialForm() {
           onChange={(e) => setTier(e.target.value)}
           className="h-9 rounded-md border bg-transparent px-3 text-sm"
         >
-          <option value="STANDARD">STANDARD</option>
-          <option value="PREMIUM">PREMIUM</option>
+          <option value="BRONZE">BRONZE</option>
+          <option value="ARGENT">ARGENT</option>
+          <option value="OR">OR</option>
         </select>
       </div>
       <div className="grid gap-1.5">

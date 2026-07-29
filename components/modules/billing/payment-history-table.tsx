@@ -1,11 +1,8 @@
 import Link from "next/link";
 import { billingReceiptRoute } from "@/lib/constants";
+import { formatAmount } from "@/lib/currency";
 import { formatLocalDateTime } from "@/lib/datetime";
 import type { PaymentHistoryItem } from "./schema";
-
-function formatAmount(minor: number, currency: string): string {
-  return `${(minor / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })} ${currency}`;
-}
 
 /** Payment history table shared between the per-event and all-events billing views. */
 export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem[] }) {

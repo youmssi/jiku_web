@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { Building2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
+import { TrackedAnchor, TrackedLink, ViewTracker } from "@/components/shared";
 import { ROUTES } from "@/lib/constants";
 import { salesMailto } from "@/lib/support";
 import type { LandingContent } from "./content";
@@ -57,7 +57,13 @@ function TierCard({
           variant={tier.highlighted ? "default" : "outline"}
           className="w-full rounded-full"
         >
-          <Link href={ROUTES.REGISTER}>{tier.cta}</Link>
+          <TrackedLink
+            href={ROUTES.REGISTER}
+            eventName="cta_click"
+            eventProperties={{ location: "pricing_tier", label: tier.name }}
+          >
+            {tier.cta}
+          </TrackedLink>
         </Button>
       </div>
     </div>
@@ -90,7 +96,13 @@ function EnterpriseCard({ enterprise }: { enterprise: LandingContent["pricing"][
 
       <div className="mt-auto">
         <Button asChild variant="outline" className="w-full rounded-full">
-          <a href={salesMailto(enterprise.mailSubject)}>{enterprise.cta}</a>
+          <TrackedAnchor
+            href={salesMailto(enterprise.mailSubject)}
+            eventName="cta_click"
+            eventProperties={{ location: "pricing_tier", label: enterprise.name }}
+          >
+            {enterprise.cta}
+          </TrackedAnchor>
         </Button>
       </div>
     </div>
@@ -100,6 +112,7 @@ function EnterpriseCard({ enterprise }: { enterprise: LandingContent["pricing"][
 export function PricingSection({ content }: { content: LandingContent["pricing"] }) {
   return (
     <section id="pricing" className="border-t border-border/30 py-24">
+      <ViewTracker eventName="pricing_view" eventProperties={{ source: "landing" }} />
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary shadow-sm shadow-primary/5">
