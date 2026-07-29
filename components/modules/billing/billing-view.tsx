@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { billingReceiptRoute } from "@/lib/constants";
-import { formatLocalDateTime } from "@/lib/datetime";
+import { formatAmount } from "@/lib/currency";
 import { ActivationInstructions } from "./activation-instructions";
 import { requestActivationAction } from "./billing.service";
+import { PaymentHistoryTable } from "./payment-history-table";
 import type {
   ManualPaymentInstructions,
   PaymentHistoryItem,
@@ -22,10 +21,6 @@ interface BillingViewProps {
   payments: PaymentHistoryItem[];
   /** The event's open activation request, when one exists (JIKU-45). */
   activation: ManualPaymentInstructions | null;
-}
-
-function formatAmount(minor: number, currency: string): string {
-  return `${(minor / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })} ${currency}`;
 }
 
 export function BillingView({ eventId, usage, catalog, payments, activation }: BillingViewProps) {
@@ -106,62 +101,7 @@ export function BillingView({ eventId, usage, catalog, payments, activation }: B
 
       <section>
         <SectionHeading>Payment history</SectionHeading>
-        {payments.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No payments yet.</p>
-        ) : (
-          <div className="overflow-hidden rounded-xl border">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/50 text-left text-xs uppercase tracking-wider text-muted-foreground">
-                <tr>
-                  <th className="px-4 py-2">Date</th>
-                  <th className="px-4 py-2">Event</th>
-                  <th className="px-4 py-2">Tier</th>
-                  <th className="px-4 py-2">Amount</th>
-                  <th className="px-4 py-2">Status</th>
-                  <th className="px-4 py-2">Receipt</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {payments.map((payment) => (
-                  <tr key={payment.paymentId}>
-                    <td className="px-4 py-2">{formatLocalDateTime(payment.createdAt)}</td>
-                    <td className="px-4 py-2">{payment.eventName}</td>
-                    <td className="px-4 py-2">{payment.tier}</td>
-                    <td className="px-4 py-2">
-                      {formatAmount(payment.amountMinor, payment.currency)}
-                    </td>
-                    <td className="px-4 py-2">
-                      <span
-                        className={
-                          payment.status === "SUCCEEDED"
-                            ? "text-green-600 dark:text-green-400"
-                            : payment.status === "FAILED"
-                              ? "text-red-600 dark:text-red-400"
-                              : "text-muted-foreground"
-                        }
-                      >
-                        {payment.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-2">
-                      {payment.status === "SUCCEEDED" ? (
-                        <Link
-                          href={billingReceiptRoute(payment.paymentId)}
-                          className="underline underline-offset-4"
-                          prefetch={false}
-                        >
-                          Download
-                        </Link>
-                      ) : (
-                        <span className="text-muted-foreground">—</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <PaymentHistoryTable payments={payments} />
       </section>
     </div>
   );

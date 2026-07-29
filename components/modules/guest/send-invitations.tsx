@@ -6,14 +6,37 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { trackEvent } from "@/lib/analytics";
 import { sendInvitationsAction } from "@/components/modules/guest/guest.service";
-import { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS } from "@/lib/channels";
-import { billingRoute } from "@/lib/constants";
+import { INVITATION_CHANNEL_LABELS, type InvitationChannel } from "@/lib/channels";
+import { billingRoute, eventEditRoute } from "@/lib/constants";
 
-export function SendInvitations({ eventId }: { eventId: string }) {
-  const [channels, setChannels] = useState<string[]>(["EMAIL"]);
+export function SendInvitations({
+  eventId,
+  enabledChannels,
+}: {
+  eventId: string;
+  /** Channels enabled in the event's settings (Event edit → Invitation channels). */
+  enabledChannels: InvitationChannel[];
+}) {
+  const [channels, setChannels] = useState<string[]>(enabledChannels);
   const [paywallMessage, setPaywallMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  if (enabledChannels.length === 0) {
+    return (
+      <div className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
+        No invitation channel is enabled for this event yet.{" "}
+        <Link
+          href={eventEditRoute(eventId)}
+          className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
+        >
+          Enable Email or WhatsApp in event settings
+        </Link>{" "}
+        before sending invitations.
+      </div>
+    );
+  }
 
   function toggle(channel: string, checked: boolean) {
     setChannels((previous) =>
@@ -28,9 +51,14 @@ export function SendInvitations({ eventId }: { eventId: string }) {
     startTransition(async () => {
       const outcome = await sendInvitationsAction(eventId, channels);
       if (!outcome.ok) {
-        toast.error(outcome.error);
+        if (outcome.paywall) {
+          setPaywallMessage(outcome.error);
+        } else {
+          toast.error(outcome.error);
+        }
         return;
       }
+      trackEvent("invitation_sent", { channel: channels.join(","), count: outcome.data.queued });
       toast.success(`Queued ${outcome.data.queued} invitation(s).`);
     });
   }
@@ -38,7 +66,7 @@ export function SendInvitations({ eventId }: { eventId: string }) {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-4">
-        {INVITATION_CHANNELS.map((channel) => (
+        {enabledChannels.map((channel) => (
           <div key={channel} className="flex items-center gap-2">
             <Checkbox
               id={`channel-${channel}`}

@@ -248,9 +248,10 @@ const fr: LandingContent = {
     perEvent: "par événement",
     upToTemplate: "Jusqu'à {guests} invités",
     tiers: [
-      { name: "Gratuit", price: "0 FCFA", guests: "100", highlighted: false, cta: "Commencer gratuitement" },
-      { name: "Standard", price: "5 000 FCFA", guests: "2 000", highlighted: true, cta: "Créer mon événement" },
-      { name: "Premium", price: "20 000 FCFA", guests: "10 000", highlighted: false, cta: "Créer mon événement" },
+      { name: "Gratuit", price: "0 GNF", guests: "100", highlighted: false, cta: "Commencer gratuitement" },
+      { name: "Bronze", price: "150 000 GNF", guests: "300", highlighted: false, cta: "Créer mon événement" },
+      { name: "Argent", price: "300 000 GNF", guests: "600", highlighted: true, cta: "Créer mon événement" },
+      { name: "Or", price: "500 000 GNF", guests: "1 000", highlighted: false, cta: "Créer mon événement" },
     ],
     enterprise: {
       name: "Entreprise",
@@ -259,7 +260,7 @@ const fr: LandingContent = {
       description:
         "Offre négociée selon vos besoins : volumes supérieurs, accompagnement dédié, et hébergement on-premise (sur votre propre infrastructure) selon l'offre.",
       cta: "Contacter l'équipe commerciale",
-      mailSubject: "Jikū — demande d'offre Entreprise / On-premise",
+      mailSubject: "Jikū - demande d'offre Entreprise / On-premise",
     },
     highlightLabel: "Le plus courant",
     everyEventIncludesTitle: "Chaque événement inclut :",
@@ -271,7 +272,7 @@ const fr: LandingContent = {
       "Tableau de bord en temps réel",
       "Export CSV des invités",
     ],
-    note: "Prix de lancement en FCFA (XOF). Le niveau requis dépend du nombre d'invités de l'événement ; vous pouvez augmenter la capacité d'un événement à tout moment. L'offre Entreprise (y compris l'hébergement on-premise) est à tarification personnalisée, via l'équipe commerciale.",
+    note: "Prix de lancement en franc guinéen (GNF). Le niveau requis dépend du nombre d'invités de l'événement ; vous pouvez augmenter la capacité d'un événement à tout moment. Au-delà de 1 000 invités, un tarif sur mesure s'applique. L'offre Entreprise (y compris l'hébergement on-premise) est à tarification personnalisée, via l'équipe commerciale.",
   },
   faq: {
     badge: "Questions fréquentes",
@@ -301,7 +302,7 @@ const fr: LandingContent = {
       {
         question: "Combien ça coûte ?",
         answer:
-          "C'est gratuit jusqu'à 100 invités par événement. Au-delà, vous payez un montant unique pour l'événement, selon le nombre d'invités : 5 000 FCFA jusqu'à 2 000 invités, 20 000 FCFA jusqu'à 10 000. Pas d'abonnement mensuel.",
+          "C'est gratuit jusqu'à 100 invités cumulés sur votre compte, un an glissant. Au-delà, vous payez un montant unique pour l'événement, selon le nombre d'invités : 150 000 GNF jusqu'à 300 invités, 300 000 GNF jusqu'à 600, 500 000 GNF jusqu'à 1 000. Au-delà, tarif sur mesure. Pas d'abonnement mensuel.",
       },
       {
         question: "Que deviennent les données de mes invités ?",
@@ -311,7 +312,7 @@ const fr: LandingContent = {
       {
         question: "Proposez-vous un hébergement on-premise ?",
         answer:
-          "Oui, dans le cadre de l'offre Entreprise : selon l'offre retenue, Jikū peut être déployé sur votre propre infrastructure. Cette offre est à tarification personnalisée — contactez l'équipe commerciale pour un devis adapté à vos besoins.",
+          "Oui, dans le cadre de l'offre Entreprise : selon l'offre retenue, Jikū peut être déployé sur votre propre infrastructure. Cette offre est à tarification personnalisée, contactez l'équipe commerciale pour un devis adapté à vos besoins.",
       },
     ],
   },
@@ -505,9 +506,10 @@ const en: LandingContent = {
     perEvent: "per event",
     upToTemplate: "Up to {guests} guests",
     tiers: [
-      { name: "Free", price: "0 FCFA", guests: "100", highlighted: false, cta: "Start free" },
-      { name: "Standard", price: "5,000 FCFA", guests: "2,000", highlighted: true, cta: "Create my event" },
-      { name: "Premium", price: "20,000 FCFA", guests: "10,000", highlighted: false, cta: "Create my event" },
+      { name: "Free", price: "0 GNF", guests: "100", highlighted: false, cta: "Start free" },
+      { name: "Bronze", price: "150,000 GNF", guests: "300", highlighted: false, cta: "Create my event" },
+      { name: "Silver", price: "300,000 GNF", guests: "600", highlighted: true, cta: "Create my event" },
+      { name: "Gold", price: "500,000 GNF", guests: "1,000", highlighted: false, cta: "Create my event" },
     ],
     enterprise: {
       name: "Enterprise",
@@ -516,7 +518,7 @@ const en: LandingContent = {
       description:
         "A negotiated offer built around your needs: higher volumes, dedicated support, and on-premise hosting (on your own infrastructure) depending on the offer.",
       cta: "Contact the sales team",
-      mailSubject: "Jikū — Enterprise / On-premise inquiry",
+      mailSubject: "Jikū - Enterprise / On-premise inquiry",
     },
     highlightLabel: "Most common",
     everyEventIncludesTitle: "Every event includes:",
@@ -528,7 +530,7 @@ const en: LandingContent = {
       "Real-time dashboard",
       "Guest list CSV export",
     ],
-    note: "Launch pricing in FCFA (XOF). The tier you need depends on the event's guest count; you can upgrade an event's capacity at any time. The Enterprise offer (including on-premise hosting) has custom pricing through the sales team.",
+    note: "Launch pricing in Guinean francs (GNF). The tier you need depends on the event's guest count; you can upgrade an event's capacity at any time. Beyond 1,000 guests, custom pricing applies. The Enterprise offer (including on-premise hosting) has custom pricing through the sales team.",
   },
   faq: {
     badge: "Frequently asked",
@@ -558,7 +560,7 @@ const en: LandingContent = {
       {
         question: "How much does it cost?",
         answer:
-          "It's free for up to 100 guests per event. Beyond that, you pay a one-time amount per event based on guest count: 5,000 FCFA up to 2,000 guests, 20,000 FCFA up to 10,000. No monthly subscription.",
+          "It's free for up to 100 guests cumulated on your account, on a rolling 12-month basis. Beyond that, you pay a one-time amount per event based on guest count: 150,000 GNF up to 300 guests, 300,000 GNF up to 600, 500,000 GNF up to 1,000. Beyond that, custom pricing. No monthly subscription.",
       },
       {
         question: "What happens to my guests' data?",
@@ -568,7 +570,7 @@ const en: LandingContent = {
       {
         question: "Do you offer on-premise hosting?",
         answer:
-          "Yes, as part of the Enterprise offer: depending on the offer, Jikū can be deployed on your own infrastructure. This offer has custom pricing — contact the sales team for a quote tailored to your needs.",
+          "Yes, as part of the Enterprise offer: depending on the offer, Jikū can be deployed on your own infrastructure. This offer has custom pricing,  contact the sales team for a quote tailored to your needs.",
       },
     ],
   },

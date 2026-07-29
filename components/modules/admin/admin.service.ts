@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { adminFetch, publicFetch } from "@/lib/api-server";
 import { clearAdminAuthCookie, setAdminAuthCookie } from "@/lib/auth";
 import { ADMIN_ROUTES } from "@/lib/constants";
+import type { TenantDirectoryEntry, TenantDirectoryPage } from "@/components/modules/admin/schema";
 
 export interface ActionResult {
   error?: string;
@@ -85,6 +86,17 @@ export async function rejectPaymentAction(
   return adminMutation(`/admin/payments/${paymentId}/reject`, { reason });
 }
 
+/** Search-as-you-type tenant lookup for admin forms (Grant Trial, agreements). */
+export async function searchTenantsAction(query: string): Promise<TenantDirectoryEntry[]> {
+  const params = new URLSearchParams({ query, size: "10" });
+  const response = await adminFetch(`/admin/tenants?${params.toString()}`);
+  if (!response.ok) {
+    return [];
+  }
+  const page = (await response.json()) as TenantDirectoryPage;
+  return page.entries;
+}
+
 export async function grantTrialAction(input: {
   tenantId: string;
   eventId: string;
@@ -122,4 +134,19 @@ export async function interruptAgreementAction(
   reason: string,
 ): Promise<ActionResult> {
   return adminMutation(`/admin/agreements/${agreementId}/interrupt`, { reason });
+}
+
+export async function cancelBookingAction(bookingId: string): Promise<ActionResult> {
+  return adminMutation(`/admin/bookings/${bookingId}/cancel`, {});
+}
+
+export async function verifyBookingPaymentAction(declarationId: string): Promise<ActionResult> {
+  return adminMutation(`/admin/booking-payments/${declarationId}/verify`, {});
+}
+
+export async function rejectBookingPaymentAction(
+  declarationId: string,
+  reason: string,
+): Promise<ActionResult> {
+  return adminMutation(`/admin/booking-payments/${declarationId}/reject`, { reason });
 }

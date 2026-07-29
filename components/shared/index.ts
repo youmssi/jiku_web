@@ -1,3 +1,10 @@
-// Cross-cutting shared barrel. Shared UI lives in components/shared/*, shared logic
-// and types in lib/* (e.g. lib/action-result). Intentionally empty for now.
-export {};
+export {AccountMenu} from "./account-menu";
+export {AppSidebar} from "./app-sidebar";
+export {BottomNav} from "./bottom-nav";
+export {EventSubNav} from "./event-sub-nav";
+export {ServiceWorkerRegister} from "./service-worker-register";
+export {StateMessage} from "./state-message";
+export {SupportButton} from "./support-button";
+export {TrackedAnchor, TrackedLink} from "./tracked-link";
+export {UmamiScript} from "./umami-script";
+export {ViewTracker} from "./view-tracker";

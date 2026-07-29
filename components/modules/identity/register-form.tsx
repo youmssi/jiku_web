@@ -40,7 +40,7 @@ export function RegisterForm({ next }: { next?: string }) {
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
     mode: "onTouched",
-    defaultValues: { email: "", password: "" },
+    defaultValues: { fullName: "", email: "", password: "" },
   });
 
   async function onSubmit(values: RegisterInput) {
@@ -57,7 +57,7 @@ export function RegisterForm({ next }: { next?: string }) {
         <CardHeader>
           <CardTitle className="text-2xl">Create your account</CardTitle>
           <CardDescription>
-            One account, then your organization — invitations follow in minutes.
+            One account, then your organization invitations follow in minutes.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-(--card-spacing)">
@@ -69,6 +69,25 @@ export function RegisterForm({ next }: { next?: string }) {
                   <AlertDescription>{formError}</AlertDescription>
                 </Alert>
               ) : null}
+              <Controller
+                control={control}
+                name="fullName"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Full name</FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      type="text"
+                      autoComplete="name"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid ? (
+                      <FieldError errors={[fieldState.error]} />
+                    ) : null}
+                  </Field>
+                )}
+              />
               <Controller
                 control={control}
                 name="email"

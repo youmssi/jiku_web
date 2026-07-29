@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
+import { TrackedLink } from "@/components/shared";
 import { ROUTES } from "@/lib/constants";
 import type { LandingContent } from "./content";
 
@@ -40,13 +40,17 @@ export function CtaSection({ content }: { content: LandingContent["cta"] }) {
                   size="lg"
                   className="group relative h-12 overflow-hidden rounded-full px-8 text-base shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30"
                 >
-                  <Link href={ROUTES.REGISTER}>
+                  <TrackedLink
+                    href={ROUTES.REGISTER}
+                    eventName="cta_click"
+                    eventProperties={{ location: "cta_section", label: content.primaryCta }}
+                  >
                     <span className="relative z-10 flex items-center gap-2">
                       {content.primaryCta}
                       <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                     <span className="absolute inset-0 z-0 bg-gradient-to-r from-primary to-primary/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  </Link>
+                  </TrackedLink>
                 </Button>
                 <Button
                   asChild
@@ -54,7 +58,13 @@ export function CtaSection({ content }: { content: LandingContent["cta"] }) {
                   variant="outline"
                   className="h-12 rounded-full px-8 text-base"
                 >
-                  <Link href={ROUTES.LOGIN}>{content.secondaryCta}</Link>
+                  <TrackedLink
+                    href={ROUTES.LOGIN}
+                    eventName="cta_click"
+                    eventProperties={{ location: "cta_section", label: content.secondaryCta }}
+                  >
+                    {content.secondaryCta}
+                  </TrackedLink>
                 </Button>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Download, Users, FileSpreadsheet } from "lucide-react";
+import { Download, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -17,19 +17,23 @@ import { SendInvitations } from "@/components/modules/guest/send-invitations";
 import { EventSubNav } from "@/components/shared/event-sub-nav";
 import { serverFetch } from "@/lib/api-server";
 import type { Guest, Invitation } from "@/components/modules/guest/schema";
-import { INVITATION_CHANNELS } from "@/lib/channels";
+import { INVITATION_CHANNELS, type InvitationChannel } from "@/lib/channels";
 
 const CSV_TEMPLATE_HREF = "/templates/guest-import-template.csv";
 
 /** Guest-list management for one event: import, invitations and the roster table. */
 export async function GuestsView({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [guestsResponse, invitationsResponse] = await Promise.all([
+  const [guestsResponse, invitationsResponse, eventResponse] = await Promise.all([
     serverFetch(`/events/${id}/guests`),
     serverFetch(`/events/${id}/invitations`),
+    serverFetch(`/events/${id}`),
   ]);
   const guests: Guest[] = guestsResponse.ok ? await guestsResponse.json() : [];
   const invitations: Invitation[] = invitationsResponse.ok ? await invitationsResponse.json() : [];
+  const enabledChannels: InvitationChannel[] = eventResponse.ok
+    ? ((await eventResponse.json()) as { invitationChannels: InvitationChannel[] }).invitationChannels
+    : [];
 
   const statusFor = (guestId: string, channel: string): string | null =>
     invitations.find((invitation) => invitation.guestId === guestId && invitation.channel === channel)
@@ -39,6 +43,7 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
     id: guest.id,
     name: `${guest.firstName} ${guest.lastName}`.trim(),
     contact: guest.email ?? guest.phoneNumber ?? "—",
+    excludedFromInvitations: guest.excludedFromInvitations,
     statuses: Object.fromEntries(
       INVITATION_CHANNELS.map((channel) => [channel, statusFor(guest.id, channel)]),
     ),
@@ -74,7 +79,7 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
       </Tabs>
 
       <div className="mt-6 rounded-lg border p-4">
-        <SendInvitations eventId={id} />
+        <SendInvitations eventId={id} enabledChannels={enabledChannels} />
       </div>
 
       {guests.length === 0 ? (
@@ -108,18 +113,10 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
         </Empty>
       ) : (
         <div className="mt-6">
-          <div className="mb-3 flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              {rows.length} guest{rows.length !== 1 ? "s" : ""}
-            </p>
-            <Button asChild variant="ghost" size="sm">
-              <Link href={CSV_TEMPLATE_HREF} download>
-                <FileSpreadsheet className="size-3.5" />
-                Template
-              </Link>
-            </Button>
-          </div>
-          <GuestsTable rows={rows} />
+          <p className="mb-3 text-sm text-muted-foreground">
+            {rows.length} guest{rows.length !== 1 ? "s" : ""}
+          </p>
+          <GuestsTable eventId={id} rows={rows} />
         </div>
       )}
     </div>

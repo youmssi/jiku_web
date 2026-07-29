@@ -18,3 +18,9 @@ export type DashboardData = Schema<"DashboardResponse"> & {
 };
 export type EntranceCount = Schema<"EntranceCount">;
 export type DeliverabilityFlag = Schema<"DeliverabilityFlag">;
+
+/** Trend data shown alongside the live snapshot (backend AnalyticsResponse). */
+export type AnalyticsData = Schema<"AnalyticsResponse">;
+export type TimeBucket = Schema<"TimeBucket">;
+export type ChannelBreakdown = Schema<"ChannelBreakdown">;
+export type DateCount = Schema<"DateCount">;

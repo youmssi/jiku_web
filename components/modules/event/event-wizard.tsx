@@ -47,6 +47,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { trackEvent } from "@/lib/analytics";
 import { ROUTES, eventEditRoute } from "@/lib/constants";
 import {
   INVITATION_CHANNELS,
@@ -139,6 +140,9 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
       }
       toast.success("Draft created");
       if (result.data?.id) {
+        // Every new event starts on the free tier (JIKU-32); it is the only
+        // value known at creation time, before any usage/paid unlock exists.
+        trackEvent("event_created", { tier: "FREE" });
         router.replace(eventEditRoute(result.data.id));
       }
     }

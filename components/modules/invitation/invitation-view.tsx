@@ -4,7 +4,7 @@ import { PRIVACY_ROUTE } from "@/lib/constants";
 import { StateMessage } from "@/components/shared/state-message";
 import { RsvpActions } from "@/components/modules/invitation/rsvp-actions";
 import { DataDeletion } from "@/components/modules/invitation/data-deletion";
-import type { RsvpView } from "@/components/modules/invitation/schema";
+import type { RsvpTransferCapability, RsvpView } from "@/components/modules/invitation/schema";
 
 /** Guest-facing invitation screen: event details and RSVP actions. */
 export async function InvitationView({ params }: { params: Promise<{ token: string }> }) {
@@ -20,7 +20,7 @@ export async function InvitationView({ params }: { params: Promise<{ token: stri
     );
   }
 
-  const rsvp = (await response.json()) as RsvpView;
+  const rsvp = (await response.json()) as RsvpView & Partial<RsvpTransferCapability>;
 
   return (
     <div className="flex flex-1 items-center justify-center px-4 py-12">
@@ -46,6 +46,8 @@ export async function InvitationView({ params }: { params: Promise<{ token: stri
             status={rsvp.status}
             primaryColor={rsvp.primaryColor}
             ticketCode={rsvp.ticketCode}
+            transferAllowed={rsvp.transferAllowed ?? false}
+            transferDeadline={rsvp.transferDeadline ?? null}
           />
         </div>
         <DataDeletion token={token} erased={rsvp.erased} />

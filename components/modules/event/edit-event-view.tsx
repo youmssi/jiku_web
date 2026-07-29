@@ -1,16 +1,42 @@
-import { notFound } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { EventWizard } from "@/components/modules/event/event-wizard";
 import { EventSubNav } from "@/components/shared/event-sub-nav";
+import { StateMessage } from "@/components/shared/state-message";
 import type { EventFormValues, EventResponse } from "@/components/modules/event/schema";
 import { serverFetch } from "@/lib/api-server";
+import { ROUTES } from "@/lib/constants";
 import { utcToLocalInput } from "@/lib/datetime";
 
 /** Edit-event screen: loads the event server-side and hydrates the wizard. */
 export async function EditEventView({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const response = await serverFetch(`/events/${id}`);
+  if (response.status === 404) {
+    return (
+      <StateMessage
+        title="This event isn't available here"
+        description="It doesn't exist in the currently selected organization. If you expect to see it, switch organizations from the account menu and try again."
+        action={
+          <Button asChild variant="outline">
+            <Link href={ROUTES.EVENTS}>Back to events</Link>
+          </Button>
+        }
+      />
+    );
+  }
   if (!response.ok) {
-    notFound();
+    return (
+      <StateMessage
+        title="Couldn't load this event"
+        description="Something went wrong on our end. Please try again."
+        action={
+          <Button asChild variant="outline">
+            <Link href={ROUTES.EVENTS}>Back to events</Link>
+          </Button>
+        }
+      />
+    );
   }
   const event = (await response.json()) as EventResponse;
 

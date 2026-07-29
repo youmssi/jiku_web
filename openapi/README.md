@@ -19,13 +19,6 @@ npx openapi-typescript openapi/openapi.json -o lib/api-types.ts
 Commit both `openapi/openapi.json` and `lib/api-types.ts` together so the snapshot and
 the generated types never drift.
 
-## Known gap
-
-`openapi.json` was snapshotted from the `feat-api-docs` backend branch, which predates
-guest self-erasure (`RsvpView.erased`). `invitation/schema.ts` adds that field back via
-an intersection; once the docs branch is merged with the latest API, regenerate and drop
-the intersection.
-
 ## Nullability
 
 springdoc does not emit `required`, so every field is generated as optional. Response

@@ -15,6 +15,8 @@ export interface Membership {
  */
 export type CurrentUser = Schema<"MeResponse"> & {
   email: string;
+  /** The person's display name; null for accounts that never provided one. */
+  fullName: string | null;
   memberships: Membership[];
 };
 
@@ -22,6 +24,11 @@ export type Branding = Schema<"BrandingResponse">;
 
 /** Registration creates the account only; the organization comes at onboarding. */
 export const registerSchema = z.object({
+  fullName: z
+    .string()
+    .trim()
+    .min(1, "Enter your full name")
+    .max(255, "Name is too long"),
   email: z.string().email("Enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
