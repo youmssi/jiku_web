@@ -57,6 +57,43 @@ export interface AdminAgreement {
   createdAt: string;
 }
 
+export interface AdminBooking {
+  id: string;
+  customerName: string;
+  customerPhone: string;
+  customerEmail: string;
+  eventType: string;
+  eventDate: string;
+  guestCountEstimate: number;
+  tier: string;
+  currency: string;
+  totalAmountMinor: number;
+  depositAmountMinor: number;
+  balanceAmountMinor: number;
+  balanceDueDate: string;
+  status: string;
+  tenantId: string | null;
+  eventId: string | null;
+  acquisitionSource: string | null;
+  createdAt: string;
+}
+
+export interface AdminBookingPaymentDeclaration {
+  id: string;
+  bookingId: string;
+  customerName: string;
+  amountMinor: number;
+  currency: string;
+  kind: string;
+  operator: string;
+  transactionReference: string;
+  declaredAt: string;
+  verificationStatus: string;
+  verifiedBy: string | null;
+  verifiedAt: string | null;
+  rejectionReason: string | null;
+}
+
 export interface AuditEntry {
   id: string;
   adminId: string;

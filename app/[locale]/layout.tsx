@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Geist, Geist_Mono, DM_Sans, Inter } from "next/font/google";
 import "../globals.css";
 import { cn } from "@/lib/utils";
-import { ServiceWorkerRegister } from "@/components/shared";
+import { ServiceWorkerRegister, UmamiScript } from "@/components/shared";
 import { routing } from "@/i18n/routing";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -137,6 +137,7 @@ export default async function RootLayout({
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
         <ServiceWorkerRegister />
+        <UmamiScript />
       </body>
     </html>
   );

@@ -2,7 +2,7 @@ import type { LandingContent, LandingLocale } from "./content";
 
 /**
  * Structured data for the landing page: Organization, SoftwareApplication (with
- * the real pay-per-event offer range in XOF), and FAQPage built from the same
+ * the real pay-per-event offer range in GNF), and FAQPage built from the same
  * FAQ content the visitor sees — the markup can never say something the page
  * does not.
  */
@@ -36,10 +36,10 @@ export function LandingJsonLd({
     inLanguage: locale,
     offers: {
       "@type": "AggregateOffer",
-      priceCurrency: "XOF",
+      priceCurrency: "GNF",
       lowPrice: "0",
-      highPrice: "20000",
-      offerCount: 3,
+      highPrice: "500000",
+      offerCount: 4,
     },
   };
 

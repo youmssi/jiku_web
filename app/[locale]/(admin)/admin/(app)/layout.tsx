@@ -10,6 +10,8 @@ export const metadata = { robots: { index: false } };
 
 const NAV = [
   { label: "Tenants", href: ADMIN_ROUTES.TENANTS },
+  { label: "Bookings", href: ADMIN_ROUTES.BOOKINGS },
+  { label: "Booking payments", href: ADMIN_ROUTES.BOOKING_PAYMENTS },
   { label: "Payments", href: ADMIN_ROUTES.PAYMENTS },
   { label: "Trials", href: ADMIN_ROUTES.TRIALS },
   { label: "Agreements", href: ADMIN_ROUTES.AGREEMENTS },

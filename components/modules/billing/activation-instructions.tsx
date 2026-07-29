@@ -3,11 +3,8 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatAmount } from "@/lib/currency";
 import type { ManualPaymentInstructions } from "./schema";
-
-function formatAmount(minor: number, currency: string): string {
-  return `${(minor / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })} ${currency}`;
-}
 
 /**
  * Payment instructions for an open activation request (JIKU-45): what to pay,

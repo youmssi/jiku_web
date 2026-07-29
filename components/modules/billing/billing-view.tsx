@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { formatAmount } from "@/lib/currency";
 import { ActivationInstructions } from "./activation-instructions";
 import { requestActivationAction } from "./billing.service";
 import { PaymentHistoryTable } from "./payment-history-table";
@@ -20,10 +21,6 @@ interface BillingViewProps {
   payments: PaymentHistoryItem[];
   /** The event's open activation request, when one exists (JIKU-45). */
   activation: ManualPaymentInstructions | null;
-}
-
-function formatAmount(minor: number, currency: string): string {
-  return `${(minor / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })} ${currency}`;
 }
 
 export function BillingView({ eventId, usage, catalog, payments, activation }: BillingViewProps) {

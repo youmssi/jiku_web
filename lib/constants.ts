@@ -55,11 +55,39 @@ export function ticketRoute(token: string): string {
   return `/invitation/${token}/ticket`;
 }
 
+export const RESERVE_ROUTE = "/reserver";
+
+export function reservationPaymentRoute(id: string): string {
+  return `/reserver/${id}/paiement`;
+}
+
+export function reservationStatusRoute(id: string): string {
+  return `/reserver/${id}/statut`;
+}
+
+export function reservationStatusUrl(id: string, token: string): string {
+  return `${reservationStatusRoute(id)}?token=${encodeURIComponent(token)}`;
+}
+
+export function reservationPaymentUrl(id: string, token: string): string {
+  return `${reservationPaymentRoute(id)}?token=${encodeURIComponent(token)}`;
+}
+
 export const COOKIES = {
   ACCESS_TOKEN: "jiku_access_token",
   REFRESH_TOKEN: "jiku_refresh_token",
   // Separate cookie so an admin session never crosses into organizer routes.
   ADMIN_ACCESS_TOKEN: "jiku_admin_access_token",
+} as const;
+
+export const SEO_ROUTES = {
+  TARIFS: "/tarifs",
+  FAQ: "/faq",
+  WEDDING_CONAKRY: "/invitations-mariage-conakry",
+  BAPTISM_GUINEA: "/invitations-bapteme-guinee",
+  VENUE_EVENT_CONAKRY: "/evenement-en-salle-conakry",
+  SEMINAR_GUINEA: "/gestion-seminaire-guinee",
+  CHECKIN_QR: "/check-in-qr-code",
 } as const;
 
 export const ADMIN_ROUTES = {
@@ -69,4 +97,6 @@ export const ADMIN_ROUTES = {
   TRIALS: "/admin/trials",
   AGREEMENTS: "/admin/agreements",
   AUDIT: "/admin/audit",
+  BOOKINGS: "/admin/bookings",
+  BOOKING_PAYMENTS: "/admin/booking-payments",
 } as const;
