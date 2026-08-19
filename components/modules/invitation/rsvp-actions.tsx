@@ -16,9 +16,15 @@ interface RsvpActionsProps {
   status: string;
   primaryColor: string;
   ticketCode: string | null;
-  /** Whether the organizer allows transferring this event's tickets, and until when. */
+  /**
+   * Whether this guest may hand their place on right now. The backend decides
+   * (event setting, deadline, confirmed, not already scanned in) and re-checks on
+   * submit, so this is a display flag, never the authority.
+   */
   transferAllowed: boolean;
   transferDeadline: string | null;
+  /** Who now holds the place, once it has been handed over. */
+  transferredTo: string | null;
 }
 
 export function RsvpActions({
@@ -28,11 +34,10 @@ export function RsvpActions({
   ticketCode,
   transferAllowed,
   transferDeadline,
+  transferredTo,
 }: RsvpActionsProps) {
   const [current, setCurrent] = useState(status);
   const [isPending, startTransition] = useTransition();
-  const canTransfer =
-    transferAllowed && (!transferDeadline || new Date(transferDeadline) > new Date());
 
   function act(action: "confirm" | "decline") {
     startTransition(async () => {
@@ -47,6 +52,23 @@ export function RsvpActions({
     });
   }
 
+  // Terminal state: the place now belongs to someone else, so there is nothing
+  // left to act on — only an explanation of what happened.
+  if (current === "TRANSFERRED") {
+    return (
+      <div className="flex flex-col items-center gap-2 text-center">
+        <p className="text-muted-foreground">
+          {transferredTo
+            ? `You handed this invitation to ${transferredTo}.`
+            : "You handed this invitation to someone else."}
+        </p>
+        <p className="text-muted-foreground text-sm">
+          Their own invitation is on its way, and this ticket is no longer valid at the entrance.
+        </p>
+      </div>
+    );
+  }
+
   if (current === "CONFIRMED") {
     return (
       <div className="flex flex-col items-center gap-3">
@@ -58,7 +80,9 @@ export function RsvpActions({
             <Link href={ticketRoute(token)}>View your ticket</Link>
           </Button>
         ) : null}
-        {canTransfer ? <TransferTicketDialog token={token} /> : null}
+        {transferAllowed ? (
+          <TransferTicketDialog token={token} deadline={transferDeadline} />
+        ) : null}
         <Button variant="outline" onClick={() => act("decline")} disabled={isPending}>
           {isPending ? "Updating…" : "I can't make it anymore"}
         </Button>

@@ -48,6 +48,7 @@ export async function InvitationView({ params }: { params: Promise<{ token: stri
             ticketCode={rsvp.ticketCode}
             transferAllowed={rsvp.transferAllowed ?? false}
             transferDeadline={rsvp.transferDeadline ?? null}
+            transferredTo={rsvp.transferredTo ?? null}
           />
         </div>
         <DataDeletion token={token} erased={rsvp.erased} />

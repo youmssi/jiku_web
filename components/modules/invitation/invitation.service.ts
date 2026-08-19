@@ -4,7 +4,10 @@ import { revalidatePath } from "next/cache";
 import { publicFetch } from "@/lib/api-server";
 import { invitationRoute } from "@/lib/constants";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
-import type { TransferTicketInput } from "@/components/modules/invitation/schema";
+import {
+  transferTicketSchema,
+  type TransferTicketInput,
+} from "@/components/modules/invitation/schema";
 
 async function submit(token: string, action: "confirm" | "decline"): Promise<ActionResult> {
   const response = await publicFetch(`/rsvp/${token}/${action}`, { method: "POST" });
@@ -27,27 +30,38 @@ export async function declineRsvpAction(token: string): Promise<ActionResult> {
 }
 
 /**
- * Hands the ticket to someone else (JIKU-transfer, pending backend endpoint —
- * see schema.ts). Wired up ahead of the backend so the guest flow ships the
- * moment `POST /rsvp/{token}/transfer` exists; until then it fails with the
- * generic message below rather than a raw 404.
+ * Hands this guest's place to someone else (JIKU-64). The backend re-checks every
+ * condition the UI used to decide whether to offer the control, so a 409 here is
+ * a genuine state change (transfers closed, deadline passed, already scanned in)
+ * rather than a client bug — surface its reason rather than a generic failure.
  */
 export async function transferTicketAction(
   token: string,
   input: TransferTicketInput,
 ): Promise<ActionResult> {
+  const parsed = transferTicketSchema.safeParse(input);
+  if (!parsed.success) {
+    return fail("Please check the recipient's details and try again.");
+  }
   const response = await publicFetch(`/rsvp/${token}/transfer`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(input),
+    body: JSON.stringify({
+      firstName: parsed.data.firstName,
+      lastName: parsed.data.lastName,
+      email: parsed.data.email || null,
+      phoneNumber: parsed.data.phoneNumber || null,
+    }),
   });
   if (!response.ok) {
     reportApiError(response);
     if (response.status === 409) {
-      return fail("Transfers are closed for this event.");
+      return fail(
+        "This place can no longer be transferred — transfers may have closed, or the ticket has already been used at the entrance.",
+      );
     }
-    if (response.status === 404) {
-      return fail("Ticket transfer isn't available yet.");
+    if (response.status === 400) {
+      return fail("Give the recipient an email address or a phone number.");
     }
     return fail("Something went wrong. Please try again.");
   }
