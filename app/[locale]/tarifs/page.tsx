@@ -81,9 +81,8 @@ export default function TarifsPage() {
               ) : null}
               <p className="text-sm font-medium text-muted-foreground">{tier.name}</p>
               <p className="mt-2 text-2xl font-bold tracking-tight">{tier.price}</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {pricing.upToTemplate.replace("{guests}", tier.guests)}
-              </p>
+              <p className="mt-1 text-sm text-muted-foreground">{tier.priceCaption}</p>
+              <p className="mt-3 text-sm text-muted-foreground">{tier.capacity}</p>
             </div>
           ))}
         </div>
