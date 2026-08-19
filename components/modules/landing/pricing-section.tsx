@@ -55,7 +55,16 @@ function TierCard({
       </div>
 
       <div className="relative mb-8">
-        <div className="text-3xl font-bold tracking-tight sm:text-4xl">{tier.price}</div>
+        {/*
+          The amount must never wrap: "150 000 GNF" broken across two lines reads
+          as a layout fault on the one element the visitor is scanning for. The
+          four-column row leaves roughly 230px of card width, which text-3xl
+          fits and text-4xl does not — so the larger size only applies where the
+          cards are wider than that.
+        */}
+        <div className="whitespace-nowrap text-3xl font-bold tracking-tight sm:text-4xl lg:text-3xl">
+          {tier.price}
+        </div>
         <div className="mt-1 text-sm text-muted-foreground">{tier.priceCaption}</div>
       </div>
 
@@ -95,7 +104,9 @@ function EnterpriseCard({ enterprise }: { enterprise: LandingContent["pricing"][
       </div>
 
       <div className="mb-6">
-        <div className="text-3xl font-bold tracking-tight sm:text-4xl">{enterprise.priceLabel}</div>
+        <div className="text-3xl font-bold tracking-tight sm:text-4xl">
+          {enterprise.priceLabel}
+        </div>
       </div>
 
       <p className="mb-8 text-sm text-muted-foreground">{enterprise.description}</p>
