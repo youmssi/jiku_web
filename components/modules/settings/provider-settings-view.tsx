@@ -348,7 +348,7 @@ function WhatsAppSection({
               type="tel"
               value={testRecipient}
               onChange={(e) => setTestRecipient(e.target.value)}
-              placeholder="+2250700000001"
+              placeholder="+224620000000"
               className="flex-1"
             />
             <Button
@@ -360,7 +360,7 @@ function WhatsAppSection({
             </Button>
           </div>
           <p className="mt-1.5 text-xs text-muted-foreground">
-            Enter a phone number in E.164 format (e.g. +2250700000001 for Côte d&apos;Ivoire).
+            Enter a phone number in E.164 format (e.g. +224620000000 for Guinea).
           </p>
         </div>
       )}

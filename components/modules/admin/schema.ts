@@ -29,6 +29,23 @@ export interface AdminPayment {
   createdAt: string;
 }
 
+/**
+ * The configured pricing grid, read from the backend (JIKU-66) rather than
+ * restated here — the operator must be offered exactly the tiers the platform
+ * is running, and a second copy in the UI would drift the next time pricing
+ * changes in configuration.
+ */
+export interface AdminTierOption {
+  name: string;
+  maxGuests: number;
+  priceMinor: number;
+}
+
+export interface AdminTierCatalog {
+  currency: string;
+  tiers: AdminTierOption[];
+}
+
 export interface AdminTrial {
   id: string;
   tenantId: string;

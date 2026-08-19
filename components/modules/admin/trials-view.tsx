@@ -8,14 +8,20 @@ import { Label } from "@/components/ui/label";
 import { formatLocalDateTime } from "@/lib/datetime";
 import { ActionDialog } from "./action-dialog";
 import { endTrialAction, grantTrialAction } from "./admin.service";
-import { AdminTable, EmptyRow, StatusBadge } from "./admin-ui";
+import { AdminTable, EmptyRow, formatAmount, StatusBadge } from "./admin-ui";
 import { TenantCombobox } from "./tenant-combobox";
-import type { AdminTrial, TenantDirectoryEntry } from "./schema";
+import type { AdminTierCatalog, AdminTrial, TenantDirectoryEntry } from "./schema";
 
-export function TrialsView({ trials }: { trials: AdminTrial[] }) {
+export function TrialsView({
+  trials,
+  catalog,
+}: {
+  trials: AdminTrial[];
+  catalog: AdminTierCatalog;
+}) {
   return (
     <div className="flex flex-col gap-6">
-      <GrantTrialForm />
+      <GrantTrialForm catalog={catalog} />
 
       <AdminTable headers={["Granted", "Tenant", "Event", "Tier", "Expires", "Status", "Actions"]}>
         {trials.length === 0 ? (
@@ -58,10 +64,12 @@ export function TrialsView({ trials }: { trials: AdminTrial[] }) {
   );
 }
 
-function GrantTrialForm() {
+function GrantTrialForm({ catalog }: { catalog: AdminTierCatalog }) {
   const [tenant, setTenant] = useState<TenantDirectoryEntry | null>(null);
   const [eventId, setEventId] = useState("");
-  const [tier, setTier] = useState("BRONZE");
+  // Default to the smallest configured tier rather than a name written here, so
+  // renaming or reordering the grid in configuration cannot leave a dead option.
+  const [tier, setTier] = useState(catalog.tiers[0]?.name ?? "");
   const [expiresAt, setExpiresAt] = useState("");
   const [isPending, startTransition] = useTransition();
 
@@ -86,6 +94,7 @@ function GrantTrialForm() {
       setTenant(null);
       setEventId("");
       setExpiresAt("");
+      setTier(catalog.tiers[0]?.name ?? "");
     });
   }
 
@@ -107,9 +116,12 @@ function GrantTrialForm() {
           onChange={(e) => setTier(e.target.value)}
           className="h-9 rounded-md border bg-transparent px-3 text-sm"
         >
-          <option value="BRONZE">BRONZE</option>
-          <option value="ARGENT">ARGENT</option>
-          <option value="OR">OR</option>
+          {catalog.tiers.map((option) => (
+            <option key={option.name} value={option.name}>
+              {option.name} — up to {option.maxGuests.toLocaleString()} guests (
+              {formatAmount(option.priceMinor, catalog.currency)})
+            </option>
+          ))}
         </select>
       </div>
       <div className="grid gap-1.5">

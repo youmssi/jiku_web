@@ -9,12 +9,19 @@ import { formatLocalDateTime } from "@/lib/datetime";
 import { ActionDialog } from "./action-dialog";
 import { createAgreementAction, interruptAgreementAction, renewAgreementAction } from "./admin.service";
 import { AdminTable, EmptyRow, formatAmount, StatusBadge } from "./admin-ui";
-import type { AdminAgreement } from "./schema";
+import { TenantCombobox } from "./tenant-combobox";
+import type { AdminAgreement, AdminTierCatalog, TenantDirectoryEntry } from "./schema";
 
-export function AgreementsView({ agreements }: { agreements: AdminAgreement[] }) {
+export function AgreementsView({
+  agreements,
+  catalog,
+}: {
+  agreements: AdminAgreement[];
+  catalog: AdminTierCatalog;
+}) {
   return (
     <div className="flex flex-col gap-6">
-      <CreateAgreementForm />
+      <CreateAgreementForm currency={catalog.currency} />
 
       <AdminTable
         headers={["Tenant", "Kind", "Period", "Renewal", "Amount", "Status", "Notes", "Actions"]}
@@ -82,8 +89,8 @@ function toInstant(date: string): string {
   return Number.isNaN(parsed.getTime()) ? "" : parsed.toISOString();
 }
 
-function CreateAgreementForm() {
-  const [tenantId, setTenantId] = useState("");
+function CreateAgreementForm({ currency }: { currency: string }) {
+  const [tenant, setTenant] = useState<TenantDirectoryEntry | null>(null);
   const [kind, setKind] = useState("ENTERPRISE_SAAS");
   const [periodStart, setPeriodStart] = useState("");
   const [periodEnd, setPeriodEnd] = useState("");
@@ -93,15 +100,20 @@ function CreateAgreementForm() {
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
+    if (!tenant) {
+      toast.error("Pick an organization first.");
+      return;
+    }
     startTransition(async () => {
       const { error } = await createAgreementAction({
-        tenantId: tenantId.trim(),
+        tenantId: tenant.id,
         kind,
         periodStart: new Date(periodStart).toISOString(),
         periodEnd: new Date(`${periodEnd}T23:59:59Z`).toISOString(),
-        // GNF has no minor unit, so the typed amount is the full amount, not centimes.
+        // The platform currency (GNF) has no minor unit, so the typed amount is
+        // the full amount rather than centimes.
         amountMinor: amount.trim() ? Math.round(Number(amount)) : null,
-        currency: amount.trim() ? "GNF" : null,
+        currency: amount.trim() ? currency : null,
         notes: notes.trim() || null,
       });
       if (error) {
@@ -109,7 +121,7 @@ function CreateAgreementForm() {
         return;
       }
       toast.success("Agreement recorded.");
-      setTenantId("");
+      setTenant(null);
       setPeriodStart("");
       setPeriodEnd("");
       setAmount("");
@@ -120,8 +132,8 @@ function CreateAgreementForm() {
   return (
     <form onSubmit={submit} className="grid gap-3 rounded-xl border p-4 sm:grid-cols-2 lg:grid-cols-6">
       <div className="grid gap-1.5">
-        <Label htmlFor="agr-tenant">Tenant id</Label>
-        <Input id="agr-tenant" value={tenantId} onChange={(e) => setTenantId(e.target.value)} required />
+        <Label htmlFor="agr-tenant">Organization</Label>
+        <TenantCombobox id="agr-tenant" value={tenant} onChange={setTenant} />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="agr-kind">Kind</Label>
@@ -156,7 +168,7 @@ function CreateAgreementForm() {
         />
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor="agr-amount">Amount (GNF, optional)</Label>
+        <Label htmlFor="agr-amount">Amount ({currency}, optional)</Label>
         <Input
           id="agr-amount"
           type="number"

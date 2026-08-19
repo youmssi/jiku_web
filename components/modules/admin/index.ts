@@ -13,6 +13,8 @@ export type {
   AdminBooking,
   AdminBookingPaymentDeclaration,
   AdminPayment,
+  AdminTierCatalog,
+  AdminTierOption,
   AdminTrial,
   AuditEntry,
   AuditPage,

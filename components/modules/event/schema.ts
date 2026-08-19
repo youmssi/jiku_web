@@ -14,17 +14,25 @@ export type EventListItem = EventResponse;
 // consumers keep importing them from the event contract.
 export { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS, type InvitationChannel };
 
-/** Curated timezone list focused on the target markets, plus a few common ones. */
+/**
+ * Curated timezone list, the launch market first: Conakry heads the list and is
+ * the default, followed by the neighbouring markets organizers most often run
+ * events in, then the diaspora zones they organize from.
+ */
 export const TIMEZONES = [
+  "Africa/Conakry",
   "Africa/Abidjan",
-  "Africa/Accra",
   "Africa/Dakar",
+  "Africa/Accra",
+  "Africa/Bamako",
   "Africa/Douala",
+  "Africa/Ndjamena",
   "Africa/Lagos",
   "Africa/Casablanca",
   "Africa/Tunis",
   "Europe/Paris",
   "Europe/London",
+  "America/New_York",
   "UTC",
 ] as const;
 
@@ -48,7 +56,7 @@ export type EventFormValues = z.infer<typeof eventFormSchema>;
 export const emptyEventValues: EventFormValues = {
   name: "",
   description: "",
-  timezone: "Africa/Abidjan",
+  timezone: "Africa/Conakry",
   startLocal: "",
   endLocal: "",
   location: "",
