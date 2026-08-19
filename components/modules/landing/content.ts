@@ -56,10 +56,20 @@ export interface LandingContent {
     badge: string;
     heading: string;
     subheading: string;
-    perEvent: string;
-    /** Capacity line per tier; `{guests}` is replaced with the tier's guest count. */
-    upToTemplate: string;
-    tiers: { name: string; price: string; guests: string; highlighted: boolean; cta: string }[];
+    tiers: {
+      name: string;
+      price: string;
+      /**
+       * Capacity line, worded per tier rather than from one template: the free
+       * allowance accumulates across a whole account, the paid tiers apply to a
+       * single event, and stating both the same way misrepresents the offer.
+       */
+      capacity: string;
+      /** Caption under the price — what the amount actually buys. */
+      priceCaption: string;
+      highlighted: boolean;
+      cta: string;
+    }[];
     /** Negotiated offer card: custom pricing, optional on-premise hosting, sales contact. */
     enterprise: {
       name: string;
@@ -245,13 +255,39 @@ const fr: LandingContent = {
     heading: "Un prix par événement. Pas d'abonnement.",
     subheading:
       "Vous payez pour l'événement que vous organisez, rien d'autre. Toutes les fonctionnalités sont incluses à chaque niveau. Seule la taille change.",
-    perEvent: "par événement",
-    upToTemplate: "Jusqu'à {guests} invités",
     tiers: [
-      { name: "Gratuit", price: "0 GNF", guests: "100", highlighted: false, cta: "Commencer gratuitement" },
-      { name: "Bronze", price: "150 000 GNF", guests: "300", highlighted: false, cta: "Créer mon événement" },
-      { name: "Argent", price: "300 000 GNF", guests: "600", highlighted: true, cta: "Créer mon événement" },
-      { name: "Or", price: "500 000 GNF", guests: "1 000", highlighted: false, cta: "Créer mon événement" },
+      {
+        name: "Gratuit",
+        price: "0 GNF",
+        capacity: "100 invités cumulés sur votre compte",
+        priceCaption: "sur 12 mois glissants",
+        highlighted: false,
+        cta: "Commencer gratuitement",
+      },
+      {
+        name: "Bronze",
+        price: "150 000 GNF",
+        capacity: "Jusqu'à 300 invités",
+        priceCaption: "par événement",
+        highlighted: false,
+        cta: "Créer mon événement",
+      },
+      {
+        name: "Argent",
+        price: "300 000 GNF",
+        capacity: "Jusqu'à 600 invités",
+        priceCaption: "par événement",
+        highlighted: true,
+        cta: "Créer mon événement",
+      },
+      {
+        name: "Or",
+        price: "500 000 GNF",
+        capacity: "Jusqu'à 1 000 invités",
+        priceCaption: "par événement",
+        highlighted: false,
+        cta: "Créer mon événement",
+      },
     ],
     enterprise: {
       name: "Entreprise",
@@ -503,13 +539,39 @@ const en: LandingContent = {
     heading: "One price per event. No subscription.",
     subheading:
       "You pay for the event you're running, nothing else. Every feature is included at every tier. Only the size changes.",
-    perEvent: "per event",
-    upToTemplate: "Up to {guests} guests",
     tiers: [
-      { name: "Free", price: "0 GNF", guests: "100", highlighted: false, cta: "Start free" },
-      { name: "Bronze", price: "150,000 GNF", guests: "300", highlighted: false, cta: "Create my event" },
-      { name: "Silver", price: "300,000 GNF", guests: "600", highlighted: true, cta: "Create my event" },
-      { name: "Gold", price: "500,000 GNF", guests: "1,000", highlighted: false, cta: "Create my event" },
+      {
+        name: "Free",
+        price: "0 GNF",
+        capacity: "100 guests in total on your account",
+        priceCaption: "over a rolling 12 months",
+        highlighted: false,
+        cta: "Start free",
+      },
+      {
+        name: "Bronze",
+        price: "150,000 GNF",
+        capacity: "Up to 300 guests",
+        priceCaption: "per event",
+        highlighted: false,
+        cta: "Create my event",
+      },
+      {
+        name: "Silver",
+        price: "300,000 GNF",
+        capacity: "Up to 600 guests",
+        priceCaption: "per event",
+        highlighted: true,
+        cta: "Create my event",
+      },
+      {
+        name: "Gold",
+        price: "500,000 GNF",
+        capacity: "Up to 1,000 guests",
+        priceCaption: "per event",
+        highlighted: false,
+        cta: "Create my event",
+      },
     ],
     enterprise: {
       name: "Enterprise",

@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { googleLoginAction } from "@/components/modules/identity/identity.service";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -51,9 +51,20 @@ export function GoogleButton({ next }: { next?: string }) {
     google.accounts.id.renderButton(container.current, {
       theme: "outline",
       size: "large",
-      width: 320,
+      // Google requires an explicit pixel width. Track the container so the
+      // button never overflows a narrow phone, which is most of this market.
+      width: Math.min(320, Math.round(container.current.getBoundingClientRect().width) || 320),
     });
   }, [next]);
+
+  // `Script.onLoad` only fires the first time the script is fetched. Navigating
+  // between /login and /register client-side reuses the already-loaded script,
+  // so without this the button silently fails to render on the second page.
+  useEffect(() => {
+    if (window.google) {
+      onLoad();
+    }
+  }, [onLoad]);
 
   if (!CLIENT_ID) {
     return null;
