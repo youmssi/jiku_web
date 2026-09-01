@@ -9,6 +9,8 @@ import type {
   UpdateEmailProviderRequest,
   UpdateWhatsAppProviderRequest,
   TestSendResponse,
+  LegalIdentityResponse,
+  UpdateLegalIdentityRequest,
 } from "./schema";
 
 // ─── Branding ───────────────────────────────────────────────────────────────
@@ -111,4 +113,32 @@ export async function testSendAction(
     return { ok: false, error: "The test message could not be sent." };
   }
   return { ok: true, data: (await response.json()) as TestSendResponse };
+}
+
+// ─── Legal identity (JIKU-69) ───────────────────────────────────────────────
+
+export async function fetchLegalIdentityAction(): Promise<
+  { ok: true; data: LegalIdentityResponse } | { ok: false }
+> {
+  const response = await serverFetch("/legal-identity");
+  if (!response.ok) return { ok: false };
+  return { ok: true, data: (await response.json()) as LegalIdentityResponse };
+}
+
+export async function updateLegalIdentityAction(
+  input: UpdateLegalIdentityRequest,
+): Promise<{ ok: true; data: LegalIdentityResponse } | { ok: false; error: string }> {
+  const response = await serverFetch("/legal-identity", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (response.status === 400) {
+    return fail("Check the details — the country must be a two-letter code such as GN.");
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("We couldn't save your legal details. Please try again.");
+  }
+  return { ok: true, data: (await response.json()) as LegalIdentityResponse };
 }

@@ -65,3 +65,18 @@ export interface PaymentInitiation {
   currency: string;
   instruction: PaymentInstruction;
 }
+
+// ─── Invoices (JIKU-69) ─────────────────────────────────────────────────────
+// Accounting-grade documents, distinct from the plain-text payment receipt: a
+// company's accounts department cannot process the latter.
+
+export interface InvoiceSummary {
+  id: string;
+  invoiceNumber: string;
+  /** INVOICE or CREDIT_NOTE. */
+  documentType: string;
+  currency: string;
+  totalMinor: number;
+  issueDate: string;
+  issuedAt: string;
+}

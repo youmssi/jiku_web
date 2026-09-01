@@ -41,6 +41,11 @@ export function billingReceiptRoute(paymentId: string): string {
   return `/api/billing/payments/${paymentId}/receipt`;
 }
 
+/** Accounting-grade invoice PDF (JIKU-69), distinct from the plain-text receipt. */
+export function billingInvoiceDocumentRoute(invoiceId: string): string {
+  return `/api/billing/invoices/${invoiceId}/document`;
+}
+
 export function eventGuestsExportRoute(id: string): string {
   return `/api/events/${id}/guests/export`;
 }

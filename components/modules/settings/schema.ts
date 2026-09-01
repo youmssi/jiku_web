@@ -60,3 +60,27 @@ export interface TestSendResponse {
   usingTenantProvider: boolean;
   error: string | null;
 }
+
+// ─── Legal identity (JIKU-69) ───────────────────────────────────────────────
+// The organization's details as they must appear on an invoice a company or
+// public-sector buyer can process. Mirrors the backend's LegalIdentityResponse.
+
+export interface LegalIdentityResponse {
+  legalName: string | null;
+  registrationNumber: string | null;
+  taxIdentifier: string | null;
+  addressLine: string | null;
+  city: string | null;
+  country: string | null;
+  /** Whether an invoice can be issued; the backend refuses until this is true. */
+  completeForInvoicing: boolean;
+}
+
+export interface UpdateLegalIdentityRequest {
+  legalName: string | null;
+  registrationNumber: string | null;
+  taxIdentifier: string | null;
+  addressLine: string | null;
+  city: string | null;
+  country: string | null;
+}
