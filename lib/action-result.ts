@@ -1,4 +1,4 @@
-import { reportError } from "@/lib/report-error";
+import { captureException } from "@/lib/error-tracking";
 
 /**
  * Uniform outcome of a Server Action: data on success, or a user-ready message on
@@ -32,10 +32,15 @@ export async function fromResponse<T>(
   return { ok: false, error: messages[response.status] ?? messages.default ?? GENERIC };
 }
 
-/** Reports a non-OK backend response to the error sink. */
+/**
+ * Reports a non-OK backend response to the error sink, carrying the backend's
+ * `X-Request-Id` so this report and the backend's own event for the same failed
+ * request can be lined up.
+ */
 export function reportApiError(response: Response, source = "service"): void {
-  reportError(new Error(`API ${response.status} on ${response.url}`), {
+  captureException(new Error(`API ${response.status} on ${response.url}`), {
     source,
     status: response.status,
+    requestId: response.headers.get("X-Request-Id") ?? undefined,
   });
 }

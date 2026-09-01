@@ -1,5 +1,10 @@
 allowBuilds:
   '@parcel/watcher': false
+  # Its postinstall downloads a platform binary used only to upload source maps at
+  # build time. Left off for the same reason as the others here: installs stay
+  # small and offline-tolerant. Flip to true when source-map upload is switched on
+  # alongside SENTRY_AUTH_TOKEN.
+  '@sentry/cli': false
   '@swc/core': false
   sharp: false
   unrs-resolver: false
