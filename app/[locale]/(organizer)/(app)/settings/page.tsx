@@ -3,10 +3,13 @@ import { getOrganizerContext } from "@/components/modules/identity/organizer-con
 import { MembersView, fetchMembersAction } from "@/components/modules/members";
 import {
   BrandingView,
+  LegalIdentityView,
   ProviderSettingsView,
   fetchBrandingAction,
+  fetchLegalIdentityAction,
   fetchProviderSettingsAction,
   type BrandingResponse,
+  type LegalIdentityResponse,
   type ProviderSettingsResponse,
 } from "@/components/modules/settings";
 
@@ -29,10 +32,27 @@ async function loadProviderSettings(): Promise<ProviderSettingsResponse> {
   return result.data;
 }
 
+async function loadLegalIdentity(): Promise<LegalIdentityResponse> {
+  const result = await fetchLegalIdentityAction();
+  if (!result.ok) {
+    return {
+      legalName: null,
+      registrationNumber: null,
+      taxIdentifier: null,
+      addressLine: null,
+      city: null,
+      country: null,
+      completeForInvoicing: false,
+    };
+  }
+  return result.data;
+}
+
 export default async function SettingsPage() {
-  const [branding, providers, membersResult, context] = await Promise.all([
+  const [branding, providers, legalIdentity, membersResult, context] = await Promise.all([
     loadBranding(),
     loadProviderSettings(),
+    loadLegalIdentity(),
     fetchMembersAction(),
     getOrganizerContext(),
   ]);
@@ -53,6 +73,7 @@ export default async function SettingsPage() {
           <TabsTrigger value="branding">Branding</TabsTrigger>
           {team ? <TabsTrigger value="members">Members</TabsTrigger> : null}
           <TabsTrigger value="messaging">Messaging providers</TabsTrigger>
+          <TabsTrigger value="legal">Invoicing details</TabsTrigger>
         </TabsList>
 
         <TabsContent value="branding" className="mt-0">
@@ -71,6 +92,10 @@ export default async function SettingsPage() {
 
         <TabsContent value="messaging" className="mt-0">
           <ProviderSettingsView initial={providers} />
+        </TabsContent>
+
+        <TabsContent value="legal" className="mt-0">
+          <LegalIdentityView identity={legalIdentity} />
         </TabsContent>
       </Tabs>
     </div>
