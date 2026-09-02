@@ -1,3 +1,4 @@
+export { QuorumSettings } from "./quorum-settings";
 // Event module — organizer event creation, editing and listing.
 export { EventWizard } from "./event-wizard";
 export { NewEventView } from "./new-event-view";

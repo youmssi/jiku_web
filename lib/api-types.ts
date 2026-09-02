@@ -1770,16 +1770,7 @@ export interface components {
             status?: string;
             settings?: components["schemas"]["EventSettingsDto"];
             invitationChannels?: ("EMAIL" | "WHATSAPP")[];
-        };
-        UpdateQuorumRequest: {
-            /** @enum {string} */
-            mode: "NONE" | "FRACTION" | "ABSOLUTE";
-            /** Format: int32 */
-            numerator?: number | null;
-            /** Format: int32 */
-            denominator?: number | null;
-            /** Format: int32 */
-            absolute?: number | null;
+            quorum?: components["schemas"]["QuorumResponse"] | null;
         };
         QuorumResponse: {
             mode?: string;
@@ -1791,6 +1782,16 @@ export interface components {
             absolute?: number | null;
             /** Format: date-time */
             reachedAt?: string | null;
+        };
+        UpdateQuorumRequest: {
+            /** @enum {string} */
+            mode: "NONE" | "FRACTION" | "ABSOLUTE";
+            /** Format: int32 */
+            numerator?: number | null;
+            /** Format: int32 */
+            denominator?: number | null;
+            /** Format: int32 */
+            absolute?: number | null;
         };
         UpdateBrandingRequest: {
             displayName?: string | null;
