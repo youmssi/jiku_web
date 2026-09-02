@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { ThematicPage, type ThematicPageContent, buildThematicMetadata, siteUrl } from "@/components/modules/seo";
 import { EarlyAccessForm } from "@/components/modules/prospect";
+import { ViewTracker } from "@/components/shared";
 import { SEO_ROUTES } from "@/lib/constants";
 
 const TITLE = "Prise de rendez-vous en ligne à Conakry — couture, coiffure, photo | Jikū";
@@ -97,6 +98,8 @@ export default function AppointmentsPage() {
         // prérendu statique de la page. La borne Suspense garde la page statique —
         // ce qui compte pour une page d'acquisition référencée.
         <Suspense fallback={<div className="mt-12 h-96 rounded-xl border border-primary/15 bg-primary/5" />}>
+          {/* Haut du tunnel : sans la vue, aucun taux de conversion n'est calculable. */}
+          <ViewTracker eventName="appointment_page_view" eventProperties={{ source: "seo" }} />
           <EarlyAccessForm />
         </Suspense>
       }
