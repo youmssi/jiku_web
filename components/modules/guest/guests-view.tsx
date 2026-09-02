@@ -44,6 +44,7 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
     name: `${guest.firstName} ${guest.lastName}`.trim(),
     contact: guest.email ?? guest.phoneNumber ?? "—",
     excludedFromInvitations: guest.excludedFromInvitations,
+    checkedInAt: guest.checkedInAt ?? null,
     statuses: Object.fromEntries(
       INVITATION_CHANNELS.map((channel) => [channel, statusFor(guest.id, channel)]),
     ),

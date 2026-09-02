@@ -6,6 +6,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { attendanceCertificateRoute } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import {
@@ -32,6 +33,8 @@ export interface GuestRow {
   name: string;
   contact: string;
   excludedFromInvitations: boolean;
+  /** Heure d'entrée, si la personne est venue — décide de l'attestation (JIKU-95). */
+  checkedInAt: string | null;
   statuses: Record<string, string | null>;
 }
 
@@ -96,6 +99,15 @@ function GuestRowActions({ eventId, guest }: { eventId: string; guest: GuestRow 
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          {guest.checkedInAt ? (
+            // Une attestation ne s'émet que pour quelqu'un qui est venu : la
+            // proposer autrement mènerait à un refus que rien n'annonçait.
+            <DropdownMenuItem asChild>
+              <a href={attendanceCertificateRoute(eventId, guest.id)} download>
+                Attestation de présence
+              </a>
+            </DropdownMenuItem>
+          ) : null}
           <DropdownMenuItem onClick={onToggleExclusion}>
             {guest.excludedFromInvitations ? "Include in invitations" : "Exclude from invitations"}
           </DropdownMenuItem>

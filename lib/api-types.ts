@@ -1204,6 +1204,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/attendance/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["register_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/attendance/certificate/{guestId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["certificate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/analytics": {
         parameters: {
             query?: never;
@@ -2338,6 +2370,8 @@ export interface components {
             email?: string | null;
             phoneNumber?: string | null;
             excludedFromInvitations?: boolean;
+            /** Format: date-time */
+            checkedInAt?: string | null;
         };
         BillingAllowance: {
             /** Format: int64 */
@@ -4702,6 +4736,51 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["GuestMatch"][];
+                };
+            };
+        };
+    };
+    register_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": string;
+                };
+            };
+        };
+    };
+    certificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                guestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": string;
                 };
             };
         };
