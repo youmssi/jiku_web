@@ -7,6 +7,7 @@ import {
   ChannelBreakdownChart,
   GuestGrowthChart,
 } from "@/components/modules/dashboard/dashboard-charts";
+import { QuorumCard } from "@/components/modules/dashboard/quorum-card";
 import type { AnalyticsData, DashboardData } from "@/components/modules/dashboard/schema";
 
 interface EventDashboardProps {
@@ -64,6 +65,10 @@ export function EventDashboard({ eventId, initial, analytics }: EventDashboardPr
           </p>
         </div>
       ) : null}
+
+      {/* Le quorum d'abord : c'est l'information qu'un secrétaire d'AG vient
+          chercher, et elle ne s'affiche que s'il en a configuré un. */}
+      {data.quorum ? <QuorumCard quorum={data.quorum} /> : null}
 
       <section>
         <SectionHeading>Before the event</SectionHeading>
