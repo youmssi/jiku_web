@@ -55,8 +55,12 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 // source-map handling; nothing is reported at runtime unless a DSN is set. Source
 // maps are uploaded only when SENTRY_AUTH_TOKEN is present, so an ordinary build
 // — local, CI or preview — neither needs credentials nor contacts the provider.
+// `disableLogger` is deliberately absent: it is deprecated, and its replacement
+// (`webpack.treeshake.removeDebugLogging`) does not apply to this project, which
+// builds with Turbopack. The cost is that the SDK's debug logging is not tree
+// shaken out of the client bundle — worth revisiting only if that shows up in a
+// bundle measurement.
 export default withSentryConfig(withNextIntl(nextConfig), {
   silent: !process.env.CI,
-  disableLogger: true,
   telemetry: false,
 });
