@@ -1,3 +1,5 @@
+import type { Schema } from "@/lib/api-contract";
+
 // CONTRACT — types mirroring the backend billing API (JIKU-32/33/35).
 
 export interface UsageAllowance {
@@ -68,15 +70,7 @@ export interface PaymentInitiation {
 
 // ─── Invoices (JIKU-69) ─────────────────────────────────────────────────────
 // Accounting-grade documents, distinct from the plain-text payment receipt: a
-// company's accounts department cannot process the latter.
+// company's accounts department cannot process the latter. Aliased from the
+// generated contract so a backend change is a type error, not a runtime surprise.
 
-export interface InvoiceSummary {
-  id: string;
-  invoiceNumber: string;
-  /** INVOICE or CREDIT_NOTE. */
-  documentType: string;
-  currency: string;
-  totalMinor: number;
-  issueDate: string;
-  issuedAt: string;
-}
+export type InvoiceSummary = Schema<"InvoiceSummary">;

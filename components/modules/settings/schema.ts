@@ -1,3 +1,5 @@
+import type { Schema } from "@/lib/api-contract";
+
 // CONTRACT — types mirroring the branding and provider settings APIs (JIKU-45).
 
 // ─── Branding ────────────────────────────────────────────────────────────────
@@ -62,25 +64,8 @@ export interface TestSendResponse {
 }
 
 // ─── Legal identity (JIKU-69) ───────────────────────────────────────────────
-// The organization's details as they must appear on an invoice a company or
-// public-sector buyer can process. Mirrors the backend's LegalIdentityResponse.
+// Aliased from the generated contract rather than restated, so a backend change
+// surfaces as a type error here instead of an undefined field at runtime.
 
-export interface LegalIdentityResponse {
-  legalName: string | null;
-  registrationNumber: string | null;
-  taxIdentifier: string | null;
-  addressLine: string | null;
-  city: string | null;
-  country: string | null;
-  /** Whether an invoice can be issued; the backend refuses until this is true. */
-  completeForInvoicing: boolean;
-}
-
-export interface UpdateLegalIdentityRequest {
-  legalName: string | null;
-  registrationNumber: string | null;
-  taxIdentifier: string | null;
-  addressLine: string | null;
-  city: string | null;
-  country: string | null;
-}
+export type LegalIdentityResponse = Schema<"LegalIdentityResponse">;
+export type UpdateLegalIdentityRequest = Schema<"UpdateLegalIdentityRequest">;
