@@ -242,6 +242,11 @@ const fr: LandingContent = {
         description:
           "Plusieurs entrées, plusieurs contrôleurs, un seul décompte fiable. Chaque billet ne passe qu'une seule fois, quoi qu'il arrive.",
       },
+      {
+        title: "Assemblées générales & formations",
+        description:
+          "Un quorum compté en direct et horodaté, une feuille d'émargement générée toute seule. La preuve que votre bailleur ou vos statuts exigent, sans la reconstituer à la main.",
+      },
     ],
     trustBar: [
       "Fonctionne hors-ligne le jour J",
@@ -369,6 +374,7 @@ const fr: LandingContent = {
           { label: "Fonctionnalités", href: "#features" },
           { label: "Comment ça marche", href: "#how-it-works" },
           { label: "Tarifs", href: "#pricing" },
+          { label: "Prise de rendez-vous", href: "/prise-de-rendez-vous" },
           { label: "FAQ", href: "#faq" },
         ],
       },
@@ -526,6 +532,11 @@ const en: LandingContent = {
         description:
           "Several entrances, several validators, one reliable count. Each ticket passes exactly once, no matter what.",
       },
+      {
+        title: "General assemblies & training",
+        description:
+          "A quorum counted live and timestamped, an attendance register generated for you. The proof your funder or your bylaws require, without rebuilding it by hand.",
+      },
     ],
     trustBar: [
       "Works offline on event day",
@@ -653,6 +664,7 @@ const en: LandingContent = {
           { label: "Features", href: "#features" },
           { label: "How it works", href: "#how-it-works" },
           { label: "Pricing", href: "#pricing" },
+          { label: "Appointments", href: "/prise-de-rendez-vous" },
           { label: "FAQ", href: "#faq" },
         ],
       },
