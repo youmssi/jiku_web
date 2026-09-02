@@ -67,3 +67,7 @@ export const emptyEventValues: EventFormValues = {
   maxOverbookingCount: null,
   invitationChannels: [],
 };
+
+/** Règle de quorum d'un événement (JIKU-94), absente si non configurée. */
+export type QuorumResponse = Schema<"QuorumResponse">;
+export type UpdateQuorumRequest = Schema<"UpdateQuorumRequest">;

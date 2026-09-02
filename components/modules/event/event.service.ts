@@ -94,3 +94,31 @@ export async function cancelEventAction(id: string): Promise<ActionResult> {
   }
   return { ok: true, data: null };
 }
+
+/**
+ * Enregistre la règle de quorum (JIKU-94). Séparée de la mise à jour de
+ * l'événement : c'est une règle statutaire, pas un réglage de présentation.
+ */
+export async function saveQuorumAction(
+  eventId: string,
+  input: {
+    mode: string;
+    numerator: number | null;
+    denominator: number | null;
+    absolute: number | null;
+  },
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const response = await serverFetch(`/events/${eventId}/quorum`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (response.status === 400) {
+    return fail("Vérifiez la règle : une part exige un numérateur et un dénominateur, un nombre exige une valeur.");
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("Le quorum n'a pas pu être enregistré. Réessayez.");
+  }
+  return { ok: true };
+}

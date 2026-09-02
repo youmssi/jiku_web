@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { EventWizard } from "@/components/modules/event/event-wizard";
+import { QuorumSettings } from "@/components/modules/event/quorum-settings";
 import { EventSubNav } from "@/components/shared/event-sub-nav";
 import { StateMessage } from "@/components/shared/state-message";
 import type { EventFormValues, EventResponse } from "@/components/modules/event/schema";
@@ -59,6 +60,9 @@ export async function EditEventView({ params }: { params: Promise<{ id: string }
     <div className="mx-auto w-full max-w-2xl px-4 py-10">
       <EventSubNav eventId={event.id} />
       <EventWizard eventId={event.id} initialValues={values} status={event.status} />
+      {/* Bloc distinct : un quorum est une règle statutaire saisie une fois,
+          pas un réglage qu'on ajuste en modifiant le lieu ou l'horaire. */}
+      <QuorumSettings eventId={event.id} initial={event.quorum ?? null} />
     </div>
   );
 }

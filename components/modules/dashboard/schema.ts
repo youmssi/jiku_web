@@ -17,6 +17,8 @@ export type DashboardData = Schema<"DashboardResponse"> & {
   } | null;
 };
 export type EntranceCount = Schema<"EntranceCount">;
+/** État du quorum d'assemblée générale (JIKU-94), absent si non configuré. */
+export type QuorumView = Schema<"QuorumView">;
 export type DeliverabilityFlag = Schema<"DeliverabilityFlag">;
 
 /** Trend data shown alongside the live snapshot (backend AnalyticsResponse). */

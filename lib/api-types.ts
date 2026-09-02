@@ -84,6 +84,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{id}/quorum": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["setQuorum"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/branding": {
         parameters: {
             query?: never;
@@ -190,6 +206,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/prospects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["register"];
         delete?: never;
         options?: never;
         head?: never;
@@ -637,7 +669,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["register"];
+        post: operations["register_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -798,6 +830,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["reactivate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/prospects/{id}/contacted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["markContacted"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1460,7 +1508,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/payments": {
+    "/api/v1/admin/prospects": {
         parameters: {
             query?: never;
             header?: never;
@@ -1476,7 +1524,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/bookings": {
+    "/api/v1/admin/payments": {
         parameters: {
             query?: never;
             header?: never;
@@ -1492,7 +1540,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/booking-payments": {
+    "/api/v1/admin/bookings": {
         parameters: {
             query?: never;
             header?: never;
@@ -1500,6 +1548,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["list_9"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/booking-payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["list_10"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1531,7 +1595,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_10"];
+        get: operations["list_11"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1706,6 +1770,28 @@ export interface components {
             status?: string;
             settings?: components["schemas"]["EventSettingsDto"];
             invitationChannels?: ("EMAIL" | "WHATSAPP")[];
+            quorum?: components["schemas"]["QuorumResponse"] | null;
+        };
+        QuorumResponse: {
+            mode?: string;
+            /** Format: int32 */
+            numerator?: number | null;
+            /** Format: int32 */
+            denominator?: number | null;
+            /** Format: int32 */
+            absolute?: number | null;
+            /** Format: date-time */
+            reachedAt?: string | null;
+        };
+        UpdateQuorumRequest: {
+            /** @enum {string} */
+            mode: "NONE" | "FRACTION" | "ABSOLUTE";
+            /** Format: int32 */
+            numerator?: number | null;
+            /** Format: int32 */
+            denominator?: number | null;
+            /** Format: int32 */
+            absolute?: number | null;
         };
         UpdateBrandingRequest: {
             displayName?: string | null;
@@ -1757,6 +1843,22 @@ export interface components {
             /** Format: date-time */
             transferDeadline?: string | null;
             transferredTo?: string | null;
+        };
+        ProspectLeadRequest: {
+            businessName: string;
+            contactName: string;
+            phone: string;
+            sector: string;
+            /** Format: email */
+            email?: string | null;
+            city?: string | null;
+            weeklyVolume?: string | null;
+            note?: string | null;
+            source?: string | null;
+        };
+        ProspectLeadAck: {
+            /** Format: uuid */
+            id?: string;
         };
         CreateOrgRequest: {
             name: string;
@@ -2092,6 +2194,24 @@ export interface components {
             city?: string;
             country?: string;
         };
+        ProspectLeadView: {
+            /** Format: uuid */
+            id?: string;
+            businessName?: string;
+            contactName?: string;
+            phone?: string;
+            email?: string | null;
+            sector?: string;
+            city?: string | null;
+            weeklyVolume?: string | null;
+            note?: string | null;
+            source?: string | null;
+            status?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            contactedAt?: string | null;
+        };
         RejectPaymentRequest: {
             reason: string;
         };
@@ -2261,6 +2381,7 @@ export interface components {
             /** Format: int64 */
             checkedIn?: number;
             entrances?: components["schemas"]["EntranceCount"][];
+            quorum?: components["schemas"]["QuorumView"] | null;
             deliverability?: components["schemas"]["DeliverabilityFlag"];
             usage?: components["schemas"]["UsageSummary"];
         };
@@ -2277,6 +2398,15 @@ export interface components {
             label?: string;
             /** Format: int64 */
             checkedIn?: number;
+        };
+        QuorumView: {
+            /** Format: int64 */
+            required?: number;
+            /** Format: int64 */
+            current?: number;
+            reached?: boolean;
+            /** Format: date-time */
+            reachedAt?: string | null;
         };
         UsageSummary: {
             /** Format: int64 */
@@ -2725,6 +2855,32 @@ export interface operations {
             };
         };
     };
+    setQuorum: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateQuorumRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["QuorumResponse"];
+                };
+            };
+        };
+    };
     get_2: {
         parameters: {
             query?: never;
@@ -2909,6 +3065,30 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["RsvpView"];
+                };
+            };
+        };
+    };
+    register: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProspectLeadRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ProspectLeadAck"];
                 };
             };
         };
@@ -3654,7 +3834,7 @@ export interface operations {
             };
         };
     };
-    register: {
+    register_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -3963,6 +4143,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["TenantInfo"];
+                };
+            };
+        };
+    };
+    markContacted: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ProspectLeadView"];
                 };
             };
         };
@@ -4924,6 +5126,28 @@ export interface operations {
         parameters: {
             query?: {
                 status?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ProspectLeadView"][];
+                };
+            };
+        };
+    };
+    list_8: {
+        parameters: {
+            query?: {
+                status?: string;
                 provider?: string;
                 tenantId?: string;
                 page?: number;
@@ -4946,7 +5170,7 @@ export interface operations {
             };
         };
     };
-    list_8: {
+    list_9: {
         parameters: {
             query?: {
                 status?: string;
@@ -4970,7 +5194,7 @@ export interface operations {
             };
         };
     };
-    list_9: {
+    list_10: {
         parameters: {
             query?: {
                 status?: string;
@@ -5014,7 +5238,7 @@ export interface operations {
             };
         };
     };
-    list_10: {
+    list_11: {
         parameters: {
             query?: {
                 action?: string;
