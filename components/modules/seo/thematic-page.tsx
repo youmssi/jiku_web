@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import {
   Accordion,
@@ -30,7 +31,22 @@ export interface ThematicPageContent {
  * page-specific BreadcrumbList + FAQPage. Never emits `Event` schema — these
  * are evergreen marketing pages, not any organizer's actual event.
  */
-export function ThematicPage({ content, siteUrl, path }: { content: ThematicPageContent; siteUrl: string; path: string }) {
+export function ThematicPage({
+  content,
+  siteUrl,
+  path,
+  cta,
+}: {
+  content: ThematicPageContent;
+  siteUrl: string;
+  path: string;
+  /**
+   * Remplace le bloc d'appel à l'action par défaut. Une page dont le produit
+   * n'est pas encore livrable ne doit pas inviter à créer un compte : elle
+   * collecte un intérêt (JIKU-98).
+   */
+  cta?: ReactNode;
+}) {
   return (
     <div className="flex flex-1 flex-col bg-white dark:bg-zinc-900">
       <OrganizationJsonLd siteUrl={siteUrl} />
@@ -82,16 +98,18 @@ export function ThematicPage({ content, siteUrl, path }: { content: ThematicPage
           </div>
         ) : null}
 
-        <div className="mt-12 rounded-xl border border-primary/15 bg-primary/5 p-8 text-center">
-          <h2 className="text-xl font-semibold">{content.ctaHeading}</h2>
-          <p className="mt-2 text-sm text-muted-foreground">{content.ctaSubtext}</p>
-          <Button asChild size="lg" className="mt-6 rounded-full px-8">
-            <Link href={ROUTES.REGISTER}>
-              Créer mon compte gratuit
-              <ArrowRight className="ml-2 size-4" />
-            </Link>
-          </Button>
-        </div>
+        {cta ?? (
+          <div className="mt-12 rounded-xl border border-primary/15 bg-primary/5 p-8 text-center">
+            <h2 className="text-xl font-semibold">{content.ctaHeading}</h2>
+            <p className="mt-2 text-sm text-muted-foreground">{content.ctaSubtext}</p>
+            <Button asChild size="lg" className="mt-6 rounded-full px-8">
+              <Link href={ROUTES.REGISTER}>
+                Créer mon compte gratuit
+                <ArrowRight className="ml-2 size-4" />
+              </Link>
+            </Button>
+          </div>
+        )}
 
         {content.faq.length > 0 ? (
           <div className="mt-16">

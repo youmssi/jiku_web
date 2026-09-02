@@ -88,6 +88,7 @@ export const SEO_ROUTES = {
   VENUE_EVENT_CONAKRY: "/evenement-en-salle-conakry",
   SEMINAR_GUINEA: "/gestion-seminaire-guinee",
   CHECKIN_QR: "/check-in-qr-code",
+  APPOINTMENTS: "/prise-de-rendez-vous",
 } as const;
 
 export const ADMIN_ROUTES = {
