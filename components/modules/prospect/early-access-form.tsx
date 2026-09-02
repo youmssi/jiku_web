@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { trackEvent } from "@/lib/analytics";
 import { registerProspectAction } from "./prospect.service";
 import { PROSPECT_SECTORS, WEEKLY_VOLUMES } from "./schema";
 
@@ -47,8 +48,14 @@ export function EarlyAccessForm() {
         source: searchParams.get("src"),
       });
       if (result.ok) {
+        // La conversion du tunnel rendez-vous. Sans elle, la campagne dépense
+        // sur cette page sans qu'on sache jamais ce qu'elle produit.
+        trackEvent("prospect_submitted", { sector, source: searchParams.get("src") });
         setDone(true);
       } else {
+        // Un échec est aussi une information : un formulaire qui refuse est
+        // indiscernable d'un visiteur qui abandonne, dans les chiffres bruts.
+        trackEvent("prospect_failed", { sector });
         setError(result.error);
       }
     });
