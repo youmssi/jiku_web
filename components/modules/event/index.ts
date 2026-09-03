@@ -1,4 +1,5 @@
 export { QuorumSettings } from "./quorum-settings";
+export { TicketTypesSettings } from "./ticket-types-settings";
 // Event module — organizer event creation, editing and listing.
 export { EventWizard } from "./event-wizard";
 export { NewEventView } from "./new-event-view";
@@ -11,4 +12,4 @@ export {
   INVITATION_CHANNEL_LABELS,
   TIMEZONES,
 } from "./schema";
-export type { EventFormValues, InvitationChannel } from "./schema";
+export type { EventFormValues, InvitationChannel, TicketTypeResponse } from "./schema";

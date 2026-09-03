@@ -122,3 +122,55 @@ export async function saveQuorumAction(
   }
   return { ok: true };
 }
+
+/**
+ * Catégories d'accès (JIKU-93). Le plafond par catégorie est facultatif : une
+ * catégorie sans plafond n'est bornée que par la capacité de l'événement.
+ */
+export async function saveTicketTypeAction(
+  eventId: string,
+  typeId: string | null,
+  input: {
+    label: string;
+    colorHex: string;
+    maxCapacity: number | null;
+    position: number;
+  },
+): Promise<ActionResult<{ id: string }>> {
+  const response = await serverFetch(
+    typeId ? `/events/${eventId}/ticket-types/${typeId}` : `/events/${eventId}/ticket-types`,
+    {
+      method: typeId ? "PUT" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    },
+  );
+  if (response.status === 409) {
+    return fail("Une catégorie porte déjà ce nom sur cet événement.");
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("La catégorie n'a pas pu être enregistrée. Réessayez.");
+  }
+  return { ok: true, data: (await response.json()) as { id: string } };
+}
+
+export async function deleteTicketTypeAction(
+  eventId: string,
+  typeId: string,
+): Promise<ActionResult<null>> {
+  const response = await serverFetch(`/events/${eventId}/ticket-types/${typeId}`, {
+    method: "DELETE",
+  });
+  // 409 : des invités y sont rattachés. Le backend dit combien — on relaie son
+  // message plutôt qu'un texte générique, le chiffre est ce qui aide.
+  if (response.status === 409) {
+    const body = (await response.json().catch(() => null)) as { detail?: string } | null;
+    return fail(body?.detail ?? "Des invités sont rattachés à cette catégorie.");
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("La catégorie n'a pas pu être supprimée. Réessayez.");
+  }
+  return { ok: true, data: null };
+}
