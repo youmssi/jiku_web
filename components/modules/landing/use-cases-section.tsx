@@ -1,9 +1,11 @@
-import { Check, Gem, Presentation, Ticket, type LucideIcon } from "lucide-react";
+import { Check, ClipboardCheck, Gem, Presentation, Ticket, type LucideIcon } from "lucide-react";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import type { LandingContent } from "./content";
 
-// Icons pair positionally with content.cases (weddings, conferences, galas).
-const CASE_ICONS: LucideIcon[] = [Gem, Presentation, Ticket];
+// Icons pair positionally with content.cases (weddings, conferences, galas,
+// general assemblies). Adding a case without adding its icon renders `undefined`
+// as a component and breaks the static build — keep the two lists the same length.
+const CASE_ICONS: LucideIcon[] = [Gem, Presentation, Ticket, ClipboardCheck];
 
 function UseCaseCard({
   title,

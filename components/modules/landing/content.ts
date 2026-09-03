@@ -177,6 +177,16 @@ const fr: LandingContent = {
           "Chaque confirmation génère un billet unique au code signé, impossible à deviner ou à réutiliser. Prêt à scanner à l'entrée.",
       },
       {
+        title: "Catégories d'accès et jauges séparées",
+        description:
+          "VIP, presse, standard : chaque catégorie a sa couleur et son propre plafond. Le carré VIP se ferme quand il est plein sans bloquer le reste, et le contrôleur voit la catégorie au moment du scan.",
+      },
+      {
+        title: "Une place qui change de main",
+        description:
+          "Un invité empêché transmet sa place à quelqu'un d'autre depuis son lien. L'ancien billet cesse d'être valable, le nouveau porte le bon nom, et votre décompte reste juste.",
+      },
+      {
         title: "Check-in même sans réseau",
         description:
           "La liste des invités se synchronise à l'avance sur le téléphone du contrôleur. Coupure le jour J ? On continue de scanner, tout se synchronise au retour du réseau.",
@@ -241,6 +251,11 @@ const fr: LandingContent = {
         title: "Galas & concerts",
         description:
           "Plusieurs entrées, plusieurs contrôleurs, un seul décompte fiable. Chaque billet ne passe qu'une seule fois, quoi qu'il arrive.",
+      },
+      {
+        title: "Assemblées générales & formations",
+        description:
+          "Un quorum compté en direct et horodaté, une feuille d'émargement générée toute seule, et une attestation de présence nominative pour chaque participant venu. La preuve que votre bailleur ou vos statuts exigent, sans la reconstituer à la main.",
       },
     ],
     trustBar: [
@@ -369,6 +384,7 @@ const fr: LandingContent = {
           { label: "Fonctionnalités", href: "#features" },
           { label: "Comment ça marche", href: "#how-it-works" },
           { label: "Tarifs", href: "#pricing" },
+          { label: "Prise de rendez-vous", href: "/prise-de-rendez-vous" },
           { label: "FAQ", href: "#faq" },
         ],
       },
@@ -461,6 +477,16 @@ const en: LandingContent = {
           "Each confirmation issues a unique ticket with a signed code that can't be guessed or reused. Ready to scan at the door.",
       },
       {
+        title: "Access tiers with their own caps",
+        description:
+          "VIP, press, standard: each tier gets its own colour and its own limit. The VIP area closes when it fills without blocking the rest, and the doorman sees the tier the moment the ticket is scanned.",
+      },
+      {
+        title: "A seat that changes hands",
+        description:
+          "A guest who cannot come passes their seat to someone else from their own link. The old ticket stops working, the new one carries the right name, and your headcount stays correct.",
+      },
+      {
         title: "Check-in without a network",
         description:
           "The guest list syncs to the validator's phone ahead of time. Connection drops on the day? Keep scanning. Everything syncs when it returns.",
@@ -525,6 +551,11 @@ const en: LandingContent = {
         title: "Galas & concerts",
         description:
           "Several entrances, several validators, one reliable count. Each ticket passes exactly once, no matter what.",
+      },
+      {
+        title: "General assemblies & training",
+        description:
+          "A quorum counted live and timestamped, an attendance register generated for you, and a named attendance certificate for every person who actually came. The proof your funder or your bylaws require, without rebuilding it by hand.",
       },
     ],
     trustBar: [
@@ -653,6 +684,7 @@ const en: LandingContent = {
           { label: "Features", href: "#features" },
           { label: "How it works", href: "#how-it-works" },
           { label: "Pricing", href: "#pricing" },
+          { label: "Appointments", href: "/prise-de-rendez-vous" },
           { label: "FAQ", href: "#faq" },
         ],
       },

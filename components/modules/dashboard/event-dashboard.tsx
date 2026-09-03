@@ -7,6 +7,8 @@ import {
   ChannelBreakdownChart,
   GuestGrowthChart,
 } from "@/components/modules/dashboard/dashboard-charts";
+import { AttendanceDocuments } from "@/components/modules/dashboard/attendance-documents";
+import { QuorumCard } from "@/components/modules/dashboard/quorum-card";
 import type { AnalyticsData, DashboardData } from "@/components/modules/dashboard/schema";
 
 interface EventDashboardProps {
@@ -64,6 +66,10 @@ export function EventDashboard({ eventId, initial, analytics }: EventDashboardPr
           </p>
         </div>
       ) : null}
+
+      {/* Le quorum d'abord : c'est l'information qu'un secrétaire d'AG vient
+          chercher, et elle ne s'affiche que s'il en a configuré un. */}
+      {data.quorum ? <QuorumCard quorum={data.quorum} /> : null}
 
       <section>
         <SectionHeading>Before the event</SectionHeading>
@@ -163,6 +169,9 @@ export function EventDashboard({ eventId, initial, analytics }: EventDashboardPr
           </Card>
         ) : null}
       </section>
+
+      {/* Après l'événement : la preuve que le bailleur ou les statuts exigent. */}
+      <AttendanceDocuments eventId={eventId} checkedIn={data.checkedIn} />
 
       <p className="text-xs text-muted-foreground">
         {updatedAt ? "Updating live every few seconds." : "Live updates on."}

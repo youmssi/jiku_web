@@ -94,3 +94,83 @@ export async function cancelEventAction(id: string): Promise<ActionResult> {
   }
   return { ok: true, data: null };
 }
+
+/**
+ * Enregistre la règle de quorum (JIKU-94). Séparée de la mise à jour de
+ * l'événement : c'est une règle statutaire, pas un réglage de présentation.
+ */
+export async function saveQuorumAction(
+  eventId: string,
+  input: {
+    mode: string;
+    numerator: number | null;
+    denominator: number | null;
+    absolute: number | null;
+  },
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const response = await serverFetch(`/events/${eventId}/quorum`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (response.status === 400) {
+    return fail("Vérifiez la règle : une part exige un numérateur et un dénominateur, un nombre exige une valeur.");
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("Le quorum n'a pas pu être enregistré. Réessayez.");
+  }
+  return { ok: true };
+}
+
+/**
+ * Catégories d'accès (JIKU-93). Le plafond par catégorie est facultatif : une
+ * catégorie sans plafond n'est bornée que par la capacité de l'événement.
+ */
+export async function saveTicketTypeAction(
+  eventId: string,
+  typeId: string | null,
+  input: {
+    label: string;
+    colorHex: string;
+    maxCapacity: number | null;
+    position: number;
+  },
+): Promise<ActionResult<{ id: string }>> {
+  const response = await serverFetch(
+    typeId ? `/events/${eventId}/ticket-types/${typeId}` : `/events/${eventId}/ticket-types`,
+    {
+      method: typeId ? "PUT" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    },
+  );
+  if (response.status === 409) {
+    return fail("Une catégorie porte déjà ce nom sur cet événement.");
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("La catégorie n'a pas pu être enregistrée. Réessayez.");
+  }
+  return { ok: true, data: (await response.json()) as { id: string } };
+}
+
+export async function deleteTicketTypeAction(
+  eventId: string,
+  typeId: string,
+): Promise<ActionResult<null>> {
+  const response = await serverFetch(`/events/${eventId}/ticket-types/${typeId}`, {
+    method: "DELETE",
+  });
+  // 409 : des invités y sont rattachés. Le backend dit combien — on relaie son
+  // message plutôt qu'un texte générique, le chiffre est ce qui aide.
+  if (response.status === 409) {
+    const body = (await response.json().catch(() => null)) as { detail?: string } | null;
+    return fail(body?.detail ?? "Des invités sont rattachés à cette catégorie.");
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("La catégorie n'a pas pu être supprimée. Réessayez.");
+  }
+  return { ok: true, data: null };
+}

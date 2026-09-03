@@ -138,3 +138,29 @@ export async function sendInvitationsAction(
     error: "We couldn't send the invitations. Please try again.",
   };
 }
+
+/**
+ * Rattache un invité à une catégorie d'accès, ou l'en détache (JIKU-93).
+ *
+ * Un 409 signifie que la catégorie visée est complète : le backend a refusé
+ * plutôt que de la faire déborder, et l'invité est resté où il était.
+ */
+export async function setGuestTicketTypeAction(
+  eventId: string,
+  guestId: string,
+  ticketTypeId: string | null,
+): Promise<ActionResult<Guest>> {
+  const response = await serverFetch(`/events/${eventId}/guests/${guestId}/ticket-type`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ticketTypeId }),
+  });
+  const result = await fromResponse<Guest>(response, {
+    409: "Cette catégorie est complète. Augmentez son plafond ou choisissez-en une autre.",
+    default: "La catégorie n'a pas pu être changée. Réessayez.",
+  });
+  if (result.ok) {
+    revalidatePath(eventGuestsRoute(eventId));
+  }
+  return result;
+}

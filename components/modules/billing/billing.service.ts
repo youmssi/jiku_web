@@ -1,7 +1,8 @@
 "use server";
 
 import { serverFetch } from "@/lib/api-server";
-import type { ManualPaymentInstructions, PaymentInitiation } from "./schema";
+import { reportApiError } from "@/lib/action-result";
+import type { InvoiceSummary, ManualPaymentInstructions, PaymentInitiation } from "./schema";
 
 export async function purchaseTierAction(
   eventId: string,
@@ -39,4 +40,34 @@ export async function requestActivationAction(
   }
   const instructions = (await response.json()) as ManualPaymentInstructions;
   return { instructions };
+}
+
+// ─── Invoices (JIKU-69) ─────────────────────────────────────────────────────
+
+export async function fetchInvoicesAction(): Promise<InvoiceSummary[]> {
+  const response = await serverFetch("/billing/invoices");
+  if (!response.ok) return [];
+  return (await response.json()) as InvoiceSummary[];
+}
+
+/**
+ * Issues the invoice for a settled payment. The backend refuses until the
+ * organization's legal details are complete, so that refusal is surfaced as its
+ * own message pointing at Settings rather than a generic failure.
+ */
+export async function issueInvoiceAction(
+  paymentId: string,
+): Promise<{ ok: true; invoice: InvoiceSummary } | { ok: false; error: string }> {
+  const response = await serverFetch(`/billing/invoices/payments/${paymentId}`, { method: "POST" });
+  if (response.status === 409) {
+    return {
+      ok: false,
+      error: "Add your organization's legal details in Settings before issuing an invoice.",
+    };
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return { ok: false, error: "We couldn't issue the invoice. Please try again." };
+  }
+  return { ok: true, invoice: (await response.json()) as InvoiceSummary };
 }

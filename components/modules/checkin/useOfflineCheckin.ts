@@ -144,6 +144,8 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
           ticketCode,
           checkedInAt: local.checkedInAt,
           checkedInBy: local.checkedInBy,
+          ticketTypeLabel: local.ticketTypeLabel,
+          ticketTypeColor: local.ticketTypeColor,
         };
       }
       const scannedAt = new Date().toISOString();
@@ -155,12 +157,16 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
       });
       patchLocal(ticketCode, "You (offline)", scannedAt);
       setPendingCount((count) => count + 1);
+      // Le roster porte la catégorie (JIKU-93) : sans réseau, c'est la seule
+      // source dont dispose l'appareil pour la montrer au portier.
       return {
         outcome: "CHECKED_IN",
         guestName: guestName ?? local?.name ?? null,
         ticketCode,
         checkedInAt: scannedAt,
         checkedInBy: "You (offline)",
+        ticketTypeLabel: local?.ticketTypeLabel ?? null,
+        ticketTypeColor: local?.ticketTypeColor ?? null,
       };
     },
     [token, localByCode, patchLocal],
@@ -231,6 +237,8 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
             ticketCode: null,
             checkedInAt: null,
             checkedInBy: null,
+            ticketTypeLabel: null,
+            ticketTypeColor: null,
           });
           return;
         }

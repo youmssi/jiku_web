@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { StateMessage } from "@/components/shared";
-import { reportError } from "@/lib/report-error";
+import { captureException } from "@/lib/error-tracking";
 
 /**
  * Route-segment error boundary. Catches render/runtime errors thrown anywhere in
@@ -17,7 +17,7 @@ export default function RouteError({
   reset: () => void;
 }) {
   useEffect(() => {
-    reportError(error, { source: "route-error-boundary", digest: error.digest });
+    captureException(error, { source: "route-error-boundary", digest: error.digest });
   }, [error]);
 
   return (

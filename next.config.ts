@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const securityHeaders = [
@@ -50,4 +51,16 @@ const nextConfig: NextConfig = {
 // locales, message catalogs under messages/, request config in i18n/request.ts.
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
-export default withNextIntl(nextConfig);
+// Error tracking (JIKU-70). The wrapper only adds build-time instrumentation and
+// source-map handling; nothing is reported at runtime unless a DSN is set. Source
+// maps are uploaded only when SENTRY_AUTH_TOKEN is present, so an ordinary build
+// — local, CI or preview — neither needs credentials nor contacts the provider.
+// `disableLogger` is deliberately absent: it is deprecated, and its replacement
+// (`webpack.treeshake.removeDebugLogging`) does not apply to this project, which
+// builds with Turbopack. The cost is that the SDK's debug logging is not tree
+// shaken out of the client bundle — worth revisiting only if that shows up in a
+// bundle measurement.
+export default withSentryConfig(withNextIntl(nextConfig), {
+  silent: !process.env.CI,
+  telemetry: false,
+});

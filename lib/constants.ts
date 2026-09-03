@@ -41,6 +41,21 @@ export function billingReceiptRoute(paymentId: string): string {
   return `/api/billing/payments/${paymentId}/receipt`;
 }
 
+/** Accounting-grade invoice PDF (JIKU-69), distinct from the plain-text receipt. */
+export function billingInvoiceDocumentRoute(invoiceId: string): string {
+  return `/api/billing/invoices/${invoiceId}/document`;
+}
+
+/** Feuille d'émargement PDF de l'événement (JIKU-95). */
+export function attendanceRegisterRoute(eventId: string): string {
+  return `/api/events/${eventId}/attendance/register`;
+}
+
+/** Attestation de présence nominative (JIKU-95). */
+export function attendanceCertificateRoute(eventId: string, guestId: string): string {
+  return `/api/events/${eventId}/attendance/certificate/${guestId}`;
+}
+
 export function eventGuestsExportRoute(id: string): string {
   return `/api/events/${id}/guests/export`;
 }
@@ -88,6 +103,7 @@ export const SEO_ROUTES = {
   VENUE_EVENT_CONAKRY: "/evenement-en-salle-conakry",
   SEMINAR_GUINEA: "/gestion-seminaire-guinee",
   CHECKIN_QR: "/check-in-qr-code",
+  APPOINTMENTS: "/prise-de-rendez-vous",
 } as const;
 
 export const ADMIN_ROUTES = {

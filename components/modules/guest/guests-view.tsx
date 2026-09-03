@@ -15,6 +15,7 @@ import { GuestImport } from "@/components/modules/guest/guest-import";
 import { GuestsTable, type GuestRow } from "@/components/modules/guest/guests-table";
 import { SendInvitations } from "@/components/modules/guest/send-invitations";
 import { EventSubNav } from "@/components/shared/event-sub-nav";
+import type { TicketTypeResponse } from "@/components/modules/event";
 import { serverFetch } from "@/lib/api-server";
 import type { Guest, Invitation } from "@/components/modules/guest/schema";
 import { INVITATION_CHANNELS, type InvitationChannel } from "@/lib/channels";
@@ -24,12 +25,14 @@ const CSV_TEMPLATE_HREF = "/templates/guest-import-template.csv";
 /** Guest-list management for one event: import, invitations and the roster table. */
 export async function GuestsView({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [guestsResponse, invitationsResponse, eventResponse] = await Promise.all([
+  const [guestsResponse, invitationsResponse, eventResponse, typesResponse] = await Promise.all([
     serverFetch(`/events/${id}/guests`),
     serverFetch(`/events/${id}/invitations`),
     serverFetch(`/events/${id}`),
+    serverFetch(`/events/${id}/ticket-types`),
   ]);
   const guests: Guest[] = guestsResponse.ok ? await guestsResponse.json() : [];
+  const ticketTypes: TicketTypeResponse[] = typesResponse.ok ? await typesResponse.json() : [];
   const invitations: Invitation[] = invitationsResponse.ok ? await invitationsResponse.json() : [];
   const enabledChannels: InvitationChannel[] = eventResponse.ok
     ? ((await eventResponse.json()) as { invitationChannels: InvitationChannel[] }).invitationChannels
@@ -44,6 +47,8 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
     name: `${guest.firstName} ${guest.lastName}`.trim(),
     contact: guest.email ?? guest.phoneNumber ?? "—",
     excludedFromInvitations: guest.excludedFromInvitations,
+    checkedInAt: guest.checkedInAt ?? null,
+    ticketTypeId: guest.ticketTypeId ?? null,
     statuses: Object.fromEntries(
       INVITATION_CHANNELS.map((channel) => [channel, statusFor(guest.id, channel)]),
     ),
@@ -116,7 +121,7 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
           <p className="mb-3 text-sm text-muted-foreground">
             {rows.length} guest{rows.length !== 1 ? "s" : ""}
           </p>
-          <GuestsTable eventId={id} rows={rows} />
+          <GuestsTable eventId={id} rows={rows} ticketTypes={ticketTypes} />
         </div>
       )}
     </div>
