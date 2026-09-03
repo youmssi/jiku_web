@@ -46,6 +46,16 @@ export function billingInvoiceDocumentRoute(invoiceId: string): string {
   return `/api/billing/invoices/${invoiceId}/document`;
 }
 
+/** Feuille d'émargement PDF de l'événement (JIKU-95). */
+export function attendanceRegisterRoute(eventId: string): string {
+  return `/api/events/${eventId}/attendance/register`;
+}
+
+/** Attestation de présence nominative (JIKU-95). */
+export function attendanceCertificateRoute(eventId: string, guestId: string): string {
+  return `/api/events/${eventId}/attendance/certificate/${guestId}`;
+}
+
 export function eventGuestsExportRoute(id: string): string {
   return `/api/events/${id}/guests/export`;
 }

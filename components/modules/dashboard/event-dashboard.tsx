@@ -7,6 +7,7 @@ import {
   ChannelBreakdownChart,
   GuestGrowthChart,
 } from "@/components/modules/dashboard/dashboard-charts";
+import { AttendanceDocuments } from "@/components/modules/dashboard/attendance-documents";
 import { QuorumCard } from "@/components/modules/dashboard/quorum-card";
 import type { AnalyticsData, DashboardData } from "@/components/modules/dashboard/schema";
 
@@ -168,6 +169,9 @@ export function EventDashboard({ eventId, initial, analytics }: EventDashboardPr
           </Card>
         ) : null}
       </section>
+
+      {/* Après l'événement : la preuve que le bailleur ou les statuts exigent. */}
+      <AttendanceDocuments eventId={eventId} checkedIn={data.checkedIn} />
 
       <p className="text-xs text-muted-foreground">
         {updatedAt ? "Updating live every few seconds." : "Live updates on."}
