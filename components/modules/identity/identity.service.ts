@@ -88,11 +88,19 @@ export async function loginAction(input: LoginInput, next?: string): Promise<Act
 
 /** Exchanges the Google Identity Services credential for a session (JIKU-51). */
 export async function googleLoginAction(idToken: string, next?: string): Promise<ActionResult> {
-  const response = await publicFetch("/auth/google", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ idToken }),
-  });
+  let response: Response;
+  try {
+    response = await publicFetch("/auth/google", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken }),
+    });
+  } catch {
+    // The backend aborts a slow request after 10s (e.g. a cold instance). A
+    // thrown fetch must become a visible message, not a silently-swallowed
+    // rejection that leaves the visitor on the login page with no feedback.
+    return fail("We couldn't reach the sign-in service. Please try again.");
+  }
   if (!response.ok) {
     if (response.status !== 401) {
       reportApiError(response);

@@ -129,7 +129,9 @@ const fr: LandingContent = {
     links: [
       { label: "Fonctionnalités", href: "#features" },
       { label: "Comment ça marche", href: "#how-it-works" },
+      { label: "Cas d'usage", href: "/use-cases" },
       { label: "Tarifs", href: "#pricing" },
+      { label: "Simulateur", href: "/simulator" },
       { label: "FAQ", href: "#faq" },
     ],
     signIn: "Se connecter",
@@ -140,11 +142,11 @@ const fr: LandingContent = {
   },
   hero: {
     badge: "Plateforme événementielle en marque blanche",
-    headlinePrefix: "Vos ",
-    headlineWords: ["invitations", "billets", "RSVP", "entrées"],
-    headlineSuffix: "enfin simples.",
+    headlinePrefix: "Fini ",
+    headlineWords: ["l'attente", "les files", "le désordre", "les resquilleurs"],
+    headlineSuffix: "à la porte.",
     subtitle:
-      "Envoyez vos invitations par e-mail et WhatsApp, suivez les confirmations, générez des billets QR infalsifiables et contrôlez les entrées, même quand le réseau tombe. Le tout à vos couleurs, sous votre nom.",
+      "Mariage, séminaire, gala ou assemblée générale : Jikū supprime l'attente et le désordre à la porte. Invitations par e-mail et WhatsApp, billets QR infalsifiables et check-in même hors-ligne, le tout à vos couleurs.",
     primaryCta: "Créer mon premier événement",
     secondaryCta: "Voir les fonctionnalités",
     ctaNote: "Gratuit jusqu'à 100 invités, sans carte bancaire",
@@ -383,8 +385,9 @@ const fr: LandingContent = {
         links: [
           { label: "Fonctionnalités", href: "#features" },
           { label: "Comment ça marche", href: "#how-it-works" },
+          { label: "Cas d'usage", href: "/use-cases" },
           { label: "Tarifs", href: "#pricing" },
-          { label: "Prise de rendez-vous", href: "/prise-de-rendez-vous" },
+          { label: "Simulateur", href: "/simulator" },
           { label: "FAQ", href: "#faq" },
         ],
       },
@@ -429,7 +432,9 @@ const en: LandingContent = {
     links: [
       { label: "Features", href: "#features" },
       { label: "How it works", href: "#how-it-works" },
+      { label: "Use cases", href: "/use-cases" },
       { label: "Pricing", href: "#pricing" },
+      { label: "Simulator", href: "/simulator" },
       { label: "FAQ", href: "#faq" },
     ],
     signIn: "Sign in",
@@ -440,11 +445,11 @@ const en: LandingContent = {
   },
   hero: {
     badge: "White-label event platform",
-    headlinePrefix: "Your ",
-    headlineWords: ["invitations", "tickets", "RSVPs", "check-ins"],
-    headlineSuffix: "finally simple.",
+    headlinePrefix: "No more ",
+    headlineWords: ["waiting", "queues", "disorder", "gatecrashers"],
+    headlineSuffix: "at the door.",
     subtitle:
-      "Send invitations by email and WhatsApp, track confirmations, issue tamper-proof QR tickets, and check guests in, even when the network drops. All under your own brand.",
+      "Wedding, seminar, gala or general assembly: Jikū removes the wait and the disorder at the door. Invitations by email and WhatsApp, tamper-proof QR tickets and check-in even offline, all under your own brand.",
     primaryCta: "Create my first event",
     secondaryCta: "See the features",
     ctaNote: "Free for up to 100 guests, no card required",
@@ -683,8 +688,9 @@ const en: LandingContent = {
         links: [
           { label: "Features", href: "#features" },
           { label: "How it works", href: "#how-it-works" },
+          { label: "Use cases", href: "/use-cases" },
           { label: "Pricing", href: "#pricing" },
-          { label: "Appointments", href: "/prise-de-rendez-vous" },
+          { label: "Simulator", href: "/simulator" },
           { label: "FAQ", href: "#faq" },
         ],
       },
