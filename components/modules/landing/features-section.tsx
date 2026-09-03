@@ -5,16 +5,46 @@ import {
   Wifi,
   Palette,
   BarChart3,
+  Layers,
+  ArrowLeftRight,
   type LucideIcon,
 } from "lucide-react";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import type { LandingContent } from "./content";
 
 // Icons and animated visuals are positional: they pair with the content items
-// in order (invitations, RSVP, tickets, offline, branding, dashboard).
-const FEATURE_ICONS: LucideIcon[] = [Mail, Users, QrCode, Wifi, Palette, BarChart3];
-type VisualKind = "mail" | "users" | "qr" | "wifi" | "palette" | "chart";
-const FEATURE_VISUALS: VisualKind[] = ["mail", "users", "qr", "wifi", "palette", "chart"];
+// in order (invitations, RSVP, tickets, categories, transfer, offline, branding,
+// dashboard). Both arrays must stay the same length as `content.features.items`
+// — a shorter one renders `undefined` as a component and breaks the page.
+const FEATURE_ICONS: LucideIcon[] = [
+  Mail,
+  Users,
+  QrCode,
+  Layers,
+  ArrowLeftRight,
+  Wifi,
+  Palette,
+  BarChart3,
+];
+type VisualKind =
+  | "mail"
+  | "users"
+  | "qr"
+  | "layers"
+  | "transfer"
+  | "wifi"
+  | "palette"
+  | "chart";
+const FEATURE_VISUALS: VisualKind[] = [
+  "mail",
+  "users",
+  "qr",
+  "layers",
+  "transfer",
+  "wifi",
+  "palette",
+  "chart",
+];
 
 // ─── Animated visuals per feature (SMIL — renders server-side) ────
 function MailVisual() {
@@ -158,8 +188,49 @@ function ChartVisual() {
   );
 }
 
+// Trois bandes de hauteurs différentes : des catégories qui se remplissent
+// chacune à son rythme, ce que le carré VIP et la salle font réellement.
+function LayersVisual() {
+  return (
+    <svg viewBox="0 0 100 80" className="h-full w-full">
+      <rect x="18" y="14" width="64" height="14" rx="4" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.25" />
+      <rect x="18" y="14" width="46" height="14" rx="4" fill="currentColor" opacity="0.55">
+        <animate attributeName="width" values="20;46;20" dur="3.2s" repeatCount="indefinite" />
+      </rect>
+      <rect x="18" y="33" width="64" height="14" rx="4" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.25" />
+      <rect x="18" y="33" width="30" height="14" rx="4" fill="currentColor" opacity="0.4">
+        <animate attributeName="width" values="12;30;12" dur="3.2s" begin="0.5s" repeatCount="indefinite" />
+      </rect>
+      <rect x="18" y="52" width="64" height="14" rx="4" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.25" />
+      <rect x="18" y="52" width="58" height="14" rx="4" fill="currentColor" opacity="0.3">
+        <animate attributeName="width" values="24;58;24" dur="3.2s" begin="1s" repeatCount="indefinite" />
+      </rect>
+    </svg>
+  );
+}
+
+// Un jeton qui passe d'une personne à l'autre : la place change de main, la
+// jauge de l'événement ne bouge pas.
+function TransferVisual() {
+  return (
+    <svg viewBox="0 0 100 80" className="h-full w-full">
+      <circle cx="22" cy="40" r="11" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
+      <circle cx="78" cy="40" r="11" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
+      <path d="M36 33 H64" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
+      <path d="M58 27 L64 33 L58 39" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.3" />
+      <path d="M64 47 H36" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.2" />
+      <path d="M42 41 L36 47 L42 53" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.2" />
+      <rect x="17" y="35" width="10" height="10" rx="2" fill="currentColor" opacity="0.7">
+        <animate attributeName="x" values="17;73;17" dur="3.4s" repeatCount="indefinite" />
+      </rect>
+    </svg>
+  );
+}
+
 function AnimatedVisual({ type }: { type: VisualKind }) {
   switch (type) {
+    case "layers": return <LayersVisual />;
+    case "transfer": return <TransferVisual />;
     case "mail": return <MailVisual />;
     case "users": return <UsersVisual />;
     case "qr": return <QRVisual />;

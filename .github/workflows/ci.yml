@@ -1,7 +1,14 @@
 name: Frontend CI
 
 on:
+  # Aucun filtre de branche cible : une PR empilée sur une autre branche de
+  # fonctionnalité doit être vérifiée comme les autres. Le filtre précédent
+  # ([develop, main]) laissait ces PR fusionner sans aucune exécution — constaté
+  # sur JIKU-72, qui a fusionné sans que la CI ne tourne une seule fois.
   pull_request:
+  # La fusion elle-même est vérifiée : c'est le commit qui part en production,
+  # et ce n'est pas celui qui a été testé sur la PR.
+  push:
     branches: [develop, main]
 
 concurrency:
