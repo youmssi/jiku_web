@@ -148,6 +148,45 @@ export function UseCasesPage({
           );
         })}
 
+        <section className="mx-auto mt-24 max-w-5xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-balance text-2xl font-bold tracking-tight sm:text-3xl">
+              {content.pricing.heading}
+            </h2>
+            <p className="mt-3 text-sm text-muted-foreground sm:text-base">
+              {content.pricing.intro}
+            </p>
+          </div>
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <div className="flex flex-col rounded-2xl border border-border/40 bg-card/50 p-7">
+              <h3 className="text-lg font-semibold">{content.pricing.events.title}</h3>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
+                {content.pricing.events.text}
+              </p>
+              <Button asChild variant="outline" className="mt-6 w-full rounded-full">
+                <Link href={SEO_ROUTES.SIMULATOR}>{content.pricing.events.cta}</Link>
+              </Button>
+            </div>
+            <div className="flex flex-col rounded-2xl border border-primary/20 bg-gradient-to-b from-primary/[0.05] to-transparent p-7">
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="text-lg font-semibold">{content.pricing.subscription.title}</h3>
+                <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                  {content.pricing.subscription.note}
+                </span>
+              </div>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
+                {content.pricing.subscription.text}
+              </p>
+              <Button asChild className="mt-6 w-full rounded-full">
+                <Link href={SEO_ROUTES.SIMULATOR}>{content.pricing.subscription.cta}</Link>
+              </Button>
+            </div>
+          </div>
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            {content.pricing.guarantee}
+          </p>
+        </section>
+
         <section className="mt-24 rounded-3xl border border-primary/15 bg-gradient-to-b from-primary/[0.06] to-transparent p-8 text-center sm:p-12">
           <h2 className="text-balance text-2xl font-bold tracking-tight sm:text-3xl">
             {content.cta.heading}

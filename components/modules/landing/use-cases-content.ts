@@ -30,6 +30,13 @@ export interface UseCasesPageContent {
     promise: string;
     cases: UseCaseEntry[];
   }[];
+  pricing: {
+    heading: string;
+    intro: string;
+    events: { title: string; text: string; cta: string };
+    subscription: { title: string; text: string; cta: string; note: string };
+    guarantee: string;
+  };
   cta: {
     heading: string;
     text: string;
@@ -145,6 +152,24 @@ const fr: UseCasesPageContent = {
       ],
     },
   ],
+  pricing: {
+    heading: "Combien ça coûte, selon votre besoin ?",
+    intro:
+      "Jikū ne vous fait jamais payer pour ce que vous n'utilisez pas. Deux modèles simples, et vous pouvez les combiner sans jamais être perdant.",
+    events: {
+      title: "Vous organisez des événements",
+      text: "Un prix unique par événement, selon le nombre d'invités. Gratuit jusqu'à 100 invités sur l'année. Aucun abonnement exigé.",
+      cta: "Estimer mon événement",
+    },
+    subscription: {
+      title: "Vous gérez des rendez-vous",
+      text: "Un abonnement par utilisateur et par mois : Solo gratuit, Teams, Organisation, Entreprise. Offre en préparation : personne ne sera prélevé avant l'ouverture.",
+      cta: "Découvrir l'abonnement",
+      note: "À venir",
+    },
+    guarantee:
+      "Votre acompte est toujours déduit du prix final. Vous n'êtes jamais facturé deux fois pour les mêmes invités ou rappels.",
+  },
   cta: {
     heading: "Votre événement mérite une porte sereine.",
     text: "Créez un compte gratuit, importez dix invités, envoyez-vous une invitation : en cinq minutes vous saurez si Jikū est fait pour vous.",
@@ -260,6 +285,24 @@ const en: UseCasesPageContent = {
       ],
     },
   ],
+  pricing: {
+    heading: "How much does it cost, for what you need?",
+    intro:
+      "Jikū never makes you pay for what you do not use. Two simple models, and you can combine them without ever being worse off.",
+    events: {
+      title: "You run events",
+      text: "One price per event, based on guest count. Free for up to 100 guests over the year. No subscription required.",
+      cta: "Estimate my event",
+    },
+    subscription: {
+      title: "You run appointments",
+      text: "A per-user monthly subscription: Solo free, Teams, Organisation, Enterprise. Offer in preparation: no one is charged before launch.",
+      cta: "Discover the subscription",
+      note: "Coming soon",
+    },
+    guarantee:
+      "Your deposit is always deducted from the final price. You are never billed twice for the same guests or reminders.",
+  },
   cta: {
     heading: "Your event deserves a calm door.",
     text: "Create a free account, import ten guests, send yourself an invitation: within five minutes you'll know whether Jikū is for you.",

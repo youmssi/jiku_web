@@ -82,3 +82,17 @@ export function quoteForGuests(guestCount: number): Quote {
     isCustom: true,
   };
 }
+
+/**
+ * Marketing display rate (GNF per US dollar), mirroring the backend's CUSTOM
+ * tier rate (billing.custom.usd-to-gnf-rate). Used ONLY to show an approximate
+ * USD figure next to a GNF amount so a visitor can grasp the total; never to
+ * charge.
+ */
+export const DISPLAY_GNF_PER_USD = PRICING.custom.usdToGnfRate;
+
+/** Approximate US-dollar value of a GNF minor-unit amount. */
+export function usdApprox(gnfMinor: number): number {
+  return gnfMinor / DISPLAY_GNF_PER_USD;
+}
+

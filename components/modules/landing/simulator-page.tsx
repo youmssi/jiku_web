@@ -71,7 +71,7 @@ export function SimulatorPage({
         </div>
 
         <div className="mt-12">
-          <SimulatorCalculator content={content} />
+          <SimulatorCalculator content={content} locale={locale} />
         </div>
       </main>
     </div>
