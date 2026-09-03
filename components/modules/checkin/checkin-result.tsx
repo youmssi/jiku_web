@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { readableTextColor } from "@/lib/color-contrast";
 import { formatTimeInZone } from "@/lib/datetime";
 import type { CheckInResponse } from "@/components/modules/checkin/schema";
 
@@ -20,6 +21,11 @@ interface Style {
  * Full-screen, glanceable check-in feedback. High-contrast color + a large glyph
  * convey success/failure at arm's length in bright outdoor or dim venue light; the
  * "already checked in" state names who checked the guest in and when (JIKU-22).
+ *
+ * La catégorie d'accès (JIKU-93) s'affiche en bandeau sous le nom, pas en fond :
+ * le fond reste la couleur du verdict, qui est ce que le portier doit lire en
+ * premier. Une catégorie qui prendrait le fond ferait perdre « laisser entrer ou
+ * non » au profit de « quelle catégorie », qui vient après.
  */
 export function CheckInResult({ result, timezone, onDismiss }: CheckInResultProps) {
   const style = STYLES[result.outcome];
@@ -36,6 +42,18 @@ export function CheckInResult({ result, timezone, onDismiss }: CheckInResultProp
       <h2 className="mt-6 text-3xl font-bold">{style.title}</h2>
       {result.guestName ? (
         <p className="mt-2 text-2xl font-medium">{result.guestName}</p>
+      ) : null}
+
+      {result.ticketTypeLabel ? (
+        <p
+          className="mt-4 rounded-lg px-6 py-2 text-3xl font-bold ring-2 ring-white/60"
+          style={{
+            backgroundColor: result.ticketTypeColor ?? "#334155",
+            color: readableTextColor(result.ticketTypeColor ?? "#334155"),
+          }}
+        >
+          {result.ticketTypeLabel}
+        </p>
       ) : null}
 
       {result.outcome === "ALREADY_CHECKED_IN" && result.checkedInBy ? (

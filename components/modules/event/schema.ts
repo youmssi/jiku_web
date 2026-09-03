@@ -71,3 +71,23 @@ export const emptyEventValues: EventFormValues = {
 /** Règle de quorum d'un événement (JIKU-94), absente si non configurée. */
 export type QuorumResponse = Schema<"QuorumResponse">;
 export type UpdateQuorumRequest = Schema<"UpdateQuorumRequest">;
+
+/** Catégorie d'accès d'un événement (JIKU-93). */
+export type TicketTypeResponse = Schema<"TicketTypeResponse">;
+export type UpsertTicketTypeRequest = Schema<"UpsertTicketTypeRequest">;
+
+/**
+ * Palette proposée pour les catégories. Choisie pour rester distinguable à
+ * distance et sous l'éclairage d'une salle : le portier reconnaît la couleur du
+ * bandeau avant de lire le libellé.
+ */
+export const TICKET_TYPE_COLORS = [
+  "#B45309",
+  "#1D4ED8",
+  "#047857",
+  "#BE123C",
+  "#6D28D9",
+  "#0F766E",
+  "#A16207",
+  "#334155",
+] as const;

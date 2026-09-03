@@ -100,6 +100,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/ticket-types/{typeId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["update_2"];
+        post?: never;
+        delete: operations["delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/branding": {
         parameters: {
             query?: never;
@@ -108,7 +124,7 @@ export interface paths {
             cookie?: never;
         };
         get: operations["get_2"];
-        put: operations["update_2"];
+        put: operations["update_3"];
         post?: never;
         delete?: never;
         options?: never;
@@ -372,6 +388,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/ticket-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["list_2"];
+        put?: never;
+        post: operations["create_3"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/payments": {
         parameters: {
             query?: never;
@@ -525,7 +557,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["create_3"];
+        post: operations["create_4"];
         delete?: never;
         options?: never;
         head?: never;
@@ -779,7 +811,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_2"];
+        get: operations["list_3"];
         put?: never;
         post: operations["grant"];
         delete?: never;
@@ -971,9 +1003,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_3"];
+        get: operations["list_4"];
         put?: never;
-        post: operations["create_4"];
+        post: operations["create_5"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1010,6 +1042,22 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/guests/{guestId}/ticket-type": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["setTicketType"];
         trace?: never;
     };
     "/api/v1/events/{eventId}/guests/{guestId}/exclusion": {
@@ -1131,7 +1179,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_4"];
+        get: operations["list_5"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1435,7 +1483,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_5"];
+        get: operations["list_6"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1531,7 +1579,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_6"];
+        get: operations["list_7"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1547,7 +1595,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_7"];
+        get: operations["list_8"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1563,7 +1611,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_8"];
+        get: operations["list_9"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1579,7 +1627,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_9"];
+        get: operations["list_10"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1595,7 +1643,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_10"];
+        get: operations["list_11"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1627,7 +1675,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_11"];
+        get: operations["list_12"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1825,6 +1873,26 @@ export interface components {
             /** Format: int32 */
             absolute?: number | null;
         };
+        UpsertTicketTypeRequest: {
+            label: string;
+            /** Format: int32 */
+            maxCapacity?: number | null;
+            colorHex?: string;
+            /** Format: int32 */
+            position?: number;
+        };
+        TicketTypeResponse: {
+            /** Format: uuid */
+            id?: string;
+            label?: string;
+            colorHex?: string;
+            /** Format: int32 */
+            maxCapacity?: number | null;
+            /** Format: int32 */
+            confirmedCount?: number;
+            /** Format: int32 */
+            position?: number;
+        };
         UpdateBrandingRequest: {
             displayName?: string | null;
             logoUrl?: string | null;
@@ -2015,6 +2083,8 @@ export interface components {
             /** Format: date-time */
             checkedInAt?: string | null;
             checkedInBy?: string | null;
+            ticketTypeLabel?: string | null;
+            ticketTypeColor?: string | null;
         };
         ManualCheckInRequest: {
             /** Format: uuid */
@@ -2359,8 +2429,9 @@ export interface components {
         InterruptAgreementRequest: {
             reason: string;
         };
-        SetGuestExclusionRequest: {
-            excluded?: boolean;
+        SetGuestTicketTypeRequest: {
+            /** Format: uuid */
+            ticketTypeId?: string | null;
         };
         GuestResponse: {
             /** Format: uuid */
@@ -2372,6 +2443,11 @@ export interface components {
             excludedFromInvitations?: boolean;
             /** Format: date-time */
             checkedInAt?: string | null;
+            /** Format: uuid */
+            ticketTypeId?: string | null;
+        };
+        SetGuestExclusionRequest: {
+            excluded?: boolean;
         };
         BillingAllowance: {
             /** Format: int64 */
@@ -2471,6 +2547,8 @@ export interface components {
             /** Format: date-time */
             checkedInAt?: string | null;
             checkedInBy?: string | null;
+            ticketTypeLabel?: string | null;
+            ticketTypeColor?: string | null;
         };
         AnalyticsResponse: {
             checkInTimeline?: components["schemas"]["TimeBucket"][];
@@ -2524,6 +2602,8 @@ export interface components {
             /** Format: date-time */
             checkedInAt?: string | null;
             checkedInBy?: string | null;
+            ticketTypeLabel?: string | null;
+            ticketTypeColor?: string | null;
         };
         BookingStatusView: {
             /** Format: uuid */
@@ -2915,6 +2995,54 @@ export interface operations {
             };
         };
     };
+    update_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                typeId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertTicketTypeRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TicketTypeResponse"];
+                };
+            };
+        };
+    };
+    delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                typeId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     get_2: {
         parameters: {
             query?: never;
@@ -2935,7 +3063,7 @@ export interface operations {
             };
         };
     };
-    update_2: {
+    update_3: {
         parameters: {
             query?: never;
             header?: never;
@@ -3404,6 +3532,54 @@ export interface operations {
             };
         };
     };
+    list_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TicketTypeResponse"][];
+                };
+            };
+        };
+    };
+    create_3: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertTicketTypeRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TicketTypeResponse"];
+                };
+            };
+        };
+    };
     initiate: {
         parameters: {
             query?: never;
@@ -3662,7 +3838,7 @@ export interface operations {
             };
         };
     };
-    create_3: {
+    create_4: {
         parameters: {
             query?: never;
             header?: never;
@@ -4054,7 +4230,7 @@ export interface operations {
             };
         };
     };
-    list_2: {
+    list_3: {
         parameters: {
             query?: {
                 status?: string;
@@ -4373,7 +4549,7 @@ export interface operations {
             };
         };
     };
-    list_3: {
+    list_4: {
         parameters: {
             query?: {
                 status?: string;
@@ -4399,7 +4575,7 @@ export interface operations {
             };
         };
     };
-    create_4: {
+    create_5: {
         parameters: {
             query?: never;
             header?: never;
@@ -4471,6 +4647,33 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["AgreementView"];
+                };
+            };
+        };
+    };
+    setTicketType: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                guestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetGuestTicketTypeRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GuestResponse"];
                 };
             };
         };
@@ -4630,7 +4833,7 @@ export interface operations {
             };
         };
     };
-    list_4: {
+    list_5: {
         parameters: {
             query?: never;
             header?: never;
@@ -5051,7 +5254,7 @@ export interface operations {
             };
         };
     };
-    list_5: {
+    list_6: {
         parameters: {
             query?: never;
             header?: never;
@@ -5177,7 +5380,7 @@ export interface operations {
             };
         };
     };
-    list_6: {
+    list_7: {
         parameters: {
             query?: {
                 query?: string;
@@ -5201,7 +5404,7 @@ export interface operations {
             };
         };
     };
-    list_7: {
+    list_8: {
         parameters: {
             query?: {
                 status?: string;
@@ -5223,7 +5426,7 @@ export interface operations {
             };
         };
     };
-    list_8: {
+    list_9: {
         parameters: {
             query?: {
                 status?: string;
@@ -5249,7 +5452,7 @@ export interface operations {
             };
         };
     };
-    list_9: {
+    list_10: {
         parameters: {
             query?: {
                 status?: string;
@@ -5273,7 +5476,7 @@ export interface operations {
             };
         };
     };
-    list_10: {
+    list_11: {
         parameters: {
             query?: {
                 status?: string;
@@ -5317,7 +5520,7 @@ export interface operations {
             };
         };
     };
-    list_11: {
+    list_12: {
         parameters: {
             query?: {
                 action?: string;

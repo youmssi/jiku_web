@@ -2,9 +2,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { EventWizard } from "@/components/modules/event/event-wizard";
 import { QuorumSettings } from "@/components/modules/event/quorum-settings";
+import { TicketTypesSettings } from "@/components/modules/event/ticket-types-settings";
 import { EventSubNav } from "@/components/shared/event-sub-nav";
 import { StateMessage } from "@/components/shared/state-message";
-import type { EventFormValues, EventResponse } from "@/components/modules/event/schema";
+import type {
+  EventFormValues,
+  EventResponse,
+  TicketTypeResponse,
+} from "@/components/modules/event/schema";
 import { serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 import { utcToLocalInput } from "@/lib/datetime";
@@ -41,6 +46,14 @@ export async function EditEventView({ params }: { params: Promise<{ id: string }
   }
   const event = (await response.json()) as EventResponse;
 
+  // Les catégories vivent sur leur propre ressource : elles se créent et se
+  // suppriment indépendamment de l'événement, et l'échec de leur chargement ne
+  // doit pas empêcher de modifier l'événement lui-même.
+  const typesResponse = await serverFetch(`/events/${id}/ticket-types`);
+  const ticketTypes: TicketTypeResponse[] = typesResponse.ok
+    ? ((await typesResponse.json()) as TicketTypeResponse[])
+    : [];
+
   const values: EventFormValues = {
     name: event.name,
     description: event.description ?? "",
@@ -62,6 +75,7 @@ export async function EditEventView({ params }: { params: Promise<{ id: string }
       <EventWizard eventId={event.id} initialValues={values} status={event.status} />
       {/* Bloc distinct : un quorum est une règle statutaire saisie une fois,
           pas un réglage qu'on ajuste en modifiant le lieu ou l'horaire. */}
+      <TicketTypesSettings eventId={event.id} initial={ticketTypes} />
       <QuorumSettings eventId={event.id} initial={event.quorum ?? null} />
     </div>
   );

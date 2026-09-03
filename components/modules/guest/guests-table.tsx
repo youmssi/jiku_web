@@ -23,10 +23,18 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { TicketTypeResponse } from "@/components/modules/event";
+import { readableTextColor } from "@/lib/color-contrast";
 import { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS } from "@/lib/channels";
-import { removeGuestAction, setGuestExclusionAction } from "@/components/modules/guest/guest.service";
+import {
+  removeGuestAction,
+  setGuestExclusionAction,
+  setGuestTicketTypeAction,
+} from "@/components/modules/guest/guest.service";
 
 export interface GuestRow {
   id: string;
@@ -36,6 +44,8 @@ export interface GuestRow {
   /** Heure d'entrée, si la personne est venue — décide de l'attestation (JIKU-95). */
   checkedInAt: string | null;
   statuses: Record<string, string | null>;
+  /** Catégorie d'accès (JIKU-93), absente si l'événement n'en définit pas. */
+  ticketTypeId: string | null;
 }
 
 function initials(name: string): string {
@@ -58,9 +68,43 @@ function StatusBadge({ status }: { status: string | null }) {
   return <Badge variant={variant}>{status}</Badge>;
 }
 
-function GuestRowActions({ eventId, guest }: { eventId: string; guest: GuestRow }) {
+/** Pastille de catégorie d'accès (JIKU-93), lisible sur n'importe quelle couleur. */
+function TicketTypeBadge({ type }: { type: TicketTypeResponse }) {
+  return (
+    <span
+      className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
+      style={{ backgroundColor: type.colorHex, color: readableTextColor(type.colorHex) }}
+    >
+      {type.label}
+    </span>
+  );
+}
+
+function GuestRowActions({
+  eventId,
+  guest,
+  ticketTypes,
+}: {
+  eventId: string;
+  guest: GuestRow;
+  ticketTypes: TicketTypeResponse[];
+}) {
   const [isPending, startTransition] = useTransition();
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  function onSetTicketType(ticketTypeId: string | null) {
+    startTransition(async () => {
+      const result = await setGuestTicketTypeAction(eventId, guest.id, ticketTypeId);
+      if (!result.ok) {
+        toast.error(result.error);
+        return;
+      }
+      const label = ticketTypes.find((type) => type.id === ticketTypeId)?.label;
+      toast.success(
+        label ? `${guest.name} : catégorie ${label}.` : `${guest.name} n'a plus de catégorie.`,
+      );
+    });
+  }
 
   function onToggleExclusion() {
     startTransition(async () => {
@@ -99,6 +143,32 @@ function GuestRowActions({ eventId, guest }: { eventId: string; guest: GuestRow 
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          {ticketTypes.length > 0 ? (
+            <>
+              <DropdownMenuLabel>Catégorie d&apos;accès</DropdownMenuLabel>
+              {ticketTypes.map((type) => (
+                <DropdownMenuItem
+                  key={type.id}
+                  disabled={type.id === guest.ticketTypeId}
+                  onClick={() => onSetTicketType(type.id)}
+                >
+                  <span
+                    aria-hidden
+                    className="size-3 shrink-0 rounded-full"
+                    style={{ backgroundColor: type.colorHex }}
+                  />
+                  {type.label}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuItem
+                disabled={guest.ticketTypeId === null}
+                onClick={() => onSetTicketType(null)}
+              >
+                Aucune catégorie
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          ) : null}
           {guest.checkedInAt ? (
             // Une attestation ne s'émet que pour quelqu'un qui est venu : la
             // proposer autrement mènerait à un refus que rien n'annonçait.
@@ -144,7 +214,10 @@ function GuestRowActions({ eventId, guest }: { eventId: string; guest: GuestRow 
   );
 }
 
-function createColumns(eventId: string): ColumnDef<GuestRow>[] {
+function createColumns(
+  eventId: string,
+  ticketTypes: TicketTypeResponse[],
+): ColumnDef<GuestRow>[] {
   return [
     {
       accessorKey: "name",
@@ -179,6 +252,25 @@ function createColumns(eventId: string): ColumnDef<GuestRow>[] {
         <span className="text-muted-foreground">{row.original.contact}</span>
       ),
     },
+    // La colonne n'apparaît que si l'événement définit des catégories : la
+    // plupart n'en ont pas, et une colonne de tirets n'aide personne.
+    ...(ticketTypes.length > 0
+      ? [
+          {
+            id: "ticketType",
+            header: "Catégorie",
+            enableSorting: false,
+            cell: ({ row }) => {
+              const type = ticketTypes.find((it) => it.id === row.original.ticketTypeId);
+              return type ? (
+                <TicketTypeBadge type={type} />
+              ) : (
+                <span className="text-muted-foreground">—</span>
+              );
+            },
+          } satisfies ColumnDef<GuestRow>,
+        ]
+      : []),
     ...INVITATION_CHANNELS.map<ColumnDef<GuestRow>>((channel) => ({
       id: `channel-${channel}`,
       header: INVITATION_CHANNEL_LABELS[channel],
@@ -191,17 +283,25 @@ function createColumns(eventId: string): ColumnDef<GuestRow>[] {
       enableSorting: false,
       cell: ({ row }) => (
         <div className="flex justify-end">
-          <GuestRowActions eventId={eventId} guest={row.original} />
+          <GuestRowActions eventId={eventId} guest={row.original} ticketTypes={ticketTypes} />
         </div>
       ),
     },
   ];
 }
 
-export function GuestsTable({ eventId, rows }: { eventId: string; rows: GuestRow[] }) {
+export function GuestsTable({
+  eventId,
+  rows,
+  ticketTypes = [],
+}: {
+  eventId: string;
+  rows: GuestRow[];
+  ticketTypes?: TicketTypeResponse[];
+}) {
   return (
     <DataTable
-      columns={createColumns(eventId)}
+      columns={createColumns(eventId, ticketTypes)}
       data={rows}
       searchColumn="name"
       searchPlaceholder="Search guests by name…"
