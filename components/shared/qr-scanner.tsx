@@ -12,10 +12,10 @@ interface QrScannerProps {
 const DECODE_INTERVAL_MS = 180;
 
 /**
- * Camera-based QR scanner. Streams the rear camera via `getUserMedia` and decodes
- * frames with `jsQR` (dynamically imported, so it stays out of the initial bundle).
- * This is the single most network-sensitive screen in the product, so decoding is
- * fully client-side — no per-frame round trips.
+ * Camera-based QR scanner, shared by the check-in console and the day-line
+ * console. Streams the rear camera via `getUserMedia` and decodes frames with
+ * `jsQR` (dynamically imported, so it stays out of the initial bundle). Decoding
+ * is fully client-side — no per-frame round trips.
  */
 export function QrScanner({ onDetect, active }: QrScannerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
