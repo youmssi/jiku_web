@@ -1,4 +1,4 @@
-import { CalendarDays, CreditCard, LayoutDashboard, Settings, Users } from "lucide-react";
+import { CalendarDays, ClipboardList, CreditCard, LayoutDashboard, Settings, Users } from "lucide-react";
 import {
   billingRoute,
   eventDashboardRoute,
@@ -31,6 +31,12 @@ export const ORGANIZER_NAV_ITEMS: OrganizerNavItem[] = [
     href: ROUTES.EVENTS,
     icon: CalendarDays,
     match: (pathname) => pathname === ROUTES.EVENTS || pathname.startsWith(`${ROUTES.EVENTS}/`),
+  },
+  {
+    label: "Services",
+    href: ROUTES.SERVICES,
+    icon: ClipboardList,
+    match: (pathname) => pathname === ROUTES.SERVICES || pathname.startsWith(`${ROUTES.SERVICES}/`),
   },
   {
     label: "Billing",

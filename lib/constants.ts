@@ -17,9 +17,14 @@ export const ROUTES = {
   DASHBOARD: "/dashboard",
   EVENTS: "/events",
   EVENTS_NEW: "/events/new",
+  SERVICES: "/services",
   BILLING: "/billing",
   SETTINGS: "/settings",
 } as const;
+
+export function serviceLineRoute(id: string): string {
+  return `/services/${id}/ligne`;
+}
 
 export function eventEditRoute(id: string): string {
   return `/events/${id}/edit`;

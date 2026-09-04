@@ -11,7 +11,7 @@ import type { ValidatorContext } from "@/components/modules/checkin/schema";
 // Loaded on demand so the camera + QR decoder stay out of the initial payload.
 const QrScanner = dynamic(
   () =>
-    import("@/components/modules/checkin/qr-scanner").then(
+    import("@/components/shared/qr-scanner").then(
       (mod) => mod.QrScanner,
     ),
   {
