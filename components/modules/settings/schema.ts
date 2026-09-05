@@ -69,3 +69,63 @@ export interface TestSendResponse {
 
 export type LegalIdentityResponse = Schema<"LegalIdentityResponse">;
 export type UpdateLegalIdentityRequest = Schema<"UpdateLegalIdentityRequest">;
+
+// ─── Personnalisation (JIKU-91) ──────────────────────────────────────────────
+// Tenant-overridable product terms and client-facing email/WhatsApp templates,
+// each falling back to the platform default.
+
+export interface VocabularyEntry {
+  key: string;
+  label: string;
+  defaultValue: string;
+  value: string;
+  overridden: boolean;
+}
+
+export interface VocabularyUpdateRequest {
+  key: string;
+  value: string | null;
+}
+
+export interface TemplateSummary {
+  name: string;
+  label: string;
+  channels: string[];
+}
+
+export interface TemplateVariable {
+  name: string;
+  label: string;
+  sample: string;
+  required: boolean;
+}
+
+export interface TemplateChannelView {
+  channel: string;
+  defaultBody: string;
+  body: string;
+  isOverride: boolean;
+  active: boolean;
+}
+
+export interface TemplateDetail {
+  name: string;
+  label: string;
+  channels: TemplateChannelView[];
+  variables: TemplateVariable[];
+}
+
+export interface TemplateUpdateRequest {
+  channel: string;
+  body: string;
+  active?: boolean;
+}
+
+export interface TemplatePreviewRequest {
+  channel: string;
+  body?: string;
+}
+
+export interface TemplatePreviewResponse {
+  body: string;
+}
