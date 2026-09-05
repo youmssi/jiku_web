@@ -5,7 +5,12 @@ import { revalidatePath } from "next/cache";
 import { adminFetch, publicFetch } from "@/lib/api-server";
 import { clearAdminAuthCookie, setAdminAuthCookie } from "@/lib/auth";
 import { ADMIN_ROUTES } from "@/lib/constants";
-import type { TenantDirectoryEntry, TenantDirectoryPage } from "@/components/modules/admin/schema";
+import type {
+  TenantDirectoryEntry,
+  TenantDirectoryPage,
+  RefundBookingRequest,
+  AdminBookingRefund,
+} from "@/components/modules/admin/schema";
 
 export interface ActionResult {
   error?: string;
@@ -138,6 +143,21 @@ export async function interruptAgreementAction(
 
 export async function cancelBookingAction(bookingId: string): Promise<ActionResult> {
   return adminMutation(`/admin/bookings/${bookingId}/cancel`, {});
+}
+
+export async function refundBookingAction(
+  bookingId: string,
+  request: RefundBookingRequest,
+): Promise<{ ok: true; refund: AdminBookingRefund } | { ok: false; error?: string }> {
+  const response = await adminFetch(`/admin/bookings/${bookingId}/refund`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
+  });
+  if (!response.ok) {
+    return { ok: false, error: "Le remboursement n'a pas pu être enregistré." };
+  }
+  return { ok: true, refund: (await response.json()) as AdminBookingRefund };
 }
 
 export async function verifyBookingPaymentAction(declarationId: string): Promise<ActionResult> {
