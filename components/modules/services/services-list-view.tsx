@@ -2,13 +2,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { serverFetch } from "@/lib/api-server";
-import { serviceLineRoute } from "@/lib/constants";
+import { serviceConfigurationRoute, serviceLineRoute } from "@/lib/constants";
 import type { ServiceSummary } from "@/components/modules/services/schema";
 
 /**
- * Services de l'organisateur : chaque service ouvre sa ligne du jour, l'écran du
- * comptoir (JIKU-88). Liste en lecture seule — la gestion du service appartient à
- * un écran dédié.
+ * Services de l'organisateur : chaque service ouvre sa ligne du jour (JIKU-88) et
+ * sa configuration (JIKU-89). Liste en lecture seule.
  */
 export async function ServicesListView() {
   const response = await serverFetch("/services");
@@ -31,9 +30,14 @@ export async function ServicesListView() {
                   <CardTitle className="text-base">{service.name}</CardTitle>
                   <p className="text-sm text-muted-foreground">{service.timezone}</p>
                 </div>
-                <Button asChild>
-                  <Link href={serviceLineRoute(service.id)}>Ligne du jour</Link>
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button asChild variant="outline">
+                    <Link href={serviceConfigurationRoute(service.id)}>Configuration</Link>
+                  </Button>
+                  <Button asChild>
+                    <Link href={serviceLineRoute(service.id)}>Ligne du jour</Link>
+                  </Button>
+                </div>
               </CardHeader>
             </Card>
           ))}
