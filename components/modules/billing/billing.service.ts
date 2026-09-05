@@ -2,7 +2,13 @@
 
 import { serverFetch } from "@/lib/api-server";
 import { reportApiError } from "@/lib/action-result";
-import type { InvoiceSummary, ManualPaymentInstructions, PaymentInitiation } from "./schema";
+import type {
+  InvoiceSummary,
+  ManualPaymentInstructions,
+  PaymentInitiation,
+  SubscriptionRequestInput,
+  SubscriptionView,
+} from "./schema";
 
 export async function purchaseTierAction(
   eventId: string,
@@ -40,6 +46,36 @@ export async function requestActivationAction(
   }
   const instructions = (await response.json()) as ManualPaymentInstructions;
   return { instructions };
+}
+
+// ─── Subscription (JIKU-90) ──────────────────────────────────────────────────
+
+/**
+ * The tenant's subscription, or null when the tenant has none yet (e.g. no
+ * active resource has ever opened one). A 404 simply means "nothing to show".
+ */
+export async function fetchSubscriptionAction(): Promise<SubscriptionView | null> {
+  const response = await serverFetch("/billing/subscription");
+  if (!response.ok) return null;
+  return (await response.json()) as SubscriptionView;
+}
+
+export async function requestSubscriptionAction(
+  input: SubscriptionRequestInput,
+): Promise<{ ok: true; instructions: ManualPaymentInstructions } | { ok: false; error: string }> {
+  const response = await serverFetch("/billing/subscription/request", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (response.status === 400) {
+    return { ok: false, error: "That subscription isn't available. Please pick another." };
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return { ok: false, error: "We couldn't record your request. Please try again." };
+  }
+  return { ok: true, instructions: (await response.json()) as ManualPaymentInstructions };
 }
 
 // ─── Invoices (JIKU-69) ─────────────────────────────────────────────────────
