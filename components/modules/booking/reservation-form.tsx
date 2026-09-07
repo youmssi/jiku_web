@@ -20,7 +20,13 @@ import type { BookingQuote } from "@/components/modules/booking/schema";
 const MIN_DATE = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 const QUOTE_DEBOUNCE_MS = 400;
 
-export function ReservationForm({ acquisitionSource }: { acquisitionSource: string | null }) {
+export function ReservationForm({
+  acquisitionSource,
+  initialGuestCount,
+}: {
+  acquisitionSource: string | null;
+  initialGuestCount?: number;
+}) {
   const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
   const [quote, setQuote] = useState<BookingQuote | null>(null);
@@ -38,7 +44,7 @@ export function ReservationForm({ acquisitionSource }: { acquisitionSource: stri
       customerEmail: "",
       eventType: "MARIAGE",
       eventDate: "",
-      guestCountEstimate: undefined,
+      guestCountEstimate: initialGuestCount,
     },
   });
 

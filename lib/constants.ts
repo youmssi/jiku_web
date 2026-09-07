@@ -17,9 +17,22 @@ export const ROUTES = {
   DASHBOARD: "/dashboard",
   EVENTS: "/events",
   EVENTS_NEW: "/events/new",
+  SERVICES: "/services",
   BILLING: "/billing",
   SETTINGS: "/settings",
 } as const;
+
+export function serviceLineRoute(id: string): string {
+  return `/services/${id}/ligne`;
+}
+
+
+export function serviceManageRoute(id: string): string {
+  return `/services/${id}/gerer`;
+}
+export function serviceConfigurationRoute(id: string): string {
+  return `/services/${id}/configuration`;
+}
 
 export function eventEditRoute(id: string): string {
   return `/events/${id}/edit`;
@@ -95,15 +108,12 @@ export const COOKIES = {
   ADMIN_ACCESS_TOKEN: "jiku_admin_access_token",
 } as const;
 
+// Public marketing pages, deliberately generic: no location-targeted slugs, so
+// the site stays valid as the product expands beyond a single market.
 export const SEO_ROUTES = {
-  TARIFS: "/tarifs",
+  USE_CASES: "/use-cases",
+  SIMULATOR: "/simulator",
   FAQ: "/faq",
-  WEDDING_CONAKRY: "/invitations-mariage-conakry",
-  BAPTISM_GUINEA: "/invitations-bapteme-guinee",
-  VENUE_EVENT_CONAKRY: "/evenement-en-salle-conakry",
-  SEMINAR_GUINEA: "/gestion-seminaire-guinee",
-  CHECKIN_QR: "/check-in-qr-code",
-  APPOINTMENTS: "/prise-de-rendez-vous",
 } as const;
 
 export const ADMIN_ROUTES = {

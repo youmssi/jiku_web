@@ -45,6 +45,24 @@ const nextConfig: NextConfig = {
       noindexRoute("/reserver/:id/statut"),
     ];
   },
+  // The generic-positioning decision (JIKU-101) removed the one-off landing
+  // pages. These permanent redirects preserve any indexed URLs or shared links
+  // pointing at them, sending visitors to the closest live equivalent.
+  async redirects() {
+    const move = (from: string, to: string) => [
+      { source: from, destination: to, permanent: true },
+      { source: `/en${from}`, destination: `/en${to}`, permanent: true },
+    ];
+    return [
+      ...move("/invitations-mariage-conakry", "/use-cases"),
+      ...move("/invitations-bapteme-guinee", "/use-cases"),
+      ...move("/evenement-en-salle-conakry", "/use-cases"),
+      ...move("/gestion-seminaire-guinee", "/use-cases"),
+      ...move("/check-in-qr-code", "/#features"),
+      ...move("/tarifs", "/simulator"),
+      ...move("/prise-de-rendez-vous", "/reserver"),
+    ];
+  },
 };
 
 // i18n foundation (mirrors Tûm): locale segment in the URL for non-default

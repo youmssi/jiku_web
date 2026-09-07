@@ -14,13 +14,23 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import { formatLocalDateTime } from "@/lib/datetime";
-import { cancelBookingAction } from "./admin.service";
+import { cancelBookingAction, refundBookingAction } from "./admin.service";
 import { AdminTable, EmptyRow, formatAmount, StatusBadge } from "./admin-ui";
 import type { AdminBooking } from "./schema";
 
-const STATUS_FILTERS = ["AWAITING_DEPOSIT", "DEPOSIT_PAID", "AWAITING_BALANCE", "FULLY_PAID", "CANCELLED"] as const;
+const STATUS_FILTERS = [
+  "AWAITING_DEPOSIT",
+  "DEPOSIT_PAID",
+  "AWAITING_BALANCE",
+  "FULLY_PAID",
+  "CANCELLED",
+  "REFUNDED",
+] as const;
 
 export function BookingsView({ bookings }: { bookings: AdminBooking[] }) {
   const router = useRouter();
@@ -62,7 +72,11 @@ export function BookingsView({ bookings }: { bookings: AdminBooking[] }) {
 }
 
 function BookingRow({ booking }: { booking: AdminBooking }) {
+  const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [refundOpen, setRefundOpen] = useState(false);
+  const [amount, setAmount] = useState(String(booking.depositAmountMinor));
+  const [reason, setReason] = useState("");
   const [isPending, startTransition] = useTransition();
 
   function onCancel() {
@@ -74,6 +88,31 @@ function BookingRow({ booking }: { booking: AdminBooking }) {
         return;
       }
       toast.success("Réservation annulée.");
+      router.refresh();
+    });
+  }
+
+  function onRefund() {
+    const amountMinor = Number.parseInt(amount, 10);
+    if (Number.isNaN(amountMinor) || amountMinor <= 0) {
+      toast.error("Indiquez un montant positif.");
+      return;
+    }
+    if (!reason.trim()) {
+      toast.error("Un motif de remboursement est obligatoire.");
+      return;
+    }
+    startTransition(async () => {
+      const result = await refundBookingAction(booking.id, { amountMinor, reason: reason.trim() });
+      setRefundOpen(false);
+      if (!result.ok) {
+        toast.error(result.error ?? "Le remboursement n'a pas pu être enregistré.");
+        return;
+      }
+      toast.success(
+        `Remboursement de ${formatAmount(result.refund.amountMinor, result.refund.currency)} enregistré — avoir ${result.refund.creditNoteNumber ?? "—"}`,
+      );
+      router.refresh();
     });
   }
 
@@ -118,6 +157,54 @@ function BookingRow({ booking }: { booking: AdminBooking }) {
                   <AlertDialogCancel disabled={isPending}>Retour</AlertDialogCancel>
                   <AlertDialogAction onClick={onCancel} disabled={isPending}>
                     {isPending ? "Annulation…" : "Confirmer l'annulation"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </>
+        ) : booking.status === "CANCELLED" ? (
+          <>
+            <Button size="sm" variant="outline" onClick={() => setRefundOpen(true)} disabled={isPending}>
+              Rembourser
+            </Button>
+            <AlertDialog open={refundOpen} onOpenChange={setRefundOpen}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Enregistrer le remboursement de {booking.customerName}</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Le virement Mobile Money est manuel : renseignez ici le montant réellement restitué et son
+                    motif. Un avoir (credit note) est émis et le client est notifié.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-1">
+                    <Label htmlFor={`refund-amount-${booking.id}`}>Montant (minor)</Label>
+                    <Input
+                      id={`refund-amount-${booking.id}`}
+                      type="number"
+                      min={1}
+                      value={amount}
+                      onChange={(event) => setAmount(event.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Acompte : {formatAmount(booking.depositAmountMinor, booking.currency)} — défaut conseillé
+                      selon la politique d&apos;annulation.
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <Label htmlFor={`refund-reason-${booking.id}`}>Motif (obligatoire)</Label>
+                    <Textarea
+                      id={`refund-reason-${booking.id}`}
+                      rows={2}
+                      value={reason}
+                      onChange={(event) => setReason(event.target.value)}
+                    />
+                  </div>
+                </div>
+                <AlertDialogFooter>
+                  <AlertDialogCancel disabled={isPending}>Retour</AlertDialogCancel>
+                  <AlertDialogAction onClick={onRefund} disabled={isPending}>
+                    {isPending ? "Enregistrement…" : "Confirmer le remboursement"}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>

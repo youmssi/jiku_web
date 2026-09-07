@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { TrackedAnchor, TrackedLink, ViewTracker } from "@/components/shared";
 import { ROUTES } from "@/lib/constants";
+import { usdApprox } from "@/lib/pricing";
 import { salesMailto } from "@/lib/support";
 import type { LandingContent } from "./content";
 
@@ -24,6 +25,14 @@ function TierCard({
   tier: LandingContent["pricing"]["tiers"][number];
   highlightLabel: string;
 }) {
+  // The displayed price string ("150 000 GNF") carries the amount; derive the
+  // minor figure from it to show a small approximate USD figure.
+  const priceMinor = Number(tier.price.replace(/[^0-9]/g, "")) || 0;
+  const usdFigure =
+    priceMinor > 0
+      ? `≈ US$${usdApprox(priceMinor).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+      : null;
+
   return (
     <div
       className={`relative flex flex-col rounded-2xl border p-7 transition-all duration-300 ${
@@ -66,6 +75,9 @@ function TierCard({
           {tier.price}
         </div>
         <div className="mt-1 text-sm text-muted-foreground">{tier.priceCaption}</div>
+        {usdFigure ? (
+          <div className="mt-1 text-xs text-muted-foreground">{usdFigure}</div>
+        ) : null}
       </div>
 
       <div className="relative mt-auto">

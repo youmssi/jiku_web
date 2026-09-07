@@ -129,7 +129,9 @@ const fr: LandingContent = {
     links: [
       { label: "Fonctionnalités", href: "#features" },
       { label: "Comment ça marche", href: "#how-it-works" },
+      { label: "Cas d'usage", href: "/use-cases" },
       { label: "Tarifs", href: "#pricing" },
+      { label: "Simulateur", href: "/simulator" },
       { label: "FAQ", href: "#faq" },
     ],
     signIn: "Se connecter",
@@ -140,11 +142,11 @@ const fr: LandingContent = {
   },
   hero: {
     badge: "Plateforme événementielle en marque blanche",
-    headlinePrefix: "Vos ",
-    headlineWords: ["invitations", "billets", "RSVP", "entrées"],
-    headlineSuffix: "enfin simples.",
+    headlinePrefix: "Fini ",
+    headlineWords: ["l'attente", "les files", "le désordre", "les resquilleurs"],
+    headlineSuffix: "à la porte.",
     subtitle:
-      "Envoyez vos invitations par e-mail et WhatsApp, suivez les confirmations, générez des billets QR infalsifiables et contrôlez les entrées, même quand le réseau tombe. Le tout à vos couleurs, sous votre nom.",
+      "Mariage, séminaire, gala ou assemblée générale : Jikū supprime l'attente et le désordre à la porte. Invitations par e-mail et WhatsApp, billets QR infalsifiables et check-in même hors-ligne, le tout à vos couleurs.",
     primaryCta: "Créer mon premier événement",
     secondaryCta: "Voir les fonctionnalités",
     ctaNote: "Gratuit jusqu'à 100 invités, sans carte bancaire",
@@ -365,6 +367,16 @@ const fr: LandingContent = {
         answer:
           "Oui, dans le cadre de l'offre Entreprise : selon l'offre retenue, Jikū peut être déployé sur votre propre infrastructure. Cette offre est à tarification personnalisée, contactez l'équipe commerciale pour un devis adapté à vos besoins.",
       },
+      {
+        question: "Puis-je utiliser Jikū pour la prise de rendez-vous ? Quel est le prix ?",
+        answer:
+          "Oui. La prise de rendez-vous est un abonnement par utilisateur et par mois (un outil de réservation pour votre activité), un modèle distinct du prix par événement. Cette offre n'est pas encore ouverte : les tarifs indicatifs (Solo gratuit, Teams, Organisation, Entreprise) sont visibles sur la page Simulateur, et personne ne sera prélevé avant l'ouverture. En attendant, l'organisation d'événements reste payée par événement, sans aucun abonnement exigé.",
+      },
+      {
+        question: "Que devient mon acompte si je réserve une date ?",
+        answer:
+          "Votre acompte (30 %) est déduit du prix final : si vous invitez finalement plus d'invités que prévu et passez au palier supérieur, vous ne payez que la différence. Vous n'êtes jamais facturé deux fois pour les mêmes invités. En cas d'annulation, le remboursement est de 100 % jusqu'à 60 jours avant l'événement, de 50 % entre 30 et 60 jours, et nul ensuite. Aucune carte bancaire n'est demandée.",
+      },
     ],
   },
   cta: {
@@ -383,8 +395,9 @@ const fr: LandingContent = {
         links: [
           { label: "Fonctionnalités", href: "#features" },
           { label: "Comment ça marche", href: "#how-it-works" },
+          { label: "Cas d'usage", href: "/use-cases" },
           { label: "Tarifs", href: "#pricing" },
-          { label: "Prise de rendez-vous", href: "/prise-de-rendez-vous" },
+          { label: "Simulateur", href: "/simulator" },
           { label: "FAQ", href: "#faq" },
         ],
       },
@@ -429,7 +442,9 @@ const en: LandingContent = {
     links: [
       { label: "Features", href: "#features" },
       { label: "How it works", href: "#how-it-works" },
+      { label: "Use cases", href: "/use-cases" },
       { label: "Pricing", href: "#pricing" },
+      { label: "Simulator", href: "/simulator" },
       { label: "FAQ", href: "#faq" },
     ],
     signIn: "Sign in",
@@ -440,11 +455,11 @@ const en: LandingContent = {
   },
   hero: {
     badge: "White-label event platform",
-    headlinePrefix: "Your ",
-    headlineWords: ["invitations", "tickets", "RSVPs", "check-ins"],
-    headlineSuffix: "finally simple.",
+    headlinePrefix: "No more ",
+    headlineWords: ["waiting", "queues", "disorder", "gatecrashers"],
+    headlineSuffix: "at the door.",
     subtitle:
-      "Send invitations by email and WhatsApp, track confirmations, issue tamper-proof QR tickets, and check guests in, even when the network drops. All under your own brand.",
+      "Wedding, seminar, gala or general assembly: Jikū removes the wait and the disorder at the door. Invitations by email and WhatsApp, tamper-proof QR tickets and check-in even offline, all under your own brand.",
     primaryCta: "Create my first event",
     secondaryCta: "See the features",
     ctaNote: "Free for up to 100 guests, no card required",
@@ -665,6 +680,16 @@ const en: LandingContent = {
         answer:
           "Yes, as part of the Enterprise offer: depending on the offer, Jikū can be deployed on your own infrastructure. This offer has custom pricing,  contact the sales team for a quote tailored to your needs.",
       },
+      {
+        question: "Can I use Jikū for appointments? How is it priced?",
+        answer:
+          "Yes. Appointments are a per-user monthly subscription (a booking tool for your business), a different model from the per-event price. This offer is not open yet: the indicative prices (Solo free, Teams, Organisation, Enterprise) are shown on the Simulator page, and no one is charged before launch. In the meantime, running events stays pay-per-event, with no subscription required.",
+      },
+      {
+        question: "What happens to my deposit if I reserve a date?",
+        answer:
+          "Your deposit (30%) is deducted from the final price: if you end up inviting more guests than expected and move up a tier, you only pay the difference. You are never billed twice for the same guests. If you cancel, the refund is 100% up to 60 days before the event, 50% between 30 and 60 days, and nothing after. No card is ever requested.",
+      },
     ],
   },
   cta: {
@@ -683,8 +708,9 @@ const en: LandingContent = {
         links: [
           { label: "Features", href: "#features" },
           { label: "How it works", href: "#how-it-works" },
+          { label: "Use cases", href: "/use-cases" },
           { label: "Pricing", href: "#pricing" },
-          { label: "Appointments", href: "/prise-de-rendez-vous" },
+          { label: "Simulator", href: "/simulator" },
           { label: "FAQ", href: "#faq" },
         ],
       },

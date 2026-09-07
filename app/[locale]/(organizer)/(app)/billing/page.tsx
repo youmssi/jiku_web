@@ -1,12 +1,19 @@
 import { redirect } from "next/navigation";
-import { AllPaymentsView, InvoicesTable, fetchInvoicesAction } from "@/components/modules/billing";
+import {
+  AllPaymentsView,
+  InvoicesTable,
+  SubscriptionSection,
+  fetchInvoicesAction,
+  fetchSubscriptionAction,
+} from "@/components/modules/billing";
 import type { PaymentHistoryItem } from "@/components/modules/billing";
 import { serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 
 /**
- * Organizer billing overview: payment history across every event in the tenant,
- * plus any accounting-grade invoices issued from those payments (JIKU-69).
+ * Organizer billing overview: the prepaid subscription (JIKU-90) — formula,
+ * expiry, active resources used/included, renewal banner — then payment history
+ * across every event in the tenant and any accounting-grade invoices.
  */
 export default async function BillingPage() {
   const response = await serverFetch("/billing/payments");
@@ -14,11 +21,21 @@ export default async function BillingPage() {
     redirect(ROUTES.LOGIN);
   }
   const payments = response.ok ? ((await response.json()) as PaymentHistoryItem[]) : [];
-  const invoices = await fetchInvoicesAction();
+  const [invoices, subscription] = await Promise.all([
+    fetchInvoicesAction(),
+    fetchSubscriptionAction(),
+  ]);
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-10">
       <h1 className="mb-6 text-2xl font-semibold">Billing</h1>
+
+      {subscription ? (
+        <section className="mb-10 flex flex-col gap-4">
+          <SubscriptionSection initial={subscription} nowIso={new Date().toISOString()} />
+        </section>
+      ) : null}
+
       <AllPaymentsView payments={payments} />
 
       <section className="mt-12">

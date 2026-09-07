@@ -111,6 +111,22 @@ export interface AdminBookingPaymentDeclaration {
   rejectionReason: string | null;
 }
 
+/** Remboursement exécuté contre l'acompte d'origine (JIKU-75). */
+export interface AdminBookingRefund {
+  id: string;
+  bookingId: string;
+  amountMinor: number;
+  currency: string;
+  reason: string;
+  creditNoteNumber: string | null;
+  status: string;
+}
+
+export interface RefundBookingRequest {
+  amountMinor: number;
+  reason: string;
+}
+
 export interface AuditEntry {
   id: string;
   adminId: string;

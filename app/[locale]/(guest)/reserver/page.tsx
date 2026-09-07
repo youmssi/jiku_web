@@ -8,7 +8,9 @@ export const metadata: Metadata = {
 
 export default async function ReservePage({
   searchParams,
-}: Readonly<{ searchParams: Promise<{ src?: string }> }>) {
-  const { src } = await searchParams;
-  return <ReservationForm acquisitionSource={src ?? null} />;
+}: Readonly<{ searchParams: Promise<{ src?: string; guests?: string }> }>) {
+  const { src, guests } = await searchParams;
+  const parsedGuests = Number(guests);
+  const initialGuestCount = Number.isFinite(parsedGuests) && parsedGuests >= 1 ? Math.trunc(parsedGuests) : undefined;
+  return <ReservationForm acquisitionSource={src ?? null} initialGuestCount={initialGuestCount} />;
 }

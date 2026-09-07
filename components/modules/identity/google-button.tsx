@@ -31,21 +31,42 @@ declare global {
  */
 export function GoogleButton({ next }: { next?: string }) {
   const container = useRef<HTMLDivElement>(null);
+  const initialized = useRef(false);
   const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
   const onLoad = useCallback(() => {
     const google = window.google;
     if (!CLIENT_ID || !google || !container.current) {
       return;
     }
+    // `Script.onLoad` and the `window.google` effect can both fire after a
+    // client-side navigation; rendering twice logs a GIS warning and can leave
+    // the button without a live credential callback.
+    if (initialized.current) {
+      return;
+    }
+    initialized.current = true;
+
     google.accounts.id.initialize({
       client_id: CLIENT_ID,
       callback: (response) => {
-        void googleLoginAction(response.credential, next).then((result) => {
-          if (result && !result.ok) {
-            setError(result.error);
-          }
-        });
+        setError(null);
+        setPending(true);
+        googleLoginAction(response.credential, next)
+          .then((result) => {
+            // Success redirects server-side; only a returned failure reaches us.
+            if (result && !result.ok) {
+              setError(result.error);
+            }
+            setPending(false);
+          })
+          .catch(() => {
+            // The action rejects on a backend timeout or network error — surface
+            // it instead of leaving the visitor staring at an unchanged form.
+            setError("We couldn't reach the sign-in service. Please try again.");
+            setPending(false);
+          });
       },
     });
     google.accounts.id.renderButton(container.current, {
@@ -77,7 +98,8 @@ export function GoogleButton({ next }: { next?: string }) {
         or
         <span className="h-px flex-1 bg-border" />
       </div>
-      <div ref={container} />
+      <div ref={container} className={pending ? "pointer-events-none opacity-60" : undefined} />
+      {pending ? <p className="text-sm text-muted-foreground">Signing in…</p> : null}
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
       <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" onLoad={onLoad} />
     </div>

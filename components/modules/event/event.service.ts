@@ -17,7 +17,6 @@ function toPayload(values: EventFormValues) {
     timezone: values.timezone,
     location: values.location || null,
     settings: {
-      placementEnabled: values.placementEnabled,
       transferAllowed: values.transferAllowed,
       transferDeadline: values.transferAllowed
         ? localInputToUtc(values.transferDeadlineLocal, values.timezone)

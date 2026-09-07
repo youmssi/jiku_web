@@ -15,7 +15,8 @@ export interface UsageAllowance {
 
 export interface PaymentHistoryItem {
   paymentId: string;
-  eventId: string;
+  /** Null for a prepaid subscription renewal (JIKU-90). */
+  eventId: string | null;
   eventName: string;
   tier: string;
   amountMinor: number;
@@ -74,3 +75,36 @@ export interface PaymentInitiation {
 // generated contract so a backend change is a type error, not a runtime surprise.
 
 export type InvoiceSummary = Schema<"InvoiceSummary">;
+
+// ─── Abonnement prépayé par ressource active (JIKU-90) ───────────────────────
+
+export type SubscriptionStatus = "ACTIVE" | "GRACE" | "EXPIRED";
+
+export interface SubscriptionPlanOption {
+  name: string;
+  maxResources: number;
+  priceMinorPerMonth: number;
+}
+
+export interface SubscriptionMonthOption {
+  months: number;
+  factorMilli: number;
+}
+
+export interface SubscriptionView {
+  plan: string;
+  resourcesActive: number;
+  resourcesIncluded: number;
+  overLimit: boolean;
+  status: SubscriptionStatus;
+  startedAt: string;
+  expiresAt: string;
+  suspensionAt: string | null;
+  plans: SubscriptionPlanOption[];
+  months: SubscriptionMonthOption[];
+}
+
+export interface SubscriptionRequestInput {
+  plan: string;
+  months: number;
+}

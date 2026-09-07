@@ -4,13 +4,18 @@ import { MembersView, fetchMembersAction } from "@/components/modules/members";
 import {
   BrandingView,
   LegalIdentityView,
+  PersonalisationView,
   ProviderSettingsView,
   fetchBrandingAction,
   fetchLegalIdentityAction,
   fetchProviderSettingsAction,
+  fetchTemplatesAction,
+  fetchVocabularyAction,
   type BrandingResponse,
   type LegalIdentityResponse,
   type ProviderSettingsResponse,
+  type TemplateSummary,
+  type VocabularyEntry,
 } from "@/components/modules/settings";
 
 async function loadBranding(): Promise<BrandingResponse> {
@@ -49,15 +54,20 @@ async function loadLegalIdentity(): Promise<LegalIdentityResponse> {
 }
 
 export default async function SettingsPage() {
-  const [branding, providers, legalIdentity, membersResult, context] = await Promise.all([
-    loadBranding(),
-    loadProviderSettings(),
-    loadLegalIdentity(),
-    fetchMembersAction(),
-    getOrganizerContext(),
-  ]);
+  const [branding, providers, legalIdentity, membersResult, context, vocabulary, templates] =
+    await Promise.all([
+      loadBranding(),
+      loadProviderSettings(),
+      loadLegalIdentity(),
+      fetchMembersAction(),
+      getOrganizerContext(),
+      fetchVocabularyAction().then((entries) => entries),
+      fetchTemplatesAction().then((list) => list),
+    ]);
   // Members management needs the ADMIN/OWNER role; the tab hides for members.
   const team = membersResult.ok ? membersResult.data : null;
+  const vocabularyEntries: VocabularyEntry[] = vocabulary.length ? vocabulary : [];
+  const templateSummaries: TemplateSummary[] = templates.length ? templates : [];
 
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-8">
@@ -74,6 +84,7 @@ export default async function SettingsPage() {
           {team ? <TabsTrigger value="members">Members</TabsTrigger> : null}
           <TabsTrigger value="messaging">Messaging providers</TabsTrigger>
           <TabsTrigger value="legal">Invoicing details</TabsTrigger>
+          <TabsTrigger value="personnalisation">Personnalisation</TabsTrigger>
         </TabsList>
 
         <TabsContent value="branding" className="mt-0">
@@ -96,6 +107,13 @@ export default async function SettingsPage() {
 
         <TabsContent value="legal" className="mt-0">
           <LegalIdentityView identity={legalIdentity} />
+        </TabsContent>
+
+        <TabsContent value="personnalisation" className="mt-0">
+          <PersonalisationView
+            initialVocabulary={vocabularyEntries}
+            templateSummaries={templateSummaries}
+          />
         </TabsContent>
       </Tabs>
     </div>

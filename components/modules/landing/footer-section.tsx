@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { JikūLogo } from "@/components/ui/jiku-logo";
-import { TrackedAnchor, TrackedLink } from "@/components/shared";
-import { PRIVACY_ROUTE, SEO_ROUTES } from "@/lib/constants";
+import { TrackedAnchor } from "@/components/shared";
+import { PRIVACY_ROUTE } from "@/lib/constants";
 import { supportWhatsAppLink } from "@/lib/support";
 import type { LandingContent } from "./content";
 
@@ -31,26 +31,12 @@ export function FooterSection({ content }: { content: LandingContent["footer"] }
               <ul className="space-y-3">
                 {group.links.map((link) => (
                   <li key={link.label}>
-                    {/* Le lien rendez-vous est tracé : c'est l'entrée du second
-                        tunnel, et sans lui on ne sait pas si la landing y amène
-                        quiconque. Les autres liens restent de simples ancres. */}
-                    {link.href === SEO_ROUTES.APPOINTMENTS ? (
-                      <TrackedLink
-                        href={link.href}
-                        eventName="appointment_link_click"
-                        eventProperties={{ source: "footer" }}
-                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        {link.label}
-                      </TrackedLink>
-                    ) : (
-                      <Link
-                        href={link.href}
-                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        {link.label}
-                      </Link>
-                    )}
+                    <Link
+                      href={link.href}
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>

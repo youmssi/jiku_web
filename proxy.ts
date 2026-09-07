@@ -17,7 +17,7 @@ import { COOKIES, ROUTES } from "@/lib/constants";
 const intlMiddleware = createIntlMiddleware(routing);
 
 /** Routes that require an organizer session (locale-stripped prefixes). */
-const GUARDED_PREFIXES = [ROUTES.DASHBOARD, ROUTES.EVENTS];
+const GUARDED_PREFIXES = [ROUTES.DASHBOARD, ROUTES.EVENTS, ROUTES.SERVICES];
 
 /** Strip the optional locale prefix so we can match on the canonical route. */
 function stripLocale(pathname: string): string {
@@ -67,6 +67,6 @@ export const config = {
     // Run on everything except Next internals, static assets, and API routes.
     // The explicit icon/manifest entries stop next-intl's locale detection from
     // rewriting those static URLs to /{locale}/... which would 404.
-    "/((?!api|_next/static|_next/image|favicon\\.ico|sw\\.js|icon-192\\.png|icon-512\\.png|apple-icon-180\\.png|robots\\.txt|sitemap\\.xml|manifest\\.webmanifest|opengraph-image).*)",
+    "/((?!api|_next/static|_next/image|favicon\\.ico|sw\\.js|icon-192\\.png|icon-512\\.png|icon-maskable-512\\.png|apple-icon-180\\.png|jiku-logo-mark\\.png|jiku-logo-1024\\.png|robots\\.txt|sitemap\\.xml|manifest\\.webmanifest|opengraph-image).*)",
   ],
 };
