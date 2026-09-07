@@ -1,13 +1,14 @@
 "use server";
 
 import { serverFetch, publicFetch } from "@/lib/api-server";
-import { type ActionResult, fromResponse } from "@/lib/action-result";
+import { fail, ok, reportApiError, type ActionResult, fromResponse } from "@/lib/action-result";
 import type {
   DayLineAuth,
   DayLineView,
   LineActionResult,
   LineTicket,
   LineTransition,
+  PendingAppointmentRequest,
   WalkInInput,
 } from "@/components/modules/dayline/schema";
 
@@ -83,4 +84,49 @@ export async function transitionAction(
     method: "POST",
   });
   return fromResponse<LineActionResult>(response, lineMessages(auth.kind === "staff"));
+}
+
+/** Demandes de rendez-vous en attente de confirmation (mode « sur demande »). */
+export async function fetchPendingRequestsAction(
+  auth: DayLineAuth,
+): Promise<ActionResult<PendingAppointmentRequest[]>> {
+  const response = await fetchFor(auth, `${basePath(auth)}/requests`);
+  return fromResponse<PendingAppointmentRequest[]>(response, {
+    404: "Aucune demande trouvée.",
+    default: "Impossible de charger les demandes en attente.",
+  });
+}
+
+/** Confirme une demande : le rendez-vous et son billet sont émis. */
+export async function acceptPendingRequestAction(
+  auth: DayLineAuth,
+  requestId: string,
+): Promise<ActionResult<null>> {
+  return decidePendingRequest(auth, requestId, "accept");
+}
+
+/** Refuse une demande : le créneau se libère. */
+export async function rejectPendingRequestAction(
+  auth: DayLineAuth,
+  requestId: string,
+): Promise<ActionResult<null>> {
+  return decidePendingRequest(auth, requestId, "reject");
+}
+
+/** Les endpoints de décision ne renvoient pas de corps : réponse → résultat direct. */
+async function decidePendingRequest(
+  auth: DayLineAuth,
+  requestId: string,
+  verb: "accept" | "reject",
+): Promise<ActionResult<null>> {
+  const response = await fetchFor(auth, `${basePath(auth)}/requests/${requestId}/${verb}`, {
+    method: "POST",
+  });
+  if (response.ok) return ok(null);
+  reportApiError(response);
+  return fail(
+    response.status === 409
+      ? "Cette demande vient d'être traitée par un autre poste — la liste est à jour."
+      : "L'action a échoué. Réessayez.",
+  );
 }

@@ -61,7 +61,6 @@ export async function EditEventView({ params }: { params: Promise<{ id: string }
     startLocal: utcToLocalInput(event.startDateTime, event.timezone),
     endLocal: utcToLocalInput(event.endDateTime, event.timezone),
     location: event.location ?? "",
-    placementEnabled: event.settings.placementEnabled,
     transferAllowed: event.settings.transferAllowed,
     transferDeadlineLocal: utcToLocalInput(event.settings.transferDeadline, event.timezone),
     overbookingAllowed: event.settings.overbookingAllowed,

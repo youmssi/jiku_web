@@ -8,7 +8,6 @@ export interface ServiceSummary {
 export type ReminderChannel = "WHATSAPP" | "NONE";
 
 export type ConfirmationMode = "INSTANTANEOUS" | "ON_REQUEST";
-export type PaymentMode = "FREE" | "BEFORE" | "AFTER";
 
 /**
  * Options effectives d'un service (GET /services/{id}/configuration) : la valeur
@@ -25,7 +24,6 @@ export interface ServiceConfiguration {
   cancelDeadlineHours: number;
   noShowToleranceMinutes: number;
   walkInsAllowed: boolean;
-  paymentMode: PaymentMode;
   reminderChannel: ReminderChannel;
   reminderOffsetsMinutes: number[];
   occupancyMinutes: number;
@@ -35,4 +33,51 @@ export interface ServiceConfiguration {
 export interface ReminderPolicyUpdate {
   reminderChannel: ReminderChannel;
   reminderOffsetsMinutes: number[];
+}
+
+export type ResourceType = "PERSON" | "LOCATION" | "EQUIPMENT";
+
+export interface ServiceResource {
+  id: string;
+  name: string;
+  type: ResourceType;
+  timezone: string;
+  active: boolean;
+}
+
+export interface ServiceRequirement {
+  id: string;
+  serviceId: string;
+  type: ResourceType;
+  quantity: number;
+}
+
+export interface StaffLink {
+  id: string;
+  serviceId: string;
+  label: string;
+  revoked: boolean;
+  createdAt: string;
+  revokedAt: string | null;
+}
+
+/** Réponse de création d'un lien comptoir : le jeton n'est montré qu'ici. */
+export interface StaffLinkCreated extends StaffLink {
+  token: string;
+}
+
+export interface ResourceAvailability {
+  id: string;
+  resourceId: string;
+  dayOfWeek: number;
+  start: string;
+  end: string;
+}
+
+export interface ResourceUnavailability {
+  id: string;
+  resourceId: string;
+  startsAt: string;
+  endsAt: string;
+  reason: string | null;
 }

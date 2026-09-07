@@ -1,6 +1,10 @@
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { DayLineConsole } from "@/components/modules/dayline/day-line-console";
-import type { DayLineView } from "@/components/modules/dayline/schema";
+import { PendingRequests } from "@/components/modules/dayline/pending-requests";
+import type {
+  DayLineView,
+  PendingAppointmentRequest,
+} from "@/components/modules/dayline/schema";
 
 /**
  * Entrées serveur de la console de ligne du jour. La première ligne du jour est
@@ -23,7 +27,13 @@ export async function DayLineOrganizerView({ serviceId }: { serviceId: string })
     );
   }
   const view = (await response.json()) as DayLineView;
-  return <DayLineConsole auth={{ kind: "organizer", serviceId }} initial={view} />;
+  const requests = await loadPendingRequests(`/services/${serviceId}/day-line/requests`);
+  return (
+    <>
+      <DayLineConsole auth={{ kind: "organizer", serviceId }} initial={view} />
+      <PendingRequests auth={{ kind: "organizer", serviceId }} timezone={view.timezone} initial={requests} />
+    </>
+  );
 }
 
 export async function DayLineStaffView({ token }: { token: string }) {
@@ -43,5 +53,17 @@ export async function DayLineStaffView({ token }: { token: string }) {
     );
   }
   const view = (await response.json()) as DayLineView;
-  return <DayLineConsole auth={{ kind: "staff", token }} initial={view} />;
+  const requests = await loadPendingRequests(`/line/${token}/requests`);
+  return (
+    <>
+      <DayLineConsole auth={{ kind: "staff", token }} initial={view} />
+      <PendingRequests auth={{ kind: "staff", token }} timezone={view.timezone} initial={requests} />
+    </>
+  );
+}
+
+/** Demande en attente renvoyée par le serveur : la liste vide est un état sain. */
+async function loadPendingRequests(path: string): Promise<PendingAppointmentRequest[]> {
+  const response = await (path.startsWith("/line/") ? publicFetch(path) : serverFetch(path));
+  return response.ok ? ((await response.json()) as PendingAppointmentRequest[]) : [];
 }

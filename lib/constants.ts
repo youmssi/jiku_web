@@ -26,6 +26,10 @@ export function serviceLineRoute(id: string): string {
   return `/services/${id}/ligne`;
 }
 
+
+export function serviceManageRoute(id: string): string {
+  return `/services/${id}/gerer`;
+}
 export function serviceConfigurationRoute(id: string): string {
   return `/services/${id}/configuration`;
 }

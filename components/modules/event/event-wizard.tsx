@@ -342,26 +342,6 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
               <>
                 <Controller
                   control={control}
-                  name="placementEnabled"
-                  render={({ field }) => (
-                    <Field orientation="horizontal">
-                      <FieldContent>
-                        <FieldLabel htmlFor={field.name}>Assigned seating</FieldLabel>
-                        <FieldDescription>
-                          Let guests be placed at specific tables or seats.
-                        </FieldDescription>
-                      </FieldContent>
-                      <Switch
-                        id={field.name}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        disabled={isLocked}
-                      />
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={control}
                   name="transferAllowed"
                   render={({ field }) => (
                     <Field orientation="horizontal">

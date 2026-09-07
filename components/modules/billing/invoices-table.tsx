@@ -2,6 +2,7 @@ import Link from "next/link";
 import { billingInvoiceDocumentRoute } from "@/lib/constants";
 import { formatAmount } from "@/lib/currency";
 import { formatLocalDateTime } from "@/lib/datetime";
+import { CreditNoteButton } from "@/components/modules/billing/invoice-actions";
 import type { InvoiceSummary } from "./schema";
 
 /**
@@ -32,6 +33,7 @@ export function InvoicesTable({ invoices }: { invoices: InvoiceSummary[] }) {
             <th className="px-4 py-2">Issued</th>
             <th className="px-4 py-2">Total</th>
             <th className="px-4 py-2">Document</th>
+            <th className="px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y">
@@ -51,6 +53,13 @@ export function InvoicesTable({ invoices }: { invoices: InvoiceSummary[] }) {
                 >
                   Download PDF
                 </Link>
+              </td>
+              <td className="px-4 py-2">
+                {invoice.documentType === "INVOICE" ? (
+                  <CreditNoteButton invoiceId={invoice.id} />
+                ) : (
+                  <span className="text-muted-foreground">—</span>
+                )}
               </td>
             </tr>
           ))}

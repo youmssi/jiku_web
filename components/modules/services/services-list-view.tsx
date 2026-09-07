@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { serverFetch } from "@/lib/api-server";
-import { serviceConfigurationRoute, serviceLineRoute } from "@/lib/constants";
+import { serviceConfigurationRoute, serviceLineRoute, serviceManageRoute } from "@/lib/constants";
+import { CreateServiceButton } from "@/components/modules/services/create-service-button";
 import type { ServiceSummary } from "@/components/modules/services/schema";
 
 /**
@@ -15,7 +16,10 @@ export async function ServicesListView() {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-10">
-      <h1 className="text-2xl font-semibold">Services</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">Services</h1>
+        <CreateServiceButton />
+      </div>
 
       {services.length === 0 ? (
         <div className="mt-10 rounded-lg border border-dashed p-10 text-center text-muted-foreground">
@@ -31,6 +35,9 @@ export async function ServicesListView() {
                   <p className="text-sm text-muted-foreground">{service.timezone}</p>
                 </div>
                 <div className="flex items-center gap-2">
+                  <Button asChild variant="outline">
+                    <Link href={serviceManageRoute(service.id)}>Gérer</Link>
+                  </Button>
                   <Button asChild variant="outline">
                     <Link href={serviceConfigurationRoute(service.id)}>Configuration</Link>
                   </Button>

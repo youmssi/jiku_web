@@ -55,3 +55,18 @@ export const walkInSchema = z.object({
 });
 
 export type WalkInInput = z.infer<typeof walkInSchema>;
+
+/**
+ * Demande de rendez-vous en attente de confirmation (mode « sur demande », JIKU-88) :
+ * la cliente a réservé un créneau mais aucun billet n'est émis tant qu'un poste
+ * (organisateur ou comptoir) ne l'a pas confirmée ou refusée.
+ */
+export interface PendingAppointmentRequest {
+  id: string;
+  startsAt: string;
+  endsAt: string;
+  clientName: string | null;
+  clientPhone: string | null;
+  requestedAt: string;
+  heldUntil: string | null;
+}

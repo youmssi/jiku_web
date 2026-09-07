@@ -107,3 +107,21 @@ export async function issueInvoiceAction(
   }
   return { ok: true, invoice: (await response.json()) as InvoiceSummary };
 }
+
+/** Note de crédit (JIKU-69/75) : corrige une facture en inversant son signe. */
+export async function creditNoteAction(
+  invoiceId: string,
+): Promise<{ ok: true; invoice: InvoiceSummary } | { ok: false; error: string }> {
+  const response = await serverFetch(`/billing/invoices/${invoiceId}/credit-note`, { method: "POST" });
+  if (response.status === 409) {
+    return {
+      ok: false,
+      error: "Cette facture ne peut pas recevoir une seconde note de crédit.",
+    };
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return { ok: false, error: "Impossible d'émettre la note de crédit." };
+  }
+  return { ok: true, invoice: (await response.json()) as InvoiceSummary };
+}
