@@ -2,6 +2,7 @@ import Link from "next/link";
 import { billingReceiptRoute } from "@/lib/constants";
 import { formatAmount } from "@/lib/currency";
 import { formatLocalDateTime } from "@/lib/datetime";
+import { IssueInvoiceButton } from "@/components/modules/billing/invoice-actions";
 import type { PaymentHistoryItem } from "./schema";
 
 /** Payment history table shared between the per-event and all-events billing views. */
@@ -21,6 +22,7 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
             <th className="px-4 py-2">Amount</th>
             <th className="px-4 py-2">Status</th>
             <th className="px-4 py-2">Receipt</th>
+            <th className="px-4 py-2">Invoice</th>
           </tr>
         </thead>
         <tbody className="divide-y">
@@ -52,6 +54,13 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
                   >
                     Download
                   </Link>
+                ) : (
+                  <span className="text-muted-foreground">—</span>
+                )}
+              </td>
+              <td className="px-4 py-2">
+                {payment.status === "SUCCEEDED" ? (
+                  <IssueInvoiceButton paymentId={payment.paymentId} />
                 ) : (
                   <span className="text-muted-foreground">—</span>
                 )}

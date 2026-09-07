@@ -17,7 +17,7 @@ import { COOKIES, ROUTES } from "@/lib/constants";
 const intlMiddleware = createIntlMiddleware(routing);
 
 /** Routes that require an organizer session (locale-stripped prefixes). */
-const GUARDED_PREFIXES = [ROUTES.DASHBOARD, ROUTES.EVENTS];
+const GUARDED_PREFIXES = [ROUTES.DASHBOARD, ROUTES.EVENTS, ROUTES.SERVICES];
 
 /** Strip the optional locale prefix so we can match on the canonical route. */
 function stripLocale(pathname: string): string {

@@ -9,6 +9,7 @@ import {
 } from "@/components/modules/dashboard/dashboard-charts";
 import { AttendanceDocuments } from "@/components/modules/dashboard/attendance-documents";
 import { QuorumCard } from "@/components/modules/dashboard/quorum-card";
+import { ValidatorLinks } from "@/components/modules/checkin/validator-links";
 import type { AnalyticsData, DashboardData } from "@/components/modules/dashboard/schema";
 
 interface EventDashboardProps {
@@ -139,7 +140,7 @@ export function EventDashboard({ eventId, initial, analytics }: EventDashboardPr
             <p className="text-sm font-medium">By entrance</p>
             {data.entrances.length === 0 ? (
               <p className="mt-2 text-sm text-muted-foreground">
-                No validator links yet. Create one from the event to staff check-in.
+                No door links yet — create one below to staff check-in.
               </p>
             ) : (
               <ul className="mt-2 divide-y">
@@ -156,6 +157,8 @@ export function EventDashboard({ eventId, initial, analytics }: EventDashboardPr
             )}
           </div>
         </div>
+
+        <ValidatorLinks eventId={eventId} />
 
         {analytics ? (
           <Card className="mt-4">

@@ -11,6 +11,13 @@ import type {
   TestSendResponse,
   LegalIdentityResponse,
   UpdateLegalIdentityRequest,
+  VocabularyEntry,
+  VocabularyUpdateRequest,
+  TemplateDetail,
+  TemplateSummary,
+  TemplatePreviewRequest,
+  TemplatePreviewResponse,
+  TemplateUpdateRequest,
 } from "./schema";
 
 // ─── Branding ───────────────────────────────────────────────────────────────
@@ -141,4 +148,76 @@ export async function updateLegalIdentityAction(
     return fail("We couldn't save your legal details. Please try again.");
   }
   return { ok: true, data: (await response.json()) as LegalIdentityResponse };
+}
+
+// ─── Personnalisation (JIKU-91) ──────────────────────────────────────────────
+
+export async function fetchVocabularyAction(): Promise<VocabularyEntry[]> {
+  const response = await serverFetch("/settings/vocabulary");
+  if (!response.ok) return [];
+  return (await response.json()) as VocabularyEntry[];
+}
+
+export async function updateVocabularyAction(
+  updates: VocabularyUpdateRequest[],
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const response = await serverFetch("/settings/vocabulary", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updates),
+  });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("We couldn't save the terms. Please try again.");
+  }
+  return { ok: true };
+}
+
+export async function fetchTemplatesAction(): Promise<TemplateSummary[]> {
+  const response = await serverFetch("/settings/templates");
+  if (!response.ok) return [];
+  return (await response.json()) as TemplateSummary[];
+}
+
+export async function fetchTemplateAction(
+  name: string,
+): Promise<{ ok: true; data: TemplateDetail } | { ok: false; error: string }> {
+  const response = await serverFetch(`/settings/templates/${encodeURIComponent(name)}`);
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("We couldn't load this template.");
+  }
+  return { ok: true, data: (await response.json()) as TemplateDetail };
+}
+
+export async function saveTemplateAction(
+  name: string,
+  update: TemplateUpdateRequest,
+): Promise<{ ok: true; data: TemplateDetail } | { ok: false; error: string }> {
+  const response = await serverFetch(`/settings/templates/${encodeURIComponent(name)}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(update),
+  });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("We couldn't save this template.");
+  }
+  return { ok: true, data: (await response.json()) as TemplateDetail };
+}
+
+export async function previewTemplateAction(
+  name: string,
+  request: TemplatePreviewRequest,
+): Promise<{ ok: true; data: TemplatePreviewResponse } | { ok: false; error: string }> {
+  const response = await serverFetch(`/settings/templates/${encodeURIComponent(name)}/preview`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
+  });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("We couldn't preview this template.");
+  }
+  return { ok: true, data: (await response.json()) as TemplatePreviewResponse };
 }
