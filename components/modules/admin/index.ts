@@ -21,3 +21,5 @@ export type {
   TenantDirectoryEntry,
   TenantDirectoryPage,
 } from "./schema";
+export { WhatsAppAdmin, ProspectsTable, DiagnosticsPanel } from "./admin-extras";
+export type { WhatsAppPricingInfo, WhatsAppOverrideStatus, ProspectLead } from "./schema";
