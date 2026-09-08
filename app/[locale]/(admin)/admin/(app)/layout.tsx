@@ -16,6 +16,9 @@ const NAV = [
   { label: "Trials", href: ADMIN_ROUTES.TRIALS },
   { label: "Agreements", href: ADMIN_ROUTES.AGREEMENTS },
   { label: "Audit", href: ADMIN_ROUTES.AUDIT },
+  { label: "WhatsApp", href: ADMIN_ROUTES.WHATSAPP },
+  { label: "Prospects", href: ADMIN_ROUTES.PROSPECTS },
+  { label: "Diagnostics", href: ADMIN_ROUTES.DIAGNOSTICS },
 ] as const;
 
 /**

@@ -32,29 +32,11 @@ import type {
   ServiceSummary,
   StaffLink,
 } from "@/components/modules/services/schema";
-
-const TIMEZONES = [
-  "Africa/Conakry",
-  "Africa/Abidjan",
-  "Africa/Dakar",
-  "Africa/Accra",
-  "Africa/Douala",
-  "Africa/Casablanca",
-  "Europe/Paris",
-  "UTC",
-] as const;
-
-const RESOURCE_TYPES: { value: ResourceType; label: string }[] = [
-  { value: "PERSON", label: "Personne" },
-  { value: "LOCATION", label: "Lieu" },
-  { value: "EQUIPMENT", label: "Équipement" },
-];
-
-const TYPE_LABEL: Record<ResourceType, string> = {
-  PERSON: "Personne",
-  LOCATION: "Lieu",
-  EQUIPMENT: "Équipement",
-};
+import {
+  RESOURCE_TYPES,
+  RESOURCE_TYPE_LABEL,
+  SERVICE_TIMEZONES,
+} from "@/components/modules/services/schema";
 
 /**
  * Gestion complète d'un service (JIKU-84/86) : lien public de réservation à
@@ -86,7 +68,7 @@ export function ServiceManagePanel({
   // Ressource : création.
   const [resName, setResName] = useState("");
   const [resType, setResType] = useState<ResourceType>("PERSON");
-  const [resTimezone, setResTimezone] = useState<string>(TIMEZONES[0]);
+  const [resTimezone, setResTimezone] = useState<string>(SERVICE_TIMEZONES[0]);
 
   // Exigence : ajout.
   const [reqType, setReqType] = useState<ResourceType>("PERSON");
@@ -283,7 +265,7 @@ export function ServiceManagePanel({
                     <div>
                       <p>{resource.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        {TYPE_LABEL[resource.type]} · {resource.timezone}
+                        {RESOURCE_TYPE_LABEL[resource.type]} · {resource.timezone}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
@@ -332,7 +314,7 @@ export function ServiceManagePanel({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {TIMEZONES.map((zone) => (
+                    {SERVICE_TIMEZONES.map((zone) => (
                       <SelectItem key={zone} value={zone}>
                         {zone}
                       </SelectItem>
@@ -366,7 +348,7 @@ export function ServiceManagePanel({
               {requirements.map((requirement) => (
                 <li key={requirement.id} className="flex items-center justify-between gap-3 py-2 text-sm">
                   <span>
-                    {TYPE_LABEL[requirement.type]} × {requirement.quantity}
+                    {RESOURCE_TYPE_LABEL[requirement.type]} × {requirement.quantity}
                   </span>
                   <Button size="sm" variant="outline" disabled={busy} onClick={() => removeRequirement(requirement.id)}>
                     Retirer
