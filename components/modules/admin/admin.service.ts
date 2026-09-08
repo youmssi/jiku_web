@@ -170,3 +170,70 @@ export async function rejectBookingPaymentAction(
 ): Promise<ActionResult> {
   return adminMutation(`/admin/booking-payments/${declarationId}/reject`, { reason });
 }
+
+export async function updateWhatsAppPricingAction(
+  category: string,
+  costUsdMinor: number,
+): Promise<ActionResult> {
+  const response = await adminFetch(`/admin/whatsapp/pricing/${category}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ costUsdMinor }),
+  });
+  if (!response.ok) {
+    const message = await response
+      .json()
+      .then((payload: { message?: string }) => payload.message)
+      .catch(() => "Impossible de mettre à jour le tarif.");
+    return { error: message ?? "Impossible de mettre à jour le tarif." };
+  }
+  revalidatePath("/admin/whatsapp", "layout");
+  return {};
+}
+
+export async function setWhatsAppOverrideAction(
+  active: boolean,
+  reason: string,
+): Promise<ActionResult> {
+  const response = await adminFetch("/admin/whatsapp/content-override", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ active, reason }),
+  });
+  if (!response.ok) {
+    const message = await response
+      .json()
+      .then((payload: { message?: string }) => payload.message)
+      .catch(() => "Impossible de modifier la surcharge de contenu.");
+    return { error: message ?? "Impossible de modifier la surcharge de contenu." };
+  }
+  revalidatePath("/admin/whatsapp", "layout");
+  return {};
+}
+
+export async function markProspectContactedAction(id: string): Promise<ActionResult> {
+  const response = await adminFetch(`/admin/prospects/${id}/contacted`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({}),
+  });
+  if (!response.ok) {
+    return {
+      error: "Impossible de marquer cette piste comme contactée.",
+    };
+  }
+  revalidatePath("/admin/prospects", "layout");
+  return {};
+}
+
+/** Déclenche l'exception de test (JIKU-97) ; le 500 attendu porte le requestId. */
+export async function triggerDiagnosticsAction(): Promise<
+  { requestId?: string; error?: string } & ActionResult
+> {
+  const response = await adminFetch("/admin/diagnostics/error", { method: "POST" });
+  if (response.ok) {
+    return { error: "Aucune erreur déclenchée — réponse inattendue." };
+  }
+  const requestId = response.headers.get("X-Request-Id") ?? undefined;
+  return { requestId };
+}

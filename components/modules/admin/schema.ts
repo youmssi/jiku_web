@@ -142,3 +142,31 @@ export interface AuditPage {
   page: number;
   size: number;
 }
+
+export interface WhatsAppPricingInfo {
+  category: string;
+  costUsdMinor: number;
+}
+
+export interface WhatsAppOverrideStatus {
+  active: boolean;
+  reason: string | null;
+  activatedBy: string | null;
+  activatedAt: string | null;
+}
+
+export interface ProspectLead {
+  id: string;
+  businessName: string;
+  contactName: string;
+  phone: string;
+  email: string | null;
+  sector: string;
+  city: string | null;
+  weeklyVolume: string | null;
+  note: string | null;
+  source: string | null;
+  status: string;
+  createdAt: string;
+  contactedAt: string | null;
+}

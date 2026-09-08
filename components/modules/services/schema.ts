@@ -81,3 +81,27 @@ export interface ResourceUnavailability {
   endsAt: string;
   reason: string | null;
 }
+
+/** Fuseaux proposés à la création d'un service ou d'une ressource. */
+export const SERVICE_TIMEZONES = [
+  "Africa/Conakry",
+  "Africa/Abidjan",
+  "Africa/Dakar",
+  "Africa/Accra",
+  "Africa/Douala",
+  "Africa/Casablanca",
+  "Europe/Paris",
+  "UTC",
+] as const;
+
+export const RESOURCE_TYPES: { value: ResourceType; label: string }[] = [
+  { value: "PERSON", label: "Personne" },
+  { value: "LOCATION", label: "Lieu" },
+  { value: "EQUIPMENT", label: "Équipement" },
+];
+
+export const RESOURCE_TYPE_LABEL: Record<ResourceType, string> = {
+  PERSON: "Personne",
+  LOCATION: "Lieu",
+  EQUIPMENT: "Équipement",
+};

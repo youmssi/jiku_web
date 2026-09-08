@@ -21,18 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SERVICE_TIMEZONES } from "@/components/modules/services/schema";
 import { createServiceAction } from "@/components/modules/services/services.service";
-
-const SERVICE_TIMEZONES = [
-  "Africa/Conakry",
-  "Africa/Abidjan",
-  "Africa/Dakar",
-  "Africa/Accra",
-  "Africa/Douala",
-  "Africa/Casablanca",
-  "Europe/Paris",
-  "UTC",
-] as const;
 
 /** Création d'un service (nom + fuseau) ; la liste est rechargée après succès. */
 export function CreateServiceButton() {
