@@ -1,4 +1,20 @@
 import Link from "next/link";
+import { FileText } from "lucide-react";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { billingInvoiceDocumentRoute } from "@/lib/constants";
 import { formatAmount } from "@/lib/currency";
 import { formatLocalDateTime } from "@/lib/datetime";
@@ -6,7 +22,7 @@ import { CreditNoteButton } from "@/components/modules/billing/invoice-actions";
 import type { InvoiceSummary } from "./schema";
 
 /**
- * Issued invoices and credit notes (JIKU-69) — the documents a company's
+ * Issued invoices and credit notes (JIKU-69), the documents a company's
  * accounts department can actually process, as opposed to the plain-text
  * payment receipt beside them.
  *
@@ -17,35 +33,43 @@ import type { InvoiceSummary } from "./schema";
 export function InvoicesTable({ invoices }: { invoices: InvoiceSummary[] }) {
   if (invoices.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">
-        No invoices yet. Issue one from a settled payment when a buyer needs a formal document.
-      </p>
+      <Empty className="py-10">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <FileText />
+          </EmptyMedia>
+          <EmptyTitle>No invoices yet</EmptyTitle>
+          <EmptyDescription>
+            Issue one from a settled payment when a buyer needs a formal document.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
     );
   }
 
   return (
     <div className="overflow-hidden rounded-xl border">
-      <table className="w-full text-sm">
-        <thead className="bg-muted/50 text-left text-xs uppercase tracking-wider text-muted-foreground">
-          <tr>
-            <th className="px-4 py-2">Number</th>
-            <th className="px-4 py-2">Type</th>
-            <th className="px-4 py-2">Issued</th>
-            <th className="px-4 py-2">Total</th>
-            <th className="px-4 py-2">Document</th>
-            <th className="px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Number</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Issued</TableHead>
+            <TableHead>Total</TableHead>
+            <TableHead>Document</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {invoices.map((invoice) => (
-            <tr key={invoice.id}>
-              <td className="px-4 py-2 font-medium">{invoice.invoiceNumber}</td>
-              <td className="px-4 py-2">
+            <TableRow key={invoice.id}>
+              <TableCell className="font-medium">{invoice.invoiceNumber}</TableCell>
+              <TableCell>
                 {invoice.documentType === "CREDIT_NOTE" ? "Credit note" : "Invoice"}
-              </td>
-              <td className="px-4 py-2">{formatLocalDateTime(invoice.issuedAt)}</td>
-              <td className="px-4 py-2">{formatAmount(invoice.totalMinor, invoice.currency)}</td>
-              <td className="px-4 py-2">
+              </TableCell>
+              <TableCell>{formatLocalDateTime(invoice.issuedAt)}</TableCell>
+              <TableCell>{formatAmount(invoice.totalMinor, invoice.currency)}</TableCell>
+              <TableCell>
                 <Link
                   href={billingInvoiceDocumentRoute(invoice.id)}
                   className="text-primary underline underline-offset-4"
@@ -53,18 +77,18 @@ export function InvoicesTable({ invoices }: { invoices: InvoiceSummary[] }) {
                 >
                   Download PDF
                 </Link>
-              </td>
-              <td className="px-4 py-2">
+              </TableCell>
+              <TableCell>
                 {invoice.documentType === "INVOICE" ? (
                   <CreditNoteButton invoiceId={invoice.id} />
                 ) : (
                   <span className="text-muted-foreground">None</span>
                 )}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

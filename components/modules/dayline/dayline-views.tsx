@@ -29,10 +29,12 @@ export async function DayLineOrganizerView({ serviceId }: { serviceId: string })
   const view = (await response.json()) as DayLineView;
   const requests = await loadPendingRequests(`/services/${serviceId}/day-line/requests`);
   return (
-    <>
+    <div className="min-h-svh bg-zinc-50 pb-12 dark:bg-zinc-950">
       <DayLineConsole auth={{ kind: "organizer", serviceId }} initial={view} />
-      <PendingRequests auth={{ kind: "organizer", serviceId }} timezone={view.timezone} initial={requests} />
-    </>
+      <div className="mx-auto w-full max-w-2xl px-4">
+        <PendingRequests auth={{ kind: "organizer", serviceId }} timezone={view.timezone} initial={requests} />
+      </div>
+    </div>
   );
 }
 
@@ -55,10 +57,12 @@ export async function DayLineStaffView({ token }: { token: string }) {
   const view = (await response.json()) as DayLineView;
   const requests = await loadPendingRequests(`/line/${token}/requests`);
   return (
-    <>
+    <div className="min-h-svh bg-zinc-50 pb-12 dark:bg-zinc-950">
       <DayLineConsole auth={{ kind: "staff", token }} initial={view} />
-      <PendingRequests auth={{ kind: "staff", token }} timezone={view.timezone} initial={requests} />
-    </>
+      <div className="mx-auto w-full max-w-2xl px-4">
+        <PendingRequests auth={{ kind: "staff", token }} timezone={view.timezone} initial={requests} />
+      </div>
+    </div>
   );
 }
 

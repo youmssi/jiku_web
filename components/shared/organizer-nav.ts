@@ -1,10 +1,13 @@
-import { CalendarDays, ClipboardList, CreditCard, LayoutDashboard, Settings, Users } from "lucide-react";
+import { CalendarDays, ClipboardList, CreditCard, LayoutDashboard, ListOrdered, Settings, Users } from "lucide-react";
 import {
   billingRoute,
   eventDashboardRoute,
   eventEditRoute,
   eventGuestsRoute,
   ROUTES,
+  serviceConfigurationRoute,
+  serviceLineRoute,
+  serviceManageRoute,
 } from "@/lib/constants";
 
 export interface OrganizerNavItem {
@@ -91,11 +94,45 @@ export const EVENT_SUB_NAV_ITEMS: EventSubNavItem[] = [
   },
 ];
 
+/**
+ * Sub-navigation for one selected service, shown as a SidebarMenuSub under
+ * "Services" in the app sidebar, mirroring the per-event sub-navigation so a
+ * service's day line, management and configuration stay one click apart.
+ */
+export const SERVICE_SUB_NAV_ITEMS: EventSubNavItem[] = [
+  {
+    label: "Ligne du jour",
+    href: serviceLineRoute,
+    icon: ListOrdered,
+    match: (pathname, serviceId) => pathname === serviceLineRoute(serviceId),
+  },
+  {
+    label: "Gérer",
+    href: serviceManageRoute,
+    icon: ClipboardList,
+    match: (pathname, serviceId) => pathname === serviceManageRoute(serviceId),
+  },
+  {
+    label: "Configuration",
+    href: serviceConfigurationRoute,
+    icon: Settings,
+    match: (pathname, serviceId) => pathname === serviceConfigurationRoute(serviceId),
+  },
+];
+
 /** Extracts the event id from a pathname like `/events/{id}/...`, or null outside that shape. */
 export function currentEventId(pathname: string): string | null {
   const match = pathname.match(/^\/events\/([^/]+)(?:\/|$)/);
   const id = match?.[1];
   if (!id || id === "new") return null;
+  return id;
+}
+
+/** Extracts the service id from a pathname like `/services/{id}/...`, or null outside that shape. */
+export function currentServiceId(pathname: string): string | null {
+  const match = pathname.match(/^\/services\/([^/]+)(?:\/|$)/);
+  const id = match?.[1];
+  if (!id) return null;
   return id;
 }
 

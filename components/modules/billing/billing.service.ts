@@ -41,7 +41,11 @@ export async function requestActivationAction(
   if (response.status === 400) {
     return { error: "That tier isn't available. Please pick another." };
   }
+  if (response.status === 401 || response.status === 403) {
+    return { error: "Only an organization admin can request capacity for this event." };
+  }
   if (!response.ok) {
+    reportApiError(response);
     return { error: "We couldn't record your request. Please try again." };
   }
   const instructions = (await response.json()) as ManualPaymentInstructions;

@@ -15,7 +15,7 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { bookAppointment, loadAppointment } from "@/components/modules/appointment/appointment.service";
+import { bookAppointment, loadAppointment, type AppointmentLinkRef } from "@/components/modules/appointment/appointment.service";
 import type { AppointmentServiceView, AppointmentSlot } from "@/components/modules/appointment/schema";
 
 function formatInZone(iso: string, zone: string): string {
@@ -36,7 +36,8 @@ function addDays(base: Date, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-export function AppointmentBooking({ token }: { token: string }) {
+export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
+  const token = "token" in link ? link.token : link.code;
   const pathname = usePathname();
   const [view, setView] = useState<AppointmentServiceView | null>(null);
   const [date, setDate] = useState<string | undefined>(undefined);
@@ -48,7 +49,7 @@ export function AppointmentBooking({ token }: { token: string }) {
   const [booked, setBooked] = useState<{ bookingToken: string; status: string } | null>(null);
 
   useEffect(() => {
-    loadAppointment(token, date).then((loaded) => {
+    loadAppointment(link, date).then((loaded) => {
       setView(loaded);
       setSelected(null);
     });
@@ -62,7 +63,7 @@ export function AppointmentBooking({ token }: { token: string }) {
     }
     setError(null);
     setSubmitting(true);
-    const result = await bookAppointment(token, {
+    const result = await bookAppointment(link, {
       clientName: name,
       clientPhone: phone,
       startsAt: selected.startsAt,

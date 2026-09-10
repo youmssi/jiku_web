@@ -2,14 +2,93 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { ArrowUpDown, Building2 } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import type { DataTableFeatures } from "@/components/ui/data-table-features";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import { formatLocalDateTime } from "@/lib/datetime";
 import { ActionDialog } from "./action-dialog";
 import { reactivateTenantAction, suspendTenantAction } from "./admin.service";
-import { AdminTable, EmptyRow, StatusBadge } from "./admin-ui";
-import type { TenantDirectoryPage } from "./schema";
+import { StatusBadge } from "./admin-ui";
+import type { TenantDirectoryEntry, TenantDirectoryPage } from "./schema";
+
+const COLUMNS: ColumnDef<DataTableFeatures, TenantDirectoryEntry>[] = [
+    {
+      accessorKey: "name",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="-ml-3 h-8"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Tenant
+          <ArrowUpDown className="size-3.5" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <span className="font-medium">{row.original.name}</span>
+      ),
+    },
+    {
+      accessorKey: "contactEmail",
+      header: "Contact",
+      cell: ({ row }) => (
+        <span className="text-muted-foreground">
+          {row.original.contactEmail}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "organizerCount",
+      header: "Organizers",
+    },
+    {
+      accessorKey: "createdAt",
+      header: "Created",
+      cell: ({ row }) => formatLocalDateTime(row.original.createdAt),
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => <StatusBadge status={row.original.status} />,
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      enableSorting: false,
+      cell: ({ row }) =>
+        row.original.status === "SUSPENDED" ? (
+          <ActionDialog
+            trigger="Reactivate"
+            title={`Reactivate ${row.original.name}`}
+            description="The tenant's organizers regain access immediately."
+            fieldLabel="Note"
+            confirmLabel="Reactivate"
+            onConfirm={(note) => reactivateTenantAction(row.original.id, note)}
+          />
+        ) : (
+          <ActionDialog
+            trigger="Suspend"
+            title={`Suspend ${row.original.name}`}
+            description="Blocks organizer access and stops guest/validator links from resolving, on the very next request."
+            fieldLabel="Note (why)"
+            confirmLabel="Suspend"
+            destructive
+            onConfirm={(note) => suspendTenantAction(row.original.id, note)}
+          />
+        ),
+    },
+  ];
 
 export function TenantsView({ directory }: { directory: TenantDirectoryPage }) {
   const router = useRouter();
@@ -37,46 +116,24 @@ export function TenantsView({ directory }: { directory: TenantDirectoryPage }) {
         </Button>
       </form>
 
-      <AdminTable headers={["Tenant", "Contact", "Organizers", "Created", "Status", "Actions"]}>
-        {directory.entries.length === 0 ? (
-          <EmptyRow span={6} label="No tenants match." />
-        ) : (
-          directory.entries.map((tenant) => (
-            <tr key={tenant.id}>
-              <td className="px-4 py-2 font-medium">{tenant.name}</td>
-              <td className="px-4 py-2 text-muted-foreground">{tenant.contactEmail}</td>
-              <td className="px-4 py-2">{tenant.organizerCount}</td>
-              <td className="px-4 py-2">{formatLocalDateTime(tenant.createdAt)}</td>
-              <td className="px-4 py-2">
-                <StatusBadge status={tenant.status} />
-              </td>
-              <td className="px-4 py-2">
-                {tenant.status === "SUSPENDED" ? (
-                  <ActionDialog
-                    trigger="Reactivate"
-                    title={`Reactivate ${tenant.name}`}
-                    description="The tenant's organizers regain access immediately."
-                    fieldLabel="Note"
-                    confirmLabel="Reactivate"
-                    onConfirm={(note) => reactivateTenantAction(tenant.id, note)}
-                  />
-                ) : (
-                  <ActionDialog
-                    trigger="Suspend"
-                    title={`Suspend ${tenant.name}`}
-                    description="Blocks organizer access and stops guest/validator links from resolving, on the very next request."
-                    fieldLabel="Note (why)"
-                    confirmLabel="Suspend"
-                    destructive
-                    onConfirm={(note) => suspendTenantAction(tenant.id, note)}
-                  />
-                )}
-              </td>
-            </tr>
-          ))
-        )}
-      </AdminTable>
-      <p className="text-xs text-muted-foreground">{directory.total} tenant(s)</p>
+      {directory.entries.length === 0 ? (
+        <Empty className="mt-10">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Building2 />
+            </EmptyMedia>
+            <EmptyTitle>No tenants found</EmptyTitle>
+            <EmptyDescription>No tenants match this search.</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      ) : (
+        <>
+          <DataTable columns={COLUMNS} data={directory.entries} />
+          <p className="text-xs text-muted-foreground">
+            {directory.total} tenant(s)
+          </p>
+        </>
+      )}
     </div>
   );
 }

@@ -9,17 +9,26 @@ import type {
   BookingInput,
 } from "@/components/modules/appointment/schema";
 
-function appointmentsPath(token: string): string {
-  return `/appointments/${encodeURIComponent(token)}`;
+/**
+ * Référence du lien de réservation : soit le jeton signé historique
+ * (/appointments/{token}), soit le code court partagé (/r/{code}). Le client
+ * n'a pas de compte ; la référence du lien porte le tenant et le service.
+ */
+export type AppointmentLinkRef = { token: string } | { code: string };
+
+function basePath(ref: AppointmentLinkRef): string {
+  return "token" in ref
+    ? `/appointments/${encodeURIComponent(ref.token)}`
+    : `/r/${encodeURIComponent(ref.code)}`;
 }
 
 /** Service et créneaux ouverts du jour (ou du [date] ISO) — sans compte. */
 export async function loadAppointment(
-  token: string,
+  ref: AppointmentLinkRef,
   date?: string,
 ): Promise<AppointmentServiceView | null> {
   const params = date ? `?date=${encodeURIComponent(date)}` : "";
-  const response = await publicFetch(`${appointmentsPath(token)}${params}`);
+  const response = await publicFetch(`${basePath(ref)}${params}`);
   if (!response.ok) {
     return null;
   }
@@ -27,10 +36,10 @@ export async function loadAppointment(
 }
 
 export async function bookAppointment(
-  token: string,
+  ref: AppointmentLinkRef,
   input: BookingInput,
 ): Promise<ActionResult<AppointmentBookingView>> {
-  const response = await publicFetch(appointmentsPath(token) + "/book", {
+  const response = await publicFetch(basePath(ref) + "/book", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
@@ -42,11 +51,11 @@ export async function bookAppointment(
 }
 
 export async function loadBookingStatus(
-  token: string,
+  ref: AppointmentLinkRef,
   bookingToken: string,
 ): Promise<AppointmentStatusView | null> {
   const response = await publicFetch(
-    `${appointmentsPath(token)}/booking/${encodeURIComponent(bookingToken)}`,
+    `${basePath(ref)}/booking/${encodeURIComponent(bookingToken)}`,
   );
   if (!response.ok) {
     return null;
@@ -55,11 +64,11 @@ export async function loadBookingStatus(
 }
 
 export async function cancelAppointment(
-  token: string,
+  ref: AppointmentLinkRef,
   bookingToken: string,
 ): Promise<ActionResult<null>> {
   const response = await publicFetch(
-    `${appointmentsPath(token)}/booking/${encodeURIComponent(bookingToken)}`,
+    `${basePath(ref)}/booking/${encodeURIComponent(bookingToken)}`,
     { method: "DELETE" },
   );
   if (!response.ok) {

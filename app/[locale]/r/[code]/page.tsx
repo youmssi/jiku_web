@@ -6,9 +6,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function AppointmentBookingPage({
+export default async function ShortLinkBookingPage({
   params,
-}: Readonly<{ params: Promise<{ locale: string; token: string }> }>) {
-  const { token } = await params;
-  return <AppointmentBooking link={{ token }} />;
+}: Readonly<{ params: Promise<{ locale: string; code: string }> }>) {
+  const { code } = await params;
+  return <AppointmentBooking link={{ code }} />;
 }

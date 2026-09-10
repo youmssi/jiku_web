@@ -8,7 +8,7 @@ export default async function AdminDiagnosticsPage() {
   if (probe.status === 401 || probe.status === 403) redirect(ADMIN_ROUTES.LOGIN);
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Diagnostics</h1>
+      <h1 className="mb-6 text-2xl font-semibold tracking-tight">Diagnostics</h1>
       <DiagnosticsPanel />
     </div>
   );
