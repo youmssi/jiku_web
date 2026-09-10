@@ -2,6 +2,7 @@
 
 import { serverFetch } from "@/lib/api-server";
 import { fail, reportApiError } from "@/lib/action-result";
+import { revalidatePath } from "next/cache";
 import type {
   BrandingResponse,
   ProviderSettingsResponse,
@@ -220,4 +221,42 @@ export async function previewTemplateAction(
     return fail("We couldn't preview this template.");
   }
   return { ok: true, data: (await response.json()) as TemplatePreviewResponse };
+}
+
+// ─── Profil public de l'organisation ────────────────────────────────────────
+
+/**
+ * Lie (ou change) l'identifiant public de l'organisation, celui de sa page
+ * découverte à /o/{username}. Réservé aux admins et au propriétaire.
+ */
+export async function updateOrgUsernameAction(
+  username: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const response = await serverFetch("/orgs/username", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username }),
+  });
+  if (!response.ok) {
+    if (response.status === 409) {
+      return fail("This username is already taken. Pick another.");
+    }
+    if (response.status === 400) {
+      return fail("Use 3 to 32 lowercase letters, numbers and hyphens.");
+    }
+    reportApiError(response);
+    return fail("We couldn't save the username. Please try again.");
+  }
+  revalidatePath("/", "layout");
+  return { ok: true };
+}
+
+/** L'identité de l'organisation courante (nom, identifiant public). */
+export async function fetchOrgProfileAction(): Promise<{
+  username: string | null;
+} | null> {
+  const response = await serverFetch("/orgs/profile");
+  if (!response.ok) return null;
+  const data = (await response.json()) as { username?: string | null };
+  return { username: data.username ?? null };
 }
