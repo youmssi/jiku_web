@@ -1,15 +1,115 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { ArrowUpDown, CreditCard } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import type { DataTableFeatures } from "@/components/ui/data-table-features";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import { formatLocalDateTime } from "@/lib/datetime";
 import { ActionDialog } from "./action-dialog";
 import { confirmPaymentAction, rejectPaymentAction } from "./admin.service";
-import { AdminTable, EmptyRow, formatAmount, StatusBadge } from "./admin-ui";
+import { formatAmount, StatusBadge } from "./admin-ui";
 import type { AdminPayment } from "./schema";
 
 const STATUS_FILTERS = ["PENDING", "SUCCEEDED", "FAILED"] as const;
+
+const COLUMNS: ColumnDef<DataTableFeatures, AdminPayment>[] = [
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="-ml-3 h-8"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Date
+        <ArrowUpDown className="size-3.5" />
+      </Button>
+    ),
+    cell: ({ row }) => formatLocalDateTime(row.original.createdAt),
+  },
+  {
+    accessorKey: "reference",
+    header: "Reference",
+    cell: ({ row }) => (
+      <span className="font-mono font-medium">
+        {row.original.reference || "—"}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "tier",
+    header: "Tier",
+  },
+  {
+    accessorKey: "amountMinor",
+    header: "Amount",
+    cell: ({ row }) =>
+      formatAmount(row.original.amountMinor, row.original.currency),
+  },
+  {
+    accessorKey: "provider",
+    header: "Provider",
+  },
+  {
+    id: "tenant",
+    header: "Tenant",
+    enableSorting: false,
+    cell: ({ row }) => (
+      <span className="font-mono text-xs text-muted-foreground">
+        {row.original.tenantId.slice(0, 8)}…
+      </span>
+    ),
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => <StatusBadge status={row.original.status} />,
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    enableSorting: false,
+    cell: ({ row }) =>
+      row.original.status === "PENDING" &&
+      row.original.provider === "manual" ? (
+        <div className="flex gap-2">
+          <ActionDialog
+            trigger="Mark paid"
+            title={`Confirm ${row.original.reference}`}
+            description="Only confirm after the transfer is visible on the receiving account. This unlocks the tier immediately."
+            fieldLabel="Observed transaction reference"
+            confirmLabel="Confirm payment"
+            onConfirm={(reference) =>
+              confirmPaymentAction(row.original.id, reference)
+            }
+          />
+          <ActionDialog
+            trigger="Reject"
+            title={`Reject ${row.original.reference}`}
+            description="The organizer is notified and can submit a new request."
+            fieldLabel="Reason"
+            confirmLabel="Reject"
+            destructive
+            onConfirm={(reason) =>
+              rejectPaymentAction(row.original.id, reason)
+            }
+          />
+        </div>
+      ) : (
+        <span className="text-muted-foreground">—</span>
+      ),
+  },
+];
 
 export function PaymentsView({ payments }: { payments: AdminPayment[] }) {
   const router = useRouter();
@@ -24,7 +124,7 @@ export function PaymentsView({ payments }: { payments: AdminPayment[] }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {STATUS_FILTERS.map((status) => (
           <Button
             key={status}
@@ -37,54 +137,21 @@ export function PaymentsView({ payments }: { payments: AdminPayment[] }) {
         ))}
       </div>
 
-      <AdminTable
-        headers={["Date", "Reference", "Tier", "Amount", "Provider", "Tenant", "Status", "Actions"]}
-      >
-        {payments.length === 0 ? (
-          <EmptyRow span={8} label={`No ${active.toLowerCase()} payments.`} />
-        ) : (
-          payments.map((payment) => (
-            <tr key={payment.id}>
-              <td className="px-4 py-2">{formatLocalDateTime(payment.createdAt)}</td>
-              <td className="px-4 py-2 font-mono font-medium">{payment.reference || "—"}</td>
-              <td className="px-4 py-2">{payment.tier}</td>
-              <td className="px-4 py-2">{formatAmount(payment.amountMinor, payment.currency)}</td>
-              <td className="px-4 py-2">{payment.provider}</td>
-              <td className="px-4 py-2 font-mono text-xs text-muted-foreground">
-                {payment.tenantId.slice(0, 8)}…
-              </td>
-              <td className="px-4 py-2">
-                <StatusBadge status={payment.status} />
-              </td>
-              <td className="px-4 py-2">
-                {payment.status === "PENDING" && payment.provider === "manual" ? (
-                  <div className="flex gap-2">
-                    <ActionDialog
-                      trigger="Mark paid"
-                      title={`Confirm ${payment.reference}`}
-                      description="Only confirm after the transfer is visible on the receiving account. This unlocks the tier immediately."
-                      fieldLabel="Observed transaction reference"
-                      confirmLabel="Confirm payment"
-                      onConfirm={(reference) => confirmPaymentAction(payment.id, reference)}
-                    />
-                    <ActionDialog
-                      trigger="Reject"
-                      title={`Reject ${payment.reference}`}
-                      description="The organizer is notified and can submit a new request."
-                      fieldLabel="Reason"
-                      confirmLabel="Reject"
-                      destructive
-                      onConfirm={(reason) => rejectPaymentAction(payment.id, reason)}
-                    />
-                  </div>
-                ) : (
-                  <span className="text-muted-foreground">—</span>
-                )}
-              </td>
-            </tr>
-          ))
-        )}
-      </AdminTable>
+      {payments.length === 0 ? (
+        <Empty className="mt-10">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <CreditCard />
+            </EmptyMedia>
+            <EmptyTitle>No payments</EmptyTitle>
+            <EmptyDescription>
+              {`No ${active.toLowerCase()} payments.`}
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      ) : (
+        <DataTable columns={COLUMNS} data={payments} />
+      )}
     </div>
   );
 }

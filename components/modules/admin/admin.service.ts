@@ -10,6 +10,8 @@ import type {
   TenantDirectoryPage,
   RefundBookingRequest,
   AdminBookingRefund,
+  AdminBillingSettingsView,
+  AdminBillingSettingsFormValues,
 } from "@/components/modules/admin/schema";
 
 export interface ActionResult {
@@ -236,4 +238,47 @@ export async function triggerDiagnosticsAction(): Promise<
   }
   const requestId = response.headers.get("X-Request-Id") ?? undefined;
   return { requestId };
+}
+
+/**
+ * Réglages de facturation (bénéficiaire + grilles de prix) tels que le bureau
+ * admin les voit. Le backend renvoie la configuration d'environnement par
+ * défaut tant que rien n'a été enregistré en base.
+ */
+export async function fetchBillingSettingsAction(): Promise<AdminBillingSettingsView | null> {
+  const response = await adminFetch("/admin/billing/settings");
+  if (!response.ok) {
+    return null;
+  }
+  return (await response.json()) as AdminBillingSettingsView;
+}
+
+export async function updateBillingSettingsAction(
+  values: AdminBillingSettingsFormValues,
+): Promise<ActionResult> {
+  const response = await adminFetch("/admin/billing/settings", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      payee: {
+        payeeName: values.payee.payeeName.trim() || null,
+        contactEmail: values.payee.contactEmail.trim() || null,
+        contactPhone: values.payee.contactPhone.trim() || null,
+        mobileMoneyNumber: values.payee.mobileMoneyNumber.trim() || null,
+        mobileMoneyOperator: values.payee.mobileMoneyOperator.trim() || null,
+        bankDetails: values.payee.bankDetails.trim() || null,
+      },
+      tiers: values.tiers,
+      subscriptionPlans: values.subscriptionPlans,
+    }),
+  });
+  if (!response.ok) {
+    const message = await response
+      .json()
+      .then((payload: { message?: string }) => payload.message)
+      .catch(() => undefined);
+    return { error: message ?? "Les réglages n'ont pas pu être enregistrés." };
+  }
+  revalidatePath("/admin", "layout");
+  return {};
 }

@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { AdminLoginForm } from "@/components/modules/admin";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { JikūLogo } from "@/components/ui/jiku-logo";
 import { getAdminAccessToken } from "@/lib/auth";
 import { ADMIN_ROUTES } from "@/lib/constants";
 
@@ -10,14 +12,19 @@ export default async function AdminLoginPage() {
     redirect(ADMIN_ROUTES.TENANTS);
   }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 px-4">
-      <div className="text-center">
-        <h1 className="text-2xl font-semibold">Jikū administration</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Platform operators only. All actions are audit-logged.
-        </p>
-      </div>
-      <AdminLoginForm />
+    <main className="flex min-h-svh flex-col items-center justify-center gap-6 px-4">
+      <Card className="w-full max-w-sm">
+        <CardHeader className="text-center">
+          <JikūLogo className="mx-auto mb-2 text-lg" />
+          <CardTitle className="text-xl">Jikū administration</CardTitle>
+          <CardDescription>
+            Platform operators only. All actions are audit-logged.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <AdminLoginForm />
+        </CardContent>
+      </Card>
     </main>
   );
 }

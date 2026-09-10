@@ -8,6 +8,13 @@ interface PageProps {
   searchParams: Promise<{ query?: string }>;
 }
 
+const EMPTY_DIRECTORY: TenantDirectoryPage = {
+  entries: [],
+  total: 0,
+  page: 0,
+  size: 50,
+};
+
 export default async function AdminTenantsPage({ searchParams }: Readonly<PageProps>) {
   const { query } = await searchParams;
   const params = new URLSearchParams({ size: "50" });
@@ -17,11 +24,13 @@ export default async function AdminTenantsPage({ searchParams }: Readonly<PagePr
   if (response.status === 401 || response.status === 403) {
     redirect(ADMIN_ROUTES.LOGIN);
   }
-  const directory = (await response.json()) as TenantDirectoryPage;
+  const directory = response.ok
+    ? ((await response.json()) as TenantDirectoryPage)
+    : EMPTY_DIRECTORY;
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Tenants</h1>
+      <h1 className="mb-6 text-2xl font-semibold tracking-tight">Tenants</h1>
       <TenantsView directory={directory} />
     </div>
   );
