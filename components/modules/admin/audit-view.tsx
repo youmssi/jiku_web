@@ -2,12 +2,69 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { ScrollText } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import type { DataTableFeatures } from "@/components/ui/data-table-features";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import { formatLocalDateTime } from "@/lib/datetime";
-import { AdminTable, EmptyRow } from "./admin-ui";
-import type { AuditPage } from "./schema";
+import type { AuditEntry, AuditPage } from "./schema";
+
+const COLUMNS: ColumnDef<DataTableFeatures, AuditEntry>[] = [
+  {
+    accessorKey: "createdAt",
+    header: "When",
+    cell: ({ row }) => (
+      <span className="whitespace-nowrap">
+        {formatLocalDateTime(row.original.createdAt)}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "action",
+    header: "Action",
+    cell: ({ row }) => (
+      <span className="font-mono text-xs">{row.original.action}</span>
+    ),
+  },
+  {
+    accessorKey: "target",
+    header: "Target",
+    cell: ({ row }) => (
+      <span className="font-mono text-xs text-muted-foreground">
+        {row.original.target}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "note",
+    header: "Note",
+    cell: ({ row }) => (
+      <span className="block max-w-64 truncate text-muted-foreground">
+        {row.original.note ?? "—"}
+      </span>
+    ),
+  },
+  {
+    id: "admin",
+    header: "Admin",
+    enableSorting: false,
+    cell: ({ row }) => (
+      <span className="font-mono text-xs text-muted-foreground">
+        {row.original.adminId.slice(0, 8)}…
+      </span>
+    ),
+  },
+];
 
 export function AuditView({ audit }: { audit: AuditPage }) {
   const router = useRouter();
@@ -35,24 +92,24 @@ export function AuditView({ audit }: { audit: AuditPage }) {
         </Button>
       </form>
 
-      <AdminTable headers={["When", "Action", "Target", "Note", "Admin"]}>
-        {audit.entries.length === 0 ? (
-          <EmptyRow span={5} label="No audit entries match." />
-        ) : (
-          audit.entries.map((entry) => (
-            <tr key={entry.id}>
-              <td className="px-4 py-2 whitespace-nowrap">{formatLocalDateTime(entry.createdAt)}</td>
-              <td className="px-4 py-2 font-mono text-xs">{entry.action}</td>
-              <td className="px-4 py-2 font-mono text-xs text-muted-foreground">{entry.target}</td>
-              <td className="max-w-64 truncate px-4 py-2 text-muted-foreground">{entry.note ?? "—"}</td>
-              <td className="px-4 py-2 font-mono text-xs text-muted-foreground">
-                {entry.adminId.slice(0, 8)}…
-              </td>
-            </tr>
-          ))
-        )}
-      </AdminTable>
-      <p className="text-xs text-muted-foreground">{audit.total} entrie(s)</p>
+      {audit.entries.length === 0 ? (
+        <Empty className="mt-10">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <ScrollText />
+            </EmptyMedia>
+            <EmptyTitle>No audit entries</EmptyTitle>
+            <EmptyDescription>No audit entries match this filter.</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      ) : (
+        <>
+          <DataTable columns={COLUMNS} data={audit.entries} />
+          <p className="text-xs text-muted-foreground">
+            {audit.total} entrie(s)
+          </p>
+        </>
+      )}
     </div>
   );
 }

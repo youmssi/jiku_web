@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cancelAppointment, loadBookingStatus } from "@/components/modules/appointment/appointment.service";
+import { cancelAppointment, loadBookingStatus, type AppointmentLinkRef } from "@/components/modules/appointment/appointment.service";
 import type { AppointmentStatusView } from "@/components/modules/appointment/schema";
 
 function formatInZone(iso: string, zone: string): string {
@@ -27,11 +27,11 @@ function formatInZone(iso: string, zone: string): string {
 }
 
 export function AppointmentStatus({
-  token,
+  link,
   bookingToken,
   timezone,
 }: {
-  token: string;
+  link: AppointmentLinkRef;
   bookingToken: string;
   timezone: string;
 }) {
@@ -40,14 +40,14 @@ export function AppointmentStatus({
   const [cancelling, setCancelling] = useState(false);
 
   const refresh = useCallback(() => {
-    loadBookingStatus(token, bookingToken).then((loaded) => setView(loaded));
-  }, [token, bookingToken]);
+    loadBookingStatus(link, bookingToken).then((loaded) => setView(loaded));
+  }, [bookingToken]);
 
   useEffect(refresh, [refresh]);
 
   const cancel = useCallback(async () => {
     setCancelling(true);
-    const result = await cancelAppointment(token, bookingToken);
+    const result = await cancelAppointment(link, bookingToken);
     setCancelling(false);
     if (!result.ok) {
       setMessage(result.error ?? "Annulation impossible.");
@@ -55,7 +55,7 @@ export function AppointmentStatus({
     }
     setMessage("Votre rendez-vous a été annulé.");
     setView(null);
-  }, [token, bookingToken]);
+  }, [bookingToken]);
 
   if (!view) {
     return (

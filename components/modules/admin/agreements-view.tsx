@@ -1,16 +1,146 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { FileSignature } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import type { Resolver } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { DataTable } from "@/components/ui/data-table";
+import type { DataTableFeatures } from "@/components/ui/data-table-features";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import {
+  Field,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { formatLocalDateTime } from "@/lib/datetime";
 import { ActionDialog } from "./action-dialog";
-import { createAgreementAction, interruptAgreementAction, renewAgreementAction } from "./admin.service";
-import { AdminTable, EmptyRow, formatAmount, StatusBadge } from "./admin-ui";
+import {
+  createAgreementAction,
+  interruptAgreementAction,
+  renewAgreementAction,
+} from "./admin.service";
+import { formatAmount, StatusBadge } from "./admin-ui";
 import { TenantCombobox } from "./tenant-combobox";
-import type { AdminAgreement, AdminTierCatalog, TenantDirectoryEntry } from "./schema";
+import type { AdminAgreement, AdminTierCatalog } from "./schema";
+import {
+  createAgreementSchema,
+  type CreateAgreementFormValues,
+} from "./schema";
+
+const COLUMNS: ColumnDef<DataTableFeatures, AdminAgreement>[] = [
+  {
+    id: "tenant",
+    header: "Tenant",
+    enableSorting: false,
+    cell: ({ row }) => (
+      <span className="font-mono text-xs text-muted-foreground">
+        {row.original.tenantId.slice(0, 8)}…
+      </span>
+    ),
+  },
+  {
+    accessorKey: "kind",
+    header: "Kind",
+  },
+  {
+    id: "period",
+    header: "Period",
+    enableSorting: false,
+    cell: ({ row }) => (
+      <span className="whitespace-nowrap">
+        {formatLocalDateTime(row.original.periodStart)} →{" "}
+        {formatLocalDateTime(row.original.periodEnd)}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "renewalAt",
+    header: "Renewal",
+    cell: ({ row }) => formatLocalDateTime(row.original.renewalAt),
+  },
+  {
+    id: "amount",
+    header: "Amount",
+    enableSorting: false,
+    cell: ({ row }) =>
+      row.original.amountMinor != null && row.original.currency
+        ? formatAmount(row.original.amountMinor, row.original.currency)
+        : "—",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => <StatusBadge status={row.original.status} />,
+  },
+  {
+    id: "notes",
+    header: "Notes",
+    enableSorting: false,
+    cell: ({ row }) => (
+      <span className="block max-w-48 truncate text-muted-foreground">
+        {row.original.interruptedReason ?? row.original.notes ?? "—"}
+      </span>
+    ),
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    enableSorting: false,
+    cell: ({ row }) =>
+      row.original.status === "ACTIVE" ? (
+        <div className="flex gap-2">
+          <ActionDialog
+            trigger="Renew"
+            title="Renew this agreement"
+            description="Closes the current period and opens the next one, ending at the date below."
+            fieldLabel="New period end (YYYY-MM-DD)"
+            confirmLabel="Renew"
+            onConfirm={(date) =>
+              renewAgreementAction(row.original.id, toInstant(date))
+            }
+          />
+          <ActionDialog
+            trigger="Interrupt"
+            title="Interrupt this agreement"
+            description="For an ENTERPRISE_SAAS deal this also suspends the tenant immediately."
+            fieldLabel="Reason"
+            confirmLabel="Interrupt"
+            destructive
+            onConfirm={(reason) =>
+              interruptAgreementAction(row.original.id, reason)
+            }
+          />
+        </div>
+      ) : (
+        <span className="text-muted-foreground">—</span>
+      ),
+  },
+];
 
 export function AgreementsView({
   agreements,
@@ -23,62 +153,21 @@ export function AgreementsView({
     <div className="flex flex-col gap-6">
       <CreateAgreementForm currency={catalog.currency} />
 
-      <AdminTable
-        headers={["Tenant", "Kind", "Period", "Renewal", "Amount", "Status", "Notes", "Actions"]}
-      >
-        {agreements.length === 0 ? (
-          <EmptyRow span={8} label="No agreements yet." />
-        ) : (
-          agreements.map((agreement) => (
-            <tr key={agreement.id}>
-              <td className="px-4 py-2 font-mono text-xs text-muted-foreground">
-                {agreement.tenantId.slice(0, 8)}…
-              </td>
-              <td className="px-4 py-2">{agreement.kind}</td>
-              <td className="px-4 py-2 whitespace-nowrap">
-                {formatLocalDateTime(agreement.periodStart)} → {formatLocalDateTime(agreement.periodEnd)}
-              </td>
-              <td className="px-4 py-2">{formatLocalDateTime(agreement.renewalAt)}</td>
-              <td className="px-4 py-2">
-                {agreement.amountMinor != null && agreement.currency
-                  ? formatAmount(agreement.amountMinor, agreement.currency)
-                  : "—"}
-              </td>
-              <td className="px-4 py-2">
-                <StatusBadge status={agreement.status} />
-              </td>
-              <td className="max-w-48 truncate px-4 py-2 text-muted-foreground">
-                {agreement.interruptedReason ?? agreement.notes ?? "—"}
-              </td>
-              <td className="px-4 py-2">
-                {agreement.status === "ACTIVE" ? (
-                  <div className="flex gap-2">
-                    <ActionDialog
-                      trigger="Renew"
-                      title="Renew this agreement"
-                      description="Closes the current period and opens the next one, ending at the date below."
-                      fieldLabel="New period end (YYYY-MM-DD)"
-                      confirmLabel="Renew"
-                      onConfirm={(date) => renewAgreementAction(agreement.id, toInstant(date))}
-                    />
-                    <ActionDialog
-                      trigger="Interrupt"
-                      title="Interrupt this agreement"
-                      description="For an ENTERPRISE_SAAS deal this also suspends the tenant immediately."
-                      fieldLabel="Reason"
-                      confirmLabel="Interrupt"
-                      destructive
-                      onConfirm={(reason) => interruptAgreementAction(agreement.id, reason)}
-                    />
-                  </div>
-                ) : (
-                  <span className="text-muted-foreground">—</span>
-                )}
-              </td>
-            </tr>
-          ))
-        )}
-      </AdminTable>
+      {agreements.length === 0 ? (
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <FileSignature />
+            </EmptyMedia>
+            <EmptyTitle>No agreements yet</EmptyTitle>
+            <EmptyDescription>
+              Create an agreement above to open a billing period for a tenant.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      ) : (
+        <DataTable columns={COLUMNS} data={agreements} />
+      )}
     </div>
   );
 }
@@ -90,102 +179,214 @@ function toInstant(date: string): string {
 }
 
 function CreateAgreementForm({ currency }: { currency: string }) {
-  const [tenant, setTenant] = useState<TenantDirectoryEntry | null>(null);
-  const [kind, setKind] = useState("ENTERPRISE_SAAS");
-  const [periodStart, setPeriodStart] = useState("");
-  const [periodEnd, setPeriodEnd] = useState("");
-  const [amount, setAmount] = useState("");
-  const [notes, setNotes] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<CreateAgreementFormValues>({
+    // The schema checks the tenant structurally (an id is required); the form
+    // value carries the full entry so the combobox can display the selection.
+    resolver: zodResolver(
+      createAgreementSchema,
+    ) as Resolver<CreateAgreementFormValues>,
+    defaultValues: {
+      tenant: null,
+      kind: "ENTERPRISE_SAAS",
+      periodStart: "",
+      periodEnd: "",
+      amount: "",
+      notes: "",
+    },
+  });
 
-  function submit(event: React.FormEvent) {
-    event.preventDefault();
-    if (!tenant) {
+  async function onSubmit(values: CreateAgreementFormValues) {
+    if (!values.tenant) {
       toast.error("Pick an organization first.");
       return;
     }
-    startTransition(async () => {
-      const { error } = await createAgreementAction({
-        tenantId: tenant.id,
-        kind,
-        periodStart: new Date(periodStart).toISOString(),
-        periodEnd: new Date(`${periodEnd}T23:59:59Z`).toISOString(),
-        // The platform currency (GNF) has no minor unit, so the typed amount is
-        // the full amount rather than centimes.
-        amountMinor: amount.trim() ? Math.round(Number(amount)) : null,
-        currency: amount.trim() ? currency : null,
-        notes: notes.trim() || null,
-      });
-      if (error) {
-        toast.error(error);
-        return;
-      }
-      toast.success("Agreement recorded.");
-      setTenant(null);
-      setPeriodStart("");
-      setPeriodEnd("");
-      setAmount("");
-      setNotes("");
+    const amount = values.amount?.trim();
+    const result = await createAgreementAction({
+      tenantId: values.tenant.id,
+      kind: values.kind,
+      periodStart: new Date(values.periodStart).toISOString(),
+      periodEnd: new Date(`${values.periodEnd}T23:59:59Z`).toISOString(),
+      // The platform currency (GNF) has no minor unit, so the typed amount is
+      // the full amount rather than centimes.
+      amountMinor: amount ? Math.round(Number(amount)) : null,
+      currency: amount ? currency : null,
+      notes: values.notes.trim() || null,
     });
+    if (result.error) {
+      toast.error(result.error);
+      return;
+    }
+    toast.success("Agreement recorded.");
+    reset();
+    router.refresh();
   }
 
   return (
-    <form onSubmit={submit} className="grid gap-3 rounded-xl border p-4 sm:grid-cols-2 lg:grid-cols-6">
-      <div className="grid gap-1.5">
-        <Label htmlFor="agr-tenant">Organization</Label>
-        <TenantCombobox id="agr-tenant" value={tenant} onChange={setTenant} />
-      </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="agr-kind">Kind</Label>
-        <select
-          id="agr-kind"
-          value={kind}
-          onChange={(e) => setKind(e.target.value)}
-          className="h-9 rounded-md border bg-transparent px-3 text-sm"
-        >
-          <option value="ENTERPRISE_SAAS">ENTERPRISE_SAAS</option>
-          <option value="ON_PREMISE">ON_PREMISE</option>
-        </select>
-      </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="agr-start">Starts</Label>
-        <Input
-          id="agr-start"
-          type="date"
-          value={periodStart}
-          onChange={(e) => setPeriodStart(e.target.value)}
-          required
-        />
-      </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="agr-end">Ends</Label>
-        <Input
-          id="agr-end"
-          type="date"
-          value={periodEnd}
-          onChange={(e) => setPeriodEnd(e.target.value)}
-          required
-        />
-      </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="agr-amount">Amount ({currency}, optional)</Label>
-        <Input
-          id="agr-amount"
-          type="number"
-          min="0"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-      </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="agr-notes">Notes</Label>
-        <div className="flex gap-2">
-          <Input id="agr-notes" value={notes} onChange={(e) => setNotes(e.target.value)} />
-          <Button type="submit" disabled={isPending}>
-            {isPending ? "…" : "Create"}
-          </Button>
-        </div>
-      </div>
-    </form>
+    <Card>
+      <CardHeader>
+        <CardTitle>Create agreement</CardTitle>
+        <CardDescription>
+          Open a billing period for an enterprise or on-premise deal. The amount
+          is optional — the platform currency is {currency}.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <div className="flex flex-wrap items-end gap-4">
+            <Controller
+              control={control}
+              name="tenant"
+              render={({ field, fieldState }) => (
+                <Field
+                  className="min-w-64 grow basis-64"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldLabel htmlFor="agr-tenant">Organization</FieldLabel>
+                  <TenantCombobox
+                    id="agr-tenant"
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : null}
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="kind"
+              render={({ field, fieldState }) => (
+                <Field
+                  className="min-w-44 grow basis-44"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldLabel htmlFor="agr-kind">Kind</FieldLabel>
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger
+                      id="agr-kind"
+                      aria-invalid={fieldState.invalid}
+                      className="w-full"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ENTERPRISE_SAAS">
+                        ENTERPRISE_SAAS
+                      </SelectItem>
+                      <SelectItem value="ON_PREMISE">ON_PREMISE</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : null}
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="periodStart"
+              render={({ field, fieldState }) => (
+                <Field
+                  className="min-w-40 grow basis-40"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldLabel htmlFor={field.name}>Starts</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="date"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : null}
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="periodEnd"
+              render={({ field, fieldState }) => (
+                <Field
+                  className="min-w-40 grow basis-40"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldLabel htmlFor={field.name}>Ends</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="date"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : null}
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="amount"
+              render={({ field, fieldState }) => (
+                <Field
+                  className="min-w-40 grow basis-40"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldLabel htmlFor={field.name}>
+                    Amount ({currency}, optional)
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="number"
+                    min="0"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : null}
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="notes"
+              render={({ field, fieldState }) => (
+                <Field
+                  className="min-w-52 grow basis-52"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldLabel htmlFor={field.name}>Notes</FieldLabel>
+                  <div className="flex gap-2">
+                    <Input
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    <Button type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? "…" : "Create"}
+                    </Button>
+                  </div>
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : null}
+                </Field>
+              )}
+            />
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
