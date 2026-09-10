@@ -69,7 +69,7 @@ export function QuorumCard({ quorum }: { quorum: QuorumView }) {
           {!quorum.reached ? (
             // Le quorum a été atteint puis est retombé : les deux faits comptent,
             // et c'est le premier qui fera foi dans un procès-verbal.
-            <span className="text-muted-foreground"> — des participants sont repartis depuis</span>
+            <span className="text-muted-foreground"> (des participants sont repartis depuis)</span>
           ) : null}
         </p>
       ) : null}

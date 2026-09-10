@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -23,7 +22,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
-import { ROUTES } from "@/lib/constants";
+import { ROUTES, PRIVACY_ROUTE } from "@/lib/constants";
 import { GoogleButton } from "@/components/modules/identity/google-button";
 import { loginAction } from "@/components/modules/identity/identity.service";
 import {
@@ -31,6 +30,10 @@ import {
   type LoginInput,
 } from "@/components/modules/identity/schema";
 
+/**
+ * Sign-in form styled after the shadcn login-03 template: centered card, social
+ * provider, "or continue with" separator, credentials, and the terms note below.
+ */
 export function LoginForm({ next }: { next?: string }) {
   const [formError, setFormError] = useState<string | null>(null);
   const {
@@ -52,16 +55,14 @@ export function LoginForm({ next }: { next?: string }) {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl">Sign in</CardTitle>
-          <CardDescription>
-            Welcome back. Sign in to manage your events.
-          </CardDescription>
+    <div className="flex flex-col gap-6">
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl">Welcome back</CardTitle>
+          <CardDescription>Login with your Google account</CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-(--card-spacing)">
-          <CardContent>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <FieldGroup>
               {formError ? (
                 <Alert variant="destructive">
@@ -69,6 +70,9 @@ export function LoginForm({ next }: { next?: string }) {
                   <AlertDescription>{formError}</AlertDescription>
                 </Alert>
               ) : null}
+              <Field>
+                <GoogleButton next={next} />
+              </Field>
               <Controller
                 control={control}
                 name="email"
@@ -93,35 +97,44 @@ export function LoginForm({ next }: { next?: string }) {
                 name="password"
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                    <div className="flex items-center">
+                      <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                      <Link
+                        href={ROUTES.FORGOT_PASSWORD}
+                        className="ml-auto text-sm underline-offset-4 hover:underline"
+                      >
+                        Forgot your password?
+                      </Link>
+                    </div>
                     <PasswordInput
                       {...field}
                       id={field.name}
                       autoComplete="current-password"
                       aria-invalid={fieldState.invalid}
                     />
-                    <FieldDescription>
-                      <Link href={ROUTES.FORGOT_PASSWORD}>Forgot your password?</Link>
-                    </FieldDescription>
                     {fieldState.invalid ? (
                       <FieldError errors={[fieldState.error]} />
                     ) : null}
                   </Field>
                 )}
               />
+              <Field>
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? "Signing in…" : "Login"}
+                </Button>
+                <FieldDescription className="text-center">
+                  Don&apos;t have an account?{" "}
+                  <Link href={ROUTES.REGISTER}>Sign up</Link>
+                </FieldDescription>
+              </Field>
             </FieldGroup>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-3">
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Signing in…" : "Sign in"}
-            </Button>
-            <GoogleButton next={next} />
-            <FieldDescription className="text-center">
-              New to Jikū? <Link href={ROUTES.REGISTER}>Create an account</Link>
-            </FieldDescription>
-          </CardFooter>
-        </form>
+          </form>
+        </CardContent>
       </Card>
+      <FieldDescription className="px-6 text-center">
+        By clicking continue, you agree to our Terms of Service and{" "}
+        <Link href={PRIVACY_ROUTE}>Privacy Policy</Link>.
+      </FieldDescription>
     </div>
   );
 }

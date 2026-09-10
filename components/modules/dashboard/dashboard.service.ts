@@ -26,3 +26,13 @@ export async function fetchAnalyticsAction(
     default: "Couldn't load this event's trend data.",
   });
 }
+
+/** Fetches one event's name for navigation chrome (breadcrumbs); null when unavailable. */
+export async function getEventNameAction(eventId: string): Promise<string | null> {
+  const response = await serverFetch(`/events/${eventId}`);
+  if (!response.ok) {
+    return null;
+  }
+  const event = (await response.json().catch(() => null)) as { name?: string } | null;
+  return event?.name ?? null;
+}
