@@ -44,6 +44,8 @@ export interface PaymentInstruction {
 
 export interface PayeeDetails {
   payeeName: string | null;
+  contactEmail: string | null;
+  contactPhone: string | null;
   mobileMoneyNumber: string | null;
   mobileMoneyOperator: string | null;
   bankDetails: string | null;
