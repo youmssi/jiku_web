@@ -92,7 +92,7 @@ export function TicketTypesSettings({
     <section className="mt-10 rounded-xl border p-6">
       <h2 className="text-lg font-semibold">Catégories d&apos;accès</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Séparez vos invités en catégories — VIP, presse, standard — avec leur propre
+        Séparez vos invités en catégories (VIP, presse, standard) avec leur propre
         plafond. Le billet porte sa catégorie et le portier la voit au scan. Laissez
         vide si tous vos invités entrent de la même façon.
       </p>

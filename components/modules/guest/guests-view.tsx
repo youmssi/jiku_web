@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { Download, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Users } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import {
   Empty,
   EmptyContent,
@@ -9,20 +8,19 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AddGuest } from "@/components/modules/guest/add-guest";
-import { GuestImport } from "@/components/modules/guest/guest-import";
+import { AddGuestDialog, ExportGuestsButton, ImportGuestsDialog, SendInvitationsDialog } from "@/components/modules/guest/guest-actions";
 import { GuestsTable, type GuestRow } from "@/components/modules/guest/guests-table";
-import { SendInvitations } from "@/components/modules/guest/send-invitations";
-import { EventSubNav } from "@/components/shared/event-sub-nav";
 import type { TicketTypeResponse } from "@/components/modules/event";
 import { serverFetch } from "@/lib/api-server";
 import type { Guest, Invitation } from "@/components/modules/guest/schema";
 import { INVITATION_CHANNELS, type InvitationChannel } from "@/lib/channels";
+import { eventGuestsExportRoute } from "@/lib/constants";
 
-const CSV_TEMPLATE_HREF = "/templates/guest-import-template.csv";
-
-/** Guest-list management for one event: import, invitations and the roster table. */
+/**
+ * Guest-list management for one event: a data-table with search and category
+ * filter, and toolbar dialogs for adding, importing and inviting. Creation and
+ * sending live in Dialogs; destructive row actions keep their AlertDialogs.
+ */
 export async function GuestsView({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const [guestsResponse, invitationsResponse, eventResponse, typesResponse] = await Promise.all([
@@ -45,7 +43,7 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
   const rows: GuestRow[] = guests.map((guest) => ({
     id: guest.id,
     name: `${guest.firstName} ${guest.lastName}`.trim(),
-    contact: guest.email ?? guest.phoneNumber ?? "—",
+    contact: guest.email ?? guest.phoneNumber ?? "No contact",
     excludedFromInvitations: guest.excludedFromInvitations,
     checkedInAt: guest.checkedInAt ?? null,
     ticketTypeId: guest.ticketTypeId ?? null,
@@ -56,71 +54,41 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10">
-      <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">Guests</h1>
-      </div>
-
-      <div className="mt-6">
-        <EventSubNav eventId={id} />
-      </div>
-
-      <Tabs defaultValue="import" className="mt-6">
-        <TabsList>
-          <TabsTrigger value="import">Import CSV</TabsTrigger>
-          <TabsTrigger value="add">Add manually</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="import" className="mt-4">
-          <div className="rounded-lg border p-4">
-            <GuestImport eventId={id} />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="add" className="mt-4">
-          <div className="rounded-lg border p-4">
-            <AddGuest eventId={id} />
-          </div>
-        </TabsContent>
-      </Tabs>
-
-      <div className="mt-6 rounded-lg border p-4">
-        <SendInvitations eventId={id} enabledChannels={enabledChannels} />
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold">Guests</h1>
+          <Badge variant="secondary">{guests.length}</Badge>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <ExportGuestsButton href={eventGuestsExportRoute(id)} />
+          <ImportGuestsDialog eventId={id} />
+          <AddGuestDialog eventId={id} />
+          <SendInvitationsDialog
+            eventId={id}
+            enabledChannels={enabledChannels}
+            guestCount={guests.length}
+          />
+        </div>
       </div>
 
       {guests.length === 0 ? (
-        <Empty className="mt-8 border bg-muted/10">
+        <Empty className="mt-10">
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <Users className="size-5" />
             </EmptyMedia>
             <EmptyTitle>No guests yet</EmptyTitle>
             <EmptyDescription>
-              Start building your guest list by importing a CSV file or adding a guest by hand above.
-              Need a template?{" "}
-              <a
-                href={CSV_TEMPLATE_HREF}
-                download
-                className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
-              >
-                Download our CSV template
-              </a>{" "}
-              to get started.
+              Start building your guest list: import a CSV file or add a guest by hand.
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
-            <Button asChild variant="outline" size="sm">
-              <Link href={CSV_TEMPLATE_HREF} download>
-                <Download className="size-3.5" />
-                Download CSV template
-              </Link>
-            </Button>
+            <ImportGuestsDialog eventId={id} />
+            <AddGuestDialog eventId={id} />
           </EmptyContent>
         </Empty>
       ) : (
-        <div className="mt-6">
-          <p className="mb-3 text-sm text-muted-foreground">
-            {rows.length} guest{rows.length !== 1 ? "s" : ""}
-          </p>
+        <div className="mt-4">
           <GuestsTable eventId={id} rows={rows} ticketTypes={ticketTypes} />
         </div>
       )}

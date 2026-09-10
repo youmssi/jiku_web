@@ -55,14 +55,14 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
                     Download
                   </Link>
                 ) : (
-                  <span className="text-muted-foreground">—</span>
+                  <span className="text-muted-foreground">None</span>
                 )}
               </td>
               <td className="px-4 py-2">
                 {payment.status === "SUCCEEDED" ? (
                   <IssueInvoiceButton paymentId={payment.paymentId} />
                 ) : (
-                  <span className="text-muted-foreground">—</span>
+                  <span className="text-muted-foreground">None</span>
                 )}
               </td>
             </tr>

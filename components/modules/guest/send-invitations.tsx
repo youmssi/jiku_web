@@ -4,8 +4,7 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { trackEvent } from "@/lib/analytics";
 import { sendInvitationsAction } from "@/components/modules/guest/guest.service";
 import { INVITATION_CHANNEL_LABELS, type InvitationChannel } from "@/lib/channels";
@@ -38,14 +37,6 @@ export function SendInvitations({
     );
   }
 
-  function toggle(channel: string, checked: boolean) {
-    setChannels((previous) =>
-      checked
-        ? Array.from(new Set([...previous, channel]))
-        : previous.filter((value) => value !== channel),
-    );
-  }
-
   function onSend() {
     setPaywallMessage(null);
     startTransition(async () => {
@@ -66,18 +57,19 @@ export function SendInvitations({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-4">
-        {enabledChannels.map((channel) => (
-          <div key={channel} className="flex items-center gap-2">
-            <Checkbox
-              id={`channel-${channel}`}
-              checked={channels.includes(channel)}
-              onCheckedChange={(checked) => toggle(channel, checked === true)}
-            />
-            <Label htmlFor={`channel-${channel}`} className="font-normal">
+        <ToggleGroup
+          type="multiple"
+          variant="outline"
+          size="sm"
+          value={channels}
+          onValueChange={(value) => setChannels(value as string[])}
+        >
+          {enabledChannels.map((channel) => (
+            <ToggleGroupItem key={channel} value={channel}>
               {INVITATION_CHANNEL_LABELS[channel]}
-            </Label>
-          </div>
-        ))}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
         <Button onClick={onSend} disabled={isPending || channels.length === 0}>
           {isPending ? "Sending\u2026" : "Send invitations"}
         </Button>

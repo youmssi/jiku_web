@@ -240,10 +240,10 @@ function ReviewDialog({
                   }
                 >
                   <TableCell className="text-muted-foreground">{row.rowNumber}</TableCell>
-                  <TableCell>{row.firstName ?? "—"}</TableCell>
-                  <TableCell>{row.lastName ?? "—"}</TableCell>
-                  <TableCell>{row.email ?? "—"}</TableCell>
-                  <TableCell>{row.phone ?? "—"}</TableCell>
+                  <TableCell>{row.firstName ?? "Not set"}</TableCell>
+                  <TableCell>{row.lastName ?? "Not set"}</TableCell>
+                  <TableCell>{row.email ?? "Not set"}</TableCell>
+                  <TableCell>{row.phone ?? "Not set"}</TableCell>
                   <TableCell>
                     <StatusBadge status={row.status} />
                   </TableCell>

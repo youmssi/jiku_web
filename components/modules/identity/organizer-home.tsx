@@ -37,6 +37,17 @@ export async function OrganizerHome() {
           <Link href={ROUTES.EVENTS}>Manage events</Link>
         </Button>
       </div>
+      <div className="mt-4 flex flex-col items-start gap-4 rounded-lg border p-8">
+        <div>
+          <h2 className="text-lg font-medium">Services</h2>
+          <p className="text-sm text-muted-foreground">
+            Offer bookable appointment slots and serve your day line.
+          </p>
+        </div>
+        <Button asChild>
+          <Link href={ROUTES.SERVICES}>Manage services</Link>
+        </Button>
+      </div>
     </div>
   );
 }

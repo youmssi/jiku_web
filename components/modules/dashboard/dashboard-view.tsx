@@ -1,10 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EventDashboard } from "@/components/modules/dashboard/event-dashboard";
+import { DoorLinksDialog } from "@/components/modules/dashboard/door-links-dialog";
 import { fetchAnalyticsAction } from "@/components/modules/dashboard/dashboard.service";
-import { EventSubNav } from "@/components/shared/event-sub-nav";
 import { serverFetch } from "@/lib/api-server";
-import { eventGuestsExportRoute } from "@/lib/constants";
+import { eventGuestsExportRoute, eventGuestsRoute } from "@/lib/constants";
 import type { DashboardData } from "@/components/modules/dashboard/schema";
 import { StateMessage } from "@/components/shared/state-message";
 
@@ -30,23 +30,25 @@ export async function DashboardView({ params }: { params: Promise<{ id: string }
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-semibold">{data.eventName}</h1>
           <Badge variant="secondary">{data.eventStatus}</Badge>
         </div>
-        <Button variant="outline" asChild>
-          <a href={eventGuestsExportRoute(id)} download>
-            Export guest list
-          </a>
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="ghost" asChild>
+            <a href={eventGuestsExportRoute(id)} download>
+              Export guest list
+            </a>
+          </Button>
+          <DoorLinksDialog eventId={id} />
+          <Button asChild>
+            <a href={eventGuestsRoute(id)}>Manage guests</a>
+          </Button>
+        </div>
       </div>
 
       <div className="mt-6">
-        <EventSubNav eventId={id} />
-      </div>
-
-      <div className="mt-2">
         <EventDashboard eventId={id} initial={data} analytics={analytics} />
       </div>
     </div>

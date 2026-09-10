@@ -1,14 +1,33 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import * as React from "react";
 import { type ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Search, SlidersHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { attendanceCertificateRoute } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
 import { DataTable } from "@/components/ui/data-table";
+import type { DataTableFeatures } from "@/components/ui/data-table-features";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,14 +38,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import type { TicketTypeResponse } from "@/components/modules/event";
 import { readableTextColor } from "@/lib/color-contrast";
 import { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS } from "@/lib/channels";
@@ -61,7 +72,7 @@ function initials(name: string): string {
 
 function StatusBadge({ status }: { status: string | null }) {
   if (!status) {
-    return <span className="text-muted-foreground">—</span>;
+    return <span className="text-muted-foreground">None</span>;
   }
   const variant =
     status === "SENT" ? "default" : status === "FAILED" ? "destructive" : "secondary";
@@ -199,7 +210,7 @@ function GuestRowActions({
             <AlertDialogTitle>Remove {guest.name}?</AlertDialogTitle>
             <AlertDialogDescription>
               This permanently removes them from the guest list. Guests who have already been invited
-              can&apos;t be removed — exclude them instead to stop future invitations.
+              can&apos;t be removed. Exclude them instead to stop future invitations.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -217,7 +228,7 @@ function GuestRowActions({
 function createColumns(
   eventId: string,
   ticketTypes: TicketTypeResponse[],
-): ColumnDef<GuestRow>[] {
+): ColumnDef<DataTableFeatures, GuestRow>[] {
   return [
     {
       accessorKey: "name",
@@ -259,19 +270,22 @@ function createColumns(
           {
             id: "ticketType",
             header: "Catégorie",
+            accessorFn: (row: GuestRow) =>
+              ticketTypes.find((it) => it.id === row.ticketTypeId)?.label ?? "",
+            filterFn: "includesString",
             enableSorting: false,
             cell: ({ row }) => {
               const type = ticketTypes.find((it) => it.id === row.original.ticketTypeId);
               return type ? (
                 <TicketTypeBadge type={type} />
               ) : (
-                <span className="text-muted-foreground">—</span>
+                <span className="text-muted-foreground">None</span>
               );
             },
-          } satisfies ColumnDef<GuestRow>,
+          } satisfies ColumnDef<DataTableFeatures, GuestRow>,
         ]
       : []),
-    ...INVITATION_CHANNELS.map<ColumnDef<GuestRow>>((channel) => ({
+    ...INVITATION_CHANNELS.map<ColumnDef<DataTableFeatures, GuestRow>>((channel) => ({
       id: `channel-${channel}`,
       header: INVITATION_CHANNEL_LABELS[channel],
       enableSorting: false,
@@ -303,8 +317,84 @@ export function GuestsTable({
     <DataTable
       columns={createColumns(eventId, ticketTypes)}
       data={rows}
-      searchColumn="name"
-      searchPlaceholder="Search guests by name…"
+      toolbar={(table) => <GuestsToolbar table={table} ticketTypes={ticketTypes} />}
     />
+  );
+}
+
+/**
+ * Toolbar of the guest list: name search, access-category filter (combobox),
+ * and the columns-visibility toggle.
+ */
+function GuestsToolbar({
+  table,
+  ticketTypes,
+}: {
+  table: import("@tanstack/react-table").Table<DataTableFeatures, GuestRow>;
+  ticketTypes: TicketTypeResponse[];
+}) {
+  const [category, setCategory] = React.useState("ALL");
+
+  return (
+    <div className="flex flex-wrap items-center gap-2 py-4">
+      <div className="relative max-w-sm flex-1">
+        <Input
+          placeholder="Search guests by name…"
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="pr-8"
+        />
+        <Search className="absolute top-1/2 right-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
+      </div>
+      {ticketTypes.length > 0 ? (
+        <Combobox
+          value={category}
+          onValueChange={(value) => {
+            const next = typeof value === "string" ? value : "ALL";
+            setCategory(next);
+            table
+              .getColumn("ticketType")
+              ?.setFilterValue(next === "ALL" ? "" : next);
+          }}
+        >
+          <ComboboxInput className="w-44" placeholder="Catégorie" />
+          <ComboboxContent>
+            <ComboboxList>
+              <ComboboxItem value="ALL">Toutes les catégories</ComboboxItem>
+              {ticketTypes.map((type) => (
+                <ComboboxItem key={type.id} value={type.label ?? ""}>
+                  {type.label}
+                </ComboboxItem>
+              ))}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
+      ) : null}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="icon-sm" className="ml-auto">
+            <SlidersHorizontal className="size-3.5" />
+            <span className="sr-only">Toggle columns</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {table
+            .getAllColumns()
+            .filter((column) => column.getCanHide())
+            .map((column) => (
+              <DropdownMenuCheckboxItem
+                key={column.id}
+                className="capitalize"
+                checked={column.getIsVisible()}
+                onCheckedChange={(value) => column.toggleVisibility(!!value)}
+              >
+                {column.id}
+              </DropdownMenuCheckboxItem>
+            ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }

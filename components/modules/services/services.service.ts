@@ -58,6 +58,34 @@ export async function createServiceAction(
   });
 }
 
+/** Renomme un service (JIKU-84+). */
+export async function renameServiceAction(
+  serviceId: string,
+  name: string,
+): Promise<ActionResult<ServiceSummary>> {
+  const response = await serverFetch(`/services/${serviceId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name }),
+  });
+  return fromResponse<ServiceSummary>(response, {
+    404: "Ce service est introuvable.",
+    default: "Impossible de renommer le service.",
+  });
+}
+
+/** Supprime un service et tout ce qui lui appartenait (créneaux, billets, ressources liées). */
+export async function deleteServiceAction(serviceId: string): Promise<ActionResult<null>> {
+  const response = await serverFetch(`/services/${serviceId}`, { method: "DELETE" });
+  if (!response.ok) {
+    return fromResponse<null>(response, {
+      404: "Ce service est introuvable.",
+      default: "Impossible de supprimer le service.",
+    });
+  }
+  return { ok: true, data: null };
+}
+
 /** Lien de réservation public d'un service : jeton signé `service-link`. */
 export async function fetchBookingLinkAction(serviceId: string): Promise<ActionResult<string>> {
   const response = await serverFetch(`/services/${serviceId}/booking-link`);

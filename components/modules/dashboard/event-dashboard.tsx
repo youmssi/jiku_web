@@ -1,6 +1,17 @@
 "use client";
 
+import { Users } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { useDashboard } from "@/components/modules/dashboard/useDashboard";
 import {
   CheckInTimelineChart,
@@ -9,7 +20,7 @@ import {
 } from "@/components/modules/dashboard/dashboard-charts";
 import { AttendanceDocuments } from "@/components/modules/dashboard/attendance-documents";
 import { QuorumCard } from "@/components/modules/dashboard/quorum-card";
-import { ValidatorLinks } from "@/components/modules/checkin/validator-links";
+import { eventGuestsRoute } from "@/lib/constants";
 import type { AnalyticsData, DashboardData } from "@/components/modules/dashboard/schema";
 
 interface EventDashboardProps {
@@ -75,12 +86,30 @@ export function EventDashboard({ eventId, initial, analytics }: EventDashboardPr
       <section>
         <SectionHeading>Before the event</SectionHeading>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          <Stat label="Total guests" value={data.totalGuests} />
-          <Stat label="Invited" value={data.invited} />
-          <Stat label="Confirmed" value={data.confirmed} tone="positive" />
-          <Stat label="Declined" value={data.declined} />
-          <Stat label="No response" value={data.pending} tone="muted" />
+          <Stat label="Total guests" value={data.totalGuests} href={eventGuestsRoute(eventId)} />
+          <Stat label="Invited" value={data.invited} href={eventGuestsRoute(eventId)} />
+          <Stat label="Confirmed" value={data.confirmed} tone="positive" href={eventGuestsRoute(eventId)} />
+          <Stat label="Declined" value={data.declined} href={eventGuestsRoute(eventId)} />
+          <Stat label="No response" value={data.pending} tone="muted" href={eventGuestsRoute(eventId)} />
         </div>
+        {data.totalGuests === 0 ? (
+          <Empty className="mt-4">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Users className="size-5" />
+              </EmptyMedia>
+              <EmptyTitle>No guests yet</EmptyTitle>
+              <EmptyDescription>
+                Import a CSV or add guests by hand, then invite them with one click.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button asChild variant="outline" size="sm">
+                <Link href={eventGuestsRoute(eventId)}>Manage guests</Link>
+              </Button>
+            </EmptyContent>
+          </Empty>
+        ) : null}
         {data.usage ? (
           <p className="mt-3 text-sm text-muted-foreground">
             {data.usage.invited} of {data.usage.allowance} invitations used
@@ -140,7 +169,7 @@ export function EventDashboard({ eventId, initial, analytics }: EventDashboardPr
             <p className="text-sm font-medium">By entrance</p>
             {data.entrances.length === 0 ? (
               <p className="mt-2 text-sm text-muted-foreground">
-                No door links yet — create one below to staff check-in.
+                No door links yet. Create one with the Door links button above.
               </p>
             ) : (
               <ul className="mt-2 divide-y">
@@ -157,8 +186,6 @@ export function EventDashboard({ eventId, initial, analytics }: EventDashboardPr
             )}
           </div>
         </div>
-
-        <ValidatorLinks eventId={eventId} />
 
         {analytics ? (
           <Card className="mt-4">
@@ -195,10 +222,12 @@ function Stat({
   label,
   value,
   tone = "default",
+  href,
 }: {
   label: string;
   value: number;
   tone?: "default" | "positive" | "muted";
+  href?: string;
 }) {
   const valueClass =
     tone === "positive"
@@ -206,10 +235,18 @@ function Stat({
       : tone === "muted"
         ? "text-muted-foreground"
         : "";
-  return (
+  const content = (
     <div className="rounded-xl border p-4">
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className={`mt-1 text-2xl font-semibold ${valueClass}`}>{value}</p>
     </div>
+  );
+  if (!href) {
+    return content;
+  }
+  return (
+    <Link href={href} className="transition-colors hover:bg-muted/50 rounded-xl">
+      {content}
+    </Link>
   );
 }

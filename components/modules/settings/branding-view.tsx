@@ -1,8 +1,18 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  Attachment,
+  AttachmentAction,
+  AttachmentActions,
+  AttachmentContent,
+  AttachmentDescription,
+  AttachmentMedia,
+  AttachmentTitle,
+} from "@/components/ui/attachment";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateBrandingAction } from "./settings.service";
@@ -92,6 +102,27 @@ export function BrandingView({ branding }: BrandingViewProps) {
         <p className="text-xs text-muted-foreground">
           A square logo works best. Host it yourself, or use a service like ImgBB, Cloudinary, or your own CDN.
         </p>
+        {logoUrl.trim() ? (
+          <div className="pt-2">
+            <Attachment>
+              <AttachmentMedia variant="image">
+                <img src={logoUrl} alt="Organization logo" />
+              </AttachmentMedia>
+              <AttachmentContent>
+                <AttachmentTitle>Logo</AttachmentTitle>
+                <AttachmentDescription>Shown in the sidebar and on guest pages.</AttachmentDescription>
+              </AttachmentContent>
+              <AttachmentActions>
+                <AttachmentAction
+                  aria-label="Remove logo"
+                  onClick={() => setLogoUrl("")}
+                >
+                  <X className="size-3.5" />
+                </AttachmentAction>
+              </AttachmentActions>
+            </Attachment>
+          </div>
+        ) : null}
       </div>
 
       {/* Primary color */}

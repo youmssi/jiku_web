@@ -61,9 +61,8 @@ export interface EventSubNavItem {
 
 /**
  * Sub-navigation for one selected event, shown as a SidebarMenuSub under "Events"
- * on desktop (expand-in-place) and as a horizontal EventSubNav strip on every
- * per-event page (desktop + mobile, since the sidebar's sub-menu has no mobile
- * equivalent under the bottom-tab-bar nav strategy).
+ * in the app sidebar (desktop and the mobile sheet) and used to label the header
+ * breadcrumb's current section.
  */
 export const EVENT_SUB_NAV_ITEMS: EventSubNavItem[] = [
   {

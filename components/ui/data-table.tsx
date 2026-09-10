@@ -1,62 +1,66 @@
 "use client";
 
-import { useState } from "react";
+import * as React from "react";
 import {
+  useTable,
   type ColumnDef,
   type ColumnFiltersState,
+  type ColumnVisibilityState,
+  type RowData,
   type SortingState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
+  type Table,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Input } from "@/components/ui/input";
 import {
-  Table,
+  Table as TablePrimitive,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { dataTableFeatures, type DataTableFeatures } from "./data-table-features";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+interface DataTableProps<TData extends RowData> {
+  columns: ColumnDef<DataTableFeatures, TData>[];
   data: TData[];
-  /** Column id to wire a search box to; omit for no filtering. */
+  /** Column id to wire a search box to; omit for no built-in filtering. */
   searchColumn?: string;
   searchPlaceholder?: string;
+  /** Optional toolbar rendered above the table, receiving the table instance. */
+  toolbar?: (table: Table<DataTableFeatures, TData>) => React.ReactNode;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends RowData>({
   columns,
   data,
   searchColumn,
   searchPlaceholder = "Search…",
-}: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  toolbar,
+}: DataTableProps<TData>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<ColumnVisibilityState>({});
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data,
     columns,
-    state: { sorting, columnFilters },
+    state: { sorting, columnFilters, columnVisibility },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
   });
 
   const filterColumn = searchColumn ? table.getColumn(searchColumn) : undefined;
 
   return (
     <div className="flex flex-col gap-3">
+      {toolbar ? toolbar(table) : null}
+
       {filterColumn ? (
         <Input
           placeholder={searchPlaceholder}
@@ -67,18 +71,15 @@ export function DataTable<TData, TValue>({
       ) : null}
 
       <div className="overflow-hidden rounded-lg border">
-        <Table>
+        <TablePrimitive>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                    {header.isPlaceholder ? null : (
+                      <table.FlexRender header={header} />
+                    )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -90,7 +91,7 @@ export function DataTable<TData, TValue>({
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      <table.FlexRender cell={cell} />
                     </TableCell>
                   ))}
                 </TableRow>
@@ -106,13 +107,14 @@ export function DataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-        </Table>
+        </TablePrimitive>
       </div>
 
       {table.getPageCount() > 1 ? (
         <div className="flex items-center justify-end gap-2">
           <span className="mr-auto text-xs text-muted-foreground">
-            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+            Page {(table.atoms.pagination?.get()?.pageIndex ?? 0) + 1} of{" "}
+            {table.getPageCount()}
           </span>
           <ButtonGroup>
             <Button
