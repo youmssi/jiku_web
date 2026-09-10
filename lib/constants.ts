@@ -16,7 +16,6 @@ export const ROUTES = {
   INVITATION_ACCEPT: "/invitations/accept",
   DASHBOARD: "/dashboard",
   EVENTS: "/events",
-  EVENTS_NEW: "/events/new",
   SERVICES: "/services",
   BILLING: "/billing",
   SETTINGS: "/settings",

@@ -26,7 +26,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldContent,
@@ -38,6 +37,14 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -55,6 +62,7 @@ import {
   TIMEZONES,
   eventFormSchema,
   type EventFormValues,
+  type InvitationChannel,
 } from "@/components/modules/event/schema";
 import {
   cancelEventAction,
@@ -67,21 +75,36 @@ interface EventWizardProps {
   eventId?: string;
   initialValues: EventFormValues;
   status?: string;
+  /** Optional external step control, used when the wizard is embedded in a dialog. */
+  step?: number;
+  onStepChange?: (step: number) => void;
 }
 
 const STEPS = ["Event details", "Event settings"] as const;
 
-export function EventWizard({ eventId, initialValues, status }: EventWizardProps) {
+export function EventWizard({
+  eventId,
+  initialValues,
+  status,
+  step: stepProp,
+  onStepChange,
+}: EventWizardProps) {
   const router = useRouter();
-  const [step, setStep] = useState(0);
+  const [internalStep, setInternalStep] = useState(0);
+  const step = stepProp ?? internalStep;
+  const externallyControlled = stepProp !== undefined;
+  const setStep = (next: number) => {
+    setInternalStep(next);
+    onStepChange?.(next);
+  };
   const [formError, setFormError] = useState<string | null>(null);
   const [isPublishing, setIsPublishing] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [notifyGuestsOnCancel, setNotifyGuestsOnCancel] = useState(true);
 
   const {
     control,
     handleSubmit,
-    trigger,
     getValues,
     reset,
     formState: { isSubmitting, isDirty },
@@ -115,12 +138,6 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
     publishBlockers.push("at least one invitation channel");
   }
   const canPublish = Boolean(eventId) && publishBlockers.length === 0 && !isLocked;
-
-  async function goToSettings() {
-    if (await trigger(["name", "timezone"])) {
-      setStep(1);
-    }
-  }
 
   async function onSaveDraft(values: EventFormValues) {
     setFormError(null);
@@ -184,12 +201,16 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
     setFormError(null);
     setIsCancelling(true);
     try {
-      const result = await cancelEventAction(eventId);
+      const result = await cancelEventAction(eventId, notifyGuestsOnCancel);
       if (!result.ok) {
         setFormError(result.error);
         return;
       }
-      toast.success("Event cancelled, guests are being notified");
+      toast.success(
+        notifyGuestsOnCancel
+          ? "Event cancelled, guests are being notified"
+          : "Event cancelled",
+      );
       router.push(ROUTES.EVENTS);
       router.refresh();
     } finally {
@@ -203,9 +224,11 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
         <CardTitle className="text-2xl">
           {eventId ? "Edit event" : "Create an event"}
         </CardTitle>
-        <CardDescription>
-          Step {step + 1} of {STEPS.length}: {STEPS[step]}
-        </CardDescription>
+        {!externallyControlled ? (
+          <CardDescription>
+            Configure your event, then publish it when ready.
+          </CardDescription>
+        ) : null}
       </CardHeader>
       <form onSubmit={handleSubmit(onSaveDraft, onInvalid)} noValidate className="flex flex-col gap-(--card-spacing)">
         <CardContent>
@@ -234,8 +257,17 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
               </Alert>
             ) : null}
 
-            {step === 0 ? (
-              <>
+            <Tabs
+              value={String(step)}
+              onValueChange={(value) => setStep(Number(value))}
+            >
+              {!externallyControlled ? (
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="0">{STEPS[0]}</TabsTrigger>
+                  <TabsTrigger value="1">{STEPS[1]}</TabsTrigger>
+                </TabsList>
+              ) : null}
+              <TabsContent value="0" className="mt-4">
                 <Controller
                   control={control}
                   name="name"
@@ -335,11 +367,9 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                     </Field>
                   )}
                 />
-              </>
-            ) : null}
+              </TabsContent>
 
-            {step === 1 ? (
-              <>
+            <TabsContent value="1" className="mt-4">
                 <Controller
                   control={control}
                   name="transferAllowed"
@@ -434,52 +464,32 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                         How guests receive their invitation. At least one is required to
                         publish.
                       </FieldDescription>
-                      <FieldGroup data-slot="checkbox-group">
+                      <ToggleGroup
+                        type="multiple"
+                        variant="outline"
+                        value={field.value as string[]}
+                        onValueChange={(value) =>
+                          field.onChange(value as InvitationChannel[])
+                        }
+                        disabled={isLocked}
+                      >
                         {INVITATION_CHANNELS.map((channel) => (
-                          <Field key={channel} orientation="horizontal">
-                            <Checkbox
-                              id={`channel-${channel}`}
-                              checked={field.value.includes(channel)}
-                              onCheckedChange={(checked) =>
-                                field.onChange(
-                                  checked
-                                    ? [...field.value, channel]
-                                    : field.value.filter((value) => value !== channel),
-                                )
-                              }
-                              disabled={isLocked}
-                            />
-                            <FieldLabel
-                              htmlFor={`channel-${channel}`}
-                              className="font-normal"
-                            >
-                              {INVITATION_CHANNEL_LABELS[channel]}
-                            </FieldLabel>
-                          </Field>
+                          <ToggleGroupItem key={channel} value={channel}>
+                            {INVITATION_CHANNEL_LABELS[channel]}
+                          </ToggleGroupItem>
                         ))}
-                      </FieldGroup>
+                      </ToggleGroup>
                     </FieldSet>
                   )}
                 />
-              </>
-            ) : null}
+              </TabsContent>
+            </Tabs>
           </FieldGroup>
         </CardContent>
         <CardFooter className="flex flex-col gap-3">
           <div className="flex w-full items-center justify-between gap-2">
-            <div>
-              {step === 1 ? (
-                <Button type="button" variant="ghost" onClick={() => setStep(0)}>
-                  Back
-                </Button>
-              ) : null}
-            </div>
+            <div />
             <div className="flex gap-2">
-              {step === 0 ? (
-                <Button type="button" variant="outline" onClick={goToSettings}>
-                  Next
-                </Button>
-              ) : null}
 {!isPublished ? (
                 <Button
                   type="button"
@@ -508,10 +518,21 @@ export function EventWizard({ eventId, initialValues, status }: EventWizardProps
                       <AlertDialogTitle>Cancel this event?</AlertDialogTitle>
                       <AlertDialogDescription>
                         This cannot be undone. Every issued ticket becomes invalid
-                        immediately, no more RSVPs are accepted, and all invited
-                        guests are notified that the event will not take place.
+                        immediately and no more RSVPs are accepted.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        id="notify-guests"
+                        checked={notifyGuestsOnCancel}
+                        onCheckedChange={(checked) =>
+                          setNotifyGuestsOnCancel(checked === true)
+                        }
+                      />
+                      <label htmlFor="notify-guests" className="text-sm">
+                        Notify guests by email or WhatsApp
+                      </label>
+                    </div>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Keep the event</AlertDialogCancel>
                       <AlertDialogAction onClick={onCancelEvent}>

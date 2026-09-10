@@ -83,13 +83,33 @@ export async function publishEventAction(id: string): Promise<ActionResult> {
   return { ok: true, data: null };
 }
 
-export async function cancelEventAction(id: string): Promise<ActionResult> {
-  const response = await serverFetch(`/events/${id}/cancel`, { method: "POST" });
+export async function cancelEventAction(
+  id: string,
+  notifyGuests: boolean = true,
+): Promise<ActionResult> {
+  const response = await serverFetch(`/events/${id}/cancel`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ notifyGuests }),
+  });
   if (response.status === 409) {
     return fail("Only a published event can be cancelled.");
   }
   if (!response.ok) {
     return fail("We couldn't cancel the event. Please try again.");
+  }
+  return { ok: true, data: null };
+}
+
+export async function deleteEventAction(id: string): Promise<ActionResult> {
+  const response = await serverFetch(`/events/${id}`, { method: "DELETE" });
+  if (response.status === 409) {
+    const body = (await response.json().catch(() => null)) as { detail?: string } | null;
+    return fail(body?.detail ?? "Cancel the event before deleting it.");
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return fail("We couldn't delete the event. Please try again.");
   }
   return { ok: true, data: null };
 }

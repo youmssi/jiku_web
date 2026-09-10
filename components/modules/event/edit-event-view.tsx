@@ -1,9 +1,14 @@
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { EventWizard } from "@/components/modules/event/event-wizard";
 import { QuorumSettings } from "@/components/modules/event/quorum-settings";
 import { TicketTypesSettings } from "@/components/modules/event/ticket-types-settings";
-import { EventSubNav } from "@/components/shared/event-sub-nav";
 import { StateMessage } from "@/components/shared/state-message";
 import type {
   EventFormValues,
@@ -70,12 +75,37 @@ export async function EditEventView({ params }: { params: Promise<{ id: string }
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-10">
-      <EventSubNav eventId={event.id} />
       <EventWizard eventId={event.id} initialValues={values} status={event.status} />
-      {/* Bloc distinct : un quorum est une règle statutaire saisie une fois,
-          pas un réglage qu'on ajuste en modifiant le lieu ou l'horaire. */}
-      <TicketTypesSettings eventId={event.id} initial={ticketTypes} />
-      <QuorumSettings eventId={event.id} initial={event.quorum ?? null} />
+      {/* Blocs distincts, repliables : un quorum est une règle statutaire saisie
+          une fois, les catégories vivent sur leur propre ressource. */}
+      <div className="mt-8 flex flex-col gap-4">
+        <CollapsibleSection title="Catégories d'accès">
+          <TicketTypesSettings eventId={event.id} initial={ticketTypes} />
+        </CollapsibleSection>
+        <CollapsibleSection title="Quorum">
+          <QuorumSettings eventId={event.id} initial={event.quorum ?? null} />
+        </CollapsibleSection>
+      </div>
     </div>
+  );
+}
+
+function CollapsibleSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Collapsible defaultOpen className="rounded-xl border">
+      <CollapsibleTrigger className="group flex w-full items-center justify-between px-5 py-4 text-left">
+        <h2 className="text-base font-medium">{title}</h2>
+        <ChevronDown className="size-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
+      </CollapsibleTrigger>
+      <CollapsibleContent className="border-t px-5 py-4">
+        {children}
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
