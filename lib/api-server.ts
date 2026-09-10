@@ -1,12 +1,29 @@
 import { apiBaseUrl } from "@/lib/api";
 import { getAccessToken, getAdminAccessToken } from "@/lib/auth";
 
-/** Abort a backend call that hangs, so a slow upstream can't stall a render. */
-const TIMEOUT_MS = 10_000;
+/**
+ * Abort a backend call that hangs, so a slow upstream can't stall a render.
+ * Configurable per deployment: a cold or overloaded backend may need more than
+ * the default headroom.
+ */
+const TIMEOUT_MS = Number(process.env.API_TIMEOUT_MS ?? 15_000);
 /** Propagated so a frontend error can be traced to the backend's request log. */
 const CORRELATION_HEADER = "X-Correlation-Id";
 /** Idempotent GETs are retried once on a transient failure (network / 5xx). */
 const GET_ATTEMPTS = 2;
+
+/** True when the error is our own deadline abort (as opposed to a caller-supplied signal). */
+function isTimeoutError(error: unknown): boolean {
+  return error instanceof DOMException && error.name === "TimeoutError";
+}
+
+/** A hung backend reads as an HTTP failure so every caller's existing error path applies. */
+function gatewayTimeoutResponse(): Response {
+  return new Response(
+    JSON.stringify({ detail: "The service took too long to respond. Please try again." }),
+    { status: 504, headers: { "Content-Type": "application/json" } },
+  );
+}
 
 /**
  * Single server-side entry point to the backend. Adds a per-request correlation id,
@@ -39,6 +56,11 @@ async function request(path: string, init: RequestInit, authHeaders?: Headers): 
     } catch (error) {
       lastError = error;
       if (attempt >= attempts) {
+        // A timeout we imposed (not a caller's own abort) becomes a 504 instead
+        // of an exception, so forms and pages fail gracefully rather than crash.
+        if (!init.signal && isTimeoutError(error)) {
+          return gatewayTimeoutResponse();
+        }
         throw error;
       }
     }
