@@ -3,6 +3,13 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { formatAmount } from "@/lib/currency";
 import { ActivationInstructions } from "./activation-instructions";
 import { requestActivationAction } from "./billing.service";
@@ -25,6 +32,7 @@ interface BillingViewProps {
 
 export function BillingView({ eventId, usage, catalog, payments, activation }: BillingViewProps) {
   const [request, setRequest] = useState<ManualPaymentInstructions | null>(activation);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   function requestTier(tier: string) {
@@ -36,6 +44,7 @@ export function BillingView({ eventId, usage, catalog, payments, activation }: B
       }
       if (instructions) {
         setRequest(instructions);
+        setDialogOpen(true);
       }
     });
   }
@@ -68,6 +77,11 @@ export function BillingView({ eventId, usage, catalog, payments, activation }: B
         <section>
           <SectionHeading>Your activation request</SectionHeading>
           <ActivationInstructions instructions={request} />
+          <div className="mt-2">
+            <Button variant="outline" size="sm" onClick={() => setDialogOpen(true)}>
+              View payment instructions
+            </Button>
+          </div>
         </section>
       ) : (
         <section>
@@ -103,6 +117,18 @@ export function BillingView({ eventId, usage, catalog, payments, activation }: B
         <SectionHeading>Payment history</SectionHeading>
         <PaymentHistoryTable payments={payments} />
       </section>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-w-full sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>Payment instructions</DialogTitle>
+            <DialogDescription>
+              Send the amount below and include the reference with your transfer.
+            </DialogDescription>
+          </DialogHeader>
+          {request ? <ActivationInstructions instructions={request} /> : null}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -33,12 +33,12 @@ export function ActivationInstructions({
   return (
     <div className="rounded-xl border border-blue-300 bg-blue-50 p-5 text-sm text-blue-950 dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-100">
       <p className="font-semibold">
-        Activation requested — {instructions.tier} tier,{" "}
+        Activation requested: {instructions.tier} tier,{" "}
         {formatAmount(instructions.amountMinor, instructions.currency)}
       </p>
       <p className="mt-2">
         Send the exact amount to the account below and include this reference with your
-        transfer. Our team confirms the payment and unlocks your capacity — usually within
+        transfer. Our team confirms the payment and unlocks your capacity, usually within
         a few hours, and you&apos;ll get a confirmation email.
       </p>
 
@@ -77,7 +77,7 @@ export function ActivationInstructions({
       </dl>
 
       <p className="mt-4 text-xs opacity-80">
-        Activation is confirmed by our team once the transfer is received — it is not
+        Activation is confirmed by our team once the transfer is received. It is not
         instant. Never share card numbers or account passwords with anyone; we only need
         the transfer itself, with the reference above.
       </p>

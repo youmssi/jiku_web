@@ -69,7 +69,7 @@ export function SubscriptionSection({
             Your {subscription.plan} subscription is in grace.
           </p>
           <p className="mt-1">
-            Renew now — your workspace will be suspended on {formatDay(subscription.suspensionAt)}.
+            Renew now. Your workspace will be suspended on {formatDay(subscription.suspensionAt)}.
           </p>
         </div>
       ) : null}
@@ -114,7 +114,7 @@ export function SubscriptionSection({
         </div>
         {subscription.overLimit ? (
           <p className="mt-2 text-sm text-amber-600 dark:text-amber-400">
-            You have more active resources than your formula includes — renew on a larger formula to avoid a
+            You have more active resources than your formula includes. Renew on a larger formula to avoid a
             gap when this period ends.
           </p>
         ) : null}
@@ -136,7 +136,7 @@ export function SubscriptionSection({
                 <SelectContent>
                   {subscription.plans.map((option) => (
                     <SelectItem key={option.name} value={option.name}>
-                      {option.name} — up to {option.maxResources} resources
+                      {option.name} (up to {option.maxResources} resources)
                     </SelectItem>
                   ))}
                 </SelectContent>

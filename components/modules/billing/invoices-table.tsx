@@ -58,7 +58,7 @@ export function InvoicesTable({ invoices }: { invoices: InvoiceSummary[] }) {
                 {invoice.documentType === "INVOICE" ? (
                   <CreditNoteButton invoiceId={invoice.id} />
                 ) : (
-                  <span className="text-muted-foreground">—</span>
+                  <span className="text-muted-foreground">None</span>
                 )}
               </td>
             </tr>
