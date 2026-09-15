@@ -41,7 +41,7 @@ export function AppointmentStatus({
 
   const refresh = useCallback(() => {
     loadBookingStatus(link, bookingToken).then((loaded) => setView(loaded));
-  }, [bookingToken]);
+  }, [link, bookingToken]);
 
   useEffect(refresh, [refresh]);
 
@@ -55,7 +55,7 @@ export function AppointmentStatus({
     }
     setMessage("Votre rendez-vous a été annulé.");
     setView(null);
-  }, [bookingToken]);
+  }, [link, bookingToken]);
 
   if (!view) {
     return (

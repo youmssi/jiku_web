@@ -37,7 +37,6 @@ function addDays(base: Date, days: number): string {
 }
 
 export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
-  const token = "token" in link ? link.token : link.code;
   const pathname = usePathname();
   const [view, setView] = useState<AppointmentServiceView | null>(null);
   const [date, setDate] = useState<string | undefined>(undefined);
@@ -53,7 +52,7 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
       setView(loaded);
       setSelected(null);
     });
-  }, [token, date]);
+  }, [link, date]);
 
   const book = useCallback(async () => {
     if (!selected) return;
@@ -74,7 +73,7 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
       return;
     }
     setBooked({ bookingToken: result.data.bookingToken, status: result.data.status });
-  }, [token, name, phone, selected]);
+  }, [link, name, phone, selected]);
 
   const suiviUrl = useMemo(
     () => (booked ? `${pathname}/suivi/${booked.bookingToken}` : null),
