@@ -10,5 +10,5 @@ export default async function AppointmentBookingPage({
   params,
 }: Readonly<{ params: Promise<{ locale: string; token: string }> }>) {
   const { token } = await params;
-  return <AppointmentBooking token={token} />;
+  return <AppointmentBooking link={{ token }} />;
 }

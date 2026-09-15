@@ -74,6 +74,14 @@ export function ActivationInstructions({
             <dd className="whitespace-pre-line">{payee.bankDetails}</dd>
           </div>
         ) : null}
+        {payee.contactEmail || payee.contactPhone ? (
+          <div className="flex gap-2">
+            <dt className="font-medium">Questions:</dt>
+            <dd>
+              {[payee.contactEmail, payee.contactPhone].filter(Boolean).join(" or ")}
+            </dd>
+          </div>
+        ) : null}
       </dl>
 
       <p className="mt-4 text-xs opacity-80">

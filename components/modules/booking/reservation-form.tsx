@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -29,11 +29,12 @@ export function ReservationForm({
 }) {
   const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
-  const [quote, setQuote] = useState<BookingQuote | null>(null);
+  // The quote is keyed by the count it was fetched for: a new count hides the
+  // previous quote during the debounce without a synchronous state reset.
+  const [quote, setQuote] = useState<{ count: number; data: BookingQuote | null } | null>(null);
   const {
     control,
     handleSubmit,
-    watch,
     formState: { isSubmitting },
   } = useForm<ReservationInput>({
     resolver: zodResolver(reservationSchema),
@@ -48,8 +49,13 @@ export function ReservationForm({
     },
   });
 
-  const guestCountEstimate = watch("guestCountEstimate");
-  const eventType = watch("eventType");
+  // `useWatch` subscribes to a single field without exposing `useForm().watch()`
+  // to the React Compiler, which cannot memoize that function safely.
+  const guestCountEstimate = useWatch({ control, name: "guestCountEstimate" });
+  const eventType = useWatch({ control, name: "eventType" });
+  const guestCount = Number(guestCountEstimate);
+  const activeQuote =
+    quote && Number.isFinite(guestCount) && quote.count === guestCount ? quote.data : null;
 
   useEffect(() => {
     trackEvent("booking_started", { source: acquisitionSource, event_type: eventType });
@@ -60,11 +66,10 @@ export function ReservationForm({
   useEffect(() => {
     const count = Number(guestCountEstimate);
     if (!Number.isFinite(count) || count <= 0) {
-      setQuote(null);
       return;
     }
     const timeout = setTimeout(() => {
-      quoteBookingAction(count).then(setQuote);
+      quoteBookingAction(count).then((data) => setQuote({ count, data }));
     }, QUOTE_DEBOUNCE_MS);
     return () => clearTimeout(timeout);
   }, [guestCountEstimate]);
@@ -197,15 +202,15 @@ export function ReservationForm({
                 )}
               />
 
-              {quote ? (
+              {activeQuote ? (
                 <div className="rounded-lg border bg-muted/50 p-4 text-sm">
                   <p className="font-medium">
-                    Palier {quote.tier} — {formatAmount(quote.totalAmountMinor, quote.currency)}
+                    Palier {activeQuote.tier} — {formatAmount(activeQuote.totalAmountMinor, activeQuote.currency)}
                   </p>
-                  {quote.depositAmountMinor > 0 ? (
+                  {activeQuote.depositAmountMinor > 0 ? (
                     <p className="mt-1 text-muted-foreground">
-                      Acompte à régler maintenant : {formatAmount(quote.depositAmountMinor, quote.currency)} (30 %). Solde :{" "}
-                      {formatAmount(quote.balanceAmountMinor, quote.currency)}.
+                      Acompte à régler maintenant : {formatAmount(activeQuote.depositAmountMinor, activeQuote.currency)} (30 %). Solde :{" "}
+                      {formatAmount(activeQuote.balanceAmountMinor, activeQuote.currency)}.
                     </p>
                   ) : (
                     <p className="mt-1 text-muted-foreground">Aucun acompte à régler — votre accès est immédiat.</p>

@@ -16,11 +16,13 @@ export default async function AdminBookingPaymentsPage({ searchParams }: Readonl
   if (response.status === 401 || response.status === 403) {
     redirect(ADMIN_ROUTES.LOGIN);
   }
-  const declarations = (await response.json()) as AdminBookingPaymentDeclaration[];
+  const declarations = response.ok
+    ? ((await response.json()) as AdminBookingPaymentDeclaration[])
+    : [];
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Paiements de réservation</h1>
+      <h1 className="mb-6 text-2xl font-semibold tracking-tight">Paiements de réservation</h1>
       <BookingPaymentsView declarations={declarations} />
     </div>
   );

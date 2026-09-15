@@ -86,14 +86,15 @@ export async function deleteServiceAction(serviceId: string): Promise<ActionResu
   return { ok: true, data: null };
 }
 
-/** Lien de réservation public d'un service : jeton signé `service-link`. */
-export async function fetchBookingLinkAction(serviceId: string): Promise<ActionResult<string>> {
+/** Lien de réservation public d'un service : code court, plus l'ancien jeton signé. */
+export async function fetchBookingLinkAction(
+  serviceId: string,
+): Promise<ActionResult<{ token: string; shortCode: string }>> {
   const response = await serverFetch(`/services/${serviceId}/booking-link`);
-  const result = await fromResponse<{ token: string }>(response, {
+  return fromResponse<{ token: string; shortCode: string }>(response, {
     404: "Ce service est introuvable.",
     default: "Impossible de générer le lien de réservation.",
   });
-  return result.ok ? { ok: true, data: result.data.token } : result;
 }
 
 export async function listStaffLinksAction(serviceId: string): Promise<ActionResult<StaffLink[]>> {

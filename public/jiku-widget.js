@@ -25,7 +25,7 @@
   var origin = "";
   try {
     origin = scriptUrl ? new URL(scriptUrl).origin : window.location.origin;
-  } catch (e) {
+  } catch {
     origin = window.location.origin;
   }
 

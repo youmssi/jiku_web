@@ -1,9 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Inbox } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import {
   acceptPendingRequestAction,
   fetchPendingRequestsAction,
@@ -71,51 +87,68 @@ export function PendingRequests({
   }
 
   return (
-    <section className="mt-6">
-      <div className="mb-2 flex items-center justify-between">
-        <h2 className="text-sm font-medium text-zinc-400">Demandes en attente</h2>
-        {requests.length > 0 && <Badge variant="outline">{requests.length}</Badge>}
-      </div>
-      {requests.length === 0 ? (
-        <p className="rounded-lg border border-dashed px-4 py-6 text-center text-sm text-zinc-500">
-          Aucune demande de rendez-vous en attente.
-        </p>
-      ) : (
-        <ul className="space-y-2">
-          {requests.map((request) => (
-            <li key={request.id} className="rounded-lg border bg-background/40 p-3">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-sm font-medium">
-                    {request.clientName ?? "Client"} · {request.clientPhone ?? "sans téléphone"}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {formatSlot(request.startsAt, timezone)} — en attente de confirmation
-                  </p>
+    <Card className="mt-6">
+      <CardHeader>
+        <CardTitle>Demandes en attente</CardTitle>
+        <CardDescription>
+          Rendez-vous demandés en mode sur demande, en attente de votre décision.
+        </CardDescription>
+        {requests.length > 0 ? (
+          <CardAction>
+            <Badge variant="outline">{requests.length}</Badge>
+          </CardAction>
+        ) : null}
+      </CardHeader>
+      <CardContent>
+        {requests.length === 0 ? (
+          <Empty className="py-6">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Inbox />
+              </EmptyMedia>
+              <EmptyTitle>Aucune demande</EmptyTitle>
+              <EmptyDescription>
+                Aucune demande de rendez-vous en attente.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        ) : (
+          <ul className="flex flex-col gap-2">
+            {requests.map((request) => (
+              <li key={request.id} className="rounded-lg border bg-background/40 p-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-medium">
+                      {request.clientName ?? "Client"} · {request.clientPhone ?? "sans téléphone"}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatSlot(request.startsAt, timezone)} — en attente de confirmation
+                    </p>
+                  </div>
+                  <div className="flex shrink-0 gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={busyId === request.id}
+                      onClick={() => decide(request.id, "reject")}
+                    >
+                      Refuser
+                    </Button>
+                    <Button
+                      size="sm"
+                      disabled={busyId === request.id}
+                      onClick={() => decide(request.id, "accept")}
+                    >
+                      Confirmer
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex shrink-0 gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={busyId === request.id}
-                    onClick={() => decide(request.id, "reject")}
-                  >
-                    Refuser
-                  </Button>
-                  <Button
-                    size="sm"
-                    disabled={busyId === request.id}
-                    onClick={() => decide(request.id, "accept")}
-                  >
-                    Confirmer
-                  </Button>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+              </li>
+            ))}
+          </ul>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 

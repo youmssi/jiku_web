@@ -80,7 +80,9 @@ export function ServiceManagePanel({
       toast.error(result.error);
       return;
     }
-    setBookingLink(`${window.location.origin}/appointments/${result.data}`);
+    // Le lien partagé est le lien court (/r/<code>) : il tient sur une ligne
+    // et reste lisible, le jeton signé reste disponible pour l'intégration widget.
+    setBookingLink(`${window.location.origin}/r/${result.data.shortCode}`);
   }
 
   async function copy(text: string) {

@@ -18,7 +18,7 @@ export default async function WidgetBookingPage({
   const { token } = await params;
   return (
     <div className="min-h-screen bg-background">
-      <AppointmentBooking token={token} />
+      <AppointmentBooking link={{ token }} />
       <WidgetResizer />
     </div>
   );

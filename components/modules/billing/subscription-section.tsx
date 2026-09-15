@@ -91,7 +91,7 @@ export function SubscriptionSection({
           <div>
             <p className="text-base font-semibold">{subscription.plan} subscription</p>
             <p className="text-sm text-muted-foreground">
-              Renews on {formatDay(subscription.expiresAt)} · {subscription.status}
+              Renews on {formatDay(subscription.expiresAt)}. Status: {subscription.status}
             </p>
           </div>
           <Button variant="outline" onClick={() => setShowRequest((current) => !current)}>

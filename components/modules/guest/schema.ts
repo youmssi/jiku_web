@@ -1,6 +1,5 @@
 import { z } from "zod";
 import type { Schema } from "@/lib/api-contract";
-import { INVITATION_CHANNELS } from "@/lib/channels";
 
 /** CSV import outcome (backend GuestImportResult). */
 export type ImportResult = Schema<"GuestImportResult">;

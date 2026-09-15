@@ -20,19 +20,23 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
 import { Link, usePathname } from "@/i18n/navigation"
 import {
   currentEventId,
+  currentServiceId,
   EVENT_SUB_NAV_ITEMS,
   ORGANIZER_NAV_ITEMS,
+  SERVICE_SUB_NAV_ITEMS,
 } from "@/components/shared/organizer-nav"
 import { ROUTES } from "@/lib/constants"
 
 /**
  * Primary navigation (sidebar-07 "nav main" slot): one collapsible section per
- * top-level destination. "Events" carries the per-event views as a sub-menu
- * whenever an event is open; the other destinations are plain links.
+ * top-level destination. "Events" and "Services" carry the per-item views as a
+ * sub-menu whenever an event or a service is open; the other destinations are
+ * plain links.
  */
 export function NavMain() {
   const pathname = usePathname()
   const eventId = currentEventId(pathname)
+  const serviceId = currentServiceId(pathname)
 
   return (
     <SidebarGroup>
@@ -40,14 +44,18 @@ export function NavMain() {
       <SidebarMenu>
         {ORGANIZER_NAV_ITEMS.map((item) => {
           const Icon = item.icon
-          const isEventsItem = item.href === ROUTES.EVENTS
           const subItems =
-            isEventsItem && eventId
+            item.href === ROUTES.EVENTS && eventId
               ? EVENT_SUB_NAV_ITEMS.map((subItem) => ({
                   title: subItem.label,
                   url: subItem.href(eventId),
                 }))
-              : []
+              : item.href === ROUTES.SERVICES && serviceId
+                ? SERVICE_SUB_NAV_ITEMS.map((subItem) => ({
+                    title: subItem.label,
+                    url: subItem.href(serviceId),
+                  }))
+                : []
 
           if (subItems.length === 0) {
             return (
