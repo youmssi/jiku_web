@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,9 +15,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Field,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import type { ActionResult } from "./admin.service";
+import type { ActionDialogFormValues } from "./schema";
 
 /**
  * The one dialog shape every back-office action uses (JIKU-46): a confirmation
@@ -40,24 +48,36 @@ export function ActionDialog({
   onConfirm: (value: string) => Promise<ActionResult>;
 }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
-  const [isPending, startTransition] = useTransition();
 
-  function submit() {
-    if (!value.trim()) {
-      toast.error(`${fieldLabel} is required.`);
+  // The only rule is "the field is filled" — the message names the field so it
+  // stays specific to each action without a separate schema per caller.
+  const schema = useMemo(
+    () =>
+      z.object({
+        value: z.string().trim().min(1, `${fieldLabel} is required.`),
+      }),
+    [fieldLabel],
+  );
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<ActionDialogFormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { value: "" },
+  });
+
+  async function submit(values: ActionDialogFormValues) {
+    const { error } = await onConfirm(values.value.trim());
+    if (error) {
+      toast.error(error);
       return;
     }
-    startTransition(async () => {
-      const { error } = await onConfirm(value.trim());
-      if (error) {
-        toast.error(error);
-        return;
-      }
-      toast.success(`${title} — done.`);
-      setValue("");
-      setOpen(false);
-    });
+    toast.success(`${title} — done.`);
+    reset();
+    setOpen(false);
   }
 
   return (
@@ -72,27 +92,43 @@ export function ActionDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <div className="grid gap-2">
-          <Label htmlFor="action-dialog-field">{fieldLabel}</Label>
-          <Input
-            id="action-dialog-field"
-            value={value}
-            onChange={(event) => setValue(event.target.value)}
-            autoFocus
+        <form onSubmit={handleSubmit(submit)} noValidate>
+          <Controller
+            control={control}
+            name="value"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>{fieldLabel}</FieldLabel>
+                <Input
+                  {...field}
+                  id={field.name}
+                  aria-invalid={fieldState.invalid}
+                  autoFocus
+                />
+                {fieldState.invalid ? (
+                  <FieldError errors={[fieldState.error]} />
+                ) : null}
+              </Field>
+            )}
           />
-        </div>
-        <DialogFooter>
-          <Button variant="ghost" onClick={() => setOpen(false)} disabled={isPending}>
-            Cancel
-          </Button>
-          <Button
-            variant={destructive ? "destructive" : "default"}
-            onClick={submit}
-            disabled={isPending}
-          >
-            {isPending ? "Working…" : confirmLabel}
-          </Button>
-        </DialogFooter>
+          <DialogFooter className="mt-4">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setOpen(false)}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant={destructive ? "destructive" : "default"}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Working…" : confirmLabel}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

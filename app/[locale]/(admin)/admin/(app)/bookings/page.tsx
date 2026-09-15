@@ -16,11 +16,16 @@ export default async function AdminBookingsPage({ searchParams }: Readonly<PageP
   if (response.status === 401 || response.status === 403) {
     redirect(ADMIN_ROUTES.LOGIN);
   }
-  const bookings = (await response.json()) as AdminBooking[];
+  // A non-OK body (unknown status, backend failure) is an object, not a list —
+  // parsing it as an array is what crashed the desk. Surface the empty state
+  // instead; the status filter buttons stay usable to recover.
+  const bookings = response.ok
+    ? ((await response.json()) as AdminBooking[])
+    : [];
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Réservations</h1>
+      <h1 className="mb-6 text-2xl font-semibold tracking-tight">Réservations</h1>
       <BookingsView bookings={bookings} />
     </div>
   );

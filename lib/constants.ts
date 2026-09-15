@@ -127,4 +127,5 @@ export const ADMIN_ROUTES = {
   WHATSAPP: "/admin/whatsapp",
   PROSPECTS: "/admin/prospects",
   DIAGNOSTICS: "/admin/diagnostics",
+  BILLING_INFO: "/admin/billing-info",
 } as const;

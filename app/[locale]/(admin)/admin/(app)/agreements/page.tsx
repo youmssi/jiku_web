@@ -4,6 +4,8 @@ import type { AdminAgreement, AdminTierCatalog } from "@/components/modules/admi
 import { adminFetch } from "@/lib/api-server";
 import { ADMIN_ROUTES } from "@/lib/constants";
 
+const EMPTY_CATALOG: AdminTierCatalog = { currency: "", tiers: [] };
+
 export default async function AdminAgreementsPage() {
   const [response, catalogResponse] = await Promise.all([
     adminFetch("/admin/agreements?size=50"),
@@ -12,12 +14,14 @@ export default async function AdminAgreementsPage() {
   if (response.status === 401 || response.status === 403) {
     redirect(ADMIN_ROUTES.LOGIN);
   }
-  const agreements = (await response.json()) as AdminAgreement[];
-  const catalog = (await catalogResponse.json()) as AdminTierCatalog;
+  const agreements = response.ok ? ((await response.json()) as AdminAgreement[]) : [];
+  const catalog = catalogResponse.ok
+    ? ((await catalogResponse.json()) as AdminTierCatalog)
+    : EMPTY_CATALOG;
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Enterprise agreements</h1>
+      <h1 className="mb-6 text-2xl font-semibold tracking-tight">Enterprise agreements</h1>
       <AgreementsView agreements={agreements} catalog={catalog} />
     </div>
   );

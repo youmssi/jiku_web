@@ -214,7 +214,7 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-2xl flex-col gap-2 px-4 pb-32 pt-4">
+      <main className="mx-auto flex w-full max-w-2xl flex-col gap-2 px-4 pb-8 pt-4">
         {view.entries.length === 0 ? (
           <div className="rounded-2xl border border-dashed p-10 text-center text-sm text-muted-foreground">
             Personne sur la ligne pour l&apos;instant.
@@ -273,21 +273,19 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
             </div>
           ))
         )}
-      </main>
 
-      {/* SUIVANT : le geste unique, gros, en bas, atteignable au pouce. */}
-      <div className="fixed inset-x-0 bottom-16 z-40 px-4 pb-4 md:bottom-6">
-        <div className="mx-auto max-w-2xl">
+        {/* SUIVANT : le geste unique, collant au bas de la colonne, sans jamais
+            chevaucher la barre latérale ni le contenu qui suit. */}
+        <div className="sticky bottom-4 z-40 mt-2">
           <Button
-            size="lg"
-            className="h-14 w-full text-base font-semibold shadow-lg"
+            className="h-12 w-full text-sm font-semibold shadow-lg"
             onClick={() => void onNext()}
             disabled={busy !== null}
           >
             {busy === "next" ? <Spinner className="h-5 w-5" /> : "SUIVANT"}
           </Button>
         </div>
-      </div>
+      </main>
 
       <WalkInDialog open={walkInOpen} onOpenChange={setWalkInOpen} onSubmit={onWalkIn} />
       <ScannerDialog

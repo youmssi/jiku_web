@@ -16,11 +16,11 @@ export default async function AdminPaymentsPage({ searchParams }: Readonly<PageP
   if (response.status === 401 || response.status === 403) {
     redirect(ADMIN_ROUTES.LOGIN);
   }
-  const payments = (await response.json()) as AdminPayment[];
+  const payments = response.ok ? ((await response.json()) as AdminPayment[]) : [];
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Payments desk</h1>
+      <h1 className="mb-6 text-2xl font-semibold tracking-tight">Payments desk</h1>
       <PaymentsView payments={payments} />
     </div>
   );

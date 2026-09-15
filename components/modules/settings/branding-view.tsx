@@ -56,6 +56,7 @@ export function BrandingView({ branding }: BrandingViewProps) {
       <div className="overflow-hidden rounded-xl border">
         <div className="flex items-center gap-3 px-5 py-4" style={{ backgroundColor: previewColor, color: "#fff" }}>
           {logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element -- user-provided remote logo URL
             <img src={logoUrl} alt="" className="size-10 rounded-lg object-contain" />
           ) : (
             <div className="flex size-10 items-center justify-center rounded-lg bg-white/20 text-lg font-bold">
@@ -106,6 +107,7 @@ export function BrandingView({ branding }: BrandingViewProps) {
           <div className="pt-2">
             <Attachment>
               <AttachmentMedia variant="image">
+                {/* eslint-disable-next-line @next/next/no-img-element -- user-provided remote logo URL */}
                 <img src={logoUrl} alt="Organization logo" />
               </AttachmentMedia>
               <AttachmentContent>

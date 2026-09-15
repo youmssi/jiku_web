@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
+import { InfoIcon } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -28,16 +30,26 @@ interface BillingViewProps {
   payments: PaymentHistoryItem[];
   /** The event's open activation request, when one exists (JIKU-45). */
   activation: ManualPaymentInstructions | null;
+  /** Capacity requests require the ADMIN or OWNER role (JIKU-41). */
+  canManage: boolean;
 }
 
-export function BillingView({ eventId, usage, catalog, payments, activation }: BillingViewProps) {
+export function BillingView({
+  eventId,
+  usage,
+  catalog,
+  payments,
+  activation,
+  canManage,
+}: BillingViewProps) {
   const [request, setRequest] = useState<ManualPaymentInstructions | null>(activation);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [pendingTier, setPendingTier] = useState<string | null>(null);
 
   function requestTier(tier: string) {
-    startTransition(async () => {
-      const { instructions, error } = await requestActivationAction(eventId, tier);
+    setPendingTier(tier);
+    requestActivationAction(eventId, tier).then(({ instructions, error }) => {
+      setPendingTier(null);
       if (error) {
         toast.error(error);
         return;
@@ -55,7 +67,7 @@ export function BillingView({ eventId, usage, catalog, payments, activation }: B
         <SectionHeading>This event&apos;s allowance</SectionHeading>
         <div className="rounded-xl border p-5">
           <p className="text-sm text-muted-foreground">
-            {usage.tier} tier · {usage.invitedGuests} of {usage.allowance} invitations used
+            {usage.tier} tier, {usage.invitedGuests} of {usage.allowance} invitations used
           </p>
           <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-muted">
             <div
@@ -83,7 +95,7 @@ export function BillingView({ eventId, usage, catalog, payments, activation }: B
             </Button>
           </div>
         </section>
-      ) : (
+      ) : canManage ? (
         <section>
           <SectionHeading>Add capacity</SectionHeading>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -99,8 +111,12 @@ export function BillingView({ eventId, usage, catalog, payments, activation }: B
                   <span className="text-lg font-semibold">
                     {formatAmount(tier.priceMinor, catalog.currency)}
                   </span>
-                  <Button size="sm" onClick={() => requestTier(tier.name)} disabled={isPending}>
-                    {isPending ? "Requesting…" : "Request activation"}
+                  <Button
+                    size="sm"
+                    onClick={() => requestTier(tier.name)}
+                    disabled={pendingTier !== null}
+                  >
+                    {pendingTier === tier.name ? "Requesting…" : "Request activation"}
                   </Button>
                 </div>
               </div>
@@ -108,9 +124,18 @@ export function BillingView({ eventId, usage, catalog, payments, activation }: B
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
             You&apos;ll receive payment instructions (Mobile Money or bank transfer) with a
-            reference; your capacity is unlocked by our team once the transfer arrives.
+            reference. Your capacity is unlocked by our team once the transfer arrives.
           </p>
         </section>
+      ) : (
+        <Alert>
+          <InfoIcon />
+          <AlertTitle>Capacity is managed by an organization admin</AlertTitle>
+          <AlertDescription>
+            Adding capacity for this event is available to admins and owners of the
+            organization. Ask them to request an activation, or switch to an admin account.
+          </AlertDescription>
+        </Alert>
       )}
 
       <section>

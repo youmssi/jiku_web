@@ -2,10 +2,36 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { MessageCircle, UserPlus } from "lucide-react";
 import { toast } from "sonner";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { DataTable } from "@/components/ui/data-table";
+import type { DataTableFeatures } from "@/components/ui/data-table-features";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   markProspectContactedAction,
   setWhatsAppOverrideAction,
@@ -66,61 +92,101 @@ export function WhatsAppAdmin({
 
   return (
     <div className="flex flex-col gap-6">
-      <section>
-        <h2 className="mb-3 text-lg font-semibold">Tarifs par catégorie (USD, minor)</h2>
-        <div className="overflow-hidden rounded-xl border">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/50 text-left text-xs uppercase tracking-wider text-muted-foreground">
-              <tr>
-                <th className="px-4 py-2">Catégorie</th>
-                <th className="px-4 py-2">Coût (USD minor)</th>
-                <th className="px-4 py-2" />
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {pricing.map((price) => (
-                <tr key={price.category}>
-                  <td className="px-4 py-2 font-medium">{price.category}</td>
-                  <td className="px-4 py-2">
-                    <Input
-                      type="number"
-                      min={0}
-                      className="w-36"
-                      value={costs[price.category] ?? ""}
-                      onChange={(e) =>
-                        setCosts((current) => ({ ...current, [price.category]: e.target.value }))
-                      }
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <Button size="sm" variant="outline" disabled={pending} onClick={() => saveCost(price.category)}>
-                      Enregistrer
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <Card>
+        <CardHeader>
+          <CardTitle>Tarifs par catégorie (USD, minor)</CardTitle>
+          <CardDescription>
+            Cost charged per message category. Changes apply to the next send.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {pricing.length === 0 ? (
+            <Empty>
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <MessageCircle />
+                </EmptyMedia>
+                <EmptyTitle>No pricing configured</EmptyTitle>
+                <EmptyDescription>
+                  The backend has no WhatsApp pricing categories yet.
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Catégorie</TableHead>
+                  <TableHead>Coût (USD minor)</TableHead>
+                  <TableHead className="w-32" />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {pricing.map((price) => (
+                  <TableRow key={price.category}>
+                    <TableCell className="font-medium">
+                      {price.category}
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        type="number"
+                        min={0}
+                        className="w-36"
+                        value={costs[price.category] ?? ""}
+                        onChange={(e) =>
+                          setCosts((current) => ({
+                            ...current,
+                            [price.category]: e.target.value,
+                          }))
+                        }
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={pending}
+                        onClick={() => saveCost(price.category)}
+                      >
+                        Enregistrer
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
 
-      <section>
-        <h2 className="mb-3 text-lg font-semibold">Surcharge de contenu (santé/urgence)</h2>
-        <div className="rounded-xl border p-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Surcharge de contenu (santé/urgence)</CardTitle>
+          <CardDescription>
+            Temporarily intercept the health/emergency message category.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
           {override.active ? (
             <div className="flex items-center justify-between gap-3">
               <div>
                 <Badge>Active</Badge>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  {override.reason ?? "Aucun motif"} — {override.activatedBy ?? "admin"} le{" "}
+                  {override.reason ?? "Aucun motif"} —{" "}
+                  {override.activatedBy ?? "admin"} le{" "}
                   {override.activatedAt
-                    ? new Intl.DateTimeFormat("fr-FR", { dateStyle: "short", timeStyle: "short" }).format(
-                        new Date(override.activatedAt),
-                      )
+                    ? new Intl.DateTimeFormat("fr-FR", {
+                        dateStyle: "short",
+                        timeStyle: "short",
+                      }).format(new Date(override.activatedAt))
                     : ""}
                 </p>
               </div>
-              <Button variant="outline" disabled={pending} onClick={() => toggleOverride(false)}>
+              <Button
+                variant="outline"
+                disabled={pending}
+                onClick={() => toggleOverride(false)}
+              >
                 Désactiver
               </Button>
             </div>
@@ -135,76 +201,115 @@ export function WhatsAppAdmin({
                   onChange={(e) => setOverrideReason(e.target.value)}
                 />
               </div>
-              <Button disabled={pending || !overrideReason.trim()} onClick={() => toggleOverride(true)}>
+              <Button
+                disabled={pending || !overrideReason.trim()}
+                onClick={() => toggleOverride(true)}
+              >
                 Activer
               </Button>
             </div>
           )}
-        </div>
-      </section>
+        </CardContent>
+      </Card>
     </div>
   );
 }
 
+const PROSPECT_COLUMNS: ColumnDef<DataTableFeatures, ProspectLead>[] = [
+  {
+    accessorKey: "businessName",
+    header: "Entreprise",
+    cell: ({ row }) => (
+      <span className="font-medium">{row.original.businessName}</span>
+    ),
+  },
+  {
+    accessorKey: "contactName",
+    header: "Contact",
+  },
+  {
+    accessorKey: "phone",
+    header: "Téléphone",
+  },
+  {
+    accessorKey: "sector",
+    header: "Secteur",
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Date",
+    cell: ({ row }) =>
+      new Intl.DateTimeFormat("fr-FR", { dateStyle: "short" }).format(
+        new Date(row.original.createdAt),
+      ),
+  },
+  {
+    accessorKey: "status",
+    header: "Statut",
+    filterFn: "includesString",
+    cell: ({ row }) =>
+      row.original.status === "CONTACTED" ? (
+        <Badge variant="outline">Contactée</Badge>
+      ) : (
+        <Badge>Nouvelle</Badge>
+      ),
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    enableSorting: false,
+    cell: ({ row }) =>
+      row.original.status !== "CONTACTED" ? (
+        <MarkContactedButton prospect={row.original} />
+      ) : null,
+  },
+];
+
 /** Pistes d'accès anticipé (JIKU-98) : rappeler dans l'ordre d'arrivée. */
 export function ProspectsTable({ prospects }: { prospects: ProspectLead[] }) {
+  if (prospects.length === 0) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <UserPlus />
+          </EmptyMedia>
+          <EmptyTitle>No prospects yet</EmptyTitle>
+          <EmptyDescription>Aucune piste pour le moment.</EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+    );
+  }
+
+  return (
+    <DataTable
+      columns={PROSPECT_COLUMNS}
+      data={prospects}
+      searchColumn="businessName"
+      searchPlaceholder="Search by business name…"
+    />
+  );
+}
+
+function MarkContactedButton({ prospect }: { prospect: ProspectLead }) {
   const router = useRouter();
   const [pending, start] = useTransition();
 
-  function contact(id: string, businessName: string) {
+  function contact() {
     start(async () => {
-      const result = await markProspectContactedAction(id);
+      const result = await markProspectContactedAction(prospect.id);
       if (result.error) toast.error(result.error);
       else {
-        toast.success(`« ${businessName} » marquée comme contactée.`);
+        toast.success(`« ${prospect.businessName} » marquée comme contactée.`);
         router.refresh();
       }
     });
   }
 
-  if (prospects.length === 0) {
-    return <p className="text-sm text-muted-foreground">Aucune piste pour le moment.</p>;
-  }
-
   return (
-    <div className="overflow-hidden rounded-xl border">
-      <table className="w-full text-sm">
-        <thead className="bg-muted/50 text-left text-xs uppercase tracking-wider text-muted-foreground">
-          <tr>
-            <th className="px-4 py-2">Entreprise</th>
-            <th className="px-4 py-2">Contact</th>
-            <th className="px-4 py-2">Téléphone</th>
-            <th className="px-4 py-2">Secteur</th>
-            <th className="px-4 py-2">Date</th>
-            <th className="px-4 py-2">Statut</th>
-            <th className="px-4 py-2" />
-          </tr>
-        </thead>
-        <tbody className="divide-y">
-          {prospects.map((prospect) => (
-            <tr key={prospect.id}>
-              <td className="px-4 py-2 font-medium">{prospect.businessName}</td>
-              <td className="px-4 py-2">{prospect.contactName}</td>
-              <td className="px-4 py-2">{prospect.phone}</td>
-              <td className="px-4 py-2">{prospect.sector}</td>
-              <td className="px-4 py-2">
-                {new Intl.DateTimeFormat("fr-FR", { dateStyle: "short" }).format(new Date(prospect.createdAt))}
-              </td>
-              <td className="px-4 py-2">
-                {prospect.status === "CONTACTED" ? <Badge variant="outline">Contactée</Badge> : <Badge>Nouvelle</Badge>}
-              </td>
-              <td className="px-4 py-2">
-                {prospect.status !== "CONTACTED" ? (
-                  <Button size="sm" variant="outline" disabled={pending} onClick={() => contact(prospect.id, prospect.businessName)}>
-                    Marquer contactée
-                  </Button>
-                ) : null}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Button size="sm" variant="outline" disabled={pending} onClick={contact}>
+      Marquer contactée
+    </Button>
   );
 }
 
@@ -218,7 +323,9 @@ export function DiagnosticsPanel() {
       const result = await triggerDiagnosticsAction();
       if (result.requestId) {
         setRequestId(result.requestId);
-        toast.success("Exception de test déclenchée — retrouvez ce requestId dans le traqueur.");
+        toast.success(
+          "Exception de test déclenchée — retrouvez ce requestId dans le traqueur.",
+        );
       } else {
         toast.error(result.error ?? "Aucune erreur remontée.");
       }
@@ -226,17 +333,26 @@ export function DiagnosticsPanel() {
   }
 
   return (
-    <div className="max-w-xl rounded-xl border p-5">
-      <p className="text-sm text-muted-foreground">
-        Déclenche une exception volontaire (500). Le <code>requestId</code> renvoyé doit apparaître dans le
-        traqueur d&apos;erreurs — c&apos;est la preuve que la chaîne de remontée fonctionne de bout en bout.
-      </p>
-      <Button onClick={run} disabled={pending} className="mt-4" variant="outline">
-        {pending ? "Déclenchement…" : "Déclencher l'erreur de test"}
-      </Button>
-      {requestId ? (
-        <p className="mt-3 break-all font-mono text-xs text-muted-foreground">requestId : {requestId}</p>
-      ) : null}
-    </div>
+    <Card className="max-w-xl">
+      <CardHeader>
+        <CardTitle>Error chain probe</CardTitle>
+        <CardDescription>
+          Déclenche une exception volontaire (500). Le{" "}
+          <code>requestId</code> renvoyé doit apparaître dans le traqueur
+          d&apos;erreurs — c&apos;est la preuve que la chaîne de remontée
+          fonctionne de bout en bout.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Button onClick={run} disabled={pending} variant="outline">
+          {pending ? "Déclenchement…" : "Déclencher l'erreur de test"}
+        </Button>
+        {requestId ? (
+          <p className="mt-3 break-all font-mono text-xs text-muted-foreground">
+            requestId : {requestId}
+          </p>
+        ) : null}
+      </CardContent>
+    </Card>
   );
 }
