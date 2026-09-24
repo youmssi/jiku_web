@@ -34,6 +34,7 @@ import {
   AttachmentMedia,
   AttachmentTitle,
 } from "@/components/ui/attachment";
+import { trackEvent } from "@/lib/analytics";
 import { importGuestsAction } from "@/components/modules/guest/guest.service";
 
 const CSV_TEMPLATE_PATH = "/templates/guest-import-template.csv";
@@ -298,6 +299,7 @@ export function GuestImport({ eventId, onImported }: { eventId: string; onImport
         return;
       }
       const { imported, failed, skippedDuplicates } = outcome.data;
+      trackEvent("guests_added", { source: "import", count: imported });
       toast.success(t("done", { imported, failed, duplicates: skippedDuplicates }));
       clearFile();
       onImported?.();

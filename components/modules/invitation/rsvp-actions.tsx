@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Link } from "@/i18n/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/lib/analytics";
 import { ticketRoute } from "@/lib/constants";
 import {
   confirmRsvpAction,
@@ -47,6 +48,7 @@ export function RsvpActions({
         toast.error(result.error);
         return;
       }
+      trackEvent(action === "confirm" ? "rsvp_confirmed" : "rsvp_declined");
       setCurrent(action === "confirm" ? "CONFIRMED" : "DECLINED");
       toast.success(action === "confirm" ? "You're confirmed, see you there!" : "You've declined.");
     });

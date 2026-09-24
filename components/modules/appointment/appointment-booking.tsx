@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname } from "@/i18n/navigation";
+import { trackEvent } from "@/lib/analytics";
 import { QRCodeSVG } from "qrcode.react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -92,6 +93,7 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
       setError(result.error ?? "La réservation a échoué.");
       return;
     }
+    trackEvent("appointment_booked", { status: result.data.status });
     setBooked({ bookingToken: result.data.bookingToken, status: result.data.status });
   }, [link, name, phone, selected]);
 

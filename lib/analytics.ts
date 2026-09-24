@@ -4,7 +4,27 @@
  * NEXT_PUBLIC_UMAMI_SRC/NEXT_PUBLIC_UMAMI_WEBSITE_ID are configured) — callers
  * never need to guard their own calls.
  */
-export function trackEvent(name: string, properties?: Record<string, unknown>): void {
+/**
+ * Every funnel milestone the product records. Steps that end on a server
+ * redirect (sign-up, organization created) are read from page views instead:
+ * /register → /verify-email → /onboarding → /dashboard.
+ */
+export type AnalyticsEvent =
+  | "cta_click"
+  | "whatsapp_click"
+  | "email_verified"
+  | "event_created"
+  | "event_published"
+  | "service_created"
+  | "ticket_category_saved"
+  | "guests_added"
+  | "invitation_sent"
+  | "ticket_marked_paid"
+  | "rsvp_confirmed"
+  | "rsvp_declined"
+  | "appointment_booked";
+
+export function trackEvent(name: AnalyticsEvent, properties?: Record<string, unknown>): void {
   if (typeof window === "undefined") return;
   const umami = (window as typeof window & { umami?: { track: (name: string, data?: Record<string, unknown>) => void } })
     .umami;

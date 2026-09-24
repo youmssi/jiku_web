@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
+import { trackEvent } from "@/lib/analytics";
 import { ROUTES } from "@/lib/constants";
 import { AuthCard } from "@/components/modules/identity/auth-card";
 import { verifyEmailAction } from "@/components/modules/identity/identity.service";
@@ -26,6 +27,7 @@ export function VerifyEmailView({ token }: { token: string | null }) {
       return;
     }
     void verifyEmailAction(token).then((result) => {
+      if (result.ok) trackEvent("email_verified");
       setState(result.ok ? { status: "done" } : { status: "failed", error: result.error });
     });
   }, [token]);

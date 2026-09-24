@@ -169,5 +169,7 @@
     "sendFailed": "The invitations could not be sent. Try again.",
     "categoryFull": "This category is full. Raise its capacity or choose another one.",
     "categoryFailed": "The category could not be changed. Try again."
-  }
+  },
+  "noMatch": "No guest matches these filters.",
+  "showMore": "{count, plural, one {Show # more guest} other {Show # more guests}}"
 }

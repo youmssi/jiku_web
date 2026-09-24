@@ -169,5 +169,7 @@
     "sendFailed": "Les invitations n'ont pas pu être envoyées. Réessayez.",
     "categoryFull": "Cette catégorie est complète. Augmentez sa jauge ou choisissez-en une autre.",
     "categoryFailed": "La catégorie n'a pas pu être changée. Réessayez."
-  }
+  },
+  "noMatch": "Aucun invité ne correspond à ces filtres.",
+  "showMore": "{count, plural, one {Voir # invité de plus} other {Voir # invités de plus}}"
 }
