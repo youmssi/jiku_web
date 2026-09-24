@@ -45,36 +45,6 @@ const nextConfig: NextConfig = {
       noindexRoute("/bookings/:path*"),
     ];
   },
-  // The generic-positioning decision (JIKU-101) removed the one-off landing
-  // pages. These permanent redirects preserve any indexed URLs or shared links
-  // pointing at them, sending visitors to the closest live equivalent.
-  async redirects() {
-    const move = (from: string, to: string) => [
-      { source: from, destination: to, permanent: true },
-      { source: `/en${from}`, destination: `/en${to}`, permanent: true },
-    ];
-    return [
-      ...move("/invitations-mariage-conakry", "/use-cases"),
-      ...move("/invitations-bapteme-guinee", "/use-cases"),
-      ...move("/evenement-en-salle-conakry", "/use-cases"),
-      ...move("/gestion-seminaire-guinee", "/use-cases"),
-      ...move("/check-in-qr-code", "/#features"),
-      ...move("/tarifs", "/simulator"),
-      ...move("/prise-de-rendez-vous", "/simulator"),
-      // New deposit reservations closed with JIKU-115.
-      ...move("/reserver", "/simulator"),
-      // English route segments (JIKU-118). Counter links and booking follow-up
-      // links are shared and printed, so the French paths keep resolving.
-      ...move("/ligne/:link", "/line/:link"),
-      ...move("/reserver/:id/paiement", "/bookings/:id/payment"),
-      ...move("/reserver/:id/statut", "/bookings/:id/status"),
-      ...move("/services/:id/gerer", "/services/:id/manage"),
-      ...move("/services/:id/ligne", "/services/:id/line"),
-      ...move("/appointments/:token/suivi/:booking", "/appointments/:token/bookings/:booking"),
-      ...move("/r/:code/suivi/:booking", "/r/:code/bookings/:booking"),
-      ...move("/widget/:token/suivi/:booking", "/widget/:token/bookings/:booking"),
-    ];
-  },
 };
 
 // i18n foundation (mirrors Tûm): locale segment in the URL for non-default
