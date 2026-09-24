@@ -229,3 +229,8 @@ export async function updateBillingSettingsAction(
   revalidatePath("/admin", "layout");
   return ok(null);
 }
+
+/** Moves a feedback message along the desk's triage, with an optional note. */
+export async function updateFeedbackStatusAction(id: string, status: string, note: string): Promise<ActionResult> {
+  return adminMutation(`/admin/feedback/${id}/status`, { status, note: note || null });
+}

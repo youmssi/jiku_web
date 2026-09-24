@@ -12,7 +12,9 @@ import type {
   AdminTrialPage,
   AdminTrialStats,
   AuditPage,
+  FeedbackPage,
   ProspectLead,
+  RatingSummary,
   TenantDirectoryPage,
   WhatsAppOverrideStatus,
   WhatsAppPricingInfo,
@@ -94,6 +96,23 @@ export async function loadAgreements() {
     adminRead<AdminTierCatalog>("/admin/billing/tiers", EMPTY_CATALOG),
   ]);
   return { agreements, catalog };
+}
+
+const FEEDBACK_PAGE_SIZE = 50;
+
+/** The feedback inbox, newest first, filtered by kind and status. */
+export function loadFeedback(kind?: string, status?: string): Promise<FeedbackPage> {
+  return adminRead(`/admin/feedback?${query({ size: FEEDBACK_PAGE_SIZE, kind, status })}`, {
+    items: [],
+    total: 0,
+    page: 0,
+    size: FEEDBACK_PAGE_SIZE,
+  });
+}
+
+/** Average rating and response count per moment over the last 30 days. */
+export function loadRatingSummary(): Promise<RatingSummary[]> {
+  return adminRead("/admin/feedback/ratings?days=30", []);
 }
 
 export function loadAudit(action?: string): Promise<AuditPage> {

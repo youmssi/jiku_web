@@ -1,3 +1,4 @@
+import type { components } from "@/lib/api-types";
 // CONTRACT — types mirroring the backend platform-admin API (JIKU-40/41/42/43).
 
 import { z } from "zod";
@@ -280,3 +281,18 @@ export const adminBillingSettingsSchema = z.object({
     .min(1, "At least one subscription plan is required."),
 });
 export type AdminBillingSettingsFormValues = z.infer<typeof adminBillingSettingsSchema>;
+
+// ─── Organizer feedback (JIKU-133) ────────────────────────────────────────────
+
+export type FeedbackEntry = Required<components["schemas"]["FeedbackView"]>;
+export type RatingSummary = Required<components["schemas"]["RatingSummary"]>;
+
+export interface FeedbackPage {
+  items: FeedbackEntry[];
+  total: number;
+  page: number;
+  size: number;
+}
+
+export const FEEDBACK_STATUSES = ["NEW", "IN_PROGRESS", "ANSWERED", "CLOSED"] as const;
+export type FeedbackStatus = (typeof FEEDBACK_STATUSES)[number];

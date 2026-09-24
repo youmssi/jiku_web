@@ -26,7 +26,8 @@
   "user": {
     "account": "Account",
     "billing": "Billing",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "feedback": "Give feedback"
   },
   "organizations": {
     "yours": "Your organizations",

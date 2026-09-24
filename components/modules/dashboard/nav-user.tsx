@@ -21,8 +21,10 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { UnfoldMoreIcon, CheckmarkBadgeIcon, CreditCardIcon, LogoutIcon } from "@hugeicons/core-free-icons"
+import { UnfoldMoreIcon, CheckmarkBadgeIcon, CreditCardIcon, LogoutIcon, Message01Icon } from "@hugeicons/core-free-icons"
+import { useState } from "react"
 import { useTranslations } from "next-intl"
+import { FeedbackDialog } from "@/components/modules/feedback"
 import { Link } from "@/i18n/navigation"
 import { logoutAction } from "@/components/modules/identity"
 import { organizerInitials } from "@/components/shared/organizer-nav"
@@ -40,6 +42,7 @@ export function NavUser({
   const { isMobile } = useSidebar()
   const fallback = organizerInitials(user.name)
   const t = useTranslations("shell.user")
+  const [feedbackOpen, setFeedbackOpen] = useState(false)
 
   return (
     <SidebarMenu>
@@ -93,6 +96,10 @@ export function NavUser({
                   {t("billing")}
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setFeedbackOpen(true)}>
+                <HugeiconsIcon icon={Message01Icon} strokeWidth={2} />
+                {t("feedback")}
+              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <form action={logoutAction}>
@@ -105,6 +112,7 @@ export function NavUser({
             </form>
           </DropdownMenuContent>
         </DropdownMenu>
+        <FeedbackDialog open={feedbackOpen} onOpenChange={setFeedbackOpen} email={user.email} />
       </SidebarMenuItem>
     </SidebarMenu>
   )

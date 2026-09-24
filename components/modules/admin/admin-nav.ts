@@ -4,6 +4,7 @@ import {
   CreditCard,
   FileSignature,
   MessageCircle,
+  MessageSquareHeart,
   ScrollText,
   Settings2,
   Timer,
@@ -83,6 +84,12 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         href: ADMIN_ROUTES.PROSPECTS,
         icon: UserPlus,
         match: (pathname) => pathname === ADMIN_ROUTES.PROSPECTS,
+      },
+      {
+        label: "Feedback",
+        href: ADMIN_ROUTES.FEEDBACK,
+        icon: MessageSquareHeart,
+        match: (pathname) => pathname === ADMIN_ROUTES.FEEDBACK,
       },
       {
         label: "Diagnostics",

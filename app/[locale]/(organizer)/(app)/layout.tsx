@@ -1,5 +1,6 @@
 import { localeRedirect } from "@/i18n/redirect";
 import { AppBreadcrumb, AppSidebar, type SidebarProject } from "@/components/modules/dashboard";
+import { RatingPrompt } from "@/components/modules/feedback";
 import { NavCommandPalette } from "@/components/shared";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -61,6 +62,7 @@ export default async function OrganizerAppLayout({
           </header>
           <div className="flex flex-1 flex-col">{children}</div>
         </SidebarInset>
+        <RatingPrompt />
       </SidebarProvider>
     </TooltipProvider>
   );

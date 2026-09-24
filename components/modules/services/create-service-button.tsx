@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FormFieldError } from "@/components/shared";
+import { askRating } from "@/components/modules/feedback";
 import { trackEvent } from "@/lib/analytics";
 import { serviceManageRoute } from "@/lib/constants";
 import { DEFAULT_TIMEZONE } from "@/lib/timezones";
@@ -64,6 +65,7 @@ export function CreateServiceButton({ variant = "default" }: { variant?: "defaul
       return;
     }
     trackEvent("service_created");
+    askRating("service_created");
     toast.success(t("created"));
     reset();
     setOpen(false);
