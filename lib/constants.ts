@@ -33,17 +33,23 @@ export function serviceConfigurationRoute(id: string): string {
   return `/services/${id}/configuration`;
 }
 
-export function eventEditRoute(id: string): string {
-  return `/events/${id}/edit`;
+/** The event's overview: setup checklist while a draft, live dashboard once published. */
+export function eventRoute(id: string): string {
+  return `/events/${id}`;
+}
+
+export function eventTicketsRoute(id: string): string {
+  return `/events/${id}/tickets`;
+}
+
+export function eventSettingsRoute(id: string): string {
+  return `/events/${id}/settings`;
 }
 
 export function eventGuestsRoute(id: string): string {
   return `/events/${id}/guests`;
 }
 
-export function eventDashboardRoute(id: string): string {
-  return `/events/${id}/dashboard`;
-}
 
 export function billingRoute(id: string): string {
   return `/events/${id}/billing`;

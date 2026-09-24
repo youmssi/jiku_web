@@ -27,3 +27,18 @@ export function formatAmount(minor: number, currency: string): string {
   }
   return `${(minor / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })} ${currency}`;
 }
+
+/** Digits after the decimal point for a currency: 0 for GNF or XOF, 2 otherwise. */
+export function currencyDecimals(currency: string): number {
+  return ZERO_DECIMAL_CURRENCIES.has(currency.toUpperCase()) ? 0 : 2;
+}
+
+/** Converts an amount typed in major units (what people read) to the minor units the API stores. */
+export function toMinorUnits(major: number, currency: string): number {
+  return Math.round(major * 10 ** currencyDecimals(currency));
+}
+
+/** Converts a stored minor-unit amount back to the major units shown in a form. */
+export function toMajorUnits(minor: number, currency: string): number {
+  return minor / 10 ** currencyDecimals(currency);
+}

@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/select";
 import { FormFieldError } from "@/components/shared";
 import { trackEvent } from "@/lib/analytics";
-import { eventEditRoute } from "@/lib/constants";
+import { eventRoute } from "@/lib/constants";
 import { createDraftAction } from "./event.service";
 import {
   emptyEventValues,
@@ -75,7 +75,7 @@ export function NewEventDialog({ variant = "default" }: { variant?: "default" | 
     trackEvent("event_created", { tier: "FREE" });
     reset();
     setOpen(false);
-    router.push(eventEditRoute(result.data.id));
+    router.push(eventRoute(result.data.id));
   }
 
   return (

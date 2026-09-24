@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { KeyRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,25 +14,23 @@ import {
 import { ValidatorLinks } from "@/components/modules/checkin/validator-links";
 
 /**
- * Door links live in a Dialog triggered from the dashboard header: create and
- * revoke entrance links without leaving the overview.
+ * Door links live in a Dialog on the event overview: create and revoke
+ * entrance links without leaving it.
  */
 export function DoorLinksDialog({ eventId }: { eventId: string }) {
+  const t = useTranslations("events.overview.doorLinks");
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <KeyRound className="size-3.5" data-icon="inline-start" />
-          Door links
+          <KeyRound data-icon="inline-start" />
+          {t("trigger")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-full sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Door links</DialogTitle>
-          <DialogDescription>
-            One link per entrance, given to the door person. Revoke to cut access
-            immediately.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
         <ValidatorLinks eventId={eventId} />
       </DialogContent>

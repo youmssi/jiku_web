@@ -17,7 +17,10 @@
     "required": "Ce champ est obligatoire.",
     "email": "Saisissez une adresse e-mail valide.",
     "passwordMin": "Au moins 8 caractères.",
-    "tooLong": "Ce texte est trop long."
+    "tooLong": "Ce texte est trop long.",
+    "wholeNumber": "Saisissez un nombre entier.",
+    "positive": "Saisissez un nombre positif.",
+    "endBeforeStart": "La fin doit être après le début."
   },
   "roles": {
     "OWNER": "Propriétaire",

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   ChartContainer,
@@ -13,13 +14,13 @@ import type { ChannelBreakdown, DateCount, TimeBucket } from "@/components/modul
 
 // ─── Check-in timeline ──────────────────────────────────────────────
 
-const timelineConfig = {
-  count: { label: "Check-ins", color: "var(--chart-1)" },
-} satisfies ChartConfig;
-
 export function CheckInTimelineChart({ buckets }: { buckets: TimeBucket[] }) {
+  const t = useTranslations("events.overview.charts");
+  const timelineConfig = {
+    count: { label: t("checkIns"), color: "var(--chart-1)" },
+  } satisfies ChartConfig;
   if (buckets.length === 0) {
-    return <EmptyChart message="No check-ins yet. This fills in as guests arrive." />;
+    return <EmptyChart message={t("noCheckIns")} />;
   }
   return (
     <ChartContainer config={timelineConfig} className="aspect-auto h-[220px] w-full">
@@ -46,16 +47,16 @@ export function CheckInTimelineChart({ buckets }: { buckets: TimeBucket[] }) {
 
 // ─── Channel breakdown ──────────────────────────────────────────────
 
-const channelConfig = {
-  sent: { label: "Sent", color: "var(--chart-1)" },
-  pending: { label: "Pending", color: "var(--chart-4)" },
-  failed: { label: "Failed", color: "var(--chart-5)" },
-} satisfies ChartConfig;
-
 export function ChannelBreakdownChart({ channels }: { channels: ChannelBreakdown[] }) {
+  const t = useTranslations("events.overview.charts");
+  const channelConfig = {
+    sent: { label: t("sent"), color: "var(--chart-1)" },
+    pending: { label: t("pending"), color: "var(--chart-4)" },
+    failed: { label: t("failed"), color: "var(--chart-5)" },
+  } satisfies ChartConfig;
   const hasData = channels.some((c) => c.sent + c.failed + c.pending > 0);
   if (!hasData) {
-    return <EmptyChart message="No invitations sent yet." />;
+    return <EmptyChart message={t("noInvitations")} />;
   }
   return (
     <ChartContainer config={channelConfig} className="aspect-auto h-[220px] w-full">
@@ -74,13 +75,13 @@ export function ChannelBreakdownChart({ channels }: { channels: ChannelBreakdown
 
 // ─── Guest list growth (cumulative) ─────────────────────────────────
 
-const growthConfig = {
-  total: { label: "Guests imported", color: "var(--chart-2)" },
-} satisfies ChartConfig;
-
 export function GuestGrowthChart({ daily }: { daily: DateCount[] }) {
+  const t = useTranslations("events.overview.charts");
+  const growthConfig = {
+    total: { label: t("guests"), color: "var(--chart-2)" },
+  } satisfies ChartConfig;
   if (daily.length === 0) {
-    return <EmptyChart message="No guests imported yet." />;
+    return <EmptyChart message={t("noGuests")} />;
   }
   const cumulative = daily.reduce<{ date: string; total: number }[]>(
     (acc, d) => [...acc, { date: d.date, total: (acc.at(-1)?.total ?? 0) + d.count }],

@@ -35,8 +35,7 @@ import { NewEventDialog } from "@/components/modules/event";
 import { CreateServiceButton } from "@/components/modules/services";
 import { getOrganizerContext } from "@/components/modules/identity/server";
 import {
-  eventDashboardRoute,
-  eventEditRoute,
+  eventRoute,
   ROUTES,
   serviceLineRoute,
 } from "@/lib/constants";
@@ -190,7 +189,7 @@ function Attention({ overview, t }: { overview: TodayOverview; t: Translator }) 
             </ItemContent>
             <ItemActions>
               <Button asChild size="sm" variant="outline">
-                <Link href={eventEditRoute(event.id)}>{t("attention.draftAction")}</Link>
+                <Link href={eventRoute(event.id)}>{t("attention.draftAction")}</Link>
               </Button>
             </ItemActions>
           </Item>
@@ -365,7 +364,7 @@ function UpcomingEventItem({ event, t, format }: { event: TodayEvent; t: Transla
   const isToday = dayOf(start) === dayOf(new Date());
   return (
     <Item asChild variant="outline">
-      <Link href={eventDashboardRoute(event.id)}>
+      <Link href={eventRoute(event.id)}>
         <ItemContent>
           <ItemTitle>
             {event.name}

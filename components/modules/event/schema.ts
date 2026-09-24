@@ -17,19 +17,25 @@ export { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS, type InvitationChannel 
 
 export { TIMEZONES };
 
-export const eventFormSchema = z.object({
-  name: z.string().min(1, "Event name is required"),
-  description: z.string(),
-  timezone: z.string().min(1, "Select a timezone"),
-  startLocal: z.string(),
-  endLocal: z.string(),
-  location: z.string(),
-  transferAllowed: z.boolean(),
-  transferDeadlineLocal: z.string(),
-  overbookingAllowed: z.boolean(),
-  maxOverbookingCount: z.number().int().min(0).nullable(),
-  invitationChannels: z.array(z.enum(INVITATION_CHANNELS)),
-});
+// Validation messages are `common.validation` keys, translated where they render.
+export const eventFormSchema = z
+  .object({
+    name: z.string().trim().min(1, "required").max(255, "tooLong"),
+    description: z.string().max(5000, "tooLong"),
+    timezone: z.string().min(1, "required"),
+    startLocal: z.string(),
+    endLocal: z.string(),
+    location: z.string().max(500, "tooLong"),
+    transferAllowed: z.boolean(),
+    transferDeadlineLocal: z.string(),
+    overbookingAllowed: z.boolean(),
+    maxOverbookingCount: z.number().int("wholeNumber").min(0, "positive").nullable(),
+    invitationChannels: z.array(z.enum(INVITATION_CHANNELS)),
+  })
+  .refine((values) => !values.startLocal || !values.endLocal || values.endLocal > values.startLocal, {
+    message: "endBeforeStart",
+    path: ["endLocal"],
+  });
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
 
@@ -69,6 +75,41 @@ export type UpdateQuorumRequest = Schema<"UpdateQuorumRequest">;
 /** Catégorie d'accès d'un événement (JIKU-93). */
 export type TicketTypeResponse = Schema<"TicketTypeResponse">;
 export type UpsertTicketTypeRequest = Schema<"UpsertTicketTypeRequest">;
+
+/**
+ * A ticket category as the organizer types it: the price in major units (what
+ * people read, "150 000 GNF"), converted to the API's minor units on save. An
+ * empty price means the category is free.
+ */
+export const ticketTypeFormSchema = z.object({
+  label: z.string().trim().min(1, "required").max(120, "tooLong"),
+  colorHex: z.string().regex(/^#[0-9a-fA-F]{6}$/, "required"),
+  maxCapacity: z.number().int("wholeNumber").min(1, "positive").nullable(),
+  price: z.number().min(0, "positive").nullable(),
+});
+
+export type TicketTypeFormValues = z.infer<typeof ticketTypeFormSchema>;
+
+export const QUORUM_FRACTIONS = [
+  { key: "half", numerator: 1, denominator: 2 },
+  { key: "twoThirds", numerator: 2, denominator: 3 },
+  { key: "threeQuarters", numerator: 3, denominator: 4 },
+] as const;
+
+export type QuorumFractionKey = (typeof QUORUM_FRACTIONS)[number]["key"];
+
+export const quorumFormSchema = z
+  .object({
+    mode: z.enum(["NONE", "FRACTION", "ABSOLUTE"]),
+    fraction: z.enum(["half", "twoThirds", "threeQuarters"]),
+    absolute: z.number().int("wholeNumber").min(1, "positive").nullable(),
+  })
+  .refine((values) => values.mode !== "ABSOLUTE" || values.absolute !== null, {
+    message: "required",
+    path: ["absolute"],
+  });
+
+export type QuorumFormValues = z.infer<typeof quorumFormSchema>;
 
 /**
  * Palette proposée pour les catégories. Choisie pour rester distinguable à

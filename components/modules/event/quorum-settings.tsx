@@ -1,133 +1,158 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { FormFieldError } from "@/components/shared";
 import { saveQuorumAction } from "./event.service";
-import type { QuorumResponse } from "./schema";
+import {
+  QUORUM_FRACTIONS,
+  quorumFormSchema,
+  type QuorumFormValues,
+  type QuorumResponse,
+} from "./schema";
 
-const FRACTIONS = [
-  { label: "La moitié (1/2)", numerator: 1, denominator: 2 },
-  { label: "Les deux tiers (2/3)", numerator: 2, denominator: 3 },
-  { label: "Les trois quarts (3/4)", numerator: 3, denominator: 4 },
-] as const;
-
-type Mode = "NONE" | "FRACTION" | "ABSOLUTE";
+function initialValues(quorum: QuorumResponse | null): QuorumFormValues {
+  const fraction =
+    QUORUM_FRACTIONS.find(
+      (candidate) => candidate.numerator === quorum?.numerator && candidate.denominator === quorum?.denominator,
+    )?.key ?? "half";
+  const mode = quorum?.mode === "FRACTION" || quorum?.mode === "ABSOLUTE" ? quorum.mode : "NONE";
+  return { mode, fraction, absolute: quorum?.absolute ?? null };
+}
 
 /**
- * Saisie de la règle de quorum d'un événement (JIKU-94).
- *
- * Bloc distinct de l'assistant de création : un quorum est une **règle
- * statutaire**, saisie une fois d'après les statuts de l'organisation, pas un
- * réglage qu'on ajuste en modifiant le lieu ou l'horaire.
- *
- * La quasi-totalité des événements n'en ont pas — le bloc s'ouvre donc sur
- * « aucun quorum » et dit à qui il s'adresse, plutôt que de se présenter comme
- * une étape à remplir.
+ * The quorum rule of a general assembly (JIKU-94). A statutory rule, entered
+ * once from the organization's bylaws, so it has its own card and its own save.
+ * Almost no event needs one: the card opens on "no quorum" and says who it is
+ * for, rather than looking like a step to fill in.
  */
 export function QuorumSettings({ eventId, initial }: { eventId: string; initial: QuorumResponse | null }) {
-  const [mode, setMode] = useState<Mode>((initial?.mode as Mode) ?? "NONE");
-  const [fraction, setFraction] = useState(() => {
-    const match = FRACTIONS.findIndex(
-      (f) => f.numerator === initial?.numerator && f.denominator === initial?.denominator,
-    );
-    return match >= 0 ? match : 0;
+  const t = useTranslations("events.quorum");
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting, isDirty },
+  } = useForm<QuorumFormValues>({
+    resolver: zodResolver(quorumFormSchema),
+    defaultValues: initialValues(initial),
   });
-  const [absolute, setAbsolute] = useState(initial?.absolute?.toString() ?? "");
-  const [isPending, startTransition] = useTransition();
+  const mode = useWatch({ control, name: "mode" });
 
-  function save() {
-    startTransition(async () => {
-      const choix = FRACTIONS[fraction];
-      const result = await saveQuorumAction(eventId, {
-        mode,
-        numerator: mode === "FRACTION" ? choix.numerator : null,
-        denominator: mode === "FRACTION" ? choix.denominator : null,
-        absolute: mode === "ABSOLUTE" ? Number(absolute) || null : null,
-      });
-      if (result.ok) {
-        toast.success(mode === "NONE" ? "Quorum retiré." : "Quorum enregistré.");
-      } else {
-        toast.error(result.error);
-      }
-    });
+  async function onSubmit(values: QuorumFormValues) {
+    const result = await saveQuorumAction(eventId, values);
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+    reset(values);
+    toast.success(values.mode === "NONE" ? t("removed") : t("saved"));
   }
 
-  const invalide = mode === "ABSOLUTE" && (!absolute || Number(absolute) < 1);
-
   return (
-    <section className="mt-10 rounded-xl border p-6">
-      <h2 className="text-lg font-semibold">Quorum</h2>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Pour les assemblées générales et réunions statutaires. Jikū compte les présents
-        en direct et horodate le moment où le quorum est atteint, ce qui rend la
-        délibération incontestable. Laissez « aucun quorum » pour tout autre événement.
-      </p>
-
-      {initial?.reachedAt ? (
-        <p className="mt-4 rounded-lg border border-green-600/30 bg-green-600/5 px-4 py-3 text-sm text-green-700 dark:text-green-400">
-          Quorum déjà atteint pour cet événement. Modifier la règle maintenant ne change
-          pas cette date : elle fait foi.
-        </p>
-      ) : null}
-
-      <div className="mt-6 space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="quorumMode">Règle</Label>
-          <select
-            id="quorumMode"
-            value={mode}
-            onChange={(event) => setMode(event.target.value as Mode)}
-            className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs"
-          >
-            <option value="NONE">Aucun quorum</option>
-            <option value="FRACTION">Une part des inscrits</option>
-            <option value="ABSOLUTE">Un nombre de présents</option>
-          </select>
-        </div>
-
-        {mode === "FRACTION" ? (
-          <div className="space-y-2">
-            <Label htmlFor="quorumFraction">Part requise</Label>
-            <select
-              id="quorumFraction"
-              value={fraction}
-              onChange={(event) => setFraction(Number(event.target.value))}
-              className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs"
-            >
-              {FRACTIONS.map((f, i) => (
-                <option key={f.label} value={i}>
-                  {f.label}
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-muted-foreground">
-              Le seuil s&apos;arrondit au supérieur : sur 181 membres, la moitié exige 91
-              présents.
-            </p>
-          </div>
-        ) : null}
-
-        {mode === "ABSOLUTE" ? (
-          <div className="space-y-2">
-            <Label htmlFor="quorumAbsolute">Présents requis</Label>
-            <Input
-              id="quorumAbsolute"
-              type="number"
-              min={1}
-              value={absolute}
-              onChange={(event) => setAbsolute(event.target.value)}
-              placeholder="25"
+    <Card id="quorum" className="scroll-mt-20">
+      <CardHeader>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
+      </CardHeader>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-(--card-spacing)">
+        <CardContent>
+          <FieldGroup>
+            {initial?.reachedAt ? (
+              <Alert>
+                <AlertDescription>{t("alreadyReached")}</AlertDescription>
+              </Alert>
+            ) : null}
+            <Controller
+              control={control}
+              name="mode"
+              render={({ field }) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>{t("rule")}</FieldLabel>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger id={field.name}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="NONE">{t("modes.NONE")}</SelectItem>
+                      <SelectItem value="FRACTION">{t("modes.FRACTION")}</SelectItem>
+                      <SelectItem value="ABSOLUTE">{t("modes.ABSOLUTE")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+              )}
             />
-          </div>
-        ) : null}
-
-        <Button onClick={save} disabled={isPending || invalide}>
-          {isPending ? "Enregistrement…" : "Enregistrer le quorum"}
-        </Button>
-      </div>
-    </section>
+            {mode === "FRACTION" ? (
+              <Controller
+                control={control}
+                name="fraction"
+                render={({ field }) => (
+                  <Field>
+                    <FieldLabel htmlFor={field.name}>{t("share")}</FieldLabel>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger id={field.name}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {QUORUM_FRACTIONS.map((fraction) => (
+                          <SelectItem key={fraction.key} value={fraction.key}>
+                            {t(`fractions.${fraction.key}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FieldDescription>{t("shareHint")}</FieldDescription>
+                  </Field>
+                )}
+              />
+            ) : null}
+            {mode === "ABSOLUTE" ? (
+              <Controller
+                control={control}
+                name="absolute"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>{t("absolute")}</FieldLabel>
+                    <Input
+                      id={field.name}
+                      type="number"
+                      inputMode="numeric"
+                      min={1}
+                      value={field.value ?? ""}
+                      onBlur={field.onBlur}
+                      onChange={(event) =>
+                        field.onChange(event.target.value === "" ? null : Number(event.target.value))
+                      }
+                      aria-invalid={fieldState.invalid}
+                      className="max-w-40"
+                    />
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
+              />
+            ) : null}
+          </FieldGroup>
+        </CardContent>
+        <CardFooter className="justify-end">
+          <Button type="submit" disabled={!isDirty || isSubmitting}>
+            {isSubmitting ? t("saving") : t("save")}
+          </Button>
+        </CardFooter>
+      </form>
+    </Card>
   );
 }

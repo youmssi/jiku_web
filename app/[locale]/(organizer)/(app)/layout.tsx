@@ -10,7 +10,7 @@ import {
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { getOrganizerContext } from "@/components/modules/identity/server";
 import { serverFetch } from "@/lib/api-server";
-import { ROUTES } from "@/lib/constants";
+import { eventRoute, ROUTES } from "@/lib/constants";
 
 /**
  * Authenticated organizer app shell, mirroring the shadcn sidebar-07 dashboard
@@ -78,6 +78,6 @@ async function loadRecentEvents(): Promise<SidebarProject[]> {
   }[];
   return events.slice(0, 4).map((event) => ({
     name: event.name,
-    url: `/events/${event.id}/dashboard`,
+    url: eventRoute(event.id),
   }));
 }
