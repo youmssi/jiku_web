@@ -53,6 +53,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FormFieldError } from "@/components/shared";
+import { trackEvent } from "@/lib/analytics";
 import { currencyDecimals, formatAmount, toMajorUnits } from "@/lib/currency";
 import { deleteTicketTypeAction, saveTicketTypeAction } from "./event.service";
 import {
@@ -250,6 +251,7 @@ function TicketTypeDialog({
       toast.error(result.error);
       return;
     }
+    trackEvent("ticket_category_saved", { priced: (values.price ?? 0) > 0 });
     toast.success(existing ? t("updated") : t("added"));
     onClose();
     router.refresh();

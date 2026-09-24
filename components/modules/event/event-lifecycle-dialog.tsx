@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldLabel } from "@/components/ui/field";
+import { trackEvent } from "@/lib/analytics";
 import { ROUTES } from "@/lib/constants";
 import { cancelEventAction, deleteEventAction, publishEventAction } from "./event.service";
 
@@ -61,6 +62,7 @@ export function EventLifecycleDialog({
         toast.error(result.error);
         return;
       }
+      if (kind === "publish") trackEvent("event_published");
       toast.success(t(`${kind}.done`));
       close(false);
       if (kind === "delete") {

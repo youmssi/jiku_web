@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useFormatter, useTranslations } from "next-intl";
-import type { ColumnDef, Table } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Search } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -32,6 +32,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemTitle,
+} from "@/components/ui/item";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -43,6 +51,7 @@ import type { TicketTypeResponse } from "@/components/modules/event";
 import { readableTextColor } from "@/lib/color-contrast";
 import { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS, type InvitationChannel } from "@/lib/channels";
 import { attendanceCertificateRoute } from "@/lib/constants";
+import { trackEvent } from "@/lib/analytics";
 import { formatAmount } from "@/lib/currency";
 import {
   markGuestPaidAction,
@@ -110,6 +119,7 @@ export function GuestsTable({
   const format = useFormatter();
   const [response, setResponse] = useState<ResponseFilter>("ALL");
   const [category, setCategory] = useState(ALL_CATEGORIES);
+  const [query, setQuery] = useState("");
   const sellsTickets = rows.some((row) => row.paymentStatus && row.paymentStatus !== "NOT_REQUIRED");
 
   const counts = useMemo(
@@ -122,22 +132,23 @@ export function GuestsTable({
     }),
     [rows],
   );
-  const visible = useMemo(
-    () =>
-      rows.filter(
-        (row) =>
-          matchesResponse(row, response) && (category === ALL_CATEGORIES || row.ticketTypeId === category),
-      ),
-    [rows, response, category],
-  );
+  const visible = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    return rows.filter(
+      (row) =>
+        matchesResponse(row, response) &&
+        (category === ALL_CATEGORIES || row.ticketTypeId === category) &&
+        (!needle || [row.name, row.email, row.phone].some((value) => value?.toLowerCase().includes(needle))),
+    );
+  }, [rows, response, category, query]);
+  const byTypeId = useMemo(() => new Map(ticketTypes.map((type) => [type.id, type])), [ticketTypes]);
 
   const columns = useMemo<ColumnDef<DataTableFeatures, GuestRow>[]>(() => {
     const byId = new Map(ticketTypes.map((type) => [type.id, type]));
     return [
       {
         id: "name",
-        accessorFn: (row) => [row.name, row.email, row.phone].filter(Boolean).join(" "),
-        filterFn: "includesString",
+        accessorFn: (row) => row.name,
         header: ({ column }) => (
           <Button variant="ghost" className="-ml-3" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             {t("columns.name")}
@@ -243,24 +254,106 @@ export function GuestsTable({
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
-      <DataTable
-        columns={columns}
-        data={visible}
-        toolbar={(table) => (
-          <GuestsToolbar table={table} ticketTypes={ticketTypes} category={category} onCategory={setCategory} />
-        )}
+      <GuestsToolbar
+        query={query}
+        onQuery={setQuery}
+        ticketTypes={ticketTypes}
+        category={category}
+        onCategory={setCategory}
       />
+      <div className="hidden md:block">
+        <DataTable columns={columns} data={visible} />
+      </div>
+      <GuestCards eventId={eventId} rows={visible} ticketTypes={ticketTypes} byTypeId={byTypeId} sellsTickets={sellsTickets} />
+    </div>
+  );
+}
+
+const CARD_PAGE = 30;
+
+/**
+ * The guest list on a phone: one card per guest with what matters at a glance
+ * (answer, category, what is owed) and the same row menu, instead of a table
+ * that would scroll sideways.
+ */
+function GuestCards({
+  eventId,
+  rows,
+  ticketTypes,
+  byTypeId,
+  sellsTickets,
+}: {
+  eventId: string;
+  rows: GuestRow[];
+  ticketTypes: TicketTypeResponse[];
+  byTypeId: Map<string, TicketTypeResponse>;
+  sellsTickets: boolean;
+}) {
+  const t = useTranslations("guests");
+  const format = useFormatter();
+  const [shown, setShown] = useState(CARD_PAGE);
+  if (rows.length === 0) {
+    return <p className="py-8 text-center text-sm text-muted-foreground md:hidden">{t("noMatch")}</p>;
+  }
+  return (
+    <div className="flex flex-col gap-2 md:hidden">
+      <ItemGroup className="gap-2">
+        {rows.slice(0, shown).map((row) => {
+          const type = row.ticketTypeId ? byTypeId.get(row.ticketTypeId) : undefined;
+          return (
+            <Item key={row.id} variant="outline" size="sm">
+              <ItemContent>
+                <ItemTitle>
+                  {row.name}
+                  {row.excludedFromInvitations ? <Badge variant="outline">{t("excluded")}</Badge> : null}
+                </ItemTitle>
+                <ItemDescription>{row.email ?? row.phone ?? t("noContact")}</ItemDescription>
+                <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                  {row.checkedInAt ? (
+                    <Badge>
+                      {t("checkedInAt", {
+                        time: format.dateTime(new Date(row.checkedInAt), { hour: "2-digit", minute: "2-digit" }),
+                      })}
+                    </Badge>
+                  ) : (
+                    <Badge variant={RSVP_VARIANTS[row.rsvpStatus]}>{t(`rsvp.${row.rsvpStatus}`)}</Badge>
+                  )}
+                  {type ? (
+                    <span
+                      className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
+                      style={{ backgroundColor: type.colorHex, color: readableTextColor(type.colorHex) }}
+                    >
+                      {type.label}
+                    </span>
+                  ) : null}
+                  {sellsTickets && row.paymentStatus ? <PaymentBadge row={row} /> : null}
+                </div>
+              </ItemContent>
+              <ItemActions>
+                <GuestRowActions eventId={eventId} guest={row} ticketTypes={ticketTypes} />
+              </ItemActions>
+            </Item>
+          );
+        })}
+      </ItemGroup>
+      {rows.length > shown ? (
+        <Button variant="outline" onClick={() => setShown((count) => count + CARD_PAGE)}>
+          {t("showMore", { count: rows.length - shown })}
+        </Button>
+      ) : null}
     </div>
   );
 }
 
 function GuestsToolbar({
-  table,
+  query,
+  onQuery,
   ticketTypes,
   category,
   onCategory,
 }: {
-  table: Table<DataTableFeatures, GuestRow>;
+  query: string;
+  onQuery: (value: string) => void;
   ticketTypes: TicketTypeResponse[];
   category: string;
   onCategory: (value: string) => void;
@@ -268,12 +361,13 @@ function GuestsToolbar({
   const t = useTranslations("guests");
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <InputGroup className="max-w-sm flex-1">
+      <InputGroup className="w-full sm:max-w-sm sm:flex-1">
         <InputGroupInput
+          type="search"
           placeholder={t("search")}
           aria-label={t("search")}
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
+          value={query}
+          onChange={(event) => onQuery(event.target.value)}
         />
         <InputGroupAddon>
           <Search />
@@ -281,7 +375,7 @@ function GuestsToolbar({
       </InputGroup>
       {ticketTypes.length > 0 ? (
         <Select value={category} onValueChange={onCategory}>
-          <SelectTrigger className="w-48" aria-label={t("columns.category")}>
+          <SelectTrigger className="w-full sm:w-48" aria-label={t("columns.category")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -367,7 +461,11 @@ function GuestRowActions({
   function markPaid(method: PaymentMethod) {
     if (!guest.ticketCode) return;
     const code = guest.ticketCode;
-    run(() => markGuestPaidAction(eventId, code, method), t("paidDone", { name: guest.name }));
+    run(async () => {
+      const result = await markGuestPaidAction(eventId, code, method);
+      if (result.ok) trackEvent("ticket_marked_paid", { method });
+      return result;
+    }, t("paidDone", { name: guest.name }));
   }
 
   function setCategory(type: TicketTypeResponse | null) {

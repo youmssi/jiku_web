@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { FormFieldError } from "@/components/shared";
+import { trackEvent } from "@/lib/analytics";
 import { addGuestAction } from "@/components/modules/guest/guest.service";
 import { singleGuestSchema, type SingleGuestInput } from "@/components/modules/guest/schema";
 
@@ -35,6 +36,7 @@ export function AddGuest({ eventId, onAdded }: { eventId: string; onAdded?: () =
     }
     const name = `${values.firstName} ${values.lastName}`.trim();
     if (outcome.data.imported > 0) {
+      trackEvent("guests_added", { source: "manual", count: 1 });
       toast.success(t("added", { name }));
       reset(EMPTY_GUEST);
       onAdded?.();
