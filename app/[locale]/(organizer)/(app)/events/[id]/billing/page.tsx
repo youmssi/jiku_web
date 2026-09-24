@@ -47,8 +47,7 @@ export default async function BillingPage({ params }: PageProps) {
   const canManage = context !== null && MANAGER_ROLES.includes(context.role);
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-10">
-      <h1 className="mb-6 text-2xl font-semibold">Billing</h1>
+    <div className="max-w-3xl">
       <BillingView
         eventId={id}
         usage={usage}

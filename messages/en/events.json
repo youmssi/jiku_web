@@ -11,5 +11,307 @@
     "submitting": "Creating…",
     "created": "Draft created.",
     "failed": "The event could not be created."
+  },
+  "status": {
+    "DRAFT": "Draft",
+    "PUBLISHED": "Published",
+    "CANCELLED": "Cancelled"
+  },
+  "backToEvents": "Back to events",
+  "notFound": {
+    "title": "This event isn't available here",
+    "description": "It doesn't exist in the selected organization. If it belongs to another one, switch organizations from the account menu."
+  },
+  "loadFailed": {
+    "title": "The event could not be loaded",
+    "description": "Something went wrong on our side. Try again in a moment."
+  },
+  "header": {
+    "undated": "Date to be set"
+  },
+  "tabs": {
+    "guests": "Guests",
+    "settings": "Settings"
+  },
+  "actions": {
+    "more": "More actions",
+    "open": "Open",
+    "publish": "Publish",
+    "cancel": "Cancel event",
+    "delete": "Delete event"
+  },
+  "lifecycle": {
+    "working": "One moment…",
+    "publish": {
+      "title": "Publish this event?",
+      "description": "The event goes live and its details are locked. You can then send the invitations.",
+      "confirm": "Publish",
+      "done": "Event published."
+    },
+    "cancel": {
+      "title": "Cancel this event?",
+      "description": "This is final: every issued ticket becomes invalid and no more answers are accepted.",
+      "confirm": "Cancel event",
+      "done": "Event cancelled.",
+      "notify": "Notify guests by email or WhatsApp"
+    },
+    "delete": {
+      "title": "Delete this event?",
+      "description": "The event and all of its data are permanently erased.",
+      "confirm": "Delete",
+      "done": "Event deleted."
+    }
+  },
+  "publish": {
+    "title": "Publish the event",
+    "ready": "Everything required is ready.",
+    "notReady": "A few things left before publishing.",
+    "done": "Done",
+    "todo": "To do",
+    "recommended": "Recommended",
+    "fix": "Complete",
+    "consequence": "Once published, the event's details can no longer change: double-check the date and place.",
+    "later": "Later",
+    "checks": {
+      "details": {
+        "title": "Name and date",
+        "description": "The name and start time your guests will see.",
+        "cta": "Fill in"
+      },
+      "channels": {
+        "title": "Invitation channel",
+        "description": "Email, WhatsApp or both.",
+        "cta": "Choose"
+      },
+      "tickets": {
+        "title": "Categories and prices",
+        "description": "VIP, press, standard, with their price and capacity. Optional.",
+        "cta": "Set up"
+      },
+      "guests": {
+        "title": "Guest list",
+        "description": "Import a file or add your guests one by one.",
+        "cta": "Add"
+      }
+    }
+  },
+  "setup": {
+    "title": "Get your event ready",
+    "description": "A few steps, in whatever order suits you. Publish from the header once the essentials are ready.",
+    "ready": "The essentials are ready: you can publish from the header.",
+    "progress": "{done} of {total}",
+    "review": "Review"
+  },
+  "errors": {
+    "invalid": "Check the form and try again.",
+    "locked": "This event can no longer be edited.",
+    "saveFailed": "Your changes could not be saved. Try again.",
+    "publishIncomplete": "The event still needs a name, a start time or an invitation channel.",
+    "publishFailed": "The event could not be published. Try again.",
+    "cancelNotPublished": "Only a published event can be cancelled.",
+    "cancelFailed": "The event could not be cancelled. Try again.",
+    "deletePublished": "Cancel the event before deleting it.",
+    "deleteFailed": "The event could not be deleted. Try again.",
+    "quorumInvalid": "Check the rule: a share or a number of attendees is expected.",
+    "quorumFailed": "The quorum could not be saved. Try again.",
+    "ticketTypeDuplicate": "A category with this name already exists on this event.",
+    "ticketTypeLocked": "Tickets in this category are confirmed: its price can no longer change.",
+    "ticketTypeFailed": "The category could not be saved. Try again.",
+    "ticketTypeInUse": "{count, plural, =0 {Guests are assigned to this category} one {# guest is assigned to this category} other {# guests are assigned to this category}}: move them before deleting it.",
+    "ticketTypeDeleteFailed": "The category could not be deleted. Try again."
+  },
+  "settings": {
+    "saved": "Changes saved.",
+    "locked": {
+      "title": "Read-only event",
+      "description": "A published or cancelled event can no longer change: your guests already have these details."
+    },
+    "details": {
+      "title": "Details",
+      "description": "What your guests see on their invitation and ticket."
+    },
+    "name": "Event name",
+    "descriptionLabel": "Description",
+    "descriptionHint": "A few lines about the programme, dress code or access.",
+    "start": "Starts",
+    "end": "Ends",
+    "timezone": "Timezone",
+    "timezoneHint": "Guests always see times in this timezone.",
+    "location": "Location",
+    "invitations": {
+      "title": "Invitations",
+      "description": "How your guests receive their invitation and ticket.",
+      "channels": "Channels",
+      "hint": "At least one channel is required to publish."
+    },
+    "rules": {
+      "title": "Ticket rules",
+      "description": "What your guests can do with their ticket.",
+      "transfer": "Allow transfers",
+      "transferHint": "A guest can pass their ticket to someone else.",
+      "transferDeadline": "Transfers allowed until",
+      "transferDeadlineHint": "After this time, tickets can no longer be transferred.",
+      "overbooking": "Allow overbooking",
+      "overbookingHint": "Accept more confirmations than capacity, up to a limit.",
+      "maxOverbooking": "Extra confirmations, at most"
+    },
+    "unsaved": "Unsaved changes",
+    "discard": "Discard",
+    "saving": "Saving…",
+    "save": "Save"
+  },
+  "quorum": {
+    "title": "Quorum",
+    "description": "For general assemblies and statutory meetings: Jikū counts attendees live and timestamps the moment the quorum is reached. Leave “No quorum” for any other event.",
+    "alreadyReached": "The quorum has already been reached. Changing the rule now does not change that time: it stands.",
+    "rule": "Rule",
+    "modes": {
+      "NONE": "No quorum",
+      "FRACTION": "A share of members",
+      "ABSOLUTE": "A number of attendees"
+    },
+    "share": "Required share",
+    "fractions": {
+      "half": "Half (1/2)",
+      "twoThirds": "Two thirds (2/3)",
+      "threeQuarters": "Three quarters (3/4)"
+    },
+    "shareHint": "The threshold rounds up: with 181 members, half requires 91 attendees.",
+    "absolute": "Attendees required",
+    "saving": "Saving…",
+    "save": "Save quorum",
+    "saved": "Quorum saved.",
+    "removed": "Quorum removed."
+  },
+  "tickets": {
+    "title": "Ticket categories",
+    "description": "Split your guests into categories (VIP, press, standard), each with its colour, capacity and price. The ticket carries its category, and door staff see it when scanning. A paid ticket only gets in once paid, and your guests pay you directly.",
+    "emptyTitle": "No categories",
+    "emptyDescription": "All your guests get the same free ticket. Add categories to separate access or set a price.",
+    "add": "Add a category",
+    "addTitle": "New category",
+    "editTitle": "Edit category",
+    "dialogDescription": "The name and colour appear on the ticket and at the door.",
+    "label": "Name",
+    "labelPlaceholder": "VIP",
+    "price": "Price",
+    "pricePlaceholder": "Free",
+    "priceHint": "Leave empty for a free category.",
+    "priceLocked": "Tickets are already confirmed at this price: it can no longer change.",
+    "capacity": "Capacity",
+    "capacityPlaceholder": "Unlimited",
+    "capacityHint": "Optional. The event's own capacity also applies.",
+    "color": "Colour",
+    "colorOption": "Colour {index}",
+    "colorHint": "Pick clearly different colours: door staff recognise them from afar.",
+    "free": "Free",
+    "full": "Full",
+    "confirmedUncapped": "{count, plural, =0 {None confirmed} one {# confirmed} other {# confirmed}}, no cap",
+    "confirmedOf": "{count} of {cap} confirmed",
+    "actions": "Actions for {label}",
+    "edit": "Edit",
+    "delete": "Delete",
+    "saving": "Saving…",
+    "save": "Save",
+    "added": "Category added.",
+    "updated": "Category updated.",
+    "deleted": "Category deleted."
+  },
+  "overview": {
+    "unavailable": {
+      "title": "Dashboard unavailable",
+      "description": "The event's figures could not be loaded. Try again."
+    },
+    "exportGuests": "Export the list",
+    "doorLinks": {
+      "trigger": "Door links",
+      "title": "Door links",
+      "description": "One link per entrance, for the person checking guests in. Revoke it to cut access immediately."
+    },
+    "alerts": {
+      "bounces": {
+        "title": "Some invitations aren't arriving",
+        "description": "About {percent}% of your recent emails bounced. Check the imported addresses: repeated bounces hurt delivery."
+      },
+      "retention": {
+        "title": "Guest data will be anonymized soon",
+        "description": "Under the retention policy, guests' names, emails and phone numbers will be anonymized on {date}. Your attendance totals are kept."
+      },
+      "allowance": {
+        "title": "Guest allowance reached",
+        "description": "{invited} of {allowance} invitations used. Move to the next tier to invite more guests.",
+        "cta": "See plans"
+      }
+    },
+    "before": "Before the event",
+    "stats": {
+      "total": "Guests",
+      "invited": "Invited",
+      "confirmed": "Confirmed",
+      "declined": "Declined",
+      "pending": "No answer"
+    },
+    "noGuests": {
+      "title": "No guests yet",
+      "description": "Import a file or add your guests, then invite them in one click.",
+      "cta": "Add guests"
+    },
+    "usage": "{invited} of {allowance} invitations used, {remaining} left.",
+    "growth": {
+      "title": "Guest list growth",
+      "description": "Guests added day by day."
+    },
+    "delivery": {
+      "title": "Delivery by channel",
+      "description": "Email and WhatsApp: sent, pending, failed."
+    },
+    "onTheDay": "On the day",
+    "checkedIn": "Checked in",
+    "ofConfirmed": "of {confirmed} confirmed",
+    "byEntrance": "By entrance",
+    "noEntrances": "No door links yet. Create one with “Door links”.",
+    "timeline": {
+      "title": "Arrivals",
+      "description": "Check-ins by hour, in the event's timezone."
+    },
+    "live": "Updated live.",
+    "charts": {
+      "checkIns": "Check-ins",
+      "noCheckIns": "No check-ins yet: this fills in as guests arrive.",
+      "sent": "Sent",
+      "pending": "Pending",
+      "failed": "Failed",
+      "noInvitations": "No invitations sent yet.",
+      "guests": "Guests",
+      "noGuests": "No guests added yet."
+    },
+    "attendance": {
+      "title": "Proof of attendance",
+      "description": "{count, plural, one {The attendance register lists the person who checked in} other {The attendance register lists the # people who checked in}}, with the time and the checkpoint. Individual certificates are downloaded from the guest list.",
+      "download": "Attendance register (PDF)"
+    },
+    "quorum": {
+      "title": "Quorum",
+      "reached": "Reached",
+      "notReached": "Not reached",
+      "share": "{percent}% of required attendees",
+      "missing": "{count, plural, one {# attendee missing} other {# attendees missing}}",
+      "reachedAt": "Reached on {date}",
+      "fellBack": "(some attendees have left since)"
+    }
+  },
+  "list": {
+    "title": "Events",
+    "emptyTitle": "No events yet",
+    "emptyDescription": "Create your first event to invite your guests and check them in at the door.",
+    "search": "Search events",
+    "allStatuses": "All statuses",
+    "columns": {
+      "name": "Name",
+      "status": "Status",
+      "date": "Date",
+      "location": "Location",
+      "undated": "Date to be set"
+    }
   }
 }

@@ -5,7 +5,8 @@
     "services": "Services",
     "billing": "Facturation",
     "settings": "Paramètres",
-    "dashboard": "Tableau de bord",
+    "overview": "Vue d'ensemble",
+    "tickets": "Billets",
     "guests": "Invités",
     "dayLine": "File du jour",
     "manage": "Gérer",
@@ -15,7 +16,7 @@
     "platform": "Plateforme",
     "recentEvents": "Événements récents",
     "more": "Plus",
-    "openDashboard": "Ouvrir le tableau de bord",
+    "openOverview": "Ouvrir la vue d'ensemble",
     "openGuests": "Ouvrir les invités"
   },
   "breadcrumb": {

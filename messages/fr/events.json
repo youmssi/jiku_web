@@ -11,5 +11,307 @@
     "submitting": "Création…",
     "created": "Brouillon créé.",
     "failed": "Impossible de créer l'événement."
+  },
+  "status": {
+    "DRAFT": "Brouillon",
+    "PUBLISHED": "Publié",
+    "CANCELLED": "Annulé"
+  },
+  "backToEvents": "Retour aux événements",
+  "notFound": {
+    "title": "Cet événement est introuvable ici",
+    "description": "Il n'existe pas dans l'organisation sélectionnée. S'il appartient à une autre, changez d'organisation depuis le menu du compte."
+  },
+  "loadFailed": {
+    "title": "L'événement n'a pas pu être chargé",
+    "description": "Un problème est survenu de notre côté. Réessayez dans un instant."
+  },
+  "header": {
+    "undated": "Date à définir"
+  },
+  "tabs": {
+    "guests": "Invités",
+    "settings": "Paramètres"
+  },
+  "actions": {
+    "more": "Plus d'actions",
+    "open": "Ouvrir",
+    "publish": "Publier",
+    "cancel": "Annuler l'événement",
+    "delete": "Supprimer l'événement"
+  },
+  "lifecycle": {
+    "working": "Un instant…",
+    "publish": {
+      "title": "Publier cet événement ?",
+      "description": "L'événement devient visible et ses informations sont figées. Vous pourrez ensuite envoyer les invitations.",
+      "confirm": "Publier",
+      "done": "Événement publié."
+    },
+    "cancel": {
+      "title": "Annuler cet événement ?",
+      "description": "C'est définitif : chaque billet émis devient invalide et plus aucune réponse n'est acceptée.",
+      "confirm": "Annuler l'événement",
+      "done": "Événement annulé.",
+      "notify": "Prévenir les invités par e-mail ou WhatsApp"
+    },
+    "delete": {
+      "title": "Supprimer cet événement ?",
+      "description": "L'événement et toutes ses données sont effacés définitivement.",
+      "confirm": "Supprimer",
+      "done": "Événement supprimé."
+    }
+  },
+  "publish": {
+    "title": "Publier l'événement",
+    "ready": "Tout ce qui est nécessaire est prêt.",
+    "notReady": "Encore quelques éléments avant de publier.",
+    "done": "Fait",
+    "todo": "À faire",
+    "recommended": "Recommandé",
+    "fix": "Compléter",
+    "consequence": "Une fois publié, les informations de l'événement ne se modifient plus : vérifiez la date et le lieu.",
+    "later": "Plus tard",
+    "checks": {
+      "details": {
+        "title": "Nom et date",
+        "description": "Le nom et l'heure de début que vos invités verront.",
+        "cta": "Renseigner"
+      },
+      "channels": {
+        "title": "Canal d'invitation",
+        "description": "E-mail, WhatsApp ou les deux.",
+        "cta": "Choisir"
+      },
+      "tickets": {
+        "title": "Catégories et prix",
+        "description": "VIP, presse, standard, avec leur prix et leur jauge. Facultatif.",
+        "cta": "Configurer"
+      },
+      "guests": {
+        "title": "Liste d'invités",
+        "description": "Importez un fichier ou ajoutez vos invités un par un.",
+        "cta": "Ajouter"
+      }
+    }
+  },
+  "setup": {
+    "title": "Préparez votre événement",
+    "description": "Quelques étapes, dans l'ordre qui vous convient. Publiez depuis l'en-tête quand l'essentiel est prêt.",
+    "ready": "L'essentiel est prêt : vous pouvez publier depuis l'en-tête.",
+    "progress": "{done} sur {total}",
+    "review": "Revoir"
+  },
+  "errors": {
+    "invalid": "Vérifiez le formulaire et réessayez.",
+    "locked": "Cet événement n'est plus modifiable.",
+    "saveFailed": "Vos modifications n'ont pas pu être enregistrées. Réessayez.",
+    "publishIncomplete": "Il manque encore un nom, une heure de début ou un canal d'invitation.",
+    "publishFailed": "L'événement n'a pas pu être publié. Réessayez.",
+    "cancelNotPublished": "Seul un événement publié peut être annulé.",
+    "cancelFailed": "L'événement n'a pas pu être annulé. Réessayez.",
+    "deletePublished": "Annulez l'événement avant de le supprimer.",
+    "deleteFailed": "L'événement n'a pas pu être supprimé. Réessayez.",
+    "quorumInvalid": "Vérifiez la règle : une part ou un nombre de présents est attendu.",
+    "quorumFailed": "Le quorum n'a pas pu être enregistré. Réessayez.",
+    "ticketTypeDuplicate": "Une catégorie porte déjà ce nom sur cet événement.",
+    "ticketTypeLocked": "Des billets de cette catégorie sont confirmés : son prix ne peut plus changer.",
+    "ticketTypeFailed": "La catégorie n'a pas pu être enregistrée. Réessayez.",
+    "ticketTypeInUse": "{count, plural, =0 {Des invités sont rattachés à cette catégorie} one {# invité est rattaché à cette catégorie} other {# invités sont rattachés à cette catégorie}} : déplacez-les avant de la supprimer.",
+    "ticketTypeDeleteFailed": "La catégorie n'a pas pu être supprimée. Réessayez."
+  },
+  "settings": {
+    "saved": "Modifications enregistrées.",
+    "locked": {
+      "title": "Événement en lecture seule",
+      "description": "Un événement publié ou annulé ne se modifie plus : vos invités ont déjà reçu ces informations."
+    },
+    "details": {
+      "title": "Informations",
+      "description": "Ce que vos invités voient sur leur invitation et leur billet."
+    },
+    "name": "Nom de l'événement",
+    "descriptionLabel": "Description",
+    "descriptionHint": "Quelques lignes sur le programme, la tenue ou l'accès.",
+    "start": "Début",
+    "end": "Fin",
+    "timezone": "Fuseau horaire",
+    "timezoneHint": "Vos invités voient toujours les horaires dans ce fuseau.",
+    "location": "Lieu",
+    "invitations": {
+      "title": "Invitations",
+      "description": "Comment vos invités reçoivent leur invitation et leur billet.",
+      "channels": "Canaux",
+      "hint": "Au moins un canal est nécessaire pour publier."
+    },
+    "rules": {
+      "title": "Règles des billets",
+      "description": "Ce que vos invités peuvent faire de leur billet.",
+      "transfer": "Autoriser le transfert",
+      "transferHint": "Un invité peut céder son billet à quelqu'un d'autre.",
+      "transferDeadline": "Transfert possible jusqu'au",
+      "transferDeadlineHint": "Au-delà, les billets ne se transfèrent plus.",
+      "overbooking": "Autoriser le surbooking",
+      "overbookingHint": "Accepter plus de confirmations que la capacité, jusqu'à une limite.",
+      "maxOverbooking": "Confirmations en plus, au maximum"
+    },
+    "unsaved": "Modifications non enregistrées",
+    "discard": "Annuler",
+    "saving": "Enregistrement…",
+    "save": "Enregistrer"
+  },
+  "quorum": {
+    "title": "Quorum",
+    "description": "Pour les assemblées générales et réunions statutaires : Jikū compte les présents en direct et horodate le moment où le quorum est atteint. Laissez « Aucun quorum » pour tout autre événement.",
+    "alreadyReached": "Le quorum a déjà été atteint. Changer la règle maintenant ne modifie pas cette date : elle fait foi.",
+    "rule": "Règle",
+    "modes": {
+      "NONE": "Aucun quorum",
+      "FRACTION": "Une part des inscrits",
+      "ABSOLUTE": "Un nombre de présents"
+    },
+    "share": "Part requise",
+    "fractions": {
+      "half": "La moitié (1/2)",
+      "twoThirds": "Les deux tiers (2/3)",
+      "threeQuarters": "Les trois quarts (3/4)"
+    },
+    "shareHint": "Le seuil s'arrondit au supérieur : sur 181 membres, la moitié exige 91 présents.",
+    "absolute": "Présents requis",
+    "saving": "Enregistrement…",
+    "save": "Enregistrer le quorum",
+    "saved": "Quorum enregistré.",
+    "removed": "Quorum retiré."
+  },
+  "tickets": {
+    "title": "Catégories de billets",
+    "description": "Séparez vos invités en catégories (VIP, presse, standard), chacune avec sa couleur, sa jauge et son prix. Le billet porte sa catégorie, et le contrôleur la voit au scan. Un billet payant n'entre qu'une fois payé, et vos invités vous règlent directement.",
+    "emptyTitle": "Aucune catégorie",
+    "emptyDescription": "Tous vos invités reçoivent le même billet gratuit. Ajoutez des catégories pour distinguer les accès ou fixer un prix.",
+    "add": "Ajouter une catégorie",
+    "addTitle": "Nouvelle catégorie",
+    "editTitle": "Modifier la catégorie",
+    "dialogDescription": "Le nom et la couleur apparaissent sur le billet et au contrôle.",
+    "label": "Nom",
+    "labelPlaceholder": "VIP",
+    "price": "Prix",
+    "pricePlaceholder": "Gratuit",
+    "priceHint": "Laissez vide pour une catégorie gratuite.",
+    "priceLocked": "Des billets sont déjà confirmés à ce prix : il ne peut plus changer.",
+    "capacity": "Jauge",
+    "capacityPlaceholder": "Illimitée",
+    "capacityHint": "Facultatif. La capacité de l'événement s'applique aussi.",
+    "color": "Couleur",
+    "colorOption": "Couleur {index}",
+    "colorHint": "Choisissez des couleurs bien distinctes : le contrôleur les reconnaît de loin.",
+    "free": "Gratuit",
+    "full": "Complète",
+    "confirmedUncapped": "{count, plural, =0 {Aucun confirmé} one {# confirmé} other {# confirmés}}, sans jauge",
+    "confirmedOf": "{count} sur {cap} confirmés",
+    "actions": "Actions pour {label}",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "saving": "Enregistrement…",
+    "save": "Enregistrer",
+    "added": "Catégorie ajoutée.",
+    "updated": "Catégorie mise à jour.",
+    "deleted": "Catégorie supprimée."
+  },
+  "overview": {
+    "unavailable": {
+      "title": "Tableau de bord indisponible",
+      "description": "Les chiffres de l'événement n'ont pas pu être chargés. Réessayez."
+    },
+    "exportGuests": "Exporter la liste",
+    "doorLinks": {
+      "trigger": "Liens d'entrée",
+      "title": "Liens d'entrée",
+      "description": "Un lien par entrée, à confier à la personne qui contrôle. Révoquez-le pour couper l'accès aussitôt."
+    },
+    "alerts": {
+      "bounces": {
+        "title": "Des invitations n'arrivent pas",
+        "description": "Environ {percent} % de vos derniers e-mails ont été rejetés. Vérifiez les adresses importées : des rejets répétés nuisent à la délivrabilité."
+      },
+      "retention": {
+        "title": "Les données des invités seront bientôt anonymisées",
+        "description": "Conformément à la politique de conservation, les noms, e-mails et numéros des invités seront anonymisés le {date}. Vos totaux de présence sont conservés."
+      },
+      "allowance": {
+        "title": "Quota d'invités atteint",
+        "description": "{invited} invitations utilisées sur {allowance}. Passez au palier supérieur pour inviter davantage.",
+        "cta": "Voir les offres"
+      }
+    },
+    "before": "Avant l'événement",
+    "stats": {
+      "total": "Invités",
+      "invited": "Invités contactés",
+      "confirmed": "Confirmés",
+      "declined": "Déclinés",
+      "pending": "Sans réponse"
+    },
+    "noGuests": {
+      "title": "Aucun invité pour l'instant",
+      "description": "Importez un fichier ou ajoutez vos invités, puis invitez-les en un clic.",
+      "cta": "Ajouter des invités"
+    },
+    "usage": "{invited} invitations utilisées sur {allowance}, {remaining} restantes.",
+    "growth": {
+      "title": "Croissance de la liste",
+      "description": "Invités ajoutés au fil des jours."
+    },
+    "delivery": {
+      "title": "Envoi par canal",
+      "description": "E-mail et WhatsApp : envoyés, en attente, en échec."
+    },
+    "onTheDay": "Le jour J",
+    "checkedIn": "Entrés",
+    "ofConfirmed": "sur {confirmed} confirmés",
+    "byEntrance": "Par entrée",
+    "noEntrances": "Aucun lien d'entrée pour l'instant. Créez-en un avec « Liens d'entrée ».",
+    "timeline": {
+      "title": "Arrivées",
+      "description": "Entrées par heure, dans le fuseau de l'événement."
+    },
+    "live": "Mis à jour en direct.",
+    "charts": {
+      "checkIns": "Entrées",
+      "noCheckIns": "Aucune entrée pour l'instant : le graphique se remplit à l'arrivée des invités.",
+      "sent": "Envoyés",
+      "pending": "En attente",
+      "failed": "En échec",
+      "noInvitations": "Aucune invitation envoyée pour l'instant.",
+      "guests": "Invités",
+      "noGuests": "Aucun invité ajouté pour l'instant."
+    },
+    "attendance": {
+      "title": "Preuve de présence",
+      "description": "{count, plural, one {La feuille d'émargement liste la personne entrée} other {La feuille d'émargement liste les # personnes entrées}}, avec l'heure et le poste de contrôle. Les attestations nominatives se téléchargent depuis la liste des invités.",
+      "download": "Feuille d'émargement (PDF)"
+    },
+    "quorum": {
+      "title": "Quorum",
+      "reached": "Atteint",
+      "notReached": "Non atteint",
+      "share": "{percent} % des présents requis",
+      "missing": "{count, plural, one {Il manque # présent} other {Il manque # présents}}",
+      "reachedAt": "Atteint le {date}",
+      "fellBack": "(des participants sont repartis depuis)"
+    }
+  },
+  "list": {
+    "title": "Événements",
+    "emptyTitle": "Aucun événement pour l'instant",
+    "emptyDescription": "Créez votre premier événement pour inviter vos invités et contrôler l'entrée.",
+    "search": "Rechercher un événement",
+    "allStatuses": "Tous les statuts",
+    "columns": {
+      "name": "Nom",
+      "status": "Statut",
+      "date": "Date",
+      "location": "Lieu",
+      "undated": "Date à définir"
+    }
   }
 }

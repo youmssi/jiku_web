@@ -1,0 +1,309 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { FormFieldError } from "@/components/shared";
+import { updateDraftAction } from "./event.service";
+import {
+  eventFormSchema,
+  INVITATION_CHANNEL_LABELS,
+  INVITATION_CHANNELS,
+  TIMEZONES,
+  type EventFormValues,
+  type InvitationChannel,
+} from "./schema";
+
+/**
+ * Everything about an event on one page, in three sections an organizer can
+ * jump to from the publish checklist (#details, #invitations, #rules). A draft
+ * is edited freely and saved from the bar that appears on the first change; a
+ * published or cancelled event shows the same page read-only, because its
+ * guests already hold what it says.
+ */
+export function EventSettingsForm({
+  eventId,
+  initialValues,
+  editable,
+}: {
+  eventId: string;
+  initialValues: EventFormValues;
+  editable: boolean;
+}) {
+  const t = useTranslations("events.settings");
+  const router = useRouter();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting, isDirty },
+  } = useForm<EventFormValues>({
+    resolver: zodResolver(eventFormSchema),
+    mode: "onTouched",
+    defaultValues: initialValues,
+  });
+  const transferAllowed = useWatch({ control, name: "transferAllowed" });
+  const overbookingAllowed = useWatch({ control, name: "overbookingAllowed" });
+
+  async function onSubmit(values: EventFormValues) {
+    const result = await updateDraftAction(eventId, values);
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+    reset(values);
+    toast.success(t("saved"));
+    router.refresh();
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-6">
+      {editable ? null : (
+        <Alert>
+          <AlertTitle>{t("locked.title")}</AlertTitle>
+          <AlertDescription>{t("locked.description")}</AlertDescription>
+        </Alert>
+      )}
+      <fieldset disabled={!editable} className="flex flex-col gap-6">
+        <Card id="details" className="scroll-mt-20">
+          <CardHeader>
+            <CardTitle>{t("details.title")}</CardTitle>
+            <CardDescription>{t("details.description")}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FieldGroup>
+              <Controller
+                control={control}
+                name="name"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>{t("name")}</FieldLabel>
+                    <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="description"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>{t("descriptionLabel")}</FieldLabel>
+                    <Textarea {...field} id={field.name} rows={3} aria-invalid={fieldState.invalid} />
+                    <FieldDescription>{t("descriptionHint")}</FieldDescription>
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
+              />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Controller
+                  control={control}
+                  name="startLocal"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>{t("start")}</FieldLabel>
+                      <Input {...field} id={field.name} type="datetime-local" aria-invalid={fieldState.invalid} />
+                      <FormFieldError error={fieldState.error} />
+                    </Field>
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="endLocal"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>{t("end")}</FieldLabel>
+                      <Input {...field} id={field.name} type="datetime-local" aria-invalid={fieldState.invalid} />
+                      <FormFieldError error={fieldState.error} />
+                    </Field>
+                  )}
+                />
+              </div>
+              <Controller
+                control={control}
+                name="timezone"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>{t("timezone")}</FieldLabel>
+                    <Select value={field.value} onValueChange={field.onChange} disabled={!editable}>
+                      <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {TIMEZONES.map((zone) => (
+                          <SelectItem key={zone} value={zone}>
+                            {zone}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FieldDescription>{t("timezoneHint")}</FieldDescription>
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="location"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>{t("location")}</FieldLabel>
+                    <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </CardContent>
+        </Card>
+
+        <Card id="invitations" className="scroll-mt-20">
+          <CardHeader>
+            <CardTitle>{t("invitations.title")}</CardTitle>
+            <CardDescription>{t("invitations.description")}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Controller
+              control={control}
+              name="invitationChannels"
+              render={({ field }) => (
+                <FieldSet>
+                  <FieldLegend variant="label">{t("invitations.channels")}</FieldLegend>
+                  <ToggleGroup
+                    type="multiple"
+                    variant="outline"
+                    value={field.value}
+                    onValueChange={(value) => field.onChange(value as InvitationChannel[])}
+                    disabled={!editable}
+                  >
+                    {INVITATION_CHANNELS.map((channel) => (
+                      <ToggleGroupItem key={channel} value={channel}>
+                        {INVITATION_CHANNEL_LABELS[channel]}
+                      </ToggleGroupItem>
+                    ))}
+                  </ToggleGroup>
+                  <FieldDescription>{t("invitations.hint")}</FieldDescription>
+                </FieldSet>
+              )}
+            />
+          </CardContent>
+        </Card>
+
+        <Card id="rules" className="scroll-mt-20">
+          <CardHeader>
+            <CardTitle>{t("rules.title")}</CardTitle>
+            <CardDescription>{t("rules.description")}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FieldGroup>
+              <Controller
+                control={control}
+                name="transferAllowed"
+                render={({ field }) => (
+                  <Field orientation="horizontal">
+                    <FieldContent>
+                      <FieldLabel htmlFor={field.name}>{t("rules.transfer")}</FieldLabel>
+                      <FieldDescription>{t("rules.transferHint")}</FieldDescription>
+                    </FieldContent>
+                    <Switch id={field.name} checked={field.value} onCheckedChange={field.onChange} />
+                  </Field>
+                )}
+              />
+              {transferAllowed ? (
+                <Controller
+                  control={control}
+                  name="transferDeadlineLocal"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>{t("rules.transferDeadline")}</FieldLabel>
+                      <Input {...field} id={field.name} type="datetime-local" aria-invalid={fieldState.invalid} />
+                      <FieldDescription>{t("rules.transferDeadlineHint")}</FieldDescription>
+                      <FormFieldError error={fieldState.error} />
+                    </Field>
+                  )}
+                />
+              ) : null}
+              <Controller
+                control={control}
+                name="overbookingAllowed"
+                render={({ field }) => (
+                  <Field orientation="horizontal">
+                    <FieldContent>
+                      <FieldLabel htmlFor={field.name}>{t("rules.overbooking")}</FieldLabel>
+                      <FieldDescription>{t("rules.overbookingHint")}</FieldDescription>
+                    </FieldContent>
+                    <Switch id={field.name} checked={field.value} onCheckedChange={field.onChange} />
+                  </Field>
+                )}
+              />
+              {overbookingAllowed ? (
+                <Controller
+                  control={control}
+                  name="maxOverbookingCount"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>{t("rules.maxOverbooking")}</FieldLabel>
+                      <Input
+                        id={field.name}
+                        type="number"
+                        inputMode="numeric"
+                        min={0}
+                        value={field.value ?? ""}
+                        onBlur={field.onBlur}
+                        onChange={(event) =>
+                          field.onChange(event.target.value === "" ? null : Number(event.target.value))
+                        }
+                        aria-invalid={fieldState.invalid}
+                        className="max-w-40"
+                      />
+                      <FormFieldError error={fieldState.error} />
+                    </Field>
+                  )}
+                />
+              ) : null}
+            </FieldGroup>
+          </CardContent>
+        </Card>
+      </fieldset>
+
+      {editable && isDirty ? (
+        <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-lg border bg-background/95 p-3 shadow-lg backdrop-blur">
+          <p className="text-sm text-muted-foreground">{t("unsaved")}</p>
+          <div className="flex gap-2">
+            <Button type="button" variant="ghost" onClick={() => reset()} disabled={isSubmitting}>
+              {t("discard")}
+            </Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? t("saving") : t("save")}
+            </Button>
+          </div>
+        </div>
+      ) : null}
+    </form>
+  );
+}

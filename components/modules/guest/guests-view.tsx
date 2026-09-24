@@ -53,10 +53,10 @@ export async function GuestsView({ params }: { params: Promise<{ id: string }> }
   }));
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-10">
+    <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-semibold">Guests</h1>
+          <h2 className="text-lg font-medium">Guests</h2>
           <Badge variant="secondary">{guests.length}</Badge>
         </div>
         <div className="flex flex-wrap items-center gap-2">

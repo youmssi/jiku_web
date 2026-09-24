@@ -5,7 +5,8 @@
     "services": "Services",
     "billing": "Billing",
     "settings": "Settings",
-    "dashboard": "Dashboard",
+    "overview": "Overview",
+    "tickets": "Tickets",
     "guests": "Guests",
     "dayLine": "Day line",
     "manage": "Manage",
@@ -15,7 +16,7 @@
     "platform": "Platform",
     "recentEvents": "Recent events",
     "more": "More",
-    "openDashboard": "Open dashboard",
+    "openOverview": "Open overview",
     "openGuests": "Open guests"
   },
   "breadcrumb": {

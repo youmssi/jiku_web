@@ -20,11 +20,11 @@ import { getServiceNameAction } from "@/components/modules/services/services.ser
 import {
   currentEventId,
   currentServiceId,
-  EVENT_SUB_NAV_ITEMS,
+  EVENT_TABS,
   ORGANIZER_NAV_ITEMS,
   SERVICE_SUB_NAV_ITEMS,
 } from "@/components/shared/organizer-nav";
-import { eventDashboardRoute, ROUTES, serviceManageRoute } from "@/lib/constants";
+import { eventRoute, ROUTES, serviceManageRoute } from "@/lib/constants";
 
 interface Crumb {
   label: string;
@@ -46,7 +46,7 @@ export function AppBreadcrumb({ brandName }: { brandName: string }) {
   const serviceId = currentServiceId(pathname);
   const active = ORGANIZER_NAV_ITEMS.find((item) => item.match(pathname));
   const eventSub = eventId
-    ? EVENT_SUB_NAV_ITEMS.find((item) => item.match(pathname, eventId))
+    ? EVENT_TABS.find((item) => item.match(pathname, eventId))
     : null;
   const serviceSub = serviceId
     ? SERVICE_SUB_NAV_ITEMS.find((item) => item.match(pathname, serviceId))
@@ -74,7 +74,7 @@ export function AppBreadcrumb({ brandName }: { brandName: string }) {
     crumbs.push({ label: t(`nav.${active.labelKey}`), href: active.href });
   }
   if (eventId) {
-    crumbs.push({ label: itemName ?? t("breadcrumb.event"), href: eventDashboardRoute(eventId) });
+    crumbs.push({ label: itemName ?? t("breadcrumb.event"), href: eventRoute(eventId) });
   } else if (serviceId) {
     crumbs.push({ label: itemName ?? t("breadcrumb.service"), href: serviceManageRoute(serviceId) });
   }

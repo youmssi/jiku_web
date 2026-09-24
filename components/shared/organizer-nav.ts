@@ -1,10 +1,11 @@
 import type { Messages } from "@/i18n/messages";
-import { CalendarDays, ClipboardList, CreditCard, LayoutDashboard, ListOrdered, Settings, Users } from "lucide-react";
+import { CalendarDays, ClipboardList, CreditCard, LayoutDashboard, ListOrdered, Settings, Ticket, Users } from "lucide-react";
 import {
   billingRoute,
-  eventDashboardRoute,
-  eventEditRoute,
   eventGuestsRoute,
+  eventRoute,
+  eventSettingsRoute,
+  eventTicketsRoute,
   ROUTES,
   serviceConfigurationRoute,
   serviceLineRoute,
@@ -67,22 +68,28 @@ export interface EventSubNavItem {
 }
 
 /**
- * Sub-navigation for one selected event, shown as a SidebarMenuSub under "Events"
- * in the app sidebar (desktop and the mobile sheet) and used to label the header
- * breadcrumb's current section.
+ * The tabs of one event's workspace, in order. The same list drives the tab bar
+ * under the event header, the event's sub-menu in the sidebar, and the last
+ * breadcrumb, so the three always agree.
  */
-export const EVENT_SUB_NAV_ITEMS: EventSubNavItem[] = [
+export const EVENT_TABS: EventSubNavItem[] = [
   {
-    labelKey: "dashboard",
-    href: eventDashboardRoute,
+    labelKey: "overview",
+    href: eventRoute,
     icon: LayoutDashboard,
-    match: (pathname, eventId) => pathname === eventDashboardRoute(eventId),
+    match: (pathname, eventId) => pathname === eventRoute(eventId),
   },
   {
     labelKey: "guests",
     href: eventGuestsRoute,
     icon: Users,
     match: (pathname, eventId) => pathname === eventGuestsRoute(eventId),
+  },
+  {
+    labelKey: "tickets",
+    href: eventTicketsRoute,
+    icon: Ticket,
+    match: (pathname, eventId) => pathname === eventTicketsRoute(eventId),
   },
   {
     labelKey: "billing",
@@ -92,9 +99,9 @@ export const EVENT_SUB_NAV_ITEMS: EventSubNavItem[] = [
   },
   {
     labelKey: "settings",
-    href: eventEditRoute,
+    href: eventSettingsRoute,
     icon: Settings,
-    match: (pathname, eventId) => pathname === eventEditRoute(eventId),
+    match: (pathname, eventId) => pathname === eventSettingsRoute(eventId),
   },
 ];
 

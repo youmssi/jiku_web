@@ -22,7 +22,7 @@ import { Link, usePathname } from "@/i18n/navigation"
 import {
   currentEventId,
   currentServiceId,
-  EVENT_SUB_NAV_ITEMS,
+  EVENT_TABS,
   ORGANIZER_NAV_ITEMS,
   SERVICE_SUB_NAV_ITEMS,
 } from "@/components/shared/organizer-nav"
@@ -49,7 +49,7 @@ export function NavMain() {
           const label = t(`nav.${item.labelKey}`)
           const subItems =
             item.href === ROUTES.EVENTS && eventId
-              ? EVENT_SUB_NAV_ITEMS.map((subItem) => ({
+              ? EVENT_TABS.map((subItem) => ({
                   title: t(`nav.${subItem.labelKey}`),
                   url: subItem.href(eventId),
                 }))

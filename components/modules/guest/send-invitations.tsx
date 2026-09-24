@@ -8,7 +8,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { trackEvent } from "@/lib/analytics";
 import { sendInvitationsAction } from "@/components/modules/guest/guest.service";
 import { INVITATION_CHANNEL_LABELS, type InvitationChannel } from "@/lib/channels";
-import { billingRoute, eventEditRoute } from "@/lib/constants";
+import { billingRoute, eventSettingsRoute } from "@/lib/constants";
 
 export function SendInvitations({
   eventId,
@@ -27,7 +27,7 @@ export function SendInvitations({
       <div className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
         No invitation channel is enabled for this event yet.{" "}
         <Link
-          href={eventEditRoute(eventId)}
+          href={`${eventSettingsRoute(eventId)}#invitations`}
           className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
         >
           Enable Email or WhatsApp in event settings
