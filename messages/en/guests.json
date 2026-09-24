@@ -1,0 +1,173 @@
+{
+  "title": "{count, plural, =0 {Guests} one {# guest} other {# guests}}",
+  "emptyTitle": "No guests yet",
+  "emptyDescription": "Import your list from a file or add guests one by one, then send the invitations in one click.",
+  "export": "Export",
+  "search": "Search a name, email or number",
+  "allCategories": "All categories",
+  "excluded": "Excluded",
+  "noContact": "No contact",
+  "checkedInAt": "In at {time}",
+  "columns": {
+    "name": "Guest",
+    "response": "Answer",
+    "category": "Category",
+    "payment": "Payment",
+    "invitation": "Invitation"
+  },
+  "rsvp": {
+    "PENDING": "No answer",
+    "CONFIRMED": "Confirmed",
+    "DECLINED": "Declined",
+    "TRANSFERRED": "Transferred"
+  },
+  "filters": {
+    "label": "Filter by answer",
+    "ALL": "All",
+    "CONFIRMED": "Confirmed",
+    "PENDING": "No answer",
+    "DECLINED": "Declined",
+    "PAYMENT_DUE": "Payment due"
+  },
+  "payment": {
+    "due": "Due · {amount}",
+    "dueNoAmount": "Due",
+    "paid": "Paid",
+    "free": "Free"
+  },
+  "invitation": {
+    "notSent": "Not sent yet",
+    "PENDING": "sending",
+    "QUEUED": "queued",
+    "SENT": "sent",
+    "FAILED": "failed"
+  },
+  "actions": {
+    "label": "Actions for {name}",
+    "markPaid": "Mark as paid",
+    "methods": {
+      "MOBILE_MONEY": "Mobile Money",
+      "PAYMENT_LINK": "Payment link",
+      "CASH": "Cash"
+    },
+    "paidDone": "{name}'s payment recorded.",
+    "category": "Category",
+    "noCategory": "No category",
+    "categoryDone": "{name}: category {category}.",
+    "categoryCleared": "{name} no longer has a category.",
+    "certificate": "Attendance certificate",
+    "include": "Include in invitations again",
+    "exclude": "Exclude from invitations",
+    "includedDone": "{name} will receive invitations again.",
+    "excludedDone": "{name} will not receive any more invitations.",
+    "remove": "Remove from the list",
+    "removing": "Removing…",
+    "removeTitle": "Remove {name}?",
+    "removeDescription": "The guest disappears from the list. A guest who was already invited can no longer be removed: exclude them instead to stop writing to them.",
+    "removedDone": "{name} was removed from the list."
+  },
+  "add": {
+    "trigger": "Add",
+    "title": "Add a guest",
+    "description": "One person at a time. They will be invited with everyone else.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "phone": "Phone (WhatsApp)",
+    "contactHint": "An email or a number is enough to invite them.",
+    "submit": "Add guest",
+    "submitting": "Adding…",
+    "added": "{name} was added.",
+    "duplicate": "{name} is already on the list.",
+    "rejected": "This guest could not be added: check the email and number."
+  },
+  "import": {
+    "trigger": "Import",
+    "title": "Import a guest list",
+    "description": "A CSV file with first name, last name, email and phone. Every row is checked before importing.",
+    "columnsHint": "Expected columns: first name, last name, email, phone.",
+    "template": "Download the template",
+    "drop": "Drop the file here",
+    "reading": "Reading the file…",
+    "readingHint": "Checking the columns and every row.",
+    "choose": "Choose a CSV file",
+    "chooseHint": "Drag and drop your file here, or <browse>browse</browse> your device.",
+    "missingTitle": "Missing columns",
+    "missingDescription": "Missing: {columns}. Download the template and reuse its headers.",
+    "another": "Choose another file",
+    "remove": "Remove the file",
+    "summary": "{valid} valid, {warnings} to check, {errors} in error",
+    "cancel": "Cancel",
+    "review": "Review {count, plural, one {the row} other {the # rows}}",
+    "reviewTitle": "Review {file}",
+    "reviewDescription": "Rows in error are skipped. Rows to check are imported, duplicates merged.",
+    "counts": {
+      "valid": "{count} valid",
+      "warnings": "{count} to check",
+      "errors": "{count} in error"
+    },
+    "columns": {
+      "row": "Row",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "phone": "Phone",
+      "status": "State",
+      "issue": "Issue"
+    },
+    "status": {
+      "valid": "Valid",
+      "warning": "To check",
+      "error": "Error"
+    },
+    "issues": {
+      "missingFirstName": "Missing first name",
+      "missingLastName": "Missing last name",
+      "missingContact": "No email and no phone",
+      "invalidEmail": "Invalid email",
+      "invalidPhone": "Invalid number",
+      "duplicate": "Duplicate in the file"
+    },
+    "truncated": "Showing the first {shown} of {total} rows. All of them are checked and imported.",
+    "back": "Back",
+    "importing": "Importing…",
+    "confirm": "Import {count, plural, one {# guest} other {# guests}}",
+    "done": "{imported, plural, one {# guest imported} other {# guests imported}}, {duplicates} duplicates skipped, {failed} in error."
+  },
+  "send": {
+    "trigger": "Send invitations",
+    "title": "Send the invitations",
+    "description": "Each guest gets their personal link to answer and receive their ticket.",
+    "channels": "Channels",
+    "reach": {
+      "EMAIL": "{count, plural, =0 {No guest has an email} one {# guest has an email} other {# guests have an email}}",
+      "WHATSAPP": "{count, plural, =0 {No guest has a number} one {# guest has a number} other {# guests have a number}}"
+    },
+    "once": "A guest already invited on a channel doesn't get the link twice: you can send again after adding guests.",
+    "submit": "Send",
+    "sending": "Sending…",
+    "queued": "{count, plural, =0 {No new invitation to send.} one {# invitation on its way.} other {# invitations on their way.}}",
+    "noChannelTitle": "No channel enabled",
+    "noChannelDescription": "Choose email, WhatsApp or both in the event's settings.",
+    "openSettings": "Open settings",
+    "allowanceTitle": "Guest allowance reached",
+    "allowanceCta": "See plans"
+  },
+  "errors": {
+    "invalid": "Check the details and try again.",
+    "noFile": "Choose a CSV file.",
+    "missingColumns": "The file doesn't have the expected columns (first name, last name, email, phone).",
+    "importFailed": "The import failed. Try again.",
+    "addFailed": "The guest could not be added. Try again.",
+    "alreadyInvited": "This guest was already invited and can no longer be removed. Exclude them instead.",
+    "removeFailed": "The guest could not be removed. Try again.",
+    "exclusionFailed": "The change could not be saved. Try again.",
+    "alreadyPaid": "This ticket owes nothing any more: it was already paid.",
+    "markPaidFailed": "The payment could not be recorded. Try again.",
+    "noChannel": "Choose at least one channel.",
+    "allowanceReached": "This event's guest allowance is reached. Move to the next tier to invite more guests.",
+    "sendFailed": "The invitations could not be sent. Try again.",
+    "categoryFull": "This category is full. Raise its capacity or choose another one.",
+    "categoryFailed": "The category could not be changed. Try again."
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "title": "{count, plural, =0 {Invités} one {# invité} other {# invités}}",
+  "emptyTitle": "Aucun invité pour l'instant",
+  "emptyDescription": "Importez votre liste depuis un fichier ou ajoutez vos invités un par un, puis envoyez les invitations en un clic.",
+  "export": "Exporter",
+  "search": "Rechercher un nom, un e-mail, un numéro",
+  "allCategories": "Toutes les catégories",
+  "excluded": "Exclu",
+  "noContact": "Sans contact",
+  "checkedInAt": "Entré à {time}",
+  "columns": {
+    "name": "Invité",
+    "response": "Réponse",
+    "category": "Catégorie",
+    "payment": "Paiement",
+    "invitation": "Invitation"
+  },
+  "rsvp": {
+    "PENDING": "Sans réponse",
+    "CONFIRMED": "Confirmé",
+    "DECLINED": "Décliné",
+    "TRANSFERRED": "Transféré"
+  },
+  "filters": {
+    "label": "Filtrer par réponse",
+    "ALL": "Tous",
+    "CONFIRMED": "Confirmés",
+    "PENDING": "Sans réponse",
+    "DECLINED": "Déclinés",
+    "PAYMENT_DUE": "Paiement dû"
+  },
+  "payment": {
+    "due": "À payer · {amount}",
+    "dueNoAmount": "À payer",
+    "paid": "Payé",
+    "free": "Gratuit"
+  },
+  "invitation": {
+    "notSent": "Pas encore envoyée",
+    "PENDING": "en cours",
+    "QUEUED": "en file",
+    "SENT": "envoyée",
+    "FAILED": "échec"
+  },
+  "actions": {
+    "label": "Actions pour {name}",
+    "markPaid": "Marquer payé",
+    "methods": {
+      "MOBILE_MONEY": "Mobile Money",
+      "PAYMENT_LINK": "Lien de paiement",
+      "CASH": "Espèces"
+    },
+    "paidDone": "Paiement de {name} enregistré.",
+    "category": "Catégorie",
+    "noCategory": "Aucune catégorie",
+    "categoryDone": "{name} : catégorie {category}.",
+    "categoryCleared": "{name} n'a plus de catégorie.",
+    "certificate": "Attestation de présence",
+    "include": "Réinclure dans les invitations",
+    "exclude": "Exclure des invitations",
+    "includedDone": "{name} recevra de nouveau les invitations.",
+    "excludedDone": "{name} ne recevra plus d'invitation.",
+    "remove": "Retirer de la liste",
+    "removing": "Retrait…",
+    "removeTitle": "Retirer {name} ?",
+    "removeDescription": "L'invité disparaît de la liste. Un invité déjà invité ne peut plus être retiré : excluez-le plutôt pour ne plus lui écrire.",
+    "removedDone": "{name} a été retiré de la liste."
+  },
+  "add": {
+    "trigger": "Ajouter",
+    "title": "Ajouter un invité",
+    "description": "Une personne à la fois. Elle sera invitée avec les autres.",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "E-mail",
+    "phone": "Téléphone (WhatsApp)",
+    "contactHint": "Un e-mail ou un numéro suffit pour inviter.",
+    "submit": "Ajouter l'invité",
+    "submitting": "Ajout…",
+    "added": "{name} a été ajouté.",
+    "duplicate": "{name} est déjà sur la liste.",
+    "rejected": "Cet invité n'a pas pu être ajouté : vérifiez l'e-mail et le numéro."
+  },
+  "import": {
+    "trigger": "Importer",
+    "title": "Importer une liste d'invités",
+    "description": "Un fichier CSV avec prénom, nom, e-mail et téléphone. Chaque ligne est vérifiée avant l'import.",
+    "columnsHint": "Colonnes attendues : prénom, nom, e-mail, téléphone.",
+    "template": "Télécharger le modèle",
+    "drop": "Déposez le fichier ici",
+    "reading": "Lecture du fichier…",
+    "readingHint": "Vérification des colonnes et de chaque ligne.",
+    "choose": "Choisissez un fichier CSV",
+    "chooseHint": "Glissez-déposez votre fichier ici, ou <browse>parcourez</browse> votre appareil.",
+    "missingTitle": "Colonnes manquantes",
+    "missingDescription": "Il manque : {columns}. Téléchargez le modèle et reprenez ses en-têtes.",
+    "another": "Choisir un autre fichier",
+    "remove": "Retirer le fichier",
+    "summary": "{valid} valides, {warnings} à vérifier, {errors} en erreur",
+    "cancel": "Annuler",
+    "review": "Vérifier {count, plural, one {la ligne} other {les # lignes}}",
+    "reviewTitle": "Vérification de {file}",
+    "reviewDescription": "Les lignes en erreur seront ignorées. Les lignes à vérifier sont importées, les doublons fusionnés.",
+    "counts": {
+      "valid": "{count, plural, one {# valide} other {# valides}}",
+      "warnings": "{count, plural, one {# à vérifier} other {# à vérifier}}",
+      "errors": "{count, plural, one {# en erreur} other {# en erreur}}"
+    },
+    "columns": {
+      "row": "Ligne",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "status": "État",
+      "issue": "Problème"
+    },
+    "status": {
+      "valid": "Valide",
+      "warning": "À vérifier",
+      "error": "Erreur"
+    },
+    "issues": {
+      "missingFirstName": "Prénom manquant",
+      "missingLastName": "Nom manquant",
+      "missingContact": "Ni e-mail ni téléphone",
+      "invalidEmail": "E-mail invalide",
+      "invalidPhone": "Numéro invalide",
+      "duplicate": "Doublon dans le fichier"
+    },
+    "truncated": "{shown} premières lignes affichées sur {total}. Toutes seront vérifiées et importées.",
+    "back": "Retour",
+    "importing": "Import…",
+    "confirm": "Importer {count, plural, one {# invité} other {# invités}}",
+    "done": "{imported, plural, one {# invité importé} other {# invités importés}}, {duplicates} doublons ignorés, {failed} en erreur."
+  },
+  "send": {
+    "trigger": "Envoyer les invitations",
+    "title": "Envoyer les invitations",
+    "description": "Chaque invité reçoit son lien personnel pour répondre et obtenir son billet.",
+    "channels": "Canaux",
+    "reach": {
+      "EMAIL": "{count, plural, =0 {Aucun invité n'a d'e-mail} one {# invité a un e-mail} other {# invités ont un e-mail}}",
+      "WHATSAPP": "{count, plural, =0 {Aucun invité n'a de numéro} one {# invité a un numéro} other {# invités ont un numéro}}"
+    },
+    "once": "Un invité déjà invité sur un canal ne reçoit pas le lien deux fois : vous pouvez renvoyer après avoir ajouté des invités.",
+    "submit": "Envoyer",
+    "sending": "Envoi…",
+    "queued": "{count, plural, =0 {Aucune nouvelle invitation à envoyer.} one {# invitation en cours d'envoi.} other {# invitations en cours d'envoi.}}",
+    "noChannelTitle": "Aucun canal activé",
+    "noChannelDescription": "Choisissez l'e-mail, WhatsApp ou les deux dans les paramètres de l'événement.",
+    "openSettings": "Ouvrir les paramètres",
+    "allowanceTitle": "Quota d'invités atteint",
+    "allowanceCta": "Voir les offres"
+  },
+  "errors": {
+    "invalid": "Vérifiez les informations et réessayez.",
+    "noFile": "Choisissez un fichier CSV.",
+    "missingColumns": "Le fichier ne contient pas les colonnes attendues (prénom, nom, e-mail, téléphone).",
+    "importFailed": "L'import a échoué. Réessayez.",
+    "addFailed": "L'invité n'a pas pu être ajouté. Réessayez.",
+    "alreadyInvited": "Cet invité a déjà été invité et ne peut plus être retiré. Excluez-le plutôt.",
+    "removeFailed": "L'invité n'a pas pu être retiré. Réessayez.",
+    "exclusionFailed": "La modification n'a pas pu être enregistrée. Réessayez.",
+    "alreadyPaid": "Ce billet ne doit plus rien : il a déjà été réglé.",
+    "markPaidFailed": "Le paiement n'a pas pu être enregistré. Réessayez.",
+    "noChannel": "Choisissez au moins un canal.",
+    "allowanceReached": "Le quota d'invités de cet événement est atteint. Passez au palier supérieur pour inviter davantage.",
+    "sendFailed": "Les invitations n'ont pas pu être envoyées. Réessayez.",
+    "categoryFull": "Cette catégorie est complète. Augmentez sa jauge ou choisissez-en une autre.",
+    "categoryFailed": "La catégorie n'a pas pu être changée. Réessayez."
+  }
+}

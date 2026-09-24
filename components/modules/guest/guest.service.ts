@@ -1,78 +1,84 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { eventGuestsRoute } from "@/lib/constants";
-import { type ActionResult, fail, fromResponse, reportApiError } from "@/lib/action-result";
-import type { Guest, ImportResult, SingleGuestInput } from "@/components/modules/guest/schema";
+import { type ActionResult, fail, fromResponse, ok, reportApiError } from "@/lib/action-result";
+import {
+  PAYMENT_METHODS,
+  singleGuestSchema,
+  type Guest,
+  type ImportResult,
+  type PaymentMethod,
+  type SingleGuestInput,
+} from "@/components/modules/guest/schema";
+
+function errors() {
+  return getTranslations("guests.errors");
+}
+
+/** A CSV cell, quoted when the value itself holds a separator, a quote or a line break. */
+function csvCell(value: string): string {
+  return /[",\n\r]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
+}
+
+async function uploadCsv(eventId: string, body: FormData, failure: string): Promise<ActionResult<ImportResult>> {
+  const t = await errors();
+  const response = await serverFetch(`/events/${eventId}/guests/import`, { method: "POST", body });
+  const result = await fromResponse<ImportResult>(response, {
+    400: t("missingColumns"),
+    default: failure,
+  });
+  if (result.ok) {
+    revalidatePath(eventGuestsRoute(eventId));
+  }
+  return result;
+}
 
 export async function importGuestsAction(
   eventId: string,
   formData: FormData,
 ): Promise<ActionResult<ImportResult>> {
+  const t = await errors();
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) {
-    return fail("Please choose a CSV file.");
+    return fail(t("noFile"));
   }
   const body = new FormData();
   body.append("file", file);
-  const response = await serverFetch(`/events/${eventId}/guests/import`, {
-    method: "POST",
-    body,
-  });
-  const result = await fromResponse<ImportResult>(response, {
-    400: "The file is missing required columns (firstName, lastName, email, phone).",
-    default: "The import failed. Please try again.",
-  });
-  if (result.ok) {
-    revalidatePath(eventGuestsRoute(eventId));
-  }
-  return result;
+  return uploadCsv(eventId, body, t("importFailed"));
 }
 
+/** One guest added by hand, sent through the same import pipeline as a one-row file. */
 export async function addGuestAction(
   eventId: string,
   data: SingleGuestInput,
 ): Promise<ActionResult<ImportResult>> {
-  if (!data.email && !data.phone) {
-    return fail("Provide an email or a phone number.");
+  const t = await errors();
+  const parsed = singleGuestSchema.safeParse(data);
+  if (!parsed.success) {
+    return fail(t("invalid"));
   }
+  const { firstName, lastName, email, phone } = parsed.data;
+  const csv = ["firstName,lastName,email,phone", [firstName, lastName, email, phone].map(csvCell).join(",")].join("\n");
   const body = new FormData();
-  const csvHeader = "firstName,lastName,email,phone";
-  const csvRow = `${data.firstName},${data.lastName},${data.email ?? ""},${data.phone ?? ""}`;
-  const blob = new Blob([csvHeader + "\n" + csvRow], { type: "text/csv" });
-  body.append("file", blob, "guest.csv");
-  const response = await serverFetch(`/events/${eventId}/guests/import`, {
-    method: "POST",
-    body,
-  });
-  const result = await fromResponse<ImportResult>(response, {
-    400: "The file is missing required columns (firstName, lastName, email, phone).",
-    default: "We couldn't add this guest. Please try again.",
-  });
-  if (result.ok) {
-    revalidatePath(eventGuestsRoute(eventId));
-  }
-  return result;
+  body.append("file", new Blob([csv], { type: "text/csv" }), "guest.csv");
+  return uploadCsv(eventId, body, t("addFailed"));
 }
 
-export async function removeGuestAction(
-  eventId: string,
-  guestId: string,
-): Promise<ActionResult<null>> {
-  const response = await serverFetch(`/events/${eventId}/guests/${guestId}`, {
-    method: "DELETE",
-  });
+export async function removeGuestAction(eventId: string, guestId: string): Promise<ActionResult<null>> {
+  const t = await errors();
+  const response = await serverFetch(`/events/${eventId}/guests/${guestId}`, { method: "DELETE" });
   if (response.ok) {
     revalidatePath(eventGuestsRoute(eventId));
-    return { ok: true, data: null };
+    return ok(null);
+  }
+  if (response.status === 409) {
+    return fail(t("alreadyInvited"));
   }
   reportApiError(response);
-  return fail(
-    response.status === 409
-      ? "This guest has already been invited and can no longer be removed. Exclude them instead."
-      : "We couldn't remove this guest. Please try again.",
-  );
+  return fail(t("removeFailed"));
 }
 
 export async function setGuestExclusionAction(
@@ -80,20 +86,47 @@ export async function setGuestExclusionAction(
   guestId: string,
   excluded: boolean,
 ): Promise<ActionResult<Guest>> {
+  const t = await errors();
   const response = await serverFetch(`/events/${eventId}/guests/${guestId}/exclusion`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ excluded }),
   });
-  const result = await fromResponse<Guest>(response, {
-    default: excluded
-      ? "We couldn't exclude this guest. Please try again."
-      : "We couldn't include this guest again. Please try again.",
-  });
+  const result = await fromResponse<Guest>(response, { default: t("exclusionFailed") });
   if (result.ok) {
     revalidatePath(eventGuestsRoute(eventId));
   }
   return result;
+}
+
+/**
+ * Records that a guest paid the organizer for their ticket (JIKU-110), through
+ * the same endpoint the door uses. A 409 means nothing was owed any more:
+ * someone at the door confirmed it first.
+ */
+export async function markGuestPaidAction(
+  eventId: string,
+  ticketCode: string,
+  method: PaymentMethod,
+): Promise<ActionResult<null>> {
+  const t = await errors();
+  if (!PAYMENT_METHODS.includes(method)) {
+    return fail(t("invalid"));
+  }
+  const response = await serverFetch(
+    `/events/${eventId}/checkin/tickets/${encodeURIComponent(ticketCode)}/paid`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ method }),
+    },
+  );
+  if (response.ok || response.status === 409) {
+    revalidatePath(eventGuestsRoute(eventId));
+    return response.ok ? ok(null) : fail(t("alreadyPaid"));
+  }
+  reportApiError(response);
+  return fail(t("markPaidFailed"));
 }
 
 export interface SendInvitationsFailure {
@@ -107,14 +140,14 @@ export async function sendInvitationsAction(
   eventId: string,
   channels: string[],
 ): Promise<{ ok: true; data: { queued: number } } | SendInvitationsFailure> {
+  const t = await errors();
   if (channels.length === 0) {
-    return { ok: false, error: "Select at least one channel.", paywall: false };
+    return { ok: false, error: t("noChannel"), paywall: false };
   }
   const params = new URLSearchParams({ channels: channels.join(",") });
-  const response = await serverFetch(
-    `/events/${eventId}/invitations/send?${params.toString()}`,
-    { method: "POST" },
-  );
+  const response = await serverFetch(`/events/${eventId}/invitations/send?${params.toString()}`, {
+    method: "POST",
+  });
   if (response.ok) {
     const data = (await response.json()) as { queued: number };
     revalidatePath(eventGuestsRoute(eventId));
@@ -122,21 +155,9 @@ export async function sendInvitationsAction(
   }
   reportApiError(response);
   if (response.status === 402) {
-    const detail = await response
-      .json()
-      .then((body: { detail?: string }) => body.detail)
-      .catch(() => undefined);
-    return {
-      ok: false,
-      paywall: true,
-      error: detail ?? "This event's guest allowance has been reached.",
-    };
+    return { ok: false, paywall: true, error: t("allowanceReached") };
   }
-  return {
-    ok: false,
-    paywall: false,
-    error: "We couldn't send the invitations. Please try again.",
-  };
+  return { ok: false, paywall: false, error: t("sendFailed") };
 }
 
 /**
@@ -150,14 +171,15 @@ export async function setGuestTicketTypeAction(
   guestId: string,
   ticketTypeId: string | null,
 ): Promise<ActionResult<Guest>> {
+  const t = await errors();
   const response = await serverFetch(`/events/${eventId}/guests/${guestId}/ticket-type`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ticketTypeId }),
   });
   const result = await fromResponse<Guest>(response, {
-    409: "Cette catégorie est complète. Augmentez son plafond ou choisissez-en une autre.",
-    default: "La catégorie n'a pas pu être changée. Réessayez.",
+    409: t("categoryFull"),
+    default: t("categoryFailed"),
   });
   if (result.ok) {
     revalidatePath(eventGuestsRoute(eventId));

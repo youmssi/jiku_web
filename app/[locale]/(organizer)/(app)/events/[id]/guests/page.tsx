@@ -1,5 +1,6 @@
-import { GuestsView } from "@/components/modules/guest";
+import { GuestsView } from "@/components/modules/guest/server";
 
-export default function GuestsPage({ params }: Readonly<{ params: Promise<{ id: string }> }>) {
-  return <GuestsView params={params} />;
+export default async function EventGuestsPage({ params }: Readonly<{ params: Promise<{ id: string }> }>) {
+  const { id } = await params;
+  return <GuestsView eventId={id} />;
 }
