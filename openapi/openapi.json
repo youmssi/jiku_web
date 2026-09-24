@@ -11848,8 +11848,7 @@
               "NOT_REQUIRED",
               "DUE",
               "DUE_AFTER_SERVICE",
-              "PAID",
-              null
+              "PAID"
             ]
           },
           "amountDueMinor" : {
