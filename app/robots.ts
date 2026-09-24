@@ -23,7 +23,6 @@ export default function robots(): MetadataRoute.Robots {
         "/checkin/",
         "/admin/",
         "/line/",
-        "/bookings/",
         "/offline",
       ],
     },

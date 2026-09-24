@@ -21,6 +21,9 @@ import type {
   RosterEntry,
 } from "@/components/modules/checkin/schema";
 
+/** Results built on the device carry no amount due: only the server knows what is owed. */
+const NO_AMOUNT_DUE = { amountDueMinor: null, amountDueCurrency: null } as const;
+
 interface Initial {
   checkedIn: number;
   confirmed: number;
@@ -146,6 +149,7 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
           checkedInBy: local.checkedInBy,
           ticketTypeLabel: local.ticketTypeLabel,
           ticketTypeColor: local.ticketTypeColor,
+          ...NO_AMOUNT_DUE,
         };
       }
       const scannedAt = new Date().toISOString();
@@ -167,6 +171,7 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
         checkedInBy: "You (offline)",
         ticketTypeLabel: local?.ticketTypeLabel ?? null,
         ticketTypeColor: local?.ticketTypeColor ?? null,
+        ...NO_AMOUNT_DUE,
       };
     },
     [token, localByCode, patchLocal],
@@ -237,6 +242,7 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
             ticketCode: null,
             checkedInAt: null,
             checkedInBy: null,
+            ...NO_AMOUNT_DUE,
             ticketTypeLabel: null,
             ticketTypeColor: null,
           });

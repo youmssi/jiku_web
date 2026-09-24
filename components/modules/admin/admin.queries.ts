@@ -7,8 +7,6 @@ import { ADMIN_ROUTES } from "@/lib/constants";
 import type {
   AdminAgreement,
   AdminBillingSettingsView,
-  AdminBooking,
-  AdminBookingPaymentDeclaration,
   AdminPayment,
   AdminTierCatalog,
   AdminTrialPage,
@@ -105,14 +103,6 @@ export function loadAudit(action?: string): Promise<AuditPage> {
     page: 0,
     size: AUDIT_PAGE_SIZE,
   });
-}
-
-export function loadBookings(status = "AWAITING_DEPOSIT"): Promise<AdminBooking[]> {
-  return adminRead(`/admin/bookings?${query({ size: DESK_PAGE_SIZE, status })}`, []);
-}
-
-export function loadBookingPayments(status = "PENDING"): Promise<AdminBookingPaymentDeclaration[]> {
-  return adminRead(`/admin/booking-payments?${query({ size: DESK_PAGE_SIZE, status })}`, []);
 }
 
 export async function loadWhatsApp() {

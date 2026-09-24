@@ -6,8 +6,6 @@ export {
   loadAgreements,
   loadAudit,
   loadBillingSettings,
-  loadBookingPayments,
-  loadBookings,
   loadPayments,
   loadProspects,
   loadTenantDirectory,

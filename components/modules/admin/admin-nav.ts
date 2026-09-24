@@ -1,11 +1,9 @@
 import {
   Activity,
   Building2,
-  CalendarClock,
   CreditCard,
   FileSignature,
   MessageCircle,
-  ReceiptText,
   ScrollText,
   Settings2,
   Timer,
@@ -68,18 +66,6 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
   {
     label: "Desk",
     items: [
-      {
-        label: "Bookings",
-        href: ADMIN_ROUTES.BOOKINGS,
-        icon: CalendarClock,
-        match: (pathname) => pathname === ADMIN_ROUTES.BOOKINGS,
-      },
-      {
-        label: "Booking payments",
-        href: ADMIN_ROUTES.BOOKING_PAYMENTS,
-        icon: ReceiptText,
-        match: (pathname) => pathname === ADMIN_ROUTES.BOOKING_PAYMENTS,
-      },
       {
         label: "Audit",
         href: ADMIN_ROUTES.AUDIT,

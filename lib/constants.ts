@@ -82,15 +82,6 @@ export function ticketRoute(token: string): string {
   return `/invitation/${token}/ticket`;
 }
 
-/** A deposit reservation's pages (JIKU-55), gated by the booking's own access token. */
-export function bookingPaymentUrl(id: string, token: string): string {
-  return `/bookings/${id}/payment?token=${encodeURIComponent(token)}`;
-}
-
-export function bookingStatusUrl(id: string, token: string): string {
-  return `/bookings/${id}/status?token=${encodeURIComponent(token)}`;
-}
-
 export const COOKIES = {
   ACCESS_TOKEN: "jiku_access_token",
   REFRESH_TOKEN: "jiku_refresh_token",
@@ -113,8 +104,6 @@ export const ADMIN_ROUTES = {
   TRIALS: "/admin/trials",
   AGREEMENTS: "/admin/agreements",
   AUDIT: "/admin/audit",
-  BOOKINGS: "/admin/bookings",
-  BOOKING_PAYMENTS: "/admin/booking-payments",
   WHATSAPP: "/admin/whatsapp",
   PROSPECTS: "/admin/prospects",
   DIAGNOSTICS: "/admin/diagnostics",
