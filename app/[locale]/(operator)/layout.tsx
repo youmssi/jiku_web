@@ -1,4 +1,4 @@
-export default function ValidatorLayout({
+export default function OperatorLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

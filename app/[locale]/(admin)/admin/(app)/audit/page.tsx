@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { AuditView } from "@/components/modules/admin";
 import type { AuditPage } from "@/components/modules/admin";
 import { adminFetch } from "@/lib/api-server";
@@ -17,7 +17,7 @@ export default async function AdminAuditPage({ searchParams }: Readonly<PageProp
 
   const response = await adminFetch(`/admin/audit?${params.toString()}`);
   if (response.status === 401 || response.status === 403) {
-    redirect(ADMIN_ROUTES.LOGIN);
+    return localeRedirect(ADMIN_ROUTES.LOGIN);
   }
   const audit = response.ok ? ((await response.json()) as AuditPage) : EMPTY_AUDIT;
 

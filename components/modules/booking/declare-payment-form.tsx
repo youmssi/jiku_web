@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trackEvent } from "@/lib/analytics";
 import { formatAmount } from "@/lib/currency";
-import { reservationStatusUrl } from "@/lib/constants";
+import { bookingStatusUrl } from "@/lib/constants";
 import { declarePaymentAction } from "@/components/modules/booking/booking.service";
 import { declarePaymentSchema, type DeclarePaymentInput } from "@/components/modules/booking/schema";
 
@@ -54,7 +54,7 @@ export function DeclarePaymentForm({
       return;
     }
     trackEvent("deposit_declared", { amount: values.amountMinor, operator: values.operator });
-    router.push(reservationStatusUrl(id, token));
+    router.push(bookingStatusUrl(id, token));
   }
 
   return (

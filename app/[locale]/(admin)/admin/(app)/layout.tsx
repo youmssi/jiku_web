@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { AdminSidebar } from "@/components/modules/admin";
 import { NavCommandPalette } from "@/components/shared";
 import { Separator } from "@/components/ui/separator";
@@ -25,7 +25,7 @@ export default async function AdminAppLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   if (!(await getAdminAccessToken())) {
-    redirect(ADMIN_ROUTES.LOGIN);
+    return localeRedirect(ADMIN_ROUTES.LOGIN);
   }
   return (
     <TooltipProvider>

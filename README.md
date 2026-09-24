@@ -46,8 +46,8 @@ web/
 │   │   ├── (organizer)/          # /dashboard, /events, /events/[id]/...
 │   │   │   ├── (auth)/           # /login, /register, password reset, verify email
 │   │   │   └── (app)/            # authenticated organizer app
-│   │   ├── (guest)/              # /invitation/[token], /privacy
-│   │   ├── (validator)/          # /checkin/[token]
+│   │   ├── (guest)/              # /invitation/[token], /bookings/[id]/…, /o/[username], /privacy
+│   │   ├── (operator)/           # /checkin/[token] (door), /line/[token] (counter)
 │   │   ├── (admin)/              # /admin/... platform admin desk
 │   │   ├── layout.tsx            # Root layout (locale-aware)
 │   │   └── page.tsx              # Landing page (both locales)
@@ -60,7 +60,7 @@ web/
 │   ├── ui/                       # shadcn/ui primitives (no domain logic)
 │   ├── shared/                   # cross-cutting: SupportButton, service worker, shared types
 │   └── modules/<domain>/         # feature modules — FLAT, one folder per business domain
-│       ├── identity/             # organizer auth  ← REFERENCE shape
+│       ├── identity/             # organizer auth  ← REFERENCE shape (index.ts + server.ts)
 │       ├── event/                # event creation & editing
 │       ├── guest/                # organizer guest-list management (import, invitations)
 │       ├── dashboard/            # live event metrics
@@ -89,6 +89,9 @@ use<Domain>.ts        CACHE    — client polling/cache hooks (optional; omit wh
                                  never raw fetch
 index.ts              BARREL   — the module's public surface (components, hooks, public types);
                                  deep imports never cross the module boundary
+server.ts             BARREL   — optional server-only surface (`import "server-only"`): loaders
+                                 that read the session cookie, for Server Components only, so
+                                 they can never reach a client bundle through index.ts
 ```
 
 Layer dependency is one-way — routing → component → cache → service → contract:
@@ -105,7 +108,9 @@ Layer dependency is one-way — routing → component → cache → service → 
 
 - **Server Components** are the default; use `"use client"` only when interactivity or browser APIs are needed
 - **Route groups** (parentheses syntax) keep URL paths clean while allowing per-role layouts
-- **i18n (next-intl)** — locales live in `i18n/routing.ts` (`fr` default, unprefixed; `/en/...` prefixed). Import `Link`/`useRouter`/`redirect` from `@/i18n/navigation` (not `next/link` / `next/navigation`) so the active locale survives navigation, and put user-facing strings in `messages/<locale>.json` (`useTranslations` / `getTranslations`)
+- **i18n (next-intl)** — locales live in `i18n/routing.ts` (`fr` default, unprefixed; `/en/...` prefixed). Import `Link`/`useRouter`/`usePathname` from `@/i18n/navigation` (not `next/link` / `next/navigation`) so the active locale survives navigation; on the server, redirect with `localeRedirect` from `@/i18n/redirect`. File downloads served by `app/api/**` are plain `<a download>` links, never `Link`. Put user-facing strings in `messages/<locale>.json` (`useTranslations` / `getTranslations`)
+- **Route names** — URL segments are English and specific (`/bookings/[id]/payment`, `/services/[id]/line`); the language lives in the locale prefix, not in the path. A renamed public route keeps a permanent redirect in `next.config.ts`, since its links are shared and printed
+- **Pages stay thin** — a `page.tsx` reads params and renders one module component; data loading, fallbacks and role checks live in the module
 - **No hardcoded config** — environment variables via `.env` files only
 - **API calls** go through service layers, never directly in components
 

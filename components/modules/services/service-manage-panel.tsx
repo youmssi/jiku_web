@@ -110,7 +110,7 @@ export function ServiceManagePanel({
   }
 
   function staffLinkUrl(code: string): string {
-    return `${window.location.origin}/ligne/${code}`;
+    return `${window.location.origin}/line/${code}`;
   }
 
   async function copyStaffLink(staffId: string, code: string) {

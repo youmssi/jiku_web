@@ -98,7 +98,7 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
   const selectedDate = useMemo(() => (date ? parseDateOnly(date) : todayUtc()), [date]);
 
   const suiviUrl = useMemo(
-    () => (booked ? `${pathname}/suivi/${booked.bookingToken}` : null),
+    () => (booked ? `${pathname}/bookings/${booked.bookingToken}` : null),
     [booked, pathname],
   );
 

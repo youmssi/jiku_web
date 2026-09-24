@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { publicFetch } from "@/lib/api-server";
 import { invitationRoute, PRIVACY_ROUTE } from "@/lib/constants";
 import { TicketCard } from "@/components/modules/invitation/ticket-card";

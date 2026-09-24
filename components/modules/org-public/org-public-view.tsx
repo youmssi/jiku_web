@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowRight, CalendarDays, Sparkles } from "lucide-react";
 import {
   Empty,

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { toast } from "sonner";

@@ -1,6 +1,6 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 import { setAuthCookies, clearAuthCookies, type AuthTokens } from "@/lib/auth";
@@ -51,7 +51,7 @@ export async function registerAction(
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
   // A fresh account has no organization yet: onboarding creates the first one.
-  redirect(safeNext(next, ROUTES.ONBOARDING));
+  return localeRedirect(safeNext(next, ROUTES.ONBOARDING));
 }
 
 export async function loginAction(input: LoginInput, next?: string): Promise<ActionResult> {
@@ -83,7 +83,7 @@ export async function loginAction(input: LoginInput, next?: string): Promise<Act
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
   // The app layout bounces members with no organization to onboarding.
-  redirect(safeNext(next, ROUTES.DASHBOARD));
+  return localeRedirect(safeNext(next, ROUTES.DASHBOARD));
 }
 
 /** Exchanges the Google Identity Services credential for a session (JIKU-51). */
@@ -113,7 +113,7 @@ export async function googleLoginAction(idToken: string, next?: string): Promise
   }
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
-  redirect(safeNext(next, ROUTES.DASHBOARD));
+  return localeRedirect(safeNext(next, ROUTES.DASHBOARD));
 }
 
 export async function forgotPasswordAction(input: ForgotPasswordInput): Promise<ActionResult> {
@@ -215,7 +215,7 @@ export async function createOrgAction(input: CreateOrgInput): Promise<ActionResu
   }
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
-  redirect(ROUTES.DASHBOARD);
+  return localeRedirect(ROUTES.DASHBOARD);
 }
 
 /** Rebinds the session to another organization the user belongs to (JIKU-48). */
@@ -231,7 +231,7 @@ export async function switchOrgAction(tenantId: string): Promise<ActionResult> {
   }
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
-  redirect(ROUTES.DASHBOARD);
+  return localeRedirect(ROUTES.DASHBOARD);
 }
 
 /** Accepts a member invitation; tokens come back bound to the joined org (JIKU-50). */
@@ -257,10 +257,10 @@ export async function acceptInvitationAction(token: string): Promise<ActionResul
   }
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
-  redirect(ROUTES.DASHBOARD);
+  return localeRedirect(ROUTES.DASHBOARD);
 }
 
 export async function logoutAction(): Promise<void> {
   await clearAuthCookies();
-  redirect(ROUTES.LOGIN);
+  return localeRedirect(ROUTES.LOGIN);
 }

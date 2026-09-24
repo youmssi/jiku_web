@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { publicFetch } from "@/lib/api-server";
 import { PRIVACY_ROUTE } from "@/lib/constants";
 import { StateMessage } from "@/components/shared/state-message";

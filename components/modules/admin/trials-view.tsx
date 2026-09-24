@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { ArrowUpDown, Plus, Timer } from "lucide-react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import type { Resolver } from "react-hook-form";

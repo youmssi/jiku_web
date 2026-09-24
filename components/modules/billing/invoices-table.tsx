@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { FileText } from "lucide-react";
 import {
   Empty,
@@ -70,13 +69,12 @@ export function InvoicesTable({ invoices }: { invoices: InvoiceSummary[] }) {
               <TableCell>{formatLocalDateTime(invoice.issuedAt)}</TableCell>
               <TableCell>{formatAmount(invoice.totalMinor, invoice.currency)}</TableCell>
               <TableCell>
-                <Link
+                <a
                   href={billingInvoiceDocumentRoute(invoice.id)}
                   className="text-primary underline underline-offset-4"
-                  prefetch={false}
                 >
                   Download PDF
-                </Link>
+                </a>
               </TableCell>
               <TableCell>
                 {invoice.documentType === "INVOICE" ? (

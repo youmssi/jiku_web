@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useState, useTransition } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";

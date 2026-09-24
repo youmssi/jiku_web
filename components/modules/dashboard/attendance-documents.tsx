@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { attendanceRegisterRoute } from "@/lib/constants";
 
 /**
@@ -22,13 +21,12 @@ export function AttendanceDocuments({ eventId, checkedIn }: { eventId: string; c
         {checkedIn > 1 ? "personnes entrées" : "personne entrée"}, avec l&apos;heure et le poste de
         contrôle. Les attestations nominatives se téléchargent depuis la liste des invités.
       </p>
-      <Link
+      <a
         href={attendanceRegisterRoute(eventId)}
-        prefetch={false}
         className="mt-4 inline-flex text-sm font-medium text-primary underline underline-offset-4"
       >
         Télécharger la feuille d&apos;émargement (PDF)
-      </Link>
+      </a>
     </section>
   );
 }
