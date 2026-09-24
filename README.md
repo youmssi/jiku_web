@@ -117,3 +117,8 @@ Layer dependency is one-way — routing → component → cache → service → 
 | Build      | `pnpm build`       |
 | Start      | `pnpm start`       |
 | Lint       | `pnpm lint`        |
+
+## Contributing
+
+`CONTRIBUTING.md` is the workflow from story to merge: one branch per story from
+an up-to-date `develop`, merged before the next story starts.
