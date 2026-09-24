@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { OnboardingForm } from "@/components/modules/identity";
-import { getOrganizerContext } from "@/components/modules/identity/organizer-context";
+import { getOrganizerContext } from "@/components/modules/identity/server";
 import { ROUTES } from "@/lib/constants";
 
 /**
@@ -11,7 +11,7 @@ import { ROUTES } from "@/lib/constants";
 export default async function OnboardingPage() {
   const context = await getOrganizerContext();
   if (!context) {
-    redirect(ROUTES.LOGIN);
+    return localeRedirect(ROUTES.LOGIN);
   }
   return <OnboardingForm email={context.email} canCancel={Boolean(context.activeTenantId)} />;
 }

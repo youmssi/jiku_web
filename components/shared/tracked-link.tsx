@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { forwardRef } from "react";
 import type { ComponentPropsWithoutRef } from "react";
 import { trackEvent } from "@/lib/analytics";

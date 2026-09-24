@@ -22,12 +22,12 @@ export const ROUTES = {
 } as const;
 
 export function serviceLineRoute(id: string): string {
-  return `/services/${id}/ligne`;
+  return `/services/${id}/line`;
 }
 
 
 export function serviceManageRoute(id: string): string {
-  return `/services/${id}/gerer`;
+  return `/services/${id}/manage`;
 }
 export function serviceConfigurationRoute(id: string): string {
   return `/services/${id}/configuration`;
@@ -82,20 +82,13 @@ export function ticketRoute(token: string): string {
   return `/invitation/${token}/ticket`;
 }
 
-export function reservationPaymentRoute(id: string): string {
-  return `/reserver/${id}/paiement`;
+/** A deposit reservation's pages (JIKU-55), gated by the booking's own access token. */
+export function bookingPaymentUrl(id: string, token: string): string {
+  return `/bookings/${id}/payment?token=${encodeURIComponent(token)}`;
 }
 
-export function reservationStatusRoute(id: string): string {
-  return `/reserver/${id}/statut`;
-}
-
-export function reservationStatusUrl(id: string, token: string): string {
-  return `${reservationStatusRoute(id)}?token=${encodeURIComponent(token)}`;
-}
-
-export function reservationPaymentUrl(id: string, token: string): string {
-  return `${reservationPaymentRoute(id)}?token=${encodeURIComponent(token)}`;
+export function bookingStatusUrl(id: string, token: string): string {
+  return `/bookings/${id}/status?token=${encodeURIComponent(token)}`;
 }
 
 export const COOKIES = {

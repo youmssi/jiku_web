@@ -39,6 +39,20 @@ function lineMessages(staff: boolean): Partial<Record<number, string>> & { defau
   };
 }
 
+/**
+ * Resolves a counter link into the signed link the console works with. A short
+ * code (JIKU-88) never contains a dot, a signed link always does; the code is
+ * exchanged server-side, once, so the console never sees it. A revoked or unknown
+ * code is an expected outcome, not an error worth reporting.
+ */
+export async function resolveCounterLinkAction(link: string): Promise<ActionResult<string>> {
+  if (link.includes(".")) return ok(link);
+  const response = await publicFetch(`/line-codes/${encodeURIComponent(link)}`);
+  if (!response.ok) return fail("Ce lien de comptoir n'est plus valide.");
+  const { token } = (await response.json()) as { token: string };
+  return ok(token);
+}
+
 /** La ligne du jour du service (liste initiale et rafraîchissements). */
 export async function fetchDayLineAction(
   auth: DayLineAuth,

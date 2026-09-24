@@ -1,8 +1,8 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 import { BillingView } from "@/components/modules/billing";
-import { getOrganizerContext } from "@/components/modules/identity/organizer-context";
+import { getOrganizerContext } from "@/components/modules/identity/server";
 import type {
   ManualPaymentInstructions,
   PaymentHistoryItem,
@@ -33,7 +33,7 @@ export default async function BillingPage({ params }: PageProps) {
   ]);
 
   if (usageRes.status === 401) {
-    redirect(ROUTES.LOGIN);
+    return localeRedirect(ROUTES.LOGIN);
   }
 
   const usage = (await usageRes.json()) as UsageAllowance;

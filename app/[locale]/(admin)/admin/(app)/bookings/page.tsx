@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { BookingsView } from "@/components/modules/admin";
 import type { AdminBooking } from "@/components/modules/admin";
 import { adminFetch } from "@/lib/api-server";
@@ -14,7 +14,7 @@ export default async function AdminBookingsPage({ searchParams }: Readonly<PageP
 
   const response = await adminFetch(`/admin/bookings?${params.toString()}`);
   if (response.status === 401 || response.status === 403) {
-    redirect(ADMIN_ROUTES.LOGIN);
+    return localeRedirect(ADMIN_ROUTES.LOGIN);
   }
   // A non-OK body (unknown status, backend failure) is an object, not a list —
   // parsing it as an array is what crashed the desk. Surface the empty state

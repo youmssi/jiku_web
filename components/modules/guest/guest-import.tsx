@@ -3,7 +3,6 @@
 import { useCallback, useState, useTransition } from "react";
 import { useDropzone } from "react-dropzone";
 import Papa from "papaparse";
-import Link from "next/link";
 import { toast } from "sonner";
 import { Download, Upload, FileText, X, CircleCheck, CircleAlert, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -337,10 +336,10 @@ export function GuestImport({ eventId }: { eventId: string }) {
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-medium">Import guests from a CSV file</p>
         <Button variant="ghost" size="sm" asChild className="gap-1.5">
-          <Link href={CSV_TEMPLATE_PATH} download>
+          <a href={CSV_TEMPLATE_PATH} download>
             <Download className="size-3.5" />
             Download template
-          </Link>
+          </a>
         </Button>
       </div>
 

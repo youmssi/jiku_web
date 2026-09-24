@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { InfoIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -20,7 +20,7 @@ import { ROUTES } from "@/lib/constants";
 export default async function BillingPage() {
   const response = await serverFetch("/billing/payments");
   if (response.status === 401) {
-    redirect(ROUTES.LOGIN);
+    return localeRedirect(ROUTES.LOGIN);
   }
   const payments = response.ok ? ((await response.json()) as PaymentHistoryItem[]) : [];
   const [invoices, subscription] = await Promise.all([

@@ -1,6 +1,6 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { revalidatePath } from "next/cache";
 import { adminFetch, publicFetch } from "@/lib/api-server";
 import { clearAdminAuthCookie, setAdminAuthCookie } from "@/lib/auth";
@@ -36,12 +36,12 @@ export async function adminLoginAction(
   }
   const tokens = (await response.json()) as { accessToken: string };
   await setAdminAuthCookie(tokens.accessToken);
-  redirect(ADMIN_ROUTES.TENANTS);
+  return localeRedirect(ADMIN_ROUTES.TENANTS);
 }
 
 export async function adminLogoutAction(): Promise<void> {
   await clearAdminAuthCookie();
-  redirect(ADMIN_ROUTES.LOGIN);
+  return localeRedirect(ADMIN_ROUTES.LOGIN);
 }
 
 /**

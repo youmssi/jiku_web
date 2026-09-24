@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { CalendarDays } from "lucide-react";
 import {
   Empty,
@@ -18,7 +18,7 @@ import { NewEventDialog } from "@/components/modules/event/new-event-dialog";
 export async function EventsListView() {
   const response = await serverFetch("/events");
   if (response.status === 401) {
-    redirect(ROUTES.LOGIN);
+    return localeRedirect(ROUTES.LOGIN);
   }
   const events = response.ok ? ((await response.json()) as EventListItem[]) : [];
 

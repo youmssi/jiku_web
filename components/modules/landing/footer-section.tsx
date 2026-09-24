@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { TrackedAnchor } from "@/components/shared";
 import { PRIVACY_ROUTE } from "@/lib/constants";

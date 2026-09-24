@@ -40,9 +40,9 @@ const nextConfig: NextConfig = {
       },
       noindexRoute("/invitation/:path*"),
       noindexRoute("/checkin/:path*"),
+      noindexRoute("/line/:path*"),
       noindexRoute("/admin/:path*"),
-      noindexRoute("/reserver/:id/paiement"),
-      noindexRoute("/reserver/:id/statut"),
+      noindexRoute("/bookings/:path*"),
     ];
   },
   // The generic-positioning decision (JIKU-101) removed the one-off landing
@@ -60,7 +60,19 @@ const nextConfig: NextConfig = {
       ...move("/gestion-seminaire-guinee", "/use-cases"),
       ...move("/check-in-qr-code", "/#features"),
       ...move("/tarifs", "/simulator"),
-      ...move("/prise-de-rendez-vous", "/reserver"),
+      ...move("/prise-de-rendez-vous", "/simulator"),
+      // New deposit reservations closed with JIKU-115.
+      ...move("/reserver", "/simulator"),
+      // English route segments (JIKU-118). Counter links and booking follow-up
+      // links are shared and printed, so the French paths keep resolving.
+      ...move("/ligne/:link", "/line/:link"),
+      ...move("/reserver/:id/paiement", "/bookings/:id/payment"),
+      ...move("/reserver/:id/statut", "/bookings/:id/status"),
+      ...move("/services/:id/gerer", "/services/:id/manage"),
+      ...move("/services/:id/ligne", "/services/:id/line"),
+      ...move("/appointments/:token/suivi/:booking", "/appointments/:token/bookings/:booking"),
+      ...move("/r/:code/suivi/:booking", "/r/:code/bookings/:booking"),
+      ...move("/widget/:token/suivi/:booking", "/widget/:token/bookings/:booking"),
     ];
   },
 };

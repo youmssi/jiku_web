@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { BookingPaymentsView } from "@/components/modules/admin";
 import type { AdminBookingPaymentDeclaration } from "@/components/modules/admin";
 import { adminFetch } from "@/lib/api-server";
@@ -14,7 +14,7 @@ export default async function AdminBookingPaymentsPage({ searchParams }: Readonl
 
   const response = await adminFetch(`/admin/booking-payments?${params.toString()}`);
   if (response.status === 401 || response.status === 403) {
-    redirect(ADMIN_ROUTES.LOGIN);
+    return localeRedirect(ADMIN_ROUTES.LOGIN);
   }
   const declarations = response.ok
     ? ((await response.json()) as AdminBookingPaymentDeclaration[])

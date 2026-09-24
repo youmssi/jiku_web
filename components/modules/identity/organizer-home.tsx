@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
+import { Link } from "@/i18n/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { ROUTES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { getOrganizerContext } from "@/components/modules/identity/organizer-context";
@@ -8,7 +8,7 @@ import { getOrganizerContext } from "@/components/modules/identity/organizer-con
 export async function OrganizerHome() {
   const context = await getOrganizerContext();
   if (!context) {
-    redirect(ROUTES.LOGIN);
+    return localeRedirect(ROUTES.LOGIN);
   }
 
   return (

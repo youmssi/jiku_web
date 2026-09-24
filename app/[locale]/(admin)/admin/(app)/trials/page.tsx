@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { TrialsView } from "@/components/modules/admin";
 import type {
   AdminTierCatalog,
@@ -32,7 +32,7 @@ export default async function AdminTrialsPage({
     adminFetch("/admin/billing/tiers"),
   ]);
   if (response.status === 401 || response.status === 403) {
-    redirect(ADMIN_ROUTES.LOGIN);
+    return localeRedirect(ADMIN_ROUTES.LOGIN);
   }
   const trialsPage = response.ok
     ? ((await response.json()) as AdminTrialPage)

@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { WhatsAppAdmin } from "@/components/modules/admin";
 import type { WhatsAppOverrideStatus, WhatsAppPricingInfo } from "@/components/modules/admin";
 import { adminFetch } from "@/lib/api-server";
@@ -16,7 +16,7 @@ export default async function AdminWhatsAppPage() {
     adminFetch("/admin/whatsapp/pricing"),
     adminFetch("/admin/whatsapp/content-override"),
   ]);
-  if (pricingResponse.status === 401 || pricingResponse.status === 403) redirect(ADMIN_ROUTES.LOGIN);
+  if (pricingResponse.status === 401 || pricingResponse.status === 403) return localeRedirect(ADMIN_ROUTES.LOGIN);
   const pricing = pricingResponse.ok
     ? ((await pricingResponse.json()) as WhatsAppPricingInfo[])
     : [];

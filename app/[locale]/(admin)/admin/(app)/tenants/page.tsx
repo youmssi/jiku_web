@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { TenantsView } from "@/components/modules/admin";
 import type { TenantDirectoryPage } from "@/components/modules/admin";
 import { adminFetch } from "@/lib/api-server";
@@ -22,7 +22,7 @@ export default async function AdminTenantsPage({ searchParams }: Readonly<PagePr
 
   const response = await adminFetch(`/admin/tenants?${params.toString()}`);
   if (response.status === 401 || response.status === 403) {
-    redirect(ADMIN_ROUTES.LOGIN);
+    return localeRedirect(ADMIN_ROUTES.LOGIN);
   }
   const directory = response.ok
     ? ((await response.json()) as TenantDirectoryPage)

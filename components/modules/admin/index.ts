@@ -9,7 +9,7 @@ export { AuditView } from "./audit-view";
 export { BookingsView } from "./bookings-view";
 export { BookingPaymentsView } from "./booking-payments-view";
 export { BillingSettingsView } from "./billing-settings-view";
-export { adminLogoutAction } from "./admin.service";
+export { adminLogoutAction, fetchBillingSettingsAction } from "./admin.service";
 export type {
   AdminAgreement,
   AdminBooking,

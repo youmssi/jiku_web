@@ -3,6 +3,7 @@
 export { DayLineOrganizerView, DayLineStaffView } from "./dayline-views";
 export { DayLineConsole } from "./day-line-console";
 export { useDayLine } from "./useDayLine";
+export { resolveCounterLinkAction } from "./dayline.service";
 export type {
   DayLineAuth,
   DayLineView,

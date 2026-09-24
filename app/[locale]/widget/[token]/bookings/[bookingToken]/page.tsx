@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { AppointmentStatus, WidgetResizer } from "@/components/modules/appointment";
-import { loadAppointment } from "@/components/modules/appointment/appointment.service";
+import { AppointmentStatus, WidgetResizer, loadAppointment } from "@/components/modules/appointment";
 
 export const metadata: Metadata = {
   title: "Mon rendez-vous",

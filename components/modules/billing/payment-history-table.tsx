@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { CreditCard } from "lucide-react";
 import {
   Empty,
@@ -75,13 +74,12 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
               </TableCell>
               <TableCell>
                 {payment.status === "SUCCEEDED" ? (
-                  <Link
+                  <a
                     href={billingReceiptRoute(payment.paymentId)}
                     className="underline underline-offset-4"
-                    prefetch={false}
                   >
                     Download
-                  </Link>
+                  </a>
                 ) : (
                   <span className="text-muted-foreground">None</span>
                 )}

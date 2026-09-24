@@ -1,7 +1,7 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { StateMessage } from "@/components/shared/state-message";
 import { formatAmount } from "@/lib/currency";
-import { reservationPaymentUrl } from "@/lib/constants";
+import { bookingPaymentUrl } from "@/lib/constants";
 import { fetchBookingStatus } from "@/components/modules/booking/booking.service";
 import { EVENT_TYPE_LABELS } from "@/components/modules/booking/schema";
 
@@ -56,7 +56,7 @@ export async function BookingStatusView({ id, token }: { id: string; token: stri
 
       {paymentDue ? (
         <Link
-          href={reservationPaymentUrl(id, token)}
+          href={bookingPaymentUrl(id, token)}
           className="rounded-md bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground"
         >
           Déclarer mon paiement

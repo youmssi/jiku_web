@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { AgreementsView } from "@/components/modules/admin";
 import type { AdminAgreement, AdminTierCatalog } from "@/components/modules/admin";
 import { adminFetch } from "@/lib/api-server";
@@ -12,7 +12,7 @@ export default async function AdminAgreementsPage() {
     adminFetch("/admin/billing/tiers"),
   ]);
   if (response.status === 401 || response.status === 403) {
-    redirect(ADMIN_ROUTES.LOGIN);
+    return localeRedirect(ADMIN_ROUTES.LOGIN);
   }
   const agreements = response.ok ? ((await response.json()) as AdminAgreement[]) : [];
   const catalog = catalogResponse.ok
