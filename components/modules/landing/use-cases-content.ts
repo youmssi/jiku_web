@@ -189,10 +189,10 @@ const fr: UseCasesPageContent = {
       cta: "Estimer mon événement",
     },
     subscription: {
-      title: "Vous gérez des rendez-vous",
-      text: "Un abonnement par utilisateur et par mois : Solo gratuit, Teams, Organisation, Entreprise. Offre en préparation : personne ne sera prélevé avant l'ouverture.",
-      cta: "Découvrir l'abonnement",
-      note: "À venir",
+      title: "Vous recevez des clients",
+      text: "Un abonnement par personne qui sert, chaque mois : Solo gratuit pour une personne, Teams à 100 000 GNF par personne. Aucune commission sur vos clients.",
+      cta: "Trouver ma formule",
+      note: "Solo gratuit",
     },
     guarantee:
       "Vous payez le palier une seule fois, au moment de l'activer. Vous n'êtes jamais facturé deux fois pour les mêmes invités ou rappels.",
@@ -349,10 +349,10 @@ const en: UseCasesPageContent = {
       cta: "Estimate my event",
     },
     subscription: {
-      title: "You run appointments",
-      text: "A per-user monthly subscription: Solo free, Teams, Organisation, Enterprise. Offer in preparation: no one is charged before launch.",
-      cta: "Discover the subscription",
-      note: "Coming soon",
+      title: "You serve clients",
+      text: "A subscription per person who serves, each month: Solo free for one person, Teams at 100,000 GNF per person. No commission on your clients.",
+      cta: "Find my plan",
+      note: "Solo free",
     },
     guarantee:
       "You pay for a tier once, when you activate it. You are never billed twice for the same guests or reminders.",

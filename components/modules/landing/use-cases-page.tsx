@@ -20,6 +20,8 @@ import { JikūLogo } from "@/components/ui/jiku-logo";
 import { Link } from "@/i18n/navigation";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
 import { OrganizationJsonLd, LocalBusinessJsonLd, BreadcrumbJsonLd } from "@/components/modules/seo";
+import { UseCaseFlows } from "./use-case-flows";
+import { USE_CASE_JOURNEYS } from "./use-case-journeys";
 import type { UseCasesPageContent } from "./use-cases-content";
 
 // Icons pair positionally with the flattened case list (ceremonies 2,
@@ -127,6 +129,8 @@ export function UseCasesPage({
             {content.intro}
           </p>
         </div>
+
+        <UseCaseFlows content={USE_CASE_JOURNEYS[locale]} />
 
         {content.categories.map((category, categoryIndex) => {
           const startIndex = content.categories
