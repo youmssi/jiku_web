@@ -22,40 +22,43 @@ export type CurrentUser = Schema<"MeResponse"> & {
 
 export type Branding = Schema<"BrandingResponse">;
 
+// Validation messages are `common.validation` keys, translated where they render
+// (FormFieldError), so these schemas serve the forms and the server actions alike.
+
 /** Registration creates the account only; the organization comes at onboarding. */
 export const registerSchema = z.object({
   fullName: z
     .string()
     .trim()
-    .min(1, "Enter your full name")
-    .max(255, "Name is too long"),
-  email: z.string().email("Enter a valid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+    .min(1, "required")
+    .max(255, "tooLong"),
+  email: z.string().email("email"),
+  password: z.string().min(8, "passwordMin"),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;
 
 export const loginSchema = z.object({
-  email: z.string().email("Enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
+  email: z.string().email("email"),
+  password: z.string().min(1, "required"),
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;
 
 export const forgotPasswordSchema = z.object({
-  email: z.string().email("Enter a valid email address"),
+  email: z.string().email("email"),
 });
 
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 
 export const resetPasswordSchema = z.object({
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(8, "passwordMin"),
 });
 
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 
 export const createOrgSchema = z.object({
-  name: z.string().min(1, "Organization name is required"),
+  name: z.string().trim().min(1, "required").max(255, "tooLong"),
 });
 
 export type CreateOrgInput = z.infer<typeof createOrgSchema>;

@@ -1,0 +1,45 @@
+{
+  "brand": "Jikū",
+  "actions": {
+    "cancel": "Annuler",
+    "continue": "Continuer",
+    "tryAgain": "Réessayer",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter"
+  },
+  "errors": {
+    "generic": "Une erreur est survenue. Réessayez.",
+    "checkForm": "Vérifiez le formulaire et réessayez.",
+    "tooManyAttempts": "Trop de tentatives. Patientez un instant puis réessayez.",
+    "unreachable": "Service injoignable. Vérifiez votre connexion et réessayez."
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire.",
+    "email": "Saisissez une adresse e-mail valide.",
+    "passwordMin": "Au moins 8 caractères.",
+    "tooLong": "Ce texte est trop long."
+  },
+  "roles": {
+    "OWNER": "Propriétaire",
+    "ADMIN": "Administrateur",
+    "MEMBER": "Membre"
+  },
+  "offline": {
+    "title": "Vous êtes hors ligne",
+    "description": "Cette page n'est pas disponible sans connexion. Reconnectez-vous puis réessayez : les pages déjà ouvertes continuent de fonctionner."
+  },
+  "errorPage": {
+    "title": "Une erreur est survenue",
+    "description": "Un problème inattendu s'est produit. Vous pouvez réessayer."
+  },
+  "support": {
+    "open": "Aide et assistance",
+    "title": "Besoin d'un coup de main ?",
+    "email": "Écrire à {email}",
+    "whatsapp": "Nous écrire sur WhatsApp"
+  },
+  "camera": {
+    "unsupported": "Cet appareil ou ce navigateur n'a pas accès à la caméra.",
+    "unavailable": "Caméra indisponible. Autorisez l'accès à la caméra ou utilisez la recherche."
+  }
+}

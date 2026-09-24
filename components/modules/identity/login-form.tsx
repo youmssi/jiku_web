@@ -2,6 +2,7 @@
 
 import { Link } from "@/i18n/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -16,13 +17,13 @@ import {
 import {
   Field,
   FieldDescription,
-  FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { ROUTES, PRIVACY_ROUTE } from "@/lib/constants";
+import { FormFieldError } from "@/components/shared";
 import { GoogleButton } from "@/components/modules/identity/google-button";
 import { loginAction } from "@/components/modules/identity/identity.service";
 import {
@@ -35,6 +36,7 @@ import {
  * provider, "or continue with" separator, credentials, and the terms note below.
  */
 export function LoginForm({ next }: { next?: string }) {
+  const t = useTranslations("auth.login");
   const [formError, setFormError] = useState<string | null>(null);
   const {
     control,
@@ -58,15 +60,15 @@ export function LoginForm({ next }: { next?: string }) {
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Login with your Google account</CardDescription>
+          <CardTitle className="text-xl">{t("title")}</CardTitle>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <FieldGroup>
               {formError ? (
                 <Alert variant="destructive">
-                  <AlertTitle>We couldn&apos;t sign you in</AlertTitle>
+                  <AlertTitle>{t("failed")}</AlertTitle>
                   <AlertDescription>{formError}</AlertDescription>
                 </Alert>
               ) : null}
@@ -78,7 +80,7 @@ export function LoginForm({ next }: { next?: string }) {
                 name="email"
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>{t("email")}</FieldLabel>
                     <Input
                       {...field}
                       id={field.name}
@@ -86,9 +88,7 @@ export function LoginForm({ next }: { next?: string }) {
                       autoComplete="email"
                       aria-invalid={fieldState.invalid}
                     />
-                    {fieldState.invalid ? (
-                      <FieldError errors={[fieldState.error]} />
-                    ) : null}
+                    <FormFieldError error={fieldState.error} />
                   </Field>
                 )}
               />
@@ -98,12 +98,12 @@ export function LoginForm({ next }: { next?: string }) {
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <div className="flex items-center">
-                      <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>{t("password")}</FieldLabel>
                       <Link
                         href={ROUTES.FORGOT_PASSWORD}
                         className="ml-auto text-sm underline-offset-4 hover:underline"
                       >
-                        Forgot your password?
+                        {t("forgot")}
                       </Link>
                     </div>
                     <PasswordInput
@@ -112,19 +112,16 @@ export function LoginForm({ next }: { next?: string }) {
                       autoComplete="current-password"
                       aria-invalid={fieldState.invalid}
                     />
-                    {fieldState.invalid ? (
-                      <FieldError errors={[fieldState.error]} />
-                    ) : null}
+                    <FormFieldError error={fieldState.error} />
                   </Field>
                 )}
               />
               <Field>
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
-                  {isSubmitting ? "Signing in…" : "Login"}
+                  {isSubmitting ? t("submitting") : t("submit")}
                 </Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account?{" "}
-                  <Link href={ROUTES.REGISTER}>Sign up</Link>
+                  {t("noAccount")} <Link href={ROUTES.REGISTER}>{t("signUp")}</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
@@ -132,8 +129,7 @@ export function LoginForm({ next }: { next?: string }) {
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our Terms of Service and{" "}
-        <Link href={PRIVACY_ROUTE}>Privacy Policy</Link>.
+        {t.rich("terms", { privacy: (chunks) => <Link href={PRIVACY_ROUTE}>{chunks}</Link> })}
       </FieldDescription>
     </div>
   );

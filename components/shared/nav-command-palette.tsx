@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,12 +20,7 @@ import { Kbd } from "@/components/ui/kbd";
 import { ADMIN_NAV_GROUPS } from "@/components/modules/admin/admin-nav";
 import { ORGANIZER_NAV_ITEMS } from "@/components/shared/organizer-nav";
 
-const GROUPS_BY_VARIANT = {
-  organizer: [{ label: "Go to", items: ORGANIZER_NAV_ITEMS }],
-  admin: ADMIN_NAV_GROUPS,
-};
-
-export type NavCommandPaletteVariant = keyof typeof GROUPS_BY_VARIANT;
+export type NavCommandPaletteVariant = "organizer" | "admin";
 
 /**
  * Global ⌘K / Ctrl+K jump-to-page palette, shared by the organizer and admin
@@ -36,7 +32,16 @@ export type NavCommandPaletteVariant = keyof typeof GROUPS_BY_VARIANT;
  * a Client Component as serializable prop data.
  */
 export function NavCommandPalette({ variant }: { variant: NavCommandPaletteVariant }) {
-  const groups = GROUPS_BY_VARIANT[variant];
+  const t = useTranslations("shell");
+  const groups =
+    variant === "organizer"
+      ? [
+          {
+            label: t("palette.goTo"),
+            items: ORGANIZER_NAV_ITEMS.map((item) => ({ ...item, label: t(`nav.${item.labelKey}`) })),
+          },
+        ]
+      : ADMIN_NAV_GROUPS;
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -65,18 +70,18 @@ export function NavCommandPalette({ variant }: { variant: NavCommandPaletteVaria
         className="ml-auto gap-2 text-muted-foreground"
         onClick={() => setOpen(true)}
       >
-        <span className="hidden sm:inline">Jump to…</span>
+        <span className="hidden sm:inline">{t("palette.open")}</span>
         <Kbd>⌘K</Kbd>
       </Button>
       <CommandDialog
         open={open}
         onOpenChange={setOpen}
-        title="Command palette"
-        description="Jump to any page"
+        title={t("palette.title")}
+        description={t("palette.description")}
       >
-        <CommandInput placeholder="Jump to a page…" />
+        <CommandInput placeholder={t("palette.placeholder")} />
         <CommandList>
-          <CommandEmpty>No matching page.</CommandEmpty>
+          <CommandEmpty>{t("palette.empty")}</CommandEmpty>
           {groups.map((group) => (
             <CommandGroup key={group.label} heading={group.label}>
               {group.items.map((item) => (

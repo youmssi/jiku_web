@@ -10,11 +10,7 @@ import type { MemberRow } from "./schema";
 
 const columnHelper = createColumnHelper<DataTableFeatures, MemberRow>();
 
-function roleLabel(role: string): string {
-  return role.charAt(0) + role.slice(1).toLowerCase();
-}
-
-export function buildMembersColumns(currentUserId: string) {
+export function buildMembersColumns(currentUserId: string, roleLabel: (role: string) => string) {
   return columnHelper.columns([
     columnHelper.accessor("email", {
       header: ({ column }) => (

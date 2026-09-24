@@ -2,6 +2,7 @@
 
 import { Link } from "@/i18n/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -17,13 +18,13 @@ import {
 import {
   Field,
   FieldDescription,
-  FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { ROUTES } from "@/lib/constants";
+import { FormFieldError } from "@/components/shared";
 import { GoogleButton } from "@/components/modules/identity/google-button";
 import { registerAction } from "@/components/modules/identity/identity.service";
 import {
@@ -32,6 +33,7 @@ import {
 } from "@/components/modules/identity/schema";
 
 export function RegisterForm({ next }: { next?: string }) {
+  const t = useTranslations("auth.register");
   const [formError, setFormError] = useState<string | null>(null);
   const {
     control,
@@ -55,17 +57,15 @@ export function RegisterForm({ next }: { next?: string }) {
     <div className="flex flex-1 items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl">Create your account</CardTitle>
-          <CardDescription>
-            One account, then your organization invitations follow in minutes.
-          </CardDescription>
+          <CardTitle className="text-2xl">{t("title")}</CardTitle>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-(--card-spacing)">
           <CardContent>
             <FieldGroup>
               {formError ? (
                 <Alert variant="destructive">
-                  <AlertTitle>We couldn&apos;t create your account</AlertTitle>
+                  <AlertTitle>{t("failed")}</AlertTitle>
                   <AlertDescription>{formError}</AlertDescription>
                 </Alert>
               ) : null}
@@ -74,7 +74,7 @@ export function RegisterForm({ next }: { next?: string }) {
                 name="fullName"
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Full name</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>{t("fullName")}</FieldLabel>
                     <Input
                       {...field}
                       id={field.name}
@@ -82,9 +82,7 @@ export function RegisterForm({ next }: { next?: string }) {
                       autoComplete="name"
                       aria-invalid={fieldState.invalid}
                     />
-                    {fieldState.invalid ? (
-                      <FieldError errors={[fieldState.error]} />
-                    ) : null}
+                    <FormFieldError error={fieldState.error} />
                   </Field>
                 )}
               />
@@ -93,7 +91,7 @@ export function RegisterForm({ next }: { next?: string }) {
                 name="email"
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>{t("email")}</FieldLabel>
                     <Input
                       {...field}
                       id={field.name}
@@ -101,9 +99,7 @@ export function RegisterForm({ next }: { next?: string }) {
                       autoComplete="email"
                       aria-invalid={fieldState.invalid}
                     />
-                    {fieldState.invalid ? (
-                      <FieldError errors={[fieldState.error]} />
-                    ) : null}
+                    <FormFieldError error={fieldState.error} />
                   </Field>
                 )}
               />
@@ -112,17 +108,15 @@ export function RegisterForm({ next }: { next?: string }) {
                 name="password"
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>{t("password")}</FieldLabel>
                     <PasswordInput
                       {...field}
                       id={field.name}
                       autoComplete="new-password"
                       aria-invalid={fieldState.invalid}
                     />
-                    <FieldDescription>At least 8 characters.</FieldDescription>
-                    {fieldState.invalid ? (
-                      <FieldError errors={[fieldState.error]} />
-                    ) : null}
+                    <FieldDescription>{t("passwordHint")}</FieldDescription>
+                    <FormFieldError error={fieldState.error} />
                   </Field>
                 )}
               />
@@ -130,11 +124,11 @@ export function RegisterForm({ next }: { next?: string }) {
           </CardContent>
           <CardFooter className="flex flex-col gap-3">
             <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Creating account…" : "Create account"}
+              {isSubmitting ? t("submitting") : t("submit")}
             </Button>
             <GoogleButton next={next} />
             <FieldDescription className="text-center">
-              Already have an account? <Link href={ROUTES.LOGIN}>Sign in</Link>
+              {t("haveAccount")} <Link href={ROUTES.LOGIN}>{t("signIn")}</Link>
             </FieldDescription>
           </CardFooter>
         </form>

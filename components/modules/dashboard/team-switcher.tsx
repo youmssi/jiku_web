@@ -21,10 +21,9 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { UnfoldMoreIcon, PlusSignIcon } from "@hugeicons/core-free-icons"
 import { Link } from "@/i18n/navigation"
 import { switchOrgAction, type Membership } from "@/components/modules/identity"
-import {
-  organizerInitials,
-  organizerRoleLabel,
-} from "@/components/shared/organizer-nav"
+import { useTranslations } from "next-intl"
+import { organizerInitials } from "@/components/shared/organizer-nav"
+import { useRoleLabel } from "@/components/shared/use-role-label"
 import { ROUTES } from "@/lib/constants"
 
 interface TeamSwitcherProps {
@@ -49,10 +48,12 @@ export function TeamSwitcher({
 }: TeamSwitcherProps) {
   const { isMobile } = useSidebar()
   const [switching, setSwitching] = React.useState(false)
+  const t = useTranslations("shell.organizations")
+  const roleLabel = useRoleLabel()
 
   const active = memberships.find((m) => m.tenantId === activeTenantId)
   const activeLabel = active?.tenantName ?? brandName
-  const activePlan = active?.role.toLowerCase() ?? organizerRoleLabel(role)
+  const activeRole = roleLabel(active?.role ?? role)
 
   async function switchTo(tenantId: string) {
     if (tenantId === activeTenantId || switching) {
@@ -80,7 +81,7 @@ export function TeamSwitcher({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{activeLabel}</span>
-                <span className="truncate text-xs capitalize">{activePlan}</span>
+                <span className="truncate text-xs">{activeRole}</span>
               </div>
               <HugeiconsIcon icon={UnfoldMoreIcon} strokeWidth={2} className="ml-auto" />
             </SidebarMenuButton>
@@ -92,7 +93,7 @@ export function TeamSwitcher({
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Your organizations
+              {t("yours")}
             </DropdownMenuLabel>
             {memberships.map((membership) => (
               <DropdownMenuItem
@@ -105,8 +106,8 @@ export function TeamSwitcher({
                   {organizerInitials(membership.tenantName)}
                 </div>
                 <span className="flex-1 truncate">{membership.tenantName}</span>
-                <span className="text-xs capitalize text-muted-foreground">
-                  {membership.role.toLowerCase()}
+                <span className="text-xs text-muted-foreground">
+                  {roleLabel(membership.role)}
                 </span>
               </DropdownMenuItem>
             ))}
@@ -116,7 +117,7 @@ export function TeamSwitcher({
                 <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                   <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} className="size-4" />
                 </div>
-                <div className="font-medium text-muted-foreground">New organization</div>
+                <div className="font-medium text-muted-foreground">{t("new")}</div>
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>

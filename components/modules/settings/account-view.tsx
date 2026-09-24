@@ -1,4 +1,5 @@
 import { UserRound } from "lucide-react";
+import { useRoleLabel } from "@/components/shared";
 import {
   Card,
   CardContent,
@@ -22,6 +23,7 @@ export function AccountView({
   email: string;
   role: string;
 }) {
+  const roleLabel = useRoleLabel();
   return (
     <div className="flex flex-col gap-4">
       <Card>
@@ -52,17 +54,4 @@ export function AccountView({
       </Card>
     </div>
   );
-}
-
-export function roleLabel(role: string): string {
-  switch (role) {
-    case "ORGANIZER_OWNER":
-      return "Owner";
-    case "ORGANIZER_ADMIN":
-      return "Admin";
-    case "ORGANIZER_MEMBER":
-      return "Member";
-    default:
-      return role;
-  }
 }
