@@ -9,8 +9,6 @@ import { ADMIN_ROUTES } from "@/lib/constants";
 import type {
   TenantDirectoryEntry,
   TenantDirectoryPage,
-  RefundBookingRequest,
-  AdminBookingRefund,
   AdminBillingSettingsFormValues,
   AdminEventSummary,
 } from "@/components/modules/admin/schema";
@@ -147,37 +145,6 @@ export async function interruptAgreementAction(
   reason: string,
 ): Promise<ActionResult> {
   return adminMutation(`/admin/agreements/${agreementId}/interrupt`, { reason });
-}
-
-export async function cancelBookingAction(bookingId: string): Promise<ActionResult> {
-  return adminMutation(`/admin/bookings/${bookingId}/cancel`, {});
-}
-
-export async function refundBookingAction(
-  bookingId: string,
-  request: RefundBookingRequest,
-): Promise<ActionResult<AdminBookingRefund>> {
-  const response = await adminFetch(`/admin/bookings/${bookingId}/refund`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(request),
-  });
-  if (!response.ok) {
-    return failWithReason(response, "Le remboursement n'a pas pu être enregistré.");
-  }
-  revalidatePath("/admin", "layout");
-  return ok((await response.json()) as AdminBookingRefund);
-}
-
-export async function verifyBookingPaymentAction(declarationId: string): Promise<ActionResult> {
-  return adminMutation(`/admin/booking-payments/${declarationId}/verify`, {});
-}
-
-export async function rejectBookingPaymentAction(
-  declarationId: string,
-  reason: string,
-): Promise<ActionResult> {
-  return adminMutation(`/admin/booking-payments/${declarationId}/reject`, { reason });
 }
 
 export async function updateWhatsAppPricingAction(

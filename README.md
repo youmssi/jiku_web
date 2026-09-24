@@ -46,7 +46,7 @@ web/
 │   │   ├── (organizer)/          # /dashboard, /events, /events/[id]/...
 │   │   │   ├── (auth)/           # /login, /register, password reset, verify email
 │   │   │   └── (app)/            # authenticated organizer app
-│   │   ├── (guest)/              # /invitation/[token], /bookings/[id]/…, /o/[username], /privacy
+│   │   ├── (guest)/              # /invitation/[token], /o/[username], /privacy
 │   │   ├── (operator)/           # /checkin/[token] (door), /line/[token] (counter)
 │   │   ├── (admin)/              # /admin/... platform admin desk
 │   │   ├── layout.tsx            # Root layout (locale-aware)
@@ -112,7 +112,7 @@ Layer dependency is one-way — routing → component → cache → service → 
 - **Server Components** are the default; use `"use client"` only when interactivity or browser APIs are needed
 - **Route groups** (parentheses syntax) keep URL paths clean while allowing per-role layouts
 - **i18n (next-intl)** — locales live in `i18n/routing.ts` (`fr` default, unprefixed; `/en/...` prefixed). Import `Link`/`useRouter`/`usePathname` from `@/i18n/navigation` (not `next/link` / `next/navigation`) so the active locale survives navigation; on the server, redirect with `localeRedirect` from `@/i18n/redirect`. File downloads served by `app/api/**` are plain `<a download>` links, never `Link`. Every user-facing string lives in `messages/<locale>/<namespace>.json` (one catalog per namespace, listed in `i18n/messages.ts`); French is the reference whose shape types every key, and `pnpm i18n:check` (run in CI) fails when English drifts from it. Components use `useTranslations` / `getTranslations`; Server Actions translate their messages with `getTranslations`; Zod schemas carry `common.validation` keys that `FormFieldError` translates. Long-form marketing copy (landing, simulator, use cases) stays in its typed per-locale content modules
-- **Route names** — URL segments are English and specific (`/bookings/[id]/payment`, `/services/[id]/line`); the language lives in the locale prefix, not in the path.
+- **Route names** — URL segments are English and specific (`/services/[id]/manage`, `/services/[id]/line`); the language lives in the locale prefix, not in the path.
 - **Pages stay thin** — a `page.tsx` reads params and renders one module component; data loading, fallbacks and role checks live in the module
 - **No hardcoded config** — environment variables via `.env` files only
 - **API calls** go through service layers, never directly in components

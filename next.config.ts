@@ -42,7 +42,6 @@ const nextConfig: NextConfig = {
       noindexRoute("/checkin/:path*"),
       noindexRoute("/line/:path*"),
       noindexRoute("/admin/:path*"),
-      noindexRoute("/bookings/:path*"),
     ];
   },
 };
