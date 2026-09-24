@@ -22,7 +22,8 @@ export type AnalyticsEvent =
   | "ticket_marked_paid"
   | "rsvp_confirmed"
   | "rsvp_declined"
-  | "appointment_booked";
+  | "appointment_booked"
+  | "plan_found";
 
 export function trackEvent(name: AnalyticsEvent, properties?: Record<string, unknown>): void {
   if (typeof window === "undefined") return;
