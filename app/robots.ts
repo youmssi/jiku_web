@@ -1,15 +1,16 @@
 import type { MetadataRoute } from "next";
+import { siteUrl } from "@/components/modules/seo";
 
 export default function robots(): MetadataRoute.Robots {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jiku-web.vercel.app";
+  const origin = siteUrl();
 
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      // Authenticated app areas and tokenized guest, operator and booking
-      // links carry no indexable content; /register stays crawlable as a
-      // conversion page.
+      // Authenticated app areas and tokenized guest, operator, booking and
+      // account links carry no indexable content; /register stays crawlable
+      // as a conversion page, and public organization pages (/o/) stay open.
       disallow: [
         "/api/",
         "/login",
@@ -23,9 +24,15 @@ export default function robots(): MetadataRoute.Robots {
         "/checkin/",
         "/admin/",
         "/line/",
+        "/r/",
+        "/appointments/",
+        "/widget/",
+        "/invitations/",
+        "/verify-email",
+        "/reset-password",
         "/offline",
       ],
     },
-    sitemap: `${siteUrl}/sitemap.xml`,
+    sitemap: `${origin}/sitemap.xml`,
   };
 }

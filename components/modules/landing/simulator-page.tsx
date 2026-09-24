@@ -5,6 +5,7 @@ import { JikūLogo } from "@/components/ui/jiku-logo";
 import { Link } from "@/i18n/navigation";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
 import { OrganizationJsonLd, LocalBusinessJsonLd, BreadcrumbJsonLd } from "@/components/modules/seo";
+import { PricingJsonLd } from "./pricing-json-ld";
 import { SimulatorCalculator } from "./simulator-calculator";
 import type { SimulatorContent } from "./simulator-content";
 
@@ -28,6 +29,7 @@ export function SimulatorPage({
     <div className="flex flex-1 flex-col bg-white dark:bg-zinc-900">
       <OrganizationJsonLd siteUrl={siteUrl} />
       <LocalBusinessJsonLd siteUrl={siteUrl} />
+      <PricingJsonLd content={content} url={`${siteUrl}${path}`} />
       <BreadcrumbJsonLd
         items={[
           { name: content.nav.home, url: siteUrl },
