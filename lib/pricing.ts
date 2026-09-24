@@ -1,9 +1,9 @@
 // Public pricing model used by the /simulator playground. It mirrors the
 // backend defaults in app/src/main/resources/application.yaml (billing.*) and
 // app/.../money/internal/BillingProperties.kt — the same "mirror, don't invent"
-// convention as components/modules/landing/content.ts. The authoritative price
-// is always recomputed server-side at reservation time (GET /bookings/quote),
-// so any drift here is corrected the moment the visitor actually reserves.
+// convention as components/modules/landing/content.ts. The authoritative price is
+// always the backend's, recomputed when a tier is activated; these figures only
+// estimate it for a visitor.
 
 export interface PricingTier {
   name: string;

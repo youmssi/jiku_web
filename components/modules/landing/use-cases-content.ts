@@ -53,9 +53,9 @@ export interface UseCasesPageContent {
 
 const fr: UseCasesPageContent = {
   meta: {
-    title: "Cas d'usage Jikū — Mariage, séminaire, assemblée générale, formation",
+    title: "Cas d'usage Jikū — Événements, cliniques, salons, administrations",
     description:
-      "Mariages, baptêmes, séminaires, assemblées générales, formations financées : découvrez comment Jikū supprime l'attente et le désordre à la porte, quel que soit votre événement.",
+      "Mariages, séminaires, assemblées générales, cliniques, salons, administrations : découvrez comment Jikū supprime l'attente, à la porte comme au guichet.",
     keywords: [
       "invitation mariage guinée",
       "assemblée générale quorum",
@@ -65,10 +65,10 @@ const fr: UseCasesPageContent = {
       "check-in QR code",
     ],
   },
-  eyebrow: "Un outil, tous vos événements",
-  title: "Fini l'attente et le désordre à la porte.",
+  eyebrow: "Un outil, tous vos billets",
+  title: "Fini l'attente, à la porte comme au guichet.",
   intro:
-    "Mariage, séminaire, assemblée générale ou formation : Jikū supprime la file d'attente et la confusion à l'entrée. Un même outil — la seule chose qui change, c'est le nombre d'invités et ce que vous devez prouver.",
+    "Mariage, assemblée générale, clinique ou agence : Jikū supprime la file et la confusion. Un même billet, pour l'événement d'un soir comme pour le service de tous les jours.",
   categories: [
     {
       title: "Cérémonies & célébrations",
@@ -151,6 +151,33 @@ const fr: UseCasesPageContent = {
         },
       ],
     },
+    {
+      title: "Services du quotidien",
+      promise: "Moins d'attente, plus de clients servis.",
+      cases: [
+        {
+          title: "Cliniques & cabinets",
+          promise: "Des patients qui savent quand venir",
+          proof: "Rendez-vous, rappels et file du jour",
+          description:
+            "Les patients réservent en ligne, reçoivent un rappel, et la réception appelle chacun dans l'ordre : la salle d'attente se vide.",
+        },
+        {
+          title: "Salons & ateliers",
+          promise: "Moins de rendez-vous manqués",
+          proof: "Lien de réservation et rappels",
+          description:
+            "Un lien de réservation sur vos réseaux, un rappel avant chaque rendez-vous : vos créneaux restent pleins.",
+        },
+        {
+          title: "Agences & administrations",
+          promise: "Une file qui avance, sans borne coûteuse",
+          proof: "Tickets d'attente et appel au guichet",
+          description:
+            "Rendez-vous et sans-rendez-vous dans une seule file ; chacun est appelé avec son numéro de guichet.",
+        },
+      ],
+    },
   ],
   pricing: {
     heading: "Combien ça coûte, selon votre besoin ?",
@@ -171,8 +198,8 @@ const fr: UseCasesPageContent = {
       "Vous payez le palier une seule fois, au moment de l'activer. Vous n'êtes jamais facturé deux fois pour les mêmes invités ou rappels.",
   },
   cta: {
-    heading: "Votre événement mérite une porte sereine.",
-    text: "Créez un compte gratuit, importez dix invités, envoyez-vous une invitation : en cinq minutes vous saurez si Jikū est fait pour vous.",
+    heading: "Vos invités et vos clients méritent de ne plus attendre.",
+    text: "Créez votre compte, importez dix invités ou partagez votre lien de réservation : en cinq minutes vous saurez si Jikū est fait pour vous.",
     primary: "Créer mon compte gratuit",
     secondary: "Simuler mon prix",
   },
@@ -186,9 +213,9 @@ const fr: UseCasesPageContent = {
 
 const en: UseCasesPageContent = {
   meta: {
-    title: "Jikū use cases — Weddings, seminars, general assemblies, training",
+    title: "Jikū use cases — Events, clinics, salons, public offices",
     description:
-      "Weddings, baptisms, seminars, general assemblies, funded training: see how Jikū removes the wait and the disorder at the door, whatever your event.",
+      "Weddings, seminars, general assemblies, clinics, salons, public offices: see how Jikū removes the wait, at the door and at the counter.",
     keywords: [
       "wedding invitations guinea",
       "general assembly quorum",
@@ -198,10 +225,10 @@ const en: UseCasesPageContent = {
       "QR check-in",
     ],
   },
-  eyebrow: "One tool, every event",
-  title: "No more waiting and disorder at the door.",
+  eyebrow: "One tool, every ticket",
+  title: "No more waiting, at the door or at the counter.",
   intro:
-    "Wedding, seminar, general assembly or training: Jikū removes the queue and the confusion at the entrance. One tool — the only thing that changes is the guest count and what you need to prove.",
+    "Wedding, general assembly, clinic or agency: Jikū removes the line and the confusion. One ticket, for a one-night event and for an everyday service.",
   categories: [
     {
       title: "Ceremonies & celebrations",
@@ -284,6 +311,33 @@ const en: UseCasesPageContent = {
         },
       ],
     },
+    {
+      title: "Everyday services",
+      promise: "Less waiting, more clients served.",
+      cases: [
+        {
+          title: "Clinics & practices",
+          promise: "Patients who know when to come",
+          proof: "Bookings, reminders and the day line",
+          description:
+            "Patients book online, get a reminder, and the front desk calls each one in order: the waiting room empties.",
+        },
+        {
+          title: "Salons & studios",
+          promise: "Fewer missed appointments",
+          proof: "Booking link and reminders",
+          description:
+            "A booking link on your social pages and a reminder before every appointment: your slots stay full.",
+        },
+        {
+          title: "Agencies & public offices",
+          promise: "A line that moves, without a costly kiosk",
+          proof: "Waiting tickets and counter calls",
+          description:
+            "Appointments and walk-ins in one line; each person is called with their counter number.",
+        },
+      ],
+    },
   ],
   pricing: {
     heading: "How much does it cost, for what you need?",
@@ -304,8 +358,8 @@ const en: UseCasesPageContent = {
       "You pay for a tier once, when you activate it. You are never billed twice for the same guests or reminders.",
   },
   cta: {
-    heading: "Your event deserves a calm door.",
-    text: "Create a free account, import ten guests, send yourself an invitation: within five minutes you'll know whether Jikū is for you.",
+    heading: "Your guests and clients deserve to stop waiting.",
+    text: "Create your account, import ten guests or share your booking link: within five minutes you'll know whether Jikū is for you.",
     primary: "Create my free account",
     secondary: "Estimate my price",
   },

@@ -10,6 +10,9 @@ import {
   Presentation,
   Users,
   Globe,
+  Stethoscope,
+  Scissors,
+  Building2,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,7 +23,7 @@ import { OrganizationJsonLd, LocalBusinessJsonLd, BreadcrumbJsonLd } from "@/com
 import type { UseCasesPageContent } from "./use-cases-content";
 
 // Icons pair positionally with the flattened case list (ceremonies 2,
-// professional 4, institutional 3). Keep this list the same length as the
+// professional 4, institutional 3, services 3). Keep this list the same length as the
 // total number of cases or a case renders a broken icon.
 const CASE_ICONS: LucideIcon[] = [
   Gem, // mariage & baptême
@@ -32,6 +35,9 @@ const CASE_ICONS: LucideIcon[] = [
   Users, // assemblées générales
   ClipboardCheck, // formations
   Globe, // diaspora
+  Stethoscope, // cliniques
+  Scissors, // salons
+  Building2, // agences et administrations
 ];
 
 function UseCaseCard({
