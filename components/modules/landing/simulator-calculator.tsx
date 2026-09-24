@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Link } from "@/i18n/navigation";
-import { RESERVE_ROUTE, SEO_ROUTES } from "@/lib/constants";
+import { ROUTES, SEO_ROUTES } from "@/lib/constants";
 import { usdApprox, PRICING, quoteForGuests, FREE_TIER, CUSTOM_TIER } from "@/lib/pricing";
 import { salesMailto } from "@/lib/support";
 import { cn } from "@/lib/utils";
@@ -26,8 +26,8 @@ function tierLabel(tier: string, content: SimulatorContent): string {
 /**
  * The pricing playground, split by need: an interactive event price estimator
  * and the indicative appointment-subscription grid. Prices show GNF with a
- * small approximate USD figure; the guarantee strip explains the deposit and
- * refund rules so a visitor never wonders what they would actually pay.
+ * small approximate USD figure; the guarantee strip explains when and how a
+ * tier is paid so a visitor never wonders what they would actually pay.
  */
 export function SimulatorCalculator({
   content,
@@ -118,7 +118,6 @@ function EventMode({
   const quote = useMemo(() => quoteForGuests(guestCount), [guestCount]);
   const isFree = quote.tier === FREE_TIER;
 
-  const reserveHref = `${RESERVE_ROUTE}?guests=${guestCount}`;
   const guestsWord = locale === "fr" ? "invités" : "guests";
   const quoteHref = salesMailto(
     `${content.event.cta.quoteSubjectPrefix} ${guestCount} ${guestsWord}`,
@@ -182,20 +181,9 @@ function EventMode({
               <p className="mt-2 text-xs text-muted-foreground">{content.event.result.perGuestNote}</p>
             </>
           ) : (
-            <>
-              <div className="mt-4 flex items-baseline justify-between border-t border-border/40 pt-4">
-                <p className="text-sm text-muted-foreground">
-                  {content.event.result.depositLabel}
-                </p>
-                <div className="text-right">
-                  <p className="text-base font-semibold">{money(quote.depositMinor)}</p>
-                  <p className="text-xs text-muted-foreground">{usd(quote.depositMinor)}</p>
-                </div>
-              </div>
-              <p className="mt-2 text-xs text-muted-foreground">
-                {content.event.result.depositNote}
-              </p>
-            </>
+            <p className="mt-4 border-t border-border/40 pt-4 text-sm text-muted-foreground">
+              {content.event.result.paymentNote}
+            </p>
           )}
         </div>
       </div>
@@ -250,7 +238,7 @@ function EventMode({
               <p className="text-lg font-semibold">{content.event.cta.heading}</p>
               <p className="mt-2 text-sm text-muted-foreground">{content.event.cta.text}</p>
               <Button asChild size="lg" className="mt-5 w-full rounded-full">
-                <Link href={reserveHref}>
+                <Link href={ROUTES.REGISTER}>
                   {content.event.cta.primary}
                   <ArrowRight className="ml-2 size-4" />
                 </Link>

@@ -82,8 +82,6 @@ export function ticketRoute(token: string): string {
   return `/invitation/${token}/ticket`;
 }
 
-export const RESERVE_ROUTE = "/reserver";
-
 export function reservationPaymentRoute(id: string): string {
   return `/reserver/${id}/paiement`;
 }
