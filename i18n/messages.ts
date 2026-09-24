@@ -6,7 +6,7 @@ import type { Locale } from "./routing";
  * shape types every `useTranslations` / `getTranslations` key (global.d.ts),
  * and `pnpm i18n:check` fails when another locale drifts from it.
  */
-export const NAMESPACES = ["common", "auth", "shell"] as const;
+export const NAMESPACES = ["common", "auth", "shell", "events", "services"] as const;
 
 export type Namespace = (typeof NAMESPACES)[number];
 
@@ -21,4 +21,6 @@ export interface Messages {
   common: typeof import("../messages/fr/common.json");
   auth: typeof import("../messages/fr/auth.json");
   shell: typeof import("../messages/fr/shell.json");
+  events: typeof import("../messages/fr/events.json");
+  services: typeof import("../messages/fr/services.json");
 }

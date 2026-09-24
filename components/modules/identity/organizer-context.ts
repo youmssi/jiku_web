@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { serverFetch } from "@/lib/api-server";
 import type { Branding, CurrentUser, Membership } from "@/components/modules/identity/schema";
 
@@ -24,9 +25,10 @@ async function fetchJson<T>(path: string): Promise<T | null> {
 /**
  * Loads the current organizer's context for the shell (sidebar, greeting).
  * Returns null when the request is unauthenticated so callers can redirect;
- * callers also bounce sessions with no organization to onboarding.
+ * callers also bounce sessions with no organization to onboarding. Memoized per
+ * request, so the app shell and the page it wraps share one round trip.
  */
-export async function getOrganizerContext(): Promise<OrganizerContext | null> {
+export const getOrganizerContext = cache(async function getOrganizerContext(): Promise<OrganizerContext | null> {
   const me = await fetchJson<CurrentUser>("/auth/me");
   if (!me) {
     return null;
@@ -44,4 +46,4 @@ export async function getOrganizerContext(): Promise<OrganizerContext | null> {
     memberships: me.memberships,
     activeTenantId: me.tenantId,
   };
-}
+});

@@ -39,15 +39,51 @@
     "empty": "Aucune page correspondante.",
     "goTo": "Aller à"
   },
-  "home": {
-    "welcome": "Bienvenue, {name}",
-    "signedInAs": "Vous êtes {role} de {organization}.",
-    "help": "Besoin d'aide à tout moment ? Le bouton <strong>Aide et assistance</strong> en bas à droite vous met en relation avec nous.",
-    "eventsTitle": "Événements",
-    "eventsDescription": "Créez vos événements, configurez-les et invitez vos invités.",
-    "eventsCta": "Gérer les événements",
-    "servicesTitle": "Services",
-    "servicesDescription": "Proposez des créneaux de rendez-vous et servez votre file du jour.",
-    "servicesCta": "Gérer les services"
+  "today": {
+    "greeting": "Bonjour, {name}",
+    "subtitle": "{date} · {role} chez {organization}",
+    "attention": {
+      "title": "À traiter",
+      "requests": "{count, plural, one {# demande de rendez-vous attend} other {# demandes de rendez-vous attendent}} votre réponse",
+      "requestsAction": "Répondre",
+      "draft": "« {name} » est encore un brouillon",
+      "draftDescription": "Publiez-le pour envoyer les invitations.",
+      "draftAction": "Terminer",
+      "moreDrafts": "{count, plural, one {# autre brouillon} other {# autres brouillons}}"
+    },
+    "lines": {
+      "title": "Files du jour",
+      "description": "Qui attend, qui est servi, qui doit encore arriver.",
+      "open": "Ouvrir la file",
+      "waiting": "En attente",
+      "serving": "En cours",
+      "done": "Servis",
+      "expected": "Attendus",
+      "next": "Prochain rendez-vous à {time}",
+      "noNext": "Plus de rendez-vous prévu aujourd'hui",
+      "unavailable": "La file n'a pas pu être chargée.",
+      "all": "Tous les services",
+      "emptyTitle": "Aucun service pour l'instant",
+      "emptyDescription": "Créez un service pour ouvrir votre file du jour et partager un lien de réservation.",
+      "requests": "{count, plural, one {# demande} other {# demandes}}"
+    },
+    "events": {
+      "title": "Prochains événements",
+      "description": "Vos événements publiés, du plus proche au plus lointain.",
+      "open": "Ouvrir",
+      "all": "Tous les événements",
+      "today": "Aujourd'hui",
+      "emptyTitle": "Aucun événement à venir",
+      "emptyDescription": "Créez un événement pour inviter vos invités et contrôler l'entrée."
+    },
+    "start": {
+      "title": "Par où commencer ?",
+      "description": "Choisissez ce que vous organisez. Vous pourrez ajouter l'autre plus tard.",
+      "eventsTitle": "Un événement",
+      "eventsDescription": "Mariage, conférence, assemblée : invitations, billets et contrôle à l'entrée.",
+      "servicesTitle": "Un service",
+      "servicesDescription": "Clinique, salon, agence : lien de réservation, rappels et file du jour."
+    },
+    "help": "Besoin d'aide ? Le bouton <strong>Aide et assistance</strong> en bas à droite vous met en relation avec nous."
   }
 }

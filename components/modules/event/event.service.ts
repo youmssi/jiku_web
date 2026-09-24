@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 import { localInputToUtc } from "@/lib/datetime";
@@ -31,9 +32,10 @@ function toPayload(values: EventFormValues) {
 export async function createDraftAction(
   values: EventFormValues,
 ): Promise<ActionResult<{ id: string }>> {
+  const t = await getTranslations("events.create");
   const parsed = eventFormSchema.safeParse(values);
   if (!parsed.success) {
-    return fail("Please check the form and try again.");
+    return fail(t("failed"));
   }
   const response = await serverFetch("/events", {
     method: "POST",
@@ -42,7 +44,7 @@ export async function createDraftAction(
   });
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't save the draft. Please try again.");
+    return fail(t("failed"));
   }
   const event = (await response.json()) as { id: string };
   return ok(event);

@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FieldGroup } from "@/components/ui/field";
+import { Spinner } from "@/components/ui/spinner";
 import { ROUTES } from "@/lib/constants";
+import { AuthCard } from "@/components/modules/identity/auth-card";
 import { verifyEmailAction } from "@/components/modules/identity/identity.service";
 
 type State = { status: "verifying" } | { status: "done" } | { status: "failed"; error: string | null };
@@ -29,37 +31,33 @@ export function VerifyEmailView({ token }: { token: string | null }) {
   }, [token]);
 
   return (
-    <div className="flex flex-1 items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl">{t("title")}</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          {state.status === "verifying" ? (
-            <p className="text-sm text-muted-foreground">{t("verifying")}</p>
-          ) : state.status === "done" ? (
-            <>
-              <Alert>
-                <AlertTitle>{t("doneTitle")}</AlertTitle>
-                <AlertDescription>{t("doneDescription")}</AlertDescription>
-              </Alert>
-              <Button asChild className="w-full">
-                <Link href={ROUTES.ONBOARDING}>{tCommon("continue")}</Link>
-              </Button>
-            </>
-          ) : (
-            <>
-              <Alert variant="destructive">
-                <AlertTitle>{t("failed")}</AlertTitle>
-                <AlertDescription>{state.error ?? t("incomplete")}</AlertDescription>
-              </Alert>
-              <Button asChild variant="outline" className="w-full">
-                <Link href={ROUTES.LOGIN}>{t("goToSignIn")}</Link>
-              </Button>
-            </>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+    <AuthCard title={t("title")}>
+      {state.status === "verifying" ? (
+        <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground" role="status">
+          <Spinner />
+          {t("verifying")}
+        </p>
+      ) : state.status === "done" ? (
+        <FieldGroup>
+          <Alert>
+            <AlertTitle>{t("doneTitle")}</AlertTitle>
+            <AlertDescription>{t("doneDescription")}</AlertDescription>
+          </Alert>
+          <Button asChild className="w-full">
+            <Link href={ROUTES.ONBOARDING}>{tCommon("continue")}</Link>
+          </Button>
+        </FieldGroup>
+      ) : (
+        <FieldGroup>
+          <Alert variant="destructive">
+            <AlertTitle>{t("failed")}</AlertTitle>
+            <AlertDescription>{state.error ?? t("incomplete")}</AlertDescription>
+          </Alert>
+          <Button asChild variant="outline" className="w-full">
+            <Link href={ROUTES.LOGIN}>{t("goToSignIn")}</Link>
+          </Button>
+        </FieldGroup>
+      )}
+    </AuthCard>
   );
 }

@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export interface ServiceSummary {
   id: string;
   name: string;
@@ -84,17 +86,16 @@ export interface ResourceUnavailability {
   reason: string | null;
 }
 
-/** Fuseaux proposés à la création d'un service ou d'une ressource. */
-export const SERVICE_TIMEZONES = [
-  "Africa/Conakry",
-  "Africa/Abidjan",
-  "Africa/Dakar",
-  "Africa/Accra",
-  "Africa/Douala",
-  "Africa/Casablanca",
-  "Europe/Paris",
-  "UTC",
-] as const;
+/** Services and resources are scheduled against the same curated list as events. */
+export { TIMEZONES as SERVICE_TIMEZONES } from "@/lib/timezones";
+
+// Validation messages are `common.validation` keys, translated where they render.
+export const createServiceSchema = z.object({
+  name: z.string().trim().min(1, "required").max(120, "tooLong"),
+  timezone: z.string().min(1, "required"),
+});
+
+export type CreateServiceInput = z.infer<typeof createServiceSchema>;
 
 export const RESOURCE_TYPES: { value: ResourceType; label: string }[] = [
   { value: "PERSON", label: "Personne" },

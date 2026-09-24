@@ -7,16 +7,9 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { AuthCard } from "@/components/modules/identity/auth-card";
 import {
   createOrgAction,
   logoutAction,
@@ -69,68 +62,60 @@ export function OnboardingForm({ email, canCancel }: { email: string; canCancel:
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl">{t("title")}</CardTitle>
-          <CardDescription>{t("description", { email })}</CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-(--card-spacing)">
-          <CardContent>
-            <FieldGroup>
-              {formError ? (
-                <Alert variant="destructive">
-                  <AlertTitle>{t("notYet")}</AlertTitle>
-                  <AlertDescription className="flex flex-col gap-2">
-                    {formError}
-                    <Button type="button" variant="outline" size="sm" onClick={resend}>
-                      {t("resend")}
-                    </Button>
-                  </AlertDescription>
-                </Alert>
-              ) : null}
-              {resent ? (
-                <Alert>
-                  <AlertTitle>{t("sentTitle")}</AlertTitle>
-                  <AlertDescription>{t("sentDescription")}</AlertDescription>
-                </Alert>
-              ) : null}
-              <Controller
-                control={control}
-                name="name"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>{t("name")}</FieldLabel>
-                    <Input
-                      {...field}
-                      id={field.name}
-                      autoComplete="organization"
-                      aria-invalid={fieldState.invalid}
-                    />
-                    <FormFieldError error={fieldState.error} />
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-3">
+    <AuthCard title={t("title")} description={t("description", { email })}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <FieldGroup>
+          {formError ? (
+            <Alert variant="destructive">
+              <AlertTitle>{t("notYet")}</AlertTitle>
+              <AlertDescription className="flex flex-col gap-2">
+                {formError}
+                <Button type="button" variant="outline" size="sm" onClick={resend}>
+                  {t("resend")}
+                </Button>
+              </AlertDescription>
+            </Alert>
+          ) : null}
+          {resent ? (
+            <Alert>
+              <AlertTitle>{t("sentTitle")}</AlertTitle>
+              <AlertDescription>{t("sentDescription")}</AlertDescription>
+            </Alert>
+          ) : null}
+          <Controller
+            control={control}
+            name="name"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>{t("name")}</FieldLabel>
+                <Input
+                  {...field}
+                  id={field.name}
+                  autoComplete="organization"
+                  aria-invalid={fieldState.invalid}
+                />
+                <FormFieldError error={fieldState.error} />
+              </Field>
+            )}
+          />
+          <Field>
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? t("submitting") : t("submit")}
             </Button>
             {canCancel ? (
-              <Button asChild type="button" variant="outline" className="w-full">
+              <Button asChild variant="outline" className="w-full">
                 <Link href={ROUTES.DASHBOARD}>{tCommon("cancel")}</Link>
               </Button>
             ) : null}
             <FieldDescription className="text-center">
               {t("wrongAccount")}{" "}
-              <button type="button" className="underline" onClick={() => void logoutAction()}>
+              <button type="button" className="underline underline-offset-4" onClick={() => void logoutAction()}>
                 {tCommon("signOut")}
               </button>
             </FieldDescription>
-          </CardFooter>
-        </form>
-      </Card>
-    </div>
+          </Field>
+        </FieldGroup>
+      </form>
+    </AuthCard>
   );
 }

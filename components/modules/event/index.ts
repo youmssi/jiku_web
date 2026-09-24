@@ -12,4 +12,4 @@ export {
   INVITATION_CHANNEL_LABELS,
   TIMEZONES,
 } from "./schema";
-export type { EventFormValues, InvitationChannel, TicketTypeResponse } from "./schema";
+export type { EventFormValues, EventListItem, InvitationChannel, TicketTypeResponse } from "./schema";

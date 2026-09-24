@@ -39,15 +39,51 @@
     "empty": "No matching page.",
     "goTo": "Go to"
   },
-  "home": {
-    "welcome": "Welcome, {name}",
-    "signedInAs": "You are {role} of {organization}.",
-    "help": "Need help at any time? The <strong>Help & support</strong> button in the bottom-right corner puts you in touch with us.",
-    "eventsTitle": "Events",
-    "eventsDescription": "Create events, configure them and invite your guests.",
-    "eventsCta": "Manage events",
-    "servicesTitle": "Services",
-    "servicesDescription": "Offer bookable appointment slots and serve your day line.",
-    "servicesCta": "Manage services"
+  "today": {
+    "greeting": "Hello, {name}",
+    "subtitle": "{date} · {role} at {organization}",
+    "attention": {
+      "title": "Needs your attention",
+      "requests": "{count, plural, one {# appointment request is} other {# appointment requests are}} waiting for your answer",
+      "requestsAction": "Answer",
+      "draft": "“{name}” is still a draft",
+      "draftDescription": "Publish it to send the invitations.",
+      "draftAction": "Finish",
+      "moreDrafts": "{count, plural, one {# more draft} other {# more drafts}}"
+    },
+    "lines": {
+      "title": "Today's lines",
+      "description": "Who is waiting, who is being served, who is still to come.",
+      "open": "Open the line",
+      "waiting": "Waiting",
+      "serving": "Serving",
+      "done": "Served",
+      "expected": "Expected",
+      "next": "Next appointment at {time}",
+      "noNext": "No more appointments scheduled today",
+      "unavailable": "The line could not be loaded.",
+      "all": "All services",
+      "emptyTitle": "No services yet",
+      "emptyDescription": "Create a service to open your daily line and share a booking link.",
+      "requests": "{count, plural, one {# request} other {# requests}}"
+    },
+    "events": {
+      "title": "Upcoming events",
+      "description": "Your published events, soonest first.",
+      "open": "Open",
+      "all": "All events",
+      "today": "Today",
+      "emptyTitle": "No upcoming events",
+      "emptyDescription": "Create an event to invite your guests and check them in at the door."
+    },
+    "start": {
+      "title": "Where do you want to start?",
+      "description": "Pick what you run. You can add the other one later.",
+      "eventsTitle": "An event",
+      "eventsDescription": "Wedding, conference, general assembly: invitations, tickets and door check-in.",
+      "servicesTitle": "A service",
+      "servicesDescription": "Clinic, salon, agency: booking link, reminders and the daily line."
+    },
+    "help": "Need help? The <strong>Help and support</strong> button at the bottom right puts you in touch with us."
   }
 }

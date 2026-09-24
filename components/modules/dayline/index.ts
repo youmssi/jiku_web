@@ -11,6 +11,7 @@ export type {
   LineStatus,
   LineTicket,
   LineTransition,
+  PendingAppointmentRequest,
   TicketKind,
   WalkInInput,
 } from "./schema";

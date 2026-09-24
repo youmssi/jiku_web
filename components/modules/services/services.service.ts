@@ -1,8 +1,10 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
-import { fromResponse } from "@/lib/action-result";
+import { fail, fromResponse } from "@/lib/action-result";
 import type { ActionResult } from "@/lib/action-result";
+import { createServiceSchema, type CreateServiceInput } from "./schema";
 import type {
   ReminderPolicyUpdate,
   ResourceAvailability,
@@ -55,17 +57,17 @@ export async function getServiceNameAction(serviceId: string): Promise<string | 
 
 /** Crée un service (JIKU-84+) : nom + fuseau. */
 export async function createServiceAction(
-  name: string,
-  timezone: string,
+  input: CreateServiceInput,
 ): Promise<ActionResult<ServiceSummary>> {
+  const parsed = createServiceSchema.safeParse(input);
+  const t = await getTranslations("services.create");
+  if (!parsed.success) return fail(t("failed"));
   const response = await serverFetch(`/services`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, timezone }),
+    body: JSON.stringify(parsed.data),
   });
-  return fromResponse<ServiceSummary>(response, {
-    default: "Impossible de créer le service.",
-  });
+  return fromResponse<ServiceSummary>(response, { default: t("failed") });
 }
 
 /** Renomme un service (JIKU-84+). */
