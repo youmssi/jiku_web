@@ -51,7 +51,7 @@ function inFinder(x: number, y: number): boolean {
 }
 
 /** A fixed, QR-looking pattern: three finder squares and a deterministic scatter. It encodes nothing. */
-function QrPattern({ className }: { className?: string }) {
+export function QrPattern({ className }: { className?: string }) {
   const cells: [number, number][] = [];
   for (let y = 0; y < QR_SIZE; y += 1) {
     for (let x = 0; x < QR_SIZE; x += 1) {
