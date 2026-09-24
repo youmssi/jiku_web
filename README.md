@@ -80,9 +80,12 @@ with the same shape — when in doubt, copy `components/modules/identity/`:
 
 ```
 schema.ts             CONTRACT — Zod schemas + inferred types / DTOs mirroring the backend
-<domain>.service.ts   SERVICE  — every endpoint of the module's scope (Server Actions / fetch);
-                                 the ONLY layer that inspects HTTP statuses and returns
-                                 user-ready messages
+<domain>.service.ts   SERVICE  — the module's writes and client-triggered reads, as Server
+                                 Actions returning `ActionResult<T>` (lib/action-result); the
+                                 only layer, with queries, that inspects HTTP statuses
+<domain>.queries.ts   SERVICE  — optional server-only reads for Server Components
+                                 (`import "server-only"`): never Server Actions, so no client
+                                 can call them; a failed read falls back to an empty state
 use<Domain>.ts        CACHE    — client polling/cache hooks (optional; omit when nothing
                                  changes after the initial load)
 <feature>.tsx         COMPONENT— UI + validation only (RHF + Zod); calls actions/hooks,

@@ -187,7 +187,7 @@ function BookingRowActions({ booking }: { booking: AdminBooking }) {
     cancelBookingAction(booking.id).then((result) => {
       setConfirmOpen(false);
       setIsPending(false);
-      if (result.error) {
+      if (!result.ok) {
         toast.error(result.error);
         return;
       }
@@ -288,13 +288,11 @@ function RefundDialog({
       reason: values.reason.trim(),
     });
     if (!result.ok) {
-      toast.error(
-        result.error ?? "Le remboursement n'a pas pu être enregistré.",
-      );
+      toast.error(result.error);
       return;
     }
     toast.success(
-      `Remboursement de ${formatAmount(result.refund.amountMinor, result.refund.currency)} enregistré — avoir ${result.refund.creditNoteNumber ?? "—"}`,
+      `Remboursement de ${formatAmount(result.data.amountMinor, result.data.currency)} enregistré — avoir ${result.data.creditNoteNumber ?? "—"}`,
     );
     reset();
     onOpenChange(false);

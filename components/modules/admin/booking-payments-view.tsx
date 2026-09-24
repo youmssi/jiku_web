@@ -197,7 +197,7 @@ function VerifyDeclarationButton({
     verifyBookingPaymentAction(declaration.id).then((result) => {
       setConfirmOpen(false);
       setIsPending(false);
-      if (result.error) {
+      if (!result.ok) {
         toast.error(result.error);
         return;
       }

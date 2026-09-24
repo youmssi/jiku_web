@@ -65,7 +65,7 @@ export function WhatsAppAdmin({
     if (!Number.isFinite(value) || value < 0) return;
     start(async () => {
       const result = await updateWhatsAppPricingAction(category, value);
-      if (result.error) toast.error(result.error);
+      if (!result.ok) toast.error(result.error);
       else {
         toast.success("Tarif mis à jour.");
         router.refresh();
@@ -81,7 +81,7 @@ export function WhatsAppAdmin({
     }
     start(async () => {
       const result = await setWhatsAppOverrideAction(nextActive, reason);
-      if (result.error) toast.error(result.error);
+      if (!result.ok) toast.error(result.error);
       else {
         setOverrideReason("");
         toast.success(nextActive ? "Surcharge activée." : "Surcharge désactivée.");
@@ -298,7 +298,7 @@ function MarkContactedButton({ prospect }: { prospect: ProspectLead }) {
   function contact() {
     start(async () => {
       const result = await markProspectContactedAction(prospect.id);
-      if (result.error) toast.error(result.error);
+      if (!result.ok) toast.error(result.error);
       else {
         toast.success(`« ${prospect.businessName} » marquée comme contactée.`);
         router.refresh();
@@ -321,13 +321,13 @@ export function DiagnosticsPanel() {
   function run() {
     start(async () => {
       const result = await triggerDiagnosticsAction();
-      if (result.requestId) {
-        setRequestId(result.requestId);
+      if (result.ok) {
+        setRequestId(result.data.requestId);
         toast.success(
           "Exception de test déclenchée — retrouvez ce requestId dans le traqueur.",
         );
       } else {
-        toast.error(result.error ?? "Aucune erreur remontée.");
+        toast.error(result.error);
       }
     });
   }

@@ -1,29 +1,13 @@
-import { localeRedirect } from "@/i18n/redirect";
-import { BookingPaymentsView } from "@/components/modules/admin";
-import type { AdminBookingPaymentDeclaration } from "@/components/modules/admin";
-import { adminFetch } from "@/lib/api-server";
-import { ADMIN_ROUTES } from "@/lib/constants";
+import { AdminPage, BookingPaymentsView } from "@/components/modules/admin";
+import { loadBookingPayments } from "@/components/modules/admin/server";
 
-interface PageProps {
-  searchParams: Promise<{ status?: string }>;
-}
-
-export default async function AdminBookingPaymentsPage({ searchParams }: Readonly<PageProps>) {
+export default async function AdminBookingPaymentsPage({
+  searchParams,
+}: Readonly<{ searchParams: Promise<{ status?: string }> }>) {
   const { status } = await searchParams;
-  const params = new URLSearchParams({ size: "50", status: status ?? "PENDING" });
-
-  const response = await adminFetch(`/admin/booking-payments?${params.toString()}`);
-  if (response.status === 401 || response.status === 403) {
-    return localeRedirect(ADMIN_ROUTES.LOGIN);
-  }
-  const declarations = response.ok
-    ? ((await response.json()) as AdminBookingPaymentDeclaration[])
-    : [];
-
   return (
-    <div>
-      <h1 className="mb-6 text-2xl font-semibold tracking-tight">Paiements de réservation</h1>
-      <BookingPaymentsView declarations={declarations} />
-    </div>
+    <AdminPage title="Paiements de réservation">
+      <BookingPaymentsView declarations={await loadBookingPayments(status)} />
+    </AdminPage>
   );
 }

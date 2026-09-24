@@ -44,3 +44,18 @@ export function reportApiError(response: Response, source = "service"): void {
     requestId: response.headers.get("X-Request-Id") ?? undefined,
   });
 }
+
+/**
+ * A failed write whose backend reason is worth showing as is — the platform
+ * desk, whose operators act on the precise cause (a conflicting state, a
+ * validation rule). Falls back to [fallback] when the body carries no reason;
+ * only server failures are reported, a refused action is an expected outcome.
+ */
+export async function failWithReason(response: Response, fallback: string): Promise<ActionResult<never>> {
+  if (response.status >= 500) reportApiError(response);
+  const reason = await response
+    .json()
+    .then((payload: { message?: string }) => payload.message)
+    .catch(() => undefined);
+  return fail(reason ?? fallback);
+}
