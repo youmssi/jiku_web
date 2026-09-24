@@ -57,11 +57,39 @@ export interface LandingContent {
     ctaNote: string;
     uses: { events: string; services: string };
   };
+  replace: {
+    badge: string;
+    heading: string;
+    subheading: string;
+    rows: { before: string; after: string }[];
+    beforeLabel: string;
+    afterLabel: string;
+  };
   proof: LandingProof[];
-  events: { badge: string; heading: string; subheading: string; items: LandingFeature[] };
-  services: { badge: string; heading: string; subheading: string; items: LandingFeature[] };
+  events: {
+    badge: string;
+    heading: string;
+    subheading: string;
+    items: LandingFeature[];
+    visual: { event: string; date: string; guest: string; category: string; status: string; scanned: string };
+  };
+  services: {
+    badge: string;
+    heading: string;
+    subheading: string;
+    items: LandingFeature[];
+    visual: { title: string; serving: string; next: string; waiting: string; counter: string; notice: string };
+  };
   operators: { badge: string; heading: string; text: string; points: LandingPoint[] };
-  payments: { badge: string; heading: string; text: string; points: LandingPoint[] };
+  money: {
+    badge: string;
+    heading: string;
+    subheading: string;
+    clients: { title: string; text: string; methods: string[] };
+    platform: { title: string; text: string; items: string[] };
+    never: string;
+    points: LandingPoint[];
+  };
   howItWorks: { badge: string; heading: string; subheading: string; steps: { title: string; description: string }[] };
   useCases: { badge: string; heading: string; subheading: string; more: string; cases: { title: string; description: string }[] };
   pricing: {
@@ -126,9 +154,23 @@ const fr: LandingContent = {
     subtitle:
       "Jikū gère tout ce qui passe par un billet : les invitations et l'entrée de vos événements, les rendez-vous et la file du jour de vos services. Sans application à installer, même quand le réseau tombe.",
     primaryCta: "Créer mon compte gratuit",
-    secondaryCta: "Voir comment ça marche",
+    secondaryCta: "Trouver ma formule",
     ctaNote: "Gratuit jusqu'à 100 invités, sans carte bancaire",
     uses: { events: "Événements", services: "Services" },
+  },
+  replace: {
+    badge: "Ce que vous remplacez",
+    heading: "Fini le groupe WhatsApp, le fichier Excel et la liste papier",
+    subheading: "Tout ce que vous bricolez aujourd'hui, dans un seul outil qui tient debout le jour J.",
+    beforeLabel: "Aujourd'hui",
+    afterLabel: "Avec Jikū",
+    rows: [
+      { before: "Des invitations copiées-collées une à une sur WhatsApp", after: "Une invitation personnelle par invité, envoyée d'un clic" },
+      { before: "Un tableur à jour chez une seule personne", after: "Les réponses en direct, pour toute l'équipe" },
+      { before: "Une liste papier et des billets photocopiés à la porte", after: "Un billet QR signé, scanné même sans réseau" },
+      { before: "Une salle d'attente pleine et des clients qui s'impatientent", after: "Une file du jour qui appelle chacun sur son téléphone" },
+      { before: "Des paiements notés sur un cahier", after: "Le statut « payé » en un geste, visible par tous" },
+    ],
   },
   proof: [
     { value: 3, label: "canaux pour joindre vos clients : e-mail, WhatsApp, SMS" },
@@ -157,7 +199,6 @@ const fr: LandingContent = {
       {
         title: "Catégories d'accès et billets payants",
         description: "VIP, presse, standard : chaque catégorie a son prix, sa couleur et sa jauge. Un billet dû n'entre qu'une fois payé.",
-        soon: true,
       },
       {
         title: "Check-in même sans réseau",
@@ -168,6 +209,14 @@ const fr: LandingContent = {
         description: "Quorum compté en direct, feuille d'émargement et attestations nominatives générées sans effort.",
       },
     ],
+    visual: {
+      event: "Gala de l'Espoir",
+      date: "Samedi 12 décembre · 19:00",
+      guest: "Awa Diallo",
+      category: "VIP",
+      status: "Payé",
+      scanned: "Entrée validée à 19:04",
+    },
   },
   services: {
     badge: "Services",
@@ -182,7 +231,6 @@ const fr: LandingContent = {
       {
         title: "Rappels WhatsApp ou SMS",
         description: "Un rappel avant chaque rendez-vous, sur WhatsApp, par SMS, ou par SMS quand WhatsApp échoue.",
-        soon: true,
       },
       {
         title: "La file du jour sur un écran",
@@ -203,6 +251,14 @@ const fr: LandingContent = {
         soon: true,
       },
     ],
+    visual: {
+      title: "File du jour · Consultations",
+      serving: "En consultation",
+      next: "Suivant",
+      waiting: "en attente",
+      counter: "Salle 2",
+      notice: "« C'est votre tour, salle 2 » envoyé sur WhatsApp",
+    },
   },
   operators: {
     badge: "Votre équipe",
@@ -215,14 +271,24 @@ const fr: LandingContent = {
       { text: "Scan, file du jour et encaissement dans une seule console", soon: true },
     ],
   },
-  payments: {
+  money: {
     badge: "Paiements",
-    heading: "Vos clients vous paient directement",
-    text:
-      "Jikū n'encaisse jamais l'argent de vos clients. Ils vous règlent sur vos numéros Mobile Money ou votre propre lien de paiement, affichés sur leur invitation ou leur ticket.",
+    heading: "L'argent de vos clients ne passe jamais par nous",
+    subheading: "Deux circuits séparés, jamais mélangés. Vous gardez la main sur vos encaissements, Jikū ne facture que son propre service.",
+    clients: {
+      title: "Vos clients vous paient",
+      text: "Sur vos numéros Mobile Money ou votre propre lien de paiement, en espèces à l'accueil ou après le service.",
+      methods: ["Orange Money", "MTN MoMo", "Wave", "Espèces", "Votre lien"],
+    },
+    platform: {
+      title: "Vous payez Jikū",
+      text: "Seulement ce que vous utilisez, montant affiché avant de payer, en un écran.",
+      items: ["Abonnement Services", "Palier d'un événement", "3 % des billets vendus"],
+    },
+    never: "Jikū ne touche jamais l'argent de vos clients",
     points: [
       { text: "Aucune commission sur vos services" },
-      { text: "Le statut « payé » noté en un geste, espèces ou Mobile Money", soon: true },
+      { text: "Le statut « payé » noté en un geste, espèces ou Mobile Money" },
       { text: "Vos numéros et votre lien affichés sur chaque billet dû", soon: true },
       { text: "Un badge « Organisation vérifiée » sur vos pages publiques", soon: true },
     ],
@@ -301,7 +367,8 @@ const fr: LandingContent = {
       { question: "Le check-in fonctionne-t-il sans internet ?", answer: "Oui. La liste se synchronise à l'avance sur le téléphone du contrôleur ; les scans hors ligne se synchronisent au retour du réseau, et un billet ne passe jamais deux fois." },
       { question: "Jikū encaisse-t-il l'argent de mes clients ?", answer: "Non, jamais. Vos clients vous paient directement, sur vos numéros Mobile Money ou votre propre lien de paiement. Jikū ne facture que son propre service." },
       { question: "Combien coûte un événement ?", answer: "C'est gratuit jusqu'à 100 invités cumulés sur l'année. Au-delà, un montant unique par événement selon le nombre d'invités : 150 000 GNF jusqu'à 300, 300 000 GNF jusqu'à 600, 500 000 GNF jusqu'à 1 000, puis sur mesure." },
-      { question: "Et la prise de rendez-vous ?", answer: "C'est un abonnement par personne qui sert et par mois, avec une offre Solo gratuite. Aucune commission n'est prise sur vos clients." },
+      { question: "Et la prise de rendez-vous ?", answer: "C'est un abonnement par personne qui sert, et par mois : Solo est gratuit pour une personne, Teams coûte 100 000 GNF par personne. Les administrateurs et les contrôleurs sont gratuits, et aucune commission n'est prise sur vos clients." },
+      { question: "Et si je vends mes billets ?", answer: "Jikū prend 3 % du prix de chaque billet vendu, rien si rien n'est vendu. L'argent des ventes arrive directement chez vous ; la commission se règle d'avance, par tranche de 50 billets, et ce qui n'a pas servi est reporté." },
       { question: "Comment mon équipe accède-t-elle à Jikū ?", answer: "Chaque membre reçoit un lien personnel qui n'ouvre que ce que vous lui confiez. Pas de compte, pas d'application, et vous le révoquez à tout moment." },
       { question: "Mes messages partent-ils vraiment sur WhatsApp ?", answer: "Oui, via l'API officielle WhatsApp Business, un message individuel par personne. Pour les rappels de rendez-vous, le SMS prend le relais si WhatsApp échoue." },
       { question: "Que deviennent les données personnelles ?", answer: "Chaque invité peut demander la suppression de ses données depuis son lien. Après la période de conservation, les données sont anonymisées automatiquement." },
@@ -386,9 +453,23 @@ const en: LandingContent = {
     subtitle:
       "Jikū runs everything that goes through a ticket: invitations and entry for your events, bookings and the day line for your services. No app to install, even when the network drops.",
     primaryCta: "Create my free account",
-    secondaryCta: "See how it works",
+    secondaryCta: "Find my plan",
     ctaNote: "Free for up to 100 guests, no card required",
     uses: { events: "Events", services: "Services" },
+  },
+  replace: {
+    badge: "What you replace",
+    heading: "No more WhatsApp group, Excel file and paper list",
+    subheading: "Everything you patch together today, in one tool that holds up on the day.",
+    beforeLabel: "Today",
+    afterLabel: "With Jikū",
+    rows: [
+      { before: "Invitations copy-pasted one by one on WhatsApp", after: "A personal invitation per guest, sent in one click" },
+      { before: "A spreadsheet only one person keeps up to date", after: "Answers live, for the whole team" },
+      { before: "A paper list and photocopied tickets at the door", after: "A signed QR ticket, scanned even offline" },
+      { before: "A full waiting room and impatient clients", after: "A day line that calls each client on their phone" },
+      { before: "Payments written down in a notebook", after: "\"Paid\" in one tap, visible to everyone" },
+    ],
   },
   proof: [
     { value: 3, label: "channels to reach your clients: email, WhatsApp, SMS" },
@@ -404,10 +485,18 @@ const en: LandingContent = {
       { title: "Email and WhatsApp invitations", description: "Every guest gets a personal link, in your colors, on the channel they actually open. Failed sends are retried." },
       { title: "Answers tracked live", description: "Guests confirm or decline in one tap. You see who's coming and whom to remind." },
       { title: "Tamper-proof QR tickets", description: "Every confirmation produces a signed ticket that can't be guessed or reused, ready to scan." },
-      { title: "Access categories and paid tickets", description: "VIP, press, standard: each category has its price, color and capacity. A ticket that's due only gets in once paid.", soon: true },
+      { title: "Access categories and paid tickets", description: "VIP, press, standard: each category has its price, color and capacity. A ticket that's due only gets in once paid." },
       { title: "Check-in without a network", description: "The list syncs to the door staff's phone ahead of time. Network down? Keep scanning." },
       { title: "Quorum and attendance proof", description: "Live quorum count, a sign-in sheet and named attendance certificates, generated for you." },
     ],
+    visual: {
+      event: "Hope Gala",
+      date: "Saturday 12 December · 7:00 pm",
+      guest: "Awa Diallo",
+      category: "VIP",
+      status: "Paid",
+      scanned: "Entry confirmed at 7:04 pm",
+    },
   },
   services: {
     badge: "Services",
@@ -415,12 +504,20 @@ const en: LandingContent = {
     subheading: "Clinic, salon, agency or public office: your clients book, arrive and get called without a crowd.",
     items: [
       { title: "A booking link to share", description: "A short link and a QR code to display: clients pick a free slot, no account and no phone call." },
-      { title: "WhatsApp or SMS reminders", description: "A reminder before every appointment, on WhatsApp, by SMS, or by SMS when WhatsApp fails.", soon: true },
+      { title: "WhatsApp or SMS reminders", description: "A reminder before every appointment, on WhatsApp, by SMS, or by SMS when WhatsApp fails." },
       { title: "The day line on one screen", description: "Appointments and walk-ins in one list. \"Next\" calls the right person, in the right order." },
       { title: "\"It's your turn, counter 4\"", description: "The client called gets the message with their counter number: they wait outside, not in the hallway." },
       { title: "Clients take their own ticket", description: "They scan the QR code at the entrance, take a ticket and follow their place live on their phone.", soon: true },
       { title: "Paid before or after the service", description: "Each service has its price and its rule. Staff mark \"paid\" in one tap, cash or Mobile Money.", soon: true },
     ],
+    visual: {
+      title: "Today's line · Consultations",
+      serving: "In consultation",
+      next: "Next",
+      waiting: "waiting",
+      counter: "Room 2",
+      notice: "\"It's your turn, room 2\" sent on WhatsApp",
+    },
   },
   operators: {
     badge: "Your team",
@@ -433,14 +530,24 @@ const en: LandingContent = {
       { text: "Scanning, the day line and payments in one console", soon: true },
     ],
   },
-  payments: {
+  money: {
     badge: "Payments",
-    heading: "Your clients pay you directly",
-    text:
-      "Jikū never collects your clients' money. They pay you on your Mobile Money numbers or your own payment link, shown on their invitation or ticket.",
+    heading: "Your clients' money never goes through us",
+    subheading: "Two separate circuits, never mixed. You stay in control of what you collect; Jikū only charges for its own service.",
+    clients: {
+      title: "Your clients pay you",
+      text: "To your Mobile Money numbers or your own payment link, in cash at the desk or after the service.",
+      methods: ["Orange Money", "MTN MoMo", "Wave", "Cash", "Your link"],
+    },
+    platform: {
+      title: "You pay Jikū",
+      text: "Only what you use, amount shown before you pay, in one screen.",
+      items: ["Services subscription", "An event's tier", "3% of tickets sold"],
+    },
+    never: "Jikū never touches your clients' money",
     points: [
       { text: "No commission on your services" },
-      { text: "\"Paid\" recorded in one tap, cash or Mobile Money", soon: true },
+      { text: "\"Paid\" recorded in one tap, cash or Mobile Money" },
       { text: "Your numbers and link shown on every ticket that's due", soon: true },
       { text: "A \"Verified organization\" badge on your public pages", soon: true },
     ],
@@ -519,7 +626,8 @@ const en: LandingContent = {
       { question: "Does check-in work without internet?", answer: "Yes. The list syncs to the door staff's phone ahead of time; offline scans sync when the network returns, and a ticket never gets in twice." },
       { question: "Does Jikū collect my clients' money?", answer: "No, never. Your clients pay you directly, on your Mobile Money numbers or your own payment link. Jikū only charges for its own service." },
       { question: "How much does an event cost?", answer: "It's free up to 100 guests a year. Beyond that, one payment per event based on guest count: 150,000 GNF up to 300, 300,000 GNF up to 600, 500,000 GNF up to 1,000, then custom." },
-      { question: "What about appointments?", answer: "It's a subscription per person who serves, per month, with a free Solo plan. No commission is taken on your clients." },
+      { question: "What about appointments?", answer: "It's a subscription per person who serves, per month: Solo is free for one person, Teams costs 100,000 GNF per person. Administrators and door staff are free, and no commission is taken on your clients." },
+      { question: "And if I sell my tickets?", answer: "Jikū takes 3% of the price of each ticket sold, nothing if nothing sells. Sales money goes straight to you; the commission is paid ahead, by tranche of 50 tickets, and anything unused carries over." },
       { question: "How does my team access Jikū?", answer: "Each member gets a personal link that only opens what you entrust to them. No account, no app, and you can revoke it at any time." },
       { question: "Do my messages really go out on WhatsApp?", answer: "Yes, through the official WhatsApp Business API, one individual message per person. For appointment reminders, SMS takes over when WhatsApp fails." },
       { question: "What happens to personal data?", answer: "Every guest can request the deletion of their data from their link. After the retention period, data is anonymized automatically." },

@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { RotatingText } from "@/components/effects";
 import { TrackedLink } from "@/components/shared";
-import { ROUTES } from "@/lib/constants";
+import { Link } from "@/i18n/navigation";
+import { ROUTES, SEO_ROUTES } from "@/lib/constants";
 import type { LandingContent } from "./content";
 
 /**
@@ -45,7 +46,7 @@ export function HeroSection({ content }: { content: LandingContent["hero"] }) {
             </TrackedLink>
           </Button>
           <Button asChild size="lg" variant="outline" className="h-12 rounded-full px-8 text-base">
-            <a href="#how-it-works">{content.secondaryCta}</a>
+            <Link href={SEO_ROUTES.SIMULATOR}>{content.secondaryCta}</Link>
           </Button>
         </div>
         <p className="mt-4 text-sm text-muted-foreground">{content.ctaNote}</p>

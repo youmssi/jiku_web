@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { LANDING_CONTENT, LandingPage } from "@/components/modules/landing";
+import { siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 
 interface PageProps {
@@ -52,7 +53,5 @@ export default async function HomePage({ params }: Readonly<PageProps>) {
     ? locale
     : routing.defaultLocale;
   setRequestLocale(resolved);
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://jiku-web.vercel.app";
-  return <LandingPage locale={resolved} siteUrl={siteUrl} />;
+  return <LandingPage locale={resolved} siteUrl={siteUrl()} />;
 }

@@ -6,6 +6,7 @@ import { Geist, Geist_Mono, DM_Sans, Inter } from "next/font/google";
 import "../globals.css";
 import { cn } from "@/lib/utils";
 import { ServiceWorkerRegister, UmamiScript } from "@/components/shared";
+import { siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -26,9 +27,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://jiku-web.vercel.app",
-  ),
+  metadataBase: new URL(siteUrl()),
   title: {
     default: "Jikū: Event Invitations, Ticketing & Check-in Platform",
     template: "%s · Jikū",
