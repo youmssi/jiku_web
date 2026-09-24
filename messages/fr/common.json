@@ -20,7 +20,8 @@
     "tooLong": "Ce texte est trop long.",
     "wholeNumber": "Saisissez un nombre entier.",
     "positive": "Saisissez un nombre positif.",
-    "endBeforeStart": "La fin doit être après le début."
+    "endBeforeStart": "La fin doit être après le début.",
+    "contactRequired": "Indiquez un e-mail ou un numéro de téléphone."
   },
   "roles": {
     "OWNER": "Propriétaire",

@@ -4194,6 +4194,14 @@ export interface components {
             checkedInAt?: string | null;
             /** Format: uuid */
             ticketTypeId?: string | null;
+            /** @enum {string} */
+            rsvpStatus?: "PENDING" | "CONFIRMED" | "DECLINED" | "TRANSFERRED";
+            ticketCode?: string | null;
+            /** @enum {string|null} */
+            paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID" | null;
+            /** Format: int64 */
+            amountDueMinor?: number | null;
+            amountDueCurrency?: string | null;
         };
         SetGuestExclusionRequest: {
             excluded?: boolean;
