@@ -1,5 +1,5 @@
-import { OrganizerHome } from "@/components/modules/identity/server";
+import { TodayView } from "@/components/modules/dashboard/server";
 
 export default function DashboardPage() {
-  return <OrganizerHome />;
+  return <TodayView />;
 }

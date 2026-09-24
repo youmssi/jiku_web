@@ -1,0 +1,14 @@
+{
+  "create": {
+    "trigger": "New service",
+    "title": "New service",
+    "description": "A service is what you offer (a consultation, a haircut, a file drop-off). You then add its opening hours and resources.",
+    "name": "Service name",
+    "namePlaceholder": "Consultation",
+    "timezone": "Timezone",
+    "submit": "Create service",
+    "submitting": "Creating…",
+    "created": "Service created.",
+    "failed": "The service could not be created."
+  }
+}

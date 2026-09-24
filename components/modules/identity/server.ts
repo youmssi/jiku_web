@@ -4,4 +4,3 @@
 import "server-only";
 
 export { getOrganizerContext, type OrganizerContext } from "./organizer-context";
-export { OrganizerHome } from "./organizer-home";

@@ -1,0 +1,15 @@
+{
+  "create": {
+    "trigger": "New event",
+    "title": "Create an event",
+    "description": "Give it a name and a timezone: everything else is filled in on the event's own page.",
+    "name": "Event name",
+    "timezone": "Timezone",
+    "timezonePlaceholder": "Select a timezone",
+    "start": "Starts (optional)",
+    "submit": "Create draft",
+    "submitting": "Creating…",
+    "created": "Draft created.",
+    "failed": "The event could not be created."
+  }
+}

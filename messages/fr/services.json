@@ -1,0 +1,14 @@
+{
+  "create": {
+    "trigger": "Nouveau service",
+    "title": "Nouveau service",
+    "description": "Un service, c'est ce que vous proposez (une consultation, une coupe, un dépôt de dossier). Vous ajouterez ensuite ses horaires et ses ressources.",
+    "name": "Nom du service",
+    "namePlaceholder": "Consultation",
+    "timezone": "Fuseau horaire",
+    "submit": "Créer le service",
+    "submitting": "Création…",
+    "created": "Service créé.",
+    "failed": "Impossible de créer le service."
+  }
+}

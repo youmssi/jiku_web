@@ -1,0 +1,15 @@
+{
+  "create": {
+    "trigger": "Nouvel événement",
+    "title": "Créer un événement",
+    "description": "Donnez-lui un nom et un fuseau horaire : le reste se complète sur la page de l'événement.",
+    "name": "Nom de l'événement",
+    "timezone": "Fuseau horaire",
+    "timezonePlaceholder": "Choisissez un fuseau",
+    "start": "Début (facultatif)",
+    "submit": "Créer le brouillon",
+    "submitting": "Création…",
+    "created": "Brouillon créé.",
+    "failed": "Impossible de créer l'événement."
+  }
+}
