@@ -1,0 +1,53 @@
+{
+  "nav": {
+    "home": "Home",
+    "events": "Events",
+    "services": "Services",
+    "billing": "Billing",
+    "settings": "Settings",
+    "dashboard": "Dashboard",
+    "guests": "Guests",
+    "dayLine": "Day line",
+    "manage": "Manage",
+    "configuration": "Configuration"
+  },
+  "sidebar": {
+    "platform": "Platform",
+    "recentEvents": "Recent events",
+    "more": "More",
+    "openDashboard": "Open dashboard",
+    "openGuests": "Open guests"
+  },
+  "breadcrumb": {
+    "event": "Event",
+    "service": "Service"
+  },
+  "user": {
+    "account": "Account",
+    "billing": "Billing",
+    "signOut": "Sign out"
+  },
+  "organizations": {
+    "yours": "Your organizations",
+    "new": "New organization"
+  },
+  "palette": {
+    "open": "Jump to…",
+    "title": "Command palette",
+    "description": "Jump to any page",
+    "placeholder": "Jump to a page…",
+    "empty": "No matching page.",
+    "goTo": "Go to"
+  },
+  "home": {
+    "welcome": "Welcome, {name}",
+    "signedInAs": "You are {role} of {organization}.",
+    "help": "Need help at any time? The <strong>Help & support</strong> button in the bottom-right corner puts you in touch with us.",
+    "eventsTitle": "Events",
+    "eventsDescription": "Create events, configure them and invite your guests.",
+    "eventsCta": "Manage events",
+    "servicesTitle": "Services",
+    "servicesDescription": "Offer bookable appointment slots and serve your day line.",
+    "servicesCta": "Manage services"
+  }
+}

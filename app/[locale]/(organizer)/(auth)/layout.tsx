@@ -22,21 +22,21 @@ export default function AuthLayout({
 }
 
 async function AuthHeader() {
-  const t = await getTranslations("auth");
+  const t = await getTranslations();
   return (
     <header className="flex items-center justify-between px-4 py-3 sm:px-6">
       <Link
         href={ROUTES.HOME}
         className="font-heading text-lg font-semibold tracking-tight"
       >
-        {t("brand")}
+        {t("common.brand")}
       </Link>
       <Link
         href={ROUTES.HOME}
         className="flex items-center gap-1.5 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
       >
         <ArrowLeft className="size-4" aria-hidden />
-        {t("backToHome")}
+        {t("auth.layout.backToHome")}
       </Link>
     </header>
   );

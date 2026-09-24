@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { Membership } from "@/components/modules/identity/schema";
-import { roleLabel } from "./account-view";
+import { useRoleLabel } from "@/components/shared";
 import { UsernameForm } from "./username-form";
 
 /**
@@ -31,6 +31,7 @@ export function OrganizationView({
   username: string | null;
   memberships: Membership[];
 }) {
+  const roleLabel = useRoleLabel();
   return (
     <div className="flex flex-col gap-4">
       {!isManager ? (
@@ -76,7 +77,7 @@ export function OrganizationView({
               <li key={membership.tenantId} className="flex items-center justify-between gap-4 py-2">
                 <span className="font-medium">{membership.tenantName}</span>
                 <span className="text-muted-foreground">
-                  {roleLabel(membershipRoleToken(membership.role))}
+                  {roleLabel(membership.role)}
                 </span>
               </li>
             ))}
@@ -92,9 +93,4 @@ export function OrganizationView({
       {isManager ? <UsernameForm initial={username} /> : null}
     </div>
   );
-}
-
-/** Membership roles arrive as OWNER / ADMIN / MEMBER; token roles are prefixed. */
-function membershipRoleToken(role: string): string {
-  return role.startsWith("ORGANIZER_") ? role : `ORGANIZER_${role}`;
 }

@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/sidebar"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { UnfoldMoreIcon, CheckmarkBadgeIcon, CreditCardIcon, LogoutIcon } from "@hugeicons/core-free-icons"
+import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 import { logoutAction } from "@/components/modules/identity"
 import { organizerInitials } from "@/components/shared/organizer-nav"
@@ -38,6 +39,7 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
   const fallback = organizerInitials(user.name)
+  const t = useTranslations("shell.user")
 
   return (
     <SidebarMenu>
@@ -82,13 +84,13 @@ export function NavUser({
               <DropdownMenuItem asChild>
                 <Link href={ROUTES.SETTINGS}>
                   <HugeiconsIcon icon={CheckmarkBadgeIcon} strokeWidth={2} />
-                  Account
+                  {t("account")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={ROUTES.BILLING}>
                   <HugeiconsIcon icon={CreditCardIcon} strokeWidth={2} />
-                  Billing
+                  {t("billing")}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -97,7 +99,7 @@ export function NavUser({
               <DropdownMenuItem asChild>
                 <button type="submit" className="w-full">
                   <HugeiconsIcon icon={LogoutIcon} strokeWidth={2} />
-                  Log out
+                  {t("signOut")}
                 </button>
               </DropdownMenuItem>
             </form>

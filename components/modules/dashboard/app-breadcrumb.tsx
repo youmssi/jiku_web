@@ -9,6 +9,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { getEventNameAction } from "./dashboard.service";
 // Deep import, not the module barrel: the barrel also re-exports server-only
@@ -40,6 +41,7 @@ interface Crumb {
  */
 export function AppBreadcrumb({ brandName }: { brandName: string }) {
   const pathname = usePathname();
+  const t = useTranslations("shell");
   const eventId = currentEventId(pathname);
   const serviceId = currentServiceId(pathname);
   const active = ORGANIZER_NAV_ITEMS.find((item) => item.match(pathname));
@@ -69,14 +71,15 @@ export function AppBreadcrumb({ brandName }: { brandName: string }) {
 
   const crumbs: Crumb[] = [];
   if (active) {
-    crumbs.push({ label: active.label, href: active.href });
+    crumbs.push({ label: t(`nav.${active.labelKey}`), href: active.href });
   }
   if (eventId) {
-    crumbs.push({ label: itemName ?? "Event", href: eventDashboardRoute(eventId) });
+    crumbs.push({ label: itemName ?? t("breadcrumb.event"), href: eventDashboardRoute(eventId) });
   } else if (serviceId) {
-    crumbs.push({ label: itemName ?? "Service", href: serviceManageRoute(serviceId) });
+    crumbs.push({ label: itemName ?? t("breadcrumb.service"), href: serviceManageRoute(serviceId) });
   }
-  const tabLabel = eventSub?.label ?? serviceSub?.label ?? null;
+  const tabKey = eventSub?.labelKey ?? serviceSub?.labelKey ?? null;
+  const tabLabel = tabKey ? t(`nav.${tabKey}`) : null;
   if (tabLabel) {
     crumbs.push({ label: tabLabel, href: pathname });
   }

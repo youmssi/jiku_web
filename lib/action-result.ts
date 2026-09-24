@@ -1,8 +1,10 @@
+import { getTranslations } from "next-intl/server";
 import { captureException } from "@/lib/error-tracking";
 
 /**
  * Uniform outcome of a Server Action: data on success, or a user-ready message on
- * failure. Components branch on `ok` and never inspect HTTP statuses themselves.
+ * failure, in the visitor's locale. Components branch on `ok` and never inspect
+ * HTTP statuses themselves. The helpers below run on the server only.
  */
 export type ActionResult<T = null> =
   | { ok: true; data: T }
@@ -10,8 +12,6 @@ export type ActionResult<T = null> =
 
 export const ok = <T>(data: T): ActionResult<T> => ({ ok: true, data });
 export const fail = (error: string): ActionResult<never> => ({ ok: false, error });
-
-const GENERIC = "Something went wrong. Please try again.";
 
 type StatusMessages = Partial<Record<number, string>> & { default?: string };
 
@@ -29,7 +29,8 @@ export async function fromResponse<T>(
     return { ok: true, data: (await response.json()) as T };
   }
   reportApiError(response);
-  return { ok: false, error: messages[response.status] ?? messages.default ?? GENERIC };
+  const message = messages[response.status] ?? messages.default;
+  return { ok: false, error: message ?? (await getTranslations("common.errors"))("generic") };
 }
 
 /**

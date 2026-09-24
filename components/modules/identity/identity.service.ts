@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { localeRedirect } from "@/i18n/redirect";
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
@@ -31,9 +32,10 @@ export async function registerAction(
   input: RegisterInput,
   next?: string,
 ): Promise<ActionResult> {
+  const t = await getTranslations();
   const parsed = registerSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Please check the form and try again.");
+    return fail(t("common.errors.checkForm"));
   }
   const response = await publicFetch("/auth/register", {
     method: "POST",
@@ -44,8 +46,8 @@ export async function registerAction(
     reportApiError(response);
     return fail(
       response.status === 409
-        ? "An account with this email already exists."
-        : "We couldn't create your account. Please try again.",
+        ? t("auth.register.emailTaken")
+        : t("auth.register.failedRetry"),
     );
   }
   const tokens = (await response.json()) as AuthTokens;
@@ -55,9 +57,10 @@ export async function registerAction(
 }
 
 export async function loginAction(input: LoginInput, next?: string): Promise<ActionResult> {
+  const t = await getTranslations();
   const parsed = loginSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Please check the form and try again.");
+    return fail(t("common.errors.checkForm"));
   }
   const response = await publicFetch("/auth/login", {
     method: "POST",
@@ -72,12 +75,12 @@ export async function loginAction(input: LoginInput, next?: string): Promise<Act
       // Google-only accounts get the backend's pointer to the right door
       // (ProblemDetail carries the reason in `detail`).
       const body = (await response.json().catch(() => null)) as { detail?: string } | null;
-      return fail(body?.detail ?? "Invalid email or password.");
+      return fail(body?.detail ?? t("auth.login.invalidCredentials"));
     }
     return fail(
       response.status === 429
-        ? "Too many attempts. Please wait a moment and try again."
-        : "We couldn't sign you in. Please try again.",
+        ? t("common.errors.tooManyAttempts")
+        : t("auth.login.failedRetry"),
     );
   }
   const tokens = (await response.json()) as AuthTokens;
@@ -88,6 +91,7 @@ export async function loginAction(input: LoginInput, next?: string): Promise<Act
 
 /** Exchanges the Google Identity Services credential for a session (JIKU-51). */
 export async function googleLoginAction(idToken: string, next?: string): Promise<ActionResult> {
+  const t = await getTranslations();
   let response: Response;
   try {
     response = await publicFetch("/auth/google", {
@@ -99,7 +103,7 @@ export async function googleLoginAction(idToken: string, next?: string): Promise
     // The backend aborts a slow request after 10s (e.g. a cold instance). A
     // thrown fetch must become a visible message, not a silently-swallowed
     // rejection that leaves the visitor on the login page with no feedback.
-    return fail("We couldn't reach the sign-in service. Please try again.");
+    return fail(t("common.errors.unreachable"));
   }
   if (!response.ok) {
     if (response.status !== 401) {
@@ -107,8 +111,8 @@ export async function googleLoginAction(idToken: string, next?: string): Promise
     }
     return fail(
       response.status === 501
-        ? "Google sign-in isn't available right now."
-        : "We couldn't sign you in with Google. Please try again.",
+        ? t("auth.google.unavailable")
+        : t("auth.google.failed"),
     );
   }
   const tokens = (await response.json()) as AuthTokens;
@@ -117,9 +121,10 @@ export async function googleLoginAction(idToken: string, next?: string): Promise
 }
 
 export async function forgotPasswordAction(input: ForgotPasswordInput): Promise<ActionResult> {
+  const t = await getTranslations();
   const parsed = forgotPasswordSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Enter a valid email address.");
+    return fail(t("common.validation.email"));
   }
   const response = await publicFetch("/auth/forgot-password", {
     method: "POST",
@@ -130,8 +135,8 @@ export async function forgotPasswordAction(input: ForgotPasswordInput): Promise<
     reportApiError(response);
     return fail(
       response.status === 429
-        ? "Too many attempts. Please wait a moment and try again."
-        : "Something went wrong. Please try again.",
+        ? t("common.errors.tooManyAttempts")
+        : t("common.errors.generic"),
     );
   }
   // Deliberately identical whether or not the address has an account.
@@ -142,9 +147,10 @@ export async function resetPasswordAction(
   token: string,
   input: ResetPasswordInput,
 ): Promise<ActionResult> {
+  const t = await getTranslations();
   const parsed = resetPasswordSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Password must be at least 8 characters.");
+    return fail(t("common.validation.passwordMin"));
   }
   const response = await publicFetch("/auth/reset-password", {
     method: "POST",
@@ -157,14 +163,15 @@ export async function resetPasswordAction(
     }
     return fail(
       response.status === 400
-        ? "This link is invalid or has expired. Request a new one."
-        : "Something went wrong. Please try again.",
+        ? t("auth.reset.invalidLink")
+        : t("common.errors.generic"),
     );
   }
   return ok(null);
 }
 
 export async function verifyEmailAction(token: string): Promise<ActionResult> {
+  const t = await getTranslations();
   const response = await publicFetch("/auth/verify-email", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -176,27 +183,29 @@ export async function verifyEmailAction(token: string): Promise<ActionResult> {
     }
     return fail(
       response.status === 400
-        ? "This link is invalid or has expired. Request a new one from the app."
-        : "Something went wrong. Please try again.",
+        ? t("auth.verify.invalidLink")
+        : t("common.errors.generic"),
     );
   }
   return ok(null);
 }
 
 export async function resendVerificationAction(): Promise<ActionResult> {
+  const t = await getTranslations();
   const response = await serverFetch("/auth/verify-email/resend", { method: "POST" });
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't send the email. Please try again.");
+    return fail(t("auth.verify.resendFailed"));
   }
   return ok(null);
 }
 
 /** Creates the caller's organization; the returned tokens are already bound to it. */
 export async function createOrgAction(input: CreateOrgInput): Promise<ActionResult> {
+  const t = await getTranslations();
   const parsed = createOrgSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Organization name is required.");
+    return fail(t("common.errors.checkForm"));
   }
   const response = await serverFetch("/orgs", {
     method: "POST",
@@ -209,8 +218,8 @@ export async function createOrgAction(input: CreateOrgInput): Promise<ActionResu
     }
     return fail(
       response.status === 403
-        ? "Verify your email address first, check your inbox for the confirmation link."
-        : "We couldn't create the organization. Please try again.",
+        ? t("auth.onboarding.verifyFirst")
+        : t("auth.onboarding.failed"),
     );
   }
   const tokens = (await response.json()) as AuthTokens;
@@ -220,6 +229,7 @@ export async function createOrgAction(input: CreateOrgInput): Promise<ActionResu
 
 /** Rebinds the session to another organization the user belongs to (JIKU-48). */
 export async function switchOrgAction(tenantId: string): Promise<ActionResult> {
+  const t = await getTranslations();
   const response = await serverFetch("/auth/switch-org", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -227,7 +237,7 @@ export async function switchOrgAction(tenantId: string): Promise<ActionResult> {
   });
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't switch organizations. Please try again.");
+    return fail(t("auth.switchOrgFailed"));
   }
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
@@ -236,6 +246,7 @@ export async function switchOrgAction(tenantId: string): Promise<ActionResult> {
 
 /** Accepts a member invitation; tokens come back bound to the joined org (JIKU-50). */
 export async function acceptInvitationAction(token: string): Promise<ActionResult> {
+  const t = await getTranslations();
   const response = await serverFetch("/auth/invitations/accept", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -247,12 +258,12 @@ export async function acceptInvitationAction(token: string): Promise<ActionResul
     }
     return fail(
       response.status === 400
-        ? "This invitation is invalid or has expired. Ask for a new one."
+        ? t("auth.invitation.invalid")
         : response.status === 403
-          ? "This invitation was sent to a different email address. Sign in with the invited account."
+          ? t("auth.invitation.otherEmail")
           : response.status === 409
-            ? "You are already a member of this organization."
-            : "We couldn't accept the invitation. Please try again.",
+            ? t("auth.invitation.alreadyMember")
+            : t("auth.invitation.failedRetry"),
     );
   }
   const tokens = (await response.json()) as AuthTokens;

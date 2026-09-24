@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { googleLoginAction } from "@/components/modules/identity/identity.service";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -30,6 +31,7 @@ declare global {
  * exchanged server-side for the platform's own session.
  */
 export function GoogleButton({ next }: { next?: string }) {
+  const t = useTranslations();
   const container = useRef<HTMLDivElement>(null);
   const initialized = useRef(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +66,7 @@ export function GoogleButton({ next }: { next?: string }) {
           .catch(() => {
             // The action rejects on a backend timeout or network error — surface
             // it instead of leaving the visitor staring at an unchanged form.
-            setError("We couldn't reach the sign-in service. Please try again.");
+            setError(t("common.errors.unreachable"));
             setPending(false);
           });
       },
@@ -76,7 +78,7 @@ export function GoogleButton({ next }: { next?: string }) {
       // button never overflows a narrow phone, which is most of this market.
       width: Math.min(320, Math.round(container.current.getBoundingClientRect().width) || 320),
     });
-  }, [next]);
+  }, [next, t]);
 
   // `Script.onLoad` only fires the first time the script is fetched. Navigating
   // between /login and /register client-side reuses the already-loaded script,
@@ -95,11 +97,11 @@ export function GoogleButton({ next }: { next?: string }) {
     <div className="flex flex-col items-center gap-2">
       <div className="relative flex w-full items-center gap-3 text-xs text-muted-foreground">
         <span className="h-px flex-1 bg-border" />
-        or
+        {t("auth.or")}
         <span className="h-px flex-1 bg-border" />
       </div>
       <div ref={container} className={pending ? "pointer-events-none opacity-60" : undefined} />
-      {pending ? <p className="text-sm text-muted-foreground">Signing in…</p> : null}
+      {pending ? <p className="text-sm text-muted-foreground">{t("auth.google.signingIn")}</p> : null}
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
       <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" onLoad={onLoad} />
     </div>

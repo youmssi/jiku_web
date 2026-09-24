@@ -39,5 +39,8 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Translation catalogs
+        run: pnpm i18n:check
+
       - name: Build
         run: pnpm build

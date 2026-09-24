@@ -6,6 +6,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import { InviteMemberDialog } from "./invite-member-dialog";
+import { useTranslations } from "next-intl";
+import { organizerRole } from "@/components/shared/organizer-nav";
 import { buildMembersColumns } from "./members-columns";
 import type { InvitationView, MemberRow, MemberView } from "./schema";
 
@@ -33,7 +35,15 @@ export function MembersView({ members, invitations, currentUserId }: MembersView
     [members, invitations],
   );
 
-  const columns = useMemo(() => buildMembersColumns(currentUserId), [currentUserId]);
+  const tRoles = useTranslations("common.roles");
+  const columns = useMemo(
+    () =>
+      buildMembersColumns(currentUserId, (role) => {
+        const key = organizerRole(role);
+        return key ? tRoles(key) : role;
+      }),
+    [currentUserId, tRoles],
+  );
 
   return (
     <div className="flex flex-col gap-4">

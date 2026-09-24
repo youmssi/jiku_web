@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { StateMessage } from "@/components/shared";
 import { captureException } from "@/lib/error-tracking";
@@ -16,15 +17,17 @@ export default function RouteError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations("common");
+
   useEffect(() => {
     captureException(error, { source: "route-error-boundary", digest: error.digest });
   }, [error]);
 
   return (
     <StateMessage
-      title="Something went wrong"
-      description="An unexpected error occurred. You can try again."
-      action={<Button onClick={reset}>Try again</Button>}
+      title={t("errorPage.title")}
+      description={t("errorPage.description")}
+      action={<Button onClick={reset}>{t("actions.tryAgain")}</Button>}
     />
   );
 }
