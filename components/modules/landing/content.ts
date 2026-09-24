@@ -373,9 +373,9 @@ const fr: LandingContent = {
           "Oui. La prise de rendez-vous est un abonnement par utilisateur et par mois (un outil de réservation pour votre activité), un modèle distinct du prix par événement. Cette offre n'est pas encore ouverte : les tarifs indicatifs (Solo gratuit, Teams, Organisation, Entreprise) sont visibles sur la page Simulateur, et personne ne sera prélevé avant l'ouverture. En attendant, l'organisation d'événements reste payée par événement, sans aucun abonnement exigé.",
       },
       {
-        question: "Que devient mon acompte si je réserve une date ?",
+        question: "Quand est-ce que je paie mon événement ?",
         answer:
-          "Votre acompte (30 %) est déduit du prix final : si vous invitez finalement plus d'invités que prévu et passez au palier supérieur, vous ne payez que la différence. Vous n'êtes jamais facturé deux fois pour les mêmes invités. En cas d'annulation, le remboursement est de 100 % jusqu'à 60 jours avant l'événement, de 50 % entre 30 et 60 jours, et nul ensuite. Aucune carte bancaire n'est demandée.",
+          "Au moment d'activer le palier qui correspond à votre nombre d'invités, en une seule fois, par Mobile Money ou par carte. Jusqu'à 100 invités, c'est gratuit. Vous n'êtes jamais facturé deux fois pour les mêmes invités.",
       },
     ],
   },
@@ -686,9 +686,9 @@ const en: LandingContent = {
           "Yes. Appointments are a per-user monthly subscription (a booking tool for your business), a different model from the per-event price. This offer is not open yet: the indicative prices (Solo free, Teams, Organisation, Enterprise) are shown on the Simulator page, and no one is charged before launch. In the meantime, running events stays pay-per-event, with no subscription required.",
       },
       {
-        question: "What happens to my deposit if I reserve a date?",
+        question: "When do I pay for my event?",
         answer:
-          "Your deposit (30%) is deducted from the final price: if you end up inviting more guests than expected and move up a tier, you only pay the difference. You are never billed twice for the same guests. If you cancel, the refund is 100% up to 60 days before the event, 50% between 30 and 60 days, and nothing after. No card is ever requested.",
+          "When you activate the tier that matches your guest count, in one go, by Mobile Money or card. Up to 100 guests, it is free. You are never billed twice for the same guests.",
       },
     ],
   },

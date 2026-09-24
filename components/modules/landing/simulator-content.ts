@@ -52,8 +52,7 @@ export interface SimulatorContent {
       freeNote: string;
       tierLabel: string;
       totalLabel: string;
-      depositLabel: string;
-      depositNote: string;
+      paymentNote: string;
       customNote: string;
       perGuestNote: string;
     };
@@ -101,7 +100,7 @@ const fr: SimulatorContent = {
   usdPrefix: "≈ US$",
   guarantee: {
     heading: "Votre argent est protégé",
-    text: "Votre acompte est déduit du prix final : vous n'êtes jamais facturé deux fois pour les mêmes invités. Annulation : remboursement de 100 % jusqu'à 60 jours avant l'événement, 50 % entre 30 et 60 jours, rien ensuite. Aucune carte bancaire n'est demandée.",
+    text: "Vous payez le palier une seule fois, au moment de l'activer, par Mobile Money ou par carte. Vous n'êtes jamais facturé deux fois pour les mêmes invités, et aucun abonnement n'est exigé pour un événement.",
   },
   event: {
     input: {
@@ -113,8 +112,7 @@ const fr: SimulatorContent = {
       freeNote: "Jusqu'à 100 invités cumulés sur votre compte, sur une année glissante.",
       tierLabel: "Palier",
       totalLabel: "Prix de l'événement",
-      depositLabel: "Acompte pour réserver (30 %)",
-      depositNote: "Le solde se règle 7 jours avant l'événement.",
+      paymentNote: "Payé en une seule fois, au moment d'activer le palier sur votre événement.",
       customNote: "Tarif estimé selon la formule sur mesure. L'équipe commerciale confirme le montant exact.",
       perGuestNote: "Au-delà de 1 000 invités, tarif sur mesure : 0,05 $ par invité, plus 15 $ de mise en place.",
     },
@@ -123,9 +121,9 @@ const fr: SimulatorContent = {
       note: "Toutes les fonctionnalités sont incluses à chaque palier. Seule la taille change.",
     },
     cta: {
-      heading: "Prêt à réserver votre date ?",
-      text: "Bloquez votre date avec 30 % d'acompte. Le reste se règle tranquillement avant le jour J.",
-      primary: "Réserver ma date",
+      heading: "Prêt à lancer votre événement ?",
+      text: "Créez votre compte gratuitement. Vous ne payez le palier qu'au moment de l'activer, en une seule fois.",
+      primary: "Créer mon événement",
       secondary: "Voir les cas d'usage",
       quoteCta: "Obtenir un devis",
       quoteSubjectPrefix: "Devis Jikū - événement de",
@@ -232,7 +230,7 @@ const en: SimulatorContent = {
   usdPrefix: "≈ US$",
   guarantee: {
     heading: "Your money is protected",
-    text: "Your deposit is deducted from the final price: you are never billed twice for the same guests. Cancellation: 100% refund up to 60 days before the event, 50% between 30 and 60 days, nothing after. No card is ever requested.",
+    text: "You pay for a tier once, when you activate it, by Mobile Money or card. You are never billed twice for the same guests, and no subscription is required for an event.",
   },
   event: {
     input: {
@@ -244,8 +242,7 @@ const en: SimulatorContent = {
       freeNote: "Up to 100 guests in total on your account, over a rolling year.",
       tierLabel: "Tier",
       totalLabel: "Event price",
-      depositLabel: "Deposit to reserve (30%)",
-      depositNote: "The balance is due 7 days before the event.",
+      paymentNote: "Paid in one go, when you activate the tier on your event.",
       customNote: "Estimated from the custom formula. The sales team confirms the exact amount.",
       perGuestNote: "Beyond 1,000 guests, custom pricing: $0.05 per guest, plus $15 setup.",
     },
@@ -254,9 +251,9 @@ const en: SimulatorContent = {
       note: "Every feature is included at every tier. Only the size changes.",
     },
     cta: {
-      heading: "Ready to reserve your date?",
-      text: "Lock your date with a 30% deposit. The balance is settled comfortably before the big day.",
-      primary: "Reserve my date",
+      heading: "Ready to launch your event?",
+      text: "Create your account for free. You only pay for the tier when you activate it, in one go.",
+      primary: "Create my event",
       secondary: "See use cases",
       quoteCta: "Get a quote",
       quoteSubjectPrefix: "Jikū quote - event of",

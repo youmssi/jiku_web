@@ -168,7 +168,7 @@ const fr: UseCasesPageContent = {
       note: "À venir",
     },
     guarantee:
-      "Votre acompte est toujours déduit du prix final. Vous n'êtes jamais facturé deux fois pour les mêmes invités ou rappels.",
+      "Vous payez le palier une seule fois, au moment de l'activer. Vous n'êtes jamais facturé deux fois pour les mêmes invités ou rappels.",
   },
   cta: {
     heading: "Votre événement mérite une porte sereine.",
@@ -301,7 +301,7 @@ const en: UseCasesPageContent = {
       note: "Coming soon",
     },
     guarantee:
-      "Your deposit is always deducted from the final price. You are never billed twice for the same guests or reminders.",
+      "You pay for a tier once, when you activate it. You are never billed twice for the same guests or reminders.",
   },
   cta: {
     heading: "Your event deserves a calm door.",

@@ -28,7 +28,6 @@ export const PRICING = {
     setupFeeUsdCents: 1_500,
     usdToGnfRate: 8_760,
   },
-  depositRate: 0.3,
 } as const;
 
 export const CUSTOM_TIER = "CUSTOM";
@@ -37,8 +36,6 @@ export const FREE_TIER = "FREE";
 export interface Quote {
   tier: string;
   totalMinor: number;
-  depositMinor: number;
-  balanceMinor: number;
   isCustom: boolean;
 }
 
@@ -56,31 +53,16 @@ export function customPriceGnf(guestCount: number): number {
  */
 export function quoteForGuests(guestCount: number): Quote {
   if (!Number.isFinite(guestCount) || guestCount <= 0) {
-    return { tier: "", totalMinor: 0, depositMinor: 0, balanceMinor: 0, isCustom: false };
+    return { tier: "", totalMinor: 0, isCustom: false };
   }
   if (guestCount <= PRICING.freeTierGuests) {
-    return { tier: FREE_TIER, totalMinor: 0, depositMinor: 0, balanceMinor: 0, isCustom: false };
+    return { tier: FREE_TIER, totalMinor: 0, isCustom: false };
   }
   const fixed = PRICING.tiers.find((tier) => guestCount <= tier.maxGuests);
   if (fixed) {
-    const totalMinor = fixed.priceMinor;
-    const depositMinor = Math.round(totalMinor * PRICING.depositRate);
-    return {
-      tier: fixed.name,
-      totalMinor,
-      depositMinor,
-      balanceMinor: totalMinor - depositMinor,
-      isCustom: false,
-    };
+    return { tier: fixed.name, totalMinor: fixed.priceMinor, isCustom: false };
   }
-  const totalMinor = customPriceGnf(guestCount);
-  return {
-    tier: CUSTOM_TIER,
-    totalMinor,
-    depositMinor: 0,
-    balanceMinor: totalMinor,
-    isCustom: true,
-  };
+  return { tier: CUSTOM_TIER, totalMinor: customPriceGnf(guestCount), isCustom: true };
 }
 
 /**

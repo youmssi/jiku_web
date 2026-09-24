@@ -10,34 +10,6 @@ export const EVENT_TYPE_LABELS: Record<(typeof EVENT_TYPES)[number], string> = {
   AUTRE: "Autre",
 };
 
-export const reservationSchema = z.object({
-  customerName: z.string().trim().min(1, "Indiquez votre nom"),
-  customerPhone: z.string().trim().min(6, "Indiquez un numéro valide"),
-  customerEmail: z.string().trim().email("Indiquez un email valide"),
-  eventType: z.enum(EVENT_TYPES),
-  eventDate: z.string().min(1, "Choisissez une date"),
-  guestCountEstimate: z.coerce.number().int().positive("Indiquez le nombre d'invités"),
-});
-
-export type ReservationInput = z.infer<typeof reservationSchema>;
-
-/** Live tier/deposit preview (GET /bookings/quote) — no row written. */
-export interface BookingQuote {
-  tier: string;
-  currency: string;
-  totalAmountMinor: number;
-  depositAmountMinor: number;
-  balanceAmountMinor: number;
-}
-
-/** Response of POST /bookings. */
-export interface BookingCreationResult extends BookingQuote {
-  id: string;
-  accessToken: string;
-  balanceDueDate: string;
-  status: string;
-}
-
 /** Response of GET /bookings/{id}?token= — the public status page. */
 export interface BookingStatusView {
   id: string;
