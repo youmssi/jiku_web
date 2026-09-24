@@ -41,7 +41,7 @@ export function AdminLoginForm() {
     setFormError(null);
     const result = await adminLoginAction(values.email, values.password);
     // A successful login redirects; only a failure returns.
-    if (result?.error) {
+    if (!result.ok) {
       setFormError(result.error);
       toast.error(result.error);
     }

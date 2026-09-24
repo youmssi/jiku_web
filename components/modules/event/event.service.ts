@@ -1,7 +1,7 @@
 "use server";
 
 import { serverFetch } from "@/lib/api-server";
-import { type ActionResult, fail, reportApiError } from "@/lib/action-result";
+import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 import { localInputToUtc } from "@/lib/datetime";
 import {
   eventFormSchema,
@@ -45,7 +45,7 @@ export async function createDraftAction(
     return fail("We couldn't save the draft. Please try again.");
   }
   const event = (await response.json()) as { id: string };
-  return { ok: true, data: event };
+  return ok(event);
 }
 
 export async function updateDraftAction(
@@ -68,7 +68,7 @@ export async function updateDraftAction(
     reportApiError(response);
     return fail("We couldn't save your changes. Please try again.");
   }
-  return { ok: true, data: null };
+  return ok(null);
 }
 
 export async function publishEventAction(id: string): Promise<ActionResult> {
@@ -80,7 +80,7 @@ export async function publishEventAction(id: string): Promise<ActionResult> {
     reportApiError(response);
     return fail("We couldn't publish the event. Please try again.");
   }
-  return { ok: true, data: null };
+  return ok(null);
 }
 
 export async function cancelEventAction(
@@ -98,7 +98,7 @@ export async function cancelEventAction(
   if (!response.ok) {
     return fail("We couldn't cancel the event. Please try again.");
   }
-  return { ok: true, data: null };
+  return ok(null);
 }
 
 export async function deleteEventAction(id: string): Promise<ActionResult> {
@@ -111,7 +111,7 @@ export async function deleteEventAction(id: string): Promise<ActionResult> {
     reportApiError(response);
     return fail("We couldn't delete the event. Please try again.");
   }
-  return { ok: true, data: null };
+  return ok(null);
 }
 
 /**
@@ -126,7 +126,7 @@ export async function saveQuorumAction(
     denominator: number | null;
     absolute: number | null;
   },
-): Promise<{ ok: true } | { ok: false; error: string }> {
+): Promise<ActionResult> {
   const response = await serverFetch(`/events/${eventId}/quorum`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -139,7 +139,7 @@ export async function saveQuorumAction(
     reportApiError(response);
     return fail("Le quorum n'a pas pu être enregistré. Réessayez.");
   }
-  return { ok: true };
+  return ok(null);
 }
 
 /**
@@ -191,5 +191,5 @@ export async function deleteTicketTypeAction(
     reportApiError(response);
     return fail("La catégorie n'a pas pu être supprimée. Réessayez.");
   }
-  return { ok: true, data: null };
+  return ok(null);
 }

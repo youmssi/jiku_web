@@ -67,7 +67,7 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
   function onSubmit(values: AdminBillingSettingsFormValues) {
     startTransition(async () => {
       const result = await updateBillingSettingsAction(values);
-      if (result.error) {
+      if (!result.ok) {
         toast.error(result.error);
         return;
       }

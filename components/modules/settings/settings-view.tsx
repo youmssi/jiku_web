@@ -10,13 +10,13 @@ import { OrganizationView } from "@/components/modules/settings/organization-vie
 import { PersonalisationView } from "@/components/modules/settings/personalisation-view";
 import { ProviderSettingsView } from "@/components/modules/settings/provider-settings-view";
 import {
-  fetchBrandingAction,
-  fetchLegalIdentityAction,
-  fetchOrgProfileAction,
-  fetchProviderSettingsAction,
-  fetchTemplatesAction,
-  fetchVocabularyAction,
-} from "@/components/modules/settings/settings.service";
+  loadBranding,
+  loadLegalIdentity,
+  loadOrgUsername,
+  loadProviderSettings,
+  loadTemplates,
+  loadVocabulary,
+} from "@/components/modules/settings/settings.queries";
 import type {
   BrandingResponse,
   LegalIdentityResponse,
@@ -60,20 +60,20 @@ const EMPTY_LEGAL_IDENTITY: LegalIdentityResponse = {
  * blocking the others.
  */
 async function loadManagerSettings() {
-  const [profile, branding, providers, legalIdentity, members, vocabulary, templates] = await Promise.all([
-    fetchOrgProfileAction(),
-    fetchBrandingAction(),
-    fetchProviderSettingsAction(),
-    fetchLegalIdentityAction(),
+  const [username, branding, providers, legalIdentity, members, vocabulary, templates] = await Promise.all([
+    loadOrgUsername(),
+    loadBranding(),
+    loadProviderSettings(),
+    loadLegalIdentity(),
     fetchMembersAction(),
-    fetchVocabularyAction(),
-    fetchTemplatesAction(),
+    loadVocabulary(),
+    loadTemplates(),
   ]);
   return {
-    username: profile?.username ?? null,
-    branding: branding.ok ? branding.data : DEFAULT_BRANDING,
-    providers: providers.ok ? providers.data : UNCONFIGURED_PROVIDERS,
-    legalIdentity: legalIdentity.ok ? legalIdentity.data : EMPTY_LEGAL_IDENTITY,
+    username,
+    branding: branding ?? DEFAULT_BRANDING,
+    providers: providers ?? UNCONFIGURED_PROVIDERS,
+    legalIdentity: legalIdentity ?? EMPTY_LEGAL_IDENTITY,
     team: members.ok ? members.data : null,
     vocabulary,
     templates,

@@ -231,7 +231,7 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
       currency: amount ? currency : null,
       notes: values.notes.trim() || null,
     });
-    if (result.error) {
+    if (!result.ok) {
       toast.error(result.error);
       return;
     }

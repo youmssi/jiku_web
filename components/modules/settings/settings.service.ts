@@ -1,10 +1,9 @@
 "use server";
 
 import { serverFetch } from "@/lib/api-server";
-import { fail, reportApiError } from "@/lib/action-result";
+import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import type {
-  BrandingResponse,
   ProviderSettingsResponse,
   UpdateBrandingRequest,
   UpdateEmailProviderRequest,
@@ -12,10 +11,8 @@ import type {
   TestSendResponse,
   LegalIdentityResponse,
   UpdateLegalIdentityRequest,
-  VocabularyEntry,
   VocabularyUpdateRequest,
   TemplateDetail,
-  TemplateSummary,
   TemplatePreviewRequest,
   TemplatePreviewResponse,
   TemplateUpdateRequest,
@@ -23,17 +20,9 @@ import type {
 
 // ─── Branding ───────────────────────────────────────────────────────────────
 
-export async function fetchBrandingAction(): Promise<
-  { ok: true; data: BrandingResponse } | { ok: false }
-> {
-  const response = await serverFetch("/branding");
-  if (!response.ok) return { ok: false };
-  return { ok: true, data: (await response.json()) as BrandingResponse };
-}
-
 export async function updateBrandingAction(
   input: UpdateBrandingRequest,
-): Promise<{ ok: true } | { ok: false; error: string }> {
+): Promise<ActionResult> {
   const response = await serverFetch("/branding", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -43,27 +32,14 @@ export async function updateBrandingAction(
     reportApiError(response);
     return fail("We couldn't save your branding. Please try again.");
   }
-  return { ok: true };
+  return ok(null);
 }
 
 // ─── Provider settings ──────────────────────────────────────────────────────
 
-export async function fetchProviderSettingsAction(): Promise<
-  { ok: true; data: ProviderSettingsResponse } | { ok: false }
-> {
-  const response = await serverFetch("/settings/providers");
-  if (!response.ok) return { ok: false };
-  return {
-    ok: true,
-    data: (await response.json()) as ProviderSettingsResponse,
-  };
-}
-
 export async function updateEmailProviderAction(
   input: UpdateEmailProviderRequest,
-): Promise<
-  { ok: true; data: ProviderSettingsResponse } | { ok: false; error: string }
-> {
+): Promise<ActionResult<ProviderSettingsResponse>> {
   const response = await serverFetch("/settings/providers/email", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -73,14 +49,12 @@ export async function updateEmailProviderAction(
     reportApiError(response);
     return fail("We couldn't save your email settings. Please try again.");
   }
-  return { ok: true, data: (await response.json()) as ProviderSettingsResponse };
+  return ok((await response.json()) as ProviderSettingsResponse);
 }
 
 export async function updateWhatsAppProviderAction(
   input: UpdateWhatsAppProviderRequest,
-): Promise<
-  { ok: true; data: ProviderSettingsResponse } | { ok: false; error: string }
-> {
+): Promise<ActionResult<ProviderSettingsResponse>> {
   const response = await serverFetch("/settings/providers/whatsapp", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -90,14 +64,12 @@ export async function updateWhatsAppProviderAction(
     reportApiError(response);
     return fail("We couldn't save your WhatsApp settings. Please try again.");
   }
-  return { ok: true, data: (await response.json()) as ProviderSettingsResponse };
+  return ok((await response.json()) as ProviderSettingsResponse);
 }
 
 export async function removeProviderAction(
   channel: string,
-): Promise<
-  { ok: true; data: ProviderSettingsResponse } | { ok: false; error: string }
-> {
+): Promise<ActionResult<ProviderSettingsResponse>> {
   const response = await serverFetch(`/settings/providers/${channel}`, {
     method: "DELETE",
   });
@@ -105,37 +77,29 @@ export async function removeProviderAction(
     reportApiError(response);
     return fail("We couldn't remove the provider configuration.");
   }
-  return { ok: true, data: (await response.json()) as ProviderSettingsResponse };
+  return ok((await response.json()) as ProviderSettingsResponse);
 }
 
 export async function testSendAction(
   channel: string,
   recipient: string,
-): Promise<{ ok: true; data: TestSendResponse } | { ok: false; error: string }> {
+): Promise<ActionResult<TestSendResponse>> {
   const response = await serverFetch(`/settings/providers/${channel}/test`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ recipient }),
   });
   if (!response.ok) {
-    return { ok: false, error: "The test message could not be sent." };
+    return fail("The test message could not be sent.");
   }
-  return { ok: true, data: (await response.json()) as TestSendResponse };
+  return ok((await response.json()) as TestSendResponse);
 }
 
 // ─── Legal identity (JIKU-69) ───────────────────────────────────────────────
 
-export async function fetchLegalIdentityAction(): Promise<
-  { ok: true; data: LegalIdentityResponse } | { ok: false }
-> {
-  const response = await serverFetch("/legal-identity");
-  if (!response.ok) return { ok: false };
-  return { ok: true, data: (await response.json()) as LegalIdentityResponse };
-}
-
 export async function updateLegalIdentityAction(
   input: UpdateLegalIdentityRequest,
-): Promise<{ ok: true; data: LegalIdentityResponse } | { ok: false; error: string }> {
+): Promise<ActionResult<LegalIdentityResponse>> {
   const response = await serverFetch("/legal-identity", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -148,20 +112,14 @@ export async function updateLegalIdentityAction(
     reportApiError(response);
     return fail("We couldn't save your legal details. Please try again.");
   }
-  return { ok: true, data: (await response.json()) as LegalIdentityResponse };
+  return ok((await response.json()) as LegalIdentityResponse);
 }
 
 // ─── Personnalisation (JIKU-91) ──────────────────────────────────────────────
 
-export async function fetchVocabularyAction(): Promise<VocabularyEntry[]> {
-  const response = await serverFetch("/settings/vocabulary");
-  if (!response.ok) return [];
-  return (await response.json()) as VocabularyEntry[];
-}
-
 export async function updateVocabularyAction(
   updates: VocabularyUpdateRequest[],
-): Promise<{ ok: true } | { ok: false; error: string }> {
+): Promise<ActionResult> {
   const response = await serverFetch("/settings/vocabulary", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -171,30 +129,24 @@ export async function updateVocabularyAction(
     reportApiError(response);
     return fail("We couldn't save the terms. Please try again.");
   }
-  return { ok: true };
-}
-
-export async function fetchTemplatesAction(): Promise<TemplateSummary[]> {
-  const response = await serverFetch("/settings/templates");
-  if (!response.ok) return [];
-  return (await response.json()) as TemplateSummary[];
+  return ok(null);
 }
 
 export async function fetchTemplateAction(
   name: string,
-): Promise<{ ok: true; data: TemplateDetail } | { ok: false; error: string }> {
+): Promise<ActionResult<TemplateDetail>> {
   const response = await serverFetch(`/settings/templates/${encodeURIComponent(name)}`);
   if (!response.ok) {
     reportApiError(response);
     return fail("We couldn't load this template.");
   }
-  return { ok: true, data: (await response.json()) as TemplateDetail };
+  return ok((await response.json()) as TemplateDetail);
 }
 
 export async function saveTemplateAction(
   name: string,
   update: TemplateUpdateRequest,
-): Promise<{ ok: true; data: TemplateDetail } | { ok: false; error: string }> {
+): Promise<ActionResult<TemplateDetail>> {
   const response = await serverFetch(`/settings/templates/${encodeURIComponent(name)}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -204,13 +156,13 @@ export async function saveTemplateAction(
     reportApiError(response);
     return fail("We couldn't save this template.");
   }
-  return { ok: true, data: (await response.json()) as TemplateDetail };
+  return ok((await response.json()) as TemplateDetail);
 }
 
 export async function previewTemplateAction(
   name: string,
   request: TemplatePreviewRequest,
-): Promise<{ ok: true; data: TemplatePreviewResponse } | { ok: false; error: string }> {
+): Promise<ActionResult<TemplatePreviewResponse>> {
   const response = await serverFetch(`/settings/templates/${encodeURIComponent(name)}/preview`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -220,7 +172,7 @@ export async function previewTemplateAction(
     reportApiError(response);
     return fail("We couldn't preview this template.");
   }
-  return { ok: true, data: (await response.json()) as TemplatePreviewResponse };
+  return ok((await response.json()) as TemplatePreviewResponse);
 }
 
 // ─── Profil public de l'organisation ────────────────────────────────────────
@@ -231,7 +183,7 @@ export async function previewTemplateAction(
  */
 export async function updateOrgUsernameAction(
   username: string,
-): Promise<{ ok: true } | { ok: false; error: string }> {
+): Promise<ActionResult> {
   const response = await serverFetch("/orgs/username", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -248,15 +200,5 @@ export async function updateOrgUsernameAction(
     return fail("We couldn't save the username. Please try again.");
   }
   revalidatePath("/", "layout");
-  return { ok: true };
-}
-
-/** L'identité de l'organisation courante (nom, identifiant public). */
-export async function fetchOrgProfileAction(): Promise<{
-  username: string | null;
-} | null> {
-  const response = await serverFetch("/orgs/profile");
-  if (!response.ok) return null;
-  const data = (await response.json()) as { username?: string | null };
-  return { username: data.username ?? null };
+  return ok(null);
 }

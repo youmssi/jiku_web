@@ -469,7 +469,7 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
       tier: values.tier,
       expiresAt: new Date(values.expiresAt).toISOString(),
     });
-    if (result.error) {
+    if (!result.ok) {
       toast.error(result.error);
       return;
     }

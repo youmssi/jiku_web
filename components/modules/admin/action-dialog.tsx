@@ -21,7 +21,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import type { ActionResult } from "./admin.service";
+import type { ActionResult } from "@/lib/action-result";
 import type { ActionDialogFormValues } from "./schema";
 
 /**
@@ -70,9 +70,9 @@ export function ActionDialog({
   });
 
   async function submit(values: ActionDialogFormValues) {
-    const { error } = await onConfirm(values.value.trim());
-    if (error) {
-      toast.error(error);
+    const result = await onConfirm(values.value.trim());
+    if (!result.ok) {
+      toast.error(result.error);
       return;
     }
     toast.success(`${title} — done.`);

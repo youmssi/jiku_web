@@ -1,27 +1,13 @@
-import { localeRedirect } from "@/i18n/redirect";
-import { PaymentsView } from "@/components/modules/admin";
-import type { AdminPayment } from "@/components/modules/admin";
-import { adminFetch } from "@/lib/api-server";
-import { ADMIN_ROUTES } from "@/lib/constants";
+import { AdminPage, PaymentsView } from "@/components/modules/admin";
+import { loadPayments } from "@/components/modules/admin/server";
 
-interface PageProps {
-  searchParams: Promise<{ status?: string }>;
-}
-
-export default async function AdminPaymentsPage({ searchParams }: Readonly<PageProps>) {
+export default async function AdminPaymentsPage({
+  searchParams,
+}: Readonly<{ searchParams: Promise<{ status?: string }> }>) {
   const { status } = await searchParams;
-  const params = new URLSearchParams({ size: "50", status: status ?? "PENDING" });
-
-  const response = await adminFetch(`/admin/payments?${params.toString()}`);
-  if (response.status === 401 || response.status === 403) {
-    return localeRedirect(ADMIN_ROUTES.LOGIN);
-  }
-  const payments = response.ok ? ((await response.json()) as AdminPayment[]) : [];
-
   return (
-    <div>
-      <h1 className="mb-6 text-2xl font-semibold tracking-tight">Payments desk</h1>
-      <PaymentsView payments={payments} />
-    </div>
+    <AdminPage title="Payments desk">
+      <PaymentsView payments={await loadPayments(status)} />
+    </AdminPage>
   );
 }

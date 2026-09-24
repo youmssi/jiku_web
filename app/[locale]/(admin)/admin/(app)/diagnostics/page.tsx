@@ -1,15 +1,11 @@
-import { localeRedirect } from "@/i18n/redirect";
-import { DiagnosticsPanel } from "@/components/modules/admin";
-import { adminFetch } from "@/lib/api-server";
-import { ADMIN_ROUTES } from "@/lib/constants";
+import { AdminPage, DiagnosticsPanel } from "@/components/modules/admin";
+import { requireAdminSession } from "@/components/modules/admin/server";
 
 export default async function AdminDiagnosticsPage() {
-  const probe = await adminFetch("/admin/tenants?size=1");
-  if (probe.status === 401 || probe.status === 403) return localeRedirect(ADMIN_ROUTES.LOGIN);
+  await requireAdminSession();
   return (
-    <div>
-      <h1 className="mb-6 text-2xl font-semibold tracking-tight">Diagnostics</h1>
+    <AdminPage title="Diagnostics">
       <DiagnosticsPanel />
-    </div>
+    </AdminPage>
   );
 }
