@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { AppBreadcrumb, AppSidebar, type SidebarProject } from "@/components/modules/dashboard";
+import { NavCommandPalette } from "@/components/shared";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -53,6 +54,9 @@ export default async function OrganizerAppLayout({
                 className="mr-2 data-vertical:h-4 data-vertical:self-auto"
               />
               <AppBreadcrumb brandName={context.brandName} />
+            </div>
+            <div className="ml-auto flex items-center px-4">
+              <NavCommandPalette variant="organizer" />
             </div>
           </header>
           <div className="flex flex-1 flex-col">{children}</div>

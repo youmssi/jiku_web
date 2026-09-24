@@ -75,28 +75,13 @@ interface EventWizardProps {
   eventId?: string;
   initialValues: EventFormValues;
   status?: string;
-  /** Optional external step control, used when the wizard is embedded in a dialog. */
-  step?: number;
-  onStepChange?: (step: number) => void;
 }
 
 const STEPS = ["Event details", "Event settings"] as const;
 
-export function EventWizard({
-  eventId,
-  initialValues,
-  status,
-  step: stepProp,
-  onStepChange,
-}: EventWizardProps) {
+export function EventWizard({ eventId, initialValues, status }: EventWizardProps) {
   const router = useRouter();
-  const [internalStep, setInternalStep] = useState(0);
-  const step = stepProp ?? internalStep;
-  const externallyControlled = stepProp !== undefined;
-  const setStep = (next: number) => {
-    setInternalStep(next);
-    onStepChange?.(next);
-  };
+  const [step, setStep] = useState(0);
   const [formError, setFormError] = useState<string | null>(null);
   const [isPublishing, setIsPublishing] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
@@ -224,11 +209,9 @@ export function EventWizard({
         <CardTitle className="text-2xl">
           {eventId ? "Edit event" : "Create an event"}
         </CardTitle>
-        {!externallyControlled ? (
-          <CardDescription>
-            Configure your event, then publish it when ready.
-          </CardDescription>
-        ) : null}
+        <CardDescription>
+          Configure your event, then publish it when ready.
+        </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSaveDraft, onInvalid)} noValidate className="flex flex-col gap-(--card-spacing)">
         <CardContent>
@@ -261,12 +244,10 @@ export function EventWizard({
               value={String(step)}
               onValueChange={(value) => setStep(Number(value))}
             >
-              {!externallyControlled ? (
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="0">{STEPS[0]}</TabsTrigger>
-                  <TabsTrigger value="1">{STEPS[1]}</TabsTrigger>
-                </TabsList>
-              ) : null}
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="0">{STEPS[0]}</TabsTrigger>
+                <TabsTrigger value="1">{STEPS[1]}</TabsTrigger>
+              </TabsList>
               <TabsContent value="0" className="mt-4">
                 <Controller
                   control={control}

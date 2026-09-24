@@ -6,9 +6,10 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 import {
   Card,
   CardContent,
@@ -133,10 +134,18 @@ export function UsernameForm({ initial }: { initial: string | null }) {
             <code className="truncate rounded-md bg-muted px-2 py-1 text-xs">
               {profileUrl}
             </code>
-            <Button size="icon-sm" variant="outline" onClick={copyUrl}>
-              {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-              <span className="sr-only">Copy public page link</span>
-            </Button>
+            <ButtonGroup>
+              <Button size="icon-sm" variant="outline" onClick={copyUrl}>
+                {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                <span className="sr-only">Copy public page link</span>
+              </Button>
+              <Button size="icon-sm" variant="outline" asChild>
+                <a href={profileUrl} target="_blank" rel="noreferrer">
+                  <ExternalLink className="size-3.5" />
+                  <span className="sr-only">Open public page in a new tab</span>
+                </a>
+              </Button>
+            </ButtonGroup>
           </div>
         ) : null}
       </CardContent>

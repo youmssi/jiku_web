@@ -57,6 +57,8 @@ export interface StaffLink {
   serviceId: string;
   label: string;
   revoked: boolean;
+  /** Short shareable code (`/ligne/{code}`); null for links created before it existed. */
+  code: string | null;
   createdAt: string;
   revokedAt: string | null;
 }

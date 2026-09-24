@@ -3,8 +3,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname } from "@/i18n/navigation";
 import { QRCodeSVG } from "qrcode.react";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Card,
   CardContent,
@@ -14,6 +18,7 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { bookAppointment, loadAppointment, type AppointmentLinkRef } from "@/components/modules/appointment/appointment.service";
 import type { AppointmentServiceView, AppointmentSlot } from "@/components/modules/appointment/schema";
@@ -31,15 +36,30 @@ function formatInZone(iso: string, zone: string): string {
   }).format(d);
 }
 
-function addDays(base: Date, days: number): string {
-  const d = new Date(base.getTime() + days * 86_400_000);
+/** UTC calendar date, `YYYY-MM-DD` — the format every date-only string in this component uses. */
+function toDateOnly(d: Date): string {
   return d.toISOString().slice(0, 10);
+}
+
+function addDays(base: Date, days: number): string {
+  return toDateOnly(new Date(base.getTime() + days * 86_400_000));
+}
+
+/** Reconstructs the calendar Date a date-only string encodes. */
+function parseDateOnly(value: string): Date {
+  return new Date(`${value}T00:00:00Z`);
+}
+
+/** Today, at UTC midnight — the same convention every date-only string here uses. */
+function todayUtc(): Date {
+  return parseDateOnly(toDateOnly(new Date()));
 }
 
 export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
   const pathname = usePathname();
   const [view, setView] = useState<AppointmentServiceView | null>(null);
   const [date, setDate] = useState<string | undefined>(undefined);
+  const [calendarOpen, setCalendarOpen] = useState(false);
   const [selected, setSelected] = useState<AppointmentSlot | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -74,6 +94,8 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
     }
     setBooked({ bookingToken: result.data.bookingToken, status: result.data.status });
   }, [link, name, phone, selected]);
+
+  const selectedDate = useMemo(() => (date ? parseDateOnly(date) : todayUtc()), [date]);
 
   const suiviUrl = useMemo(
     () => (booked ? `${pathname}/suivi/${booked.bookingToken}` : null),
@@ -137,13 +159,42 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           ) : null}
-          <div className="flex items-center justify-between text-sm">
-            <Button variant="outline" size="sm" onClick={() => setDate(addDays(new Date(), -1))}>
-              Jour précédent
+          <div className="flex items-center justify-between gap-2">
+            <Button
+              variant="outline"
+              size="icon-sm"
+              onClick={() => setDate(addDays(selectedDate, -1))}
+              disabled={selectedDate <= todayUtc()}
+            >
+              <ChevronLeft className="size-3.5" />
+              <span className="sr-only">Jour précédent</span>
             </Button>
-            <span className="text-muted-foreground">Choisissez une heure</span>
-            <Button variant="outline" size="sm" onClick={() => setDate(addDays(new Date(), 1))}>
-              Jour suivant
+            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2 font-normal capitalize">
+                  <CalendarIcon className="size-3.5" />
+                  {format(selectedDate, "EEEE d MMMM", { locale: fr })}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="center">
+                <Calendar
+                  mode="single"
+                  locale={fr}
+                  selected={selectedDate}
+                  defaultMonth={selectedDate}
+                  disabled={{ before: todayUtc() }}
+                  onSelect={(day) => {
+                    if (!day) return;
+                    setDate(toDateOnly(day));
+                    setCalendarOpen(false);
+                  }}
+                  autoFocus
+                />
+              </PopoverContent>
+            </Popover>
+            <Button variant="outline" size="icon-sm" onClick={() => setDate(addDays(selectedDate, 1))}>
+              <ChevronRight className="size-3.5" />
+              <span className="sr-only">Jour suivant</span>
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-2">

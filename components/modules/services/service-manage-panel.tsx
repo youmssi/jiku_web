@@ -2,9 +2,20 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { Check, Copy, ExternalLink } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DataTable } from "@/components/ui/data-table";
+import type { DataTableFeatures } from "@/components/ui/data-table-features";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -58,12 +69,14 @@ export function ServiceManagePanel({
   const [requirements, setRequirements] = useState<ServiceRequirement[]>(initialRequirements);
   const [staff, setStaff] = useState<StaffLink[]>(initialStaffLinks);
   const [busy, setBusy] = useState(false);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [scheduleFor, setScheduleFor] = useState<ServiceResource | null>(null);
   const [bookingLink, setBookingLink] = useState<string | null>(null);
+  const [linkCopied, setLinkCopied] = useState(false);
 
-  // Staff: création (le jeton n'est montré qu'une fois).
+  // Staff: création, et l'état "copié" du lien le plus récemment copié dans la table.
   const [staffLabel, setStaffLabel] = useState("");
-  const [freshStaff, setFreshStaff] = useState<{ label: string; token: string } | null>(null);
+  const [freshStaff, setFreshStaff] = useState<{ label: string; code: string } | null>(null);
+  const [copiedStaffId, setCopiedStaffId] = useState<string | null>(null);
 
   // Ressource : création.
   const [resName, setResName] = useState("");
@@ -85,10 +98,26 @@ export function ServiceManagePanel({
     setBookingLink(`${window.location.origin}/r/${result.data.shortCode}`);
   }
 
-  async function copy(text: string) {
+  async function copyLink() {
+    if (!bookingLink) return;
     try {
-      await navigator.clipboard.writeText(text);
-      toast.success("Copié dans le presse-papiers.");
+      await navigator.clipboard.writeText(bookingLink);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    } catch {
+      toast.error("Impossible de copier.");
+    }
+  }
+
+  function staffLinkUrl(code: string): string {
+    return `${window.location.origin}/ligne/${code}`;
+  }
+
+  async function copyStaffLink(staffId: string, code: string) {
+    try {
+      await navigator.clipboard.writeText(staffLinkUrl(code));
+      setCopiedStaffId(staffId);
+      setTimeout(() => setCopiedStaffId((current) => (current === staffId ? null : current)), 2000);
     } catch {
       toast.error("Impossible de copier.");
     }
@@ -105,7 +134,9 @@ export function ServiceManagePanel({
       return;
     }
     setStaffLabel("");
-    setFreshStaff({ label: result.data.label, token: result.data.token });
+    if (result.data.code) {
+      setFreshStaff({ label: result.data.label, code: result.data.code });
+    }
     setStaff((current) => [...current.filter((s) => s.id !== result.data.id), result.data]);
   }
 
@@ -169,6 +200,113 @@ export function ServiceManagePanel({
     setRequirements((current) => current.filter((r) => r.id !== requirementId));
   }
 
+  const staffColumns: ColumnDef<DataTableFeatures, StaffLink>[] = [
+    {
+      accessorKey: "label",
+      header: "Poste",
+      filterFn: "includesString",
+    },
+    {
+      id: "status",
+      header: "Statut",
+      enableSorting: false,
+      cell: ({ row }) =>
+        row.original.revoked ? <Badge variant="outline">révoqué</Badge> : <Badge>actif</Badge>,
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      enableSorting: false,
+      cell: ({ row }) => {
+        const link = row.original;
+        if (link.revoked) {
+          return <span className="text-muted-foreground">—</span>;
+        }
+        return (
+          <div className="flex items-center gap-2">
+            {link.code ? (
+              <ButtonGroup>
+                <Button size="icon-sm" variant="outline" onClick={() => copyStaffLink(link.id, link.code!)}>
+                  {copiedStaffId === link.id ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                  <span className="sr-only">Copier le lien</span>
+                </Button>
+                <Button size="icon-sm" variant="outline" asChild>
+                  <a href={staffLinkUrl(link.code)} target="_blank" rel="noreferrer">
+                    <ExternalLink className="size-3.5" />
+                    <span className="sr-only">Ouvrir le lien dans un nouvel onglet</span>
+                  </a>
+                </Button>
+              </ButtonGroup>
+            ) : null}
+            <Button size="sm" variant="outline" disabled={busy} onClick={() => revokeStaff(link.id, link.label)}>
+              Révoquer
+            </Button>
+          </div>
+        );
+      },
+    },
+  ];
+
+  const resourceColumns: ColumnDef<DataTableFeatures, ServiceResource>[] = [
+    {
+      accessorKey: "name",
+      header: "Nom",
+      filterFn: "includesString",
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: ({ row }) => RESOURCE_TYPE_LABEL[row.original.type],
+    },
+    {
+      accessorKey: "timezone",
+      header: "Fuseau",
+    },
+    {
+      id: "status",
+      header: "Statut",
+      enableSorting: false,
+      cell: ({ row }) => (row.original.active ? <Badge>active</Badge> : <Badge variant="outline">désactivée</Badge>),
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      enableSorting: false,
+      cell: ({ row }) => (
+        <ButtonGroup>
+          <Button size="sm" variant="outline" onClick={() => setScheduleFor(row.original)}>
+            Horaires
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => toggleResource(row.original)}>
+            {row.original.active ? "Désactiver" : "Activer"}
+          </Button>
+        </ButtonGroup>
+      ),
+    },
+  ];
+
+  const requirementColumns: ColumnDef<DataTableFeatures, ServiceRequirement>[] = [
+    {
+      id: "type",
+      header: "Type",
+      cell: ({ row }) => RESOURCE_TYPE_LABEL[row.original.type],
+    },
+    {
+      accessorKey: "quantity",
+      header: "Quantité",
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      enableSorting: false,
+      cell: ({ row }) => (
+        <Button size="sm" variant="outline" disabled={busy} onClick={() => removeRequirement(row.original.id)}>
+          Retirer
+        </Button>
+      ),
+    },
+  ];
+
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-10">
       <div>
@@ -186,19 +324,29 @@ export function ServiceManagePanel({
             choisir un créneau sans compte.
           </p>
           <div className="flex flex-wrap items-center gap-2">
-            <Button size="sm" variant="outline" onClick={showBookingLink}>
-              Afficher le lien
-            </Button>
             {bookingLink ? (
               <>
                 <code className="max-w-full break-all rounded bg-muted px-2 py-1 font-mono text-xs">
                   {bookingLink}
                 </code>
-                <Button size="sm" onClick={() => copy(bookingLink)}>
-                  Copier
-                </Button>
+                <ButtonGroup>
+                  <Button size="icon-sm" variant="outline" onClick={copyLink}>
+                    {linkCopied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                    <span className="sr-only">Copier le lien</span>
+                  </Button>
+                  <Button size="icon-sm" variant="outline" asChild>
+                    <a href={bookingLink} target="_blank" rel="noreferrer">
+                      <ExternalLink className="size-3.5" />
+                      <span className="sr-only">Ouvrir le lien dans un nouvel onglet</span>
+                    </a>
+                  </Button>
+                </ButtonGroup>
               </>
-            ) : null}
+            ) : (
+              <Button size="sm" variant="outline" onClick={showBookingLink}>
+                Afficher le lien
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -212,28 +360,29 @@ export function ServiceManagePanel({
             Chaque lien ouvre la console sur un téléphone. Un employé qui part : révoquez
             son lien, l&apos;accès s&apos;arrête immédiatement.
           </p>
-          {staff.map((link) => (
-            <div key={link.id} className="flex items-center justify-between gap-3 text-sm">
-              <div className="flex items-center gap-2">
-                <span>{link.label}</span>
-                {link.revoked ? <Badge variant="outline">révoqué</Badge> : <Badge>actif</Badge>}
-              </div>
-              {!link.revoked ? (
-                <Button size="sm" variant="outline" disabled={busy} onClick={() => revokeStaff(link.id, link.label)}>
-                  Révoquer
-                </Button>
-              ) : null}
-            </div>
-          ))}
+          {staff.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Aucun lien de comptoir pour le moment.</p>
+          ) : (
+            <DataTable columns={staffColumns} data={staff} />
+          )}
           {freshStaff ? (
             <div className="rounded-lg border border-green-600/30 bg-green-50 p-3 text-sm dark:bg-green-950/30 dark:text-green-200">
-              <p className="font-medium">
-                Lien pour « {freshStaff.label} » — montrez-le une seule fois :
-              </p>
-              <p className="mt-1 break-all font-mono text-xs">{window.location.origin}/ligne/{freshStaff.token}</p>
-              <Button size="sm" variant="outline" className="mt-2" onClick={() => copy(`${window.location.origin}/ligne/${freshStaff.token}`)}>
-                Copier le lien
-              </Button>
+              <p className="font-medium">Lien pour « {freshStaff.label} » :</p>
+              <div className="mt-1 flex flex-wrap items-center gap-2">
+                <p className="break-all font-mono text-xs">{staffLinkUrl(freshStaff.code)}</p>
+                <ButtonGroup>
+                  <Button size="icon-sm" variant="outline" onClick={() => copyStaffLink(freshStaff.code, freshStaff.code)}>
+                    {copiedStaffId === freshStaff.code ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                    <span className="sr-only">Copier le lien</span>
+                  </Button>
+                  <Button size="icon-sm" variant="outline" asChild>
+                    <a href={staffLinkUrl(freshStaff.code)} target="_blank" rel="noreferrer">
+                      <ExternalLink className="size-3.5" />
+                      <span className="sr-only">Ouvrir le lien dans un nouvel onglet</span>
+                    </a>
+                  </Button>
+                </ButtonGroup>
+              </div>
             </div>
           ) : null}
           <div className="mt-2 flex flex-wrap items-end gap-2">
@@ -260,33 +409,7 @@ export function ServiceManagePanel({
           {resources.length === 0 ? (
             <p className="text-sm text-muted-foreground">Aucune ressource pour le moment.</p>
           ) : (
-            <ul className="divide-y">
-              {resources.map((resource) => (
-                <li key={resource.id} className="py-2 text-sm">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p>{resource.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {RESOURCE_TYPE_LABEL[resource.type]} · {resource.timezone}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => setExpandedId(expandedId === resource.id ? null : resource.id)}
-                      >
-                        Horaires
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => toggleResource(resource)}>
-                        {resource.active ? "Désactiver" : "Activer"}
-                      </Button>
-                    </div>
-                  </div>
-                  {expandedId === resource.id ? <ResourceScheduleEditor resource={resource} /> : null}
-                </li>
-              ))}
-            </ul>
+            <DataTable columns={resourceColumns} data={resources} />
           )}
           <div className="mt-2 grid gap-3 sm:grid-cols-2">
             <Field>
@@ -346,18 +469,7 @@ export function ServiceManagePanel({
           {requirements.length === 0 ? (
             <p className="text-sm text-muted-foreground">Aucune exigence — ajoutez-en au moins une pour ouvrir des créneaux.</p>
           ) : (
-            <ul className="divide-y">
-              {requirements.map((requirement) => (
-                <li key={requirement.id} className="flex items-center justify-between gap-3 py-2 text-sm">
-                  <span>
-                    {RESOURCE_TYPE_LABEL[requirement.type]} × {requirement.quantity}
-                  </span>
-                  <Button size="sm" variant="outline" disabled={busy} onClick={() => removeRequirement(requirement.id)}>
-                    Retirer
-                  </Button>
-                </li>
-              ))}
-            </ul>
+            <DataTable columns={requirementColumns} data={requirements} />
           )}
           <div className="mt-2 flex flex-wrap items-end gap-2">
             <Select value={reqType} onValueChange={(v) => setReqType(v as ResourceType)}>
@@ -392,6 +504,15 @@ export function ServiceManagePanel({
           <Spinner />
         </div>
       ) : null}
+
+      <Dialog open={scheduleFor != null} onOpenChange={(open) => !open && setScheduleFor(null)}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Horaires — {scheduleFor?.name}</DialogTitle>
+          </DialogHeader>
+          {scheduleFor ? <ResourceScheduleEditor resource={scheduleFor} /> : null}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

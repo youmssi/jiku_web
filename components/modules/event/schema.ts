@@ -66,6 +66,21 @@ export const emptyEventValues: EventFormValues = {
   invitationChannels: [],
 };
 
+/**
+ * The creation dialog's own, smaller schema: just what's needed to start a
+ * draft. Everything else in EventFormValues (description, end date, location,
+ * transfer/overbooking, invitation channels) has a real default and is filled
+ * in afterward on the event's own Settings tab — the page the dialog redirects
+ * to the moment the draft exists.
+ */
+export const quickCreateEventSchema = z.object({
+  name: z.string().min(1, "Event name is required"),
+  timezone: z.string().min(1, "Select a timezone"),
+  startLocal: z.string(),
+});
+
+export type QuickCreateEventValues = z.infer<typeof quickCreateEventSchema>;
+
 /** Règle de quorum d'un événement (JIKU-94), absente si non configurée. */
 export type QuorumResponse = Schema<"QuorumResponse">;
 export type UpdateQuorumRequest = Schema<"UpdateQuorumRequest">;

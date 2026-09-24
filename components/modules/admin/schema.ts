@@ -51,13 +51,40 @@ export interface AdminTierCatalog {
 export interface AdminTrial {
   id: string;
   tenantId: string;
+  tenantName: string | null;
   eventId: string;
+  eventName: string | null;
   tier: string;
   grantedAllowance: number;
   expiresAt: string;
   status: string;
   endedReason: string | null;
   createdAt: string;
+}
+
+/** One page of the admin trial listing, with the true total across every page (JIKU-99). */
+export interface AdminTrialPage {
+  entries: AdminTrial[];
+  total: number;
+  page: number;
+  size: number;
+}
+
+/** Platform-wide trial funnel snapshot for the overview strip (JIKU-99). */
+export interface AdminTrialStats {
+  active: number;
+  expiringWithin7Days: number;
+  convertedThisMonth: number;
+  /** Null until at least one trial has ever concluded. */
+  conversionRatePercent: number | null;
+}
+
+/** An event as the trial grant form's tenant-scoped picker sees it (JIKU-99). */
+export interface AdminEventSummary {
+  id: string;
+  name: string;
+  startDateTime: string | null;
+  status: string;
 }
 
 export interface AdminAgreement {
@@ -182,11 +209,16 @@ export const adminLoginSchema = z.object({
 });
 export type AdminLoginFormValues = z.infer<typeof adminLoginSchema>;
 
+/** Shape an admin form needs to identify an event: full id, everything else structural. */
+const adminEventReferenceSchema = z.object({ id: z.string().min(1) });
+
 export const grantTrialSchema = z.object({
   tenant: z
     .union([adminTenantReferenceSchema, z.null()])
     .refine((tenant) => tenant !== null, "Pick an organization first."),
-  eventId: z.string().trim().uuid("Enter a valid event id."),
+  event: z
+    .union([adminEventReferenceSchema, z.null()])
+    .refine((event) => event !== null, "Pick an event first."),
   tier: z.string().min(1, "Pick a tier."),
   expiresAt: z
     .string()
@@ -202,7 +234,7 @@ export const grantTrialSchema = z.object({
 });
 export interface GrantTrialFormValues {
   tenant: TenantDirectoryEntry | null;
-  eventId: string;
+  event: AdminEventSummary | null;
   tier: string;
   expiresAt: string;
 }

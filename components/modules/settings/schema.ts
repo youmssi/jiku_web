@@ -7,12 +7,14 @@ import type { Schema } from "@/lib/api-contract";
 export interface BrandingResponse {
   displayName: string;
   logoUrl: string | null;
+  bannerUrl: string | null;
   primaryColor: string;
 }
 
 export interface UpdateBrandingRequest {
   displayName: string | null;
   logoUrl: string | null;
+  bannerUrl: string | null;
   primaryColor: string | null;
 }
 

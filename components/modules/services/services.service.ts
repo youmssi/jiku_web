@@ -43,6 +43,16 @@ export async function updateReminderPolicyAction(
   });
 }
 
+/** Fetches one service's name for navigation chrome (breadcrumbs); null when unavailable. */
+export async function getServiceNameAction(serviceId: string): Promise<string | null> {
+  const response = await serverFetch(`/services/${serviceId}`);
+  if (!response.ok) {
+    return null;
+  }
+  const service = (await response.json().catch(() => null)) as { name?: string } | null;
+  return service?.name ?? null;
+}
+
 /** Crée un service (JIKU-84+) : nom + fuseau. */
 export async function createServiceAction(
   name: string,

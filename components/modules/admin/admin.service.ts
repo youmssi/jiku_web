@@ -12,6 +12,7 @@ import type {
   AdminBookingRefund,
   AdminBillingSettingsView,
   AdminBillingSettingsFormValues,
+  AdminEventSummary,
 } from "@/components/modules/admin/schema";
 
 export interface ActionResult {
@@ -102,6 +103,19 @@ export async function searchTenantsAction(query: string): Promise<TenantDirector
   }
   const page = (await response.json()) as TenantDirectoryPage;
   return page.entries;
+}
+
+/** Search-as-you-type event lookup for the trial grant form, scoped to one organization. */
+export async function searchTenantEventsAction(
+  tenantId: string,
+  query: string,
+): Promise<AdminEventSummary[]> {
+  const params = new URLSearchParams({ query });
+  const response = await adminFetch(`/admin/tenants/${tenantId}/events?${params.toString()}`);
+  if (!response.ok) {
+    return [];
+  }
+  return (await response.json()) as AdminEventSummary[];
 }
 
 export async function grantTrialAction(input: {

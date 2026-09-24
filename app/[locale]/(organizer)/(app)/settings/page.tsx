@@ -26,7 +26,7 @@ const MANAGER_ROLES = ["ORGANIZER_OWNER", "ORGANIZER_ADMIN"];
 async function loadBranding(): Promise<BrandingResponse> {
   const result = await fetchBrandingAction();
   if (!result.ok) {
-    return { displayName: "Your organization", logoUrl: null, primaryColor: "#2563EB" };
+    return { displayName: "Your organization", logoUrl: null, bannerUrl: null, primaryColor: "#2563EB" };
   }
   return result.data;
 }
@@ -114,7 +114,7 @@ export default async function SettingsPage() {
 
         {isManager ? (
           <TabsContent value="branding" className="mt-0">
-            <BrandingView branding={branding ?? { displayName: "Your organization", logoUrl: null, primaryColor: "#2563EB" }} />
+            <BrandingView branding={branding ?? { displayName: "Your organization", logoUrl: null, bannerUrl: null, primaryColor: "#2563EB" }} />
           </TabsContent>
         ) : null}
 

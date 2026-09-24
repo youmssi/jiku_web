@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import { AdminSidebar } from "@/components/modules/admin";
+import { NavCommandPalette } from "@/components/shared";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -39,6 +40,9 @@ export default async function AdminAppLayout({
                 className="mr-2 data-vertical:h-4 data-vertical:self-auto"
               />
               <span className="text-sm font-medium">Jikū admin</span>
+            </div>
+            <div className="ml-auto flex items-center px-4">
+              <NavCommandPalette variant="admin" />
             </div>
           </header>
           <main className="flex flex-1 flex-col gap-6 px-4 pb-8 md:px-6">

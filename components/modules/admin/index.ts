@@ -18,6 +18,8 @@ export type {
   AdminTierCatalog,
   AdminTierOption,
   AdminTrial,
+  AdminTrialPage,
+  AdminTrialStats,
   AuditEntry,
   AuditPage,
   TenantDirectoryEntry,

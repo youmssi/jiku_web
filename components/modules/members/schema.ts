@@ -17,6 +17,9 @@ export interface InvitationView {
   createdAt: string;
 }
 
+/** A row of the unified members table: an active member or a still-pending invitation, told apart by `kind`. */
+export type MemberRow = ({ kind: "member" } & MemberView) | ({ kind: "invitation" } & InvitationView);
+
 /** OWNER is granted through a later role change by an owner, never at the door. */
 export const INVITABLE_ROLES = ["ADMIN", "MEMBER"] as const;
 export const ASSIGNABLE_ROLES = ["OWNER", "ADMIN", "MEMBER"] as const;
