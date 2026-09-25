@@ -3445,6 +3445,8 @@ export interface components {
             overbookingAllowed?: boolean;
             /** Format: int32 */
             maxOverbookingCount?: number | null;
+            /** @enum {string} */
+            deliveryMode?: "LINK" | "DIRECT_TICKET";
         };
         UpdateEventRequest: {
             name: string;

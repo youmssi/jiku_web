@@ -17,6 +17,10 @@ export { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS, type InvitationChannel 
 
 export { TIMEZONES };
 
+/** How a guest receives the event (ADR 105): an invitation link to confirm, or the ticket straight away. */
+export const DELIVERY_MODES = ["LINK", "DIRECT_TICKET"] as const;
+export type DeliveryMode = (typeof DELIVERY_MODES)[number];
+
 // Validation messages are `common.validation` keys, translated where they render.
 export const eventFormSchema = z
   .object({
@@ -31,6 +35,7 @@ export const eventFormSchema = z
     overbookingAllowed: z.boolean(),
     maxOverbookingCount: z.number().int("wholeNumber").min(0, "positive").nullable(),
     invitationChannels: z.array(z.enum(INVITATION_CHANNELS)),
+    deliveryMode: z.enum(DELIVERY_MODES),
   })
   .refine((values) => !values.startLocal || !values.endLocal || values.endLocal > values.startLocal, {
     message: "endBeforeStart",
@@ -51,6 +56,7 @@ export const emptyEventValues: EventFormValues = {
   overbookingAllowed: false,
   maxOverbookingCount: null,
   invitationChannels: [],
+  deliveryMode: "LINK",
 };
 
 /**

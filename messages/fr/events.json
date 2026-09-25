@@ -142,7 +142,24 @@
       "title": "Invitations",
       "description": "Comment vos invités reçoivent leur invitation et leur billet.",
       "channels": "Canaux",
-      "hint": "Au moins un canal est nécessaire pour publier."
+      "hint": "Au moins un canal est nécessaire pour publier.",
+      "mode": {
+        "label": "Ce que reçoivent vos invités",
+        "hint": "Modifiable tant que l'événement est en brouillon.",
+        "soon": "Bientôt",
+        "LINK": {
+          "title": "Lien d'invitation",
+          "description": "L'invité ouvre sa page, confirme ou décline, puis reçoit son billet. Le moins cher."
+        },
+        "DIRECT_TICKET": {
+          "title": "Billet direct",
+          "description": "Chaque invité reçoit son billet tout de suite, sans étape de confirmation."
+        },
+        "INTERACTIVE": {
+          "title": "Billet interactif WhatsApp",
+          "description": "L'invité confirme d'un bouton dans WhatsApp et reçoit son billet dans la conversation."
+        }
+      }
     },
     "rules": {
       "title": "Règles des billets",

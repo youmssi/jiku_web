@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { MessageSquareText } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { PRICING_CURRENCIES, type DeliveryMode, type PricingCurrency, type ServicePlanId } from "@/lib/pricing";
+import { PRICING_CURRENCIES, PRICING_CURRENCY_LABELS, type DeliveryMode, type PricingCurrency, type ServicePlanId } from "@/lib/pricing";
 import type { LandingLocale } from "./content";
 import { PlanFinder, type FinderResult } from "./plan-finder";
 import type { SimulatorContent, SimulatorNeed } from "./simulator-content";
@@ -59,7 +59,7 @@ export function SimulatorCalculator({ content, locale }: { content: SimulatorCon
         >
           {PRICING_CURRENCIES.map((code) => (
             <ToggleGroupItem key={code} value={code} className="px-4" title={content.currency.names[code]}>
-              {code}
+              {PRICING_CURRENCY_LABELS[code]}
             </ToggleGroupItem>
           ))}
         </ToggleGroup>

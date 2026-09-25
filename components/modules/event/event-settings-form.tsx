@@ -1,11 +1,14 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Check } from "lucide-react";
+import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -18,6 +21,7 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { RadioGroup } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -31,10 +35,12 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { FormFieldError } from "@/components/shared";
 import { updateDraftAction } from "./event.service";
 import {
+  DELIVERY_MODES,
   eventFormSchema,
   INVITATION_CHANNEL_LABELS,
   INVITATION_CHANNELS,
   TIMEZONES,
+  type DeliveryMode,
   type EventFormValues,
   type InvitationChannel,
 } from "./schema";
@@ -188,29 +194,52 @@ export function EventSettingsForm({
             <CardDescription>{t("invitations.description")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Controller
-              control={control}
-              name="invitationChannels"
-              render={({ field }) => (
-                <FieldSet>
-                  <FieldLegend variant="label">{t("invitations.channels")}</FieldLegend>
-                  <ToggleGroup
-                    type="multiple"
-                    variant="outline"
-                    value={field.value}
-                    onValueChange={(value) => field.onChange(value as InvitationChannel[])}
-                    disabled={!editable}
-                  >
-                    {INVITATION_CHANNELS.map((channel) => (
-                      <ToggleGroupItem key={channel} value={channel}>
-                        {INVITATION_CHANNEL_LABELS[channel]}
-                      </ToggleGroupItem>
-                    ))}
-                  </ToggleGroup>
-                  <FieldDescription>{t("invitations.hint")}</FieldDescription>
-                </FieldSet>
-              )}
-            />
+            <FieldGroup>
+              <Controller
+                control={control}
+                name="deliveryMode"
+                render={({ field }) => (
+                  <FieldSet>
+                    <FieldLegend variant="label">{t("invitations.mode.label")}</FieldLegend>
+                    <RadioGroup
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value as DeliveryMode)}
+                      disabled={!editable}
+                      className="grid gap-3 sm:grid-cols-3"
+                    >
+                      {DELIVERY_MODES.map((mode) => (
+                        <ModeCard key={mode} value={mode} />
+                      ))}
+                      <ModeCard value="INTERACTIVE" soon />
+                    </RadioGroup>
+                    <FieldDescription>{t("invitations.mode.hint")}</FieldDescription>
+                  </FieldSet>
+                )}
+              />
+              <Controller
+                control={control}
+                name="invitationChannels"
+                render={({ field }) => (
+                  <FieldSet>
+                    <FieldLegend variant="label">{t("invitations.channels")}</FieldLegend>
+                    <ToggleGroup
+                      type="multiple"
+                      variant="outline"
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value as InvitationChannel[])}
+                      disabled={!editable}
+                    >
+                      {INVITATION_CHANNELS.map((channel) => (
+                        <ToggleGroupItem key={channel} value={channel}>
+                          {INVITATION_CHANNEL_LABELS[channel]}
+                        </ToggleGroupItem>
+                      ))}
+                    </ToggleGroup>
+                    <FieldDescription>{t("invitations.hint")}</FieldDescription>
+                  </FieldSet>
+                )}
+              />
+            </FieldGroup>
           </CardContent>
         </Card>
 
@@ -305,5 +334,25 @@ export function EventSettingsForm({
         </div>
       ) : null}
     </form>
+  );
+}
+
+function ModeCard({ value, soon = false }: { value: DeliveryMode | "INTERACTIVE"; soon?: boolean }) {
+  const t = useTranslations("events.settings.invitations.mode");
+  return (
+    <RadioGroupPrimitive.Item
+      value={value}
+      disabled={soon}
+      className="group flex flex-col rounded-xl border p-4 text-left transition-colors outline-none hover:border-primary/40 focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:border-border data-[state=checked]:border-primary data-[state=checked]:bg-primary/[0.06]"
+    >
+      <span className="flex items-center justify-between gap-2 text-sm font-semibold">
+        <span className="flex items-center gap-2">
+          {t(`${value}.title`)}
+          {soon ? <Badge variant="outline">{t("soon")}</Badge> : null}
+        </span>
+        <Check className="size-4 text-primary opacity-0 group-data-[state=checked]:opacity-100" />
+      </span>
+      <span className="mt-1.5 text-xs text-muted-foreground">{t(`${value}.description`)}</span>
+    </RadioGroupPrimitive.Item>
   );
 }

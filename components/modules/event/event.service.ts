@@ -30,6 +30,7 @@ function toPayload(values: EventFormValues) {
         : null,
       overbookingAllowed: values.overbookingAllowed,
       maxOverbookingCount: values.overbookingAllowed ? values.maxOverbookingCount : null,
+      deliveryMode: values.deliveryMode,
     },
     invitationChannels: values.invitationChannels,
   };

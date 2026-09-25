@@ -142,7 +142,24 @@
       "title": "Invitations",
       "description": "How your guests receive their invitation and ticket.",
       "channels": "Channels",
-      "hint": "At least one channel is required to publish."
+      "hint": "At least one channel is required to publish.",
+      "mode": {
+        "label": "What your guests receive",
+        "hint": "Can be changed while the event is a draft.",
+        "soon": "Coming soon",
+        "LINK": {
+          "title": "Invitation link",
+          "description": "Guests open their page, accept or decline, then get their ticket. The cheapest."
+        },
+        "DIRECT_TICKET": {
+          "title": "Direct ticket",
+          "description": "Every guest gets their ticket right away, with no confirmation step."
+        },
+        "INTERACTIVE": {
+          "title": "Interactive WhatsApp ticket",
+          "description": "Guests confirm with a button in WhatsApp and get their ticket in the chat."
+        }
+      }
     },
     "rules": {
       "title": "Ticket rules",
