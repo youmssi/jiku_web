@@ -830,6 +830,83 @@
         }
       }
     },
+    "/api/v1/whatsapp/webhook" : {
+      "get" : {
+        "tags" : [
+          "whats-app-webhook-controller"
+        ],
+        "operationId" : "verifySubscription",
+        "parameters" : [
+          {
+            "name" : "hub.mode",
+            "in" : "query",
+            "required" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "hub.verify_token",
+            "in" : "query",
+            "required" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "hub.challenge",
+            "in" : "query",
+            "required" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [
+          "whats-app-webhook-controller"
+        ],
+        "operationId" : "receiveMessages",
+        "parameters" : [
+          {
+            "name" : "X-Hub-Signature-256",
+            "in" : "header",
+            "required" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "string"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
     "/api/v1/settings/templates/{name}/preview" : {
       "post" : {
         "tags" : [
@@ -5912,6 +5989,37 @@
         }
       }
     },
+    "/api/v1/rsvp/{token}/qr.png" : {
+      "get" : {
+        "tags" : [
+          "rsvp-controller"
+        ],
+        "operationId" : "qrCode",
+        "parameters" : [
+          {
+            "name" : "token",
+            "in" : "path",
+            "required" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "image/png" : {
+                "schema" : {
+                  "type" : "string",
+                  "format" : "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/resources/{id}/free" : {
       "get" : {
         "tags" : [
@@ -6724,6 +6832,40 @@
         }
       }
     },
+    "/api/v1/events/{eventId}/billing/quotes" : {
+      "get" : {
+        "tags" : [
+          "event-tier-quotes-controller"
+        ],
+        "operationId" : "quotes",
+        "parameters" : [
+          {
+            "name" : "eventId",
+            "in" : "path",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "format" : "uuid"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/EventTierQuote"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/events/{eventId}/attendance/register" : {
       "get" : {
         "tags" : [
@@ -7166,6 +7308,15 @@
             "schema" : {
               "type" : "integer",
               "format" : "int64"
+            }
+          },
+          {
+            "name" : "interactive",
+            "in" : "query",
+            "required" : false,
+            "schema" : {
+              "type" : "boolean",
+              "default" : false
             }
           }
         ],
@@ -9124,7 +9275,8 @@
             "type" : "string",
             "enum" : [
               "LINK",
-              "DIRECT_TICKET"
+              "DIRECT_TICKET",
+              "INTERACTIVE"
             ]
           }
         }
@@ -12995,6 +13147,32 @@
           }
         }
       },
+      "EventTierQuote" : {
+        "type" : "object",
+        "properties" : {
+          "tier" : {
+            "type" : "string"
+          },
+          "maxGuests" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "amountMinor" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "surchargeMinor" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "currency" : {
+            "type" : "string"
+          },
+          "interactive" : {
+            "type" : "boolean"
+          }
+        }
+      },
       "AnalyticsResponse" : {
         "type" : "object",
         "properties" : {
@@ -13236,6 +13414,10 @@
             "items" : {
               "$ref" : "#/components/schemas/TierOption"
             }
+          },
+          "interactivePerGuestMinor" : {
+            "type" : "integer",
+            "format" : "int64"
           },
           "custom" : {
             "$ref" : "#/components/schemas/CustomTierOption"

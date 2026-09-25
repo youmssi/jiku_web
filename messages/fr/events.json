@@ -146,7 +146,6 @@
       "mode": {
         "label": "Ce que reçoivent vos invités",
         "hint": "Modifiable tant que l'événement est en brouillon.",
-        "soon": "Bientôt",
         "LINK": {
           "title": "Lien d'invitation",
           "description": "L'invité ouvre sa page, confirme ou décline, puis reçoit son billet. Le moins cher."
@@ -157,7 +156,7 @@
         },
         "INTERACTIVE": {
           "title": "Billet interactif WhatsApp",
-          "description": "L'invité confirme d'un bouton dans WhatsApp et reçoit son billet dans la conversation."
+          "description": "L'invité confirme d'un bouton dans WhatsApp et reçoit son billet dans la conversation. Un supplément par invité s'ajoute aux paliers payants."
         }
       }
     },

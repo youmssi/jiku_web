@@ -28,6 +28,8 @@ export interface PaymentHistoryItem {
 /** Event tiers priced in the organization's billing currency (ADR 105). */
 export type TierOption = Schema<"TierOption">;
 export type TierCatalog = Schema<"TierCatalog">;
+/** A tier this event can still buy, priced by the server for it (tier difference + interactive surcharge). */
+export type EventTierQuote = Schema<"EventTierQuote">;
 
 export interface PaymentInstruction {
   type: string;

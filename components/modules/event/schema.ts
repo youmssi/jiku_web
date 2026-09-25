@@ -17,8 +17,11 @@ export { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS, type InvitationChannel 
 
 export { TIMEZONES };
 
-/** How a guest receives the event (ADR 105): an invitation link to confirm, or the ticket straight away. */
-export const DELIVERY_MODES = ["LINK", "DIRECT_TICKET"] as const;
+/**
+ * How a guest receives the event (ADR 105): an invitation link to answer, the
+ * ticket straight away, or an invitation answered with a button in WhatsApp.
+ */
+export const DELIVERY_MODES = ["LINK", "DIRECT_TICKET", "INTERACTIVE"] as const;
 export type DeliveryMode = (typeof DELIVERY_MODES)[number];
 
 // Validation messages are `common.validation` keys, translated where they render.

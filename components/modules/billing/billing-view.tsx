@@ -18,6 +18,7 @@ import { ActivationInstructions } from "./activation-instructions";
 import { requestActivationAction } from "./billing.service";
 import { PaymentHistoryTable } from "./payment-history-table";
 import type {
+  EventTierQuote,
   ManualPaymentInstructions,
   PaymentHistoryItem,
   TierCatalog,
@@ -28,6 +29,8 @@ interface BillingViewProps {
   eventId: string;
   usage: UsageAllowance;
   catalog: TierCatalog;
+  /** What each tier this event can still buy costs it, from the server (ADR 105). */
+  quotes: EventTierQuote[];
   payments: PaymentHistoryItem[];
   /** The event's open activation request, when one exists (JIKU-45). */
   activation: ManualPaymentInstructions | null;
@@ -39,6 +42,7 @@ export function BillingView({
   eventId,
   usage,
   catalog,
+  quotes,
   payments,
   activation,
   canManage,
@@ -47,7 +51,6 @@ export function BillingView({
   const locale = useLocale();
   const [request, setRequest] = useState<ManualPaymentInstructions | null>(activation);
   const paid = catalog.tiers.filter((tier) => tier.maxGuests <= usage.allowance).at(-1);
-  const upgrades = catalog.tiers.filter((tier) => tier.maxGuests > usage.allowance);
   const lastTier = catalog.tiers.at(-1);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [pendingTier, setPendingTier] = useState<string | null>(null);
@@ -105,27 +108,34 @@ export function BillingView({
         <section>
           <SectionHeading>{t("addTitle")}</SectionHeading>
           <div className="grid gap-3 sm:grid-cols-2">
-            {upgrades.length === 0 && lastTier ? (
+            {quotes.length === 0 && lastTier ? (
               <p className="text-sm text-muted-foreground">{t("maxed", { count: lastTier.maxGuests })}</p>
             ) : null}
-            {upgrades.map((tier) => (
-              <div key={tier.name} className="flex flex-col justify-between rounded-xl border p-4">
+            {quotes.map((quote) => (
+              <div key={quote.tier} className="flex flex-col justify-between rounded-xl border p-4">
                 <div>
-                  <p className="font-medium">{tier.name}</p>
+                  <p className="font-medium">{quote.tier}</p>
                   <p className="text-sm text-muted-foreground">
-                    {t("upTo", { count: tier.maxGuests })}
+                    {quote.maxGuests <= usage.allowance ? t("surchargeOnly") : t("upTo", { count: quote.maxGuests })}
                   </p>
                 </div>
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-lg font-semibold">
-                    {formatAmount(tier.priceMinor - (paid?.priceMinor ?? 0), catalog.currency, locale)}
-                  </span>
+                <div className="mt-4 flex items-end justify-between gap-3">
+                  <div>
+                    <span className="text-lg font-semibold">
+                      {formatAmount(quote.amountMinor, quote.currency, locale)}
+                    </span>
+                    {quote.surchargeMinor > 0 ? (
+                      <p className="text-xs text-muted-foreground">
+                        {t("surcharge", { amount: formatAmount(quote.surchargeMinor, quote.currency, locale) })}
+                      </p>
+                    ) : null}
+                  </div>
                   <Button
                     size="sm"
-                    onClick={() => requestTier(tier.name)}
+                    onClick={() => requestTier(quote.tier)}
                     disabled={pendingTier !== null}
                   >
-                    {pendingTier === tier.name ? t("requesting") : t("activate")}
+                    {pendingTier === quote.tier ? t("requesting") : t("activate")}
                   </Button>
                 </div>
               </div>

@@ -146,7 +146,6 @@
       "mode": {
         "label": "What your guests receive",
         "hint": "Can be changed while the event is a draft.",
-        "soon": "Coming soon",
         "LINK": {
           "title": "Invitation link",
           "description": "Guests open their page, accept or decline, then get their ticket. The cheapest."
@@ -157,7 +156,7 @@
         },
         "INTERACTIVE": {
           "title": "Interactive WhatsApp ticket",
-          "description": "Guests confirm with a button in WhatsApp and get their ticket in the chat."
+          "description": "Guests confirm with a button in WhatsApp and get their ticket in the chat. A per-guest surcharge is added to paid tiers."
         }
       }
     },

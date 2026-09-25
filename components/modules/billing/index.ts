@@ -11,6 +11,7 @@ export type {
   PayeeDetails,
   PaymentHistoryItem,
   PaymentInstruction,
+  EventTierQuote,
   TierCatalog,
   TierOption,
   UsageAllowance,

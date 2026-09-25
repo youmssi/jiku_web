@@ -74,7 +74,9 @@
       "forbidden": "Only an organization admin can request capacity for this event.",
       "owned": "This event already has that tier or more.",
       "failed": "We couldn't record your request. Please try again."
-    }
+    },
+    "surcharge": "including {amount} for answers in WhatsApp",
+    "surchargeOnly": "Answers in WhatsApp for the guests you already have"
   },
   "instructions": {
     "title": "Activation requested: {tier}, {amount}",

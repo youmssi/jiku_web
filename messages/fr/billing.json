@@ -74,7 +74,9 @@
       "forbidden": "Seul un administrateur de l'organisation peut demander de la capacité.",
       "owned": "Cet événement a déjà ce palier ou plus.",
       "failed": "Impossible d'enregistrer votre demande. Réessayez."
-    }
+    },
+    "surcharge": "dont {amount} de réponses dans WhatsApp",
+    "surchargeOnly": "Réponses dans WhatsApp pour vos invités déjà couverts"
   },
   "instructions": {
     "title": "Activation demandée : {tier}, {amount}",
