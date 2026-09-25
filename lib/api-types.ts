@@ -308,6 +308,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/settings/providers/whatsapp/embedded-signup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["embeddedSignupConfig"];
+        put?: never;
+        post: operations["completeEmbeddedSignup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/services": {
         parameters: {
             query?: never;
@@ -1486,6 +1502,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["manual_2"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/whatsapp-number/request": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["requestOwnNumber"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2772,6 +2804,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/billing/whatsapp-number": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ownNumberView"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/billing/tiers": {
         parameters: {
             query?: never;
@@ -3379,6 +3427,9 @@ export interface components {
             accessTokenMasked?: string | null;
             templateName?: string | null;
             templateLanguage?: string | null;
+            allowed?: boolean;
+            displayPhoneNumber?: string | null;
+            verifiedName?: string | null;
         };
         UpdateEmailProviderRequest: {
             apiKey: string;
@@ -3721,6 +3772,11 @@ export interface components {
             delivered?: boolean;
             usingTenantProvider?: boolean;
             error?: string | null;
+        };
+        CompleteEmbeddedSignupRequest: {
+            code: string;
+            wabaId: string;
+            phoneNumberId: string;
         };
         ServiceCreateRequest: {
             name: string;
@@ -4184,12 +4240,12 @@ export interface components {
             checkedInAt?: string | null;
             checkedInBy?: string | null;
         };
-        SubscriptionRequest: {
-            plan: string;
+        PackRequest: {
             /** Format: int32 */
             months?: number;
         };
-        PackRequest: {
+        SubscriptionRequest: {
+            plan: string;
             /** Format: int32 */
             months?: number;
         };
@@ -4492,6 +4548,12 @@ export interface components {
             label?: string;
             channels?: string[];
         };
+        EmbeddedSignupConfig: {
+            enabled?: boolean;
+            appId?: string | null;
+            configId?: string | null;
+            graphVersion?: string | null;
+        };
         ServiceStaffView: {
             /** Format: uuid */
             id?: string;
@@ -4768,6 +4830,30 @@ export interface components {
             /** Format: int64 */
             confirmed?: number;
         };
+        MonthOption: {
+            /** Format: int32 */
+            months?: number;
+            /** Format: int32 */
+            chargedMonths?: number;
+            /**
+             * Format: int32
+             * @deprecated
+             * @description Use chargedMonths
+             */
+            factorMilli?: number;
+        };
+        OwnWhatsAppNumberView: {
+            allowed?: boolean;
+            /** @enum {string} */
+            source?: "PLAN" | "PACK" | "ADDON" | "NONE";
+            /** Format: date-time */
+            addonExpiresAt?: string | null;
+            includedPlans?: string[];
+            currency?: string;
+            /** Format: int64 */
+            monthlyMinor?: number;
+            months?: components["schemas"]["MonthOption"][];
+        };
         CustomTierOption: {
             /** Format: int64 */
             beyondPerGuestMinor?: number;
@@ -4806,18 +4892,6 @@ export interface components {
             /** Format: int64 */
             priceMinor?: number;
             currency?: string;
-        };
-        MonthOption: {
-            /** Format: int32 */
-            months?: number;
-            /** Format: int32 */
-            chargedMonths?: number;
-            /**
-             * Format: int32
-             * @deprecated
-             * @description Use chargedMonths
-             */
-            factorMilli?: number;
         };
         PlanOption: {
             name?: string;
@@ -5749,6 +5823,50 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["TestSendResponse"];
+                };
+            };
+        };
+    };
+    embeddedSignupConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EmbeddedSignupConfig"];
+                };
+            };
+        };
+    };
+    completeEmbeddedSignup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CompleteEmbeddedSignupRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ProviderSettingsResponse"];
                 };
             };
         };
@@ -7879,6 +7997,30 @@ export interface operations {
             };
         };
     };
+    requestOwnNumber: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ManualPaymentInstructions"];
+                };
+            };
+        };
+    };
     request_1: {
         parameters: {
             query?: never;
@@ -9897,6 +10039,26 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ValidatorContextResponse"];
+                };
+            };
+        };
+    };
+    ownNumberView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OwnWhatsAppNumberView"];
                 };
             };
         };

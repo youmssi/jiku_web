@@ -987,6 +987,54 @@
         }
       }
     },
+    "/api/v1/settings/providers/whatsapp/embedded-signup" : {
+      "get" : {
+        "tags" : [
+          "provider-settings-controller"
+        ],
+        "operationId" : "embeddedSignupConfig",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EmbeddedSignupConfig"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [
+          "provider-settings-controller"
+        ],
+        "operationId" : "completeEmbeddedSignup",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CompleteEmbeddedSignupRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProviderSettingsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/services" : {
       "get" : {
         "tags" : [
@@ -4369,6 +4417,36 @@
         }
       }
     },
+    "/api/v1/billing/whatsapp-number/request" : {
+      "post" : {
+        "tags" : [
+          "own-whats-app-number-controller"
+        ],
+        "operationId" : "requestOwnNumber",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PackRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ManualPaymentInstructions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/billing/subscription/request" : {
       "post" : {
         "tags" : [
@@ -7334,6 +7412,26 @@
         }
       }
     },
+    "/api/v1/billing/whatsapp-number" : {
+      "get" : {
+        "tags" : [
+          "own-whats-app-number-controller"
+        ],
+        "operationId" : "ownNumberView",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OwnWhatsAppNumberView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/billing/tiers" : {
       "get" : {
         "tags" : [
@@ -8695,6 +8793,21 @@
               "string",
               "null"
             ]
+          },
+          "allowed" : {
+            "type" : "boolean"
+          },
+          "displayPhoneNumber" : {
+            "type" : [
+              "string",
+              "null"
+            ]
+          },
+          "verifiedName" : {
+            "type" : [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -9975,6 +10088,28 @@
             ]
           }
         }
+      },
+      "CompleteEmbeddedSignupRequest" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "minLength" : 1
+          },
+          "wabaId" : {
+            "type" : "string",
+            "minLength" : 1
+          },
+          "phoneNumberId" : {
+            "type" : "string",
+            "minLength" : 1
+          }
+        },
+        "required" : [
+          "code",
+          "phoneNumberId",
+          "wabaId"
+        ]
       },
       "ServiceCreateRequest" : {
         "type" : "object",
@@ -11575,6 +11710,16 @@
           }
         }
       },
+      "PackRequest" : {
+        "type" : "object",
+        "properties" : {
+          "months" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 1
+          }
+        }
+      },
       "SubscriptionRequest" : {
         "type" : "object",
         "properties" : {
@@ -11591,16 +11736,6 @@
         "required" : [
           "plan"
         ]
-      },
-      "PackRequest" : {
-        "type" : "object",
-        "properties" : {
-          "months" : {
-            "type" : "integer",
-            "format" : "int32",
-            "minimum" : 1
-          }
-        }
       },
       "PackExtraRequest" : {
         "type" : "object",
@@ -12666,6 +12801,32 @@
           }
         }
       },
+      "EmbeddedSignupConfig" : {
+        "type" : "object",
+        "properties" : {
+          "enabled" : {
+            "type" : "boolean"
+          },
+          "appId" : {
+            "type" : [
+              "string",
+              "null"
+            ]
+          },
+          "configId" : {
+            "type" : [
+              "string",
+              "null"
+            ]
+          },
+          "graphVersion" : {
+            "type" : [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
       "ServiceStaffView" : {
         "type" : "object",
         "properties" : {
@@ -13502,6 +13663,68 @@
           }
         }
       },
+      "MonthOption" : {
+        "type" : "object",
+        "properties" : {
+          "months" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "chargedMonths" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "factorMilli" : {
+            "type" : "integer",
+            "format" : "int32",
+            "deprecated" : true,
+            "description" : "Use chargedMonths"
+          }
+        }
+      },
+      "OwnWhatsAppNumberView" : {
+        "type" : "object",
+        "properties" : {
+          "allowed" : {
+            "type" : "boolean"
+          },
+          "source" : {
+            "type" : "string",
+            "enum" : [
+              "PLAN",
+              "PACK",
+              "ADDON",
+              "NONE"
+            ]
+          },
+          "addonExpiresAt" : {
+            "type" : [
+              "string",
+              "null"
+            ],
+            "format" : "date-time"
+          },
+          "includedPlans" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "currency" : {
+            "type" : "string"
+          },
+          "monthlyMinor" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "months" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MonthOption"
+            }
+          }
+        }
+      },
       "CustomTierOption" : {
         "type" : "object",
         "properties" : {
@@ -13577,25 +13800,6 @@
           },
           "currency" : {
             "type" : "string"
-          }
-        }
-      },
-      "MonthOption" : {
-        "type" : "object",
-        "properties" : {
-          "months" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "chargedMonths" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "factorMilli" : {
-            "type" : "integer",
-            "format" : "int32",
-            "deprecated" : true,
-            "description" : "Use chargedMonths"
           }
         }
       },

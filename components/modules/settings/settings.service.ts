@@ -3,7 +3,9 @@
 import { serverFetch } from "@/lib/api-server";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import type {
+  CompleteEmbeddedSignupRequest,
   ProviderSettingsResponse,
   UpdateBrandingRequest,
   UpdateEmailProviderRequest,
@@ -60,9 +62,30 @@ export async function updateWhatsAppProviderAction(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
+  return whatsAppResult(response);
+}
+
+/** Finishes Meta's Embedded Signup with what its window handed back (ADR 105). */
+export async function completeEmbeddedSignupAction(
+  input: CompleteEmbeddedSignupRequest,
+): Promise<ActionResult<ProviderSettingsResponse>> {
+  const response = await serverFetch("/settings/providers/whatsapp/embedded-signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  return whatsAppResult(response);
+}
+
+async function whatsAppResult(response: Response): Promise<ActionResult<ProviderSettingsResponse>> {
+  const t = await getTranslations("settings.whatsappNumber.errors");
+  if (response.status === 402) return fail(t("notIncluded"));
+  if (response.status === 409) return fail(t("taken"));
+  if (response.status === 502) return fail(t("metaRefused"));
+  if (response.status === 503) return fail(t("unavailable"));
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't save your WhatsApp settings. Please try again.");
+    return fail(t("failed"));
   }
   return ok((await response.json()) as ProviderSettingsResponse);
 }

@@ -14,6 +14,7 @@ import {
   loadLegalIdentity,
   loadOrgUsername,
   loadProviderSettings,
+  loadEmbeddedSignupConfig,
   loadTemplates,
   loadVocabulary,
 } from "@/components/modules/settings/settings.queries";
@@ -41,6 +42,9 @@ const UNCONFIGURED_PROVIDERS: ProviderSettingsResponse = {
     accessTokenMasked: null,
     templateName: null,
     templateLanguage: null,
+    allowed: false,
+    displayPhoneNumber: null,
+    verifiedName: null,
   },
 };
 
@@ -60,10 +64,11 @@ const EMPTY_LEGAL_IDENTITY: LegalIdentityResponse = {
  * blocking the others.
  */
 async function loadManagerSettings() {
-  const [username, branding, providers, legalIdentity, members, vocabulary, templates] = await Promise.all([
+  const [username, branding, providers, embeddedSignup, legalIdentity, members, vocabulary, templates] = await Promise.all([
     loadOrgUsername(),
     loadBranding(),
     loadProviderSettings(),
+    loadEmbeddedSignupConfig(),
     loadLegalIdentity(),
     fetchMembersAction(),
     loadVocabulary(),
@@ -73,6 +78,7 @@ async function loadManagerSettings() {
     username,
     branding: branding ?? DEFAULT_BRANDING,
     providers: providers ?? UNCONFIGURED_PROVIDERS,
+    embeddedSignup: embeddedSignup ?? { enabled: false, appId: null, configId: null, graphVersion: null },
     legalIdentity: legalIdentity ?? EMPTY_LEGAL_IDENTITY,
     team: members.ok ? members.data : null,
     vocabulary,
@@ -86,7 +92,7 @@ async function loadManagerSettings() {
  * ADMIN or OWNER role; a member only sees their organization and account, and
  * nothing a member cannot read is fetched for them.
  */
-export async function SettingsView() {
+export async function SettingsView({ tab }: { tab?: string }) {
   const context = await getOrganizerContext();
   const isManager = context !== null && MANAGER_ROLES.includes(context.role);
   const settings = isManager ? await loadManagerSettings() : null;
@@ -98,7 +104,7 @@ export async function SettingsView() {
         <p className="mt-1 text-sm text-muted-foreground">Your organization, your team and your account.</p>
       </div>
 
-      <Tabs defaultValue={settings ? "branding" : "organization"} className="w-full">
+      <Tabs defaultValue={tab && settings ? tab : settings ? "branding" : "organization"} className="w-full">
         <TabsList className="mb-8">
           <TabsTrigger value="organization">Organization</TabsTrigger>
           {settings ? <TabsTrigger value="branding">Branding</TabsTrigger> : null}
@@ -134,7 +140,7 @@ export async function SettingsView() {
               </TabsContent>
             ) : null}
             <TabsContent value="messaging" className="mt-0">
-              <ProviderSettingsView initial={settings.providers} />
+              <ProviderSettingsView initial={settings.providers} embeddedSignup={settings.embeddedSignup} />
             </TabsContent>
             <TabsContent value="legal" className="mt-0">
               <LegalIdentityView identity={settings.legalIdentity} />

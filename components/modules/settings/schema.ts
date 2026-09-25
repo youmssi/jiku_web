@@ -28,13 +28,20 @@ export interface EmailProviderView {
   apiKeyMasked: string | null;
 }
 
-export interface WhatsAppProviderView {
-  configured: boolean;
-  provider: string | null;
-  phoneNumberId: string | null;
-  accessTokenMasked: string | null;
-  templateName: string | null;
-  templateLanguage: string | null;
+/**
+ * The organization's WhatsApp number (ADR 105). [allowed] says whether its
+ * offer includes its own number; saved credentials are used only while it does.
+ */
+export type WhatsAppProviderView = Schema<"WhatsAppProviderView">;
+
+/** What Meta's Embedded Signup window needs; [enabled] is false until the Meta app is configured. */
+export type EmbeddedSignupConfig = Schema<"EmbeddedSignupConfig">;
+
+/** What Meta's window hands back once the organizer approves. */
+export interface CompleteEmbeddedSignupRequest {
+  code: string;
+  wabaId: string;
+  phoneNumberId: string;
 }
 
 export interface ProviderSettingsResponse {
