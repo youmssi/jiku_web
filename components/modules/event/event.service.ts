@@ -31,6 +31,9 @@ function toPayload(values: EventFormValues) {
       overbookingAllowed: values.overbookingAllowed,
       maxOverbookingCount: values.overbookingAllowed ? values.maxOverbookingCount : null,
       deliveryMode: values.deliveryMode,
+      brandName: values.brandName.trim() || null,
+      brandLogoUrl: values.brandLogoUrl.trim() || null,
+      brandColor: values.brandColor || null,
     },
     invitationChannels: values.invitationChannels,
   };

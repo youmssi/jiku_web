@@ -24,6 +24,9 @@ export { TIMEZONES };
 export const DELIVERY_MODES = ["LINK", "DIRECT_TICKET", "INTERACTIVE"] as const;
 export type DeliveryMode = (typeof DELIVERY_MODES)[number];
 
+const HTTPS_OR_EMPTY = /^(https:\/\/\S+)?$/;
+const HEX_OR_EMPTY = /^(#[0-9a-fA-F]{6})?$/;
+
 // Validation messages are `common.validation` keys, translated where they render.
 export const eventFormSchema = z
   .object({
@@ -39,6 +42,9 @@ export const eventFormSchema = z
     maxOverbookingCount: z.number().int("wholeNumber").min(0, "positive").nullable(),
     invitationChannels: z.array(z.enum(INVITATION_CHANNELS)),
     deliveryMode: z.enum(DELIVERY_MODES),
+    brandName: z.string().max(255, "tooLong"),
+    brandLogoUrl: z.string().max(2048, "tooLong").regex(HTTPS_OR_EMPTY, "httpsUrl"),
+    brandColor: z.string().regex(HEX_OR_EMPTY, "hexColor"),
   })
   .refine((values) => !values.startLocal || !values.endLocal || values.endLocal > values.startLocal, {
     message: "endBeforeStart",
@@ -60,6 +66,9 @@ export const emptyEventValues: EventFormValues = {
   maxOverbookingCount: null,
   invitationChannels: [],
   deliveryMode: "LINK",
+  brandName: "",
+  brandLogoUrl: "",
+  brandColor: "",
 };
 
 /**

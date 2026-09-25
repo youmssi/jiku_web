@@ -44,9 +44,13 @@ import {
   type InvitationChannel,
 } from "./schema";
 
+const DEFAULT_BRAND_COLOR = "#1E293B";
+const HEX = /^#[0-9a-fA-F]{6}$/;
+const HTTPS = /^https:\/\/\S+$/;
+
 /**
- * Everything about an event on one page, in three sections an organizer can
- * jump to from the publish checklist (#details, #invitations, #rules). A draft
+ * Everything about an event on one page, in sections an organizer can
+ * jump to from the publish checklist (#details, #invitations, #client, #rules). A draft
  * is edited freely and saved from the bar that appears on the first change; a
  * published or cancelled event shows the same page read-only, because its
  * guests already hold what it says.
@@ -74,6 +78,7 @@ export function EventSettingsForm({
   });
   const transferAllowed = useWatch({ control, name: "transferAllowed" });
   const overbookingAllowed = useWatch({ control, name: "overbookingAllowed" });
+  const [brandName, brandLogoUrl, brandColor] = useWatch({ control, name: ["brandName", "brandLogoUrl", "brandColor"] });
 
   async function onSubmit(values: EventFormValues) {
     const result = await updateDraftAction(eventId, values);
@@ -237,6 +242,95 @@ export function EventSettingsForm({
                   </FieldSet>
                 )}
               />
+            </FieldGroup>
+          </CardContent>
+        </Card>
+
+        <Card id="client" className="scroll-mt-20">
+          <CardHeader>
+            <CardTitle>{t("client.title")}</CardTitle>
+            <CardDescription>{t("client.description")}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FieldGroup>
+              <Controller
+                control={control}
+                name="brandName"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>{t("client.name")}</FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      placeholder={t("client.namePlaceholder")}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="brandLogoUrl"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>{t("client.logo")}</FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      type="url"
+                      inputMode="url"
+                      placeholder="https://"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    <FieldDescription>{t("client.logoHint")}</FieldDescription>
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="brandColor"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>{t("client.color")}</FieldLabel>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="color"
+                        aria-label={t("client.color")}
+                        value={field.value || DEFAULT_BRAND_COLOR}
+                        onChange={(event) => field.onChange(event.target.value.toUpperCase())}
+                        disabled={!editable}
+                        className="h-9 w-12 cursor-pointer rounded-md border bg-transparent p-1 disabled:cursor-not-allowed"
+                      />
+                      <Input
+                        {...field}
+                        id={field.name}
+                        placeholder={DEFAULT_BRAND_COLOR}
+                        maxLength={7}
+                        aria-invalid={fieldState.invalid}
+                        className="max-w-32 font-mono uppercase"
+                      />
+                    </div>
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
+              />
+              {brandName.trim() ? (
+                <Field>
+                  <FieldLabel>{t("client.preview")}</FieldLabel>
+                  <div
+                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-white"
+                    style={{ backgroundColor: HEX.test(brandColor) ? brandColor : DEFAULT_BRAND_COLOR }}
+                  >
+                    {HTTPS.test(brandLogoUrl) ? (
+                      // eslint-disable-next-line @next/next/no-img-element -- an organizer-supplied external logo, not a local asset
+                      <img src={brandLogoUrl} alt="" className="size-8 rounded-full bg-white object-contain" />
+                    ) : null}
+                    <span className="font-semibold">{brandName}</span>
+                  </div>
+                </Field>
+              ) : null}
             </FieldGroup>
           </CardContent>
         </Card>

@@ -23,7 +23,9 @@
     "endBeforeStart": "The end must be after the start.",
     "contactRequired": "Enter an email or a phone number.",
     "phone": "Use the international format, e.g. +224620000000.",
-    "tooShort": "Too short."
+    "tooShort": "Too short.",
+    "httpsUrl": "Enter an address that starts with https://",
+    "hexColor": "Enter a colour in the #RRGGBB format"
   },
   "roles": {
     "OWNER": "Owner",
