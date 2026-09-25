@@ -4,7 +4,8 @@ export { BillingView } from "./billing-view";
 export { AllPaymentsView } from "./all-payments-view";
 export { InvoicesTable } from "./invoices-table";
 export { SubscriptionSection } from "./subscription-section";
-export { fetchInvoicesAction, issueInvoiceAction, fetchSubscriptionAction } from "./billing.service";
+export { PackSection } from "./pack-section";
+export { fetchInvoicesAction, issueInvoiceAction, fetchSubscriptionAction, fetchPackAction } from "./billing.service";
 export type {
   InvoiceSummary,
   ManualPaymentInstructions,
@@ -15,6 +16,7 @@ export type {
   TierCatalog,
   TierOption,
   UsageAllowance,
+  PackView,
   SubscriptionView,
   SubscriptionPlanOption,
   SubscriptionMonthOption,

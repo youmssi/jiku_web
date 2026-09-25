@@ -25,6 +25,9 @@ import type {
   UsageAllowance,
 } from "./schema";
 
+/** The tier an event reports while an Organizer Pack covers it (ADR 105). */
+const PACK_TIER = "PACK";
+
 interface BillingViewProps {
   eventId: string;
   usage: UsageAllowance;
@@ -76,7 +79,7 @@ export function BillingView({
         <SectionHeading>{t("allowanceTitle")}</SectionHeading>
         <div className="rounded-xl border p-5">
           <p className="text-sm text-muted-foreground">
-            {t("allowance", { tier: usage.tier, used: usage.invitedGuests, allowance: usage.allowance })}
+            {t("allowance", { tier: usage.tier === PACK_TIER ? t("packTier") : usage.tier, used: usage.invitedGuests, allowance: usage.allowance })}
           </p>
           <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-muted">
             <div
@@ -94,7 +97,13 @@ export function BillingView({
         </div>
       </section>
 
-      {request ? (
+      {usage.tier === PACK_TIER ? (
+        <Alert>
+          <InfoIcon />
+          <AlertTitle>{t("coveredTitle")}</AlertTitle>
+          <AlertDescription>{t("coveredText")}</AlertDescription>
+        </Alert>
+      ) : request ? (
         <section>
           <SectionHeading>{t("requestTitle")}</SectionHeading>
           <ActivationInstructions instructions={request} />
