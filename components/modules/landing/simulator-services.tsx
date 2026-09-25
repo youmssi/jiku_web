@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Link } from "@/i18n/navigation";
 import { ROUTES } from "@/lib/constants";
-import { quoteForService, servicePlan, type ServicePlanId } from "@/lib/pricing";
+import { priceIn, quoteForService, servicePlan, type ServicePlanId } from "@/lib/pricing";
 import { salesMailto } from "@/lib/support";
 import { cn } from "@/lib/utils";
 import type { SimulatorContent, SimulatorServicePlan } from "./simulator-content";
@@ -33,8 +33,9 @@ export function ServicesPanel({
   const { services } = content;
   const [yearly, setYearly] = useState(false);
   const selected = services.plans.find((plan) => plan.id === planId) ?? services.plans[1];
-  const quote = quoteForService(planId, servers, yearly);
-  const soloTooSmall = planId === "solo" && servers > (servicePlan("solo").maxServers ?? 1);
+  const quote = quoteForService(planId, servers, yearly, format.currency);
+  const maxPeople = servicePlan(planId).maxPeople;
+  const soloTooSmall = maxPeople !== null && servers > maxPeople;
 
   return (
     <div className="flex flex-col gap-8">
@@ -75,7 +76,6 @@ export function ServicesPanel({
                 key={plan.id}
                 plan={plan}
                 selected={plan.id === planId}
-                yearly={yearly}
                 format={format}
                 content={content}
                 onSelect={() => onPlanChange(plan.id)}
@@ -95,16 +95,14 @@ export function ServicesPanel({
               <p className="mt-4 text-3xl font-bold tracking-tight">{content.onQuote}</p>
             ) : (
               <>
-                <p className="mt-4 text-4xl font-bold tracking-tight">{format.gnf(quote.monthlyTotal)}</p>
-                <p className="text-sm text-muted-foreground">
-                  {services.perMonth} · {format.usd(quote.monthlyTotal)}
-                </p>
+                <p className="mt-4 text-4xl font-bold tracking-tight">{format.money(quote.monthlyTotal)}</p>
+                <p className="text-sm text-muted-foreground">{services.perMonth}</p>
                 <p className="mt-3 text-sm">
-                  {format.gnf(quote.yearlyTotal ?? 0)} {services.perYear}
+                  {format.money(quote.yearlyTotal ?? 0)} {services.perYear}
                 </p>
                 {quote.yearlySaving > 0 ? (
                   <p className="mt-2 text-sm font-medium text-primary">
-                    {fill(services.saving, { amount: format.gnf(quote.yearlySaving) })}
+                    {fill(services.saving, { amount: format.money(quote.yearlySaving) })}
                   </p>
                 ) : null}
               </>
@@ -134,20 +132,19 @@ export function ServicesPanel({
 function PlanCard({
   plan,
   selected,
-  yearly,
   format,
   content,
   onSelect,
 }: {
   plan: SimulatorServicePlan;
   selected: boolean;
-  yearly: boolean;
   format: PriceFormat;
   content: SimulatorContent;
   onSelect: () => void;
 }) {
   const pricing = servicePlan(plan.id);
-  const perPerson = yearly && pricing.yearly !== null ? pricing.yearly : pricing.monthly;
+  const base = pricing.monthly === null ? null : priceIn(pricing.monthly, format.currency);
+  const extra = pricing.extraPerson === null ? null : priceIn(pricing.extraPerson, format.currency);
 
   return (
     <button
@@ -167,10 +164,16 @@ function PlanCard({
       </span>
       <span className="mt-1 text-xs text-muted-foreground">{plan.audience}</span>
       <span className="mt-4 text-xl font-bold tracking-tight">
-        {perPerson === null ? content.onQuote : format.gnf(perPerson)}
+        {base === null ? content.onQuote : format.money(base)}
       </span>
-      {perPerson !== null && perPerson > 0 ? (
-        <span className="text-xs text-muted-foreground">{content.services.perPersonMonth}</span>
+      {base !== null && base > 0 ? (
+        <span className="text-xs text-muted-foreground">
+          {content.services.perMonth}
+          {pricing.includedPeople > 1 ? ` · ${fill(content.services.includes, { count: pricing.includedPeople })}` : ""}
+        </span>
+      ) : null}
+      {extra !== null ? (
+        <span className="text-xs text-muted-foreground">{fill(content.services.extraPerson, { amount: format.money(extra) })}</span>
       ) : null}
       <ul className="mt-4 flex flex-col gap-1.5">
         {plan.features.map((feature) => (

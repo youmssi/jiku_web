@@ -3,11 +3,12 @@
 import { useRef, useState } from "react";
 import { MessageSquareText } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { ServicePlanId } from "@/lib/pricing";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { PRICING_CURRENCIES, type DeliveryMode, type PricingCurrency, type ServicePlanId } from "@/lib/pricing";
 import type { LandingLocale } from "./content";
-import { DEFAULT_TICKET_PRICE, PlanFinder, type FinderResult } from "./plan-finder";
+import { PlanFinder, type FinderResult } from "./plan-finder";
 import type { SimulatorContent, SimulatorNeed } from "./simulator-content";
-import { priceFormat } from "./simulator-format";
+import { defaultCurrency, priceFormat, ticketPriceField } from "./simulator-format";
 import { InvitePanel } from "./simulator-invite";
 import { SellPanel } from "./simulator-sell";
 import { ServicesPanel } from "./simulator-services";
@@ -25,10 +26,17 @@ export function SimulatorCalculator({ content, locale }: { content: SimulatorCon
   const [planId, setPlanId] = useState<ServicePlanId>("teams");
   const [servers, setServers] = useState(3);
   const [guests, setGuests] = useState(150);
-  const [ticketPrice, setTicketPrice] = useState(DEFAULT_TICKET_PRICE);
+  const [mode, setMode] = useState<DeliveryMode>("link");
+  const [currency, setCurrency] = useState<PricingCurrency>(defaultCurrency(locale));
+  const [ticketPrice, setTicketPrice] = useState(ticketPriceField(defaultCurrency(locale)).initial);
   const [tickets, setTickets] = useState(300);
   const tabsRef = useRef<HTMLDivElement>(null);
-  const format = priceFormat(locale, content.usdPrefix);
+  const format = priceFormat(locale, currency);
+
+  function changeCurrency(next: PricingCurrency) {
+    setCurrency(next);
+    setTicketPrice(ticketPriceField(next).initial);
+  }
 
   function apply(result: FinderResult) {
     setNeed(result.need);
@@ -41,7 +49,24 @@ export function SimulatorCalculator({ content, locale }: { content: SimulatorCon
 
   return (
     <div className="flex flex-col gap-14">
-      <PlanFinder content={content} locale={locale} onApply={apply} />
+      <div className="flex flex-col items-center gap-3 text-center">
+        <ToggleGroup
+          type="single"
+          variant="outline"
+          aria-label={content.currency.label}
+          value={currency}
+          onValueChange={(value) => value && changeCurrency(value as PricingCurrency)}
+        >
+          {PRICING_CURRENCIES.map((code) => (
+            <ToggleGroupItem key={code} value={code} className="px-4" title={content.currency.names[code]}>
+              {code}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+        <p className="max-w-xl text-xs text-muted-foreground">{content.currency.note}</p>
+      </div>
+
+      <PlanFinder content={content} format={format} onApply={apply} />
 
       <div ref={tabsRef} className="scroll-mt-24">
         <Tabs value={need} onValueChange={(value) => setNeed(value as SimulatorNeed)} className="gap-8">
@@ -67,7 +92,14 @@ export function SimulatorCalculator({ content, locale }: { content: SimulatorCon
             />
           </TabsContent>
           <TabsContent value="invite" className="text-sm">
-            <InvitePanel content={content} locale={locale} format={format} guests={guests} onGuestsChange={setGuests} />
+            <InvitePanel
+              content={content}
+              format={format}
+              guests={guests}
+              onGuestsChange={setGuests}
+              mode={mode}
+              onModeChange={setMode}
+            />
           </TabsContent>
           <TabsContent value="sell" className="text-sm">
             <SellPanel

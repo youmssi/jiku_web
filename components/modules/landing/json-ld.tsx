@@ -1,4 +1,4 @@
-import { PRICING } from "@/lib/pricing";
+import { EVENT_PRICING } from "@/lib/pricing";
 import type { LandingContent, LandingLocale } from "./content";
 
 /**
@@ -39,8 +39,8 @@ export function LandingJsonLd({
       "@type": "AggregateOffer",
       priceCurrency: "GNF",
       lowPrice: "0",
-      highPrice: String(PRICING.tiers[PRICING.tiers.length - 1].priceMinor),
-      offerCount: PRICING.tiers.length + 1,
+      highPrice: String(EVENT_PRICING.tiers[EVENT_PRICING.tiers.length - 1].price.gnf),
+      offerCount: EVENT_PRICING.tiers.length + 1,
     },
   };
 

@@ -190,7 +190,7 @@ const fr: UseCasesPageContent = {
     },
     subscription: {
       title: "Vous recevez des clients",
-      text: "Un abonnement par personne qui sert, chaque mois : Solo gratuit pour une personne, Teams à 100 000 GNF par personne. Aucune commission sur vos clients.",
+      text: "Un abonnement pour votre équipe, chaque mois : Solo gratuit pour toujours, Teams dès 150 000 GNF (10 000 FCFA) pour 2 personnes. Aucune commission sur vos clients.",
       cta: "Trouver ma formule",
       note: "Solo gratuit",
     },
@@ -350,7 +350,7 @@ const en: UseCasesPageContent = {
     },
     subscription: {
       title: "You serve clients",
-      text: "A subscription per person who serves, each month: Solo free for one person, Teams at 100,000 GNF per person. No commission on your clients.",
+      text: "A subscription for your team, each month: Solo free forever, Teams from $17 (150,000 GNF) for 2 people. No commission on your clients.",
       cta: "Find my plan",
       note: "Solo free",
     },
