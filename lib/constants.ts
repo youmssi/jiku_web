@@ -79,6 +79,8 @@ export function eventGuestsExportRoute(id: string): string {
 }
 
 export const PRIVACY_ROUTE = "/privacy";
+export const TERMS_ROUTE = "/terms";
+export const LEGAL_NOTICE_ROUTE = "/legal";
 
 export function invitationRoute(token: string): string {
   return `/invitation/${token}`;

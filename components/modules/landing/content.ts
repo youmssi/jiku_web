@@ -402,7 +402,14 @@ const fr: LandingContent = {
           { label: "Créer un compte", href: "/register" },
         ],
       },
-      { title: "Légal", links: [{ label: "Politique de confidentialité", href: "/privacy" }] },
+      {
+        title: "Légal",
+        links: [
+          { label: "Mentions légales", href: "/legal" },
+          { label: "Conditions d'utilisation et de vente", href: "/terms" },
+          { label: "Politique de confidentialité", href: "/privacy" },
+        ],
+      },
     ],
     copyright: "Tous droits réservés.",
     tagline: "Pensé pour l'Afrique francophone",
@@ -661,7 +668,14 @@ const en: LandingContent = {
           { label: "Create an account", href: "/register" },
         ],
       },
-      { title: "Legal", links: [{ label: "Privacy policy", href: "/privacy" }] },
+      {
+        title: "Legal",
+        links: [
+          { label: "Legal notice", href: "/legal" },
+          { label: "Terms of use and sale", href: "/terms" },
+          { label: "Privacy policy", href: "/privacy" },
+        ],
+      },
     ],
     copyright: "All rights reserved.",
     tagline: "Built for French-speaking Africa",
