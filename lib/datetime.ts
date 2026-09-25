@@ -78,3 +78,32 @@ export function utcToLocalInput(utcInstant: string | null, timeZone: string): st
     `T${pad(zoned.getHours())}:${pad(zoned.getMinutes())}`
   );
 }
+
+/**
+ * The day of an event, spelled out in the viewer's language and the event's own
+ * timezone ("samedi 12 décembre 2026" / "Saturday 12 December 2026").
+ */
+export function formatEventDay(utcInstant: string, timeZone: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone,
+  }).format(new Date(utcInstant));
+}
+
+/** The time of day of an event in its own timezone, on a 24-hour clock. */
+export function formatEventTime(utcInstant: string, timeZone: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+    timeZone,
+  }).format(new Date(utcInstant));
+}
+
+/** The city part of an IANA zone, for a "Conakry time" hint ("Africa/Conakry" → "Conakry"). */
+export function zoneCity(timeZone: string): string {
+  return (timeZone.split("/").pop() ?? timeZone).replaceAll("_", " ");
+}

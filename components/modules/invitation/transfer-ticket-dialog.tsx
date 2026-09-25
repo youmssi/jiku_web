@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -15,8 +16,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { FormFieldError } from "@/components/shared";
 import { formatLocalDateTime } from "@/lib/datetime";
 import { transferTicketAction } from "@/components/modules/invitation/invitation.service";
 import {
@@ -33,6 +35,7 @@ export function TransferTicketDialog({
   /** When transfers close, shown so the guest knows how long they have. */
   deadline: string | null;
 }) {
+  const t = useTranslations("guest.transfer");
   const [open, setOpen] = useState(false);
   const {
     control,
@@ -51,7 +54,7 @@ export function TransferTicketDialog({
       toast.error(result.error);
       return;
     }
-    toast.success(`Ticket transferred to ${values.firstName} ${values.lastName}.`);
+    toast.success(t("done", { name: `${values.firstName} ${values.lastName}` }));
     reset();
     setOpen(false);
   }
@@ -59,17 +62,15 @@ export function TransferTicketDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Transfer to someone else</Button>
+        <Button variant="outline">{t("open")}</Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <DialogHeader>
-            <DialogTitle>Transfer your ticket</DialogTitle>
+            <DialogTitle>{t("title")}</DialogTitle>
             <DialogDescription>
-              They&apos;ll get their own invitation and this ticket will no longer be valid for you.
-              {deadline
-                ? ` Transfers close on ${formatLocalDateTime(deadline)}.`
-                : null}
+              {t("description")}
+              {deadline ? ` ${t("deadline", { date: formatLocalDateTime(deadline) })}` : null}
             </DialogDescription>
           </DialogHeader>
           <FieldGroup className="py-4">
@@ -79,9 +80,9 @@ export function TransferTicketDialog({
                 name="firstName"
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>First name</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>{t("firstName")}</FieldLabel>
                     <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
-                    {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                    <FormFieldError error={fieldState.error} />
                   </Field>
                 )}
               />
@@ -90,9 +91,9 @@ export function TransferTicketDialog({
                 name="lastName"
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Last name</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>{t("lastName")}</FieldLabel>
                     <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
-                    {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                    <FormFieldError error={fieldState.error} />
                   </Field>
                 )}
               />
@@ -102,7 +103,7 @@ export function TransferTicketDialog({
               name="email"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Their email</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{t("email")}</FieldLabel>
                   <Input
                     {...field}
                     value={field.value ?? ""}
@@ -111,7 +112,7 @@ export function TransferTicketDialog({
                     inputMode="email"
                     aria-invalid={fieldState.invalid}
                   />
-                  {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                  <FormFieldError error={fieldState.error} />
                 </Field>
               )}
             />
@@ -120,7 +121,7 @@ export function TransferTicketDialog({
               name="phoneNumber"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Their WhatsApp number (optional)</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{t("phone")}</FieldLabel>
                   <Input
                     {...field}
                     value={field.value ?? ""}
@@ -130,7 +131,7 @@ export function TransferTicketDialog({
                     placeholder="+224620000000"
                     aria-invalid={fieldState.invalid}
                   />
-                  {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                  <FormFieldError error={fieldState.error} />
                 </Field>
               )}
             />
@@ -138,11 +139,11 @@ export function TransferTicketDialog({
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="ghost">
-                Cancel
+                {t("cancel")}
               </Button>
             </DialogClose>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Transferring…" : "Transfer ticket"}
+              {isSubmitting ? t("submitting") : t("submit")}
             </Button>
           </DialogFooter>
         </form>

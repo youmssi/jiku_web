@@ -3752,6 +3752,12 @@ export interface components {
             transferredTo?: string | null;
             questions?: components["schemas"]["RsvpQuestion"][];
             payment?: components["schemas"]["RsvpPayment"] | null;
+            /** Format: date-time */
+            eventStart?: string | null;
+            /** Format: date-time */
+            eventEnd?: string | null;
+            eventTimezone?: string | null;
+            categoryName?: string | null;
         };
         ResourceCreateRequest: {
             name: string;

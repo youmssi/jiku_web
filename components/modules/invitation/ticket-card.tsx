@@ -1,17 +1,25 @@
 "use client";
 
 import { useState, type CSSProperties, type MouseEvent } from "react";
+import { useTranslations } from "next-intl";
 import { QRCodeSVG } from "qrcode.react";
+import { cn } from "@/lib/utils";
 
 interface TicketCardProps {
   ticketCode: string;
   eventName: string;
-  eventWhen: string | null;
-  eventLocation: string | null;
   organizerName: string;
   primaryColor: string;
   logoUrl: string | null;
   guestName: string;
+  categoryName: string | null;
+  /** The event day and time, already written in the viewer's language and the event's timezone. */
+  day: string | null;
+  time: string | null;
+  /** The event's timezone city, shown under the time so no one reads it in their own zone. */
+  zone: string | null;
+  location: string | null;
+  cancelled: boolean;
 }
 
 /** Mixes a hex color toward black by `amount` (0-1), for the header's gradient depth. */
@@ -37,13 +45,18 @@ function darken(hex: string, amount: number): string {
 export function TicketCard({
   ticketCode,
   eventName,
-  eventWhen,
-  eventLocation,
   organizerName,
   primaryColor,
   logoUrl,
   guestName,
+  categoryName,
+  day,
+  time,
+  zone,
+  location,
+  cancelled,
 }: TicketCardProps) {
+  const t = useTranslations("guest.ticket");
   const [glare, setGlare] = useState<{ x: number; y: number } | null>(null);
 
   function handleMouseMove(event: MouseEvent<HTMLDivElement>) {
@@ -67,7 +80,7 @@ export function TicketCard({
   return (
     <div className="w-full max-w-sm">
       <div
-        className="group relative overflow-hidden rounded-2xl border bg-card shadow-lg shadow-black/5"
+        className="group relative overflow-hidden rounded-2xl border bg-card shadow-lg shadow-black/5 print:shadow-none"
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setGlare(null)}
       >
@@ -94,6 +107,11 @@ export function TicketCard({
           ) : null}
           <p className="text-xs font-medium uppercase tracking-[0.2em] opacity-80">{organizerName}</p>
           <h1 className="mt-1 text-balance text-xl font-bold tracking-tight">{eventName}</h1>
+          {categoryName ? (
+            <span className="mt-3 inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider ring-1 ring-white/30">
+              {categoryName}
+            </span>
+          ) : null}
         </div>
 
         {/* Perforated divider with side notches, matching the page background. */}
@@ -103,9 +121,22 @@ export function TicketCard({
           <div className="absolute inset-x-6 top-0 -translate-y-1/2 border-t-2 border-dashed border-border" />
         </div>
 
+        {/* Details, laid out like a pass: who, when, where. */}
+        <dl className="grid grid-cols-2 gap-x-4 gap-y-3 px-6 pt-7 text-left">
+          <Detail label={t("guest")} value={guestName} wide />
+          {day ? <Detail label={t("date")} value={day} wide /> : null}
+          {time ? <Detail label={t("time")} value={time} hint={zone ? t("timezone", { zone }) : null} /> : null}
+          {location ? <Detail label={t("place")} value={location} wide /> : null}
+        </dl>
+
         {/* Scan panel */}
-        <div className="relative flex flex-col items-center px-6 pb-6 pt-8">
-          <div className="rounded-xl bg-white p-4 shadow-inner ring-1 ring-black/5">
+        <div className="relative flex flex-col items-center px-6 pb-6 pt-6">
+          <div
+            className={cn(
+              "rounded-xl bg-white p-4 shadow-inner ring-1 ring-black/5",
+              cancelled && "opacity-30 grayscale",
+            )}
+          >
             <QRCodeSVG
               value={ticketCode}
               size={216}
@@ -114,23 +145,38 @@ export function TicketCard({
               className="h-auto w-full max-w-[216px]"
             />
           </div>
-          <p className="mt-4 font-mono text-sm font-semibold uppercase tracking-wide">{guestName}</p>
-          <p className="mt-1.5 select-all rounded-md bg-muted px-3 py-1 font-mono text-xs tracking-wider text-muted-foreground">
-            {ticketCode}
+          <p className="mt-3 flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted-foreground">
+            {t("code")}
+            <span className="select-all rounded-md bg-muted px-2 py-0.5 font-mono text-xs normal-case tracking-wider text-foreground">
+              {ticketCode}
+            </span>
           </p>
-
-          {(eventWhen || eventLocation) && (
-            <div className="mt-4 w-full space-y-1 border-t pt-4 text-center text-sm text-muted-foreground">
-              {eventWhen ? <p>{eventWhen}</p> : null}
-              {eventLocation ? <p>{eventLocation}</p> : null}
-            </div>
-          )}
         </div>
       </div>
 
-      <p className="mt-4 text-center text-xs text-muted-foreground">
-        Save or screenshot this ticket. It works offline and you can show it at the entrance.
+      <p className="mt-4 text-center text-xs text-muted-foreground print:hidden">
+        {t("offline")}
       </p>
+    </div>
+  );
+}
+
+function Detail({
+  label,
+  value,
+  hint,
+  wide,
+}: {
+  label: string;
+  value: string;
+  hint?: string | null;
+  wide?: boolean;
+}) {
+  return (
+    <div className={cn("min-w-0", wide && "col-span-2")}>
+      <dt className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{label}</dt>
+      <dd className="mt-0.5 text-sm font-semibold first-letter:uppercase">{value}</dd>
+      {hint ? <dd className="text-xs text-muted-foreground">{hint}</dd> : null}
     </div>
   );
 }
