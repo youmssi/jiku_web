@@ -112,5 +112,8 @@ export function toEventFormValues(event: EventResponse): EventFormValues {
     maxOverbookingCount: event.settings.maxOverbookingCount,
     invitationChannels: event.invitationChannels,
     deliveryMode: event.settings.deliveryMode,
+    brandName: event.settings.brandName ?? "",
+    brandLogoUrl: event.settings.brandLogoUrl ?? "",
+    brandColor: event.settings.brandColor ?? "",
   };
 }

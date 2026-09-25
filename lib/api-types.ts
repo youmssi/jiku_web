@@ -3543,6 +3543,9 @@ export interface components {
             maxOverbookingCount?: number | null;
             /** @enum {string} */
             deliveryMode?: "LINK" | "DIRECT_TICKET" | "INTERACTIVE";
+            brandName?: string | null;
+            brandLogoUrl?: string | null;
+            brandColor?: string | null;
         };
         UpdateEventRequest: {
             name: string;

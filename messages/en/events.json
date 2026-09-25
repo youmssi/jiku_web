@@ -174,7 +174,17 @@
     "unsaved": "Unsaved changes",
     "discard": "Discard",
     "saving": "Saving…",
-    "save": "Save"
+    "save": "Save",
+    "client": {
+      "title": "Client",
+      "description": "For agencies and wedding planners: your guests see the event under your client's name, logo and colour. Left empty, your organization shows.",
+      "name": "Client name",
+      "namePlaceholder": "e.g. The Diallo family",
+      "logo": "Logo address",
+      "logoHint": "An online image, starting with https://",
+      "color": "Colour",
+      "preview": "What your guests see"
+    }
   },
   "quorum": {
     "title": "Quorum",

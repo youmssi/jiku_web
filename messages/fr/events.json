@@ -174,7 +174,17 @@
     "unsaved": "Modifications non enregistrées",
     "discard": "Annuler",
     "saving": "Enregistrement…",
-    "save": "Enregistrer"
+    "save": "Enregistrer",
+    "client": {
+      "title": "Client",
+      "description": "Pour les agences et wedding planners : vos invités voient l'événement au nom de votre client, avec son logo et sa couleur. Laissé vide, c'est votre organisation qui apparaît.",
+      "name": "Nom du client",
+      "namePlaceholder": "Ex. Famille Diallo",
+      "logo": "Adresse du logo",
+      "logoHint": "Une image en ligne, en https://",
+      "color": "Couleur",
+      "preview": "Aperçu pour vos invités"
+    }
   },
   "quorum": {
     "title": "Quorum",
