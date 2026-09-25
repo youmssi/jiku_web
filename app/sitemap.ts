@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/components/modules/seo";
-import { SEO_ROUTES } from "@/lib/constants";
+import { LEGAL_NOTICE_ROUTE, PRIVACY_ROUTE, SEO_ROUTES, TERMS_ROUTE } from "@/lib/constants";
+
+const LEGAL_PAGES = [LEGAL_NOTICE_ROUTE, TERMS_ROUTE, PRIVACY_ROUTE];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const origin = siteUrl();
@@ -9,8 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // The generic marketing pages (use-cases, simulator) are bilingual with the
   // default locale (fr) serving unprefixed — they carry explicit hreflang
-  // alternates, like the landing page. /faq and /privacy render French content
-  // regardless of locale segment, so they stay single entries.
+  // alternates, like the landing page. /faq renders French content regardless of
+  // locale segment, so it stays a single entry. The legal pages are bilingual.
   return [
     {
       url: origin,
@@ -84,11 +86,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.6,
     },
-    {
-      url: `${origin}/privacy`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.3,
-    },
+    ...LEGAL_PAGES.flatMap((path) =>
+      [`${origin}${path}`, `${origin}/en${path}`].map((url) => ({
+        url,
+        lastModified,
+        changeFrequency: "yearly" as const,
+        priority: 0.3,
+        alternates: { languages: { fr: `${origin}${path}`, en: `${origin}/en${path}` } },
+      })),
+    ),
   ];
 }
