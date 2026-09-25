@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { MoreHorizontal, Plus, Ticket } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -90,6 +90,7 @@ export function TicketTypesSettings({
   editable: boolean;
 }) {
   const t = useTranslations("events.tickets");
+  const locale = useLocale();
   const format = useFormatter();
   const router = useRouter();
   const [editing, setEditing] = useState<TicketTypeResponse | "new" | null>(null);
@@ -151,7 +152,7 @@ export function TicketTypesSettings({
                   </ItemTitle>
                   <ItemDescription>
                     {type.priceMinor && type.currency
-                      ? formatAmount(type.priceMinor, type.currency)
+                      ? formatAmount(type.priceMinor, type.currency, locale)
                       : t("free")}
                     {" · "}
                     {type.maxCapacity === null

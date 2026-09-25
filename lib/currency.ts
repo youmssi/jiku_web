@@ -20,12 +20,17 @@ const ZERO_DECIMAL_CURRENCIES = new Set([
   "XPF",
 ]);
 
-/** Formats a minor-unit amount for display, currency-aware (mirrors the backend's BillingHistoryController). */
-export function formatAmount(minor: number, currency: string): string {
+/**
+ * Formats a minor-unit amount for display, currency-aware (mirrors the backend's
+ * BillingHistoryController). Pass the visitor's [locale] from a Client Component:
+ * without it the server and the browser may group digits differently, and the
+ * page fails to hydrate.
+ */
+export function formatAmount(minor: number, currency: string, locale?: string): string {
   if (ZERO_DECIMAL_CURRENCIES.has(currency.toUpperCase())) {
-    return `${minor.toLocaleString(undefined, { minimumFractionDigits: 0 })} ${currency}`;
+    return `${minor.toLocaleString(locale, { minimumFractionDigits: 0 })} ${currency}`;
   }
-  return `${(minor / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })} ${currency}`;
+  return `${(minor / 100).toLocaleString(locale, { minimumFractionDigits: 2 })} ${currency}`;
 }
 
 /** Digits after the decimal point for a currency: 0 for GNF or XOF, 2 otherwise. */

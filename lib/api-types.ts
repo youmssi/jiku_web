@@ -3549,7 +3549,12 @@ export interface components {
             name?: string;
             /** Format: int64 */
             maxGuests?: number;
-            /** Format: int64 */
+            price?: components["schemas"]["PriceList"];
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use price
+             */
             priceMinor?: number;
         };
         PayeeDetails: {
@@ -3565,11 +3570,33 @@ export interface components {
             tiers?: components["schemas"]["BillingTierOption"][];
             subscriptionPlans?: components["schemas"]["SubscriptionPlanOption"][];
         };
+        PriceList: {
+            /** Format: int64 */
+            gnf?: number;
+            /** Format: int64 */
+            fcfa?: number;
+            /** Format: int64 */
+            usdCents?: number;
+        };
         SubscriptionPlanOption: {
             name?: string;
             /** Format: int64 */
-            maxResources?: number;
+            includedPeople?: number;
             /** Format: int64 */
+            maxPeople?: number | null;
+            monthly?: components["schemas"]["PriceList"];
+            extraPerson?: components["schemas"]["PriceList"] | null;
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use maxPeople and includedPeople
+             */
+            maxResources?: number;
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use monthly
+             */
             priceMinorPerMonth?: number;
         };
         PlatformBillingSettingsView: {
@@ -4623,8 +4650,18 @@ export interface components {
         };
         CustomTierOption: {
             /** Format: int64 */
+            beyondPerGuestMinor?: number;
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use beyondPerGuestMinor
+             */
             perGuestUsdCents?: number;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @deprecated
+             * @description There is no setup fee since ADR 105; always 0
+             */
             setupFeeUsdCents?: number;
         };
         TierCatalog: {
@@ -4646,22 +4683,48 @@ export interface components {
             guestCount?: number;
             /** Format: int64 */
             priceMinor?: number;
+            currency?: string;
         };
         MonthOption: {
             /** Format: int32 */
             months?: number;
             /** Format: int32 */
+            chargedMonths?: number;
+            /**
+             * Format: int32
+             * @deprecated
+             * @description Use chargedMonths
+             */
             factorMilli?: number;
         };
         PlanOption: {
             name?: string;
             /** Format: int64 */
-            maxResources?: number;
+            includedPeople?: number;
             /** Format: int64 */
+            maxPeople?: number | null;
+            /** Format: int64 */
+            monthlyMinor?: number;
+            /** Format: int64 */
+            extraPersonMinor?: number | null;
+            /** Format: int64 */
+            teamMonthlyMinor?: number | null;
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use maxPeople and includedPeople
+             */
+            maxResources?: number;
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use monthlyMinor
+             */
             priceMinorPerMonth?: number;
         };
         SubscriptionView: {
             plan?: string;
+            currency?: string;
             /** Format: int64 */
             resourcesActive?: number;
             /** Format: int64 */
@@ -4671,9 +4734,11 @@ export interface components {
             /** Format: date-time */
             startedAt?: string;
             /** Format: date-time */
-            expiresAt?: string;
+            expiresAt?: string | null;
             /** Format: date-time */
             suspensionAt?: string | null;
+            /** Format: int64 */
+            monthlyMinor?: number;
             plans?: components["schemas"]["PlanOption"][];
             months?: components["schemas"]["MonthOption"][];
         };

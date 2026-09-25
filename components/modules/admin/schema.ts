@@ -38,9 +38,18 @@ export interface AdminPayment {
  * is running, and a second copy in the UI would drift the next time pricing
  * changes in configuration.
  */
+/** One price in the three billing currencies (ADR 105); USD is in cents. */
+export interface AdminPriceList {
+  gnf: number;
+  fcfa: number;
+  usdCents: number;
+}
+
 export interface AdminTierOption {
   name: string;
   maxGuests: number;
+  price: AdminPriceList;
+  /** The GNF price, kept by the API for older clients. */
   priceMinor: number;
 }
 
@@ -235,8 +244,12 @@ export interface AdminPayeeDetails {
 
 export interface AdminSubscriptionPlanOption {
   name: string;
-  maxResources: number;
-  priceMinorPerMonth: number;
+  includedPeople: number;
+  /** Null when the plan has no people cap. */
+  maxPeople: number | null;
+  monthly: AdminPriceList;
+  /** Null when the plan takes no one beyond its included people. */
+  extraPerson: AdminPriceList | null;
 }
 
 export interface AdminBillingSettingsView {
@@ -246,6 +259,9 @@ export interface AdminBillingSettingsView {
   subscriptionPlans: AdminSubscriptionPlanOption[];
   managedInDatabase: boolean;
 }
+
+const amount = z.coerce.number().int().nonnegative("Price must be zero or more.");
+const priceListSchema = z.object({ gnf: amount, fcfa: amount, usdCents: amount });
 
 export const adminBillingSettingsSchema = z.object({
   payee: z.object({
@@ -266,7 +282,7 @@ export const adminBillingSettingsSchema = z.object({
       z.object({
         name: z.string().trim().min(1, "Tier name is required.").max(40),
         maxGuests: z.coerce.number().int().positive("Guests must be a positive number."),
-        priceMinor: z.coerce.number().int().nonnegative("Price must be zero or more."),
+        price: priceListSchema,
       }),
     )
     .min(1, "At least one tier is required."),
@@ -274,8 +290,12 @@ export const adminBillingSettingsSchema = z.object({
     .array(
       z.object({
         name: z.string().trim().min(1, "Plan name is required.").max(40),
-        maxResources: z.coerce.number().int().positive("Resources must be a positive number."),
-        priceMinorPerMonth: z.coerce.number().int().nonnegative("Price must be zero or more."),
+        includedPeople: z.coerce.number().int().positive("Included people must be a positive number."),
+        /** Empty means no cap. */
+        maxPeople: z.string().trim().regex(/^\d*$/, "Leave empty or enter a whole number."),
+        monthly: priceListSchema,
+        /** All zero means the plan takes no one beyond its included people. */
+        extraPerson: priceListSchema,
       }),
     )
     .min(1, "At least one subscription plan is required."),

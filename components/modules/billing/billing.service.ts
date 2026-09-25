@@ -1,33 +1,14 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { reportApiError } from "@/lib/action-result";
 import type {
   InvoiceSummary,
   ManualPaymentInstructions,
-  PaymentInitiation,
   SubscriptionRequestInput,
   SubscriptionView,
 } from "./schema";
-
-export async function purchaseTierAction(
-  eventId: string,
-  tier: string,
-): Promise<{ initiation?: PaymentInitiation; error?: string }> {
-  const response = await serverFetch(`/events/${eventId}/payments`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ tier }),
-  });
-  if (response.status === 400) {
-    return { error: "That tier isn't available. Please pick another." };
-  }
-  if (!response.ok) {
-    return { error: "We couldn't start the payment. Please try again." };
-  }
-  const initiation = (await response.json()) as PaymentInitiation;
-  return { initiation };
-}
 
 export async function requestActivationAction(
   eventId: string,
@@ -38,15 +19,19 @@ export async function requestActivationAction(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ tier }),
   });
+  const t = await getTranslations("billing.event.errors");
   if (response.status === 400) {
-    return { error: "That tier isn't available. Please pick another." };
+    return { error: t("unavailable") };
   }
   if (response.status === 401 || response.status === 403) {
-    return { error: "Only an organization admin can request capacity for this event." };
+    return { error: t("forbidden") };
+  }
+  if (response.status === 409) {
+    return { error: t("owned") };
   }
   if (!response.ok) {
     reportApiError(response);
-    return { error: "We couldn't record your request. Please try again." };
+    return { error: t("failed") };
   }
   const instructions = (await response.json()) as ManualPaymentInstructions;
   return { instructions };
@@ -72,12 +57,16 @@ export async function requestSubscriptionAction(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
+  const t = await getTranslations("billing.subscription.errors");
   if (response.status === 400) {
-    return { ok: false, error: "That subscription isn't available. Please pick another." };
+    return { ok: false, error: t("unavailable") };
+  }
+  if (response.status === 409) {
+    return { ok: false, error: t("tooSmall") };
   }
   if (!response.ok) {
     reportApiError(response);
-    return { ok: false, error: "We couldn't record your request. Please try again." };
+    return { ok: false, error: t("failed") };
   }
   return { ok: true, instructions: (await response.json()) as ManualPaymentInstructions };
 }
@@ -99,15 +88,13 @@ export async function issueInvoiceAction(
   paymentId: string,
 ): Promise<{ ok: true; invoice: InvoiceSummary } | { ok: false; error: string }> {
   const response = await serverFetch(`/billing/invoices/payments/${paymentId}`, { method: "POST" });
+  const t = await getTranslations("billing.actions");
   if (response.status === 409) {
-    return {
-      ok: false,
-      error: "Add your organization's legal details in Settings before issuing an invoice.",
-    };
+    return { ok: false, error: t("legalDetails") };
   }
   if (!response.ok) {
     reportApiError(response);
-    return { ok: false, error: "We couldn't issue the invoice. Please try again." };
+    return { ok: false, error: t("invoiceFailed") };
   }
   return { ok: true, invoice: (await response.json()) as InvoiceSummary };
 }
@@ -117,15 +104,13 @@ export async function creditNoteAction(
   invoiceId: string,
 ): Promise<{ ok: true; invoice: InvoiceSummary } | { ok: false; error: string }> {
   const response = await serverFetch(`/billing/invoices/${invoiceId}/credit-note`, { method: "POST" });
+  const t = await getTranslations("billing.actions");
   if (response.status === 409) {
-    return {
-      ok: false,
-      error: "Cette facture ne peut pas recevoir une seconde note de crédit.",
-    };
+    return { ok: false, error: t("creditTwice") };
   }
   if (!response.ok) {
     reportApiError(response);
-    return { ok: false, error: "Impossible d'émettre la note de crédit." };
+    return { ok: false, error: t("creditFailed") };
   }
   return { ok: true, invoice: (await response.json()) as InvoiceSummary };
 }

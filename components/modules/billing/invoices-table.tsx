@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { billingInvoiceDocumentRoute } from "@/lib/constants";
+import { useLocale, useTranslations } from "next-intl";
 import { formatAmount } from "@/lib/currency";
 import { formatLocalDateTime } from "@/lib/datetime";
 import { CreditNoteButton } from "@/components/modules/billing/invoice-actions";
@@ -30,6 +31,8 @@ import type { InvoiceSummary } from "./schema";
  * the original and its correction.
  */
 export function InvoicesTable({ invoices }: { invoices: InvoiceSummary[] }) {
+  const t = useTranslations("billing.invoices");
+  const locale = useLocale();
   if (invoices.length === 0) {
     return (
       <Empty className="py-10">
@@ -37,9 +40,9 @@ export function InvoicesTable({ invoices }: { invoices: InvoiceSummary[] }) {
           <EmptyMedia variant="icon">
             <FileText />
           </EmptyMedia>
-          <EmptyTitle>No invoices yet</EmptyTitle>
+          <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
           <EmptyDescription>
-            Issue one from a settled payment when a buyer needs a formal document.
+            {t("emptyText")}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -51,12 +54,12 @@ export function InvoicesTable({ invoices }: { invoices: InvoiceSummary[] }) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Number</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Issued</TableHead>
-            <TableHead>Total</TableHead>
-            <TableHead>Document</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>{t("number")}</TableHead>
+            <TableHead>{t("type")}</TableHead>
+            <TableHead>{t("issued")}</TableHead>
+            <TableHead>{t("total")}</TableHead>
+            <TableHead>{t("document")}</TableHead>
+            <TableHead>{t("actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -64,23 +67,23 @@ export function InvoicesTable({ invoices }: { invoices: InvoiceSummary[] }) {
             <TableRow key={invoice.id}>
               <TableCell className="font-medium">{invoice.invoiceNumber}</TableCell>
               <TableCell>
-                {invoice.documentType === "CREDIT_NOTE" ? "Credit note" : "Invoice"}
+                {invoice.documentType === "CREDIT_NOTE" ? t("creditNote") : t("invoice")}
               </TableCell>
               <TableCell>{formatLocalDateTime(invoice.issuedAt)}</TableCell>
-              <TableCell>{formatAmount(invoice.totalMinor, invoice.currency)}</TableCell>
+              <TableCell>{formatAmount(invoice.totalMinor, invoice.currency, locale)}</TableCell>
               <TableCell>
                 <a
                   href={billingInvoiceDocumentRoute(invoice.id)}
                   className="text-primary underline underline-offset-4"
                 >
-                  Download PDF
+                  {t("pdf")}
                 </a>
               </TableCell>
               <TableCell>
                 {invoice.documentType === "INVOICE" ? (
                   <CreditNoteButton invoiceId={invoice.id} />
                 ) : (
-                  <span className="text-muted-foreground">None</span>
+                  <span className="text-muted-foreground">{t("none")}</span>
                 )}
               </TableCell>
             </TableRow>

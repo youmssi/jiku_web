@@ -1,52 +1,67 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";import { toast } from "sonner";
+import { useState, useTransition } from "react";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { Check } from "lucide-react";
+import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
+import { toast } from "sonner";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { RadioGroup } from "@/components/ui/radio-group";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { formatAmount } from "@/lib/currency";
+import { cn } from "@/lib/utils";
 import { requestSubscriptionAction } from "@/components/modules/billing/billing.service";
 import { ActivationInstructions } from "@/components/modules/billing/activation-instructions";
-import type { ManualPaymentInstructions, SubscriptionView } from "@/components/modules/billing/schema";
+import type {
+  ManualPaymentInstructions,
+  SubscriptionPlanOption,
+  SubscriptionStatus,
+  SubscriptionView,
+} from "@/components/modules/billing/schema";
 
-function formatDay(iso: string | null): string {
-  if (!iso) return "";
-  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-}
+const DAY_MS = 86_400_000;
+const NOTICE_DAYS = 7;
 
 /**
- * Abonnement prépayé de l'organisateur (JIKU-90) : formule, échéance, ressources
- * utilisées/incluses, bandeau quand l'échéance approche (ou en grâce, en ambre,
- * avec la date de suspension), et demande de prépaiement 1/3/6/12 mois qui suit
- * le circuit Mobile Money manuel (référence puis confirmation par l'équipe).
+ * The organizer's services subscription (JIKU-90, priced per team since ADR 105):
+ * the plan and what it costs for this team, a banner when a paid period ends
+ * soon, is in grace, or when the team outgrew a free plan, and a request for a
+ * prepayment of one month or a year (two months free) that follows the manual
+ * Mobile Money flow.
  */
-export function SubscriptionSection({
-  initial,
-  nowIso,
-}: {
-  initial: SubscriptionView;
-  nowIso: string;
-}) {
+export function SubscriptionSection({ initial, nowIso }: { initial: SubscriptionView; nowIso: string }) {
+  const t = useTranslations("billing.subscription");
+  const locale = useLocale();
+  const format = useFormatter();
   const subscription = initial;
-  const [showRequest, setShowRequest] = useState(false);
-  const [plan, setPlan] = useState(initial.plan);
-  const [months, setMonths] = useState<number>(initial.months[0]?.months ?? 1);
+  const money = (amount: number) => formatAmount(amount, subscription.currency, locale);
+  const day = (iso: string | null) => (iso ? format.dateTime(new Date(iso), { dateStyle: "long" }) : "");
+
+  const current = subscription.plans.find((option) => option.name === subscription.plan);
+  const isFree = current?.monthlyMinor === 0;
+  const paidOptions = subscription.plans.filter((option) => option.monthlyMinor > 0);
+  const [open, setOpen] = useState(subscription.overLimit);
+  const [plan, setPlan] = useState(
+    (current && !isFree ? current : paidOptions.find((option) => option.teamMonthlyMinor !== null))?.name ?? "",
+  );
+  const [months, setMonths] = useState(subscription.months[0]?.months ?? 1);
   const [instructions, setInstructions] = useState<ManualPaymentInstructions | null>(null);
   const [isSaving, startSave] = useTransition();
 
-  const daysLeft = useMemo(() => {
-    const expires = Date.parse(subscription.expiresAt);
-    return Math.ceil((expires - Date.parse(nowIso)) / 86_400_000);
-  }, [subscription.expiresAt, nowIso]);
+  const daysLeft = subscription.expiresAt
+    ? Math.ceil((Date.parse(subscription.expiresAt) - Date.parse(nowIso)) / DAY_MS)
+    : null;
+  const status = subscription.status as SubscriptionStatus;
+  const inGrace = status === "GRACE";
+  const outgrown = subscription.overLimit && isFree;
+  const nearExpiry = !inGrace && !isFree && daysLeft !== null && daysLeft <= NOTICE_DAYS;
 
-  const inGrace = subscription.status === "GRACE";
-  const nearExpiry = !inGrace && daysLeft <= 7;
-  const selectedPlan = subscription.plans.find((p) => p.name === plan);
+  const selected = subscription.plans.find((option) => option.name === plan);
+  const period = subscription.months.find((option) => option.months === months);
+  const total =
+    selected?.teamMonthlyMinor != null && period ? selected.teamMonthlyMinor * period.chargedMonths : null;
 
   function submitRequest() {
     startSave(async () => {
@@ -56,128 +71,128 @@ export function SubscriptionSection({
         return;
       }
       setInstructions(result.instructions);
-      setShowRequest(false);
-      toast.success("Payment instructions are ready.");
+      setOpen(false);
+      toast.success(t("ready"));
     });
   }
 
   return (
     <div className="flex flex-col gap-4">
-      {inGrace ? (
-        <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200">
-          <p className="font-semibold">
-            Your {subscription.plan} subscription is in grace.
-          </p>
-          <p className="mt-1">
-            Renew now. Your workspace will be suspended on {formatDay(subscription.suspensionAt)}.
-          </p>
-        </div>
+      {outgrown ? (
+        <Banner>{t("outgrown", { plan: subscription.plan, date: day(subscription.expiresAt) })}</Banner>
       ) : null}
-      {nearExpiry ? (
-        <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200">
-          <p className="font-semibold">
-            Your {subscription.plan} subscription expires in {daysLeft} day{daysLeft === 1 ? "" : "s"}.
-          </p>
-          <p className="mt-1">
-            {subscription.resourcesActive} active resource
-            {subscription.resourcesActive === 1 ? "" : "s"} on {subscription.resourcesIncluded} included. Renew
-            before then to keep your workspace running.
-          </p>
-        </div>
-      ) : null}
+      {inGrace ? <Banner>{t("grace", { date: day(subscription.suspensionAt) })}</Banner> : null}
+      {nearExpiry ? <Banner>{t("expiring", { days: Math.max(daysLeft ?? 0, 0) })}</Banner> : null}
 
       <div className="rounded-xl border p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="text-base font-semibold">{subscription.plan} subscription</p>
-            <p className="text-sm text-muted-foreground">
-              Renews on {formatDay(subscription.expiresAt)}. Status: {subscription.status}
+            <p className="flex items-center gap-2 text-base font-semibold">
+              {t("title", { plan: subscription.plan })}
+              <Badge variant={status === "ACTIVE" ? "secondary" : "destructive"}>{t(`status.${status}`)}</Badge>
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {isFree ? t("free") : t("renews", { date: day(subscription.expiresAt) })}
             </p>
           </div>
-          <Button variant="outline" onClick={() => setShowRequest((current) => !current)}>
-            {showRequest ? "Cancel" : "Renew or change"}
+          <Button variant={outgrown ? "default" : "outline"} onClick={() => setOpen((value) => !value)}>
+            {open ? t("cancel") : outgrown ? t("choose") : t("change")}
           </Button>
         </div>
-
-        <p className="mt-4 text-sm text-muted-foreground">
-          {subscription.resourcesActive} of {subscription.resourcesIncluded} active resources used
-        </p>
-        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-muted">
-          <div
-            className={`h-full rounded-full transition-all ${
-              subscription.overLimit ? "bg-amber-500" : "bg-green-600"
-            }`}
-            style={{
-              width: `${Math.min(100, (subscription.resourcesActive / subscription.resourcesIncluded) * 100)}%`,
-            }}
-          />
-        </div>
-        {subscription.overLimit ? (
-          <p className="mt-2 text-sm text-amber-600 dark:text-amber-400">
-            You have more active resources than your formula includes. Renew on a larger formula to avoid a
-            gap when this period ends.
-          </p>
-        ) : null}
+        <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+          <div>
+            <dt className="text-muted-foreground">
+              {t("people", { active: subscription.resourcesActive })}
+            </dt>
+            <dd className="font-medium">{t("included", { count: subscription.resourcesIncluded })}</dd>
+          </div>
+          {!isFree ? (
+            <div>
+              <dt className="text-muted-foreground">{t("teamPrice")}</dt>
+              <dd className="font-medium">{t("monthly", { amount: money(subscription.monthlyMinor) })}</dd>
+            </div>
+          ) : null}
+        </dl>
       </div>
 
-      {instructions ? (
-        <ActivationInstructions instructions={instructions} />
-      ) : null}
+      {instructions ? <ActivationInstructions instructions={instructions} /> : null}
 
-      {showRequest ? (
-        <div className="flex flex-col gap-4 rounded-xl border p-5">
-          <div>
-            <Label>Formula</Label>
-            <div className="mt-2 max-w-xs">
-              <Select value={plan} onValueChange={setPlan}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {subscription.plans.map((option) => (
-                    <SelectItem key={option.name} value={option.name}>
-                      {option.name} (up to {option.maxResources} resources)
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+      {open ? (
+        <div className="flex flex-col gap-5 rounded-xl border p-5">
+          <RadioGroup value={plan} onValueChange={setPlan} className="grid gap-3 sm:grid-cols-2">
+            {paidOptions.map((option) => (
+              <PlanCard key={option.name} option={option} current={option.name === subscription.plan} money={money} />
+            ))}
+          </RadioGroup>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-sm font-medium">{t("period.label")}</span>
+            <ToggleGroup
+              type="single"
+              variant="outline"
+              value={String(months)}
+              onValueChange={(value) => value && setMonths(Number.parseInt(value, 10))}
+            >
+              {subscription.months.map((option) => (
+                <ToggleGroupItem key={option.months} value={String(option.months)} className="px-3">
+                  {option.months === 12 ? t("period.yearly") : t("period.monthly")}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
           </div>
 
-          <div>
-            <Label>Prepaid period</Label>
-            <div className="mt-2 max-w-xs">
-              <Select
-                value={String(months)}
-                onValueChange={(value) => setMonths(Number.parseInt(value, 10))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {subscription.months.map((option) => (
-                    <SelectItem key={option.months} value={String(option.months)}>
-                      {option.months} month{option.months === 1 ? "" : "s"}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <p className="text-sm text-muted-foreground">
-            {selectedPlan
-              ? `You'll receive Mobile Money payment instructions with the exact amount and a reference to quote.`
-              : null}
-          </p>
-
-          <div>
-            <Button onClick={submitRequest} disabled={isSaving}>
-              {isSaving ? "Requesting…" : "Request prepayment"}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+            <p className="text-lg font-semibold">{total !== null ? t("total", { amount: money(total) }) : null}</p>
+            <Button onClick={submitRequest} disabled={isSaving || total === null}>
+              {isSaving ? t("requesting") : t("request")}
             </Button>
           </div>
         </div>
       ) : null}
     </div>
+  );
+}
+
+function PlanCard({
+  option,
+  current,
+  money,
+}: {
+  option: SubscriptionPlanOption;
+  current: boolean;
+  money: (amount: number) => string;
+}) {
+  const t = useTranslations("billing.subscription.plan");
+  const holdsTeam = option.teamMonthlyMinor !== null;
+  return (
+    <RadioGroupPrimitive.Item
+      value={option.name}
+      disabled={!holdsTeam}
+      className="group flex flex-col rounded-xl border p-4 text-left transition-colors outline-none hover:border-primary/40 focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary data-[state=checked]:bg-primary/[0.06]"
+    >
+      <span className="flex items-center justify-between gap-2 font-semibold">
+        <span className="flex items-center gap-2">
+          {option.name}
+          {current ? <Badge variant="outline">{t("current")}</Badge> : null}
+        </span>
+        <Check className="size-4 text-primary opacity-0 group-data-[state=checked]:opacity-100" />
+      </span>
+      <span className="mt-2 text-sm">{t("base", { amount: money(option.monthlyMinor) })}</span>
+      <span className="text-xs text-muted-foreground">{t("includes", { count: option.includedPeople })}</span>
+      {option.extraPersonMinor !== null ? (
+        <span className="text-xs text-muted-foreground">{t("extra", { amount: money(option.extraPersonMinor) })}</span>
+      ) : null}
+      <span className={cn("mt-3 text-sm font-medium", holdsTeam ? "text-primary" : "text-muted-foreground")}>
+        {holdsTeam ? t("team", { amount: money(option.teamMonthlyMinor ?? 0) }) : t("tooSmall")}
+      </span>
+    </RadioGroupPrimitive.Item>
+  );
+}
+
+function Banner({ children }: { children: React.ReactNode }) {
+  return (
+    <Alert className="border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200">
+      <AlertDescription className="text-inherit">{children}</AlertDescription>
+    </Alert>
   );
 }

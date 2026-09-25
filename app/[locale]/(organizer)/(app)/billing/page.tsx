@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { localeRedirect } from "@/i18n/redirect";
 import { InfoIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -23,23 +24,20 @@ export default async function BillingPage() {
     return localeRedirect(ROUTES.LOGIN);
   }
   const payments = response.ok ? ((await response.json()) as PaymentHistoryItem[]) : [];
-  const [invoices, subscription] = await Promise.all([
+  const [invoices, subscription, t] = await Promise.all([
     fetchInvoicesAction(),
     fetchSubscriptionAction(),
+    getTranslations("billing.page"),
   ]);
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-10">
-      <h1 className="mb-6 text-2xl font-semibold">Billing</h1>
+      <h1 className="mb-6 text-2xl font-semibold">{t("title")}</h1>
 
       <Alert className="mb-8">
         <InfoIcon />
-        <AlertTitle>This is your workspace billing</AlertTitle>
-        <AlertDescription>
-          It covers your subscription and every payment made across all of your events.
-          To see one event&apos;s guest allowance and request extra capacity for it, open
-          that event and go to its Billing section.
-        </AlertDescription>
+        <AlertTitle>{t("notice.title")}</AlertTitle>
+        <AlertDescription>{t("notice.text")}</AlertDescription>
       </Alert>
 
       {subscription ? (
@@ -51,10 +49,9 @@ export default async function BillingPage() {
       <AllPaymentsView payments={payments} />
 
       <section className="mt-12">
-        <h2 className="mb-2 text-lg font-semibold">Invoices</h2>
+        <h2 className="mb-2 text-lg font-semibold">{t("invoicesTitle")}</h2>
         <p className="mb-4 text-sm text-muted-foreground">
-          Formal documents for a company or institution. Your legal details live in
-          Settings, and an invoice cannot be issued until they are complete.
+          {t("invoicesText")}
         </p>
         <InvoicesTable invoices={invoices} />
       </section>
