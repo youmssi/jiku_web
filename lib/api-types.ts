@@ -4844,6 +4844,12 @@ export interface components {
              */
             priceMinorPerMonth?: number;
         };
+        ReminderAllowance: {
+            /** Format: int32 */
+            sent?: number;
+            /** Format: int32 */
+            limit?: number;
+        };
         SubscriptionView: {
             plan?: string;
             currency?: string;
@@ -4863,6 +4869,7 @@ export interface components {
             monthlyMinor?: number;
             plans?: components["schemas"]["PlanOption"][];
             months?: components["schemas"]["MonthOption"][];
+            whatsAppReminders?: components["schemas"]["ReminderAllowance"] | null;
         };
         PaymentHistoryItem: {
             /** Format: uuid */
