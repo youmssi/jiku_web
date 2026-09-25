@@ -15,13 +15,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { billingReceiptRoute } from "@/lib/constants";
+import { useLocale, useTranslations } from "next-intl";
 import { formatAmount } from "@/lib/currency";
 import { formatLocalDateTime } from "@/lib/datetime";
 import { IssueInvoiceButton } from "@/components/modules/billing/invoice-actions";
 import type { PaymentHistoryItem } from "./schema";
 
+const STATUSES = ["PENDING", "SUCCEEDED", "FAILED"] as const;
+type PaymentStatus = (typeof STATUSES)[number];
+
 /** Payment history table shared between the per-event and all-events billing views. */
 export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem[] }) {
+  const t = useTranslations("billing.history");
+  const locale = useLocale();
   if (payments.length === 0) {
     return (
       <Empty className="py-10">
@@ -29,9 +35,9 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
           <EmptyMedia variant="icon">
             <CreditCard />
           </EmptyMedia>
-          <EmptyTitle>No payments yet</EmptyTitle>
+          <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
           <EmptyDescription>
-            Payments you request appear here once they are recorded.
+            {t("emptyText")}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -43,22 +49,22 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Date</TableHead>
-            <TableHead>Event</TableHead>
-            <TableHead>Tier</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Receipt</TableHead>
-            <TableHead>Invoice</TableHead>
+            <TableHead>{t("date")}</TableHead>
+            <TableHead>{t("event")}</TableHead>
+            <TableHead>{t("tier")}</TableHead>
+            <TableHead>{t("amount")}</TableHead>
+            <TableHead>{t("status")}</TableHead>
+            <TableHead>{t("receipt")}</TableHead>
+            <TableHead>{t("invoice")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {payments.map((payment) => (
             <TableRow key={payment.paymentId}>
               <TableCell>{formatLocalDateTime(payment.createdAt)}</TableCell>
-              <TableCell>{payment.eventName}</TableCell>
+              <TableCell>{payment.eventId ? payment.eventName : t("subscription")}</TableCell>
               <TableCell>{payment.tier}</TableCell>
-              <TableCell>{formatAmount(payment.amountMinor, payment.currency)}</TableCell>
+              <TableCell>{formatAmount(payment.amountMinor, payment.currency, locale)}</TableCell>
               <TableCell>
                 <span
                   className={
@@ -69,7 +75,7 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
                         : "text-muted-foreground"
                   }
                 >
-                  {payment.status}
+                  {STATUSES.includes(payment.status as PaymentStatus) ? t(`statuses.${payment.status as PaymentStatus}`) : payment.status}
                 </span>
               </TableCell>
               <TableCell>
@@ -78,17 +84,17 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
                     href={billingReceiptRoute(payment.paymentId)}
                     className="underline underline-offset-4"
                   >
-                    Download
+                    {t("download")}
                   </a>
                 ) : (
-                  <span className="text-muted-foreground">None</span>
+                  <span className="text-muted-foreground">{t("none")}</span>
                 )}
               </TableCell>
               <TableCell>
                 {payment.status === "SUCCEEDED" ? (
                   <IssueInvoiceButton paymentId={payment.paymentId} />
                 ) : (
-                  <span className="text-muted-foreground">None</span>
+                  <span className="text-muted-foreground">{t("none")}</span>
                 )}
               </TableCell>
             </TableRow>

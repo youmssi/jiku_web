@@ -25,17 +25,9 @@ export interface PaymentHistoryItem {
   createdAt: string;
 }
 
-export interface TierOption {
-  name: string;
-  maxGuests: number;
-  priceMinor: number;
-}
-
-export interface TierCatalog {
-  currency: string;
-  freeTierGuests: number;
-  tiers: TierOption[];
-}
+/** Event tiers priced in the organization's billing currency (ADR 105). */
+export type TierOption = Schema<"TierOption">;
+export type TierCatalog = Schema<"TierCatalog">;
 
 export interface PaymentInstruction {
   type: string;
@@ -63,13 +55,6 @@ export interface ManualPaymentInstructions {
   payee: PayeeDetails;
 }
 
-export interface PaymentInitiation {
-  paymentId: string;
-  status: string;
-  amountMinor: number;
-  currency: string;
-  instruction: PaymentInstruction;
-}
 
 // ─── Invoices (JIKU-69) ─────────────────────────────────────────────────────
 // Accounting-grade documents, distinct from the plain-text payment receipt: a
@@ -78,33 +63,12 @@ export interface PaymentInitiation {
 
 export type InvoiceSummary = Schema<"InvoiceSummary">;
 
-// ─── Abonnement prépayé par ressource active (JIKU-90) ───────────────────────
+// ─── Services subscription, priced per team (JIKU-90, ADR 105) ───────────────
 
 export type SubscriptionStatus = "ACTIVE" | "GRACE" | "EXPIRED";
-
-export interface SubscriptionPlanOption {
-  name: string;
-  maxResources: number;
-  priceMinorPerMonth: number;
-}
-
-export interface SubscriptionMonthOption {
-  months: number;
-  factorMilli: number;
-}
-
-export interface SubscriptionView {
-  plan: string;
-  resourcesActive: number;
-  resourcesIncluded: number;
-  overLimit: boolean;
-  status: SubscriptionStatus;
-  startedAt: string;
-  expiresAt: string;
-  suspensionAt: string | null;
-  plans: SubscriptionPlanOption[];
-  months: SubscriptionMonthOption[];
-}
+export type SubscriptionView = Schema<"SubscriptionView">;
+export type SubscriptionPlanOption = Schema<"PlanOption">;
+export type SubscriptionMonthOption = Schema<"MonthOption">;
 
 export interface SubscriptionRequestInput {
   plan: string;

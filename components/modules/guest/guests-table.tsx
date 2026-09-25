@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Search } from "lucide-react";
 import { toast } from "sonner";
@@ -394,12 +394,13 @@ function GuestsToolbar({
 
 function PaymentBadge({ row }: { row: GuestRow }) {
   const t = useTranslations("guests.payment");
+  const locale = useLocale();
   switch (row.paymentStatus) {
     case "DUE":
       return (
         <Badge variant="secondary">
           {row.amountDueMinor && row.amountDueCurrency
-            ? t("due", { amount: formatAmount(row.amountDueMinor, row.amountDueCurrency) })
+            ? t("due", { amount: formatAmount(row.amountDueMinor, row.amountDueCurrency, locale) })
             : t("dueNoAmount")}
         </Badge>
       );

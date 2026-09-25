@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { InfoIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -42,7 +43,12 @@ export function BillingView({
   activation,
   canManage,
 }: BillingViewProps) {
+  const t = useTranslations("billing.event");
+  const locale = useLocale();
   const [request, setRequest] = useState<ManualPaymentInstructions | null>(activation);
+  const paid = catalog.tiers.filter((tier) => tier.maxGuests <= usage.allowance).at(-1);
+  const upgrades = catalog.tiers.filter((tier) => tier.maxGuests > usage.allowance);
+  const lastTier = catalog.tiers.at(-1);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [pendingTier, setPendingTier] = useState<string | null>(null);
 
@@ -64,10 +70,10 @@ export function BillingView({
   return (
     <div className="flex flex-col gap-8">
       <section>
-        <SectionHeading>This event&apos;s allowance</SectionHeading>
+        <SectionHeading>{t("allowanceTitle")}</SectionHeading>
         <div className="rounded-xl border p-5">
           <p className="text-sm text-muted-foreground">
-            {usage.tier} tier, {usage.invitedGuests} of {usage.allowance} invitations used
+            {t("allowance", { tier: usage.tier, used: usage.invitedGuests, allowance: usage.allowance })}
           </p>
           <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-muted">
             <div
@@ -80,76 +86,74 @@ export function BillingView({
             />
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
-            {usage.remaining} invitation(s) remaining.
+            {t("remaining", { count: usage.remaining })}
           </p>
         </div>
       </section>
 
       {request ? (
         <section>
-          <SectionHeading>Your activation request</SectionHeading>
+          <SectionHeading>{t("requestTitle")}</SectionHeading>
           <ActivationInstructions instructions={request} />
           <div className="mt-2">
             <Button variant="outline" size="sm" onClick={() => setDialogOpen(true)}>
-              View payment instructions
+              {t("viewInstructions")}
             </Button>
           </div>
         </section>
       ) : canManage ? (
         <section>
-          <SectionHeading>Add capacity</SectionHeading>
+          <SectionHeading>{t("addTitle")}</SectionHeading>
           <div className="grid gap-3 sm:grid-cols-2">
-            {catalog.tiers.map((tier) => (
+            {upgrades.length === 0 && lastTier ? (
+              <p className="text-sm text-muted-foreground">{t("maxed", { count: lastTier.maxGuests })}</p>
+            ) : null}
+            {upgrades.map((tier) => (
               <div key={tier.name} className="flex flex-col justify-between rounded-xl border p-4">
                 <div>
                   <p className="font-medium">{tier.name}</p>
                   <p className="text-sm text-muted-foreground">
-                    Up to {tier.maxGuests.toLocaleString()} invited guests
+                    {t("upTo", { count: tier.maxGuests })}
                   </p>
                 </div>
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-lg font-semibold">
-                    {formatAmount(tier.priceMinor, catalog.currency)}
+                    {formatAmount(tier.priceMinor - (paid?.priceMinor ?? 0), catalog.currency, locale)}
                   </span>
                   <Button
                     size="sm"
                     onClick={() => requestTier(tier.name)}
                     disabled={pendingTier !== null}
                   >
-                    {pendingTier === tier.name ? "Requesting…" : "Request activation"}
+                    {pendingTier === tier.name ? t("requesting") : t("activate")}
                   </Button>
                 </div>
               </div>
             ))}
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            You&apos;ll receive payment instructions (Mobile Money or bank transfer) with a
-            reference. Your capacity is unlocked by our team once the transfer arrives.
+            {paid ? `${t("difference")} ` : ""}
+            {t("note")}
           </p>
         </section>
       ) : (
         <Alert>
           <InfoIcon />
-          <AlertTitle>Capacity is managed by an organization admin</AlertTitle>
-          <AlertDescription>
-            Adding capacity for this event is available to admins and owners of the
-            organization. Ask them to request an activation, or switch to an admin account.
-          </AlertDescription>
+          <AlertTitle>{t("managedTitle")}</AlertTitle>
+          <AlertDescription>{t("managedText")}</AlertDescription>
         </Alert>
       )}
 
       <section>
-        <SectionHeading>Payment history</SectionHeading>
+        <SectionHeading>{t("historyTitle")}</SectionHeading>
         <PaymentHistoryTable payments={payments} />
       </section>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-full sm:max-w-xl">
           <DialogHeader>
-            <DialogTitle>Payment instructions</DialogTitle>
-            <DialogDescription>
-              Send the amount below and include the reference with your transfer.
-            </DialogDescription>
+            <DialogTitle>{t("dialogTitle")}</DialogTitle>
+            <DialogDescription>{t("dialogText")}</DialogDescription>
           </DialogHeader>
           {request ? <ActivationInstructions instructions={request} /> : null}
         </DialogContent>

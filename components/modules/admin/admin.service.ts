@@ -220,7 +220,13 @@ export async function updateBillingSettingsAction(
         bankDetails: values.payee.bankDetails.trim() || null,
       },
       tiers: values.tiers,
-      subscriptionPlans: values.subscriptionPlans,
+      subscriptionPlans: values.subscriptionPlans.map((plan) => ({
+        name: plan.name,
+        includedPeople: plan.includedPeople,
+        maxPeople: plan.maxPeople ? Number(plan.maxPeople) : null,
+        monthly: plan.monthly,
+        extraPerson: Object.values(plan.extraPerson).some((value) => value > 0) ? plan.extraPerson : null,
+      })),
     }),
   });
   if (!response.ok) {

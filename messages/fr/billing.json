@@ -1,0 +1,135 @@
+{
+  "page": {
+    "title": "Facturation",
+    "notice": {
+      "title": "La facturation de votre espace",
+      "text": "Votre abonnement et tous les paiements de vos événements. Pour la capacité d'un événement, ouvrez cet événement puis sa section Facturation."
+    },
+    "invoicesTitle": "Factures",
+    "invoicesText": "Des documents officiels pour une entreprise ou une institution. Vos informations légales se renseignent dans les Paramètres ; une facture ne peut pas être émise sans elles."
+  },
+  "subscription": {
+    "title": "Abonnement {plan}",
+    "free": "Gratuit pour toujours",
+    "renews": "Payé jusqu'au {date}",
+    "status": {
+      "ACTIVE": "Actif",
+      "GRACE": "En période de grâce",
+      "EXPIRED": "Expiré"
+    },
+    "monthly": "{amount} par mois pour votre équipe",
+    "people": "{active, plural, one {# personne sert vos clients} other {# personnes servent vos clients}}",
+    "included": "{count, plural, one {# incluse} other {# incluses}}",
+    "outgrown": "Votre équipe a grandi au-delà de {plan}. Choisissez une formule avant le {date} pour continuer sans interruption.",
+    "grace": "Votre abonnement est en période de grâce. Renouvelez-le : votre espace sera suspendu le {date}.",
+    "expiring": "{days, plural, one {Votre abonnement se termine dans # jour.} other {Votre abonnement se termine dans # jours.}} Renouvelez-le pour continuer sans interruption.",
+    "change": "Renouveler ou changer",
+    "cancel": "Annuler",
+    "choose": "Choisir une formule",
+    "plan": {
+      "base": "{amount} par mois",
+      "includes": "{count, plural, one {# personne incluse} other {# personnes incluses}}",
+      "extra": "+ {amount} par personne en plus",
+      "team": "Pour votre équipe : {amount} par mois",
+      "tooSmall": "Ne couvre pas une équipe de cette taille",
+      "current": "Actuelle",
+      "freePlan": "Gratuit"
+    },
+    "period": {
+      "label": "Durée",
+      "monthly": "1 mois",
+      "yearly": "12 mois, 2 mois offerts"
+    },
+    "total": "À payer : {amount}",
+    "request": "Recevoir les instructions de paiement",
+    "requesting": "Demande…",
+    "ready": "Vos instructions de paiement sont prêtes.",
+    "errors": {
+      "unavailable": "Cette formule n'est pas disponible. Choisissez-en une autre.",
+      "tooSmall": "Cette formule ne couvre pas toute votre équipe.",
+      "failed": "Impossible d'enregistrer votre demande. Réessayez."
+    },
+    "teamPrice": "Prix pour votre équipe"
+  },
+  "event": {
+    "allowanceTitle": "Capacité de cet événement",
+    "allowance": "Palier {tier} : {used, number} invitations sur {allowance, number}",
+    "remaining": "{count, plural, one {# invitation restante.} other {# invitations restantes.}}",
+    "requestTitle": "Votre demande d'activation",
+    "viewInstructions": "Voir les instructions de paiement",
+    "addTitle": "Ajouter de la capacité",
+    "upTo": "Jusqu'à {count, number} invités",
+    "difference": "Vous ne payez que la différence avec votre palier actuel.",
+    "activate": "Demander l'activation",
+    "requesting": "Demande…",
+    "note": "Vous recevez les instructions de paiement (Mobile Money ou virement) avec une référence. La capacité est débloquée par notre équipe dès réception.",
+    "maxed": "Cet événement a déjà le plus grand palier. Au-delà de {count, number} invités, écrivez-nous.",
+    "managedTitle": "La capacité est gérée par un administrateur",
+    "managedText": "Seuls les administrateurs et propriétaires de l'organisation peuvent ajouter de la capacité. Demandez-leur, ou connectez-vous avec un compte administrateur.",
+    "historyTitle": "Historique des paiements",
+    "dialogTitle": "Instructions de paiement",
+    "dialogText": "Envoyez le montant ci-dessous en indiquant la référence avec votre transfert.",
+    "errors": {
+      "unavailable": "Ce palier n'est pas disponible. Choisissez-en un autre.",
+      "forbidden": "Seul un administrateur de l'organisation peut demander de la capacité.",
+      "owned": "Cet événement a déjà ce palier ou plus.",
+      "failed": "Impossible d'enregistrer votre demande. Réessayez."
+    }
+  },
+  "instructions": {
+    "title": "Activation demandée : {tier}, {amount}",
+    "text": "Envoyez le montant exact au compte ci-dessous en indiquant cette référence. Notre équipe confirme le paiement et débloque votre accès, en général en quelques heures, et vous recevez un e-mail de confirmation.",
+    "copy": "Copier",
+    "copied": "Copié",
+    "payee": "Bénéficiaire",
+    "mobileMoney": "Mobile Money",
+    "bank": "Virement bancaire",
+    "questions": "Questions",
+    "or": "ou",
+    "safety": "L'activation est confirmée par notre équipe dès réception du transfert : elle n'est pas instantanée. Ne communiquez jamais un numéro de carte ou un mot de passe ; seul le transfert, avec la référence, est nécessaire."
+  },
+  "history": {
+    "emptyTitle": "Aucun paiement",
+    "emptyText": "Vos paiements apparaissent ici dès qu'ils sont enregistrés.",
+    "date": "Date",
+    "event": "Événement",
+    "tier": "Palier",
+    "amount": "Montant",
+    "status": "Statut",
+    "receipt": "Reçu",
+    "invoice": "Facture",
+    "download": "Télécharger",
+    "none": "—",
+    "subscription": "Abonnement",
+    "statuses": {
+      "PENDING": "En attente",
+      "SUCCEEDED": "Payé",
+      "FAILED": "Échoué"
+    }
+  },
+  "invoices": {
+    "emptyTitle": "Aucune facture",
+    "emptyText": "Émettez-en une depuis un paiement réglé quand un acheteur a besoin d'un document officiel.",
+    "number": "Numéro",
+    "type": "Type",
+    "issued": "Émise le",
+    "total": "Total",
+    "document": "Document",
+    "actions": "Actions",
+    "creditNote": "Note de crédit",
+    "invoice": "Facture",
+    "pdf": "Télécharger le PDF",
+    "none": "—"
+  },
+  "actions": {
+    "issue": "Émettre la facture",
+    "issuing": "Émission…",
+    "issued": "Facture émise.",
+    "credit": "Note de crédit",
+    "credited": "Note de crédit émise.",
+    "legalDetails": "Renseignez les informations légales de votre organisation dans les Paramètres avant d'émettre une facture.",
+    "invoiceFailed": "Impossible d'émettre la facture. Réessayez.",
+    "creditTwice": "Cette facture a déjà une note de crédit.",
+    "creditFailed": "Impossible d'émettre la note de crédit. Réessayez."
+  }
+}

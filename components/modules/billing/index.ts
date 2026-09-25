@@ -10,7 +10,6 @@ export type {
   ManualPaymentInstructions,
   PayeeDetails,
   PaymentHistoryItem,
-  PaymentInitiation,
   PaymentInstruction,
   TierCatalog,
   TierOption,
