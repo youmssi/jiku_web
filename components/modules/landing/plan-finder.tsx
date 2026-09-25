@@ -11,9 +11,8 @@ import { trackEvent } from "@/lib/analytics";
 import { ROUTES } from "@/lib/constants";
 import { FREE_TIER, quoteForGuests, quoteForSales, quoteForService, type ServicePlanId } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
-import type { LandingLocale } from "./content";
 import type { FinderOption, SimulatorContent, SimulatorNeed } from "./simulator-content";
-import { fill, priceFormat } from "./simulator-format";
+import { fill, ticketPriceField, type PriceFormat } from "./simulator-format";
 
 /** What the questionnaire hands to the calculator: the tab to open, pre-filled. */
 export interface FinderResult {
@@ -43,7 +42,6 @@ type StepKey = keyof Answers;
 const SERVER_COUNT: Record<Servers, number> = { one: 1, few: 3, many: 12 };
 const GUEST_COUNT: Record<Guests, number> = { "100": 100, "300": 250, "600": 500, "1000": 900, more: 1_500 };
 const TICKET_COUNT: Record<Sales, number> = { small: 100, medium: 400, large: 1_000 };
-export const DEFAULT_TICKET_PRICE = 50_000;
 
 function stepsFor(need: Need | undefined): StepKey[] {
   if (need === "serve" || need === "both") return ["need", "servers", "features"];
@@ -54,9 +52,9 @@ function stepsFor(need: Need | undefined): StepKey[] {
 
 function planFor(servers: Servers, features: Features): ServicePlanId {
   if (features === "custom") return "enterprise";
-  if (features === "sites") return "organisation";
-  if (features === "whatsapp" || servers !== "one") return "teams";
-  return "solo";
+  if (features === "sites" || servers === "many") return "organisation";
+  if (servers === "few") return "teams";
+  return features === "whatsapp" ? "soloPlus" : "solo";
 }
 
 function resultFor(answers: Answers): FinderResult | null {
@@ -81,11 +79,11 @@ function resultFor(answers: Answers): FinderResult | null {
  */
 export function PlanFinder({
   content,
-  locale,
+  format,
   onApply,
 }: {
   content: SimulatorContent;
-  locale: LandingLocale;
+  format: PriceFormat;
   onApply: (result: FinderResult) => void;
 }) {
   const { finder } = content;
@@ -95,7 +93,6 @@ export function PlanFinder({
   const steps = stepsFor(answers.need);
   const result = resultFor(answers);
   const done = result !== null && index >= steps.length;
-  const format = priceFormat(locale, content.usdPrefix);
 
   function answer<K extends StepKey>(key: K, value: NonNullable<Answers[K]>) {
     const next = key === "need" ? { need: value as Need } : { ...answers, [key]: value };
@@ -227,7 +224,7 @@ function FinderOutcome({
   content: SimulatorContent;
   result: FinderResult;
   both: boolean;
-  format: ReturnType<typeof priceFormat>;
+  format: PriceFormat;
   onApply: (result: FinderResult) => void;
 }) {
   const { finder, services, invite } = content;
@@ -238,19 +235,20 @@ function FinderOutcome({
   if (result.need === "serve" && result.planId) {
     const plan = services.plans.find((candidate) => candidate.id === result.planId);
     title = fill(finder.result.plan, { plan: plan?.name ?? "" });
-    const quote = quoteForService(result.planId, result.servers ?? 1, false);
-    price = quote.monthlyTotal === null ? content.onQuote : format.gnf(quote.monthlyTotal);
+    const quote = quoteForService(result.planId, result.servers ?? 1, false, format.currency);
+    price = quote.monthlyTotal === null ? content.onQuote : format.money(quote.monthlyTotal);
     caption = quote.monthlyTotal === null ? plan?.audience ?? "" : services.perMonth;
   } else if (result.need === "invite") {
-    const quote = quoteForGuests(result.guests ?? 0);
+    const quote = quoteForGuests(result.guests ?? 0, format.currency);
     const tier = quote.tier === FREE_TIER ? invite.result.freeLabel : quote.tier;
     title = fill(finder.result.tier, { tier });
-    price = quote.tier === FREE_TIER ? invite.result.freeLabel : format.gnf(quote.totalMinor);
+    price = quote.tier === FREE_TIER ? invite.result.freeLabel : format.money(quote.totalMinor);
     caption = quote.tier === FREE_TIER ? invite.result.freeNote : invite.result.paymentNote;
   } else {
-    const quote = quoteForSales(DEFAULT_TICKET_PRICE, result.tickets ?? 0);
-    price = format.gnf(quote.commission);
-    caption = `${format.number(result.tickets ?? 0)} × ${format.gnf(DEFAULT_TICKET_PRICE)}`;
+    const ticketPrice = ticketPriceField(format.currency);
+    const quote = quoteForSales(ticketPrice.toMinor(ticketPrice.initial), result.tickets ?? 0);
+    price = format.money(quote.commission);
+    caption = `${format.number(result.tickets ?? 0)} × ${format.money(ticketPrice.toMinor(ticketPrice.initial))}`;
   }
 
   return (

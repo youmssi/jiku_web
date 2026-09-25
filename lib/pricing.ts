@@ -1,110 +1,150 @@
-// Public pricing model used by the /simulator playground. It mirrors the
-// backend defaults in app/src/main/resources/application.yaml (billing.*) and
-// app/.../money/internal/BillingProperties.kt — the same "mirror, don't invent"
-// convention as components/modules/landing/content.ts. The authoritative price is
-// always the backend's, recomputed when a tier is activated; these figures only
-// estimate it for a visitor.
+// Public pricing model (ADR 105) used by the /simulator playground and the
+// landing page. It mirrors the backend defaults (money/internal/BillingProperties
+// and SubscriptionProperties) — the same "mirror, don't invent" convention as
+// components/modules/landing/content.ts. The authoritative price is always the
+// backend's, recomputed at payment; these figures only estimate it for a visitor.
+
+/** The three currencies Jikū bills in. FCFA stands for both XOF and XAF, which carry the same amount. */
+export const PRICING_CURRENCIES = ["GNF", "FCFA", "USD"] as const;
+export type PricingCurrency = (typeof PRICING_CURRENCIES)[number];
+
+/** One price, set by hand in each currency (round amounts, never converted). USD is in cents. */
+export interface PriceList {
+  gnf: number;
+  fcfa: number;
+  usdCents: number;
+}
+
+const FREE: PriceList = { gnf: 0, fcfa: 0, usdCents: 0 };
+
+/** A price in [currency]'s minor unit: whole francs, or US cents. */
+export function priceIn(price: PriceList, currency: PricingCurrency): number {
+  if (currency === "GNF") return price.gnf;
+  if (currency === "FCFA") return price.fcfa;
+  return price.usdCents;
+}
+
+// ─── Events (ADR 105, decision 3) ──────────────────────────────────────────
 
 export interface PricingTier {
   name: string;
   /** Inclusive upper bound of guests this tier unlocks. */
   maxGuests: number;
-  /** Price in GNF (GNF has no minor unit, so this is the full amount). */
-  priceMinor: number;
+  price: PriceList;
 }
 
-export const PRICING = {
-  currency: "GNF",
+export const EVENT_PRICING = {
   freeTierGuests: 100,
   tiers: [
-    { name: "BRONZE", maxGuests: 300, priceMinor: 150_000 },
-    { name: "ARGENT", maxGuests: 600, priceMinor: 300_000 },
-    { name: "OR", maxGuests: 1_000, priceMinor: 500_000 },
+    { name: "BRONZE", maxGuests: 300, price: { gnf: 225_000, fcfa: 15_000, usdCents: 2_500 } },
+    { name: "ARGENT", maxGuests: 600, price: { gnf: 375_000, fcfa: 25_000, usdCents: 4_500 } },
+    { name: "OR", maxGuests: 1_000, price: { gnf: 600_000, fcfa: 40_000, usdCents: 7_000 } },
   ] satisfies PricingTier[],
-  // CUSTOM tier (beyond the OR tier): $0.05/guest + $15 setup, converted at the
-  // configured USD→GNF rate. Both move independently of a release.
-  custom: {
-    perGuestUsdCents: 5,
-    setupFeeUsdCents: 1_500,
-    usdToGnfRate: 8_760,
-  },
+  /** Each guest beyond the last tier, added to that tier's price. */
+  beyondPerGuest: { gnf: 500, fcfa: 35, usdCents: 6 } satisfies PriceList,
 } as const;
 
 export const CUSTOM_TIER = "CUSTOM";
 export const FREE_TIER = "FREE";
 
+/** How guests receive their ticket; the organizer chooses per event. */
+export const DELIVERY_MODES = ["link", "direct", "interactive"] as const;
+export type DeliveryMode = (typeof DELIVERY_MODES)[number];
+
+/** Added per guest when invitations are interactive WhatsApp messages. */
+export const INTERACTIVE_SURCHARGE: PriceList = { gnf: 150, fcfa: 10, usdCents: 2 };
+
 export interface Quote {
   tier: string;
+  /** The tier's price, or the last tier plus each guest beyond it. */
+  baseMinor: number;
+  /** The interactive WhatsApp supplement for these guests; 0 for the other modes. */
+  surchargeMinor: number;
   totalMinor: number;
   isCustom: boolean;
 }
 
-/** Custom-tier price in GNF for a guest count: variable sending + fixed setup. */
-export function customPriceGnf(guestCount: number): number {
-  const { perGuestUsdCents, setupFeeUsdCents, usdToGnfRate } = PRICING.custom;
-  const totalUsdCents = perGuestUsdCents * guestCount + setupFeeUsdCents;
-  return Math.round((totalUsdCents * usdToGnfRate) / 100);
-}
-
 /**
- * Tier + price for an estimated guest count. Free is a per-account allowance
- * over a rolling year, not per event; the paid tiers and CUSTOM apply to one
- * event. Returns an estimate only — never used to charge.
+ * Tier and price of an event of [guestCount] guests. The free allowance
+ * covers every delivery mode; the paid tiers and beyond apply to one event.
+ * An estimate only — never used to charge.
  */
-export function quoteForGuests(guestCount: number): Quote {
+export function quoteForGuests(guestCount: number, currency: PricingCurrency, mode: DeliveryMode = "link"): Quote {
   if (!Number.isFinite(guestCount) || guestCount <= 0) {
-    return { tier: "", totalMinor: 0, isCustom: false };
+    return { tier: "", baseMinor: 0, surchargeMinor: 0, totalMinor: 0, isCustom: false };
   }
-  if (guestCount <= PRICING.freeTierGuests) {
-    return { tier: FREE_TIER, totalMinor: 0, isCustom: false };
+  if (guestCount <= EVENT_PRICING.freeTierGuests) {
+    return { tier: FREE_TIER, baseMinor: 0, surchargeMinor: 0, totalMinor: 0, isCustom: false };
   }
-  const fixed = PRICING.tiers.find((tier) => guestCount <= tier.maxGuests);
+  const surchargeMinor = mode === "interactive" ? guestCount * priceIn(INTERACTIVE_SURCHARGE, currency) : 0;
+  const fixed = EVENT_PRICING.tiers.find((tier) => guestCount <= tier.maxGuests);
   if (fixed) {
-    return { tier: fixed.name, totalMinor: fixed.priceMinor, isCustom: false };
+    const baseMinor = priceIn(fixed.price, currency);
+    return { tier: fixed.name, baseMinor, surchargeMinor, totalMinor: baseMinor + surchargeMinor, isCustom: false };
   }
-  return { tier: CUSTOM_TIER, totalMinor: customPriceGnf(guestCount), isCustom: true };
+  const last = EVENT_PRICING.tiers[EVENT_PRICING.tiers.length - 1];
+  const baseMinor =
+    priceIn(last.price, currency) + (guestCount - last.maxGuests) * priceIn(EVENT_PRICING.beyondPerGuest, currency);
+  return { tier: CUSTOM_TIER, baseMinor, surchargeMinor, totalMinor: baseMinor + surchargeMinor, isCustom: true };
 }
 
-/**
- * Marketing display rate (GNF per US dollar), mirroring the backend's CUSTOM
- * tier rate (billing.custom.usd-to-gnf-rate). Used ONLY to show an approximate
- * USD figure next to a GNF amount so a visitor can grasp the total; never to
- * charge.
- */
-export const DISPLAY_GNF_PER_USD = PRICING.custom.usdToGnfRate;
+/** Planners, agencies and venues: a monthly guest allowance across all their events. */
+export const ORGANIZER_PACK = {
+  monthly: { gnf: 600_000, fcfa: 40_000, usdCents: 7_000 } satisfies PriceList,
+  includedGuests: 1_000,
+  extraPerGuest: { gnf: 600, fcfa: 40, usdCents: 7 } satisfies PriceList,
+} as const;
 
-/** Approximate US-dollar value of a GNF minor-unit amount. */
-export function usdApprox(gnfMinor: number): number {
-  return gnfMinor / DISPLAY_GNF_PER_USD;
-}
+// ─── Services subscription (ADR 105, decision 2) ─────────────────────────────
+// Priced for the team: a monthly price covering the included people, plus a
+// price per extra person. Only people who serve clients count.
 
-
-// ─── Services subscription (ADR 104 §8, référentiel §6) ──────────────────────
-// Billed per person who serves clients, per month. Administrators, entrance
-// checkers and couriers are free. There is no limit on services, staff or
-// clients per day; plans differ by features and by how many clients one
-// resource may receive in the same slot (group sessions).
-
-export type ServicePlanId = "solo" | "teams" | "organisation" | "enterprise";
+export type ServicePlanId = "solo" | "soloPlus" | "teams" | "organisation" | "enterprise";
 
 export interface ServicePlanPricing {
   id: ServicePlanId;
-  /** GNF per serving person per month; null = custom quote. */
-  monthly: number | null;
-  /** GNF per serving person per month when billed yearly; null when not offered. */
-  yearly: number | null;
-  /** Serving people covered; null = no cap. */
-  maxServers: number | null;
+  /** Monthly price covering [includedPeople]; null = custom quote. */
+  monthly: PriceList | null;
+  includedPeople: number;
+  /** Most people the plan holds; null = no cap. */
+  maxPeople: number | null;
+  /** Each person beyond [includedPeople]; null when the plan takes no more. */
+  extraPerson: PriceList | null;
   /** Clients one resource may receive in the same slot; null = on quote. */
   groupSize: number | null;
 }
 
 export const SERVICE_PLANS: readonly ServicePlanPricing[] = [
-  { id: "solo", monthly: 0, yearly: null, maxServers: 1, groupSize: 1 },
-  { id: "teams", monthly: 100_000, yearly: 90_000, maxServers: null, groupSize: 10 },
-  { id: "organisation", monthly: 240_000, yearly: 200_000, maxServers: null, groupSize: 30 },
-  { id: "enterprise", monthly: null, yearly: null, maxServers: null, groupSize: null },
+  { id: "solo", monthly: FREE, includedPeople: 1, maxPeople: 1, extraPerson: null, groupSize: 1 },
+  {
+    id: "soloPlus",
+    monthly: { gnf: 50_000, fcfa: 3_500, usdCents: 600 },
+    includedPeople: 1,
+    maxPeople: 1,
+    extraPerson: null,
+    groupSize: 1,
+  },
+  {
+    id: "teams",
+    monthly: { gnf: 150_000, fcfa: 10_000, usdCents: 1_700 },
+    includedPeople: 2,
+    maxPeople: null,
+    extraPerson: { gnf: 50_000, fcfa: 3_500, usdCents: 600 },
+    groupSize: 10,
+  },
+  {
+    id: "organisation",
+    monthly: { gnf: 350_000, fcfa: 25_000, usdCents: 4_000 },
+    includedPeople: 5,
+    maxPeople: null,
+    extraPerson: { gnf: 40_000, fcfa: 2_500, usdCents: 500 },
+    groupSize: 30,
+  },
+  { id: "enterprise", monthly: null, includedPeople: 0, maxPeople: null, extraPerson: null, groupSize: null },
 ];
+
+/** Paying yearly charges ten of the twelve months: two months free. */
+export const YEARLY_CHARGED_MONTHS = 10;
 
 export function servicePlan(id: ServicePlanId): ServicePlanPricing {
   const plan = SERVICE_PLANS.find((candidate) => candidate.id === id);
@@ -112,31 +152,41 @@ export function servicePlan(id: ServicePlanId): ServicePlanPricing {
   return plan;
 }
 
+/** Monthly price of [plan] for a team of [people] in [currency]; null on quote. */
+export function teamMonthly(plan: ServicePlanPricing, people: number, currency: PricingCurrency): number | null {
+  if (plan.monthly === null) return null;
+  const extra = Math.max(0, Math.round(people) - plan.includedPeople);
+  return priceIn(plan.monthly, currency) + extra * (plan.extraPerson ? priceIn(plan.extraPerson, currency) : 0);
+}
+
 export interface ServiceQuote {
-  /** Per month for the whole team, at the chosen billing rhythm; null = on quote. */
+  /** Monthly price for the whole team; null = on quote. */
   monthlyTotal: number | null;
-  /** Per year for the whole team; null = on quote. */
+  /** What a year costs at the chosen rhythm; null = on quote. */
   yearlyTotal: number | null;
-  /** Saved per year by paying yearly; 0 when not offered. */
+  /** Saved over a year by paying yearly; 0 when paying monthly. */
   yearlySaving: number;
 }
 
-export function quoteForService(id: ServicePlanId, servers: number, yearly: boolean): ServiceQuote {
-  const plan = servicePlan(id);
-  if (plan.monthly === null) return { monthlyTotal: null, yearlyTotal: null, yearlySaving: 0 };
-  const count = Math.max(1, Math.round(servers));
-  const perPerson = yearly && plan.yearly !== null ? plan.yearly : plan.monthly;
-  const saving = plan.yearly !== null ? (plan.monthly - plan.yearly) * 12 * count : 0;
+export function quoteForService(
+  id: ServicePlanId,
+  people: number,
+  yearly: boolean,
+  currency: PricingCurrency,
+): ServiceQuote {
+  const monthly = teamMonthly(servicePlan(id), Math.max(1, people), currency);
+  if (monthly === null) return { monthlyTotal: null, yearlyTotal: null, yearlySaving: 0 };
   return {
-    monthlyTotal: perPerson * count,
-    yearlyTotal: perPerson * count * 12,
-    yearlySaving: yearly ? saving : 0,
+    monthlyTotal: monthly,
+    yearlyTotal: monthly * (yearly ? YEARLY_CHARGED_MONTHS : 12),
+    yearlySaving: yearly ? monthly * (12 - YEARLY_CHARGED_MONTHS) : 0,
   };
 }
 
-// ─── Ticket sales commission (ADR 104 §8, référentiel §7) ────────────────────
+// ─── Ticket sales commission (ADR 105, decision 4) ───────────────────────────
 // 3 % of each ticket sold, paid to Jikū before the sale, one tranche at a
-// time. Sales money goes straight to the organization.
+// time; the first tranche of an organization's first sale is free. Sales
+// money goes straight to the organization.
 
 export const TICKET_SALES = {
   commissionRate: 0.03,

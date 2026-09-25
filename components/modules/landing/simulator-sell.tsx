@@ -4,7 +4,7 @@ import { BadgeCheck, Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TICKET_SALES, quoteForSales } from "@/lib/pricing";
 import type { SimulatorContent } from "./simulator-content";
-import { fill, type PriceFormat } from "./simulator-format";
+import { fill, ticketPriceField, type PriceFormat } from "./simulator-format";
 import { NumberField } from "./simulator-number-field";
 
 /** "Je vends des billets": ticket price and count to the 3 % commission, paid by tranche. */
@@ -24,8 +24,10 @@ export function SellPanel({
   onCountChange: (count: number) => void;
 }) {
   const { sell } = content;
-  const quote = quoteForSales(price, count);
-  const perTicket = Math.round(price * TICKET_SALES.commissionRate);
+  const field = ticketPriceField(format.currency);
+  const priceMinor = field.toMinor(price);
+  const quote = quoteForSales(priceMinor, count);
+  const perTicket = Math.round(priceMinor * TICKET_SALES.commissionRate);
 
   return (
     <div className="flex flex-col gap-8">
@@ -40,12 +42,12 @@ export function SellPanel({
             id="simulator-ticket-price"
             label={sell.priceLabel}
             value={price}
-            min={1_000}
-            max={500_000}
-            step={1_000}
-            inputMax={10_000_000}
+            min={field.min}
+            max={field.max}
+            step={field.step}
+            inputMax={field.inputMax}
             onChange={onPriceChange}
-            suffix="GNF"
+            suffix={field.suffix}
           />
           <NumberField
             id="simulator-ticket-count"
@@ -72,14 +74,14 @@ export function SellPanel({
         <aside className="flex flex-col gap-4">
           <div className="rounded-3xl border border-primary/20 bg-gradient-to-b from-primary/[0.08] to-transparent p-6">
             <p className="text-sm text-muted-foreground">{sell.commissionLabel}</p>
-            <p className="mt-1 text-4xl font-bold tracking-tight">{format.gnf(quote.commission)}</p>
+            <p className="mt-1 text-4xl font-bold tracking-tight">{format.money(quote.commission)}</p>
             <p className="text-sm text-muted-foreground">
-              {format.gnf(perTicket)} {sell.perTicketLabel} · {format.usd(quote.commission)}
+              {format.money(perTicket)} {sell.perTicketLabel}
             </p>
             <div className="mt-5 flex flex-col gap-1 border-t border-border/40 pt-4 text-sm">
               <p className="flex justify-between gap-3">
                 <span className="text-muted-foreground">{fill(sell.trancheLabel, { size: TICKET_SALES.trancheSize })}</span>
-                <span className="font-semibold">{format.gnf(quote.perTranche)}</span>
+                <span className="font-semibold">{format.money(quote.perTranche)}</span>
               </p>
               <p className="text-xs text-muted-foreground">{fill(sell.tranchesLabel, { count: quote.tranches })}</p>
             </div>
@@ -89,7 +91,7 @@ export function SellPanel({
               <Wallet className="size-4 text-primary" />
               {sell.revenueLabel}
             </p>
-            <p className="mt-1 text-2xl font-bold tracking-tight">{format.gnf(quote.organizationRevenue)}</p>
+            <p className="mt-1 text-2xl font-bold tracking-tight">{format.money(quote.organizationRevenue)}</p>
             <p className="mt-2 text-sm text-muted-foreground">{sell.revenueNote}</p>
           </div>
           <p className="flex items-start gap-2 rounded-2xl border border-border/50 bg-card/60 p-4 text-sm text-muted-foreground">

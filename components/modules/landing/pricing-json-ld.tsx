@@ -1,29 +1,30 @@
-import { PRICING, SERVICE_PLANS } from "@/lib/pricing";
+import { EVENT_PRICING, SERVICE_PLANS } from "@/lib/pricing";
 import type { SimulatorContent } from "./simulator-content";
 
 /**
  * Offers for the pricing page, built from the same figures the calculator
- * uses: the Services plans (per person, per month) and the event tiers.
- * Custom-quoted offers carry no price and are left out.
+ * uses: the Services plans (per month, for their included team) and the event
+ * tiers, in Guinean francs, the reference grid. Custom-quoted offers carry no
+ * price and are left out.
  */
 export function PricingJsonLd({ content, url }: { content: SimulatorContent; url: string }) {
   const plans = SERVICE_PLANS.filter((plan) => plan.monthly !== null).map((plan) => ({
     "@type": "Offer",
     name: content.services.plans.find((candidate) => candidate.id === plan.id)?.name ?? plan.id,
-    price: String(plan.monthly),
-    priceCurrency: PRICING.currency,
+    price: String(plan.monthly?.gnf ?? 0),
+    priceCurrency: "GNF",
     priceSpecification: {
       "@type": "UnitPriceSpecification",
-      price: String(plan.monthly),
-      priceCurrency: PRICING.currency,
-      unitText: content.services.perPersonMonth,
+      price: String(plan.monthly?.gnf ?? 0),
+      priceCurrency: "GNF",
+      unitText: content.services.perMonth,
     },
   }));
-  const tiers = PRICING.tiers.map((tier) => ({
+  const tiers = EVENT_PRICING.tiers.map((tier) => ({
     "@type": "Offer",
     name: tier.name,
-    price: String(tier.priceMinor),
-    priceCurrency: PRICING.currency,
+    price: String(tier.price.gnf),
+    priceCurrency: "GNF",
   }));
   const schema = {
     "@context": "https://schema.org",
