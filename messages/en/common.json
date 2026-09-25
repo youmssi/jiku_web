@@ -22,6 +22,7 @@
     "positive": "Enter a positive number.",
     "endBeforeStart": "The end must be after the start.",
     "contactRequired": "Enter an email or a phone number.",
+    "phone": "Use the international format, e.g. +224620000000.",
     "tooShort": "Too short."
   },
   "roles": {

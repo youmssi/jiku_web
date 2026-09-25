@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -20,13 +21,14 @@ import { requestErasureAction } from "@/components/modules/invitation/invitation
  * confirmation so it cannot be triggered by a single accidental tap.
  */
 export function DataDeletion({ token, erased }: { token: string; erased: boolean }) {
+  const t = useTranslations("guest.erasure");
   const [done, setDone] = useState(erased);
   const [isPending, startTransition] = useTransition();
 
   if (done) {
     return (
       <p className="mt-6 text-xs text-muted-foreground">
-        Your personal data has been deleted from this event. This cannot be undone.
+        {t("done")}
       </p>
     );
   }
@@ -39,7 +41,7 @@ export function DataDeletion({ token, erased }: { token: string; erased: boolean
         return;
       }
       setDone(true);
-      toast.success("Your personal data has been deleted.");
+      toast.success(t("doneToast"));
     });
   }
 
@@ -51,22 +53,20 @@ export function DataDeletion({ token, erased }: { token: string; erased: boolean
             type="button"
             className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
           >
-            Request deletion of my data
+            {t("open")}
           </button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete your personal data?</AlertDialogTitle>
+            <AlertDialogTitle>{t("title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This permanently removes your name, email and phone number from this
-              event. It cannot be undone. The organizer keeps only an anonymous record
-              that a guest was invited.
+              {t("description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep my data</AlertDialogCancel>
+            <AlertDialogCancel>{t("keep")}</AlertDialogCancel>
             <AlertDialogAction onClick={onConfirm} disabled={isPending}>
-              {isPending ? "Deleting…" : "Delete my data"}
+              {isPending ? t("deleting") : t("confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

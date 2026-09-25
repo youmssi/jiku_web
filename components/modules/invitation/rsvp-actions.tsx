@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,7 @@ export function RsvpActions({
   transferDeadline,
   transferredTo,
 }: RsvpActionsProps) {
+  const t = useTranslations("guest.rsvp");
   const [current, setCurrent] = useState(status);
   const [isPending, startTransition] = useTransition();
 
@@ -50,7 +52,7 @@ export function RsvpActions({
       }
       trackEvent(action === "confirm" ? "rsvp_confirmed" : "rsvp_declined");
       setCurrent(action === "confirm" ? "CONFIRMED" : "DECLINED");
-      toast.success(action === "confirm" ? "You're confirmed, see you there!" : "You've declined.");
+      toast.success(action === "confirm" ? t("confirmedToast") : t("declinedToast"));
     });
   }
 
@@ -60,12 +62,10 @@ export function RsvpActions({
     return (
       <div className="flex flex-col items-center gap-2 text-center">
         <p className="text-muted-foreground">
-          {transferredTo
-            ? `You handed this invitation to ${transferredTo}.`
-            : "You handed this invitation to someone else."}
+          {transferredTo ? t("transferredTo", { name: transferredTo }) : t("transferredSomeone")}
         </p>
         <p className="text-muted-foreground text-sm">
-          Their own invitation is on its way, and this ticket is no longer valid at the entrance.
+          {t("transferredHint")}
         </p>
       </div>
     );
@@ -75,18 +75,18 @@ export function RsvpActions({
     return (
       <div className="flex flex-col items-center gap-3">
         <p className="text-green-700 dark:text-green-400">
-          You&apos;re confirmed. See you there!
+          {t("confirmed")}
         </p>
         {ticketCode ? (
           <Button asChild style={{ backgroundColor: primaryColor }} className="text-white">
-            <Link href={ticketRoute(token)}>View your ticket</Link>
+            <Link href={ticketRoute(token)}>{t("viewTicket")}</Link>
           </Button>
         ) : null}
         {transferAllowed ? (
           <TransferTicketDialog token={token} deadline={transferDeadline} />
         ) : null}
         <Button variant="outline" onClick={() => act("decline")} disabled={isPending}>
-          {isPending ? "Updating…" : "I can't make it anymore"}
+          {isPending ? t("updating") : t("cantMakeIt")}
         </Button>
       </div>
     );
@@ -95,14 +95,14 @@ export function RsvpActions({
   if (current === "DECLINED") {
     return (
       <div className="flex flex-col items-center gap-3">
-        <p className="text-muted-foreground">You&apos;ve declined this invitation.</p>
+        <p className="text-muted-foreground">{t("declined")}</p>
         <Button
           style={{ backgroundColor: primaryColor }}
           className="text-white"
           onClick={() => act("confirm")}
           disabled={isPending}
         >
-          {isPending ? "Updating…" : "Actually, I'll come"}
+          {isPending ? t("updating") : t("changeMind")}
         </Button>
       </div>
     );
@@ -116,10 +116,10 @@ export function RsvpActions({
         onClick={() => act("confirm")}
         disabled={isPending}
       >
-        {isPending ? "Confirming…" : "Confirm attendance"}
+        {isPending ? t("confirming") : t("confirm")}
       </Button>
       <Button variant="outline" onClick={() => act("decline")} disabled={isPending}>
-        Decline
+        {t("decline")}
       </Button>
     </div>
   );
