@@ -1076,6 +1076,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["submit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/ratings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["rate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events": {
         parameters: {
             query?: never;
@@ -1844,6 +1876,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/feedback/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["updateStatus"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/diagnostics/error": {
         parameters: {
             query?: never;
@@ -2332,6 +2380,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["health"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/prompt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["prompt"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2932,6 +2996,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["list_17"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/feedback/ratings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ratings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/billing/tiers": {
         parameters: {
             query?: never;
@@ -2955,7 +3051,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_17"];
+        get: operations["list_18"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3783,6 +3879,25 @@ export interface components {
             /** Format: date-time */
             createdAt?: string;
         };
+        FeedbackRequest: {
+            kind: string;
+            message: string;
+            page?: string | null;
+            /** Format: email */
+            contactEmail?: string | null;
+            language?: string | null;
+        };
+        FeedbackAck: {
+            /** Format: uuid */
+            id?: string;
+        };
+        RatingRequest: {
+            moment: string;
+            /** Format: int32 */
+            score?: number | null;
+            comment?: string | null;
+            page?: string | null;
+        };
         CreateEventRequest: {
             name: string;
             description?: string | null;
@@ -4105,6 +4220,30 @@ export interface components {
         ConfirmPaymentRequest: {
             transactionReference: string;
         };
+        FeedbackStatusRequest: {
+            status: string;
+            note?: string | null;
+        };
+        FeedbackView: {
+            /** Format: uuid */
+            id?: string;
+            kind?: string;
+            moment?: string | null;
+            /** Format: int32 */
+            score?: number | null;
+            message?: string | null;
+            page?: string | null;
+            contactEmail?: string | null;
+            language?: string | null;
+            tenantId?: string | null;
+            organizationName?: string | null;
+            status?: string;
+            adminNote?: string | null;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string | null;
+        };
         AdminRefreshRequest: {
             refreshToken?: string;
         };
@@ -4313,6 +4452,9 @@ export interface components {
         };
         LineCodeResolution: {
             token?: string;
+        };
+        PromptDecision: {
+            show?: boolean;
         };
         BillingAllowance: {
             /** Format: int64 */
@@ -4620,6 +4762,24 @@ export interface components {
             /** Format: date-time */
             startDateTime?: string | null;
             status?: string;
+        };
+        FeedbackPage: {
+            items?: components["schemas"]["FeedbackView"][];
+            /** Format: int64 */
+            total?: number;
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            size?: number;
+        };
+        RatingSummary: {
+            moment?: string;
+            /** Format: int32 */
+            responses?: number;
+            /** Format: int32 */
+            dismissed?: number;
+            /** Format: double */
+            average?: number | null;
         };
         AdminTierCatalog: {
             currency?: string;
@@ -6664,6 +6824,54 @@ export interface operations {
             };
         };
     };
+    submit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["FeedbackAck"];
+                };
+            };
+        };
+    };
+    rate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RatingRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["FeedbackAck"];
+                };
+            };
+        };
+    };
     list_4: {
         parameters: {
             query?: never;
@@ -8035,6 +8243,32 @@ export interface operations {
             };
         };
     };
+    updateStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackStatusRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["FeedbackView"];
+                };
+            };
+        };
+    };
     triggerError: {
         parameters: {
             query?: never;
@@ -8865,6 +9099,28 @@ export interface operations {
                     "*/*": {
                         [key: string]: string;
                     };
+                };
+            };
+        };
+    };
+    prompt: {
+        parameters: {
+            query: {
+                moment: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PromptDecision"];
                 };
             };
         };
@@ -9711,6 +9967,53 @@ export interface operations {
             };
         };
     };
+    list_17: {
+        parameters: {
+            query?: {
+                kind?: string;
+                status?: string;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["FeedbackPage"];
+                };
+            };
+        };
+    };
+    ratings: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RatingSummary"][];
+                };
+            };
+        };
+    };
     catalog: {
         parameters: {
             query?: never;
@@ -9731,7 +10034,7 @@ export interface operations {
             };
         };
     };
-    list_17: {
+    list_18: {
         parameters: {
             query?: {
                 action?: string;

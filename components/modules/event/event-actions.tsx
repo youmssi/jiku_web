@@ -31,6 +31,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
+import { askRating } from "@/components/modules/feedback";
 import { trackEvent } from "@/lib/analytics";
 import { publishEventAction } from "./event.service";
 import { EventLifecycleDialog, type EventLifecycleAction } from "./event-lifecycle-dialog";
@@ -95,6 +96,7 @@ function PublishDialog({ eventId, checklist }: { eventId: string; checklist: Pub
         return;
       }
       trackEvent("event_published");
+      askRating("event_published");
       toast.success(t("lifecycle.publish.done"));
       setOpen(false);
       router.refresh();

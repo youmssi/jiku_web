@@ -34,6 +34,7 @@ import {
   AttachmentMedia,
   AttachmentTitle,
 } from "@/components/ui/attachment";
+import { askRating } from "@/components/modules/feedback";
 import { trackEvent } from "@/lib/analytics";
 import { importGuestsAction } from "@/components/modules/guest/guest.service";
 
@@ -300,6 +301,7 @@ export function GuestImport({ eventId, onImported }: { eventId: string; onImport
       }
       const { imported, failed, skippedDuplicates } = outcome.data;
       trackEvent("guests_added", { source: "import", count: imported });
+      askRating("guests_imported");
       toast.success(t("done", { imported, failed, duplicates: skippedDuplicates }));
       clearFile();
       onImported?.();

@@ -8,6 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSet, FieldLegend } from "@/components/ui/field";
+import { askRating } from "@/components/modules/feedback";
 import { trackEvent } from "@/lib/analytics";
 import { INVITATION_CHANNEL_LABELS, type InvitationChannel } from "@/lib/channels";
 import { billingRoute, eventSettingsRoute } from "@/lib/constants";
@@ -66,6 +67,7 @@ export function SendInvitations({
         return;
       }
       trackEvent("invitation_sent", { channel: channels.join(","), count: outcome.data.queued });
+      askRating("invitations_sent");
       toast.success(t("queued", { count: outcome.data.queued }));
       onSent?.();
     });
