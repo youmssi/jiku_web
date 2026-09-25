@@ -1540,6 +1540,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/billing/pack/request": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["requestPack"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/pack/extra": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["requestPackExtra"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/billing/invoices/{invoiceId}/credit-note": {
         parameters: {
             query?: never;
@@ -2812,6 +2844,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["receipt"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/pack": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["packView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4138,6 +4186,14 @@ export interface components {
             /** Format: int32 */
             months?: number;
         };
+        PackRequest: {
+            /** Format: int32 */
+            months?: number;
+        };
+        PackExtraRequest: {
+            /** Format: int32 */
+            blocks?: number;
+        };
         InvoiceDetail: {
             /** Format: uuid */
             id?: string;
@@ -4818,6 +4874,37 @@ export interface components {
             status?: string;
             /** Format: date-time */
             createdAt?: string;
+        };
+        PackView: {
+            active?: boolean;
+            /** Format: date-time */
+            startedAt?: string | null;
+            /** Format: date-time */
+            expiresAt?: string | null;
+            /** Format: date-time */
+            monthStart?: string | null;
+            /** Format: date-time */
+            monthEnd?: string | null;
+            /** Format: int64 */
+            includedGuests?: number;
+            /** Format: int64 */
+            extraGuests?: number;
+            /** Format: int64 */
+            usedGuests?: number;
+            /** Format: int64 */
+            remainingGuests?: number;
+            /** Format: int64 */
+            owedGuests?: number;
+            currency?: string;
+            /** Format: int64 */
+            monthlyMinor?: number;
+            /** Format: int64 */
+            extraPerGuestMinor?: number;
+            /** Format: int64 */
+            extraBlockGuests?: number;
+            /** Format: int64 */
+            owedMinor?: number;
+            months?: components["schemas"]["MonthOption"][];
         };
         InvoiceSummary: {
             /** Format: uuid */
@@ -7856,6 +7943,54 @@ export interface operations {
             };
         };
     };
+    requestPack: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ManualPaymentInstructions"];
+                };
+            };
+        };
+    };
+    requestPackExtra: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackExtraRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ManualPaymentInstructions"];
+                };
+            };
+        };
+    };
     creditNote: {
         parameters: {
             query?: never;
@@ -9857,6 +9992,26 @@ export interface operations {
                 };
                 content: {
                     "text/plain": string;
+                };
+            };
+        };
+    };
+    packView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PackView"];
                 };
             };
         };

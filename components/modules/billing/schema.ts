@@ -68,6 +68,8 @@ export type InvoiceSummary = Schema<"InvoiceSummary">;
 // ─── Services subscription, priced per team (JIKU-90, ADR 105) ───────────────
 
 export type SubscriptionStatus = "ACTIVE" | "GRACE" | "EXPIRED";
+/** The Organizer Pack and its current month (ADR 105). */
+export type PackView = Schema<"PackView">;
 export type SubscriptionView = Schema<"SubscriptionView">;
 export type SubscriptionPlanOption = Schema<"PlanOption">;
 export type SubscriptionMonthOption = Schema<"MonthOption">;

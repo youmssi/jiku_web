@@ -76,7 +76,10 @@
       "failed": "Impossible d'enregistrer votre demande. Réessayez."
     },
     "surcharge": "dont {amount} de réponses dans WhatsApp",
-    "surchargeOnly": "Réponses dans WhatsApp pour vos invités déjà couverts"
+    "surchargeOnly": "Réponses dans WhatsApp pour vos invités déjà couverts",
+    "coveredTitle": "Couvert par votre Pack Organisateur",
+    "coveredText": "Cet événement puise dans les invités du mois de votre Pack : aucun palier à acheter. Suivez et complétez votre Pack depuis la page Facturation.",
+    "packTier": "Pack Organisateur"
   },
   "instructions": {
     "title": "Activation demandée : {tier}, {amount}",
@@ -133,5 +136,38 @@
     "invoiceFailed": "Impossible d'émettre la facture. Réessayez.",
     "creditTwice": "Cette facture a déjà une note de crédit.",
     "creditFailed": "Impossible d'émettre la note de crédit. Réessayez."
+  },
+  "pack": {
+    "title": "Pack Organisateur",
+    "pitch": "Pour les wedding planners, agences et salles : {guests, number} invités par mois sur tous vos événements, tous les modes d'envoi compris, sans palier à acheter.",
+    "activeUntil": "Actif jusqu'au {date}",
+    "inactive": "Non souscrit",
+    "month": "Mois en cours : du {start} au {end}",
+    "used": "{used, number} invités envoyés sur {allowance, number}",
+    "remaining": "{count, plural, one {# invité restant ce mois-ci.} other {# invités restants ce mois-ci.}}",
+    "owed": "{count, plural, one {# invité envoyé le jour J au-delà du mois est dû : il s'ajoute au prochain renouvellement ({amount}).} other {# invités envoyés le jour J au-delà du mois sont dus : ils s'ajoutent au prochain renouvellement ({amount}).}}",
+    "price": "{amount} par mois",
+    "subscribe": "Souscrire au Pack",
+    "renew": "Renouveler le Pack",
+    "cancel": "Annuler",
+    "period": {
+      "label": "Durée",
+      "monthly": "1 mois",
+      "yearly": "12 mois, 2 mois offerts"
+    },
+    "total": "À payer : {amount}",
+    "includesOwed": "dont {amount} d'invités dus",
+    "extraTitle": "Ajouter des invités ce mois-ci",
+    "extraText": "Par blocs de {block, number} invités, à {amount} l'invité.",
+    "blocks": "Blocs",
+    "extraTotal": "{guests, number} invités : {amount}",
+    "request": "Recevoir les instructions de paiement",
+    "requesting": "Demande…",
+    "ready": "Vos instructions de paiement sont prêtes.",
+    "errors": {
+      "forbidden": "Seul un administrateur de l'organisation peut souscrire au Pack.",
+      "inactive": "Les invités en plus demandent un Pack actif.",
+      "failed": "Impossible d'enregistrer votre demande. Réessayez."
+    }
   }
 }

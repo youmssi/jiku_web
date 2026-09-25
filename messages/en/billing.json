@@ -76,7 +76,10 @@
       "failed": "We couldn't record your request. Please try again."
     },
     "surcharge": "including {amount} for answers in WhatsApp",
-    "surchargeOnly": "Answers in WhatsApp for the guests you already have"
+    "surchargeOnly": "Answers in WhatsApp for the guests you already have",
+    "coveredTitle": "Covered by your Organizer Pack",
+    "coveredText": "This event uses your Pack's guests for the month: no tier to buy. Follow and top up your Pack from the Billing page.",
+    "packTier": "Organizer Pack"
   },
   "instructions": {
     "title": "Activation requested: {tier}, {amount}",
@@ -133,5 +136,38 @@
     "invoiceFailed": "We couldn't issue the invoice. Please try again.",
     "creditTwice": "This invoice already has a credit note.",
     "creditFailed": "We couldn't issue the credit note. Please try again."
+  },
+  "pack": {
+    "title": "Organizer Pack",
+    "pitch": "For wedding planners, agencies and venues: {guests, number} guests a month across all your events, every delivery mode included, with no tier to buy.",
+    "activeUntil": "Active until {date}",
+    "inactive": "Not subscribed",
+    "month": "Current month: {start} to {end}",
+    "used": "{used, number} guests sent out of {allowance, number}",
+    "remaining": "{count, plural, one {# guest left this month.} other {# guests left this month.}}",
+    "owed": "{count, plural, one {# guest sent on an event day past the month is owed: it is added to the next renewal ({amount}).} other {# guests sent on an event day past the month are owed: they are added to the next renewal ({amount}).}}",
+    "price": "{amount} a month",
+    "subscribe": "Get the Pack",
+    "renew": "Renew the Pack",
+    "cancel": "Cancel",
+    "period": {
+      "label": "Length",
+      "monthly": "1 month",
+      "yearly": "12 months, 2 months free"
+    },
+    "total": "To pay: {amount}",
+    "includesOwed": "including {amount} for owed guests",
+    "extraTitle": "Add guests this month",
+    "extraText": "In blocks of {block, number} guests, at {amount} a guest.",
+    "blocks": "Blocks",
+    "extraTotal": "{guests, number} guests: {amount}",
+    "request": "Get the payment instructions",
+    "requesting": "Requesting…",
+    "ready": "Your payment instructions are ready.",
+    "errors": {
+      "forbidden": "Only an organization admin can get the Pack.",
+      "inactive": "Extra guests need an active Pack.",
+      "failed": "We couldn't record your request. Please try again."
+    }
   }
 }

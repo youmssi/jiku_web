@@ -5,18 +5,24 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AllPaymentsView,
   InvoicesTable,
+  PackSection,
   SubscriptionSection,
   fetchInvoicesAction,
+  fetchPackAction,
   fetchSubscriptionAction,
 } from "@/components/modules/billing";
+import { getOrganizerContext } from "@/components/modules/identity/server";
 import type { PaymentHistoryItem } from "@/components/modules/billing";
 import { serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 
+const MANAGER_ROLES = ["ORGANIZER_OWNER", "ORGANIZER_ADMIN"];
+
 /**
  * Organizer billing overview: the prepaid subscription (JIKU-90), the formula,
- * expiry, active resources used and included, the renewal banner, then payment
- * history across every event in the tenant and any accounting-grade invoices.
+ * expiry, active resources used and included, the renewal banner, the
+ * Organizer Pack (ADR 105), then payment history across every event in the
+ * tenant and any accounting-grade invoices.
  */
 export default async function BillingPage() {
   const response = await serverFetch("/billing/payments");
@@ -24,11 +30,14 @@ export default async function BillingPage() {
     return localeRedirect(ROUTES.LOGIN);
   }
   const payments = response.ok ? ((await response.json()) as PaymentHistoryItem[]) : [];
-  const [invoices, subscription, t] = await Promise.all([
+  const [invoices, subscription, pack, context, t] = await Promise.all([
     fetchInvoicesAction(),
     fetchSubscriptionAction(),
+    fetchPackAction(),
+    getOrganizerContext(),
     getTranslations("billing.page"),
   ]);
+  const canManage = context !== null && MANAGER_ROLES.includes(context.role);
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-10">
@@ -43,6 +52,12 @@ export default async function BillingPage() {
       {subscription ? (
         <section className="mb-10 flex flex-col gap-4">
           <SubscriptionSection initial={subscription} nowIso={new Date().toISOString()} />
+        </section>
+      ) : null}
+
+      {pack ? (
+        <section className="mb-10 flex flex-col gap-4">
+          <PackSection initial={pack} canManage={canManage} />
         </section>
       ) : null}
 

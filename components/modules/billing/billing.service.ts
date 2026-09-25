@@ -6,6 +6,7 @@ import { reportApiError } from "@/lib/action-result";
 import type {
   InvoiceSummary,
   ManualPaymentInstructions,
+  PackView,
   SubscriptionRequestInput,
   SubscriptionView,
 } from "./schema";
@@ -63,6 +64,38 @@ export async function requestSubscriptionAction(
   }
   if (response.status === 409) {
     return { ok: false, error: t("tooSmall") };
+  }
+  if (!response.ok) {
+    reportApiError(response);
+    return { ok: false, error: t("failed") };
+  }
+  return { ok: true, instructions: (await response.json()) as ManualPaymentInstructions };
+}
+
+// ─── Organizer Pack (ADR 105) ────────────────────────────────────────────────
+
+export async function fetchPackAction(): Promise<PackView | null> {
+  const response = await serverFetch("/billing/pack");
+  if (!response.ok) return null;
+  return (await response.json()) as PackView;
+}
+
+/** Asks to pay for [months] of pack (guests still owed included) or for [blocks] of extra guests. */
+export async function requestPackAction(
+  input: { months: number } | { blocks: number },
+): Promise<{ ok: true; instructions: ManualPaymentInstructions } | { ok: false; error: string }> {
+  const path = "months" in input ? "/billing/pack/request" : "/billing/pack/extra";
+  const response = await serverFetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  const t = await getTranslations("billing.pack.errors");
+  if (response.status === 401 || response.status === 403) {
+    return { ok: false, error: t("forbidden") };
+  }
+  if (response.status === 409) {
+    return { ok: false, error: t("inactive") };
   }
   if (!response.ok) {
     reportApiError(response);
