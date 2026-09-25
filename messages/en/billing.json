@@ -49,7 +49,11 @@
       "tooSmall": "That plan doesn't cover your whole team.",
       "failed": "We couldn't record your request. Please try again."
     },
-    "teamPrice": "Price for your team"
+    "teamPrice": "Price for your team",
+    "reminders": "WhatsApp reminders this month",
+    "remindersUsed": "{sent} of {limit}",
+    "remindersOut": "You have sent this month's {limit} free WhatsApp reminders. No more reminders go out this month: move to a paid plan for unlimited reminders.",
+    "remindersLow": "{left, plural, one {You have # free WhatsApp reminder left this month.} other {You have # free WhatsApp reminders left this month.}}"
   },
   "event": {
     "allowanceTitle": "This event's capacity",

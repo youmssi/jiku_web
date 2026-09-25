@@ -23,6 +23,7 @@ import type {
 
 const DAY_MS = 86_400_000;
 const NOTICE_DAYS = 7;
+const REMINDERS_LOW_SHARE = 0.8;
 
 /**
  * The organizer's services subscription (JIKU-90, priced per team since ADR 105):
@@ -57,6 +58,11 @@ export function SubscriptionSection({ initial, nowIso }: { initial: Subscription
   const inGrace = status === "GRACE";
   const outgrown = subscription.overLimit && isFree;
   const nearExpiry = !inGrace && !isFree && daysLeft !== null && daysLeft <= NOTICE_DAYS;
+  const reminders = subscription.whatsAppReminders;
+  const remindersLeft = reminders ? Math.max(reminders.limit - reminders.sent, 0) : null;
+  const remindersOut = remindersLeft === 0;
+  const remindersLow =
+    reminders !== null && !remindersOut && reminders.sent >= reminders.limit * REMINDERS_LOW_SHARE;
 
   const selected = subscription.plans.find((option) => option.name === plan);
   const period = subscription.months.find((option) => option.months === months);
@@ -83,6 +89,8 @@ export function SubscriptionSection({ initial, nowIso }: { initial: Subscription
       ) : null}
       {inGrace ? <Banner>{t("grace", { date: day(subscription.suspensionAt) })}</Banner> : null}
       {nearExpiry ? <Banner>{t("expiring", { days: Math.max(daysLeft ?? 0, 0) })}</Banner> : null}
+      {reminders && remindersOut ? <Banner>{t("remindersOut", { limit: reminders.limit })}</Banner> : null}
+      {remindersLow ? <Banner>{t("remindersLow", { left: remindersLeft ?? 0 })}</Banner> : null}
 
       <div className="rounded-xl border p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -95,8 +103,11 @@ export function SubscriptionSection({ initial, nowIso }: { initial: Subscription
               {isFree ? t("free") : t("renews", { date: day(subscription.expiresAt) })}
             </p>
           </div>
-          <Button variant={outgrown ? "default" : "outline"} onClick={() => setOpen((value) => !value)}>
-            {open ? t("cancel") : outgrown ? t("choose") : t("change")}
+          <Button
+            variant={outgrown || remindersOut ? "default" : "outline"}
+            onClick={() => setOpen((value) => !value)}
+          >
+            {open ? t("cancel") : outgrown || remindersOut ? t("choose") : t("change")}
           </Button>
         </div>
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
@@ -110,6 +121,24 @@ export function SubscriptionSection({ initial, nowIso }: { initial: Subscription
             <div>
               <dt className="text-muted-foreground">{t("teamPrice")}</dt>
               <dd className="font-medium">{t("monthly", { amount: money(subscription.monthlyMinor) })}</dd>
+            </div>
+          ) : null}
+          {reminders ? (
+            <div className="sm:col-span-2">
+              <dt className="flex items-center justify-between text-muted-foreground">
+                {t("reminders")}
+                <span className="font-medium text-foreground">
+                  {t("remindersUsed", { sent: reminders.sent, limit: reminders.limit })}
+                </span>
+              </dt>
+              <dd className="mt-2 h-2 w-full overflow-hidden rounded-full bg-muted">
+                <div
+                  className={cn("h-full rounded-full transition-all", remindersOut ? "bg-destructive" : "bg-primary")}
+                  style={{
+                    width: `${Math.min(100, reminders.limit > 0 ? (reminders.sent / reminders.limit) * 100 : 100)}%`,
+                  }}
+                />
+              </dd>
             </div>
           ) : null}
         </dl>

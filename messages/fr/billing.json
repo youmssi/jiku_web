@@ -49,7 +49,11 @@
       "tooSmall": "Cette formule ne couvre pas toute votre équipe.",
       "failed": "Impossible d'enregistrer votre demande. Réessayez."
     },
-    "teamPrice": "Prix pour votre équipe"
+    "teamPrice": "Prix pour votre équipe",
+    "reminders": "Rappels WhatsApp ce mois-ci",
+    "remindersUsed": "{sent} sur {limit}",
+    "remindersOut": "Vous avez envoyé les {limit} rappels WhatsApp gratuits de ce mois. Plus aucun rappel ne partira ce mois-ci : passez à une formule payante pour des rappels illimités.",
+    "remindersLow": "{left, plural, one {Il vous reste # rappel WhatsApp gratuit ce mois-ci.} other {Il vous reste # rappels WhatsApp gratuits ce mois-ci.}}"
   },
   "event": {
     "allowanceTitle": "Capacité de cet événement",
