@@ -260,6 +260,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/whatsapp/webhook": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["verifySubscription"];
+        put?: never;
+        post: operations["receiveMessages"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/settings/templates/{name}/preview": {
         parameters: {
             query?: never;
@@ -2148,6 +2164,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/rsvp/{token}/qr.png": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["qrCode"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/resources/{id}/free": {
         parameters: {
             query?: never;
@@ -2508,6 +2540,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["search"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/billing/quotes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["quotes"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3446,7 +3494,7 @@ export interface components {
             /** Format: int32 */
             maxOverbookingCount?: number | null;
             /** @enum {string} */
-            deliveryMode?: "LINK" | "DIRECT_TICKET";
+            deliveryMode?: "LINK" | "DIRECT_TICKET" | "INTERACTIVE";
         };
         UpdateEventRequest: {
             name: string;
@@ -4592,6 +4640,17 @@ export interface components {
             ticketTypeLabel?: string | null;
             ticketTypeColor?: string | null;
         };
+        EventTierQuote: {
+            tier?: string;
+            /** Format: int64 */
+            maxGuests?: number;
+            /** Format: int64 */
+            amountMinor?: number;
+            /** Format: int64 */
+            surchargeMinor?: number;
+            currency?: string;
+            interactive?: boolean;
+        };
         AnalyticsResponse: {
             checkInTimeline?: components["schemas"]["TimeBucket"][];
             channelBreakdown?: components["schemas"]["ChannelBreakdown"][];
@@ -4671,6 +4730,8 @@ export interface components {
             /** Format: int64 */
             freeTierGuests?: number;
             tiers?: components["schemas"]["TierOption"][];
+            /** Format: int64 */
+            interactivePerGuestMinor?: number;
             custom?: components["schemas"]["CustomTierOption"];
         };
         TierOption: {
@@ -5492,6 +5553,54 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["PlatformBillingSettingsView"];
                 };
+            };
+        };
+    };
+    verifySubscription: {
+        parameters: {
+            query?: {
+                "hub.mode"?: string;
+                "hub.verify_token"?: string;
+                "hub.challenge"?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+        };
+    };
+    receiveMessages: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Hub-Signature-256"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string;
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -8812,6 +8921,28 @@ export interface operations {
             };
         };
     };
+    qrCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/png": string;
+                };
+            };
+        };
+    };
     free: {
         parameters: {
             query: {
@@ -9352,6 +9483,28 @@ export interface operations {
             };
         };
     };
+    quotes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventTierQuote"][];
+                };
+            };
+        };
+    };
     register_2: {
         parameters: {
             query?: never;
@@ -9627,6 +9780,7 @@ export interface operations {
         parameters: {
             query: {
                 guestCount: number;
+                interactive?: boolean;
             };
             header?: never;
             path?: never;
