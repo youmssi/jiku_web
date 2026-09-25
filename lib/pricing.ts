@@ -8,6 +8,13 @@
 export const PRICING_CURRENCIES = ["GNF", "FCFA", "USD"] as const;
 export type PricingCurrency = (typeof PRICING_CURRENCIES)[number];
 
+/** What a currency picker shows: FCFA names the two ISO codes it covers. */
+export const PRICING_CURRENCY_LABELS: Record<PricingCurrency, string> = {
+  GNF: "GNF",
+  FCFA: "FCFA (XOF / XAF)",
+  USD: "USD",
+};
+
 /** One price, set by hand in each currency (round amounts, never converted). USD is in cents. */
 export interface PriceList {
   gnf: number;

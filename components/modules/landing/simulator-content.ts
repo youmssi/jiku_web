@@ -138,7 +138,7 @@ const fr: SimulatorContent = {
   currency: {
     label: "Monnaie",
     names: { GNF: "Franc guinéen", FCFA: "Franc CFA", USD: "Dollar US" },
-    note: "Même prix partout : francs guinéens en Guinée, francs CFA dans les zones UEMOA et CEMAC, dollars ailleurs.",
+    note: "Même prix partout : francs guinéens en Guinée, francs CFA (XOF en zone UEMOA, XAF en zone CEMAC), dollars ailleurs.",
   },
   finder: {
     heading: "Trouvez votre formule en trois questions",
@@ -409,7 +409,7 @@ const en: SimulatorContent = {
   currency: {
     label: "Currency",
     names: { GNF: "Guinean franc", FCFA: "CFA franc", USD: "US dollar" },
-    note: "Same price everywhere: Guinean francs in Guinea, CFA francs in the WAEMU and CEMAC zones, dollars elsewhere.",
+    note: "Same price everywhere: Guinean francs in Guinea, CFA francs (XOF in the WAEMU zone, XAF in the CEMAC zone), dollars elsewhere.",
   },
   finder: {
     heading: "Find your plan in three questions",
