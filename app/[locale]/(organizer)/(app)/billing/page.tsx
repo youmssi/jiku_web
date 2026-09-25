@@ -5,9 +5,11 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AllPaymentsView,
   InvoicesTable,
+  OwnNumberSection,
   PackSection,
   SubscriptionSection,
   fetchInvoicesAction,
+  fetchOwnNumberAction,
   fetchPackAction,
   fetchSubscriptionAction,
 } from "@/components/modules/billing";
@@ -21,7 +23,7 @@ const MANAGER_ROLES = ["ORGANIZER_OWNER", "ORGANIZER_ADMIN"];
 /**
  * Organizer billing overview: the prepaid subscription (JIKU-90), the formula,
  * expiry, active resources used and included, the renewal banner, the
- * Organizer Pack (ADR 105), then payment history across every event in the
+ * Organizer Pack and the own WhatsApp number (ADR 105), then payment history across every event in the
  * tenant and any accounting-grade invoices.
  */
 export default async function BillingPage() {
@@ -30,10 +32,11 @@ export default async function BillingPage() {
     return localeRedirect(ROUTES.LOGIN);
   }
   const payments = response.ok ? ((await response.json()) as PaymentHistoryItem[]) : [];
-  const [invoices, subscription, pack, context, t] = await Promise.all([
+  const [invoices, subscription, pack, ownNumber, context, t] = await Promise.all([
     fetchInvoicesAction(),
     fetchSubscriptionAction(),
     fetchPackAction(),
+    fetchOwnNumberAction(),
     getOrganizerContext(),
     getTranslations("billing.page"),
   ]);
@@ -58,6 +61,12 @@ export default async function BillingPage() {
       {pack ? (
         <section className="mb-10 flex flex-col gap-4">
           <PackSection initial={pack} canManage={canManage} />
+        </section>
+      ) : null}
+
+      {ownNumber ? (
+        <section className="mb-10 flex flex-col gap-4">
+          <OwnNumberSection initial={ownNumber} canManage={canManage} />
         </section>
       ) : null}
 

@@ -173,5 +173,35 @@
       "inactive": "Les invités en plus demandent un Pack actif.",
       "failed": "Impossible d'enregistrer votre demande. Réessayez."
     }
+  },
+  "ownNumber": {
+    "title": "Votre propre numéro WhatsApp",
+    "pitch": "Vos invités et vos clients reçoivent les messages depuis votre numéro, à votre nom, et vous répondent directement. Meta vous facture ces messages.",
+    "price": "{amount} par mois",
+    "included": "Compris dans {plans} et le Pack Organisateur.",
+    "source": {
+      "PLAN": "Compris dans votre formule",
+      "PACK": "Compris dans votre Pack Organisateur",
+      "ADDON": "Option active jusqu'au {date}",
+      "NONE": "Non souscrit"
+    },
+    "subscribe": "Ajouter l'option",
+    "renew": "Prolonger l'option",
+    "cancel": "Annuler",
+    "connect": "Connecter mon numéro",
+    "period": {
+      "label": "Durée",
+      "monthly": "1 mois",
+      "yearly": "12 mois, 2 mois offerts"
+    },
+    "total": "À payer : {amount}",
+    "request": "Recevoir les instructions de paiement",
+    "requesting": "Demande…",
+    "ready": "Vos instructions de paiement sont prêtes.",
+    "errors": {
+      "forbidden": "Seul un administrateur de l'organisation peut ajouter l'option.",
+      "included": "Votre offre comprend déjà votre propre numéro WhatsApp.",
+      "failed": "Impossible d'enregistrer votre demande. Réessayez."
+    }
   }
 }

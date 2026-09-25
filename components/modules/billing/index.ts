@@ -5,7 +5,8 @@ export { AllPaymentsView } from "./all-payments-view";
 export { InvoicesTable } from "./invoices-table";
 export { SubscriptionSection } from "./subscription-section";
 export { PackSection } from "./pack-section";
-export { fetchInvoicesAction, issueInvoiceAction, fetchSubscriptionAction, fetchPackAction } from "./billing.service";
+export { OwnNumberSection } from "./own-number-section";
+export { fetchInvoicesAction, issueInvoiceAction, fetchSubscriptionAction, fetchPackAction, fetchOwnNumberAction } from "./billing.service";
 export type {
   InvoiceSummary,
   ManualPaymentInstructions,
@@ -17,6 +18,7 @@ export type {
   TierOption,
   UsageAllowance,
   PackView,
+  OwnWhatsAppNumberView,
   SubscriptionView,
   SubscriptionPlanOption,
   SubscriptionMonthOption,

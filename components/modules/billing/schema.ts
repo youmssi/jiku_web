@@ -70,6 +70,9 @@ export type InvoiceSummary = Schema<"InvoiceSummary">;
 export type SubscriptionStatus = "ACTIVE" | "GRACE" | "EXPIRED";
 /** The Organizer Pack and its current month (ADR 105). */
 export type PackView = Schema<"PackView">;
+
+/** Whether the organization may send from its own WhatsApp number, and the add-on's price (ADR 105). */
+export type OwnWhatsAppNumberView = Schema<"OwnWhatsAppNumberView">;
 export type SubscriptionView = Schema<"SubscriptionView">;
 export type SubscriptionPlanOption = Schema<"PlanOption">;
 export type SubscriptionMonthOption = Schema<"MonthOption">;

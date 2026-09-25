@@ -173,5 +173,35 @@
       "inactive": "Extra guests need an active Pack.",
       "failed": "We couldn't record your request. Please try again."
     }
+  },
+  "ownNumber": {
+    "title": "Your own WhatsApp number",
+    "pitch": "Your guests and clients get messages from your number, under your name, and reply to you directly. Meta bills you for these messages.",
+    "price": "{amount} a month",
+    "included": "Included in {plans} and the Organizer Pack.",
+    "source": {
+      "PLAN": "Included in your plan",
+      "PACK": "Included in your Organizer Pack",
+      "ADDON": "Add-on active until {date}",
+      "NONE": "Not subscribed"
+    },
+    "subscribe": "Add the option",
+    "renew": "Extend the option",
+    "cancel": "Cancel",
+    "connect": "Connect my number",
+    "period": {
+      "label": "Length",
+      "monthly": "1 month",
+      "yearly": "12 months, 2 months free"
+    },
+    "total": "To pay: {amount}",
+    "request": "Get payment instructions",
+    "requesting": "Requesting…",
+    "ready": "Your payment instructions are ready.",
+    "errors": {
+      "forbidden": "Only an organization administrator can add the option.",
+      "included": "Your offer already includes your own WhatsApp number.",
+      "failed": "We couldn't record your request. Please try again."
+    }
   }
 }

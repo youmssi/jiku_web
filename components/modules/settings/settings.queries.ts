@@ -4,6 +4,7 @@ import { serverFetch } from "@/lib/api-server";
 import { reportApiError } from "@/lib/action-result";
 import type {
   BrandingResponse,
+  EmbeddedSignupConfig,
   LegalIdentityResponse,
   ProviderSettingsResponse,
   TemplateSummary,
@@ -35,6 +36,10 @@ export function loadBranding(): Promise<BrandingResponse | null> {
 
 export function loadProviderSettings(): Promise<ProviderSettingsResponse | null> {
   return read("/settings/providers");
+}
+
+export function loadEmbeddedSignupConfig(): Promise<EmbeddedSignupConfig | null> {
+  return read("/settings/providers/whatsapp/embedded-signup");
 }
 
 export function loadLegalIdentity(): Promise<LegalIdentityResponse | null> {
