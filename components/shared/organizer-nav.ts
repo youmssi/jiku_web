@@ -1,5 +1,5 @@
 import type { Messages } from "@/i18n/messages";
-import { CalendarDays, ClipboardList, CreditCard, LayoutDashboard, ListOrdered, Settings, Ticket, Users } from "lucide-react";
+import { CalendarDays, ClipboardList, CreditCard, IdCard, LayoutDashboard, ListOrdered, Settings, Ticket, Users } from "lucide-react";
 import {
   billingRoute,
   eventGuestsRoute,
@@ -45,6 +45,12 @@ export const ORGANIZER_NAV_ITEMS: OrganizerNavItem[] = [
     href: ROUTES.SERVICES,
     icon: ClipboardList,
     match: (pathname) => pathname === ROUTES.SERVICES || pathname.startsWith(`${ROUTES.SERVICES}/`),
+  },
+  {
+    labelKey: "operators",
+    href: ROUTES.OPERATORS,
+    icon: IdCard,
+    match: (pathname) => pathname === ROUTES.OPERATORS,
   },
   {
     labelKey: "billing",

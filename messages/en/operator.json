@@ -41,5 +41,48 @@
     "back": "My posts",
     "invalidTitle": "Link unavailable",
     "invalidText": "This link was revoked or is no longer valid. Ask the organizer for a new one."
+  },
+  "team": {
+    "title": "Operators",
+    "subtitle": "The people who check guests in, run the line or take payments. Each gets one link, no account needed, for their events and services.",
+    "add": "Add an operator",
+    "seats": "{count, plural, =0 {No operator counts toward your subscription.} one {# operator counts toward your subscription (they work on a service).} other {# operators count toward your subscription (they work on a service).}}",
+    "empty": "No operators yet. Add the person who runs the door or the counter.",
+    "columns": {
+      "name": "Name",
+      "scope": "Works on",
+      "actions": "Can",
+      "link": "Link"
+    },
+    "nothingAssigned": "Nothing assigned",
+    "billable": "Counts toward the subscription",
+    "revoked": "Revoked",
+    "copy": "Copy link",
+    "copied": "Link copied.",
+    "edit": "Edit",
+    "revoke": "Revoke",
+    "revokeConfirm": "Revoke {name}? Their link will stop working immediately.",
+    "revokedToast": "Operator revoked.",
+    "saved": "Operator saved.",
+    "form": {
+      "createTitle": "New operator",
+      "editTitle": "Edit operator",
+      "label": "Name",
+      "labelHelp": "What you call them: “Mamadou, front desk”.",
+      "events": "Events",
+      "services": "Services",
+      "noEvents": "No events.",
+      "noServices": "No services.",
+      "actions": "They can",
+      "servicesNote": "An operator who works on a service counts toward your subscription.",
+      "save": "Save",
+      "saving": "Saving…",
+      "cancel": "Cancel"
+    },
+    "errors": {
+      "forbidden": "Only an organization administrator can manage operators.",
+      "invalid": "Check the name and choose at least one action.",
+      "failed": "We couldn't save the operator. Please try again."
+    }
   }
 }

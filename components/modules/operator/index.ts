@@ -2,3 +2,5 @@
 // the event doors and service lines they work on.
 export { OperatorBackLink, OperatorHome, OperatorLinkInvalid } from "./operator-home";
 export type { OperatorConsoleEvent, OperatorConsoleService, OperatorConsoleView } from "./schema";
+export { OperatorTeam } from "./operator-team";
+export type { OperatorTeamView, OperatorView, ScopeChoice } from "./schema";

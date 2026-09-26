@@ -41,5 +41,48 @@
     "back": "Mes postes",
     "invalidTitle": "Lien indisponible",
     "invalidText": "Ce lien a été révoqué ou n'est plus valide. Demandez-en un nouveau à l'organisateur."
+  },
+  "team": {
+    "title": "Opérateurs",
+    "subtitle": "Les personnes qui contrôlent les entrées, gèrent la file ou encaissent. Chacune reçoit un seul lien, sans compte, pour ses événements et ses services.",
+    "add": "Ajouter un opérateur",
+    "seats": "{count, plural, =0 {Aucun opérateur ne compte dans votre abonnement.} one {# opérateur compte dans votre abonnement (il travaille sur un service).} other {# opérateurs comptent dans votre abonnement (ils travaillent sur un service).}}",
+    "empty": "Aucun opérateur pour le moment. Ajoutez la personne qui tient la porte ou le comptoir.",
+    "columns": {
+      "name": "Nom",
+      "scope": "Travaille sur",
+      "actions": "Peut",
+      "link": "Lien"
+    },
+    "nothingAssigned": "Rien d'assigné",
+    "billable": "Compte dans l'abonnement",
+    "revoked": "Révoqué",
+    "copy": "Copier le lien",
+    "copied": "Lien copié.",
+    "edit": "Modifier",
+    "revoke": "Révoquer",
+    "revokeConfirm": "Révoquer {name} ? Son lien cessera de fonctionner immédiatement.",
+    "revokedToast": "Opérateur révoqué.",
+    "saved": "Opérateur enregistré.",
+    "form": {
+      "createTitle": "Nouvel opérateur",
+      "editTitle": "Modifier l'opérateur",
+      "label": "Nom",
+      "labelHelp": "Comme vous l'appelez : « Mamadou, accueil ».",
+      "events": "Événements",
+      "services": "Services",
+      "noEvents": "Aucun événement.",
+      "noServices": "Aucun service.",
+      "actions": "Il peut",
+      "servicesNote": "Un opérateur qui travaille sur un service compte dans votre abonnement.",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…",
+      "cancel": "Annuler"
+    },
+    "errors": {
+      "forbidden": "Seul un administrateur de l'organisation peut gérer les opérateurs.",
+      "invalid": "Vérifiez le nom et choisissez au moins une action.",
+      "failed": "Impossible d'enregistrer l'opérateur. Réessayez."
+    }
   }
 }

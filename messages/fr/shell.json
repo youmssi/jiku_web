@@ -10,7 +10,8 @@
     "guests": "Invités",
     "dayLine": "File du jour",
     "manage": "Gérer",
-    "configuration": "Configuration"
+    "configuration": "Configuration",
+    "operators": "Opérateurs"
   },
   "sidebar": {
     "platform": "Plateforme",

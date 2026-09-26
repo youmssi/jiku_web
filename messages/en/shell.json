@@ -10,7 +10,8 @@
     "guests": "Guests",
     "dayLine": "Day line",
     "manage": "Manage",
-    "configuration": "Configuration"
+    "configuration": "Configuration",
+    "operators": "Operators"
   },
   "sidebar": {
     "platform": "Platform",
