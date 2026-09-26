@@ -1,5 +1,7 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { AppBreadcrumb, AppSidebar, type SidebarProject } from "@/components/modules/dashboard";
+import { RatingPrompt } from "@/components/modules/feedback";
+import { NavCommandPalette } from "@/components/shared";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -7,9 +9,9 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { getOrganizerContext } from "@/components/modules/identity/organizer-context";
+import { getOrganizerContext } from "@/components/modules/identity/server";
 import { serverFetch } from "@/lib/api-server";
-import { ROUTES } from "@/lib/constants";
+import { eventRoute, ROUTES } from "@/lib/constants";
 
 /**
  * Authenticated organizer app shell, mirroring the shadcn sidebar-07 dashboard
@@ -22,11 +24,11 @@ export default async function OrganizerAppLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const context = await getOrganizerContext();
   if (!context) {
-    redirect(ROUTES.LOGIN);
+    return localeRedirect(ROUTES.LOGIN);
   }
   // A fresh account has no organization yet — onboarding creates the first one.
   if (!context.activeTenantId) {
-    redirect(ROUTES.ONBOARDING);
+    return localeRedirect(ROUTES.ONBOARDING);
   }
 
   const projects = await loadRecentEvents();
@@ -54,9 +56,13 @@ export default async function OrganizerAppLayout({
               />
               <AppBreadcrumb brandName={context.brandName} />
             </div>
+            <div className="ml-auto flex items-center px-4">
+              <NavCommandPalette variant="organizer" />
+            </div>
           </header>
           <div className="flex flex-1 flex-col">{children}</div>
         </SidebarInset>
+        <RatingPrompt />
       </SidebarProvider>
     </TooltipProvider>
   );
@@ -74,6 +80,6 @@ async function loadRecentEvents(): Promise<SidebarProject[]> {
   }[];
   return events.slice(0, 4).map((event) => ({
     name: event.name,
-    url: `/events/${event.id}/dashboard`,
+    url: eventRoute(event.id),
   }));
 }

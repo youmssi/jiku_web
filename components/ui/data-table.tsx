@@ -31,6 +31,12 @@ interface DataTableProps<TData extends RowData> {
   searchPlaceholder?: string;
   /** Optional toolbar rendered above the table, receiving the table instance. */
   toolbar?: (table: Table<DataTableFeatures, TData>) => React.ReactNode;
+  /**
+   * Rows per client-side page (default 10). Pass the exact length of `data`
+   * when the caller already paginates server-side, so this table's own
+   * Previous/Next chrome never shows a second, conflicting page count.
+   */
+  pageSize?: number;
 }
 
 export function DataTable<TData extends RowData>({
@@ -39,6 +45,7 @@ export function DataTable<TData extends RowData>({
   searchColumn,
   searchPlaceholder = "Search…",
   toolbar,
+  pageSize = 10,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -49,6 +56,7 @@ export function DataTable<TData extends RowData>({
     features: dataTableFeatures,
     data,
     columns,
+    initialState: { pagination: { pageIndex: 0, pageSize } },
     state: { sorting, columnFilters, columnVisibility },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

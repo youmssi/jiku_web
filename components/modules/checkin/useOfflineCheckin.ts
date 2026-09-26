@@ -21,6 +21,9 @@ import type {
   RosterEntry,
 } from "@/components/modules/checkin/schema";
 
+/** Results built on the device carry no amount due: only the server knows what is owed. */
+const NO_AMOUNT_DUE = { amountDueMinor: null, amountDueCurrency: null } as const;
+
 interface Initial {
   checkedIn: number;
   confirmed: number;
@@ -33,7 +36,7 @@ interface Initial {
  * offline, and flushes the queue automatically when connectivity returns —
  * reconciling each result against the server's first-timestamp-wins decision.
  */
-export function useOfflineCheckIn(token: string, initial: Initial) {
+export function useOfflineCheckIn(door: string, initial: Initial) {
   const [result, setResult] = useState<CheckInResponse | null>(null);
   const [attendance, setAttendance] = useState<AttendanceResponse>(initial);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,37 +68,37 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
 
   const refreshAttendance = useCallback(async () => {
     try {
-      const { data } = await fetchAttendance(token);
+      const { data } = await fetchAttendance(door);
       if (data) setAttendance(data);
     } catch {
       /* offline — counters stay as last known */
     }
-  }, [token]);
+  }, [door]);
 
   // Load any persisted roster + queue for this link on mount.
   useEffect(() => {
     let active = true;
     (async () => {
-      const cached = await loadRoster(token);
+      const cached = await loadRoster(door);
       if (active && cached) {
         commitRoster(cached.entries);
         setLastSyncedAt(cached.syncedAt);
       }
-      const queue = await loadQueue(token);
+      const queue = await loadQueue(door);
       if (active) setPendingCount(queue.length);
     })();
     return () => {
       active = false;
     };
-  }, [token, commitRoster]);
+  }, [door, commitRoster]);
 
   const flushQueue = useCallback(async () => {
     if (flushingRef.current) return;
     flushingRef.current = true;
     try {
-      const queue = await loadQueue(token);
+      const queue = await loadQueue(door);
       if (queue.length === 0) return;
-      const { data, linkInvalid: invalid } = await submitSync(token, queue);
+      const { data, linkInvalid: invalid } = await submitSync(door, queue);
       if (invalid) setLinkInvalid(true);
       if (!data) return;
       await removeQueued(queue.map((item) => item.id));
@@ -104,14 +107,14 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
           patchLocal(entry.ticketCode, entry.checkedInBy, entry.checkedInAt);
         }
       });
-      setPendingCount((await loadQueue(token)).length);
+      setPendingCount((await loadQueue(door)).length);
       await refreshAttendance();
     } catch {
       /* still offline — keep the queue for the next attempt */
     } finally {
       flushingRef.current = false;
     }
-  }, [token, patchLocal, refreshAttendance]);
+  }, [door, patchLocal, refreshAttendance]);
 
   // Track connectivity; flush whatever queued the moment we come back online.
   useEffect(() => {
@@ -146,10 +149,11 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
           checkedInBy: local.checkedInBy,
           ticketTypeLabel: local.ticketTypeLabel,
           ticketTypeColor: local.ticketTypeColor,
+          ...NO_AMOUNT_DUE,
         };
       }
       const scannedAt = new Date().toISOString();
-      await enqueueCheckIn(token, {
+      await enqueueCheckIn(door, {
         id: crypto.randomUUID(),
         ticketCode,
         scannedAt,
@@ -167,9 +171,10 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
         checkedInBy: "You (offline)",
         ticketTypeLabel: local?.ticketTypeLabel ?? null,
         ticketTypeColor: local?.ticketTypeColor ?? null,
+        ...NO_AMOUNT_DUE,
       };
     },
-    [token, localByCode, patchLocal],
+    [door, localByCode, patchLocal],
   );
 
   const runOnline = useCallback(
@@ -206,14 +211,14 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
       try {
         const local = localByCode(ticketCode);
         const next = navigator.onLine
-          ? await runOnline(() => submitScan(token, ticketCode), ticketCode, local?.name ?? null)
+          ? await runOnline(() => submitScan(door, ticketCode), ticketCode, local?.name ?? null)
           : await queueOffline(ticketCode, local?.name ?? null);
         if (next) setResult(next);
       } finally {
         setIsSubmitting(false);
       }
     },
-    [token, localByCode, runOnline, queueOffline],
+    [door, localByCode, runOnline, queueOffline],
   );
 
   const checkInByGuest = useCallback(
@@ -222,7 +227,7 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
       try {
         if (navigator.onLine) {
           const next = await runOnline(
-            () => submitManualCheckIn(token, guestId),
+            () => submitManualCheckIn(door, guestId),
             rosterRef.current.find((e) => e.guestId === guestId)?.ticketCode ?? null,
             rosterRef.current.find((e) => e.guestId === guestId)?.name ?? null,
           );
@@ -237,6 +242,7 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
             ticketCode: null,
             checkedInAt: null,
             checkedInBy: null,
+            ...NO_AMOUNT_DUE,
             ticketTypeLabel: null,
             ticketTypeColor: null,
           });
@@ -247,18 +253,18 @@ export function useOfflineCheckIn(token: string, initial: Initial) {
         setIsSubmitting(false);
       }
     },
-    [token, runOnline, queueOffline],
+    [door, runOnline, queueOffline],
   );
 
   const syncForOffline = useCallback(async () => {
-    const { data, linkInvalid: invalid } = await fetchRoster(token);
+    const { data, linkInvalid: invalid } = await fetchRoster(door);
     if (invalid) setLinkInvalid(true);
     if (!data) return false;
-    const syncedAt = await saveRoster(token, data);
+    const syncedAt = await saveRoster(door, data);
     commitRoster(data);
     setLastSyncedAt(syncedAt);
     return true;
-  }, [token, commitRoster]);
+  }, [door, commitRoster]);
 
   const clearResult = useCallback(() => setResult(null), []);
 

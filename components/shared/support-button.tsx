@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,25 +19,26 @@ import { supportEmail, supportMailto, supportWhatsAppLink } from "@/lib/support"
  */
 export function SupportButton() {
   const whatsApp = supportWhatsAppLink();
+  const t = useTranslations("common.support");
 
   return (
     <div className="fixed bottom-20 right-4 z-40 md:bottom-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size="sm" variant="secondary" className="shadow-md">
-            Help &amp; support
+            {t("open")}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" side="top" className="w-60">
-          <DropdownMenuLabel>Need a hand?</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("title")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <a href={supportMailto()}>Email {supportEmail()}</a>
+            <a href={supportMailto()}>{t("email", { email: supportEmail() })}</a>
           </DropdownMenuItem>
           {whatsApp ? (
             <DropdownMenuItem asChild>
               <a href={whatsApp} target="_blank" rel="noopener noreferrer">
-                Message us on WhatsApp
+                {t("whatsapp")}
               </a>
             </DropdownMenuItem>
           ) : null}

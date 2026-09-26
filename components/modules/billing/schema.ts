@@ -25,17 +25,11 @@ export interface PaymentHistoryItem {
   createdAt: string;
 }
 
-export interface TierOption {
-  name: string;
-  maxGuests: number;
-  priceMinor: number;
-}
-
-export interface TierCatalog {
-  currency: string;
-  freeTierGuests: number;
-  tiers: TierOption[];
-}
+/** Event tiers priced in the organization's billing currency (ADR 105). */
+export type TierOption = Schema<"TierOption">;
+export type TierCatalog = Schema<"TierCatalog">;
+/** A tier this event can still buy, priced by the server for it (tier difference + interactive surcharge). */
+export type EventTierQuote = Schema<"EventTierQuote">;
 
 export interface PaymentInstruction {
   type: string;
@@ -63,13 +57,6 @@ export interface ManualPaymentInstructions {
   payee: PayeeDetails;
 }
 
-export interface PaymentInitiation {
-  paymentId: string;
-  status: string;
-  amountMinor: number;
-  currency: string;
-  instruction: PaymentInstruction;
-}
 
 // ─── Invoices (JIKU-69) ─────────────────────────────────────────────────────
 // Accounting-grade documents, distinct from the plain-text payment receipt: a
@@ -78,35 +65,34 @@ export interface PaymentInitiation {
 
 export type InvoiceSummary = Schema<"InvoiceSummary">;
 
-// ─── Abonnement prépayé par ressource active (JIKU-90) ───────────────────────
+// ─── Services subscription, priced per team (JIKU-90, ADR 105) ───────────────
 
 export type SubscriptionStatus = "ACTIVE" | "GRACE" | "EXPIRED";
+/** The Organizer Pack and its current month (ADR 105). */
+export type PackView = Schema<"PackView">;
 
-export interface SubscriptionPlanOption {
-  name: string;
-  maxResources: number;
-  priceMinorPerMonth: number;
-}
-
-export interface SubscriptionMonthOption {
-  months: number;
-  factorMilli: number;
-}
-
-export interface SubscriptionView {
-  plan: string;
-  resourcesActive: number;
-  resourcesIncluded: number;
-  overLimit: boolean;
-  status: SubscriptionStatus;
-  startedAt: string;
-  expiresAt: string;
-  suspensionAt: string | null;
-  plans: SubscriptionPlanOption[];
-  months: SubscriptionMonthOption[];
-}
+/** Whether the organization may send from its own WhatsApp number, and the add-on's price (ADR 105). */
+export type OwnWhatsAppNumberView = Schema<"OwnWhatsAppNumberView">;
+export type SubscriptionView = Schema<"SubscriptionView">;
+export type SubscriptionPlanOption = Schema<"PlanOption">;
+export type SubscriptionMonthOption = Schema<"MonthOption">;
 
 export interface SubscriptionRequestInput {
   plan: string;
   months: number;
 }
+
+// ─── Online checkout (JIKU-165) ──────────────────────────────────────────────
+
+/** A started online payment: the provider page to send the payer to. */
+export type PaymentInitiationResult = Schema<"PaymentInitiationResult">;
+/** Where a payment stands, read by the page the payer returns to. */
+export type PaymentStatusView = Schema<"PaymentStatusView">;
+
+/** Everything that can be paid online, and what the backend needs to price it. */
+export type CheckoutTarget =
+  | { kind: "tier"; eventId: string; tier: string }
+  | { kind: "subscription"; plan: string; months: number }
+  | { kind: "pack"; months: number }
+  | { kind: "packExtra"; blocks: number }
+  | { kind: "ownNumber"; months: number };

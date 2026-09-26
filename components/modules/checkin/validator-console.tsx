@@ -2,9 +2,12 @@
 
 import { useCallback, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { formatDateTimeInZone, formatTimeInZone } from "@/lib/datetime";
 import { useOfflineCheckIn } from "@/components/modules/checkin/useOfflineCheckin";
 import { CheckInResult } from "@/components/modules/checkin/checkin-result";
+import { markTicketPaid } from "@/components/modules/checkin/checkin.service";
 import { GuestSearch } from "@/components/modules/checkin/guest-search";
 import type { ValidatorContext } from "@/components/modules/checkin/schema";
 
@@ -27,7 +30,7 @@ const QrScanner = dynamic(
 type Mode = "scan" | "search";
 
 interface ValidatorConsoleProps {
-  token: string;
+  door: string;
   context: ValidatorContext;
 }
 
@@ -37,7 +40,7 @@ interface ValidatorConsoleProps {
  * feedback after each check-in. Pre-sync the roster to keep checking guests in
  * offline (JIKU-25); queued check-ins flush automatically on reconnection.
  */
-export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
+export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
   const [mode, setMode] = useState<Mode>("scan");
   const eventCancelled = context.eventStatus === "CANCELLED";
   const [isSyncing, setIsSyncing] = useState(false);
@@ -54,7 +57,7 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
     checkInByGuest,
     syncForOffline,
     clearResult,
-  } = useOfflineCheckIn(token, { checkedIn: context.checkedIn, confirmed: context.confirmed });
+  } = useOfflineCheckIn(door, { checkedIn: context.checkedIn, confirmed: context.confirmed });
   const lockRef = useRef(false);
 
   const handleDetect = useCallback(
@@ -73,6 +76,22 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
       checkInByGuest(guestId);
     },
     [checkInByGuest],
+  );
+
+  const collect = useTranslations("operator.collect");
+  const collectPayment = useCallback(
+    async (method: "MOBILE_MONEY" | "CASH") => {
+      const ticketCode = result?.ticketCode;
+      if (!ticketCode) return;
+      const paid = await markTicketPaid(door, ticketCode, method);
+      if (paid.error) {
+        toast.error(paid.error);
+        return;
+      }
+      toast.success(collect("done"));
+      await checkInByCode(ticketCode);
+    },
+    [result, door, checkInByCode, collect],
   );
 
   const dismiss = useCallback(() => {
@@ -158,7 +177,7 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
           </>
         ) : (
           <GuestSearch
-            token={token}
+            door={door}
             onSelect={handleSelect}
             isSubmitting={isSubmitting}
             offline={!isOnline}
@@ -168,7 +187,7 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
       </main>
 
       {result ? (
-        <CheckInResult result={result} timezone={context.timezone} onDismiss={dismiss} />
+        <CheckInResult result={result} timezone={context.timezone} onDismiss={dismiss} onCollect={collectPayment} />
       ) : null}
 
       {linkInvalid ? (

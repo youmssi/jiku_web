@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { type ActionResult, fromResponse } from "@/lib/action-result";
 import type { AnalyticsData, DashboardData } from "@/components/modules/dashboard/schema";
@@ -12,9 +13,8 @@ export async function fetchDashboardAction(
   eventId: string,
 ): Promise<ActionResult<DashboardData>> {
   const response = await serverFetch(`/events/${eventId}/dashboard`);
-  return fromResponse<DashboardData>(response, {
-    default: "Couldn't load the latest metrics.",
-  });
+  const t = await getTranslations("events.overview.unavailable");
+  return fromResponse<DashboardData>(response, { default: t("description") });
 }
 
 /** Fetches an event's trend data (check-in timeline, channel breakdown, guest growth). */
@@ -22,9 +22,8 @@ export async function fetchAnalyticsAction(
   eventId: string,
 ): Promise<ActionResult<AnalyticsData>> {
   const response = await serverFetch(`/events/${eventId}/analytics`);
-  return fromResponse<AnalyticsData>(response, {
-    default: "Couldn't load this event's trend data.",
-  });
+  const t = await getTranslations("events.overview.unavailable");
+  return fromResponse<AnalyticsData>(response, { default: t("description") });
 }
 
 /** Fetches one event's name for navigation chrome (breadcrumbs); null when unavailable. */

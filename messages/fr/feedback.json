@@ -1,0 +1,57 @@
+{
+  "form": {
+    "title": "Votre avis compte",
+    "description": "Un souci, une question, une idée ? Écrivez-nous : nous lisons tout et répondons par e-mail.",
+    "kind": "De quoi s'agit-il ?",
+    "kinds": {
+      "PROBLEM": "Un problème",
+      "QUESTION": "Une question",
+      "IDEA": "Une idée",
+      "COMPLAINT": "Une réclamation"
+    },
+    "message": "Votre message",
+    "placeholders": {
+      "PROBLEM": "Ce que vous faisiez, ce qui s'est passé, ce que vous attendiez…",
+      "QUESTION": "Posez votre question, nous vous répondons vite.",
+      "IDEA": "Ce qui vous ferait gagner du temps…",
+      "COMPLAINT": "Racontez-nous ce qui s'est mal passé : c'est traité en priorité."
+    },
+    "contactEmail": "Adresse pour vous répondre",
+    "contactHint": "Laissez vide si vous ne souhaitez pas de réponse.",
+    "cancel": "Annuler",
+    "send": "Envoyer",
+    "sending": "Envoi…",
+    "sent": {
+      "PROBLEM": "Merci, nous regardons ce problème.",
+      "QUESTION": "Merci, nous vous répondons vite.",
+      "IDEA": "Merci pour l'idée, elle est notée.",
+      "COMPLAINT": "Merci. Votre réclamation est traitée en priorité."
+    },
+    "invalid": "Vérifiez votre message.",
+    "failed": "L'envoi a échoué. Réessayez.",
+    "tooMany": "Trop d'envois d'un coup. Réessayez dans une minute."
+  },
+  "rating": {
+    "questions": {
+      "event_published": "Publier votre événement, c'était facile ?",
+      "invitations_sent": "Envoyer les invitations, c'était facile ?",
+      "guests_imported": "Importer vos invités, c'était facile ?",
+      "service_created": "Créer votre service, c'était facile ?"
+    },
+    "scale": "Votre note, de 1 à 5",
+    "scores": {
+      "1": "Très difficile",
+      "2": "Difficile",
+      "3": "Correct",
+      "4": "Facile",
+      "5": "Très facile"
+    },
+    "comment": "Un commentaire",
+    "commentLow": "Qu'est-ce qui vous a bloqué ?",
+    "commentHigh": "Un mot de plus ? (facultatif)",
+    "send": "Envoyer",
+    "dismiss": "Ne pas répondre",
+    "thanks": "Merci pour votre retour !",
+    "failed": "Votre note n'a pas pu être envoyée."
+  }
+}

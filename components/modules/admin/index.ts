@@ -6,18 +6,17 @@ export { PaymentsView } from "./payments-view";
 export { TrialsView } from "./trials-view";
 export { AgreementsView } from "./agreements-view";
 export { AuditView } from "./audit-view";
-export { BookingsView } from "./bookings-view";
-export { BookingPaymentsView } from "./booking-payments-view";
 export { BillingSettingsView } from "./billing-settings-view";
 export { adminLogoutAction } from "./admin.service";
+export { AdminPage } from "./admin-page";
 export type {
   AdminAgreement,
-  AdminBooking,
-  AdminBookingPaymentDeclaration,
   AdminPayment,
   AdminTierCatalog,
   AdminTierOption,
   AdminTrial,
+  AdminTrialPage,
+  AdminTrialStats,
   AuditEntry,
   AuditPage,
   TenantDirectoryEntry,
@@ -25,3 +24,4 @@ export type {
 } from "./schema";
 export { WhatsAppAdmin, ProspectsTable, DiagnosticsPanel } from "./admin-extras";
 export type { WhatsAppPricingInfo, WhatsAppOverrideStatus, ProspectLead } from "./schema";
+export { FeedbackInbox } from "./feedback-inbox";

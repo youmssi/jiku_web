@@ -18,16 +18,18 @@ import {
 } from "@/components/ui/sidebar"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { MoreHorizontalCircle01Icon, FolderIcon, ArrowRightIcon } from "@hugeicons/core-free-icons"
+import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 import type { SidebarProject } from "./app-sidebar"
 
 /**
  * Quick-access events (sidebar-07 "projects" slot): the organizer's most recent
- * events with per-item actions (open dashboard, open guests). Hidden when the
+ * events with per-item actions (open the overview, open guests). Hidden when the
  * sidebar collapses to icons, exactly like the template.
  */
 export function NavProjects({ projects }: { projects: SidebarProject[] }) {
   const { isMobile } = useSidebar()
+  const t = useTranslations("shell.sidebar")
 
   if (projects.length === 0) {
     return null
@@ -35,7 +37,7 @@ export function NavProjects({ projects }: { projects: SidebarProject[] }) {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Recent events</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("recentEvents")}</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.url}>
@@ -52,7 +54,7 @@ export function NavProjects({ projects }: { projects: SidebarProject[] }) {
                   className="aria-expanded:bg-muted"
                 >
                   <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} />
-                  <span className="sr-only">More</span>
+                  <span className="sr-only">{t("more")}</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -63,13 +65,13 @@ export function NavProjects({ projects }: { projects: SidebarProject[] }) {
                 <DropdownMenuItem asChild>
                   <Link href={item.url}>
                     <HugeiconsIcon icon={FolderIcon} strokeWidth={2} />
-                    <span>Open dashboard</span>
+                    <span>{t("openOverview")}</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href={item.url.replace(/\/dashboard$/, "/guests")}>
+                  <Link href={`${item.url}/guests`}>
                     <HugeiconsIcon icon={ArrowRightIcon} strokeWidth={2} />
-                    <span>Open guests</span>
+                    <span>{t("openGuests")}</span>
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

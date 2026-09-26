@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { AdminLoginForm } from "@/components/modules/admin";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { JikūLogo } from "@/components/ui/jiku-logo";
@@ -9,7 +9,7 @@ export const metadata = { title: "Jikū - Administration", robots: { index: fals
 
 export default async function AdminLoginPage() {
   if (await getAdminAccessToken()) {
-    redirect(ADMIN_ROUTES.TENANTS);
+    return localeRedirect(ADMIN_ROUTES.TENANTS);
   }
   return (
     <main className="flex min-h-svh flex-col items-center justify-center gap-6 px-4">

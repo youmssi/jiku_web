@@ -1,33 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import * as React from "react";
-import { type ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Search, SlidersHorizontal } from "lucide-react";
+import { useMemo, useState, useTransition } from "react";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
+import type { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown, MoreHorizontal, Search } from "lucide-react";
 import { toast } from "sonner";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { attendanceCertificateRoute } from "@/lib/constants";
-import { Button } from "@/components/ui/button";
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox";
-import { DataTable } from "@/components/ui/data-table";
-import type { DataTableFeatures } from "@/components/ui/data-table-features";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,56 +15,422 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import type { DataTableFeatures } from "@/components/ui/data-table-features";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemTitle,
+} from "@/components/ui/item";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { TicketTypeResponse } from "@/components/modules/event";
 import { readableTextColor } from "@/lib/color-contrast";
-import { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS } from "@/lib/channels";
+import { INVITATION_CHANNELS, INVITATION_CHANNEL_LABELS, type InvitationChannel } from "@/lib/channels";
+import { attendanceCertificateRoute } from "@/lib/constants";
+import { trackEvent } from "@/lib/analytics";
+import { formatAmount } from "@/lib/currency";
 import {
+  markGuestPaidAction,
   removeGuestAction,
   setGuestExclusionAction,
   setGuestTicketTypeAction,
 } from "@/components/modules/guest/guest.service";
+import {
+  PAYMENT_METHODS,
+  type PaymentMethod,
+  type RsvpStatus,
+  type TicketPaymentStatus,
+} from "@/components/modules/guest/schema";
 
 export interface GuestRow {
   id: string;
   name: string;
-  contact: string;
+  email: string | null;
+  phone: string | null;
   excludedFromInvitations: boolean;
-  /** Heure d'entrée, si la personne est venue — décide de l'attestation (JIKU-95). */
+  /** When the guest came in; decides whether a certificate can be issued (JIKU-95). */
   checkedInAt: string | null;
-  statuses: Record<string, string | null>;
-  /** Catégorie d'accès (JIKU-93), absente si l'événement n'en définit pas. */
   ticketTypeId: string | null;
+  rsvpStatus: RsvpStatus;
+  ticketCode: string | null;
+  paymentStatus: TicketPaymentStatus | null;
+  amountDueMinor: number | null;
+  amountDueCurrency: string | null;
+  invitations: Record<string, string | null>;
 }
 
-function initials(name: string): string {
+type ResponseFilter = "ALL" | "CONFIRMED" | "PENDING" | "DECLINED" | "PAYMENT_DUE";
+
+const ALL_CATEGORIES = "ALL";
+
+function matchesResponse(row: GuestRow, filter: ResponseFilter): boolean {
+  if (filter === "ALL") return true;
+  if (filter === "PAYMENT_DUE") return row.paymentStatus === "DUE";
+  return row.rsvpStatus === filter;
+}
+
+const RSVP_VARIANTS: Record<RsvpStatus, "default" | "secondary" | "outline" | "destructive"> = {
+  CONFIRMED: "default",
+  PENDING: "outline",
+  DECLINED: "secondary",
+  TRANSFERRED: "secondary",
+};
+
+/**
+ * The guest list: search by name or contact, filter by answer (with counts) and
+ * by category, and act on a guest from its row. The payment column appears
+ * only when the event sells tickets, the category column only when it has
+ * categories: most events have neither, and a column of dashes helps no one.
+ */
+export function GuestsTable({
+  eventId,
+  rows,
+  ticketTypes,
+}: {
+  eventId: string;
+  rows: GuestRow[];
+  ticketTypes: TicketTypeResponse[];
+}) {
+  const t = useTranslations("guests");
+  const format = useFormatter();
+  const [response, setResponse] = useState<ResponseFilter>("ALL");
+  const [category, setCategory] = useState(ALL_CATEGORIES);
+  const [query, setQuery] = useState("");
+  const sellsTickets = rows.some((row) => row.paymentStatus && row.paymentStatus !== "NOT_REQUIRED");
+
+  const counts = useMemo(
+    () => ({
+      ALL: rows.length,
+      CONFIRMED: rows.filter((row) => matchesResponse(row, "CONFIRMED")).length,
+      PENDING: rows.filter((row) => matchesResponse(row, "PENDING")).length,
+      DECLINED: rows.filter((row) => matchesResponse(row, "DECLINED")).length,
+      PAYMENT_DUE: rows.filter((row) => matchesResponse(row, "PAYMENT_DUE")).length,
+    }),
+    [rows],
+  );
+  const visible = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    return rows.filter(
+      (row) =>
+        matchesResponse(row, response) &&
+        (category === ALL_CATEGORIES || row.ticketTypeId === category) &&
+        (!needle || [row.name, row.email, row.phone].some((value) => value?.toLowerCase().includes(needle))),
+    );
+  }, [rows, response, category, query]);
+  const byTypeId = useMemo(() => new Map(ticketTypes.map((type) => [type.id, type])), [ticketTypes]);
+
+  const columns = useMemo<ColumnDef<DataTableFeatures, GuestRow>[]>(() => {
+    const byId = new Map(ticketTypes.map((type) => [type.id, type]));
+    return [
+      {
+        id: "name",
+        accessorFn: (row) => row.name,
+        header: ({ column }) => (
+          <Button variant="ghost" className="-ml-3" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            {t("columns.name")}
+            <ArrowUpDown data-icon="inline-end" />
+          </Button>
+        ),
+        cell: ({ row }) => (
+          <div className="flex min-w-0 flex-col">
+            <span className="flex items-center gap-2 font-medium">
+              {row.original.name}
+              {row.original.excludedFromInvitations ? <Badge variant="outline">{t("excluded")}</Badge> : null}
+            </span>
+            <span className="truncate text-xs text-muted-foreground">
+              {row.original.email ?? row.original.phone ?? t("noContact")}
+            </span>
+          </div>
+        ),
+      },
+      {
+        id: "response",
+        header: t("columns.response"),
+        enableSorting: false,
+        cell: ({ row }) =>
+          row.original.checkedInAt ? (
+            <Badge variant="default">
+              {t("checkedInAt", {
+                time: format.dateTime(new Date(row.original.checkedInAt), { hour: "2-digit", minute: "2-digit" }),
+              })}
+            </Badge>
+          ) : (
+            <Badge variant={RSVP_VARIANTS[row.original.rsvpStatus]}>{t(`rsvp.${row.original.rsvpStatus}`)}</Badge>
+          ),
+      },
+      ...(ticketTypes.length > 0
+        ? [
+            {
+              id: "category",
+              header: t("columns.category"),
+              enableSorting: false,
+              cell: ({ row }) => {
+                const type = row.original.ticketTypeId ? byId.get(row.original.ticketTypeId) : undefined;
+                return type ? (
+                  <span
+                    className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
+                    style={{ backgroundColor: type.colorHex, color: readableTextColor(type.colorHex) }}
+                  >
+                    {type.label}
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground">—</span>
+                );
+              },
+            } satisfies ColumnDef<DataTableFeatures, GuestRow>,
+          ]
+        : []),
+      ...(sellsTickets
+        ? [
+            {
+              id: "payment",
+              header: t("columns.payment"),
+              enableSorting: false,
+              cell: ({ row }) => <PaymentBadge row={row.original} />,
+            } satisfies ColumnDef<DataTableFeatures, GuestRow>,
+          ]
+        : []),
+      {
+        id: "invitation",
+        header: t("columns.invitation"),
+        enableSorting: false,
+        cell: ({ row }) => <InvitationBadges invitations={row.original.invitations} />,
+      },
+      {
+        id: "actions",
+        enableSorting: false,
+        cell: ({ row }) => (
+          <div className="flex justify-end">
+            <GuestRowActions eventId={eventId} guest={row.original} ticketTypes={ticketTypes} />
+          </div>
+        ),
+      },
+    ];
+  }, [eventId, ticketTypes, sellsTickets, t, format]);
+
+  const filters: ResponseFilter[] = sellsTickets
+    ? ["ALL", "CONFIRMED", "PENDING", "DECLINED", "PAYMENT_DUE"]
+    : ["ALL", "CONFIRMED", "PENDING", "DECLINED"];
+
   return (
-    name
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((word) => word[0]?.toUpperCase() ?? "")
-      .join("") || "?"
+    <div className="flex flex-col gap-3">
+      <ToggleGroup
+        type="single"
+        variant="outline"
+        size="sm"
+        value={response}
+        onValueChange={(value) => value && setResponse(value as ResponseFilter)}
+        aria-label={t("filters.label")}
+        className="flex-wrap"
+      >
+        {filters.map((filter) => (
+          <ToggleGroupItem key={filter} value={filter}>
+            {t(`filters.${filter}`)}
+            <span className="text-muted-foreground tabular-nums">{counts[filter]}</span>
+          </ToggleGroupItem>
+        ))}
+      </ToggleGroup>
+      <GuestsToolbar
+        query={query}
+        onQuery={setQuery}
+        ticketTypes={ticketTypes}
+        category={category}
+        onCategory={setCategory}
+      />
+      <div className="hidden md:block">
+        <DataTable columns={columns} data={visible} />
+      </div>
+      <GuestCards eventId={eventId} rows={visible} ticketTypes={ticketTypes} byTypeId={byTypeId} sellsTickets={sellsTickets} />
+    </div>
   );
 }
 
-function StatusBadge({ status }: { status: string | null }) {
-  if (!status) {
-    return <span className="text-muted-foreground">None</span>;
+const CARD_PAGE = 30;
+
+/**
+ * The guest list on a phone: one card per guest with what matters at a glance
+ * (answer, category, what is owed) and the same row menu, instead of a table
+ * that would scroll sideways.
+ */
+function GuestCards({
+  eventId,
+  rows,
+  ticketTypes,
+  byTypeId,
+  sellsTickets,
+}: {
+  eventId: string;
+  rows: GuestRow[];
+  ticketTypes: TicketTypeResponse[];
+  byTypeId: Map<string, TicketTypeResponse>;
+  sellsTickets: boolean;
+}) {
+  const t = useTranslations("guests");
+  const format = useFormatter();
+  const [shown, setShown] = useState(CARD_PAGE);
+  if (rows.length === 0) {
+    return <p className="py-8 text-center text-sm text-muted-foreground md:hidden">{t("noMatch")}</p>;
   }
-  const variant =
-    status === "SENT" ? "default" : status === "FAILED" ? "destructive" : "secondary";
-  return <Badge variant={variant}>{status}</Badge>;
+  return (
+    <div className="flex flex-col gap-2 md:hidden">
+      <ItemGroup className="gap-2">
+        {rows.slice(0, shown).map((row) => {
+          const type = row.ticketTypeId ? byTypeId.get(row.ticketTypeId) : undefined;
+          return (
+            <Item key={row.id} variant="outline" size="sm">
+              <ItemContent>
+                <ItemTitle>
+                  {row.name}
+                  {row.excludedFromInvitations ? <Badge variant="outline">{t("excluded")}</Badge> : null}
+                </ItemTitle>
+                <ItemDescription>{row.email ?? row.phone ?? t("noContact")}</ItemDescription>
+                <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                  {row.checkedInAt ? (
+                    <Badge>
+                      {t("checkedInAt", {
+                        time: format.dateTime(new Date(row.checkedInAt), { hour: "2-digit", minute: "2-digit" }),
+                      })}
+                    </Badge>
+                  ) : (
+                    <Badge variant={RSVP_VARIANTS[row.rsvpStatus]}>{t(`rsvp.${row.rsvpStatus}`)}</Badge>
+                  )}
+                  {type ? (
+                    <span
+                      className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
+                      style={{ backgroundColor: type.colorHex, color: readableTextColor(type.colorHex) }}
+                    >
+                      {type.label}
+                    </span>
+                  ) : null}
+                  {sellsTickets && row.paymentStatus ? <PaymentBadge row={row} /> : null}
+                </div>
+              </ItemContent>
+              <ItemActions>
+                <GuestRowActions eventId={eventId} guest={row} ticketTypes={ticketTypes} />
+              </ItemActions>
+            </Item>
+          );
+        })}
+      </ItemGroup>
+      {rows.length > shown ? (
+        <Button variant="outline" onClick={() => setShown((count) => count + CARD_PAGE)}>
+          {t("showMore", { count: rows.length - shown })}
+        </Button>
+      ) : null}
+    </div>
+  );
 }
 
-/** Pastille de catégorie d'accès (JIKU-93), lisible sur n'importe quelle couleur. */
-function TicketTypeBadge({ type }: { type: TicketTypeResponse }) {
+function GuestsToolbar({
+  query,
+  onQuery,
+  ticketTypes,
+  category,
+  onCategory,
+}: {
+  query: string;
+  onQuery: (value: string) => void;
+  ticketTypes: TicketTypeResponse[];
+  category: string;
+  onCategory: (value: string) => void;
+}) {
+  const t = useTranslations("guests");
   return (
-    <span
-      className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
-      style={{ backgroundColor: type.colorHex, color: readableTextColor(type.colorHex) }}
-    >
-      {type.label}
-    </span>
+    <div className="flex flex-wrap items-center gap-2">
+      <InputGroup className="w-full sm:max-w-sm sm:flex-1">
+        <InputGroupInput
+          type="search"
+          placeholder={t("search")}
+          aria-label={t("search")}
+          value={query}
+          onChange={(event) => onQuery(event.target.value)}
+        />
+        <InputGroupAddon>
+          <Search />
+        </InputGroupAddon>
+      </InputGroup>
+      {ticketTypes.length > 0 ? (
+        <Select value={category} onValueChange={onCategory}>
+          <SelectTrigger className="w-full sm:w-48" aria-label={t("columns.category")}>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={ALL_CATEGORIES}>{t("allCategories")}</SelectItem>
+            {ticketTypes.map((type) => (
+              <SelectItem key={type.id} value={type.id}>
+                {type.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : null}
+    </div>
+  );
+}
+
+function PaymentBadge({ row }: { row: GuestRow }) {
+  const t = useTranslations("guests.payment");
+  const locale = useLocale();
+  switch (row.paymentStatus) {
+    case "DUE":
+      return (
+        <Badge variant="secondary">
+          {row.amountDueMinor && row.amountDueCurrency
+            ? t("due", { amount: formatAmount(row.amountDueMinor, row.amountDueCurrency, locale) })
+            : t("dueNoAmount")}
+        </Badge>
+      );
+    case "PAID":
+      return <Badge variant="default">{t("paid")}</Badge>;
+    case "NOT_REQUIRED":
+      return <span className="text-xs text-muted-foreground">{t("free")}</span>;
+    default:
+      return <span className="text-muted-foreground">—</span>;
+  }
+}
+
+function InvitationBadges({ invitations }: { invitations: Record<string, string | null> }) {
+  const t = useTranslations("guests.invitation");
+  const reached = INVITATION_CHANNELS.filter((channel) => invitations[channel]);
+  if (reached.length === 0) {
+    return <span className="text-xs text-muted-foreground">{t("notSent")}</span>;
+  }
+  return (
+    <div className="flex flex-wrap gap-1">
+      {reached.map((channel: InvitationChannel) => {
+        const status = invitations[channel] ?? "";
+        const known = status === "SENT" || status === "FAILED" || status === "PENDING" || status === "QUEUED";
+        return (
+          <Badge key={channel} variant={status === "FAILED" ? "destructive" : status === "SENT" ? "outline" : "secondary"}>
+            {INVITATION_CHANNEL_LABELS[channel]} · {known ? t(status) : status}
+          </Badge>
+        );
+      })}
+    </div>
   );
 }
 
@@ -100,39 +443,47 @@ function GuestRowActions({
   guest: GuestRow;
   ticketTypes: TicketTypeResponse[];
 }) {
+  const t = useTranslations("guests.actions");
+  const tCommon = useTranslations("common.actions");
   const [isPending, startTransition] = useTransition();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  function onSetTicketType(ticketTypeId: string | null) {
+  function run(action: () => Promise<{ ok: boolean; error?: string }>, success: string) {
     startTransition(async () => {
-      const result = await setGuestTicketTypeAction(eventId, guest.id, ticketTypeId);
+      const result = await action();
       if (!result.ok) {
         toast.error(result.error);
         return;
       }
-      const label = ticketTypes.find((type) => type.id === ticketTypeId)?.label;
-      toast.success(
-        label ? `${guest.name} : catégorie ${label}.` : `${guest.name} n'a plus de catégorie.`,
-      );
+      toast.success(success);
     });
   }
 
-  function onToggleExclusion() {
-    startTransition(async () => {
-      const result = await setGuestExclusionAction(eventId, guest.id, !guest.excludedFromInvitations);
-      if (!result.ok) {
-        toast.error(result.error);
-        return;
-      }
-      toast.success(
-        guest.excludedFromInvitations
-          ? `${guest.name} will receive future invitations again.`
-          : `${guest.name} is excluded from future invitations.`,
-      );
-    });
+  function markPaid(method: PaymentMethod) {
+    if (!guest.ticketCode) return;
+    const code = guest.ticketCode;
+    run(async () => {
+      const result = await markGuestPaidAction(eventId, code, method);
+      if (result.ok) trackEvent("ticket_marked_paid", { method });
+      return result;
+    }, t("paidDone", { name: guest.name }));
   }
 
-  function onRemove() {
+  function setCategory(type: TicketTypeResponse | null) {
+    run(
+      () => setGuestTicketTypeAction(eventId, guest.id, type?.id ?? null),
+      type ? t("categoryDone", { name: guest.name, category: type.label }) : t("categoryCleared", { name: guest.name }),
+    );
+  }
+
+  function toggleExclusion() {
+    run(
+      () => setGuestExclusionAction(eventId, guest.id, !guest.excludedFromInvitations),
+      guest.excludedFromInvitations ? t("includedDone", { name: guest.name }) : t("excludedDone", { name: guest.name }),
+    );
+  }
+
+  function remove() {
     startTransition(async () => {
       const result = await removeGuestAction(eventId, guest.id);
       setConfirmOpen(false);
@@ -140,7 +491,7 @@ function GuestRowActions({
         toast.error(result.error);
         return;
       }
-      toast.success(`${guest.name} was removed.`);
+      toast.success(t("removedDone", { name: guest.name }));
     });
   }
 
@@ -148,49 +499,59 @@ function GuestRowActions({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="size-8" disabled={isPending}>
-            <MoreHorizontal className="size-4" />
-            <span className="sr-only">Guest actions</span>
+          <Button variant="ghost" size="icon" disabled={isPending} aria-label={t("label", { name: guest.name })}>
+            <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          {guest.paymentStatus === "DUE" && guest.ticketCode ? (
+            <>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>{t("markPaid")}</DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  {PAYMENT_METHODS.map((method) => (
+                    <DropdownMenuItem key={method} onSelect={() => markPaid(method)}>
+                      {t(`methods.${method}`)}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+              <DropdownMenuSeparator />
+            </>
+          ) : null}
           {ticketTypes.length > 0 ? (
             <>
-              <DropdownMenuLabel>Catégorie d&apos;accès</DropdownMenuLabel>
-              {ticketTypes.map((type) => (
-                <DropdownMenuItem
-                  key={type.id}
-                  disabled={type.id === guest.ticketTypeId}
-                  onClick={() => onSetTicketType(type.id)}
-                >
-                  <span
-                    aria-hidden
-                    className="size-3 shrink-0 rounded-full"
-                    style={{ backgroundColor: type.colorHex }}
-                  />
-                  {type.label}
-                </DropdownMenuItem>
-              ))}
-              <DropdownMenuItem
-                disabled={guest.ticketTypeId === null}
-                onClick={() => onSetTicketType(null)}
-              >
-                Aucune catégorie
-              </DropdownMenuItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>{t("category")}</DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuLabel>{t("category")}</DropdownMenuLabel>
+                  {ticketTypes.map((type) => (
+                    <DropdownMenuItem
+                      key={type.id}
+                      disabled={type.id === guest.ticketTypeId}
+                      onSelect={() => setCategory(type)}
+                    >
+                      <span aria-hidden className="size-3 shrink-0 rounded-full" style={{ backgroundColor: type.colorHex }} />
+                      {type.label}
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuItem disabled={guest.ticketTypeId === null} onSelect={() => setCategory(null)}>
+                    {t("noCategory")}
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
               <DropdownMenuSeparator />
             </>
           ) : null}
           {guest.checkedInAt ? (
-            // Une attestation ne s'émet que pour quelqu'un qui est venu : la
-            // proposer autrement mènerait à un refus que rien n'annonçait.
             <DropdownMenuItem asChild>
               <a href={attendanceCertificateRoute(eventId, guest.id)} download>
-                Attestation de présence
+                {t("certificate")}
               </a>
             </DropdownMenuItem>
           ) : null}
-          <DropdownMenuItem onClick={onToggleExclusion}>
-            {guest.excludedFromInvitations ? "Include in invitations" : "Exclude from invitations"}
+          <DropdownMenuItem onSelect={toggleExclusion}>
+            {guest.excludedFromInvitations ? t("include") : t("exclude")}
           </DropdownMenuItem>
           <DropdownMenuItem
             variant="destructive"
@@ -199,7 +560,7 @@ function GuestRowActions({
               setConfirmOpen(true);
             }}
           >
-            Remove guest
+            {t("remove")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -207,194 +568,24 @@ function GuestRowActions({
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Remove {guest.name}?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This permanently removes them from the guest list. Guests who have already been invited
-              can&apos;t be removed. Exclude them instead to stop future invitations.
-            </AlertDialogDescription>
+            <AlertDialogTitle>{t("removeTitle", { name: guest.name })}</AlertDialogTitle>
+            <AlertDialogDescription>{t("removeDescription")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={onRemove} disabled={isPending}>
-              {isPending ? "Removing…" : "Remove guest"}
+            <AlertDialogCancel disabled={isPending}>{tCommon("cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={(event) => {
+                event.preventDefault();
+                remove();
+              }}
+              disabled={isPending}
+            >
+              {isPending ? t("removing") : t("remove")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </>
-  );
-}
-
-function createColumns(
-  eventId: string,
-  ticketTypes: TicketTypeResponse[],
-): ColumnDef<DataTableFeatures, GuestRow>[] {
-  return [
-    {
-      accessorKey: "name",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          className="-ml-3 h-8"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="size-3.5" />
-        </Button>
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center gap-2.5">
-          <Avatar className="size-7">
-            <AvatarFallback className="text-[0.65rem]">{initials(row.original.name)}</AvatarFallback>
-          </Avatar>
-          <span className="font-medium">{row.original.name}</span>
-          {row.original.excludedFromInvitations ? (
-            <Badge variant="outline" className="text-muted-foreground">
-              Excluded
-            </Badge>
-          ) : null}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "contact",
-      header: "Contact",
-      cell: ({ row }) => (
-        <span className="text-muted-foreground">{row.original.contact}</span>
-      ),
-    },
-    // La colonne n'apparaît que si l'événement définit des catégories : la
-    // plupart n'en ont pas, et une colonne de tirets n'aide personne.
-    ...(ticketTypes.length > 0
-      ? [
-          {
-            id: "ticketType",
-            header: "Catégorie",
-            accessorFn: (row: GuestRow) =>
-              ticketTypes.find((it) => it.id === row.ticketTypeId)?.label ?? "",
-            filterFn: "includesString",
-            enableSorting: false,
-            cell: ({ row }) => {
-              const type = ticketTypes.find((it) => it.id === row.original.ticketTypeId);
-              return type ? (
-                <TicketTypeBadge type={type} />
-              ) : (
-                <span className="text-muted-foreground">None</span>
-              );
-            },
-          } satisfies ColumnDef<DataTableFeatures, GuestRow>,
-        ]
-      : []),
-    ...INVITATION_CHANNELS.map<ColumnDef<DataTableFeatures, GuestRow>>((channel) => ({
-      id: `channel-${channel}`,
-      header: INVITATION_CHANNEL_LABELS[channel],
-      enableSorting: false,
-      cell: ({ row }) => <StatusBadge status={row.original.statuses[channel] ?? null} />,
-    })),
-    {
-      id: "actions",
-      header: "",
-      enableSorting: false,
-      cell: ({ row }) => (
-        <div className="flex justify-end">
-          <GuestRowActions eventId={eventId} guest={row.original} ticketTypes={ticketTypes} />
-        </div>
-      ),
-    },
-  ];
-}
-
-export function GuestsTable({
-  eventId,
-  rows,
-  ticketTypes = [],
-}: {
-  eventId: string;
-  rows: GuestRow[];
-  ticketTypes?: TicketTypeResponse[];
-}) {
-  return (
-    <DataTable
-      columns={createColumns(eventId, ticketTypes)}
-      data={rows}
-      toolbar={(table) => <GuestsToolbar table={table} ticketTypes={ticketTypes} />}
-    />
-  );
-}
-
-/**
- * Toolbar of the guest list: name search, access-category filter (combobox),
- * and the columns-visibility toggle.
- */
-function GuestsToolbar({
-  table,
-  ticketTypes,
-}: {
-  table: import("@tanstack/react-table").Table<DataTableFeatures, GuestRow>;
-  ticketTypes: TicketTypeResponse[];
-}) {
-  const [category, setCategory] = React.useState("ALL");
-
-  return (
-    <div className="flex flex-wrap items-center gap-2 py-4">
-      <div className="relative max-w-sm flex-1">
-        <Input
-          placeholder="Search guests by name…"
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="pr-8"
-        />
-        <Search className="absolute top-1/2 right-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
-      </div>
-      {ticketTypes.length > 0 ? (
-        <Combobox
-          value={category}
-          onValueChange={(value) => {
-            const next = typeof value === "string" ? value : "ALL";
-            setCategory(next);
-            table
-              .getColumn("ticketType")
-              ?.setFilterValue(next === "ALL" ? "" : next);
-          }}
-        >
-          <ComboboxInput className="w-44" placeholder="Catégorie" />
-          <ComboboxContent>
-            <ComboboxList>
-              <ComboboxItem value="ALL">Toutes les catégories</ComboboxItem>
-              {ticketTypes.map((type) => (
-                <ComboboxItem key={type.id} value={type.label ?? ""}>
-                  {type.label}
-                </ComboboxItem>
-              ))}
-            </ComboboxList>
-          </ComboboxContent>
-        </Combobox>
-      ) : null}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="icon-sm" className="ml-auto">
-            <SlidersHorizontal className="size-3.5" />
-            <span className="sr-only">Toggle columns</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {table
-            .getAllColumns()
-            .filter((column) => column.getCanHide())
-            .map((column) => (
-              <DropdownMenuCheckboxItem
-                key={column.id}
-                className="capitalize"
-                checked={column.getIsVisible()}
-                onCheckedChange={(value) => column.toggleVisibility(!!value)}
-              >
-                {column.id}
-              </DropdownMenuCheckboxItem>
-            ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
   );
 }

@@ -1,0 +1,64 @@
+{
+  "whatsappNumber": {
+    "title": "Your WhatsApp number",
+    "platform": "Your WhatsApp messages go out from Jikū's number. Nothing to set up.",
+    "pitch": "Send from your own number: your guests and clients see your name and reply to you directly. Meta bills you for these messages.",
+    "notIncluded": "Your own number is included in Organisation and the Organizer Pack, or available as a monthly add-on.",
+    "seeOption": "See the option",
+    "connect": "Connect my WhatsApp number",
+    "connecting": "Connecting…",
+    "connectHelp": "A Meta window opens: choose or create your WhatsApp Business account and number. You need a Meta Business account and a payment method on file with Meta.",
+    "unavailable": "Connecting through Meta is not available yet. You can enter your credentials below.",
+    "connected": "Connected",
+    "lapsed": "Your offer no longer includes your own number: your messages go out from Jikū's number until you renew.",
+    "numberId": "Number ID: {id}",
+    "disconnect": "Disconnect",
+    "disconnected": "Your number is disconnected. Your messages go out from Jikū's number.",
+    "saved": "Your WhatsApp number is connected.",
+    "cancelled": "Connection cancelled.",
+    "manual": {
+      "toggle": "Enter my credentials manually",
+      "accessToken": "Access token",
+      "accessTokenCurrent": "Current token: {masked}. Enter a new one to replace it.",
+      "phoneNumberId": "Phone number ID",
+      "phoneNumberIdHelp": "The numeric ID of your WhatsApp Business number, in Meta Business Manager.",
+      "templateName": "Template name (optional)",
+      "templateLanguage": "Template language",
+      "save": "Save",
+      "saving": "Saving…"
+    },
+    "test": {
+      "label": "Send a test message",
+      "help": "Number in international format, for example +224620000000.",
+      "send": "Send",
+      "sending": "Sending…",
+      "sent": "Test message sent.",
+      "failed": "Test failed: {error}"
+    },
+    "errors": {
+      "notIncluded": "Your offer doesn't include your own WhatsApp number. Add the option from billing.",
+      "taken": "This number is already connected to another organization.",
+      "metaRefused": "Meta refused the connection. Try again from the Meta window.",
+      "unavailable": "Connecting through Meta is not available right now.",
+      "failed": "We couldn't save your number. Please try again.",
+      "sdk": "The Meta window couldn't open. Check your connection and try again."
+    }
+  },
+  "paymentMethods": {
+    "title": "How your clients pay you",
+    "text": "When a ticket or appointment isn't free, your clients see these payment methods on their invitation and ticket. Jikū collects nothing: the money goes straight to your accounts.",
+    "payeeName": "Payee name",
+    "payeeNameHelp": "The name your clients see on the Mobile Money confirmation. Required if you enter a number.",
+    "orangeMoney": "Orange Money number",
+    "mtnMomo": "MTN MoMo number",
+    "wave": "Wave number",
+    "paymentLink": "Payment link (optional)",
+    "paymentLinkHelp": "An https:// address to your payment page, if you have one.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Payment methods saved.",
+    "errors": {
+      "failed": "We couldn't save your payment methods. Please try again."
+    }
+  }
+}

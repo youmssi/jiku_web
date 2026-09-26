@@ -1,22 +1,17 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { revalidatePath } from "next/cache";
+import { type ActionResult, fail, failWithReason, ok, reportApiError } from "@/lib/action-result";
 import { adminFetch, publicFetch } from "@/lib/api-server";
 import { clearAdminAuthCookie, setAdminAuthCookie } from "@/lib/auth";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import type {
   TenantDirectoryEntry,
   TenantDirectoryPage,
-  RefundBookingRequest,
-  AdminBookingRefund,
-  AdminBillingSettingsView,
   AdminBillingSettingsFormValues,
+  AdminEventSummary,
 } from "@/components/modules/admin/schema";
-
-export interface ActionResult {
-  error?: string;
-}
 
 export async function adminLoginAction(
   email: string,
@@ -28,19 +23,20 @@ export async function adminLoginAction(
     body: JSON.stringify({ email, password }),
   });
   if (response.status === 401) {
-    return { error: "Invalid email or password." };
+    return fail("Invalid email or password.");
   }
   if (!response.ok) {
-    return { error: "Sign-in failed. Please try again." };
+    reportApiError(response, "admin");
+    return fail("Sign-in failed. Please try again.");
   }
   const tokens = (await response.json()) as { accessToken: string };
   await setAdminAuthCookie(tokens.accessToken);
-  redirect(ADMIN_ROUTES.TENANTS);
+  return localeRedirect(ADMIN_ROUTES.TENANTS);
 }
 
 export async function adminLogoutAction(): Promise<void> {
   await clearAdminAuthCookie();
-  redirect(ADMIN_ROUTES.LOGIN);
+  return localeRedirect(ADMIN_ROUTES.LOGIN);
 }
 
 /**
@@ -54,18 +50,13 @@ async function adminMutation(path: string, body: unknown): Promise<ActionResult>
     body: JSON.stringify(body),
   });
   if (!response.ok) {
-    const fallback =
-      response.status === 409
-        ? "This action conflicts with the current state."
-        : "The action failed. Please try again.";
-    const message = await response
-      .json()
-      .then((payload: { message?: string }) => payload.message)
-      .catch(() => undefined);
-    return { error: message ?? fallback };
+    return failWithReason(
+      response,
+      response.status === 409 ? "This action conflicts with the current state." : "The action failed. Please try again.",
+    );
   }
   revalidatePath("/admin", "layout");
-  return {};
+  return ok(null);
 }
 
 export async function suspendTenantAction(tenantId: string, note: string): Promise<ActionResult> {
@@ -102,6 +93,19 @@ export async function searchTenantsAction(query: string): Promise<TenantDirector
   }
   const page = (await response.json()) as TenantDirectoryPage;
   return page.entries;
+}
+
+/** Search-as-you-type event lookup for the trial grant form, scoped to one organization. */
+export async function searchTenantEventsAction(
+  tenantId: string,
+  query: string,
+): Promise<AdminEventSummary[]> {
+  const params = new URLSearchParams({ query });
+  const response = await adminFetch(`/admin/tenants/${tenantId}/events?${params.toString()}`);
+  if (!response.ok) {
+    return [];
+  }
+  return (await response.json()) as AdminEventSummary[];
 }
 
 export async function grantTrialAction(input: {
@@ -143,36 +147,6 @@ export async function interruptAgreementAction(
   return adminMutation(`/admin/agreements/${agreementId}/interrupt`, { reason });
 }
 
-export async function cancelBookingAction(bookingId: string): Promise<ActionResult> {
-  return adminMutation(`/admin/bookings/${bookingId}/cancel`, {});
-}
-
-export async function refundBookingAction(
-  bookingId: string,
-  request: RefundBookingRequest,
-): Promise<{ ok: true; refund: AdminBookingRefund } | { ok: false; error?: string }> {
-  const response = await adminFetch(`/admin/bookings/${bookingId}/refund`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(request),
-  });
-  if (!response.ok) {
-    return { ok: false, error: "Le remboursement n'a pas pu être enregistré." };
-  }
-  return { ok: true, refund: (await response.json()) as AdminBookingRefund };
-}
-
-export async function verifyBookingPaymentAction(declarationId: string): Promise<ActionResult> {
-  return adminMutation(`/admin/booking-payments/${declarationId}/verify`, {});
-}
-
-export async function rejectBookingPaymentAction(
-  declarationId: string,
-  reason: string,
-): Promise<ActionResult> {
-  return adminMutation(`/admin/booking-payments/${declarationId}/reject`, { reason });
-}
-
 export async function updateWhatsAppPricingAction(
   category: string,
   costUsdMinor: number,
@@ -183,14 +157,10 @@ export async function updateWhatsAppPricingAction(
     body: JSON.stringify({ costUsdMinor }),
   });
   if (!response.ok) {
-    const message = await response
-      .json()
-      .then((payload: { message?: string }) => payload.message)
-      .catch(() => "Impossible de mettre à jour le tarif.");
-    return { error: message ?? "Impossible de mettre à jour le tarif." };
+    return failWithReason(response, "Impossible de mettre à jour le tarif.");
   }
   revalidatePath("/admin/whatsapp", "layout");
-  return {};
+  return ok(null);
 }
 
 export async function setWhatsAppOverrideAction(
@@ -203,14 +173,10 @@ export async function setWhatsAppOverrideAction(
     body: JSON.stringify({ active, reason }),
   });
   if (!response.ok) {
-    const message = await response
-      .json()
-      .then((payload: { message?: string }) => payload.message)
-      .catch(() => "Impossible de modifier la surcharge de contenu.");
-    return { error: message ?? "Impossible de modifier la surcharge de contenu." };
+    return failWithReason(response, "Impossible de modifier la surcharge de contenu.");
   }
   revalidatePath("/admin/whatsapp", "layout");
-  return {};
+  return ok(null);
 }
 
 export async function markProspectContactedAction(id: string): Promise<ActionResult> {
@@ -220,37 +186,22 @@ export async function markProspectContactedAction(id: string): Promise<ActionRes
     body: JSON.stringify({}),
   });
   if (!response.ok) {
-    return {
-      error: "Impossible de marquer cette piste comme contactée.",
-    };
+    return failWithReason(response, "Impossible de marquer cette piste comme contactée.");
   }
   revalidatePath("/admin/prospects", "layout");
-  return {};
-}
-
-/** Déclenche l'exception de test (JIKU-97) ; le 500 attendu porte le requestId. */
-export async function triggerDiagnosticsAction(): Promise<
-  { requestId?: string; error?: string } & ActionResult
-> {
-  const response = await adminFetch("/admin/diagnostics/error", { method: "POST" });
-  if (response.ok) {
-    return { error: "Aucune erreur déclenchée — réponse inattendue." };
-  }
-  const requestId = response.headers.get("X-Request-Id") ?? undefined;
-  return { requestId };
+  return ok(null);
 }
 
 /**
- * Réglages de facturation (bénéficiaire + grilles de prix) tels que le bureau
- * admin les voit. Le backend renvoie la configuration d'environnement par
- * défaut tant que rien n'a été enregistré en base.
+ * Déclenche l'exception de test (JIKU-97). Le succès, c'est le 500 attendu : il
+ * porte le requestId à retrouver dans le suivi d'erreurs.
  */
-export async function fetchBillingSettingsAction(): Promise<AdminBillingSettingsView | null> {
-  const response = await adminFetch("/admin/billing/settings");
-  if (!response.ok) {
-    return null;
+export async function triggerDiagnosticsAction(): Promise<ActionResult<{ requestId: string | null }>> {
+  const response = await adminFetch("/admin/diagnostics/error", { method: "POST" });
+  if (response.ok) {
+    return fail("Aucune erreur déclenchée — réponse inattendue.");
   }
-  return (await response.json()) as AdminBillingSettingsView;
+  return ok({ requestId: response.headers.get("X-Request-Id") });
 }
 
 export async function updateBillingSettingsAction(
@@ -269,16 +220,23 @@ export async function updateBillingSettingsAction(
         bankDetails: values.payee.bankDetails.trim() || null,
       },
       tiers: values.tiers,
-      subscriptionPlans: values.subscriptionPlans,
+      subscriptionPlans: values.subscriptionPlans.map((plan) => ({
+        name: plan.name,
+        includedPeople: plan.includedPeople,
+        maxPeople: plan.maxPeople ? Number(plan.maxPeople) : null,
+        monthly: plan.monthly,
+        extraPerson: Object.values(plan.extraPerson).some((value) => value > 0) ? plan.extraPerson : null,
+      })),
     }),
   });
   if (!response.ok) {
-    const message = await response
-      .json()
-      .then((payload: { message?: string }) => payload.message)
-      .catch(() => undefined);
-    return { error: message ?? "Les réglages n'ont pas pu être enregistrés." };
+    return failWithReason(response, "Les réglages n'ont pas pu être enregistrés.");
   }
   revalidatePath("/admin", "layout");
-  return {};
+  return ok(null);
+}
+
+/** Moves a feedback message along the desk's triage, with an optional note. */
+export async function updateFeedbackStatusAction(id: string, status: string, note: string): Promise<ActionResult> {
+  return adminMutation(`/admin/feedback/${id}/status`, { status, note: note || null });
 }

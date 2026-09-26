@@ -1,22 +1,25 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { FileSignature } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "@/i18n/navigation";
+import { FileSignature, Plus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import type { Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 import type { DataTableFeatures } from "@/components/ui/data-table-features";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Empty,
   EmptyDescription,
@@ -151,7 +154,12 @@ export function AgreementsView({
 }) {
   return (
     <div className="flex flex-col gap-6">
-      <CreateAgreementForm currency={catalog.currency} />
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-xs text-muted-foreground">
+          Every enterprise or on-premise billing period on record.
+        </p>
+        <CreateAgreementDialog currency={catalog.currency} />
+      </div>
 
       {agreements.length === 0 ? (
         <Empty>
@@ -161,7 +169,7 @@ export function AgreementsView({
             </EmptyMedia>
             <EmptyTitle>No agreements yet</EmptyTitle>
             <EmptyDescription>
-              Create an agreement above to open a billing period for a tenant.
+              Create an agreement to open a billing period for a tenant.
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
@@ -178,8 +186,13 @@ function toInstant(date: string): string {
   return Number.isNaN(parsed.getTime()) ? "" : parsed.toISOString();
 }
 
-function CreateAgreementForm({ currency }: { currency: string }) {
+/**
+ * Create-an-agreement flow, in a dialog so it doesn't compete for space with
+ * the table — the same pattern as inviting a teammate or granting a trial.
+ */
+function CreateAgreementDialog({ currency }: { currency: string }) {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   const {
     control,
     handleSubmit,
@@ -218,89 +231,93 @@ function CreateAgreementForm({ currency }: { currency: string }) {
       currency: amount ? currency : null,
       notes: values.notes.trim() || null,
     });
-    if (result.error) {
+    if (!result.ok) {
       toast.error(result.error);
       return;
     }
     toast.success("Agreement recorded.");
     reset();
+    setOpen(false);
     router.refresh();
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create agreement</CardTitle>
-        <CardDescription>
-          Open a billing period for an enterprise or on-premise deal. The amount
-          is optional — the platform currency is {currency}.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <div className="flex flex-wrap items-end gap-4">
-            <Controller
-              control={control}
-              name="tenant"
-              render={({ field, fieldState }) => (
-                <Field
-                  className="min-w-64 grow basis-64"
-                  data-invalid={fieldState.invalid}
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        setOpen(next);
+        if (!next) reset();
+      }}
+    >
+      <DialogTrigger asChild>
+        <Button>
+          <Plus className="size-3.5" data-icon="inline-start" />
+          Create agreement
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Create agreement</DialogTitle>
+          <DialogDescription>
+            Open a billing period for an enterprise or on-premise deal. The
+            amount is optional — the platform currency is {currency}.
+          </DialogDescription>
+        </DialogHeader>
+        <form id="create-agreement-form" onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+          <Controller
+            control={control}
+            name="tenant"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="agr-tenant">Organization</FieldLabel>
+                <TenantCombobox
+                  id="agr-tenant"
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+                {fieldState.invalid ? (
+                  <FieldError errors={[fieldState.error]} />
+                ) : null}
+              </Field>
+            )}
+          />
+          <Controller
+            control={control}
+            name="kind"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="agr-kind">Kind</FieldLabel>
+                <Select
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={field.onChange}
                 >
-                  <FieldLabel htmlFor="agr-tenant">Organization</FieldLabel>
-                  <TenantCombobox
-                    id="agr-tenant"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                  {fieldState.invalid ? (
-                    <FieldError errors={[fieldState.error]} />
-                  ) : null}
-                </Field>
-              )}
-            />
-            <Controller
-              control={control}
-              name="kind"
-              render={({ field, fieldState }) => (
-                <Field
-                  className="min-w-44 grow basis-44"
-                  data-invalid={fieldState.invalid}
-                >
-                  <FieldLabel htmlFor="agr-kind">Kind</FieldLabel>
-                  <Select
-                    name={field.name}
-                    value={field.value}
-                    onValueChange={field.onChange}
+                  <SelectTrigger
+                    id="agr-kind"
+                    aria-invalid={fieldState.invalid}
+                    className="w-full"
                   >
-                    <SelectTrigger
-                      id="agr-kind"
-                      aria-invalid={fieldState.invalid}
-                      className="w-full"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ENTERPRISE_SAAS">
-                        ENTERPRISE_SAAS
-                      </SelectItem>
-                      <SelectItem value="ON_PREMISE">ON_PREMISE</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {fieldState.invalid ? (
-                    <FieldError errors={[fieldState.error]} />
-                  ) : null}
-                </Field>
-              )}
-            />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ENTERPRISE_SAAS">
+                      ENTERPRISE_SAAS
+                    </SelectItem>
+                    <SelectItem value="ON_PREMISE">ON_PREMISE</SelectItem>
+                  </SelectContent>
+                </Select>
+                {fieldState.invalid ? (
+                  <FieldError errors={[fieldState.error]} />
+                ) : null}
+              </Field>
+            )}
+          />
+          <div className="flex flex-wrap gap-4">
             <Controller
               control={control}
               name="periodStart"
               render={({ field, fieldState }) => (
-                <Field
-                  className="min-w-40 grow basis-40"
-                  data-invalid={fieldState.invalid}
-                >
+                <Field className="min-w-40 grow basis-40" data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={field.name}>Starts</FieldLabel>
                   <Input
                     {...field}
@@ -318,10 +335,7 @@ function CreateAgreementForm({ currency }: { currency: string }) {
               control={control}
               name="periodEnd"
               render={({ field, fieldState }) => (
-                <Field
-                  className="min-w-40 grow basis-40"
-                  data-invalid={fieldState.invalid}
-                >
+                <Field className="min-w-40 grow basis-40" data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={field.name}>Ends</FieldLabel>
                   <Input
                     {...field}
@@ -335,58 +349,55 @@ function CreateAgreementForm({ currency }: { currency: string }) {
                 </Field>
               )}
             />
-            <Controller
-              control={control}
-              name="amount"
-              render={({ field, fieldState }) => (
-                <Field
-                  className="min-w-40 grow basis-40"
-                  data-invalid={fieldState.invalid}
-                >
-                  <FieldLabel htmlFor={field.name}>
-                    Amount ({currency}, optional)
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    type="number"
-                    min="0"
-                    aria-invalid={fieldState.invalid}
-                  />
-                  {fieldState.invalid ? (
-                    <FieldError errors={[fieldState.error]} />
-                  ) : null}
-                </Field>
-              )}
-            />
-            <Controller
-              control={control}
-              name="notes"
-              render={({ field, fieldState }) => (
-                <Field
-                  className="min-w-52 grow basis-52"
-                  data-invalid={fieldState.invalid}
-                >
-                  <FieldLabel htmlFor={field.name}>Notes</FieldLabel>
-                  <div className="flex gap-2">
-                    <Input
-                      {...field}
-                      id={field.name}
-                      aria-invalid={fieldState.invalid}
-                    />
-                    <Button type="submit" disabled={isSubmitting}>
-                      {isSubmitting ? "…" : "Create"}
-                    </Button>
-                  </div>
-                  {fieldState.invalid ? (
-                    <FieldError errors={[fieldState.error]} />
-                  ) : null}
-                </Field>
-              )}
-            />
           </div>
+          <Controller
+            control={control}
+            name="amount"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>
+                  Amount ({currency}, optional)
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id={field.name}
+                  type="number"
+                  min="0"
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid ? (
+                  <FieldError errors={[fieldState.error]} />
+                ) : null}
+              </Field>
+            )}
+          />
+          <Controller
+            control={control}
+            name="notes"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Notes</FieldLabel>
+                <Input
+                  {...field}
+                  id={field.name}
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid ? (
+                  <FieldError errors={[fieldState.error]} />
+                ) : null}
+              </Field>
+            )}
+          />
         </form>
-      </CardContent>
-    </Card>
+        <DialogFooter>
+          <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button type="submit" form="create-agreement-form" disabled={isSubmitting}>
+            {isSubmitting ? "Creating…" : "Create agreement"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

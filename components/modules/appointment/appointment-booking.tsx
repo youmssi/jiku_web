@@ -1,96 +1,107 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { usePathname } from "@/i18n/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { QRCodeSVG } from "qrcode.react";
+import { enUS, fr } from "date-fns/locale";
+import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { usePathname } from "@/i18n/navigation";
+import { trackEvent } from "@/lib/analytics";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { FormFieldError } from "@/components/shared";
 import { cn } from "@/lib/utils";
 import { bookAppointment, loadAppointment, type AppointmentLinkRef } from "@/components/modules/appointment/appointment.service";
-import type { AppointmentServiceView, AppointmentSlot } from "@/components/modules/appointment/schema";
+import {
+  bookingSchema,
+  type AppointmentServiceView,
+  type BookingInput,
+} from "@/components/modules/appointment/schema";
 
-function formatInZone(iso: string, zone: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("fr-FR", {
-    timeZone: zone,
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(d);
-}
-
-function addDays(base: Date, days: number): string {
-  const d = new Date(base.getTime() + days * 86_400_000);
+/** UTC calendar date, `YYYY-MM-DD` — the format every date-only string in this component uses. */
+function toDateOnly(d: Date): string {
   return d.toISOString().slice(0, 10);
 }
 
+function addDays(base: Date, days: number): string {
+  return toDateOnly(new Date(base.getTime() + days * 86_400_000));
+}
+
+/** Reconstructs the calendar Date a date-only string encodes. */
+function parseDateOnly(value: string): Date {
+  return new Date(`${value}T00:00:00Z`);
+}
+
+/** Today, at UTC midnight — the same convention every date-only string here uses. */
+function todayUtc(): Date {
+  return parseDateOnly(toDateOnly(new Date()));
+}
+
+/**
+ * A client books a time without an account (JIKU-86): a day, one of its open
+ * times, a name and a phone number. Times show in the service's timezone, in
+ * the visitor's language.
+ */
 export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
+  const t = useTranslations("guest.appointment");
+  const format = useFormatter();
+  const locale = useLocale();
   const pathname = usePathname();
   const [view, setView] = useState<AppointmentServiceView | null>(null);
   const [date, setDate] = useState<string | undefined>(undefined);
-  const [selected, setSelected] = useState<AppointmentSlot | null>(null);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [calendarOpen, setCalendarOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [booked, setBooked] = useState<{ bookingToken: string; status: string } | null>(null);
+  const [booked, setBooked] = useState<{ bookingToken: string; status: string; startsAt: string } | null>(null);
+
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { isSubmitting },
+  } = useForm<BookingInput>({
+    resolver: zodResolver(bookingSchema),
+    mode: "onTouched",
+    defaultValues: { clientName: "", clientPhone: "", startsAt: "" },
+  });
+  const startsAt = useWatch({ control, name: "startsAt" });
 
   useEffect(() => {
     loadAppointment(link, date).then((loaded) => {
       setView(loaded);
-      setSelected(null);
+      setValue("startsAt", "");
     });
-  }, [link, date]);
+  }, [link, date, setValue]);
 
-  const book = useCallback(async () => {
-    if (!selected) return;
-    if (name.trim().length < 2 || phone.trim().length < 6) {
-      setError("Indiquez votre nom et un numéro valide.");
-      return;
-    }
+  async function onSubmit(values: BookingInput) {
     setError(null);
-    setSubmitting(true);
-    const result = await bookAppointment(link, {
-      clientName: name,
-      clientPhone: phone,
-      startsAt: selected.startsAt,
-    });
-    setSubmitting(false);
+    const result = await bookAppointment(link, values);
     if (!result.ok) {
-      setError(result.error ?? "La réservation a échoué.");
+      setError(result.error);
       return;
     }
-    setBooked({ bookingToken: result.data.bookingToken, status: result.data.status });
-  }, [link, name, phone, selected]);
+    trackEvent("appointment_booked", { status: result.data.status });
+    setBooked({ bookingToken: result.data.bookingToken, status: result.data.status, startsAt: values.startsAt });
+  }
 
-  const suiviUrl = useMemo(
-    () => (booked ? `${pathname}/suivi/${booked.bookingToken}` : null),
-    [booked, pathname],
-  );
+  const timeZone = view?.timezone ?? "UTC";
+  const selectedDate = useMemo(() => (date ? parseDateOnly(date) : todayUtc()), [date]);
+  const calendarLocale = locale === "en" ? enUS : fr;
+  const names = view?.professionals.join(", ") ?? "";
 
   if (booked) {
     return (
       <div className="flex flex-1 items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md text-center">
           <CardHeader>
-            <CardTitle>Votre rendez-vous est enregistré</CardTitle>
-            <CardDescription>
-              {booked.status === "PENDING"
-                ? "En attente de confirmation : vous recevrez la confirmation du professionnel."
-                : "Votre rendez-vous est confirmé."}
-            </CardDescription>
+            <CardTitle>{t("booked.title")}</CardTitle>
+            <CardDescription>{booked.status === "PENDING" ? t("booked.PENDING") : t("booked.CONFIRMED")}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center gap-4">
             <div className="rounded-xl border p-3">
@@ -99,18 +110,23 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
             <div>
               <p className="font-medium">{view?.name}</p>
               <p className="text-sm text-muted-foreground">
-                {selected ? formatInZone(selected.startsAt, view?.timezone ?? "UTC") : ""}
+                {format.dateTime(new Date(booked.startsAt), {
+                  timeZone,
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </p>
-              {view?.professionals.length ? (
-                <p className="text-sm text-muted-foreground">Avec {view.professionals.join(", ")}</p>
-              ) : null}
+              {names ? <p className="text-sm text-muted-foreground">{t("booked.withNames", { names })}</p> : null}
             </div>
-            <p className="text-xs text-muted-foreground">N° de réservation : {booked.bookingToken.slice(0, 8)}</p>
-            {suiviUrl ? (
-              <Button asChild variant="outline" className="w-full rounded-full">
-                <a href={suiviUrl}>Voir ou annuler mon rendez-vous</a>
-              </Button>
-            ) : null}
+            <p className="text-xs text-muted-foreground">
+              {t("booked.number", { number: booked.bookingToken.slice(0, 8) })}
+            </p>
+            <Button asChild variant="outline" className="w-full rounded-full">
+              <a href={`${pathname}/bookings/${booked.bookingToken}`}>{t("booked.manage")}</a>
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -121,77 +137,120 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
     <div className="flex flex-1 items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>{view ? view.name : "Rendez-vous"}</CardTitle>
+          <CardTitle>{view ? view.name : t("booking.title")}</CardTitle>
           <CardDescription>
-            {view
-              ? view.professionals.length
-                ? `Avec ${view.professionals.join(", ")} — sans compte, en trois gestes.`
-                : "Choisissez un créneau, sans compte."
-              : "Chargement…"}
+            {view ? (names ? t("booking.withNames", { names }) : t("booking.noAccount")) : t("booking.loading")}
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          {error ? (
-            <Alert variant="destructive">
-              <AlertTitle>Impossible</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          ) : null}
-          <div className="flex items-center justify-between text-sm">
-            <Button variant="outline" size="sm" onClick={() => setDate(addDays(new Date(), -1))}>
-              Jour précédent
-            </Button>
-            <span className="text-muted-foreground">Choisissez une heure</span>
-            <Button variant="outline" size="sm" onClick={() => setDate(addDays(new Date(), 1))}>
-              Jour suivant
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            {(view?.slots ?? []).map((slot) => (
-              <button
-                key={slot.startsAt}
-                type="button"
-                onClick={() => setSelected(slot)}
-                className={cn(
-                  "rounded-xl border px-3 py-2 text-sm font-medium transition-colors",
-                  selected?.startsAt === slot.startsAt
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border/40 hover:border-primary/30",
-                )}
-              >
-                {new Intl.DateTimeFormat("fr-FR", {
-                  timeZone: view?.timezone ?? "UTC",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                }).format(new Date(slot.startsAt))}
-              </button>
-            ))}
-            {(view?.slots ?? []).length === 0 ? (
-              <p className="col-span-2 text-center text-sm text-muted-foreground">
-                Aucun créneau ouvert ce jour-là.
-              </p>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+            {error ? (
+              <Alert variant="destructive">
+                <AlertTitle>{t("booking.failed")}</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
             ) : null}
-          </div>
-          <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="client-name">Votre nom</FieldLabel>
-              <Input id="client-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="client-phone">Votre téléphone</FieldLabel>
-              <Input
-                id="client-phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                type="tel"
-                autoComplete="tel"
-                placeholder="+224 6XX XX XX XX"
+            <div className="flex items-center justify-between gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-sm"
+                onClick={() => setDate(addDays(selectedDate, -1))}
+                disabled={selectedDate <= todayUtc()}
+              >
+                <ChevronLeft className="size-3.5" />
+                <span className="sr-only">{t("booking.previousDay")}</span>
+              </Button>
+              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                <PopoverTrigger asChild>
+                  <Button type="button" variant="outline" size="sm" className="gap-2 font-normal capitalize">
+                    <CalendarIcon className="size-3.5" />
+                    {format.dateTime(selectedDate, { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" })}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="center">
+                  <Calendar
+                    mode="single"
+                    locale={calendarLocale}
+                    selected={selectedDate}
+                    defaultMonth={selectedDate}
+                    disabled={{ before: todayUtc() }}
+                    onSelect={(day) => {
+                      if (!day) return;
+                      setDate(toDateOnly(day));
+                      setCalendarOpen(false);
+                    }}
+                    autoFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-sm"
+                onClick={() => setDate(addDays(selectedDate, 1))}
+              >
+                <ChevronRight className="size-3.5" />
+                <span className="sr-only">{t("booking.nextDay")}</span>
+              </Button>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {(view?.slots ?? []).map((slot) => (
+                <button
+                  key={slot.startsAt}
+                  type="button"
+                  aria-pressed={startsAt === slot.startsAt}
+                  onClick={() => setValue("startsAt", slot.startsAt, { shouldValidate: true })}
+                  className={cn(
+                    "rounded-xl border px-3 py-2 text-sm font-medium transition-colors",
+                    startsAt === slot.startsAt
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border/40 hover:border-primary/30",
+                  )}
+                >
+                  {format.dateTime(new Date(slot.startsAt), { timeZone, hour: "2-digit", minute: "2-digit" })}
+                </button>
+              ))}
+              {view && view.slots.length === 0 ? (
+                <p className="col-span-2 text-center text-sm text-muted-foreground">{t("booking.noSlots")}</p>
+              ) : null}
+            </div>
+            <FieldGroup>
+              <Controller
+                control={control}
+                name="clientName"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="client-name">{t("booking.name")}</FieldLabel>
+                    <Input {...field} id="client-name" autoComplete="name" aria-invalid={fieldState.invalid} />
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
               />
-            </Field>
-          </FieldGroup>
-          <Button onClick={() => void book()} disabled={submitting || !selected} className="w-full rounded-full">
-            {submitting ? "Réservation…" : "Réserver ce créneau"}
-          </Button>
+              <Controller
+                control={control}
+                name="clientPhone"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="client-phone">{t("booking.phone")}</FieldLabel>
+                    <Input
+                      {...field}
+                      id="client-phone"
+                      type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
+                      placeholder="+224 6XX XX XX XX"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+            <Button type="submit" disabled={isSubmitting || !startsAt} className="w-full rounded-full">
+              {isSubmitting ? t("booking.submitting") : t("booking.submit")}
+            </Button>
+          </form>
         </CardContent>
       </Card>
     </div>

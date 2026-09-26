@@ -1,17 +1,22 @@
-import { CalendarDays, ClipboardList, CreditCard, LayoutDashboard, ListOrdered, Settings, Users } from "lucide-react";
+import type { Messages } from "@/i18n/messages";
+import { CalendarDays, ClipboardList, CreditCard, IdCard, LayoutDashboard, ListOrdered, Settings, Ticket, Users } from "lucide-react";
 import {
   billingRoute,
-  eventDashboardRoute,
-  eventEditRoute,
   eventGuestsRoute,
+  eventRoute,
+  eventSettingsRoute,
+  eventTicketsRoute,
   ROUTES,
   serviceConfigurationRoute,
   serviceLineRoute,
   serviceManageRoute,
 } from "@/lib/constants";
 
+/** A key of the `shell.nav` catalog: nav labels are translated where they render. */
+export type NavLabelKey = keyof Messages["shell"]["nav"];
+
 export interface OrganizerNavItem {
-  label: string;
+  labelKey: NavLabelKey;
   href: string;
   icon: typeof LayoutDashboard;
   match: (pathname: string) => boolean;
@@ -24,31 +29,37 @@ export interface OrganizerNavItem {
  */
 export const ORGANIZER_NAV_ITEMS: OrganizerNavItem[] = [
   {
-    label: "Home",
+    labelKey: "home",
     href: ROUTES.DASHBOARD,
     icon: LayoutDashboard,
     match: (pathname) => pathname === ROUTES.DASHBOARD,
   },
   {
-    label: "Events",
+    labelKey: "events",
     href: ROUTES.EVENTS,
     icon: CalendarDays,
     match: (pathname) => pathname === ROUTES.EVENTS || pathname.startsWith(`${ROUTES.EVENTS}/`),
   },
   {
-    label: "Services",
+    labelKey: "services",
     href: ROUTES.SERVICES,
     icon: ClipboardList,
     match: (pathname) => pathname === ROUTES.SERVICES || pathname.startsWith(`${ROUTES.SERVICES}/`),
   },
   {
-    label: "Billing",
+    labelKey: "operators",
+    href: ROUTES.OPERATORS,
+    icon: IdCard,
+    match: (pathname) => pathname === ROUTES.OPERATORS,
+  },
+  {
+    labelKey: "billing",
     href: ROUTES.BILLING,
     icon: CreditCard,
     match: (pathname) => pathname === ROUTES.BILLING || pathname.startsWith(`${ROUTES.BILLING}/`),
   },
   {
-    label: "Settings",
+    labelKey: "settings",
     href: ROUTES.SETTINGS,
     icon: Settings,
     match: (pathname) => pathname === ROUTES.SETTINGS || pathname.startsWith(`${ROUTES.SETTINGS}/`),
@@ -56,41 +67,47 @@ export const ORGANIZER_NAV_ITEMS: OrganizerNavItem[] = [
 ];
 
 export interface EventSubNavItem {
-  label: string;
+  labelKey: NavLabelKey;
   href: (eventId: string) => string;
   icon: typeof LayoutDashboard;
   match: (pathname: string, eventId: string) => boolean;
 }
 
 /**
- * Sub-navigation for one selected event, shown as a SidebarMenuSub under "Events"
- * in the app sidebar (desktop and the mobile sheet) and used to label the header
- * breadcrumb's current section.
+ * The tabs of one event's workspace, in order. The same list drives the tab bar
+ * under the event header, the event's sub-menu in the sidebar, and the last
+ * breadcrumb, so the three always agree.
  */
-export const EVENT_SUB_NAV_ITEMS: EventSubNavItem[] = [
+export const EVENT_TABS: EventSubNavItem[] = [
   {
-    label: "Dashboard",
-    href: eventDashboardRoute,
+    labelKey: "overview",
+    href: eventRoute,
     icon: LayoutDashboard,
-    match: (pathname, eventId) => pathname === eventDashboardRoute(eventId),
+    match: (pathname, eventId) => pathname === eventRoute(eventId),
   },
   {
-    label: "Guests",
+    labelKey: "guests",
     href: eventGuestsRoute,
     icon: Users,
     match: (pathname, eventId) => pathname === eventGuestsRoute(eventId),
   },
   {
-    label: "Billing",
+    labelKey: "tickets",
+    href: eventTicketsRoute,
+    icon: Ticket,
+    match: (pathname, eventId) => pathname === eventTicketsRoute(eventId),
+  },
+  {
+    labelKey: "billing",
     href: billingRoute,
     icon: CreditCard,
     match: (pathname, eventId) => pathname === billingRoute(eventId),
   },
   {
-    label: "Settings",
-    href: eventEditRoute,
+    labelKey: "settings",
+    href: eventSettingsRoute,
     icon: Settings,
-    match: (pathname, eventId) => pathname === eventEditRoute(eventId),
+    match: (pathname, eventId) => pathname === eventSettingsRoute(eventId),
   },
 ];
 
@@ -101,19 +118,19 @@ export const EVENT_SUB_NAV_ITEMS: EventSubNavItem[] = [
  */
 export const SERVICE_SUB_NAV_ITEMS: EventSubNavItem[] = [
   {
-    label: "Ligne du jour",
+    labelKey: "dayLine",
     href: serviceLineRoute,
     icon: ListOrdered,
     match: (pathname, serviceId) => pathname === serviceLineRoute(serviceId),
   },
   {
-    label: "Gérer",
+    labelKey: "manage",
     href: serviceManageRoute,
     icon: ClipboardList,
     match: (pathname, serviceId) => pathname === serviceManageRoute(serviceId),
   },
   {
-    label: "Configuration",
+    labelKey: "configuration",
     href: serviceConfigurationRoute,
     icon: Settings,
     match: (pathname, serviceId) => pathname === serviceConfigurationRoute(serviceId),
@@ -147,6 +164,14 @@ export function organizerInitials(name: string): string {
   );
 }
 
-export function organizerRoleLabel(role: string): string {
-  return role.toLowerCase().replace(/_/g, " ");
+export type OrganizerRole = keyof Messages["common"]["roles"];
+
+/**
+ * The `common.roles` key for a role as the backend names it: session roles carry
+ * an `ORGANIZER_` prefix (`ORGANIZER_OWNER`), membership roles do not (`OWNER`).
+ * Null for a role the catalog does not know, which callers show as is.
+ */
+export function organizerRole(role: string): OrganizerRole | null {
+  const key = role.replace(/^ORGANIZER_/, "");
+  return key === "OWNER" || key === "ADMIN" || key === "MEMBER" ? key : null;
 }

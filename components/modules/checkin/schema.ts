@@ -11,7 +11,9 @@ export type CheckInOutcome =
   | "ALREADY_CHECKED_IN"
   | "CANCELLED"
   | "EVENT_CANCELLED"
-  | "NOT_FOUND";
+  | "NOT_FOUND"
+  /** The ticket isn't paid yet: no entry until the payment is recorded (JIKU-110). */
+  | "PAYMENT_DUE";
 
 export type CheckInResponse = Omit<Schema<"CheckInResponse">, "outcome"> & {
   outcome: CheckInOutcome;

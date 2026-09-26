@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { creditNoteAction, issueInvoiceAction } from "@/components/modules/billing/billing.service";
 
 /** Émet la facture d'un paiement réglé ; l'écran rechargé montre le nouveau document. */
 export function IssueInvoiceButton({ paymentId }: { paymentId: string }) {
+  const t = useTranslations("billing.actions");
   const router = useRouter();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +23,7 @@ export function IssueInvoiceButton({ paymentId }: { paymentId: string }) {
         toast.error(result.error);
         return;
       }
-      toast.success("Facture émise.");
+      toast.success(t("issued"));
       router.refresh();
     });
   }
@@ -29,7 +31,7 @@ export function IssueInvoiceButton({ paymentId }: { paymentId: string }) {
   return (
     <div className="flex flex-col items-start gap-1">
       <Button size="sm" variant="outline" onClick={issue} disabled={pending}>
-        {pending ? "Émission…" : "Issue invoice"}
+        {pending ? t("issuing") : t("issue")}
       </Button>
       {error ? <span className="text-xs text-red-600">{error}</span> : null}
     </div>
@@ -38,6 +40,7 @@ export function IssueInvoiceButton({ paymentId }: { paymentId: string }) {
 
 /** Émet la note de crédit corrigeant une facture (documentType INVOICE uniquement). */
 export function CreditNoteButton({ invoiceId }: { invoiceId: string }) {
+  const t = useTranslations("billing.actions");
   const router = useRouter();
   const [pending, start] = useTransition();
 
@@ -48,14 +51,14 @@ export function CreditNoteButton({ invoiceId }: { invoiceId: string }) {
         toast.error(result.error);
         return;
       }
-      toast.success("Note de crédit émise.");
+      toast.success(t("credited"));
       router.refresh();
     });
   }
 
   return (
     <Button size="sm" variant="outline" onClick={credit} disabled={pending}>
-      {pending ? "Émission…" : "Credit note"}
+      {pending ? t("issuing") : t("credit")}
     </Button>
   );
 }

@@ -44,7 +44,7 @@ Attributs optionnels :
 ## Suivi de réservation
 
 Après une réservation, l'iframe propose « Voir ou annuler mon rendez-vous », qui
-ouvre `/widget/{token}/suivi/{bookingToken}` — toujours dans l'iframe.
+ouvre `/widget/{token}/bookings/{bookingToken}` — toujours dans l'iframe.
 
 ## Limites assumées (v2)
 

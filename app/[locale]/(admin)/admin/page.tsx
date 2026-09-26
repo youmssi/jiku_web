@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
+import { localeRedirect } from "@/i18n/redirect";
 import { ADMIN_ROUTES } from "@/lib/constants";
 
 export default function AdminIndexPage() {
-  redirect(ADMIN_ROUTES.TENANTS);
+  return localeRedirect(ADMIN_ROUTES.TENANTS);
 }

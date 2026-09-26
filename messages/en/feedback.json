@@ -1,0 +1,57 @@
+{
+  "form": {
+    "title": "Your feedback matters",
+    "description": "A problem, a question, an idea? Write to us: we read everything and reply by email.",
+    "kind": "What is it about?",
+    "kinds": {
+      "PROBLEM": "A problem",
+      "QUESTION": "A question",
+      "IDEA": "An idea",
+      "COMPLAINT": "A complaint"
+    },
+    "message": "Your message",
+    "placeholders": {
+      "PROBLEM": "What you were doing, what happened, what you expected…",
+      "QUESTION": "Ask away, we'll answer quickly.",
+      "IDEA": "What would save you time…",
+      "COMPLAINT": "Tell us what went wrong: it's handled first."
+    },
+    "contactEmail": "Where to reply",
+    "contactHint": "Leave empty if you don't need a reply.",
+    "cancel": "Cancel",
+    "send": "Send",
+    "sending": "Sending…",
+    "sent": {
+      "PROBLEM": "Thanks, we're looking into this problem.",
+      "QUESTION": "Thanks, we'll answer quickly.",
+      "IDEA": "Thanks for the idea, it's noted.",
+      "COMPLAINT": "Thank you. Your complaint is handled first."
+    },
+    "invalid": "Check your message.",
+    "failed": "Sending failed. Try again.",
+    "tooMany": "Too many messages at once. Try again in a minute."
+  },
+  "rating": {
+    "questions": {
+      "event_published": "Was publishing your event easy?",
+      "invitations_sent": "Was sending the invitations easy?",
+      "guests_imported": "Was importing your guests easy?",
+      "service_created": "Was creating your service easy?"
+    },
+    "scale": "Your rating, from 1 to 5",
+    "scores": {
+      "1": "Very hard",
+      "2": "Hard",
+      "3": "Okay",
+      "4": "Easy",
+      "5": "Very easy"
+    },
+    "comment": "A comment",
+    "commentLow": "What got in your way?",
+    "commentHigh": "Anything else? (optional)",
+    "send": "Send",
+    "dismiss": "Don't answer",
+    "thanks": "Thanks for your feedback!",
+    "failed": "Your rating couldn't be sent."
+  }
+}

@@ -1,5 +1,3 @@
-// Guest module — organizer-side guest list management (CSV import, invitations).
-export { GuestImport } from "./guest-import";
-export { SendInvitations } from "./send-invitations";
-export { GuestsView } from "./guests-view";
-export type { ImportResult, RowIssue } from "./schema";
+// Guest module — client-safe public surface: the contract types. The guest
+// list itself reads the session, so it is exported from `server.ts`.
+export type { Guest, ImportResult, RowIssue } from "./schema";

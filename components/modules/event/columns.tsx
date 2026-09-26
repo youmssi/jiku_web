@@ -1,105 +1,75 @@
 "use client";
 
+import { useMemo } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { formatDateTimeInZone } from "@/lib/datetime";
-import { eventDashboardRoute } from "@/lib/constants";
 import type { DataTableFeatures } from "@/components/ui/data-table-features";
+import { eventRoute } from "@/lib/constants";
 import { EventRowActions } from "./event-row-actions";
+import { EventStatusBadge } from "./event-status-badge";
 import type { EventListItem } from "./schema";
 
 const columnHelper = createColumnHelper<DataTableFeatures, EventListItem>();
 
-const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-  PUBLISHED: "default",
-  DRAFT: "secondary",
-  CANCELLED: "destructive",
-};
+/** The events table's columns, labelled in the visitor's language and dated in each event's timezone. */
+export function useEventColumns() {
+  const t = useTranslations("events.list.columns");
+  const format = useFormatter();
 
-function statusLabel(status?: string): string {
-  if (!status) {
-    return "None";
-  }
-  return status
-    .replace(/_/g, " ")
-    .toLowerCase()
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+  return useMemo(
+    () =>
+      columnHelper.columns([
+        columnHelper.accessor("name", {
+          header: ({ column }) => (
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+              {t("name")}
+              <ArrowUpDown data-icon="inline-end" />
+            </Button>
+          ),
+          filterFn: "includesString",
+          cell: ({ row }) => (
+            <Link href={eventRoute(row.original.id ?? "")} className="font-medium hover:underline">
+              {row.original.name}
+            </Link>
+          ),
+        }),
+        columnHelper.accessor("status", {
+          header: t("status"),
+          filterFn: "includesString",
+          cell: ({ row }) => <EventStatusBadge status={row.original.status ?? ""} />,
+        }),
+        columnHelper.accessor("startDateTime", {
+          id: "date",
+          header: ({ column }) => (
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+              {t("date")}
+              <ArrowUpDown data-icon="inline-end" />
+            </Button>
+          ),
+          cell: ({ row }) => {
+            const event = row.original;
+            return event.startDateTime
+              ? format.dateTime(new Date(event.startDateTime), {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                  timeZone: event.timezone,
+                })
+              : t("undated");
+          },
+        }),
+        columnHelper.accessor("location", {
+          header: t("location"),
+          cell: ({ row }) => row.original.location ?? "—",
+        }),
+        columnHelper.display({
+          id: "actions",
+          enableSorting: false,
+          cell: ({ row }) => <EventRowActions event={row.original} />,
+        }),
+      ]),
+    [t, format],
+  );
 }
-
-export const columns = columnHelper.columns([
-  columnHelper.accessor("name", {
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Name
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    filterFn: "includesString",
-    cell: ({ row }) => {
-      const event = row.original;
-      return (
-        <Link
-          href={eventDashboardRoute(event.id ?? "")}
-          className="font-medium hover:underline"
-        >
-          {event.name}
-        </Link>
-      );
-    },
-  }),
-  columnHelper.accessor("status", {
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Status
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    filterFn: "includesString",
-    cell: ({ row }) => {
-      const status = row.original.status ?? "";
-      return (
-        <Badge variant={STATUS_VARIANTS[status] ?? "outline"}>
-          {statusLabel(status)}
-        </Badge>
-      );
-    },
-  }),
-  columnHelper.accessor("startDateTime", {
-    id: "date",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Date
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ row }) => {
-      const event = row.original;
-      return event.startDateTime
-        ? formatDateTimeInZone(event.startDateTime, event.timezone ?? "UTC")
-        : "No date set";
-    },
-  }),
-  columnHelper.accessor("location", {
-    header: "Location",
-    enableHiding: true,
-    cell: ({ row }) => row.original.location ?? "Not set",
-  }),
-  columnHelper.display({
-    id: "actions",
-    enableSorting: false,
-    enableHiding: false,
-    cell: ({ row }) => <EventRowActions event={row.original} />,
-  }),
-]);

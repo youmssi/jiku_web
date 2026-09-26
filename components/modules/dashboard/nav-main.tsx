@@ -17,11 +17,12 @@ import {
 } from "@/components/ui/sidebar"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
+import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/i18n/navigation"
 import {
   currentEventId,
   currentServiceId,
-  EVENT_SUB_NAV_ITEMS,
+  EVENT_TABS,
   ORGANIZER_NAV_ITEMS,
   SERVICE_SUB_NAV_ITEMS,
 } from "@/components/shared/organizer-nav"
@@ -37,22 +38,24 @@ export function NavMain() {
   const pathname = usePathname()
   const eventId = currentEventId(pathname)
   const serviceId = currentServiceId(pathname)
+  const t = useTranslations("shell")
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("sidebar.platform")}</SidebarGroupLabel>
       <SidebarMenu>
         {ORGANIZER_NAV_ITEMS.map((item) => {
           const Icon = item.icon
+          const label = t(`nav.${item.labelKey}`)
           const subItems =
             item.href === ROUTES.EVENTS && eventId
-              ? EVENT_SUB_NAV_ITEMS.map((subItem) => ({
-                  title: subItem.label,
+              ? EVENT_TABS.map((subItem) => ({
+                  title: t(`nav.${subItem.labelKey}`),
                   url: subItem.href(eventId),
                 }))
               : item.href === ROUTES.SERVICES && serviceId
                 ? SERVICE_SUB_NAV_ITEMS.map((subItem) => ({
-                    title: subItem.label,
+                    title: t(`nav.${subItem.labelKey}`),
                     url: subItem.href(serviceId),
                   }))
                 : []
@@ -62,12 +65,12 @@ export function NavMain() {
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
                   asChild
-                  tooltip={item.label}
+                  tooltip={label}
                   isActive={item.match(pathname)}
                 >
                   <Link href={item.href}>
                     <Icon />
-                    <span>{item.label}</span>
+                    <span>{label}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -83,9 +86,9 @@ export function NavMain() {
             >
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton tooltip={item.label} isActive={item.match(pathname)}>
+                  <SidebarMenuButton tooltip={label} isActive={item.match(pathname)}>
                     <Icon />
-                    <span>{item.label}</span>
+                    <span>{label}</span>
                     <HugeiconsIcon
                       icon={ArrowRight01Icon}
                       strokeWidth={2}

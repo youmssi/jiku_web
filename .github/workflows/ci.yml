@@ -39,5 +39,12 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Translation catalogs
+        run: pnpm i18n:check
+
       - name: Build
         run: pnpm build
+        env:
+          # The build renders canonical URLs and the sitemap, which need a public
+          # origin; CI builds against the local one.
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000

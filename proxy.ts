@@ -17,7 +17,15 @@ import { COOKIES, ROUTES } from "@/lib/constants";
 const intlMiddleware = createIntlMiddleware(routing);
 
 /** Routes that require an organizer session (locale-stripped prefixes). */
-const GUARDED_PREFIXES = [ROUTES.DASHBOARD, ROUTES.EVENTS, ROUTES.SERVICES];
+const GUARDED_PREFIXES = [
+  ROUTES.DASHBOARD,
+  ROUTES.EVENTS,
+  ROUTES.SERVICES,
+  ROUTES.BILLING,
+  ROUTES.SETTINGS,
+  ROUTES.OPERATORS,
+  ROUTES.ONBOARDING,
+];
 
 /** Strip the optional locale prefix so we can match on the canonical route. */
 function stripLocale(pathname: string): string {
@@ -39,6 +47,14 @@ export function proxy(request: NextRequest): NextResponse {
   if (intlResponse.headers.get("location")) return intlResponse;
 
   const bareRoute = stripLocale(pathname);
+
+  // A payment provider may send the payer back with a cross-site form POST,
+  // which carries no SameSite=Lax session cookie. Answer it with a 303 to the
+  // same URL: the browser follows it as a top-level GET, cookie included.
+  if (request.method === "POST" && bareRoute === ROUTES.BILLING_RETURN) {
+    return NextResponse.redirect(request.nextUrl, 303);
+  }
+
   const isGuarded = GUARDED_PREFIXES.some(
     (p) => bareRoute === p || bareRoute.startsWith(`${p}/`),
   );

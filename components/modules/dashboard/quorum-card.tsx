@@ -1,78 +1,48 @@
-import { formatLocalDateTime } from "@/lib/datetime";
+import { useFormatter, useTranslations } from "next-intl";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import type { QuorumView } from "./schema";
 
 /**
- * État du quorum d'une assemblée générale (JIKU-94).
- *
- * Une AG est nulle sans quorum, et le quorum se compte aujourd'hui à la main,
- * dans la contestation. Cette carte est donc lue à un moment précis — juste
- * avant un vote — par quelqu'un qui doit pouvoir dire « nous y sommes » sans
- * interpréter des chiffres.
- *
- * D'où deux partis pris :
- *  - l'état se lit **sans lire les nombres** : couleur et libellé d'abord ;
- *  - si des départs font retomber le compte, la date de première atteinte reste
- *    affichée. Les deux informations sont vraies et l'une ne remplace pas
- *    l'autre.
+ * Where a general assembly stands on its quorum (JIKU-94). Read at one precise
+ * moment, just before a vote, by someone who must be able to say "we have it"
+ * without interpreting numbers: the state reads from the badge first. When
+ * departures drop the count again, the time it was first reached stays shown;
+ * both facts are true and the first is the one the minutes rely on.
  */
 export function QuorumCard({ quorum }: { quorum: QuorumView }) {
+  const t = useTranslations("events.overview.quorum");
+  const format = useFormatter();
   const percent = quorum.required > 0 ? Math.round((quorum.current / quorum.required) * 100) : 0;
-  const manquants = Math.max(0, quorum.required - quorum.current);
+  const missing = Math.max(0, quorum.required - quorum.current);
 
   return (
-    <section
-      className={`rounded-xl border p-6 ${
-        quorum.reached
-          ? "border-green-600/30 bg-green-600/5"
-          : "border-amber-500/30 bg-amber-500/5"
-      }`}
-    >
-      <div className="flex items-baseline justify-between gap-4">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Quorum
-        </h2>
-        <span
-          className={`text-sm font-semibold ${
-            quorum.reached
-              ? "text-green-700 dark:text-green-400"
-              : "text-amber-700 dark:text-amber-400"
-          }`}
-        >
-          {quorum.reached ? "✓ Atteint" : "Non atteint"}
-        </span>
-      </div>
-
-      <p className="mt-4 text-3xl font-bold tabular-nums">
-        {quorum.current}
-        <span className="text-muted-foreground"> / {quorum.required}</span>
-      </p>
-
-      <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted">
-        <div
-          className={`h-full rounded-full transition-all ${
-            quorum.reached ? "bg-green-600" : "bg-amber-500"
-          }`}
-          style={{ width: `${Math.min(100, percent)}%` }}
-        />
-      </div>
-
-      <p className="mt-3 text-sm text-muted-foreground">
-        {quorum.reached
-          ? `${percent} % des présents requis`
-          : `Il manque ${manquants} ${manquants > 1 ? "présents" : "présent"}`}
-      </p>
-
-      {quorum.reachedAt ? (
-        <p className="mt-2 text-sm">
-          <span className="text-muted-foreground">Atteint le </span>
-          <span className="font-medium">{formatLocalDateTime(quorum.reachedAt)}</span>
-          {!quorum.reached ? (
-            // Le quorum a été atteint puis est retombé : les deux faits comptent,
-            // et c'est le premier qui fera foi dans un procès-verbal.
-            <span className="text-muted-foreground"> (des participants sont repartis depuis)</span>
-          ) : null}
+    <Card>
+      <CardHeader>
+        <CardDescription>{t("title")}</CardDescription>
+        <CardTitle className="text-3xl tabular-nums">
+          {quorum.current}
+          <span className="text-muted-foreground"> / {quorum.required}</span>
+        </CardTitle>
+        <CardAction>
+          <Badge variant={quorum.reached ? "default" : "secondary"}>
+            {quorum.reached ? t("reached") : t("notReached")}
+          </Badge>
+        </CardAction>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-3">
+        <Progress value={Math.min(100, percent)} aria-label={t("title")} />
+        <p className="text-sm text-muted-foreground">
+          {quorum.reached ? t("share", { percent }) : t("missing", { count: missing })}
         </p>
-      ) : null}
-    </section>
+        {quorum.reachedAt ? (
+          <p className="text-sm">
+            {t("reachedAt", { date: format.dateTime(new Date(quorum.reachedAt), { dateStyle: "medium", timeStyle: "short" }) })}
+            {quorum.reached ? null : <span className="text-muted-foreground"> {t("fellBack")}</span>}
+          </p>
+        ) : null}
+      </CardContent>
+    </Card>
   );
 }

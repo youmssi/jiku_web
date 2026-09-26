@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { publicFetch } from "@/lib/api-server";
 import { invitationRoute } from "@/lib/constants";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
@@ -13,9 +14,8 @@ async function submit(token: string, action: "confirm" | "decline"): Promise<Act
   const response = await publicFetch(`/rsvp/${token}/${action}`, { method: "POST" });
   if (!response.ok) {
     reportApiError(response);
-    return fail(
-      response.status === 409 ? "This event is full." : "Something went wrong. Please try again.",
-    );
+    const t = await getTranslations("guest.rsvp");
+    return fail(response.status === 409 ? t("full") : t("failed"));
   }
   revalidatePath(invitationRoute(token));
   return ok(null);
@@ -39,9 +39,10 @@ export async function transferTicketAction(
   token: string,
   input: TransferTicketInput,
 ): Promise<ActionResult> {
+  const t = await getTranslations("guest.transfer");
   const parsed = transferTicketSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Please check the recipient's details and try again.");
+    return fail(t("invalid"));
   }
   const response = await publicFetch(`/rsvp/${token}/transfer`, {
     method: "POST",
@@ -56,14 +57,12 @@ export async function transferTicketAction(
   if (!response.ok) {
     reportApiError(response);
     if (response.status === 409) {
-      return fail(
-        "This place can no longer be transferred — transfers may have closed, or the ticket has already been used at the entrance.",
-      );
+      return fail(t("closed"));
     }
     if (response.status === 400) {
-      return fail("Give the recipient an email address or a phone number.");
+      return fail(t("contactRequired"));
     }
-    return fail("Something went wrong. Please try again.");
+    return fail((await getTranslations("guest.rsvp"))("failed"));
   }
   revalidatePath(invitationRoute(token));
   return ok(null);
@@ -73,7 +72,7 @@ export async function requestErasureAction(token: string): Promise<ActionResult>
   const response = await publicFetch(`/rsvp/${token}/erase`, { method: "POST" });
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't delete your data just now. Please try again.");
+    return fail((await getTranslations("guest.erasure"))("failed"));
   }
   revalidatePath(invitationRoute(token));
   return ok(null);

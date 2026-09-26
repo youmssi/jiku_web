@@ -38,8 +38,9 @@ This file configures Claude Code for the Jikū frontend service. It includes all
 ### PR & Commit Rules
 
 - Branch naming: `jiku-{number}-{slug}` (e.g., `jiku-12-organizer-auth-ui`)
-- Squash merge only into `develop`
-- PR template from `docs/jiku-mvp-backlog.md` Section 2
+- Squash merge only into `develop`, and merge a finished story before starting the
+  next one (see `CONTRIBUTING.md`)
+- PR description follows `.github/pull_request_template.md`
 - **Never** include AI authorship traces in any artifact
 
 ### When Stuck

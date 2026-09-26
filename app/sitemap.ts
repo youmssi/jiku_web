@@ -1,93 +1,99 @@
 import type { MetadataRoute } from "next";
-import { SEO_ROUTES } from "@/lib/constants";
+import { siteUrl } from "@/components/modules/seo";
+import { LEGAL_NOTICE_ROUTE, PRIVACY_ROUTE, SEO_ROUTES, TERMS_ROUTE } from "@/lib/constants";
+
+const LEGAL_PAGES = [LEGAL_NOTICE_ROUTE, TERMS_ROUTE, PRIVACY_ROUTE];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jiku-web.vercel.app";
+  const origin = siteUrl();
 
   const lastModified = new Date();
 
   // The generic marketing pages (use-cases, simulator) are bilingual with the
   // default locale (fr) serving unprefixed — they carry explicit hreflang
-  // alternates, like the landing page. /faq and /privacy render French content
-  // regardless of locale segment, so they stay single entries.
+  // alternates, like the landing page. /faq renders French content regardless of
+  // locale segment, so it stays a single entry. The legal pages are bilingual.
   return [
     {
-      url: siteUrl,
+      url: origin,
       lastModified,
       changeFrequency: "weekly",
       priority: 1,
       alternates: {
-        languages: { fr: siteUrl, en: `${siteUrl}/en` },
+        languages: { fr: origin, en: `${origin}/en` },
       },
     },
     {
-      url: `${siteUrl}/en`,
+      url: `${origin}/en`,
       lastModified,
       changeFrequency: "weekly",
       priority: 0.9,
       alternates: {
-        languages: { fr: siteUrl, en: `${siteUrl}/en` },
+        languages: { fr: origin, en: `${origin}/en` },
       },
     },
     {
-      url: `${siteUrl}${SEO_ROUTES.USE_CASES}`,
+      url: `${origin}${SEO_ROUTES.USE_CASES}`,
       lastModified,
       changeFrequency: "monthly",
       priority: 0.8,
       alternates: {
         languages: {
-          fr: `${siteUrl}${SEO_ROUTES.USE_CASES}`,
-          en: `${siteUrl}/en${SEO_ROUTES.USE_CASES}`,
+          fr: `${origin}${SEO_ROUTES.USE_CASES}`,
+          en: `${origin}/en${SEO_ROUTES.USE_CASES}`,
         },
       },
     },
     {
-      url: `${siteUrl}/en${SEO_ROUTES.USE_CASES}`,
+      url: `${origin}/en${SEO_ROUTES.USE_CASES}`,
       lastModified,
       changeFrequency: "monthly",
       priority: 0.8,
       alternates: {
         languages: {
-          fr: `${siteUrl}${SEO_ROUTES.USE_CASES}`,
-          en: `${siteUrl}/en${SEO_ROUTES.USE_CASES}`,
+          fr: `${origin}${SEO_ROUTES.USE_CASES}`,
+          en: `${origin}/en${SEO_ROUTES.USE_CASES}`,
         },
       },
     },
     {
-      url: `${siteUrl}${SEO_ROUTES.SIMULATOR}`,
+      url: `${origin}${SEO_ROUTES.SIMULATOR}`,
       lastModified,
       changeFrequency: "monthly",
       priority: 0.8,
       alternates: {
         languages: {
-          fr: `${siteUrl}${SEO_ROUTES.SIMULATOR}`,
-          en: `${siteUrl}/en${SEO_ROUTES.SIMULATOR}`,
+          fr: `${origin}${SEO_ROUTES.SIMULATOR}`,
+          en: `${origin}/en${SEO_ROUTES.SIMULATOR}`,
         },
       },
     },
     {
-      url: `${siteUrl}/en${SEO_ROUTES.SIMULATOR}`,
+      url: `${origin}/en${SEO_ROUTES.SIMULATOR}`,
       lastModified,
       changeFrequency: "monthly",
       priority: 0.8,
       alternates: {
         languages: {
-          fr: `${siteUrl}${SEO_ROUTES.SIMULATOR}`,
-          en: `${siteUrl}/en${SEO_ROUTES.SIMULATOR}`,
+          fr: `${origin}${SEO_ROUTES.SIMULATOR}`,
+          en: `${origin}/en${SEO_ROUTES.SIMULATOR}`,
         },
       },
     },
     {
-      url: `${siteUrl}${SEO_ROUTES.FAQ}`,
+      url: `${origin}${SEO_ROUTES.FAQ}`,
       lastModified,
       changeFrequency: "monthly",
       priority: 0.6,
     },
-    {
-      url: `${siteUrl}/privacy`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.3,
-    },
+    ...LEGAL_PAGES.flatMap((path) =>
+      [`${origin}${path}`, `${origin}/en${path}`].map((url) => ({
+        url,
+        lastModified,
+        changeFrequency: "yearly" as const,
+        priority: 0.3,
+        alternates: { languages: { fr: `${origin}${path}`, en: `${origin}/en${path}` } },
+      })),
+    ),
   ];
 }

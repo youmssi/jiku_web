@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { USE_CASES_CONTENT, UseCasesPage } from "@/components/modules/landing";
+import { siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 
 interface PageProps {
@@ -45,6 +46,6 @@ export default async function UseCasesPageRoute({ params }: Readonly<PageProps>)
   const { locale } = await params;
   const resolved = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
   setRequestLocale(resolved);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jiku-web.vercel.app";
-  return <UseCasesPage content={USE_CASES_CONTENT[resolved]} locale={resolved} siteUrl={siteUrl} />;
+  const origin = siteUrl();
+  return <UseCasesPage content={USE_CASES_CONTENT[resolved]} locale={resolved} siteUrl={origin} />;
 }

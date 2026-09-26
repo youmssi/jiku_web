@@ -1,3 +1,4 @@
+import type { components } from "@/lib/api-types";
 // CONTRACT — types mirroring the backend platform-admin API (JIKU-40/41/42/43).
 
 import { z } from "zod";
@@ -37,9 +38,18 @@ export interface AdminPayment {
  * is running, and a second copy in the UI would drift the next time pricing
  * changes in configuration.
  */
+/** One price in the three billing currencies (ADR 105); USD is in cents. */
+export interface AdminPriceList {
+  gnf: number;
+  fcfa: number;
+  usdCents: number;
+}
+
 export interface AdminTierOption {
   name: string;
   maxGuests: number;
+  price: AdminPriceList;
+  /** The GNF price, kept by the API for older clients. */
   priceMinor: number;
 }
 
@@ -51,13 +61,40 @@ export interface AdminTierCatalog {
 export interface AdminTrial {
   id: string;
   tenantId: string;
+  tenantName: string | null;
   eventId: string;
+  eventName: string | null;
   tier: string;
   grantedAllowance: number;
   expiresAt: string;
   status: string;
   endedReason: string | null;
   createdAt: string;
+}
+
+/** One page of the admin trial listing, with the true total across every page (JIKU-99). */
+export interface AdminTrialPage {
+  entries: AdminTrial[];
+  total: number;
+  page: number;
+  size: number;
+}
+
+/** Platform-wide trial funnel snapshot for the overview strip (JIKU-99). */
+export interface AdminTrialStats {
+  active: number;
+  expiringWithin7Days: number;
+  convertedThisMonth: number;
+  /** Null until at least one trial has ever concluded. */
+  conversionRatePercent: number | null;
+}
+
+/** An event as the trial grant form's tenant-scoped picker sees it (JIKU-99). */
+export interface AdminEventSummary {
+  id: string;
+  name: string;
+  startDateTime: string | null;
+  status: string;
 }
 
 export interface AdminAgreement {
@@ -74,59 +111,6 @@ export interface AdminAgreement {
   interruptedReason: string | null;
   renewedBy: string | null;
   createdAt: string;
-}
-
-export interface AdminBooking {
-  id: string;
-  customerName: string;
-  customerPhone: string;
-  customerEmail: string;
-  eventType: string;
-  eventDate: string;
-  guestCountEstimate: number;
-  tier: string;
-  currency: string;
-  totalAmountMinor: number;
-  depositAmountMinor: number;
-  balanceAmountMinor: number;
-  balanceDueDate: string;
-  status: string;
-  tenantId: string | null;
-  eventId: string | null;
-  acquisitionSource: string | null;
-  createdAt: string;
-}
-
-export interface AdminBookingPaymentDeclaration {
-  id: string;
-  bookingId: string;
-  customerName: string;
-  amountMinor: number;
-  currency: string;
-  kind: string;
-  operator: string;
-  transactionReference: string;
-  declaredAt: string;
-  verificationStatus: string;
-  verifiedBy: string | null;
-  verifiedAt: string | null;
-  rejectionReason: string | null;
-}
-
-/** Remboursement exécuté contre l'acompte d'origine (JIKU-75). */
-export interface AdminBookingRefund {
-  id: string;
-  bookingId: string;
-  amountMinor: number;
-  currency: string;
-  reason: string;
-  creditNoteNumber: string | null;
-  status: string;
-}
-
-export interface RefundBookingRequest {
-  amountMinor: number;
-  reason: string;
 }
 
 export interface AuditEntry {
@@ -182,11 +166,16 @@ export const adminLoginSchema = z.object({
 });
 export type AdminLoginFormValues = z.infer<typeof adminLoginSchema>;
 
+/** Shape an admin form needs to identify an event: full id, everything else structural. */
+const adminEventReferenceSchema = z.object({ id: z.string().min(1) });
+
 export const grantTrialSchema = z.object({
   tenant: z
     .union([adminTenantReferenceSchema, z.null()])
     .refine((tenant) => tenant !== null, "Pick an organization first."),
-  eventId: z.string().trim().uuid("Enter a valid event id."),
+  event: z
+    .union([adminEventReferenceSchema, z.null()])
+    .refine((event) => event !== null, "Pick an event first."),
   tier: z.string().min(1, "Pick a tier."),
   expiresAt: z
     .string()
@@ -202,7 +191,7 @@ export const grantTrialSchema = z.object({
 });
 export interface GrantTrialFormValues {
   tenant: TenantDirectoryEntry | null;
-  eventId: string;
+  event: AdminEventSummary | null;
   tier: string;
   expiresAt: string;
 }
@@ -237,14 +226,6 @@ export interface CreateAgreementFormValues {
   notes: string;
 }
 
-export const refundBookingSchema = z.object({
-  amountMinor: z.coerce
-    .number()
-    .int("Enter a whole amount.")
-    .positive("Enter a positive amount."),
-  reason: z.string().trim().min(1, "A refund reason is required."),
-});
-export type RefundBookingFormValues = z.infer<typeof refundBookingSchema>;
 
 export interface ActionDialogFormValues {
   value: string;
@@ -263,8 +244,12 @@ export interface AdminPayeeDetails {
 
 export interface AdminSubscriptionPlanOption {
   name: string;
-  maxResources: number;
-  priceMinorPerMonth: number;
+  includedPeople: number;
+  /** Null when the plan has no people cap. */
+  maxPeople: number | null;
+  monthly: AdminPriceList;
+  /** Null when the plan takes no one beyond its included people. */
+  extraPerson: AdminPriceList | null;
 }
 
 export interface AdminBillingSettingsView {
@@ -274,6 +259,9 @@ export interface AdminBillingSettingsView {
   subscriptionPlans: AdminSubscriptionPlanOption[];
   managedInDatabase: boolean;
 }
+
+const amount = z.coerce.number().int().nonnegative("Price must be zero or more.");
+const priceListSchema = z.object({ gnf: amount, fcfa: amount, usdCents: amount });
 
 export const adminBillingSettingsSchema = z.object({
   payee: z.object({
@@ -294,7 +282,7 @@ export const adminBillingSettingsSchema = z.object({
       z.object({
         name: z.string().trim().min(1, "Tier name is required.").max(40),
         maxGuests: z.coerce.number().int().positive("Guests must be a positive number."),
-        priceMinor: z.coerce.number().int().nonnegative("Price must be zero or more."),
+        price: priceListSchema,
       }),
     )
     .min(1, "At least one tier is required."),
@@ -302,10 +290,29 @@ export const adminBillingSettingsSchema = z.object({
     .array(
       z.object({
         name: z.string().trim().min(1, "Plan name is required.").max(40),
-        maxResources: z.coerce.number().int().positive("Resources must be a positive number."),
-        priceMinorPerMonth: z.coerce.number().int().nonnegative("Price must be zero or more."),
+        includedPeople: z.coerce.number().int().positive("Included people must be a positive number."),
+        /** Empty means no cap. */
+        maxPeople: z.string().trim().regex(/^\d*$/, "Leave empty or enter a whole number."),
+        monthly: priceListSchema,
+        /** All zero means the plan takes no one beyond its included people. */
+        extraPerson: priceListSchema,
       }),
     )
     .min(1, "At least one subscription plan is required."),
 });
 export type AdminBillingSettingsFormValues = z.infer<typeof adminBillingSettingsSchema>;
+
+// ─── Organizer feedback (JIKU-133) ────────────────────────────────────────────
+
+export type FeedbackEntry = Required<components["schemas"]["FeedbackView"]>;
+export type RatingSummary = Required<components["schemas"]["RatingSummary"]>;
+
+export interface FeedbackPage {
+  items: FeedbackEntry[];
+  total: number;
+  page: number;
+  size: number;
+}
+
+export const FEEDBACK_STATUSES = ["NEW", "IN_PROGRESS", "ANSWERED", "CLOSED"] as const;
+export type FeedbackStatus = (typeof FEEDBACK_STATUSES)[number];

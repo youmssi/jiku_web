@@ -18,32 +18,41 @@ export const ROUTES = {
   EVENTS: "/events",
   SERVICES: "/services",
   BILLING: "/billing",
+  /** Where the payment provider sends the payer back (JIKU-165). */
+  BILLING_RETURN: "/billing/return",
   SETTINGS: "/settings",
+  OPERATORS: "/operators",
 } as const;
 
 export function serviceLineRoute(id: string): string {
-  return `/services/${id}/ligne`;
+  return `/services/${id}/line`;
 }
 
 
 export function serviceManageRoute(id: string): string {
-  return `/services/${id}/gerer`;
+  return `/services/${id}/manage`;
 }
 export function serviceConfigurationRoute(id: string): string {
   return `/services/${id}/configuration`;
 }
 
-export function eventEditRoute(id: string): string {
-  return `/events/${id}/edit`;
+/** The event's overview: setup checklist while a draft, live dashboard once published. */
+export function eventRoute(id: string): string {
+  return `/events/${id}`;
+}
+
+export function eventTicketsRoute(id: string): string {
+  return `/events/${id}/tickets`;
+}
+
+export function eventSettingsRoute(id: string): string {
+  return `/events/${id}/settings`;
 }
 
 export function eventGuestsRoute(id: string): string {
   return `/events/${id}/guests`;
 }
 
-export function eventDashboardRoute(id: string): string {
-  return `/events/${id}/dashboard`;
-}
 
 export function billingRoute(id: string): string {
   return `/events/${id}/billing`;
@@ -73,6 +82,8 @@ export function eventGuestsExportRoute(id: string): string {
 }
 
 export const PRIVACY_ROUTE = "/privacy";
+export const TERMS_ROUTE = "/terms";
+export const LEGAL_NOTICE_ROUTE = "/legal";
 
 export function invitationRoute(token: string): string {
   return `/invitation/${token}`;
@@ -80,24 +91,6 @@ export function invitationRoute(token: string): string {
 
 export function ticketRoute(token: string): string {
   return `/invitation/${token}/ticket`;
-}
-
-export const RESERVE_ROUTE = "/reserver";
-
-export function reservationPaymentRoute(id: string): string {
-  return `/reserver/${id}/paiement`;
-}
-
-export function reservationStatusRoute(id: string): string {
-  return `/reserver/${id}/statut`;
-}
-
-export function reservationStatusUrl(id: string, token: string): string {
-  return `${reservationStatusRoute(id)}?token=${encodeURIComponent(token)}`;
-}
-
-export function reservationPaymentUrl(id: string, token: string): string {
-  return `${reservationPaymentRoute(id)}?token=${encodeURIComponent(token)}`;
 }
 
 export const COOKIES = {
@@ -122,10 +115,9 @@ export const ADMIN_ROUTES = {
   TRIALS: "/admin/trials",
   AGREEMENTS: "/admin/agreements",
   AUDIT: "/admin/audit",
-  BOOKINGS: "/admin/bookings",
-  BOOKING_PAYMENTS: "/admin/booking-payments",
   WHATSAPP: "/admin/whatsapp",
   PROSPECTS: "/admin/prospects",
+  FEEDBACK: "/admin/feedback",
   DIAGNOSTICS: "/admin/diagnostics",
   BILLING_INFO: "/admin/billing-info",
 } as const;

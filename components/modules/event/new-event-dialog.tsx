@@ -1,84 +1,158 @@
 "use client";
 
-import * as React from "react";
-import { CalendarDays, Settings2 } from "lucide-react";
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
+import { Plus } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
-import { EventWizard } from "./event-wizard";
-import { emptyEventValues } from "./schema";
-
-const STEPS = [
-  { label: "Event details", icon: <CalendarDays /> },
-  { label: "Event settings", icon: <Settings2 /> },
-];
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { FormFieldError } from "@/components/shared";
+import { trackEvent } from "@/lib/analytics";
+import { eventRoute } from "@/lib/constants";
+import { createDraftAction } from "./event.service";
+import {
+  emptyEventValues,
+  quickCreateEventSchema,
+  TIMEZONES,
+  type QuickCreateEventValues,
+} from "./schema";
 
 /**
- * Event creation in a dialog (sidebar-13 pattern): a slim sidebar lists the
- * wizard steps, the wizard itself fills the remaining space. Saving a draft
- * navigates to the event's edit page, which closes the dialog.
+ * Event creation, in a dialog so it opens from wherever the organizer is (the
+ * events list, the Today page). Asks only what a draft needs to exist; every
+ * other setting has a real default and is filled in on the event's own page,
+ * which is exactly where creating the draft sends you next.
  */
-export function NewEventDialog() {
-  const [open, setOpen] = React.useState(false);
-  const [step, setStep] = React.useState(0);
+export function NewEventDialog({ variant = "default" }: { variant?: "default" | "outline" }) {
+  const t = useTranslations("events.create");
+  const tCommon = useTranslations("common.actions");
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<QuickCreateEventValues>({
+    resolver: zodResolver(quickCreateEventSchema),
+    mode: "onTouched",
+    defaultValues: {
+      name: "",
+      timezone: emptyEventValues.timezone,
+      startLocal: "",
+    },
+  });
+
+  async function onSubmit(values: QuickCreateEventValues) {
+    const result = await createDraftAction({ ...emptyEventValues, ...values });
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+    toast.success(t("created"));
+    // Every new event starts on the free tier (JIKU-32); it is the only
+    // value known at creation time, before any usage/paid unlock exists.
+    trackEvent("event_created", { tier: "FREE" });
+    reset();
+    setOpen(false);
+    router.push(eventRoute(result.data.id));
+  }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        setOpen(next);
+        if (!next) reset();
+      }}
+    >
       <DialogTrigger asChild>
-        <Button>New event</Button>
+        <Button variant={variant}>
+          <Plus data-icon="inline-start" />
+          {t("trigger")}
+        </Button>
       </DialogTrigger>
-      <DialogContent className="overflow-hidden p-0 sm:max-w-[640px] md:max-w-[820px]">
-        <DialogTitle className="sr-only">Create an event</DialogTitle>
-        <DialogDescription className="sr-only">
-          Name your event and configure its settings.
-        </DialogDescription>
-        <SidebarProvider className="min-h-0 items-start">
-          <Sidebar collapsible="none" className="hidden w-48 md:flex">
-            <SidebarContent>
-              <SidebarGroup>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {STEPS.map((item, index) => (
-                      <SidebarMenuItem key={item.label}>
-                        <SidebarMenuButton
-                          isActive={step === index}
-                          onClick={() => setStep(index)}
-                        >
-                          {item.icon}
-                          <span>{item.label}</span>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
-            </SidebarContent>
-          </Sidebar>
-          <main className="flex max-h-[80vh] min-h-[480px] flex-1 flex-col overflow-hidden">
-            <div className="flex flex-1 flex-col overflow-y-auto p-4 md:p-6">
-              <EventWizard
-                initialValues={emptyEventValues}
-                step={step}
-                onStepChange={setStep}
-              />
-            </div>
-          </main>
-        </SidebarProvider>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
+        </DialogHeader>
+        <form id="new-event-form" onSubmit={handleSubmit(onSubmit)} noValidate>
+          <FieldGroup>
+            <Controller
+              control={control}
+              name="name"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>{t("name")}</FieldLabel>
+                  <Input {...field} id={field.name} autoFocus aria-invalid={fieldState.invalid} />
+                  <FormFieldError error={fieldState.error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="timezone"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>{t("timezone")}</FieldLabel>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
+                      <SelectValue placeholder={t("timezonePlaceholder")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {TIMEZONES.map((zone) => (
+                        <SelectItem key={zone} value={zone}>
+                          {zone}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormFieldError error={fieldState.error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="startLocal"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>{t("start")}</FieldLabel>
+                  <Input {...field} id={field.name} type="datetime-local" aria-invalid={fieldState.invalid} />
+                  <FormFieldError error={fieldState.error} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
+        </form>
+        <DialogFooter>
+          <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            {tCommon("cancel")}
+          </Button>
+          <Button type="submit" form="new-event-form" disabled={isSubmitting}>
+            {isSubmitting ? t("submitting") : t("submit")}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

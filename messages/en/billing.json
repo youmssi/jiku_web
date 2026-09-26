@@ -1,0 +1,249 @@
+{
+  "page": {
+    "title": "Billing",
+    "notice": {
+      "title": "Your workspace billing",
+      "text": "Your subscription and every payment across your events. For an event's capacity, open that event and go to its Billing section."
+    },
+    "invoicesTitle": "Invoices",
+    "invoicesText": "Formal documents for a company or institution. Your legal details live in Settings, and an invoice cannot be issued without them."
+  },
+  "subscription": {
+    "title": "{plan} subscription",
+    "free": "Free forever",
+    "renews": "Paid until {date}",
+    "status": {
+      "ACTIVE": "Active",
+      "GRACE": "In grace period",
+      "EXPIRED": "Expired"
+    },
+    "monthly": "{amount} a month for your team",
+    "people": "{active, plural, one {# person serves your clients} other {# people serve your clients}}",
+    "included": "{count} included",
+    "outgrown": "Your team has grown beyond {plan}. Choose a plan before {date} to keep going without interruption.",
+    "grace": "Your subscription is in its grace period. Renew it: your workspace will be suspended on {date}.",
+    "expiring": "{days, plural, one {Your subscription ends in # day.} other {Your subscription ends in # days.}} Renew it to keep going without interruption.",
+    "change": "Renew or change",
+    "cancel": "Cancel",
+    "choose": "Choose a plan",
+    "plan": {
+      "base": "{amount} a month",
+      "includes": "{count, plural, one {# person included} other {# people included}}",
+      "extra": "+ {amount} per extra person",
+      "team": "For your team: {amount} a month",
+      "tooSmall": "Does not cover a team this size",
+      "current": "Current",
+      "freePlan": "Free"
+    },
+    "period": {
+      "label": "Length",
+      "monthly": "1 month",
+      "yearly": "12 months, 2 months free"
+    },
+    "total": "To pay: {amount}",
+    "request": "Get payment instructions",
+    "requesting": "Requesting…",
+    "ready": "Your payment instructions are ready.",
+    "errors": {
+      "unavailable": "That plan isn't available. Please pick another.",
+      "tooSmall": "That plan doesn't cover your whole team.",
+      "failed": "We couldn't record your request. Please try again."
+    },
+    "teamPrice": "Price for your team",
+    "reminders": "WhatsApp reminders this month",
+    "remindersUsed": "{sent} of {limit}",
+    "remindersOut": "You have sent this month's {limit} free WhatsApp reminders. No more reminders go out this month: move to a paid plan for unlimited reminders.",
+    "remindersLow": "{left, plural, one {You have # free WhatsApp reminder left this month.} other {You have # free WhatsApp reminders left this month.}}"
+  },
+  "event": {
+    "allowanceTitle": "This event's capacity",
+    "allowance": "{tier} tier: {used, number} of {allowance, number} invitations used",
+    "remaining": "{count, plural, one {# invitation left.} other {# invitations left.}}",
+    "requestTitle": "Your activation request",
+    "viewInstructions": "View payment instructions",
+    "addTitle": "Add capacity",
+    "upTo": "Up to {count, number} guests",
+    "difference": "You only pay the difference with your current tier.",
+    "activate": "Request activation",
+    "requesting": "Requesting…",
+    "note": "You'll receive payment instructions (Mobile Money or bank transfer) with a reference. Our team unlocks the capacity once the transfer arrives.",
+    "maxed": "This event already has the largest tier. Beyond {count, number} guests, write to us.",
+    "managedTitle": "Capacity is managed by an admin",
+    "managedText": "Only admins and owners of the organization can add capacity. Ask them, or switch to an admin account.",
+    "historyTitle": "Payment history",
+    "dialogTitle": "Payment instructions",
+    "dialogText": "Send the amount below and include the reference with your transfer.",
+    "errors": {
+      "unavailable": "That tier isn't available. Please pick another.",
+      "forbidden": "Only an organization admin can request capacity for this event.",
+      "owned": "This event already has that tier or more.",
+      "failed": "We couldn't record your request. Please try again."
+    },
+    "surcharge": "including {amount} for answers in WhatsApp",
+    "surchargeOnly": "Answers in WhatsApp for the guests you already have",
+    "coveredTitle": "Covered by your Organizer Pack",
+    "coveredText": "This event uses your Pack's guests for the month: no tier to buy. Follow and top up your Pack from the Billing page.",
+    "packTier": "Organizer Pack"
+  },
+  "instructions": {
+    "title": "Activation requested: {tier}, {amount}",
+    "text": "Send the exact amount to the account below and include this reference with your transfer. Our team confirms the payment and unlocks your access, usually within a few hours, and you'll get a confirmation email.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "payee": "Payee",
+    "mobileMoney": "Mobile Money",
+    "bank": "Bank transfer",
+    "questions": "Questions",
+    "or": "or",
+    "safety": "Activation is confirmed by our team once the transfer is received: it is not instant. Never share card numbers or passwords; we only need the transfer itself, with the reference."
+  },
+  "history": {
+    "emptyTitle": "No payments yet",
+    "emptyText": "Your payments appear here once they are recorded.",
+    "date": "Date",
+    "event": "Event",
+    "tier": "Tier",
+    "amount": "Amount",
+    "status": "Status",
+    "receipt": "Receipt",
+    "invoice": "Invoice",
+    "download": "Download",
+    "none": "—",
+    "subscription": "Subscription",
+    "statuses": {
+      "PENDING": "Pending",
+      "SUCCEEDED": "Paid",
+      "FAILED": "Failed"
+    }
+  },
+  "invoices": {
+    "emptyTitle": "No invoices yet",
+    "emptyText": "Issue one from a settled payment when a buyer needs a formal document.",
+    "number": "Number",
+    "type": "Type",
+    "issued": "Issued",
+    "total": "Total",
+    "document": "Document",
+    "actions": "Actions",
+    "creditNote": "Credit note",
+    "invoice": "Invoice",
+    "pdf": "Download PDF",
+    "none": "—"
+  },
+  "actions": {
+    "issue": "Issue invoice",
+    "issuing": "Issuing…",
+    "issued": "Invoice issued.",
+    "credit": "Credit note",
+    "credited": "Credit note issued.",
+    "legalDetails": "Add your organization's legal details in Settings before issuing an invoice.",
+    "invoiceFailed": "We couldn't issue the invoice. Please try again.",
+    "creditTwice": "This invoice already has a credit note.",
+    "creditFailed": "We couldn't issue the credit note. Please try again."
+  },
+  "pack": {
+    "title": "Organizer Pack",
+    "pitch": "For wedding planners, agencies and venues: {guests, number} guests a month across all your events, every delivery mode included, with no tier to buy.",
+    "activeUntil": "Active until {date}",
+    "inactive": "Not subscribed",
+    "month": "Current month: {start} to {end}",
+    "used": "{used, number} guests sent out of {allowance, number}",
+    "remaining": "{count, plural, one {# guest left this month.} other {# guests left this month.}}",
+    "owed": "{count, plural, one {# guest sent on an event day past the month is owed: it is added to the next renewal ({amount}).} other {# guests sent on an event day past the month are owed: they are added to the next renewal ({amount}).}}",
+    "price": "{amount} a month",
+    "subscribe": "Get the Pack",
+    "renew": "Renew the Pack",
+    "cancel": "Cancel",
+    "period": {
+      "label": "Length",
+      "monthly": "1 month",
+      "yearly": "12 months, 2 months free"
+    },
+    "total": "To pay: {amount}",
+    "includesOwed": "including {amount} for owed guests",
+    "extraTitle": "Add guests this month",
+    "extraText": "In blocks of {block, number} guests, at {amount} a guest.",
+    "blocks": "Blocks",
+    "extraTotal": "{guests, number} guests: {amount}",
+    "request": "Get the payment instructions",
+    "requesting": "Requesting…",
+    "ready": "Your payment instructions are ready.",
+    "errors": {
+      "forbidden": "Only an organization admin can get the Pack.",
+      "inactive": "Extra guests need an active Pack.",
+      "failed": "We couldn't record your request. Please try again."
+    }
+  },
+  "ownNumber": {
+    "title": "Your own WhatsApp number",
+    "pitch": "Your guests and clients get messages from your number, under your name, and reply to you directly. Meta bills you for these messages.",
+    "price": "{amount} a month",
+    "included": "Included in {plans} and the Organizer Pack.",
+    "source": {
+      "PLAN": "Included in your plan",
+      "PACK": "Included in your Organizer Pack",
+      "ADDON": "Add-on active until {date}",
+      "NONE": "Not subscribed"
+    },
+    "subscribe": "Add the option",
+    "renew": "Extend the option",
+    "cancel": "Cancel",
+    "connect": "Connect my number",
+    "period": {
+      "label": "Length",
+      "monthly": "1 month",
+      "yearly": "12 months, 2 months free"
+    },
+    "total": "To pay: {amount}",
+    "request": "Get payment instructions",
+    "requesting": "Requesting…",
+    "ready": "Your payment instructions are ready.",
+    "errors": {
+      "forbidden": "Only an organization administrator can add the option.",
+      "included": "Your offer already includes your own WhatsApp number.",
+      "failed": "We couldn't record your request. Please try again."
+    }
+  },
+  "online": {
+    "pay": "Pay online",
+    "starting": "Opening payment…",
+    "errors": {
+      "forbidden": "Only workspace admins can pay.",
+      "unavailable": "This offer is not available for your workspace.",
+      "conflict": "This purchase is not possible right now: your current offer already covers it, or it needs an active Pack.",
+      "provider": "The payment service is not responding. Try again in a moment, or pay by transfer.",
+      "failed": "The payment could not start. Try again."
+    },
+    "return": {
+      "metaTitle": "Your payment",
+      "back": "Back to billing",
+      "pending": {
+        "title": "Confirming your payment",
+        "text": "We are waiting for the payment service to confirm. This page updates on its own."
+      },
+      "late": {
+        "title": "Confirmation is taking longer than usual",
+        "text": "The payment service has not confirmed yet. If you approved the payment, it will show in your history once confirmed; otherwise you can try again."
+      },
+      "paid": {
+        "title": "Payment confirmed",
+        "text": "Thank you! Your purchase is active."
+      },
+      "failed": {
+        "title": "Payment not completed",
+        "text": "The payment was declined or cancelled. You were not charged; you can try again."
+      },
+      "missing": {
+        "title": "Payment not found",
+        "text": "This link does not match any payment of your workspace."
+      },
+      "kind": {
+        "TIER": "{tier} capacity for your event",
+        "SUBSCRIPTION": "{tier} plan",
+        "PACK": "Organizer Pack",
+        "PACK_EXTRA": "Extra Pack guests",
+        "WHATSAPP_NUMBER": "Your own WhatsApp number"
+      }
+    }
+  }
+}

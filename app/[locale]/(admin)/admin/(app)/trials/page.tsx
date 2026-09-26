@@ -1,28 +1,14 @@
-import { redirect } from "next/navigation";
-import { TrialsView } from "@/components/modules/admin";
-import type { AdminTierCatalog, AdminTrial } from "@/components/modules/admin";
-import { adminFetch } from "@/lib/api-server";
-import { ADMIN_ROUTES } from "@/lib/constants";
+import { AdminPage, TrialsView } from "@/components/modules/admin";
+import { loadTrials } from "@/components/modules/admin/server";
 
-const EMPTY_CATALOG: AdminTierCatalog = { currency: "", tiers: [] };
-
-export default async function AdminTrialsPage() {
-  const [response, catalogResponse] = await Promise.all([
-    adminFetch("/admin/trials?size=50"),
-    adminFetch("/admin/billing/tiers"),
-  ]);
-  if (response.status === 401 || response.status === 403) {
-    redirect(ADMIN_ROUTES.LOGIN);
-  }
-  const trials = response.ok ? ((await response.json()) as AdminTrial[]) : [];
-  const catalog = catalogResponse.ok
-    ? ((await catalogResponse.json()) as AdminTierCatalog)
-    : EMPTY_CATALOG;
-
+export default async function AdminTrialsPage({
+  searchParams,
+}: Readonly<{ searchParams: Promise<{ page?: string }> }>) {
+  const { page } = await searchParams;
+  const { trialsPage, stats, catalog } = await loadTrials(Math.max(0, Number.parseInt(page ?? "0", 10) || 0));
   return (
-    <div>
-      <h1 className="mb-6 text-2xl font-semibold tracking-tight">Trials</h1>
-      <TrialsView trials={trials} catalog={catalog} />
-    </div>
+    <AdminPage title="Trials">
+      <TrialsView trialsPage={trialsPage} stats={stats} catalog={catalog} />
+    </AdminPage>
   );
 }

@@ -1,0 +1,173 @@
+{
+  "checkin": {
+    "CHECKED_IN": "Entrée validée",
+    "ALREADY_CHECKED_IN": "Déjà entré",
+    "CANCELLED": "Billet annulé",
+    "EVENT_CANCELLED": "Événement annulé",
+    "NOT_FOUND": "Introuvable",
+    "PAYMENT_DUE": "Paiement dû",
+    "by": "par {name}",
+    "byAt": "par {name} à {time}",
+    "notFound": "Aucun billet ne correspond. Cherchez plutôt par nom.",
+    "cancelled": "Ce billet est annulé : l'invité a décliné.",
+    "eventCancelled": "Cet événement est annulé : aucun billet n'est valable.",
+    "due": "À régler avant d'entrer : {amount}",
+    "dueNoAmount": "Ce billet n'est pas encore réglé.",
+    "next": "Scanner le suivant",
+    "close": "Fermer"
+  },
+  "collect": {
+    "mobileMoney": "Payé en Mobile Money",
+    "cash": "Payé en espèces",
+    "link": "Payé par lien",
+    "saving": "Enregistrement…",
+    "done": "Paiement enregistré.",
+    "due": "À régler : {amount}",
+    "dueAfter": "À régler après : {amount}",
+    "paid": "Réglé",
+    "collect": "Encaisser"
+  },
+  "console": {
+    "hello": "Bonjour,",
+    "actions": {
+      "CHECK_IN": "Contrôle des entrées",
+      "QUEUE": "File d'attente",
+      "COLLECT": "Encaissement"
+    },
+    "events": "Vos événements",
+    "services": "Vos services",
+    "cancelled": "Annulé",
+    "empty": "Aucun événement ni service ne vous est confié pour le moment. Demandez à l'organisateur.",
+    "back": "Mes postes",
+    "invalidTitle": "Lien indisponible",
+    "invalidText": "Ce lien a été révoqué ou n'est plus valide. Demandez-en un nouveau à l'organisateur."
+  },
+  "team": {
+    "title": "Opérateurs",
+    "subtitle": "Les personnes qui contrôlent les entrées, gèrent la file ou encaissent. Chacune reçoit un seul lien, sans compte, pour ses événements et ses services.",
+    "add": "Ajouter un opérateur",
+    "seats": "{count, plural, =0 {Aucun opérateur ne compte dans votre abonnement.} one {# opérateur compte dans votre abonnement (il travaille sur un service).} other {# opérateurs comptent dans votre abonnement (ils travaillent sur un service).}}",
+    "empty": "Aucun opérateur pour le moment. Ajoutez la personne qui tient la porte ou le comptoir.",
+    "columns": {
+      "name": "Nom",
+      "scope": "Travaille sur",
+      "actions": "Peut",
+      "link": "Lien"
+    },
+    "nothingAssigned": "Rien d'assigné",
+    "billable": "Compte dans l'abonnement",
+    "revoked": "Révoqué",
+    "copy": "Copier le lien",
+    "copied": "Lien copié.",
+    "edit": "Modifier",
+    "revoke": "Révoquer",
+    "revokeConfirm": "Révoquer {name} ? Son lien cessera de fonctionner immédiatement.",
+    "revokedToast": "Opérateur révoqué.",
+    "saved": "Opérateur enregistré.",
+    "form": {
+      "createTitle": "Nouvel opérateur",
+      "editTitle": "Modifier l'opérateur",
+      "label": "Nom",
+      "labelHelp": "Comme vous l'appelez : « Mamadou, accueil ».",
+      "events": "Événements",
+      "services": "Services",
+      "noEvents": "Aucun événement.",
+      "noServices": "Aucun service.",
+      "actions": "Il peut",
+      "servicesNote": "Un opérateur qui travaille sur un service compte dans votre abonnement.",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…",
+      "cancel": "Annuler"
+    },
+    "errors": {
+      "forbidden": "Seul un administrateur de l'organisation peut gérer les opérateurs.",
+      "invalid": "Vérifiez le nom et choisissez au moins une action.",
+      "failed": "Impossible d'enregistrer l'opérateur. Réessayez."
+    }
+  },
+  "line": {
+    "title": "Ligne du jour",
+    "scan": "Scanner",
+    "walkIn": "+ Sans RDV",
+    "empty": "Personne sur la ligne pour l'instant.",
+    "next": "SUIVANT",
+    "client": "Client",
+    "rank": "n°{rank}",
+    "status": {
+      "ISSUED": "pas encore arrivé",
+      "WAITING": "en attente",
+      "CALLED": "appelé",
+      "IN_SERVICE": "en cours",
+      "DONE": "terminé",
+      "NO_SHOW": "absent"
+    },
+    "kind": {
+      "APPOINTMENT": "RDV",
+      "WALK_IN": "sans RDV"
+    },
+    "actions": {
+      "arrive": "Arrivée",
+      "call": "Appeler",
+      "present": "Prendre en charge",
+      "finish": "Terminer",
+      "noShow": "Absent"
+    },
+    "toasts": {
+      "failed": "L'action a échoué.",
+      "nobody": "Personne en attente pour l'instant.",
+      "called": "{name} est appelé(e).",
+      "calledNext": "La personne suivante est appelée.",
+      "joined": "{name} a rejoint la file.",
+      "arrived": "Arrivée enregistrée."
+    },
+    "walkInDialog": {
+      "title": "Ajouter un sans-rendez-vous",
+      "text": "Le client est au comptoir : il rejoint la file immédiatement.",
+      "name": "Nom du client",
+      "namePlaceholder": "Prénom et nom",
+      "phone": "Téléphone",
+      "cancel": "Annuler",
+      "submit": "Ajouter à la file"
+    },
+    "scanner": {
+      "title": "Scanner le ticket du client",
+      "text": "L'arrivée est enregistrée, comme le bouton « Arrivée ».",
+      "saving": "Enregistrement de l'arrivée…",
+      "close": "Fermer"
+    },
+    "unavailable": {
+      "title": "Ligne du jour indisponible",
+      "notFound": "Ce service est introuvable ou ne vous appartient pas.",
+      "failed": "Impossible de charger la ligne du jour. Réessayez dans un instant.",
+      "staffTitle": "Lien de comptoir indisponible",
+      "staffNotFound": "Ce lien a été révoqué ou n'est plus valide. Demandez-en un nouveau à l'organisateur."
+    },
+    "requests": {
+      "title": "Demandes en attente",
+      "text": "Rendez-vous demandés en mode sur demande, en attente de votre décision.",
+      "emptyTitle": "Aucune demande",
+      "emptyText": "Aucune demande de rendez-vous en attente.",
+      "noPhone": "sans téléphone",
+      "awaiting": "{slot} — en attente de confirmation",
+      "reject": "Refuser",
+      "accept": "Confirmer",
+      "accepted": "Rendez-vous confirmé.",
+      "rejected": "Demande refusée."
+    },
+    "errors": {
+      "conflict": "Cette entrée vient d'être traitée par un autre poste — la liste est à jour.",
+      "unpaid": "Ce client n'a pas encore réglé : enregistrez d'abord son paiement.",
+      "linkGone": "Ce lien n'est plus valide.",
+      "notFound": "Cette entrée n'existe pas ou n'appartient pas à ce service.",
+      "failed": "L'action a échoué. Réessayez.",
+      "loadFailed": "Impossible de charger la ligne du jour.",
+      "serviceNotFound": "Ce service est introuvable.",
+      "counterLinkGone": "Ce lien de comptoir n'est plus valide.",
+      "walkInClosed": "Ce service n'accueille pas de sans-rendez-vous.",
+      "walkInFailed": "L'inscription a échoué. Réessayez.",
+      "requestsNotFound": "Aucune demande trouvée.",
+      "requestsFailed": "Impossible de charger les demandes en attente.",
+      "requestConflict": "Cette demande vient d'être traitée par un autre poste — la liste est à jour."
+    }
+  }
+}

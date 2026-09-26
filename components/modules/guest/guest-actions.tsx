@@ -1,6 +1,7 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Download, Plus, Send, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,56 +12,55 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import type { InvitationChannel } from "@/lib/channels";
 import { AddGuest } from "./add-guest";
 import { GuestImport } from "./guest-import";
 import { SendInvitations } from "./send-invitations";
-import type { InvitationChannel } from "@/lib/channels";
 
 /**
- * Toolbar actions of the guest list, each opening a Dialog: add a guest by hand,
- * import a CSV, or send invitations. Destructive confirmations stay in the table
- * rows; this file only hosts the creation/sending flows.
+ * The guest list's toolbar actions, each in its own dialog: add a guest by
+ * hand, import a file, or send the invitations. Row-level actions and their
+ * confirmations live in the table.
  */
 export function AddGuestDialog({ eventId }: { eventId: string }) {
+  const t = useTranslations("guests.add");
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <Plus className="size-3.5" data-icon="inline-start" />
-          Add guest
+          <Plus data-icon="inline-start" />
+          {t("trigger")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add a guest</DialogTitle>
-          <DialogDescription>
-            Add one person to the list. They can be invited later with everyone else.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
-        <AddGuest eventId={eventId} />
+        <AddGuest eventId={eventId} onAdded={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );
 }
 
 export function ImportGuestsDialog({ eventId }: { eventId: string }) {
+  const t = useTranslations("guests.import");
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <Upload className="size-3.5" data-icon="inline-start" />
-          Import CSV
+          <Upload data-icon="inline-start" />
+          {t("trigger")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-full sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Import guests from a CSV file</DialogTitle>
-          <DialogDescription>
-            Columns needed: first name, last name, email, phone. Every row is checked
-            before anything is imported.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
-        <GuestImport eventId={eventId} />
+        <GuestImport eventId={eventId} onImported={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );
@@ -69,41 +69,46 @@ export function ImportGuestsDialog({ eventId }: { eventId: string }) {
 export function SendInvitationsDialog({
   eventId,
   enabledChannels,
-  guestCount,
+  reach,
 }: {
   eventId: string;
   enabledChannels: InvitationChannel[];
-  guestCount: number;
+  /** How many guests each channel can reach: an address for email, a number for WhatsApp. */
+  reach: Record<InvitationChannel, number>;
 }) {
+  const t = useTranslations("guests.send");
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
-          <Send className="size-3.5" data-icon="inline-start" />
-          Send invitations
+          <Send data-icon="inline-start" />
+          {t("trigger")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Send invitations</DialogTitle>
-          <DialogDescription>
-            {guestCount} guest{guestCount === 1 ? "" : "s"} on the list. Choose the
-            channels and send — guests who already received a link on a channel
-            won&apos;t get it twice.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
-        <SendInvitations eventId={eventId} enabledChannels={enabledChannels} />
+        <SendInvitations
+          eventId={eventId}
+          enabledChannels={enabledChannels}
+          reach={reach}
+          onSent={() => setOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   );
 }
 
 export function ExportGuestsButton({ href }: { href: string }) {
+  const t = useTranslations("guests");
   return (
     <Button variant="ghost" asChild>
       <a href={href} download>
-        <Download className="size-3.5" data-icon="inline-start" />
-        Export
+        <Download data-icon="inline-start" />
+        {t("export")}
       </a>
     </Button>
   );

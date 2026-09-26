@@ -1,0 +1,22 @@
+{
+  "create": {
+    "trigger": "New service",
+    "title": "New service",
+    "description": "A service is what you offer (a consultation, a haircut, a file drop-off). You then add its opening hours and resources.",
+    "name": "Service name",
+    "namePlaceholder": "Consultation",
+    "timezone": "Timezone",
+    "submit": "Create service",
+    "submitting": "Creating…",
+    "created": "Service created.",
+    "failed": "The service could not be created."
+  },
+  "entranceQr": {
+    "title": "Entrance QR for today's line",
+    "text": "Show this QR at your entrance: walk-in clients scan it, take a ticket and follow their place on their phone. They're told when it's their turn.",
+    "show": "Show the QR",
+    "download": "Download to print",
+    "open": "Open the page",
+    "fileName": "entrance-qr-{service}.png"
+  }
+}

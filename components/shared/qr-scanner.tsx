@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface QrScannerProps {
   /** Called with the decoded text the first time a QR is read; paused while a result shows. */
@@ -23,7 +24,8 @@ export function QrScanner({ onDetect, active }: QrScannerProps) {
   const rafRef = useRef<number | null>(null);
   const lastDecodeRef = useRef(0);
   const activeRef = useRef(active);
-  const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("common.camera");
+  const [error, setError] = useState<"unsupported" | "unavailable" | null>(null);
 
   useEffect(() => {
     activeRef.current = active;
@@ -36,7 +38,7 @@ export function QrScanner({ onDetect, active }: QrScannerProps) {
 
     async function start() {
       if (!navigator.mediaDevices?.getUserMedia) {
-        setError("This device or browser doesn't support camera access.");
+        setError("unsupported");
         return;
       }
       try {
@@ -57,7 +59,7 @@ export function QrScanner({ onDetect, active }: QrScannerProps) {
         loop();
       } catch {
         if (!cancelled) {
-          setError("Camera unavailable. Grant camera access or use search instead.");
+          setError("unavailable");
         }
       }
     }
@@ -99,7 +101,7 @@ export function QrScanner({ onDetect, active }: QrScannerProps) {
   if (error) {
     return (
       <div className="flex aspect-square w-full max-w-sm items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900 p-6 text-center text-sm text-zinc-400">
-        {error}
+        {t(error)}
       </div>
     );
   }

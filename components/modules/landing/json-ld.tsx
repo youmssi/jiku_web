@@ -1,10 +1,11 @@
+import { EVENT_PRICING } from "@/lib/pricing";
 import type { LandingContent, LandingLocale } from "./content";
 
 /**
  * Structured data for the landing page: Organization, SoftwareApplication (with
- * the real pay-per-event offer range in GNF), and FAQPage built from the same
- * FAQ content the visitor sees — the markup can never say something the page
- * does not.
+ * the published event tier range in GNF), and FAQPage built from the same FAQ
+ * content the visitor sees — the markup can never say something the page does
+ * not.
  */
 export function LandingJsonLd({
   content,
@@ -38,8 +39,8 @@ export function LandingJsonLd({
       "@type": "AggregateOffer",
       priceCurrency: "GNF",
       lowPrice: "0",
-      highPrice: "500000",
-      offerCount: 4,
+      highPrice: String(EVENT_PRICING.tiers[EVENT_PRICING.tiers.length - 1].price.gnf),
+      offerCount: EVENT_PRICING.tiers.length + 1,
     },
   };
 

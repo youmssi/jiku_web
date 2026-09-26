@@ -1,6 +1,5 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { JikūLogo } from "@/components/ui/jiku-logo";
 import { TrackedLink } from "@/components/shared";
 import { ROUTES } from "@/lib/constants";
 import type { LandingContent } from "./content";
@@ -21,11 +20,6 @@ export function CtaSection({ content }: { content: LandingContent["cta"] }) {
           {/* Content */}
           <div className="relative z-10 px-8 py-16 text-center sm:px-16 sm:py-24">
             <div className="mx-auto max-w-2xl">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary shadow-sm shadow-primary/5">
-                <JikūLogo variant="mark" className="size-3.5" />
-                {content.badge}
-              </div>
-
               <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
                 {content.heading}
               </h2>

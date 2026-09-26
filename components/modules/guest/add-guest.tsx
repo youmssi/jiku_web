@@ -1,37 +1,27 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { FormFieldError } from "@/components/shared";
+import { trackEvent } from "@/lib/analytics";
 import { addGuestAction } from "@/components/modules/guest/guest.service";
-import {
-  singleGuestSchema,
-  type SingleGuestInput,
-} from "@/components/modules/guest/schema";
+import { singleGuestSchema, type SingleGuestInput } from "@/components/modules/guest/schema";
 
-const EMPTY_GUEST: SingleGuestInput = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-};
+const EMPTY_GUEST: SingleGuestInput = { firstName: "", lastName: "", email: "", phone: "" };
 
-/** Manual single-guest entry — a one-row import that reuses the CSV pipeline. */
-export function AddGuest({ eventId }: { eventId: string }) {
+/** One guest added by hand: a one-row import that reuses the file pipeline and its checks. */
+export function AddGuest({ eventId, onAdded }: { eventId: string; onAdded?: () => void }) {
+  const t = useTranslations("guests.add");
   const {
     control,
     handleSubmit,
     reset,
-    formState: { isSubmitting, isDirty },
+    formState: { isSubmitting },
   } = useForm<SingleGuestInput>({
     resolver: zodResolver(singleGuestSchema),
     mode: "onTouched",
@@ -44,29 +34,31 @@ export function AddGuest({ eventId }: { eventId: string }) {
       toast.error(outcome.error);
       return;
     }
-    const result = outcome.data;
-    if (result.imported > 0) {
-      toast.success(`${values.firstName} ${values.lastName} was added.`);
+    const name = `${values.firstName} ${values.lastName}`.trim();
+    if (outcome.data.imported > 0) {
+      trackEvent("guests_added", { source: "manual", count: 1 });
+      toast.success(t("added", { name }));
       reset(EMPTY_GUEST);
-    } else if (result.skippedDuplicates > 0) {
-      toast.info("This guest is already on the list.");
+      onAdded?.();
+    } else if (outcome.data.skippedDuplicates > 0) {
+      toast.info(t("duplicate", { name }));
     } else {
-      toast.error(result.failures[0]?.reason ?? "We couldn't add this guest.");
+      toast.error(t("rejected"));
     }
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <FieldGroup>
-        <Field orientation="responsive">
+        <div className="grid gap-4 sm:grid-cols-2">
           <Controller
             control={control}
             name="firstName"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>First name</FieldLabel>
-                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
-                {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                <FieldLabel htmlFor={field.name}>{t("firstName")}</FieldLabel>
+                <Input {...field} id={field.name} autoComplete="off" aria-invalid={fieldState.invalid} />
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
@@ -75,28 +67,20 @@ export function AddGuest({ eventId }: { eventId: string }) {
             name="lastName"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Last name</FieldLabel>
-                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
-                {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                <FieldLabel htmlFor={field.name}>{t("lastName")}</FieldLabel>
+                <Input {...field} id={field.name} autoComplete="off" aria-invalid={fieldState.invalid} />
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
-        </Field>
-        <Field orientation="responsive">
           <Controller
             control={control}
             name="email"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                <Input
-                  {...field}
-                  id={field.name}
-                  type="email"
-                  autoComplete="off"
-                  aria-invalid={fieldState.invalid}
-                />
-                {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                <FieldLabel htmlFor={field.name}>{t("email")}</FieldLabel>
+                <Input {...field} id={field.name} type="email" autoComplete="off" aria-invalid={fieldState.invalid} />
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
@@ -105,33 +89,25 @@ export function AddGuest({ eventId }: { eventId: string }) {
             name="phone"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Phone</FieldLabel>
+                <FieldLabel htmlFor={field.name}>{t("phone")}</FieldLabel>
                 <Input
                   {...field}
                   id={field.name}
                   type="tel"
+                  inputMode="tel"
                   autoComplete="off"
+                  placeholder="+224 620 00 00 00"
                   aria-invalid={fieldState.invalid}
                 />
-                {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
-        </Field>
-        <FieldDescription>
-          Provide at least an email or a phone number so this guest can be invited.
-        </FieldDescription>
-        <Field orientation="horizontal">
+        </div>
+        <FieldDescription>{t("contactHint")}</FieldDescription>
+        <Field orientation="horizontal" className="justify-end">
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Adding…" : "Add guest"}
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => reset(EMPTY_GUEST)}
-            disabled={!isDirty || isSubmitting}
-          >
-            Clear
+            {isSubmitting ? t("submitting") : t("submit")}
           </Button>
         </Field>
       </FieldGroup>

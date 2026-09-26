@@ -1,34 +1,34 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { FileDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { attendanceRegisterRoute } from "@/lib/constants";
 
 /**
- * Preuves de présence téléchargeables (JIKU-95).
- *
- * Quand un bailleur ou un employeur finance une session, le versement du solde
- * est conditionné à la preuve de présence. Le bloc n'apparaît qu'une fois
- * quelqu'un entré : proposer une feuille d'émargement vide avant l'événement
- * n'aiderait personne et laisserait croire à un document utilisable.
+ * Downloadable proof of attendance (JIKU-95), often required before a funder or
+ * an employer pays the balance of a session. The block appears only once
+ * someone has checked in: an empty register before the event would look usable
+ * and help no one.
  */
 export function AttendanceDocuments({ eventId, checkedIn }: { eventId: string; checkedIn: number }) {
+  const t = useTranslations("events.overview.attendance");
   if (checkedIn === 0) {
     return null;
   }
-
   return (
-    <section className="mt-10 rounded-xl border p-6">
-      <h2 className="text-lg font-semibold">Preuve de présence</h2>
-      <p className="mt-1 text-sm text-muted-foreground">
-        La feuille d&apos;émargement liste les {checkedIn}{" "}
-        {checkedIn > 1 ? "personnes entrées" : "personne entrée"}, avec l&apos;heure et le poste de
-        contrôle. Les attestations nominatives se téléchargent depuis la liste des invités.
-      </p>
-      <Link
-        href={attendanceRegisterRoute(eventId)}
-        prefetch={false}
-        className="mt-4 inline-flex text-sm font-medium text-primary underline underline-offset-4"
-      >
-        Télécharger la feuille d&apos;émargement (PDF)
-      </Link>
-    </section>
+    <Card>
+      <CardHeader>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description", { count: checkedIn })}</CardDescription>
+      </CardHeader>
+      <CardFooter>
+        <Button asChild variant="outline">
+          <a href={attendanceRegisterRoute(eventId)} download>
+            <FileDown data-icon="inline-start" />
+            {t("download")}
+          </a>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }

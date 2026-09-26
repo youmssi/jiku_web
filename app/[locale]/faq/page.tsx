@@ -11,9 +11,9 @@ import { BreadcrumbJsonLd, FaqJsonLd, LocalBusinessJsonLd, OrganizationJsonLd, b
 import { Link } from "@/i18n/navigation";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
 
-const TITLE = "FAQ Jikū — Invitations, billets QR et check-in : vos questions";
+const TITLE = "FAQ Jikū — Événements, rendez-vous et file d'attente : vos questions";
 const DESCRIPTION =
-  "Faut-il une application ? Le check-in marche-t-il hors-ligne ? Comment les invitations WhatsApp sont-elles envoyées ? Réponses aux questions les plus posées sur Jikū.";
+  "Faut-il une application ? Le check-in marche-t-il hors ligne ? Jikū encaisse-t-il l'argent de mes clients ? Réponses aux questions les plus posées sur Jikū.";
 
 export const metadata: Metadata = buildThematicMetadata({
   path: SEO_ROUTES.FAQ,
@@ -57,11 +57,10 @@ export default function FaqPage() {
         </h1>
 
         <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Jikū gère l&apos;envoi des invitations par e-mail et WhatsApp, la confirmation de présence, les billets
-          QR signés et le check-in le jour de l&apos;événement — sans que vos invités aient besoin d&apos;installer
-          une application. Voici les réponses aux questions qu&apos;on nous pose le plus souvent, sur le
-          fonctionnement hors-ligne du check-in, l&apos;envoi WhatsApp, la marque blanche, les tarifs et la
-          protection des données de vos invités.
+          Jikū gère tout ce qui passe par un billet : les invitations, les billets QR et l&apos;entrée de vos
+          événements, la prise de rendez-vous, les rappels et la file du jour de vos services, sans application à
+          installer. Voici les réponses aux questions qu&apos;on nous pose le plus souvent : fonctionnement hors
+          ligne, paiements, équipe, tarifs et protection des données.
         </p>
 
         <Accordion type="single" collapsible className="mt-12">

@@ -1,0 +1,22 @@
+{
+  "create": {
+    "trigger": "Nouveau service",
+    "title": "Nouveau service",
+    "description": "Un service, c'est ce que vous proposez (une consultation, une coupe, un dépôt de dossier). Vous ajouterez ensuite ses horaires et ses ressources.",
+    "name": "Nom du service",
+    "namePlaceholder": "Consultation",
+    "timezone": "Fuseau horaire",
+    "submit": "Créer le service",
+    "submitting": "Création…",
+    "created": "Service créé.",
+    "failed": "Impossible de créer le service."
+  },
+  "entranceQr": {
+    "title": "QR d'entrée de la file du jour",
+    "text": "Affichez ce QR à l'entrée : vos clients sans rendez-vous le scannent, prennent un ticket et suivent leur rang sur leur téléphone. Ils sont prévenus quand c'est leur tour.",
+    "show": "Afficher le QR",
+    "download": "Télécharger pour imprimer",
+    "open": "Ouvrir la page",
+    "fileName": "qr-entree-{service}.png"
+  }
+}
