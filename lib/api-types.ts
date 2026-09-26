@@ -3554,6 +3554,8 @@ export interface components {
             /** @enum {string|null} */
             reminderChannel?: "WHATSAPP" | "SMS" | "WHATSAPP_OR_SMS" | "NONE" | null;
             reminderOffsetsMinutes?: number[] | null;
+            /** Format: int32 */
+            clientsPerSlot?: number | null;
         };
         EffectiveServiceConfig: {
             /** @enum {string} */
@@ -3578,6 +3580,10 @@ export interface components {
             /** @enum {string} */
             reminderChannel?: "WHATSAPP" | "SMS" | "WHATSAPP_OR_SMS" | "NONE";
             reminderOffsetsMinutes?: number[];
+            /** Format: int32 */
+            clientsPerSlot?: number;
+            /** Format: int32 */
+            maxClientsPerSlot?: number;
             /** Format: int64 */
             occupancyMinutes?: number;
         };
@@ -4676,12 +4682,16 @@ export interface components {
             confirmationMode?: string;
             professionals?: string[];
             slots?: components["schemas"]["AppointmentSlotView"][];
+            /** Format: int32 */
+            clientsPerSlot?: number;
         };
         AppointmentSlotView: {
             /** Format: date-time */
             startsAt?: string;
             /** Format: date-time */
             endsAt?: string;
+            /** Format: int32 */
+            placesLeft?: number;
         };
         AppointmentStatusView: {
             status?: string;

@@ -4,6 +4,8 @@ import type { Schema } from "@/lib/api-contract";
 export interface AppointmentSlot {
   startsAt: string;
   endsAt: string;
+  /** Clients the slot can still take (group sessions). */
+  placesLeft?: number;
 }
 
 export interface AppointmentServiceView {
@@ -13,6 +15,8 @@ export interface AppointmentServiceView {
   confirmationMode: "ON_REQUEST" | "INSTANTANEOUS";
   professionals: string[];
   slots: AppointmentSlot[];
+  /** Clients served together per slot; above 1 the service runs group sessions. */
+  clientsPerSlot?: number;
 }
 
 export interface AppointmentBookingView {

@@ -136,7 +136,8 @@
       "name": "Votre nom",
       "phone": "Votre téléphone",
       "submit": "Réserver ce créneau",
-      "submitting": "Réservation…"
+      "submitting": "Réservation…",
+      "placesLeft": "{count, plural, one {# place} other {# places}}"
     },
     "booked": {
       "title": "Votre rendez-vous est enregistré",
