@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { MessageCircle, UserPlus } from "lucide-react";
 import { toast } from "sonner";
@@ -52,6 +53,8 @@ export function WhatsAppAdmin({
   pricing: WhatsAppPricingInfo[];
   override: WhatsAppOverrideStatus;
 }) {
+  const t = useTranslations("admin.whatsapp");
+  const format = useFormatter();
   const router = useRouter();
   const [pending, start] = useTransition();
   const [costs, setCosts] = useState<Record<string, string>>(() =>
@@ -67,7 +70,7 @@ export function WhatsAppAdmin({
       const result = await updateWhatsAppPricingAction(category, value);
       if (!result.ok) toast.error(result.error);
       else {
-        toast.success("Tarif mis à jour.");
+        toast.success(t("priceSaved"));
         router.refresh();
       }
     });
@@ -76,7 +79,7 @@ export function WhatsAppAdmin({
   function toggleOverride(nextActive: boolean) {
     const reason = overrideReason.trim();
     if (nextActive && !reason) {
-      toast.error("Indiquez le motif de la surcharge.");
+      toast.error(t("reasonRequired"));
       return;
     }
     start(async () => {
@@ -84,7 +87,7 @@ export function WhatsAppAdmin({
       if (!result.ok) toast.error(result.error);
       else {
         setOverrideReason("");
-        toast.success(nextActive ? "Surcharge activée." : "Surcharge désactivée.");
+        toast.success(nextActive ? t("activated") : t("deactivated"));
         router.refresh();
       }
     });
@@ -94,10 +97,8 @@ export function WhatsAppAdmin({
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>Tarifs par catégorie (USD, minor)</CardTitle>
-          <CardDescription>
-            Cost charged per message category. Changes apply to the next send.
-          </CardDescription>
+          <CardTitle>{t("pricingTitle")}</CardTitle>
+          <CardDescription>{t("pricingText")}</CardDescription>
         </CardHeader>
         <CardContent>
           {pricing.length === 0 ? (
@@ -106,18 +107,16 @@ export function WhatsAppAdmin({
                 <EmptyMedia variant="icon">
                   <MessageCircle />
                 </EmptyMedia>
-                <EmptyTitle>No pricing configured</EmptyTitle>
-                <EmptyDescription>
-                  The backend has no WhatsApp pricing categories yet.
-                </EmptyDescription>
+                <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+                <EmptyDescription>{t("emptyText")}</EmptyDescription>
               </EmptyHeader>
             </Empty>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Catégorie</TableHead>
-                  <TableHead>Coût (USD minor)</TableHead>
+                  <TableHead>{t("category")}</TableHead>
+                  <TableHead>{t("cost")}</TableHead>
                   <TableHead className="w-32" />
                 </TableRow>
               </TableHeader>
@@ -148,7 +147,7 @@ export function WhatsAppAdmin({
                         disabled={pending}
                         onClick={() => saveCost(price.category)}
                       >
-                        Enregistrer
+                        {t("save")}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -161,25 +160,22 @@ export function WhatsAppAdmin({
 
       <Card>
         <CardHeader>
-          <CardTitle>Surcharge de contenu (santé/urgence)</CardTitle>
-          <CardDescription>
-            Temporarily intercept the health/emergency message category.
-          </CardDescription>
+          <CardTitle>{t("overrideTitle")}</CardTitle>
+          <CardDescription>{t("overrideText")}</CardDescription>
         </CardHeader>
         <CardContent>
           {override.active ? (
             <div className="flex items-center justify-between gap-3">
               <div>
-                <Badge>Active</Badge>
+                <Badge>{t("active")}</Badge>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  {override.reason ?? "Aucun motif"} —{" "}
-                  {override.activatedBy ?? "admin"} le{" "}
-                  {override.activatedAt
-                    ? new Intl.DateTimeFormat("fr-FR", {
-                        dateStyle: "short",
-                        timeStyle: "short",
-                      }).format(new Date(override.activatedAt))
-                    : ""}
+                  {t("activatedBy", {
+                    reason: override.reason ?? t("noReason"),
+                    by: override.activatedBy ?? "admin",
+                    date: override.activatedAt
+                      ? format.dateTime(new Date(override.activatedAt), { dateStyle: "short", timeStyle: "short" })
+                      : "",
+                  })}
                 </p>
               </div>
               <Button
@@ -187,16 +183,16 @@ export function WhatsAppAdmin({
                 disabled={pending}
                 onClick={() => toggleOverride(false)}
               >
-                Désactiver
+                {t("deactivate")}
               </Button>
             </div>
           ) : (
             <div className="flex flex-wrap items-end gap-2">
               <div className="min-w-64 flex-1">
-                <p className="text-sm text-muted-foreground">Inactive.</p>
+                <p className="text-sm text-muted-foreground">{t("inactive")}</p>
                 <Input
                   className="mt-2"
-                  placeholder="Motif de la surcharge (ex. incident WhatsApp)"
+                  placeholder={t("reasonPlaceholder")}
                   value={overrideReason}
                   onChange={(e) => setOverrideReason(e.target.value)}
                 />
@@ -205,7 +201,7 @@ export function WhatsAppAdmin({
                 disabled={pending || !overrideReason.trim()}
                 onClick={() => toggleOverride(true)}
               >
-                Activer
+                {t("activate")}
               </Button>
             </div>
           )}
@@ -215,48 +211,49 @@ export function WhatsAppAdmin({
   );
 }
 
-const PROSPECT_COLUMNS: ColumnDef<DataTableFeatures, ProspectLead>[] = [
+function useProspectColumns(): ColumnDef<DataTableFeatures, ProspectLead>[] {
+  const t = useTranslations("admin.prospects");
+  const format = useFormatter();
+  return [
   {
     accessorKey: "businessName",
-    header: "Entreprise",
+    header: t("business"),
     cell: ({ row }) => (
       <span className="font-medium">{row.original.businessName}</span>
     ),
   },
   {
     accessorKey: "contactName",
-    header: "Contact",
+    header: t("contact"),
   },
   {
     accessorKey: "phone",
-    header: "Téléphone",
+    header: t("phone"),
   },
   {
     accessorKey: "sector",
-    header: "Secteur",
+    header: t("sector"),
   },
   {
     accessorKey: "createdAt",
-    header: "Date",
+    header: t("date"),
     cell: ({ row }) =>
-      new Intl.DateTimeFormat("fr-FR", { dateStyle: "short" }).format(
-        new Date(row.original.createdAt),
-      ),
+      format.dateTime(new Date(row.original.createdAt), { dateStyle: "short" }),
   },
   {
     accessorKey: "status",
-    header: "Statut",
+    header: t("status"),
     filterFn: "includesString",
     cell: ({ row }) =>
       row.original.status === "CONTACTED" ? (
-        <Badge variant="outline">Contactée</Badge>
+        <Badge variant="outline">{t("contacted")}</Badge>
       ) : (
-        <Badge>Nouvelle</Badge>
+        <Badge>{t("new")}</Badge>
       ),
   },
   {
     id: "actions",
-    header: "Actions",
+    header: t("actions"),
     enableSorting: false,
     cell: ({ row }) =>
       row.original.status !== "CONTACTED" ? (
@@ -264,9 +261,12 @@ const PROSPECT_COLUMNS: ColumnDef<DataTableFeatures, ProspectLead>[] = [
       ) : null,
   },
 ];
+}
 
 /** Pistes d'accès anticipé (JIKU-98) : rappeler dans l'ordre d'arrivée. */
 export function ProspectsTable({ prospects }: { prospects: ProspectLead[] }) {
+  const t = useTranslations("admin.prospects");
+  const columns = useProspectColumns();
   if (prospects.length === 0) {
     return (
       <Empty>
@@ -274,8 +274,8 @@ export function ProspectsTable({ prospects }: { prospects: ProspectLead[] }) {
           <EmptyMedia variant="icon">
             <UserPlus />
           </EmptyMedia>
-          <EmptyTitle>No prospects yet</EmptyTitle>
-          <EmptyDescription>Aucune piste pour le moment.</EmptyDescription>
+          <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+          <EmptyDescription>{t("emptyText")}</EmptyDescription>
         </EmptyHeader>
       </Empty>
     );
@@ -283,15 +283,16 @@ export function ProspectsTable({ prospects }: { prospects: ProspectLead[] }) {
 
   return (
     <DataTable
-      columns={PROSPECT_COLUMNS}
+      columns={columns}
       data={prospects}
       searchColumn="businessName"
-      searchPlaceholder="Search by business name…"
+      searchPlaceholder={t("search")}
     />
   );
 }
 
 function MarkContactedButton({ prospect }: { prospect: ProspectLead }) {
+  const t = useTranslations("admin.prospects");
   const router = useRouter();
   const [pending, start] = useTransition();
 
@@ -300,7 +301,7 @@ function MarkContactedButton({ prospect }: { prospect: ProspectLead }) {
       const result = await markProspectContactedAction(prospect.id);
       if (!result.ok) toast.error(result.error);
       else {
-        toast.success(`« ${prospect.businessName} » marquée comme contactée.`);
+        toast.success(t("marked", { name: prospect.businessName }));
         router.refresh();
       }
     });
@@ -308,13 +309,14 @@ function MarkContactedButton({ prospect }: { prospect: ProspectLead }) {
 
   return (
     <Button size="sm" variant="outline" disabled={pending} onClick={contact}>
-      Marquer contactée
+      {t("markContacted")}
     </Button>
   );
 }
 
 /** Diagnostic de la chaîne d'erreurs (JIKU-97) : déclenche un 500 de test. */
 export function DiagnosticsPanel() {
+  const t = useTranslations("admin.diagnostics");
   const [pending, start] = useTransition();
   const [requestId, setRequestId] = useState<string | null>(null);
 
@@ -323,9 +325,7 @@ export function DiagnosticsPanel() {
       const result = await triggerDiagnosticsAction();
       if (result.ok) {
         setRequestId(result.data.requestId);
-        toast.success(
-          "Exception de test déclenchée — retrouvez ce requestId dans le traqueur.",
-        );
+        toast.success(t("triggered"));
       } else {
         toast.error(result.error);
       }
@@ -335,21 +335,16 @@ export function DiagnosticsPanel() {
   return (
     <Card className="max-w-xl">
       <CardHeader>
-        <CardTitle>Error chain probe</CardTitle>
-        <CardDescription>
-          Déclenche une exception volontaire (500). Le{" "}
-          <code>requestId</code> renvoyé doit apparaître dans le traqueur
-          d&apos;erreurs — c&apos;est la preuve que la chaîne de remontée
-          fonctionne de bout en bout.
-        </CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t.rich("text", { code: (chunks) => <code>{chunks}</code> })}</CardDescription>
       </CardHeader>
       <CardContent>
         <Button onClick={run} disabled={pending} variant="outline">
-          {pending ? "Déclenchement…" : "Déclencher l'erreur de test"}
+          {pending ? t("running") : t("run")}
         </Button>
         {requestId ? (
           <p className="mt-3 break-all font-mono text-xs text-muted-foreground">
-            requestId : {requestId}
+            {t("requestId", { id: requestId })}
           </p>
         ) : null}
       </CardContent>
