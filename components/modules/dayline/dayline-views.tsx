@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { DayLineConsole } from "@/components/modules/dayline/day-line-console";
 import { PendingRequests } from "@/components/modules/dayline/pending-requests";
@@ -7,27 +8,25 @@ import type {
 } from "@/components/modules/dayline/schema";
 
 /**
- * Entrées serveur de la console de ligne du jour. La première ligne du jour est
- * rendue par le serveur (pas de flash vide), puis la console la rafraîchit toutes
- * les 10 s. L'organisateur est authentifié par sa session ; le personnel par le
- * lien signé porté dans le chemin.
+ * Server entries of the day-line console. The first list is rendered on the
+ * server (no empty flash), then the console refreshes it. The organizer is
+ * authenticated by their session; staff and operators by the link in the path.
  */
 export async function DayLineOrganizerView({ serviceId }: { serviceId: string }) {
   const response = await serverFetch(`/services/${serviceId}/day-line`);
   if (!response.ok) {
+    const t = await getTranslations("operator.line.unavailable");
     return (
       <div className="mx-auto flex max-w-md flex-col items-center px-6 py-20 text-center">
-        <h2 className="text-xl font-semibold">Ligne du jour indisponible</h2>
+        <h2 className="text-xl font-semibold">{t("title")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          {response.status === 404
-            ? "Ce service est introuvable ou ne vous appartient pas."
-            : "Impossible de charger la ligne du jour. Réessayez dans un instant."}
+          {response.status === 404 ? t("notFound") : t("failed")}
         </p>
       </div>
     );
   }
   const view = (await response.json()) as DayLineView;
-  const requests = await loadPendingRequests(`/services/${serviceId}/day-line/requests`);
+  const requests = await loadPendingRequests(serverFetch(`/services/${serviceId}/day-line/requests`));
   return (
     <div className="min-h-svh bg-zinc-50 pb-12 dark:bg-zinc-950">
       <DayLineConsole auth={{ kind: "organizer", serviceId }} initial={view} />
@@ -41,21 +40,19 @@ export async function DayLineOrganizerView({ serviceId }: { serviceId: string })
 export async function DayLineStaffView({ base }: { base: string }) {
   const response = await publicFetch(`/${base}`);
   if (!response.ok) {
+    const t = await getTranslations("operator.line.unavailable");
     return (
       <div className="flex flex-1 items-center justify-center px-6 text-center">
         <div className="max-w-sm">
-          <h2 className="text-xl font-semibold text-zinc-100">Lien de comptoir indisponible</h2>
-          <p className="mt-2 text-zinc-400">
-            {response.status === 404
-              ? "Ce lien a été révoqué ou n'est plus valide. Demandez-en un nouveau à l'organisateur."
-              : "Impossible de charger la ligne du jour. Réessayez dans un instant."}
-          </p>
+          <h2 className="text-xl font-semibold text-zinc-100">{t("staffTitle")}</h2>
+          <p className="mt-2 text-zinc-400">{response.status === 404 ? t("staffNotFound") : t("failed")}</p>
         </div>
       </div>
     );
   }
   const view = (await response.json()) as DayLineView;
-  const requests = await loadPendingRequests(`/${base}/requests`);
+  // A counter link and an operator link are both credentials in the path.
+  const requests = await loadPendingRequests(publicFetch(`/${base}/requests`));
   return (
     <div className="min-h-svh bg-zinc-50 pb-12 dark:bg-zinc-950">
       <DayLineConsole auth={{ kind: "staff", base }} initial={view} />
@@ -66,8 +63,8 @@ export async function DayLineStaffView({ base }: { base: string }) {
   );
 }
 
-/** Demande en attente renvoyée par le serveur : la liste vide est un état sain. */
-async function loadPendingRequests(path: string): Promise<PendingAppointmentRequest[]> {
-  const response = await (path.startsWith("/line/") ? publicFetch(path) : serverFetch(path));
+/** Pending requests from the server; an empty list is a healthy state. */
+async function loadPendingRequests(request: Promise<Response>): Promise<PendingAppointmentRequest[]> {
+  const response = await request;
   return response.ok ? ((await response.json()) as PendingAppointmentRequest[]) : [];
 }
