@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { serverFetch, publicFetch } from "@/lib/api-server";
 import { fail, ok, reportApiError, type ActionResult, fromResponse } from "@/lib/action-result";
 import type {
@@ -34,14 +35,13 @@ function fetchFor(auth: DayLineAuth, path: string, init: RequestInit = {}): Prom
   return auth.kind === "organizer" ? serverFetch(path, init) : publicFetch(path, init);
 }
 
-function lineMessages(staff: boolean): Partial<Record<number, string>> & { default?: string } {
+async function lineMessages(staff: boolean): Promise<Partial<Record<number, string>> & { default?: string }> {
+  const t = await getTranslations("operator.line.errors");
   return {
-    409: "Cette entrée vient d'être traitée par un autre poste — la liste est à jour.",
-    402: "Ce client n'a pas encore réglé : enregistrez d'abord son paiement.",
-    404: staff
-      ? "Ce lien n'est plus valide."
-      : "Cette entrée n'existe pas ou n'appartient pas à ce service.",
-    default: "L'action a échoué. Réessayez.",
+    409: t("conflict"),
+    402: t("unpaid"),
+    404: staff ? t("linkGone") : t("notFound"),
+    default: t("failed"),
   };
 }
 
@@ -54,31 +54,32 @@ function lineMessages(staff: boolean): Partial<Record<number, string>> & { defau
 export async function resolveCounterLinkAction(link: string): Promise<ActionResult<string>> {
   if (link.includes(".")) return ok(link);
   const response = await publicFetch(`/line-codes/${encodeURIComponent(link)}`);
-  if (!response.ok) return fail("Ce lien de comptoir n'est plus valide.");
+  if (!response.ok) return fail((await getTranslations("operator.line.errors"))("counterLinkGone"));
   const { token } = (await response.json()) as { token: string };
   return ok(token);
 }
 
-/** La ligne du jour du service (liste initiale et rafraîchissements). */
+/** The service's line for today (first list and refreshes). */
 export async function fetchDayLineAction(
   auth: DayLineAuth,
 ): Promise<ActionResult<DayLineView>> {
   const response = await fetchFor(auth, basePath(auth));
+  const t = await getTranslations("operator.line.errors");
   return fromResponse<DayLineView>(response, {
-    404: auth.kind === "staff" ? "Ce lien de comptoir n'est plus valide." : "Ce service est introuvable.",
-    default: "Impossible de charger la ligne du jour.",
+    404: auth.kind === "staff" ? t("counterLinkGone") : t("serviceNotFound"),
+    default: t("loadFailed"),
   });
 }
 
-/** Appelle la personne suivante ; ticket nul si personne n'attend. */
+/** Calls the next person; a null ticket when nobody is waiting. */
 export async function nextAction(auth: DayLineAuth): Promise<ActionResult<{ ticket: LineTicket | null }>> {
   const response = await fetchFor(auth, `${basePath(auth)}/next`, {
     method: "POST",
   });
-  return fromResponse<{ ticket: LineTicket | null }>(response, lineMessages(auth.kind === "staff"));
+  return fromResponse<{ ticket: LineTicket | null }>(response, await lineMessages(auth.kind === "staff"));
 }
 
-/** Inscrit un sans-rendez-vous au comptoir ; renvoie la ligne actualisée. */
+/** Adds a walk-in at the counter; returns the updated line. */
 export async function walkInAction(
   auth: DayLineAuth,
   input: WalkInInput,
@@ -88,13 +89,14 @@ export async function walkInAction(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
+  const t = await getTranslations("operator.line.errors");
   return fromResponse<DayLineView>(response, {
-    409: "Ce service n'accueille pas de sans-rendez-vous.",
-    default: "L'inscription a échoué. Réessayez.",
+    409: t("walkInClosed"),
+    default: t("walkInFailed"),
   });
 }
 
-/** Transition d'une entrée de la ligne : arrivée, appel, prise en charge, fin, absent. */
+/** Moves a line entry on: arrived, called, being served, done, no-show. */
 export async function transitionAction(
   auth: DayLineAuth,
   ticketCode: string,
@@ -103,7 +105,7 @@ export async function transitionAction(
   const response = await fetchFor(auth, `${basePath(auth)}/tickets/${ticketCode}/${transition}`, {
     method: "POST",
   });
-  return fromResponse<LineActionResult>(response, lineMessages(auth.kind === "staff"));
+  return fromResponse<LineActionResult>(response, await lineMessages(auth.kind === "staff"));
 }
 
 /** Records that the client paid the organization (JIKU-110), by [method]. */
@@ -117,21 +119,22 @@ export async function markPaidAction(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ method }),
   });
-  return fromResponse<LineTicket>(response, lineMessages(auth.kind === "staff"));
+  return fromResponse<LineTicket>(response, await lineMessages(auth.kind === "staff"));
 }
 
-/** Demandes de rendez-vous en attente de confirmation (mode « sur demande »). */
+/** Appointment requests waiting for a decision (on-request mode). */
 export async function fetchPendingRequestsAction(
   auth: DayLineAuth,
 ): Promise<ActionResult<PendingAppointmentRequest[]>> {
   const response = await fetchFor(auth, `${basePath(auth)}/requests`);
+  const t = await getTranslations("operator.line.errors");
   return fromResponse<PendingAppointmentRequest[]>(response, {
-    404: "Aucune demande trouvée.",
-    default: "Impossible de charger les demandes en attente.",
+    404: t("requestsNotFound"),
+    default: t("requestsFailed"),
   });
 }
 
-/** Confirme une demande : le rendez-vous et son billet sont émis. */
+/** Confirms a request: the appointment and its ticket are issued. */
 export async function acceptPendingRequestAction(
   auth: DayLineAuth,
   requestId: string,
@@ -139,7 +142,7 @@ export async function acceptPendingRequestAction(
   return decidePendingRequest(auth, requestId, "accept");
 }
 
-/** Refuse une demande : le créneau se libère. */
+/** Declines a request: the time is freed. */
 export async function rejectPendingRequestAction(
   auth: DayLineAuth,
   requestId: string,
@@ -147,7 +150,7 @@ export async function rejectPendingRequestAction(
   return decidePendingRequest(auth, requestId, "reject");
 }
 
-/** Les endpoints de décision ne renvoient pas de corps : réponse → résultat direct. */
+/** The decision endpoints return no body. */
 async function decidePendingRequest(
   auth: DayLineAuth,
   requestId: string,
@@ -157,10 +160,8 @@ async function decidePendingRequest(
     method: "POST",
   });
   if (response.ok) return ok(null);
+  const t = await getTranslations("operator.line.errors");
+  if (response.status === 409) return fail(t("requestConflict"));
   reportApiError(response);
-  return fail(
-    response.status === 409
-      ? "Cette demande vient d'être traitée par un autre poste — la liste est à jour."
-      : "L'action a échoué. Réessayez.",
-  );
+  return fail(t("failed"));
 }

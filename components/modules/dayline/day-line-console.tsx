@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import { useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { FormFieldError } from "@/components/shared";
 import {
   markPaidAction,
   nextAction,
@@ -36,50 +39,18 @@ import type {
   LineStatus,
   LineTicket,
   LineTransition,
-  TicketKind,
   WalkInInput,
 } from "@/components/modules/dayline/schema";
+import { walkInSchema } from "@/components/modules/dayline/schema";
 import { useDayLine } from "@/components/modules/dayline/useDayLine";
 import { formatAmount } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 
-/** Caméra chargée paresseusement : le scan n'est qu'une façon secondaire de servir. */
+/** The camera loads lazily: scanning is only a second way to record an arrival. */
 const QrScanner = dynamic(
   () => import("@/components/shared/qr-scanner").then((mod) => mod.QrScanner),
   { ssr: false },
 );
-
-function formatTime(iso: string | null, zone: string): string {
-  if (!iso) return "—";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("fr-FR", { timeZone: zone, hour: "2-digit", minute: "2-digit" }).format(d);
-}
-
-function formatDateLabel(date: string, zone: string): string {
-  const d = new Date(`${date}T12:00:00`);
-  if (Number.isNaN(d.getTime())) return date;
-  return new Intl.DateTimeFormat("fr-FR", {
-    timeZone: zone,
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  }).format(d);
-}
-
-const STATUS_TEXT: Record<LineStatus, string> = {
-  ISSUED: "pas encore arrivé",
-  WAITING: "en attente",
-  CALLED: "appelé",
-  IN_SERVICE: "en cours",
-  DONE: "terminé",
-  NO_SHOW: "absent",
-};
-
-const KIND_TEXT: Record<TicketKind, string> = {
-  APPOINTMENT: "RDV",
-  WALK_IN: "sans RDV",
-};
 
 function dotClass(status: LineStatus): string {
   switch (status) {
@@ -98,7 +69,7 @@ function dotClass(status: LineStatus): string {
   }
 }
 
-/** Action principale offerte par l'état de l'entrée (rien si déjà terminée). */
+/** The main action an entry's state offers (none once it is over). */
 function rowAction(status: LineStatus): LineTransition | null {
   switch (status) {
     case "ISSUED":
@@ -114,20 +85,14 @@ function rowAction(status: LineStatus): LineTransition | null {
   }
 }
 
-function rowActionLabel(transition: LineTransition): string {
-  switch (transition) {
-    case "arrive":
-      return "Arrivée";
-    case "call":
-      return "Appeler";
-    case "present":
-      return "Prendre en charge";
-    case "finish":
-      return "Terminer";
-    case "no-show":
-      return "Absent";
-  }
-}
+/** The message key of each transition's button. */
+const ACTION_KEY = {
+  arrive: "arrive",
+  call: "call",
+  present: "present",
+  finish: "finish",
+  "no-show": "noShow",
+} as const satisfies Record<LineTransition, string>;
 
 interface DayLineConsoleProps {
   auth: DayLineAuth;
@@ -135,11 +100,10 @@ interface DayLineConsoleProps {
 }
 
 /**
- * Console de ligne du jour (JIKU-88) : l'écran central du comptoir. Une seule
- * liste mêle rendez-vous et sans-rendez-vous, le geste unique SUIVANT appelle la
- * personne selon la règle, chaque ligne offre la transition correspondant à son
- * état, et le scan du QR est une seconde façon d'enregistrer l'arrivée. Utilisable
- * d'une main au comptoir, sur téléphone.
+ * The day-line console (JIKU-88), the counter's main screen. One list mixes
+ * appointments and walk-ins, the single NEXT gesture calls the next person by
+ * the rule, each row offers the transition its state allows, and scanning the
+ * QR is a second way to record an arrival. Usable one-handed on a phone.
  */
 export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
   const { view, refresh } = useDayLine(auth, initial);
@@ -147,8 +111,12 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
   const [walkInOpen, setWalkInOpen] = useState(false);
   const [scannerOpen, setScannerOpen] = useState(false);
   const [scanLocked, setScanLocked] = useState(false);
+  const t = useTranslations("operator.line");
   const c = useTranslations("operator.collect");
   const locale = useLocale();
+  const format = useFormatter();
+  const time = (iso: string | null) =>
+    iso ? format.dateTime(new Date(iso), { timeZone: view.timezone, hour: "2-digit", minute: "2-digit" }) : "—";
 
   async function act(ticket: LineTicket, transition: LineTransition) {
     const key = `${ticket.ticketCode}:${transition}`;
@@ -156,7 +124,7 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
     const result = await transitionAction(auth, ticket.ticketCode, transition);
     setBusy(null);
     if (!result.ok) {
-      toast.error(result.error ?? "L'action a échoué.");
+      toast.error(result.error);
       return;
     }
     await refresh();
@@ -167,7 +135,7 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
     const result = await markPaidAction(auth, ticket.ticketCode, method);
     setBusy(null);
     if (!result.ok) {
-      toast.error(result.error ?? "L'action a échoué.");
+      toast.error(result.error);
       return;
     }
     toast.success(c("done"));
@@ -179,25 +147,26 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
     const result = await nextAction(auth);
     setBusy(null);
     if (!result.ok) {
-      toast.error(result.error ?? "Impossible d'appeler la personne suivante.");
+      toast.error(result.error);
       return;
     }
     if (!result.data.ticket) {
-      toast("Personne en attente pour l'instant.");
+      toast(t("toasts.nobody"));
       return;
     }
-    toast.success(`${result.data.ticket.clientName ?? "La personne suivante"} est appelé(e).`);
+    const name = result.data.ticket.clientName;
+    toast.success(name ? t("toasts.called", { name }) : t("toasts.calledNext"));
     await refresh();
   }
 
   async function onWalkIn(input: WalkInInput) {
     const result = await walkInAction(auth, input);
     if (!result.ok) {
-      toast.error(result.error ?? "L'inscription a échoué.");
+      toast.error(result.error);
       return false;
     }
     setWalkInOpen(false);
-    toast.success(`${input.clientName} a rejoint la file.`);
+    toast.success(t("toasts.joined", { name: input.clientName }));
     await refresh();
     return true;
   }
@@ -208,9 +177,9 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
     transitionAction(auth, code, "arrive")
       .then(async (result) => {
         if (!result.ok) {
-          toast.error(result.error ?? "Ce ticket n'a pas pu être pris en charge.");
+          toast.error(result.error);
         } else {
-          toast.success("Arrivée enregistrée.");
+          toast.success(t("toasts.arrived"));
         }
         await refresh();
       })
@@ -224,16 +193,23 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
     <div className="bg-zinc-50 dark:bg-zinc-950">
       <header className="mx-auto flex w-full max-w-2xl items-start justify-between gap-3 px-4 pt-6">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Ligne du jour</h1>
+          <h1 className="text-xl font-semibold tracking-tight">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{view.serviceName}</p>
-          <p className="text-xs capitalize text-muted-foreground">{formatDateLabel(view.date, view.timezone)}</p>
+          <p className="text-xs capitalize text-muted-foreground">
+            {format.dateTime(new Date(`${view.date}T12:00:00Z`), {
+              timeZone: "UTC",
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+            })}
+          </p>
         </div>
         <div className="flex shrink-0 gap-2">
           <Button variant="outline" size="sm" onClick={() => setScannerOpen(true)}>
-            Scanner
+            {t("scan")}
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setWalkInOpen(true)}>
-            + Sans RDV
+            {t("walkIn")}
           </Button>
         </div>
       </header>
@@ -241,7 +217,7 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
       <main className="mx-auto flex w-full max-w-2xl flex-col gap-2 px-4 pb-8 pt-4">
         {view.entries.length === 0 ? (
           <div className="rounded-2xl border border-dashed p-10 text-center text-sm text-muted-foreground">
-            Personne sur la ligne pour l&apos;instant.
+            {t("empty")}
           </div>
         ) : (
           view.entries.map((entry) => (
@@ -255,22 +231,22 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
               <div className="flex min-w-0 flex-1 items-center gap-3">
                 <div className="w-14 shrink-0 text-center">
                   <div className="text-lg font-semibold tabular-nums">
-                    {formatTime(entry.startsAt ?? entry.arrivedAt, view.timezone)}
+                    {time(entry.startsAt ?? entry.arrivedAt)}
                   </div>
                   {entry.dayRank != null ? (
-                    <div className="text-[11px] text-muted-foreground">n°{entry.dayRank}</div>
+                    <div className="text-[11px] text-muted-foreground">{t("rank", { rank: entry.dayRank })}</div>
                   ) : null}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <span className={cn("h-2 w-2 shrink-0 rounded-full", dotClass(entry.status))} />
-                    <p className="truncate font-medium">{entry.clientName ?? "Client"}</p>
+                    <p className="truncate font-medium">{entry.clientName ?? t("client")}</p>
                   </div>
                   <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
                     <Badge variant={entry.kind === "APPOINTMENT" ? "default" : "secondary"}>
-                      {KIND_TEXT[entry.kind]}
+                      {t(`kind.${entry.kind}`)}
                     </Badge>
-                    <span>{STATUS_TEXT[entry.status]}</span>
+                    <span>{t(`status.${entry.status}`)}</span>
                     {entry.paymentStatus === "PAID" ? <Badge variant="outline">{c("paid")}</Badge> : null}
                     {entry.paymentStatus === "DUE" || entry.paymentStatus === "DUE_AFTER_SERVICE" ? (
                       <span className="font-medium text-orange-700 dark:text-orange-400">
@@ -302,7 +278,7 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
                 ) : null}
                 {entry.status === "CALLED" ? (
                   <Button size="sm" variant="outline" onClick={() => act(entry, "no-show")} disabled={busy !== null}>
-                    Absent
+                    {t("actions.noShow")}
                   </Button>
                 ) : null}
                 {rowAction(entry.status) ? (
@@ -314,7 +290,7 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
                     {busy === `${entry.ticketCode}:${rowAction(entry.status)}` ? (
                       <Spinner className="h-4 w-4" />
                     ) : (
-                      rowActionLabel(rowAction(entry.status) as LineTransition)
+                      t(`actions.${ACTION_KEY[rowAction(entry.status) as LineTransition]}`)
                     )}
                   </Button>
                 ) : null}
@@ -323,15 +299,15 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
           ))
         )}
 
-        {/* SUIVANT : le geste unique, collant au bas de la colonne, sans jamais
-            chevaucher la barre latérale ni le contenu qui suit. */}
+        {/* NEXT, the single gesture: sticks to the bottom of the column without
+            covering the sidebar or the content that follows. */}
         <div className="sticky bottom-4 z-40 mt-2">
           <Button
             className="h-12 w-full text-sm font-semibold shadow-lg"
             onClick={() => void onNext()}
             disabled={busy !== null}
           >
-            {busy === "next" ? <Spinner className="h-5 w-5" /> : "SUIVANT"}
+            {busy === "next" ? <Spinner className="h-5 w-5" /> : t("next")}
           </Button>
         </div>
       </main>
@@ -359,61 +335,76 @@ function WalkInDialog({
   onOpenChange: (open: boolean) => void;
   onSubmit: (input: WalkInInput) => Promise<boolean>;
 }) {
-  const [clientName, setClientName] = useState("");
-  const [clientPhone, setClientPhone] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const t = useTranslations("operator.line.walkInDialog");
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<WalkInInput>({
+    resolver: zodResolver(walkInSchema),
+    mode: "onTouched",
+    defaultValues: { clientName: "", clientPhone: "" },
+  });
 
-  async function submit() {
-    if (clientName.trim().length < 2 || clientPhone.trim().length < 6) return;
-    setSubmitting(true);
-    const ok = await onSubmit({ clientName: clientName.trim(), clientPhone: clientPhone.trim() });
-    setSubmitting(false);
-    if (ok) {
-      setClientName("");
-      setClientPhone("");
-    }
+  async function submit(values: WalkInInput) {
+    if (await onSubmit(values)) reset();
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Ajouter un sans-rendez-vous</DialogTitle>
-          <DialogDescription>Le client est au comptoir : il rejoint la file immédiatement.</DialogDescription>
-        </DialogHeader>
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="walkin-name">Nom du client</FieldLabel>
-            <Input
-              id="walkin-name"
-              value={clientName}
-              onChange={(e) => setClientName(e.target.value)}
-              autoFocus
-              placeholder="Prénom et nom"
+        <form onSubmit={handleSubmit(submit)} noValidate className="flex flex-col gap-4">
+          <DialogHeader>
+            <DialogTitle>{t("title")}</DialogTitle>
+            <DialogDescription>{t("text")}</DialogDescription>
+          </DialogHeader>
+          <FieldGroup>
+            <Controller
+              control={control}
+              name="clientName"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="walkin-name">{t("name")}</FieldLabel>
+                  <Input
+                    {...field}
+                    id="walkin-name"
+                    autoFocus
+                    placeholder={t("namePlaceholder")}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  <FormFieldError error={fieldState.error} />
+                </Field>
+              )}
             />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="walkin-phone">Téléphone</FieldLabel>
-            <Input
-              id="walkin-phone"
-              value={clientPhone}
-              onChange={(e) => setClientPhone(e.target.value)}
-              type="tel"
-              placeholder="+224 6XX XX XX XX"
+            <Controller
+              control={control}
+              name="clientPhone"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="walkin-phone">{t("phone")}</FieldLabel>
+                  <Input
+                    {...field}
+                    id="walkin-phone"
+                    type="tel"
+                    inputMode="tel"
+                    placeholder="+224 6XX XX XX XX"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  <FormFieldError error={fieldState.error} />
+                </Field>
+              )}
             />
-          </Field>
-        </FieldGroup>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={submitting}>
-            Annuler
-          </Button>
-          <Button
-            onClick={() => void submit()}
-            disabled={submitting || clientName.trim().length < 2 || clientPhone.trim().length < 6}
-          >
-            {submitting ? <Spinner className="h-4 w-4" /> : "Ajouter à la file"}
-          </Button>
-        </DialogFooter>
+          </FieldGroup>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
+              {t("cancel")}
+            </Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? <Spinner className="h-4 w-4" /> : t("submit")}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
@@ -430,18 +421,19 @@ function ScannerDialog({
   locked: boolean;
   onDetect: (code: string) => void;
 }) {
+  const t = useTranslations("operator.line.scanner");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>Scanner le ticket du client</DialogTitle>
-          <DialogDescription>L&apos;arrivée est enregistrée, comme le bouton « Arrivée ».</DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("text")}</DialogDescription>
         </DialogHeader>
         {open ? <QrScanner active={!locked} onDetect={onDetect} /> : null}
-        {locked ? <p className="text-center text-sm text-muted-foreground">Arrivée enregistrée…</p> : null}
+        {locked ? <p className="text-center text-sm text-muted-foreground">{t("saving")}</p> : null}
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Fermer
+            {t("close")}
           </Button>
         </DialogFooter>
       </DialogContent>

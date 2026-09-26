@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { Inbox } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -33,11 +34,10 @@ import type {
 const REFRESH_MS = 15_000;
 
 /**
- * Demandes de rendez-vous en attente de confirmation (mode « sur demande », JIKU-88).
- * Une demande bloque son créneau tant qu'aucun poste n'a décidé ; la confirmer émet
- * le billet (la personne rejoint la ligne), la refuser libère la case. La liste
- * initiale vient du serveur ; elle est ensuite actualisée car plusieurs comptoirs
- * peuvent agir sur la même file.
+ * Appointment requests waiting for a decision (on-request mode, JIKU-88). A
+ * request holds its time until a counter decides: confirming issues the ticket
+ * (the person joins the line), declining frees the time. The first list comes
+ * from the server, then refreshes, since several counters work the same line.
  */
 export function PendingRequests({
   auth,
@@ -48,6 +48,8 @@ export function PendingRequests({
   timezone: string;
   initial: PendingAppointmentRequest[];
 }) {
+  const t = useTranslations("operator.line.requests");
+  const format = useFormatter();
   const [requests, setRequests] = useState<PendingAppointmentRequest[]>(initial);
   const [busyId, setBusyId] = useState<string | null>(null);
 
@@ -82,17 +84,15 @@ export function PendingRequests({
       toast.error(result.error);
       return;
     }
-    toast.success(verb === "accept" ? "Rendez-vous confirmé." : "Demande refusée.");
+    toast.success(verb === "accept" ? t("accepted") : t("rejected"));
     await refresh();
   }
 
   return (
     <Card className="mt-6">
       <CardHeader>
-        <CardTitle>Demandes en attente</CardTitle>
-        <CardDescription>
-          Rendez-vous demandés en mode sur demande, en attente de votre décision.
-        </CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("text")}</CardDescription>
         {requests.length > 0 ? (
           <CardAction>
             <Badge variant="outline">{requests.length}</Badge>
@@ -106,10 +106,8 @@ export function PendingRequests({
               <EmptyMedia variant="icon">
                 <Inbox />
               </EmptyMedia>
-              <EmptyTitle>Aucune demande</EmptyTitle>
-              <EmptyDescription>
-                Aucune demande de rendez-vous en attente.
-              </EmptyDescription>
+              <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+              <EmptyDescription>{t("emptyText")}</EmptyDescription>
             </EmptyHeader>
           </Empty>
         ) : (
@@ -119,10 +117,18 @@ export function PendingRequests({
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-sm font-medium">
-                      {request.clientName ?? "Client"} · {request.clientPhone ?? "sans téléphone"}
+                      {request.clientName ?? "—"} · {request.clientPhone ?? t("noPhone")}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {formatSlot(request.startsAt, timezone)} — en attente de confirmation
+                      {t("awaiting", {
+                        slot: format.dateTime(new Date(request.startsAt), {
+                          timeZone: timezone || "UTC",
+                          day: "numeric",
+                          month: "short",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }),
+                      })}
                     </p>
                   </div>
                   <div className="flex shrink-0 gap-2">
@@ -132,14 +138,14 @@ export function PendingRequests({
                       disabled={busyId === request.id}
                       onClick={() => decide(request.id, "reject")}
                     >
-                      Refuser
+                      {t("reject")}
                     </Button>
                     <Button
                       size="sm"
                       disabled={busyId === request.id}
                       onClick={() => decide(request.id, "accept")}
                     >
-                      Confirmer
+                      {t("accept")}
                     </Button>
                   </div>
                 </div>
@@ -150,14 +156,4 @@ export function PendingRequests({
       </CardContent>
     </Card>
   );
-}
-
-function formatSlot(startIso: string, timezone: string): string {
-  return new Intl.DateTimeFormat("fr-FR", {
-    timeZone: timezone || "UTC",
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(startIso));
 }

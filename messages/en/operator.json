@@ -84,5 +84,90 @@
       "invalid": "Check the name and choose at least one action.",
       "failed": "We couldn't save the operator. Please try again."
     }
+  },
+  "line": {
+    "title": "Today's line",
+    "scan": "Scan",
+    "walkIn": "+ Walk-in",
+    "empty": "Nobody on the line yet.",
+    "next": "NEXT",
+    "client": "Client",
+    "rank": "#{rank}",
+    "status": {
+      "ISSUED": "not arrived yet",
+      "WAITING": "waiting",
+      "CALLED": "called",
+      "IN_SERVICE": "being served",
+      "DONE": "done",
+      "NO_SHOW": "no-show"
+    },
+    "kind": {
+      "APPOINTMENT": "Appt.",
+      "WALK_IN": "Walk-in"
+    },
+    "actions": {
+      "arrive": "Arrived",
+      "call": "Call",
+      "present": "Start",
+      "finish": "Finish",
+      "noShow": "No-show"
+    },
+    "toasts": {
+      "failed": "The action failed.",
+      "nobody": "Nobody is waiting right now.",
+      "called": "{name} has been called.",
+      "calledNext": "The next person has been called.",
+      "joined": "{name} joined the line.",
+      "arrived": "Arrival recorded."
+    },
+    "walkInDialog": {
+      "title": "Add a walk-in",
+      "text": "The client is at the counter: they join the line right away.",
+      "name": "Client name",
+      "namePlaceholder": "First and last name",
+      "phone": "Phone",
+      "cancel": "Cancel",
+      "submit": "Add to the line"
+    },
+    "scanner": {
+      "title": "Scan the client's ticket",
+      "text": "This records the arrival, like the \"Arrived\" button.",
+      "saving": "Recording the arrival…",
+      "close": "Close"
+    },
+    "unavailable": {
+      "title": "Today's line is unavailable",
+      "notFound": "This service does not exist or is not yours.",
+      "failed": "Today's line could not load. Try again in a moment.",
+      "staffTitle": "Counter link unavailable",
+      "staffNotFound": "This link was revoked or is no longer valid. Ask the organizer for a new one."
+    },
+    "requests": {
+      "title": "Pending requests",
+      "text": "Appointments requested in on-request mode, waiting for your decision.",
+      "emptyTitle": "No requests",
+      "emptyText": "No appointment requests are waiting.",
+      "noPhone": "no phone",
+      "awaiting": "{slot} — awaiting confirmation",
+      "reject": "Decline",
+      "accept": "Confirm",
+      "accepted": "Appointment confirmed.",
+      "rejected": "Request declined."
+    },
+    "errors": {
+      "conflict": "Another counter just handled this entry — the list is up to date.",
+      "unpaid": "This client has not paid yet: record their payment first.",
+      "linkGone": "This link is no longer valid.",
+      "notFound": "This entry does not exist or does not belong to this service.",
+      "failed": "The action failed. Try again.",
+      "loadFailed": "Today's line could not load.",
+      "serviceNotFound": "This service cannot be found.",
+      "counterLinkGone": "This counter link is no longer valid.",
+      "walkInClosed": "This service does not take walk-ins.",
+      "walkInFailed": "The walk-in could not be added. Try again.",
+      "requestsNotFound": "No requests found.",
+      "requestsFailed": "Pending requests could not load.",
+      "requestConflict": "Another counter just handled this request — the list is up to date."
+    }
   }
 }

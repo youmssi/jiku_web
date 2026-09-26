@@ -18,10 +18,10 @@ export interface LineTicket {
   status: LineStatus;
   clientName: string | null;
   clientPhone: string | null;
-  /** Créneau, pour un rendez-vous ; nul pour un sans-rendez-vous. */
+  /** The booked time for an appointment; null for a walk-in. */
   startsAt: string | null;
   endsAt: string | null;
-  /** Heure d'arrivée au comptoir, renseignée dès l'entrée en attente. */
+  /** When the client arrived at the counter, set once they are waiting. */
   arrivedAt: string | null;
   dayRank: number | null;
   /** What the client owes the organization (JIKU-110); service cannot start while DUE. */
@@ -41,21 +41,21 @@ export interface DayLineView {
   serviceId: string;
   serviceName: string;
   timezone: string;
-  /** Jour de la ligne, dans le fuseau du service. */
+  /** The line's day, in the service's timezone. */
   date: string;
   entries: LineTicket[];
 }
 
-/** Une entrée ne se modifie que dans un sens précis ; le bouton découle de l'état. */
+/** An entry only moves one way; its button follows from its state. */
 export type LineTransition = "arrive" | "call" | "present" | "finish" | "no-show";
 
-/** Réponse d'une action réussie : la transition appliquée et la ligne à jour. */
+/** A successful action: the transition applied and the updated entry. */
 export interface LineActionResult {
   outcome: "OK";
   ticket: LineTicket;
 }
 
-/** Qui ouvre la console : l'organisateur connecté, ou le personnel par son lien. */
+/** Who opens the console: the signed-in organizer, or staff through their link. */
 export type DayLineAuth =
   | { kind: "organizer"; serviceId: string }
   /**
@@ -64,17 +64,18 @@ export type DayLineAuth =
    */
   | { kind: "staff"; base: string };
 
+/** A walk-in added at the counter; messages are `common.validation` keys. */
 export const walkInSchema = z.object({
-  clientName: z.string().trim().min(2, "Indiquez le nom du client"),
-  clientPhone: z.string().trim().min(6, "Indiquez un numéro valide"),
+  clientName: z.string().trim().min(1, "required").min(2, "tooShort").max(120, "tooLong"),
+  clientPhone: z.string().trim().min(1, "required").min(6, "phone").max(32, "tooLong"),
 });
 
 export type WalkInInput = z.infer<typeof walkInSchema>;
 
 /**
- * Demande de rendez-vous en attente de confirmation (mode « sur demande », JIKU-88) :
- * la cliente a réservé un créneau mais aucun billet n'est émis tant qu'un poste
- * (organisateur ou comptoir) ne l'a pas confirmée ou refusée.
+ * An appointment request waiting for a decision (on-request mode, JIKU-88): the
+ * client booked a time, but no ticket is issued until a counter or the organizer
+ * confirms or declines it.
  */
 export interface PendingAppointmentRequest {
   id: string;

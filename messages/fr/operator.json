@@ -84,5 +84,90 @@
       "invalid": "Vérifiez le nom et choisissez au moins une action.",
       "failed": "Impossible d'enregistrer l'opérateur. Réessayez."
     }
+  },
+  "line": {
+    "title": "Ligne du jour",
+    "scan": "Scanner",
+    "walkIn": "+ Sans RDV",
+    "empty": "Personne sur la ligne pour l'instant.",
+    "next": "SUIVANT",
+    "client": "Client",
+    "rank": "n°{rank}",
+    "status": {
+      "ISSUED": "pas encore arrivé",
+      "WAITING": "en attente",
+      "CALLED": "appelé",
+      "IN_SERVICE": "en cours",
+      "DONE": "terminé",
+      "NO_SHOW": "absent"
+    },
+    "kind": {
+      "APPOINTMENT": "RDV",
+      "WALK_IN": "sans RDV"
+    },
+    "actions": {
+      "arrive": "Arrivée",
+      "call": "Appeler",
+      "present": "Prendre en charge",
+      "finish": "Terminer",
+      "noShow": "Absent"
+    },
+    "toasts": {
+      "failed": "L'action a échoué.",
+      "nobody": "Personne en attente pour l'instant.",
+      "called": "{name} est appelé(e).",
+      "calledNext": "La personne suivante est appelée.",
+      "joined": "{name} a rejoint la file.",
+      "arrived": "Arrivée enregistrée."
+    },
+    "walkInDialog": {
+      "title": "Ajouter un sans-rendez-vous",
+      "text": "Le client est au comptoir : il rejoint la file immédiatement.",
+      "name": "Nom du client",
+      "namePlaceholder": "Prénom et nom",
+      "phone": "Téléphone",
+      "cancel": "Annuler",
+      "submit": "Ajouter à la file"
+    },
+    "scanner": {
+      "title": "Scanner le ticket du client",
+      "text": "L'arrivée est enregistrée, comme le bouton « Arrivée ».",
+      "saving": "Enregistrement de l'arrivée…",
+      "close": "Fermer"
+    },
+    "unavailable": {
+      "title": "Ligne du jour indisponible",
+      "notFound": "Ce service est introuvable ou ne vous appartient pas.",
+      "failed": "Impossible de charger la ligne du jour. Réessayez dans un instant.",
+      "staffTitle": "Lien de comptoir indisponible",
+      "staffNotFound": "Ce lien a été révoqué ou n'est plus valide. Demandez-en un nouveau à l'organisateur."
+    },
+    "requests": {
+      "title": "Demandes en attente",
+      "text": "Rendez-vous demandés en mode sur demande, en attente de votre décision.",
+      "emptyTitle": "Aucune demande",
+      "emptyText": "Aucune demande de rendez-vous en attente.",
+      "noPhone": "sans téléphone",
+      "awaiting": "{slot} — en attente de confirmation",
+      "reject": "Refuser",
+      "accept": "Confirmer",
+      "accepted": "Rendez-vous confirmé.",
+      "rejected": "Demande refusée."
+    },
+    "errors": {
+      "conflict": "Cette entrée vient d'être traitée par un autre poste — la liste est à jour.",
+      "unpaid": "Ce client n'a pas encore réglé : enregistrez d'abord son paiement.",
+      "linkGone": "Ce lien n'est plus valide.",
+      "notFound": "Cette entrée n'existe pas ou n'appartient pas à ce service.",
+      "failed": "L'action a échoué. Réessayez.",
+      "loadFailed": "Impossible de charger la ligne du jour.",
+      "serviceNotFound": "Ce service est introuvable.",
+      "counterLinkGone": "Ce lien de comptoir n'est plus valide.",
+      "walkInClosed": "Ce service n'accueille pas de sans-rendez-vous.",
+      "walkInFailed": "L'inscription a échoué. Réessayez.",
+      "requestsNotFound": "Aucune demande trouvée.",
+      "requestsFailed": "Impossible de charger les demandes en attente.",
+      "requestConflict": "Cette demande vient d'être traitée par un autre poste — la liste est à jour."
+    }
   }
 }
