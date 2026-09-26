@@ -1524,6 +1524,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/billing/whatsapp-number/checkout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["checkoutOwnNumber"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/billing/subscription/request": {
         parameters: {
             query?: never;
@@ -1534,6 +1550,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["request_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/subscription/checkout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["checkout"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1598,6 +1630,38 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["requestPackExtra"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/pack/extra/checkout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["checkoutPackExtra"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/pack/checkout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["checkoutPack"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2884,6 +2948,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/billing/payments/{paymentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["status_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/billing/payments/{paymentId}/receipt": {
         parameters: {
             query?: never;
@@ -3035,7 +3115,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["status_1"];
+        get: operations["status_2"];
         put?: never;
         post?: never;
         delete: operations["cancel_2"];
@@ -4958,6 +5038,26 @@ export interface components {
             status?: string;
             /** Format: date-time */
             createdAt?: string;
+        };
+        PaymentStatusView: {
+            /** Format: uuid */
+            paymentId?: string;
+            kind?: string;
+            tier?: string;
+            /** Format: uuid */
+            eventId?: string | null;
+            /** Format: int32 */
+            months?: number | null;
+            /** Format: int64 */
+            guests?: number | null;
+            /** Format: int64 */
+            amountMinor?: number;
+            currency?: string;
+            status?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
         };
         PackView: {
             active?: boolean;
@@ -8021,6 +8121,30 @@ export interface operations {
             };
         };
     };
+    checkoutOwnNumber: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PaymentInitiationResult"];
+                };
+            };
+        };
+    };
     request_1: {
         parameters: {
             query?: never;
@@ -8041,6 +8165,30 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ManualPaymentInstructions"];
+                };
+            };
+        };
+    };
+    checkout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscriptionRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PaymentInitiationResult"];
                 };
             };
         };
@@ -8139,6 +8287,54 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ManualPaymentInstructions"];
+                };
+            };
+        };
+    };
+    checkoutPackExtra: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackExtraRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PaymentInitiationResult"];
+                };
+            };
+        };
+    };
+    checkoutPack: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PaymentInitiationResult"];
                 };
             };
         };
@@ -10146,6 +10342,28 @@ export interface operations {
             };
         };
     };
+    status_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                paymentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PaymentStatusView"];
+                };
+            };
+        };
+    };
     receipt: {
         parameters: {
             query?: never;
@@ -10341,7 +10559,7 @@ export interface operations {
             };
         };
     };
-    status_1: {
+    status_2: {
         parameters: {
             query?: never;
             header?: never;

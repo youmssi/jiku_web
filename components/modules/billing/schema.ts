@@ -81,3 +81,18 @@ export interface SubscriptionRequestInput {
   plan: string;
   months: number;
 }
+
+// ─── Online checkout (JIKU-165) ──────────────────────────────────────────────
+
+/** A started online payment: the provider page to send the payer to. */
+export type PaymentInitiationResult = Schema<"PaymentInitiationResult">;
+/** Where a payment stands, read by the page the payer returns to. */
+export type PaymentStatusView = Schema<"PaymentStatusView">;
+
+/** Everything that can be paid online, and what the backend needs to price it. */
+export type CheckoutTarget =
+  | { kind: "tier"; eventId: string; tier: string }
+  | { kind: "subscription"; plan: string; months: number }
+  | { kind: "pack"; months: number }
+  | { kind: "packExtra"; blocks: number }
+  | { kind: "ownNumber"; months: number };

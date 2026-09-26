@@ -18,6 +18,8 @@ export const ROUTES = {
   EVENTS: "/events",
   SERVICES: "/services",
   BILLING: "/billing",
+  /** Where the payment provider sends the payer back (JIKU-165). */
+  BILLING_RETURN: "/billing/return",
   SETTINGS: "/settings",
   OPERATORS: "/operators",
 } as const;

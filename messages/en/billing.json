@@ -203,5 +203,47 @@
       "included": "Your offer already includes your own WhatsApp number.",
       "failed": "We couldn't record your request. Please try again."
     }
+  },
+  "online": {
+    "pay": "Pay online",
+    "starting": "Opening payment…",
+    "errors": {
+      "forbidden": "Only workspace admins can pay.",
+      "unavailable": "This offer is not available for your workspace.",
+      "conflict": "This purchase is not possible right now: your current offer already covers it, or it needs an active Pack.",
+      "provider": "The payment service is not responding. Try again in a moment, or pay by transfer.",
+      "failed": "The payment could not start. Try again."
+    },
+    "return": {
+      "metaTitle": "Your payment",
+      "back": "Back to billing",
+      "pending": {
+        "title": "Confirming your payment",
+        "text": "We are waiting for the payment service to confirm. This page updates on its own."
+      },
+      "late": {
+        "title": "Confirmation is taking longer than usual",
+        "text": "The payment service has not confirmed yet. If you approved the payment, it will show in your history once confirmed; otherwise you can try again."
+      },
+      "paid": {
+        "title": "Payment confirmed",
+        "text": "Thank you! Your purchase is active."
+      },
+      "failed": {
+        "title": "Payment not completed",
+        "text": "The payment was declined or cancelled. You were not charged; you can try again."
+      },
+      "missing": {
+        "title": "Payment not found",
+        "text": "This link does not match any payment of your workspace."
+      },
+      "kind": {
+        "TIER": "{tier} capacity for your event",
+        "SUBSCRIPTION": "{tier} plan",
+        "PACK": "Organizer Pack",
+        "PACK_EXTRA": "Extra Pack guests",
+        "WHATSAPP_NUMBER": "Your own WhatsApp number"
+      }
+    }
   }
 }

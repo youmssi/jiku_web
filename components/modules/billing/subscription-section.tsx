@@ -14,6 +14,7 @@ import { formatAmount } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 import { requestSubscriptionAction } from "@/components/modules/billing/billing.service";
 import { ActivationInstructions } from "@/components/modules/billing/activation-instructions";
+import { PayOnlineButton } from "@/components/modules/billing/pay-online-button";
 import type {
   ManualPaymentInstructions,
   SubscriptionPlanOption,
@@ -29,10 +30,19 @@ const REMINDERS_LOW_SHARE = 0.8;
  * The organizer's services subscription (JIKU-90, priced per team since ADR 105):
  * the plan and what it costs for this team, a banner when a paid period ends
  * soon, is in grace, or when the team outgrew a free plan, and a request for a
- * prepayment of one month or a year (two months free) that follows the manual
- * Mobile Money flow.
+ * prepayment of one month or a year (two months free), paid online when offered
+ * or through the manual Mobile Money flow.
  */
-export function SubscriptionSection({ initial, nowIso }: { initial: SubscriptionView; nowIso: string }) {
+export function SubscriptionSection({
+  initial,
+  nowIso,
+  online,
+}: {
+  initial: SubscriptionView;
+  nowIso: string;
+  /** Online payment is offered next to the manual transfer (JIKU-165). */
+  online: boolean;
+}) {
   const t = useTranslations("billing.subscription");
   const locale = useLocale();
   const format = useFormatter();
@@ -172,9 +182,14 @@ export function SubscriptionSection({ initial, nowIso }: { initial: Subscription
 
           <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
             <p className="text-lg font-semibold">{total !== null ? t("total", { amount: money(total) }) : null}</p>
-            <Button onClick={submitRequest} disabled={isSaving || total === null}>
-              {isSaving ? t("requesting") : t("request")}
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button variant={online ? "outline" : "default"} onClick={submitRequest} disabled={isSaving || total === null}>
+                {isSaving ? t("requesting") : t("request")}
+              </Button>
+              {online ? (
+                <PayOnlineButton target={{ kind: "subscription", plan, months }} disabled={total === null} />
+              ) : null}
+            </div>
           </div>
         </div>
       ) : null}

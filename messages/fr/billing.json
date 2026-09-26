@@ -203,5 +203,47 @@
       "included": "Votre offre comprend déjà votre propre numéro WhatsApp.",
       "failed": "Impossible d'enregistrer votre demande. Réessayez."
     }
+  },
+  "online": {
+    "pay": "Payer en ligne",
+    "starting": "Ouverture du paiement…",
+    "errors": {
+      "forbidden": "Seuls les administrateurs de l'espace peuvent payer.",
+      "unavailable": "Cette offre n'est pas disponible pour votre espace.",
+      "conflict": "Cet achat n'est pas possible pour le moment : votre offre actuelle le couvre déjà, ou il demande un Pack actif.",
+      "provider": "Le service de paiement ne répond pas. Réessayez dans un instant, ou payez par virement.",
+      "failed": "Le paiement n'a pas pu démarrer. Réessayez."
+    },
+    "return": {
+      "metaTitle": "Votre paiement",
+      "back": "Retour à la facturation",
+      "pending": {
+        "title": "Paiement en cours de confirmation",
+        "text": "Nous attendons la confirmation du service de paiement. Cette page se met à jour toute seule."
+      },
+      "late": {
+        "title": "Confirmation plus longue que prévu",
+        "text": "Le service de paiement n'a pas encore confirmé. Si vous avez validé le paiement, il apparaîtra dans votre historique dès sa confirmation ; sinon, vous pouvez réessayer."
+      },
+      "paid": {
+        "title": "Paiement confirmé",
+        "text": "Merci ! Votre achat est actif."
+      },
+      "failed": {
+        "title": "Paiement non abouti",
+        "text": "Le paiement a été refusé ou annulé. Rien ne vous a été facturé ; vous pouvez réessayer."
+      },
+      "missing": {
+        "title": "Paiement introuvable",
+        "text": "Ce lien ne correspond à aucun paiement de votre espace."
+      },
+      "kind": {
+        "TIER": "Capacité {tier} pour votre événement",
+        "SUBSCRIPTION": "Formule {tier}",
+        "PACK": "Pack Organisateur",
+        "PACK_EXTRA": "Invités supplémentaires du Pack",
+        "WHATSAPP_NUMBER": "Votre propre numéro WhatsApp"
+      }
+    }
   }
 }

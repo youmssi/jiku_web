@@ -47,6 +47,14 @@ export function proxy(request: NextRequest): NextResponse {
   if (intlResponse.headers.get("location")) return intlResponse;
 
   const bareRoute = stripLocale(pathname);
+
+  // A payment provider may send the payer back with a cross-site form POST,
+  // which carries no SameSite=Lax session cookie. Answer it with a 303 to the
+  // same URL: the browser follows it as a top-level GET, cookie included.
+  if (request.method === "POST" && bareRoute === ROUTES.BILLING_RETURN) {
+    return NextResponse.redirect(request.nextUrl, 303);
+  }
+
   const isGuarded = GUARDED_PREFIXES.some(
     (p) => bareRoute === p || bareRoute.startsWith(`${p}/`),
   );

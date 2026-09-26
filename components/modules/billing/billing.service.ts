@@ -2,10 +2,13 @@
 
 import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
-import { reportApiError } from "@/lib/action-result";
+import { fail, ok, reportApiError, type ActionResult } from "@/lib/action-result";
 import type {
+  CheckoutTarget,
   InvoiceSummary,
   ManualPaymentInstructions,
+  PaymentInitiationResult,
+  PaymentStatusView,
   OwnWhatsAppNumberView,
   PackView,
   SubscriptionRequestInput,
@@ -178,4 +181,72 @@ export async function creditNoteAction(
     return { ok: false, error: t("creditFailed") };
   }
   return { ok: true, invoice: (await response.json()) as InvoiceSummary };
+}
+
+// ─── Online checkout (JIKU-165) ─────────────────────────────────────────────
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function checkoutRequest(target: CheckoutTarget): { path: string; body: unknown } {
+  switch (target.kind) {
+    case "tier":
+      if (!UUID.test(target.eventId)) throw new Error("Not an event id");
+      return { path: `/events/${target.eventId}/payments`, body: { tier: target.tier } };
+    case "subscription":
+      return { path: "/billing/subscription/checkout", body: { plan: target.plan, months: target.months } };
+    case "pack":
+      return { path: "/billing/pack/checkout", body: { months: target.months } };
+    case "packExtra":
+      return { path: "/billing/pack/extra/checkout", body: { blocks: target.blocks } };
+    case "ownNumber":
+      return { path: "/billing/whatsapp-number/checkout", body: { months: target.months } };
+  }
+}
+
+/**
+ * Starts an online payment with the platform's provider and returns the page to
+ * send the payer to. Nothing is granted here: the provider confirms the payment
+ * to the backend, and the return page reads the outcome.
+ */
+export async function checkoutAction(target: CheckoutTarget): Promise<ActionResult<string>> {
+  const { path, body } = checkoutRequest(target);
+  const response = await serverFetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const t = await getTranslations("billing.online.errors");
+  if (!response.ok) {
+    if (response.status >= 500) reportApiError(response);
+    if (response.status === 401 || response.status === 403) return fail(t("forbidden"));
+    if (response.status === 400) return fail(t("unavailable"));
+    if (response.status === 409) return fail(t("conflict"));
+    if (response.status === 502) return fail(t("provider"));
+    return fail(t("failed"));
+  }
+  const started = (await response.json()) as PaymentInitiationResult;
+  const url = started.instruction.type === "REDIRECT" ? safeUrl(started.instruction.value) : null;
+  if (!url) return fail(t("failed"));
+  return ok(url);
+}
+
+/** Only a web page is ever handed to the browser as a redirect. */
+function safeUrl(value: string): string | null {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Where one of the organization's payments stands; null when it is not theirs or does not exist. */
+export async function fetchPaymentStatusAction(paymentId: string): Promise<PaymentStatusView | null> {
+  if (!UUID.test(paymentId)) return null;
+  const response = await serverFetch(`/billing/payments/${paymentId}`);
+  if (!response.ok) {
+    if (response.status >= 500) reportApiError(response);
+    return null;
+  }
+  return (await response.json()) as PaymentStatusView;
 }

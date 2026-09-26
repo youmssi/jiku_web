@@ -6,7 +6,16 @@ export { InvoicesTable } from "./invoices-table";
 export { SubscriptionSection } from "./subscription-section";
 export { PackSection } from "./pack-section";
 export { OwnNumberSection } from "./own-number-section";
-export { fetchInvoicesAction, issueInvoiceAction, fetchSubscriptionAction, fetchPackAction, fetchOwnNumberAction } from "./billing.service";
+export { PayOnlineButton } from "./pay-online-button";
+export { PaymentReturn, PaymentReturnMissing } from "./payment-return";
+export {
+  fetchInvoicesAction,
+  issueInvoiceAction,
+  fetchSubscriptionAction,
+  fetchPackAction,
+  fetchOwnNumberAction,
+  fetchPaymentStatusAction,
+} from "./billing.service";
 export type {
   InvoiceSummary,
   ManualPaymentInstructions,
@@ -24,4 +33,6 @@ export type {
   SubscriptionMonthOption,
   SubscriptionStatus,
   SubscriptionRequestInput,
+  CheckoutTarget,
+  PaymentStatusView,
 } from "./schema";

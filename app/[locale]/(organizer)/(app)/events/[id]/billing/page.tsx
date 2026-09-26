@@ -2,6 +2,7 @@ import { localeRedirect } from "@/i18n/redirect";
 import { serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 import { BillingView } from "@/components/modules/billing";
+import { isOnlinePaymentEnabled } from "@/components/modules/billing/server";
 import { getOrganizerContext } from "@/components/modules/identity/server";
 import type {
   EventTierQuote,
@@ -60,6 +61,7 @@ export default async function BillingPage({ params }: PageProps) {
         payments={payments}
         activation={activation}
         canManage={canManage}
+        online={isOnlinePaymentEnabled()}
       />
     </div>
   );
