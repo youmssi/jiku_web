@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { AppointmentBooking, WidgetResizer } from "@/components/modules/appointment";
 
-export const metadata: Metadata = {
-  title: "Réserver un rendez-vous",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("guest.appointment");
+  return { title: t("metaTitle"), robots: { index: false, follow: false } };
+}
 
 /**
- * Page embarrable du widget de réservation (JIKU-92) : le parcours de réservation
- * sans compte, dans une iframe isolée au site du client. La hauteur est envoyée
- * au parent par [WidgetResizer] ; pas d'en-tête ni pied de page — seul le
- * parcours, pour tenir dans le conteneur du client.
+ * The embeddable booking widget (JIKU-92): the no-account booking flow in an
+ * iframe on the organization's own site. [WidgetResizer] sends the height to the
+ * parent page; no header or footer, only the flow, to fit the host's container.
  */
 export default async function WidgetBookingPage({
   params,

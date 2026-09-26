@@ -2,7 +2,7 @@
 
 import { getTranslations } from "next-intl/server";
 import { publicFetch } from "@/lib/api-server";
-import { type ActionResult, fail, fromResponse, ok } from "@/lib/action-result";
+import { type ActionResult, fail, fromResponse, ok, reportApiError } from "@/lib/action-result";
 import type {
   AppointmentBookingView,
   AppointmentServiceView,
@@ -13,9 +13,9 @@ import type {
 } from "@/components/modules/appointment/schema";
 
 /**
- * Référence du lien de réservation : soit le jeton signé historique
- * (/appointments/{token}), soit le code court partagé (/r/{code}). Le client
- * n'a pas de compte ; la référence du lien porte le tenant et le service.
+ * The booking link a client holds: the historical signed token
+ * (/appointments/{token}) or the shared short code (/r/{code}). The client has
+ * no account; the link carries the organization and the service.
  */
 export type AppointmentLinkRef = { token: string } | { code: string };
 
@@ -25,7 +25,7 @@ function basePath(ref: AppointmentLinkRef): string {
     : `/r/${encodeURIComponent(ref.code)}`;
 }
 
-/** Service et créneaux ouverts du jour (ou du [date] ISO) — sans compte. */
+/** The service and its open times for today, or for the ISO [date]; no account needed. */
 export async function loadAppointment(
   ref: AppointmentLinkRef,
   date?: string,
@@ -47,9 +47,10 @@ export async function bookAppointment(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
+  const t = await getTranslations("guest.appointment.errors");
   return fromResponse<AppointmentBookingView>(response, {
-    409: "Ce créneau vient d'être pris. Choisissez-en un autre.",
-    default: "La réservation a échoué. Réessayez.",
+    409: t("taken"),
+    default: t("failed"),
   });
 }
 
@@ -75,13 +76,11 @@ export async function cancelAppointment(
     { method: "DELETE" },
   );
   if (!response.ok) {
-    if (response.status === 404) {
-      return fail("Cette réservation est introuvable.");
-    }
-    if (response.status === 409) {
-      return fail("Ce rendez-vous ne peut plus être annulé.");
-    }
-    return fail("L'annulation a échoué. Réessayez.");
+    const t = await getTranslations("guest.appointment.errors");
+    if (response.status === 404) return fail(t("notFound"));
+    if (response.status === 409) return fail(t("notCancellable"));
+    reportApiError(response);
+    return fail(t("cancelFailed"));
   }
   return ok(null);
 }

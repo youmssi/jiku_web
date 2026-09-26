@@ -1,31 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cancelAppointment, loadBookingStatus, type AppointmentLinkRef } from "@/components/modules/appointment/appointment.service";
 import type { AppointmentStatusView } from "@/components/modules/appointment/schema";
 
-function formatInZone(iso: string, zone: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("fr-FR", {
-    timeZone: zone,
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(d);
-}
-
+/**
+ * A client's own booking (JIKU-86): when it is, whether the professional has
+ * confirmed it, and a way to cancel it. The time shows in the service's
+ * timezone, in the visitor's language.
+ */
 export function AppointmentStatus({
   link,
   bookingToken,
@@ -35,74 +22,82 @@ export function AppointmentStatus({
   bookingToken: string;
   timezone: string;
 }) {
+  const t = useTranslations("guest.appointment.status");
+  const format = useFormatter();
   const [view, setView] = useState<AppointmentStatusView | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
+  const [loaded, setLoaded] = useState(false);
+  const [cancelled, setCancelled] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [cancelling, setCancelling] = useState(false);
 
-  const refresh = useCallback(() => {
-    loadBookingStatus(link, bookingToken).then((loaded) => setView(loaded));
+  useEffect(() => {
+    loadBookingStatus(link, bookingToken).then((next) => {
+      setView(next);
+      setLoaded(true);
+    });
   }, [link, bookingToken]);
-
-  useEffect(refresh, [refresh]);
 
   const cancel = useCallback(async () => {
     setCancelling(true);
+    setError(null);
     const result = await cancelAppointment(link, bookingToken);
     setCancelling(false);
     if (!result.ok) {
-      setMessage(result.error ?? "Annulation impossible.");
+      setError(result.error);
       return;
     }
-    setMessage("Votre rendez-vous a été annulé.");
-    setView(null);
+    setCancelled(true);
   }, [link, bookingToken]);
 
+  if (cancelled) {
+    return <Notice title={t("cancelledTitle")} text={t("cancelledText")} />;
+  }
   if (!view) {
-    return (
-      <div className="flex flex-1 items-center justify-center px-4 py-12">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Réservation introuvable</CardTitle>
-            <CardDescription>
-              {message ?? "Vérifiez le lien ou votre numéro de réservation."}
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
-    );
+    return loaded ? <Notice title={t("notFound")} text={t("notFoundText")} /> : null;
   }
 
   return (
     <div className="flex flex-1 items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Votre rendez-vous</CardTitle>
-          <CardDescription>
-            {view.status === "PENDING"
-              ? "En attente de confirmation."
-              : view.status === "CONFIRMED"
-                ? "Confirmé."
-                : view.status}
-          </CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{view.status === "PENDING" ? t("PENDING") : t("CONFIRMED")}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          {message ? (
-            <Alert variant={view ? "default" : "destructive"}>
-              <AlertTitle>{view ? "Annulation" : "Attention"}</AlertTitle>
-              <AlertDescription>{message}</AlertDescription>
+          {error ? (
+            <Alert variant="destructive">
+              <AlertTitle>{t("cancelFailed")}</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
             </Alert>
           ) : null}
           {view.clientName ? <p className="font-medium">{view.clientName}</p> : null}
-          <p className="text-sm text-muted-foreground">{formatInZone(view.startsAt, timezone)}</p>
-          <Button
-            variant="outline"
-            className="w-full rounded-full"
-            disabled={cancelling || view.status !== "PENDING" && view.status !== "CONFIRMED"}
-            onClick={() => void cancel()}
-          >
-            {cancelling ? "Annulation…" : "Annuler ce rendez-vous"}
+          <p className="text-sm text-muted-foreground">
+            {format.dateTime(new Date(view.startsAt), {
+              timeZone: timezone,
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </p>
+          <Button variant="outline" className="w-full rounded-full" disabled={cancelling} onClick={() => void cancel()}>
+            {cancelling ? t("cancelling") : t("cancel")}
           </Button>
         </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function Notice({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="flex flex-1 items-center justify-center px-4 py-12">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{text}</CardDescription>
+        </CardHeader>
       </Card>
     </div>
   );

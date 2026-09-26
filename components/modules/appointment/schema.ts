@@ -29,10 +29,11 @@ export interface AppointmentStatusView {
   clientName: string | null;
 }
 
+/** What a client gives to book a time; messages are `common.validation` keys. */
 export const bookingSchema = z.object({
-  clientName: z.string().trim().min(2, "Indiquez votre nom"),
-  clientPhone: z.string().trim().min(6, "Indiquez un numéro valide"),
-  startsAt: z.string().min(1, "Choisissez un créneau"),
+  clientName: z.string().trim().min(1, "required").min(2, "tooShort").max(120, "tooLong"),
+  clientPhone: z.string().trim().min(1, "required").min(6, "phone").max(32, "tooLong"),
+  startsAt: z.string().min(1, "required"),
 });
 
 export type BookingInput = z.infer<typeof bookingSchema>;

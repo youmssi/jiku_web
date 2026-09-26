@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { AppointmentStatus, WidgetResizer, loadAppointment } from "@/components/modules/appointment";
 
-export const metadata: Metadata = {
-  title: "Mon rendez-vous",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("guest.appointment");
+  return { title: t("statusMetaTitle"), robots: { index: false, follow: false } };
+}
 
-/** Suivi (voir/annuler) d'une réservation faite depuis le widget (JIKU-92). */
+/** Following (view or cancel) a booking made from the widget (JIKU-92). */
 export default async function WidgetBookingStatusPage({
   params,
 }: Readonly<{ params: Promise<{ locale: string; token: string; bookingToken: string }> }>) {
