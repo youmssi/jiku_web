@@ -26,5 +26,20 @@
     "dueAfter": "To pay after: {amount}",
     "paid": "Paid",
     "collect": "Collect"
+  },
+  "console": {
+    "hello": "Hello,",
+    "actions": {
+      "CHECK_IN": "Door check-in",
+      "QUEUE": "Queue",
+      "COLLECT": "Payments"
+    },
+    "events": "Your events",
+    "services": "Your services",
+    "cancelled": "Cancelled",
+    "empty": "No event or service is assigned to you yet. Ask the organizer.",
+    "back": "My posts",
+    "invalidTitle": "Link unavailable",
+    "invalidText": "This link was revoked or is no longer valid. Ask the organizer for a new one."
   }
 }

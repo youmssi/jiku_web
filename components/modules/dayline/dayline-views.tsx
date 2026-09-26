@@ -38,8 +38,8 @@ export async function DayLineOrganizerView({ serviceId }: { serviceId: string })
   );
 }
 
-export async function DayLineStaffView({ token }: { token: string }) {
-  const response = await publicFetch(`/line/${token}`);
+export async function DayLineStaffView({ base }: { base: string }) {
+  const response = await publicFetch(`/${base}`);
   if (!response.ok) {
     return (
       <div className="flex flex-1 items-center justify-center px-6 text-center">
@@ -55,12 +55,12 @@ export async function DayLineStaffView({ token }: { token: string }) {
     );
   }
   const view = (await response.json()) as DayLineView;
-  const requests = await loadPendingRequests(`/line/${token}/requests`);
+  const requests = await loadPendingRequests(`/${base}/requests`);
   return (
     <div className="min-h-svh bg-zinc-50 pb-12 dark:bg-zinc-950">
-      <DayLineConsole auth={{ kind: "staff", token }} initial={view} />
+      <DayLineConsole auth={{ kind: "staff", base }} initial={view} />
       <div className="mx-auto w-full max-w-2xl px-4">
-        <PendingRequests auth={{ kind: "staff", token }} timezone={view.timezone} initial={requests} />
+        <PendingRequests auth={{ kind: "staff", base }} timezone={view.timezone} initial={requests} />
       </div>
     </div>
   );

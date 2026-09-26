@@ -12,7 +12,7 @@ const DEBOUNCE_MS = 300;
  * holds the latest matches; only queries of at least two characters hit the
  * backend. A stale-response guard discards results from a superseded query.
  */
-export function useGuestSearch(token: string, enabled = true) {
+export function useGuestSearch(door: string, enabled = true) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<GuestMatch[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -36,7 +36,7 @@ export function useGuestSearch(token: string, enabled = true) {
 
     const timer = setTimeout(async () => {
       setIsSearching(true);
-      const { data } = await searchGuests(token, trimmed);
+      const { data } = await searchGuests(door, trimmed);
       if (requestId !== latestQuery.current) {
         return; // a newer query has superseded this one
       }
@@ -44,7 +44,7 @@ export function useGuestSearch(token: string, enabled = true) {
       setIsSearching(false);
     }, DEBOUNCE_MS);
     return () => clearTimeout(timer);
-  }, [query, token, enabled]);
+  }, [query, door, enabled]);
 
   const reset = useCallback(() => {
     setQuery("");

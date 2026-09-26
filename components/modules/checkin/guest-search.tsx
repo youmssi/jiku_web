@@ -7,7 +7,7 @@ import { useGuestSearch } from "@/components/modules/checkin/useGuestSearch";
 import type { RosterEntry } from "@/components/modules/checkin/schema";
 
 interface GuestSearchProps {
-  token: string;
+  door: string;
   onSelect: (guestId: string) => void;
   isSubmitting: boolean;
   /** When offline, search filters the pre-synced roster locally instead of the server. */
@@ -30,8 +30,8 @@ const MIN_QUERY = 2;
  * and tap a guest to check them in. One tap from the scanner view. Offline, it
  * filters the locally cached roster for instant results with no network (JIKU-25).
  */
-export function GuestSearch({ token, onSelect, isSubmitting, offline, roster }: GuestSearchProps) {
-  const search = useGuestSearch(token, !offline);
+export function GuestSearch({ door, onSelect, isSubmitting, offline, roster }: GuestSearchProps) {
+  const search = useGuestSearch(door, !offline);
 
   const localResults = useMemo<Row[]>(() => {
     const term = search.query.trim().toLowerCase();

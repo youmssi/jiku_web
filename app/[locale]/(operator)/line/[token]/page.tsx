@@ -17,5 +17,5 @@ export default async function CounterLinePage({
       />
     );
   }
-  return <DayLineStaffView token={link.data} />;
+  return <DayLineStaffView base={`line/${encodeURIComponent(link.data)}`} />;
 }

@@ -26,5 +26,20 @@
     "dueAfter": "À régler après : {amount}",
     "paid": "Réglé",
     "collect": "Encaisser"
+  },
+  "console": {
+    "hello": "Bonjour,",
+    "actions": {
+      "CHECK_IN": "Contrôle des entrées",
+      "QUEUE": "File d'attente",
+      "COLLECT": "Encaissement"
+    },
+    "events": "Vos événements",
+    "services": "Vos services",
+    "cancelled": "Annulé",
+    "empty": "Aucun événement ni service ne vous est confié pour le moment. Demandez à l'organisateur.",
+    "back": "Mes postes",
+    "invalidTitle": "Lien indisponible",
+    "invalidText": "Ce lien a été révoqué ou n'est plus valide. Demandez-en un nouveau à l'organisateur."
   }
 }

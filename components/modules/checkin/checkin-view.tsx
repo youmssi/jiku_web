@@ -2,10 +2,12 @@ import { publicFetch } from "@/lib/api-server";
 import { ValidatorConsole } from "@/components/modules/checkin/validator-console";
 import type { ValidatorContext } from "@/components/modules/checkin/schema";
 
-/** Validator check-in screen, authenticated by the link token in the path. */
-export async function CheckinView({ params }: { params: Promise<{ token: string }> }) {
-  const { token } = await params;
-  const response = await publicFetch(`/checkin/${token}`);
+/**
+ * Validator check-in screen, authenticated by the link token in the path: an
+ * event's door link, or an operator's link opened on one of its events.
+ */
+export async function CheckinView({ door }: { door: string }) {
+  const response = await publicFetch(`/${door}`);
 
   if (!response.ok) {
     const revoked = response.status === 403;
@@ -27,5 +29,5 @@ export async function CheckinView({ params }: { params: Promise<{ token: string 
 
   const context = (await response.json()) as ValidatorContext;
 
-  return <ValidatorConsole token={token} context={context} />;
+  return <ValidatorConsole door={door} context={context} />;
 }
