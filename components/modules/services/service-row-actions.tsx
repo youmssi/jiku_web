@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { Link } from "@/i18n/navigation";
@@ -48,6 +49,7 @@ import type { ServiceSummary } from "./schema";
  * of its data (slots, tickets, staff links).
  */
 export function ServiceRowActions({ service }: { service: ServiceSummary }) {
+  const t = useTranslations("services.rowActions");
   const router = useRouter();
   const [pending, startTransition] = React.useTransition();
   const [renameOpen, setRenameOpen] = React.useState(false);
@@ -72,7 +74,7 @@ export function ServiceRowActions({ service }: { service: ServiceSummary }) {
         toast.error(result.error);
         return;
       }
-      toast.success("Service renommé.");
+      toast.success(t("renamed"));
       router.refresh();
     });
   }
@@ -85,7 +87,7 @@ export function ServiceRowActions({ service }: { service: ServiceSummary }) {
         toast.error(result.error);
         return;
       }
-      toast.success("Service supprimé.");
+      toast.success(t("deleted"));
       router.refresh();
     });
   }
@@ -95,28 +97,28 @@ export function ServiceRowActions({ service }: { service: ServiceSummary }) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">{t("more")}</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("title")}</DropdownMenuLabel>
           <DropdownMenuItem asChild>
-            <Link href={serviceManageRoute(service.id)}>Gérer</Link>
+            <Link href={serviceManageRoute(service.id)}>{t("manage")}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={serviceConfigurationRoute(service.id)}>Configuration</Link>
+            <Link href={serviceConfigurationRoute(service.id)}>{t("configuration")}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={serviceLineRoute(service.id)}>Ligne du jour</Link>
+            <Link href={serviceLineRoute(service.id)}>{t("line")}</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onSelect={openRename}>Rename</DropdownMenuItem>
+          <DropdownMenuItem onSelect={openRename}>{t("rename")}</DropdownMenuItem>
           <DropdownMenuItem
             variant="destructive"
             onSelect={() => setDeleteOpen(true)}
           >
-            Delete service
+            {t("delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -124,13 +126,11 @@ export function ServiceRowActions({ service }: { service: ServiceSummary }) {
       <Dialog open={renameOpen} onOpenChange={setRenameOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Renommer le service</DialogTitle>
-            <DialogDescription>
-              Le nom du service apparaît sur le lien de réservation et la ligne du jour.
-            </DialogDescription>
+            <DialogTitle>{t("renameTitle")}</DialogTitle>
+            <DialogDescription>{t("renameDescription")}</DialogDescription>
           </DialogHeader>
           <Field>
-            <FieldLabel htmlFor="rename-service">Nom</FieldLabel>
+            <FieldLabel htmlFor="rename-service">{t("name")}</FieldLabel>
             <Input
               id="rename-service"
               value={name}
@@ -139,10 +139,10 @@ export function ServiceRowActions({ service }: { service: ServiceSummary }) {
           </Field>
           <DialogFooter>
             <Button variant="outline" onClick={() => setRenameOpen(false)}>
-              Annuler
+              {t("cancel")}
             </Button>
             <Button onClick={submitRename} disabled={pending || !name.trim()}>
-              Enregistrer
+              {t("save")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -151,20 +151,17 @@ export function ServiceRowActions({ service }: { service: ServiceSummary }) {
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Supprimer « {service.name} » ?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Le service, ses créneaux, ses billets et ses liens de comptoir seront
-              supprimés définitivement. Cette action est irréversible.
-            </AlertDialogDescription>
+            <AlertDialogTitle>{t("deleteTitle", { name: service.name })}</AlertDialogTitle>
+            <AlertDialogDescription>{t("deleteDescription")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={pending}>Annuler</AlertDialogCancel>
+            <AlertDialogCancel disabled={pending}>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               variant="destructive"
               onClick={confirmDelete}
               disabled={pending}
             >
-              {pending ? "Suppression…" : "Supprimer"}
+              {pending ? t("deleting") : t("deleteConfirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

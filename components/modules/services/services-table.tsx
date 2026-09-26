@@ -1,6 +1,7 @@
 "use client";
 
 import { Search, SlidersHorizontal } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { Table } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -12,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { columns } from "./services-columns";
+import { useServiceColumns } from "./services-columns";
 import type { ServiceSummary } from "./schema";
 
 /** Same toolbar shape as the events table: search plus a column-visibility toggle. */
@@ -21,11 +22,12 @@ function ServicesToolbar({
 }: {
   table: Table<DataTableFeatures, ServiceSummary>;
 }) {
+  const t = useTranslations("services");
   return (
     <div className="flex flex-wrap items-center gap-2 py-4">
       <div className="relative max-w-sm flex-1">
         <Input
-          placeholder="Filtrer par nom…"
+          placeholder={t("list.filter")}
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -38,7 +40,7 @@ function ServicesToolbar({
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon-sm" className="ml-auto">
             <SlidersHorizontal className="size-3.5" />
-            <span className="sr-only">Colonnes affichées</span>
+            <span className="sr-only">{t("list.visibleColumns")}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -48,11 +50,10 @@ function ServicesToolbar({
             .map((column) => (
               <DropdownMenuCheckboxItem
                 key={column.id}
-                className="capitalize"
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id}
+                {column.id === "timezone" ? t("columns.timezone") : t("columns.name")}
               </DropdownMenuCheckboxItem>
             ))}
         </DropdownMenuContent>
@@ -67,6 +68,7 @@ function ServicesToolbar({
  * (consoles, rename, delete).
  */
 export function ServicesTable({ services }: { services: ServiceSummary[] }) {
+  const columns = useServiceColumns();
   return (
     <DataTable
       columns={columns}
