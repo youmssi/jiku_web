@@ -25,7 +25,8 @@
     "phone": "Utilisez le format international, par ex. +224620000000.",
     "tooShort": "Trop court.",
     "httpsUrl": "Indiquez une adresse qui commence par https://",
-    "hexColor": "Indiquez une couleur au format #RRGGBB"
+    "hexColor": "Indiquez une couleur au format #RRGGBB",
+    "payeeRequired": "Indiquez le nom du bénéficiaire que vos clients verront."
   },
   "roles": {
     "OWNER": "Propriétaire",

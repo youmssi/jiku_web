@@ -4,7 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { publicFetch } from "@/lib/api-server";
 import { PRIVACY_ROUTE } from "@/lib/constants";
 import { formatEventDay, formatEventTime } from "@/lib/datetime";
-import { StateMessage } from "@/components/shared";
+import { PaymentDue, StateMessage } from "@/components/shared";
 import { RsvpActions } from "@/components/modules/invitation/rsvp-actions";
 import { DataDeletion } from "@/components/modules/invitation/data-deletion";
 import type { RsvpView } from "@/components/modules/invitation/schema";
@@ -59,6 +59,11 @@ export async function InvitationView({ params }: { params: Promise<{ token: stri
           ) : null}
         </div>
         <p className="mt-4 text-sm">{t("greeting", { name: rsvp.guestName })}</p>
+        {rsvp.payment && !cancelled ? (
+          <div className="mt-4">
+            <PaymentDue {...rsvp.payment} />
+          </div>
+        ) : null}
         {cancelled ? (
           <p className="mt-6 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
             {t("cancelled")}

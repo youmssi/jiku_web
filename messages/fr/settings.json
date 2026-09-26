@@ -43,5 +43,22 @@
       "failed": "Impossible d'enregistrer votre numéro. Réessayez.",
       "sdk": "La fenêtre Meta n'a pas pu s'ouvrir. Vérifiez votre connexion et réessayez."
     }
+  },
+  "paymentMethods": {
+    "title": "Comment vos clients vous paient",
+    "text": "Quand un billet ou un rendez-vous est payant, vos clients voient ces moyens de paiement sur leur invitation et leur billet. Jikū n'encaisse rien : l'argent va directement sur vos comptes.",
+    "payeeName": "Nom du bénéficiaire",
+    "payeeNameHelp": "Le nom que vos clients verront sur la confirmation Mobile Money. Obligatoire si vous indiquez un numéro.",
+    "orangeMoney": "Numéro Orange Money",
+    "mtnMomo": "Numéro MTN MoMo",
+    "wave": "Numéro Wave",
+    "paymentLink": "Lien de paiement (facultatif)",
+    "paymentLinkHelp": "Une adresse https:// vers votre page de paiement, si vous en avez une.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Moyens de paiement enregistrés.",
+    "errors": {
+      "failed": "Impossible d'enregistrer vos moyens de paiement. Réessayez."
+    }
   }
 }

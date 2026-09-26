@@ -6,6 +6,7 @@ import { MembersView, fetchMembersAction } from "@/components/modules/members";
 import { AccountView } from "@/components/modules/settings/account-view";
 import { BrandingView } from "@/components/modules/settings/branding-view";
 import { LegalIdentityView } from "@/components/modules/settings/legal-identity-view";
+import { PaymentMethodsForm } from "@/components/modules/settings/payment-methods-form";
 import { OrganizationView } from "@/components/modules/settings/organization-view";
 import { PersonalisationView } from "@/components/modules/settings/personalisation-view";
 import { ProviderSettingsView } from "@/components/modules/settings/provider-settings-view";
@@ -15,6 +16,7 @@ import {
   loadOrgUsername,
   loadProviderSettings,
   loadEmbeddedSignupConfig,
+  loadPaymentMethods,
   loadTemplates,
   loadVocabulary,
 } from "@/components/modules/settings/settings.queries";
@@ -64,11 +66,13 @@ const EMPTY_LEGAL_IDENTITY: LegalIdentityResponse = {
  * blocking the others.
  */
 async function loadManagerSettings() {
-  const [username, branding, providers, embeddedSignup, legalIdentity, members, vocabulary, templates] = await Promise.all([
+  const [username, branding, providers, embeddedSignup, paymentMethods, legalIdentity, members, vocabulary, templates] =
+    await Promise.all([
     loadOrgUsername(),
     loadBranding(),
     loadProviderSettings(),
     loadEmbeddedSignupConfig(),
+    loadPaymentMethods(),
     loadLegalIdentity(),
     fetchMembersAction(),
     loadVocabulary(),
@@ -79,6 +83,7 @@ async function loadManagerSettings() {
     branding: branding ?? DEFAULT_BRANDING,
     providers: providers ?? UNCONFIGURED_PROVIDERS,
     embeddedSignup: embeddedSignup ?? { enabled: false, appId: null, configId: null, graphVersion: null },
+    paymentMethods,
     legalIdentity: legalIdentity ?? EMPTY_LEGAL_IDENTITY,
     team: members.ok ? members.data : null,
     vocabulary,
@@ -110,6 +115,7 @@ export async function SettingsView({ tab }: { tab?: string }) {
           {settings ? <TabsTrigger value="branding">Branding</TabsTrigger> : null}
           {settings?.team ? <TabsTrigger value="members">Members</TabsTrigger> : null}
           {settings ? <TabsTrigger value="messaging">Messaging providers</TabsTrigger> : null}
+          {settings ? <TabsTrigger value="payments">Payment methods</TabsTrigger> : null}
           {settings ? <TabsTrigger value="legal">Invoicing details</TabsTrigger> : null}
           {settings ? <TabsTrigger value="personalisation">Personalisation</TabsTrigger> : null}
           <TabsTrigger value="account">Account</TabsTrigger>
@@ -141,6 +147,9 @@ export async function SettingsView({ tab }: { tab?: string }) {
             ) : null}
             <TabsContent value="messaging" className="mt-0">
               <ProviderSettingsView initial={settings.providers} embeddedSignup={settings.embeddedSignup} />
+            </TabsContent>
+            <TabsContent value="payments" className="mt-0">
+              <PaymentMethodsForm initial={settings.paymentMethods} />
             </TabsContent>
             <TabsContent value="legal" className="mt-0">
               <LegalIdentityView identity={settings.legalIdentity} />

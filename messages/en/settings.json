@@ -43,5 +43,22 @@
       "failed": "We couldn't save your number. Please try again.",
       "sdk": "The Meta window couldn't open. Check your connection and try again."
     }
+  },
+  "paymentMethods": {
+    "title": "How your clients pay you",
+    "text": "When a ticket or appointment isn't free, your clients see these payment methods on their invitation and ticket. Jikū collects nothing: the money goes straight to your accounts.",
+    "payeeName": "Payee name",
+    "payeeNameHelp": "The name your clients see on the Mobile Money confirmation. Required if you enter a number.",
+    "orangeMoney": "Orange Money number",
+    "mtnMomo": "MTN MoMo number",
+    "wave": "Wave number",
+    "paymentLink": "Payment link (optional)",
+    "paymentLinkHelp": "An https:// address to your payment page, if you have one.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Payment methods saved.",
+    "errors": {
+      "failed": "We couldn't save your payment methods. Please try again."
+    }
   }
 }

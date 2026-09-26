@@ -5,6 +5,7 @@ import { reportApiError } from "@/lib/action-result";
 import type {
   BrandingResponse,
   EmbeddedSignupConfig,
+  PaymentMethodsInfo,
   LegalIdentityResponse,
   ProviderSettingsResponse,
   TemplateSummary,
@@ -40,6 +41,10 @@ export function loadProviderSettings(): Promise<ProviderSettingsResponse | null>
 
 export function loadEmbeddedSignupConfig(): Promise<EmbeddedSignupConfig | null> {
   return read("/settings/providers/whatsapp/embedded-signup");
+}
+
+export function loadPaymentMethods(): Promise<PaymentMethodsInfo | null> {
+  return read("/settings/payment-methods");
 }
 
 export function loadLegalIdentity(): Promise<LegalIdentityResponse | null> {

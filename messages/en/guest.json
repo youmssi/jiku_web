@@ -109,5 +109,16 @@
       "closed": "This service's line isn't open right now.",
       "failed": "We couldn't give you a ticket. Please try again."
     }
+  },
+  "payment": {
+    "due": "To pay: {amount}",
+    "dueAfter": "To pay after the service: {amount}",
+    "paid": "Paid: {amount}",
+    "payee": "Payee: {name}",
+    "orangeMoney": "Orange Money",
+    "mtnMomo": "MTN MoMo",
+    "wave": "Wave",
+    "payOnline": "Pay online",
+    "askOrganizer": "The organizer will tell you how to pay."
   }
 }
