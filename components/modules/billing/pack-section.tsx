@@ -12,6 +12,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { formatAmount } from "@/lib/currency";
 import { requestPackAction } from "@/components/modules/billing/billing.service";
 import { ActivationInstructions } from "@/components/modules/billing/activation-instructions";
+import { PayOnlineButton } from "@/components/modules/billing/pay-online-button";
 import type { ManualPaymentInstructions, PackView } from "@/components/modules/billing/schema";
 
 const MAX_BLOCKS = 50;
@@ -19,10 +20,19 @@ const MAX_BLOCKS = 50;
 /**
  * The Organizer Pack (ADR 105): the month's guests shared by every event, a
  * request for one month or a year (two months free) with any guests still
- * owed from an event day, and extra guests for the month in blocks. Payments
- * follow the manual Mobile Money flow.
+ * owed from an event day, and extra guests for the month in blocks. Paid
+ * online when offered, or through the manual Mobile Money flow.
  */
-export function PackSection({ initial, canManage }: { initial: PackView; canManage: boolean }) {
+export function PackSection({
+  initial,
+  canManage,
+  online,
+}: {
+  initial: PackView;
+  canManage: boolean;
+  /** Online payment is offered next to the manual transfer (JIKU-165). */
+  online: boolean;
+}) {
   const t = useTranslations("billing.pack");
   const locale = useLocale();
   const format = useFormatter();
@@ -127,9 +137,16 @@ export function PackSection({ initial, canManage }: { initial: PackView; canMana
                 <p className="text-xs text-muted-foreground">{t("includesOwed", { amount: money(pack.owedMinor) })}</p>
               ) : null}
             </div>
-            <Button onClick={() => submit({ months })} disabled={isSaving || total === null}>
-              {isSaving ? t("requesting") : t("request")}
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant={online ? "outline" : "default"}
+                onClick={() => submit({ months })}
+                disabled={isSaving || total === null}
+              >
+                {isSaving ? t("requesting") : t("request")}
+              </Button>
+              {online ? <PayOnlineButton target={{ kind: "pack", months }} disabled={total === null} /> : null}
+            </div>
           </div>
         </div>
       ) : null}
@@ -163,9 +180,12 @@ export function PackSection({ initial, canManage }: { initial: PackView; canMana
                 {t("extraTotal", { guests: extraGuests, amount: money(extraGuests * pack.extraPerGuestMinor) })}
               </p>
             </div>
-            <Button variant="outline" onClick={() => submit({ blocks })} disabled={isSaving}>
-              {isSaving ? t("requesting") : t("request")}
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" onClick={() => submit({ blocks })} disabled={isSaving}>
+                {isSaving ? t("requesting") : t("request")}
+              </Button>
+              {online ? <PayOnlineButton target={{ kind: "packExtra", blocks }} /> : null}
+            </div>
           </div>
         </div>
       ) : null}

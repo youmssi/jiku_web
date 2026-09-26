@@ -13,6 +13,7 @@ import {
   fetchPackAction,
   fetchSubscriptionAction,
 } from "@/components/modules/billing";
+import { isOnlinePaymentEnabled } from "@/components/modules/billing/server";
 import { getOrganizerContext } from "@/components/modules/identity/server";
 import type { PaymentHistoryItem } from "@/components/modules/billing";
 import { serverFetch } from "@/lib/api-server";
@@ -41,6 +42,7 @@ export default async function BillingPage() {
     getTranslations("billing.page"),
   ]);
   const canManage = context !== null && MANAGER_ROLES.includes(context.role);
+  const online = isOnlinePaymentEnabled();
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-10">
@@ -54,19 +56,19 @@ export default async function BillingPage() {
 
       {subscription ? (
         <section className="mb-10 flex flex-col gap-4">
-          <SubscriptionSection initial={subscription} nowIso={new Date().toISOString()} />
+          <SubscriptionSection initial={subscription} nowIso={new Date().toISOString()} online={online} />
         </section>
       ) : null}
 
       {pack ? (
         <section className="mb-10 flex flex-col gap-4">
-          <PackSection initial={pack} canManage={canManage} />
+          <PackSection initial={pack} canManage={canManage} online={online} />
         </section>
       ) : null}
 
       {ownNumber ? (
         <section className="mb-10 flex flex-col gap-4">
-          <OwnNumberSection initial={ownNumber} canManage={canManage} />
+          <OwnNumberSection initial={ownNumber} canManage={canManage} online={online} />
         </section>
       ) : null}
 

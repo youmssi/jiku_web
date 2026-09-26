@@ -11,15 +11,25 @@ import { formatAmount } from "@/lib/currency";
 import { ROUTES } from "@/lib/constants";
 import { requestOwnNumberAction } from "@/components/modules/billing/billing.service";
 import { ActivationInstructions } from "@/components/modules/billing/activation-instructions";
+import { PayOnlineButton } from "@/components/modules/billing/pay-online-button";
 import type { ManualPaymentInstructions, OwnWhatsAppNumberView } from "@/components/modules/billing/schema";
 
 /**
  * Sending from the organization's own WhatsApp number (ADR 105): included in
  * the Organisation plan and the Organizer Pack, a monthly add-on otherwise,
- * requested through the manual Mobile Money flow. Once it is allowed, the
+ * paid online when offered or through the manual Mobile Money flow. Once it is allowed, the
  * number is connected from the messaging settings.
  */
-export function OwnNumberSection({ initial, canManage }: { initial: OwnWhatsAppNumberView; canManage: boolean }) {
+export function OwnNumberSection({
+  initial,
+  canManage,
+  online,
+}: {
+  initial: OwnWhatsAppNumberView;
+  canManage: boolean;
+  /** Online payment is offered next to the manual transfer (JIKU-165). */
+  online: boolean;
+}) {
   const t = useTranslations("billing.ownNumber");
   const locale = useLocale();
   const format = useFormatter();
@@ -105,9 +115,12 @@ export function OwnNumberSection({ initial, canManage }: { initial: OwnWhatsAppN
           </div>
           <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
             <p className="text-lg font-semibold">{total !== null ? t("total", { amount: money(total) }) : null}</p>
-            <Button onClick={submit} disabled={isSaving || total === null}>
-              {isSaving ? t("requesting") : t("request")}
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button variant={online ? "outline" : "default"} onClick={submit} disabled={isSaving || total === null}>
+                {isSaving ? t("requesting") : t("request")}
+              </Button>
+              {online ? <PayOnlineButton target={{ kind: "ownNumber", months }} disabled={total === null} /> : null}
+            </div>
           </div>
         </div>
       ) : null}

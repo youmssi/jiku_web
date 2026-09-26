@@ -16,6 +16,7 @@ import {
 import { formatAmount } from "@/lib/currency";
 import { ActivationInstructions } from "./activation-instructions";
 import { requestActivationAction } from "./billing.service";
+import { PayOnlineButton } from "./pay-online-button";
 import { PaymentHistoryTable } from "./payment-history-table";
 import type {
   EventTierQuote,
@@ -39,6 +40,8 @@ interface BillingViewProps {
   activation: ManualPaymentInstructions | null;
   /** Capacity requests require the ADMIN or OWNER role (JIKU-41). */
   canManage: boolean;
+  /** Online payment is offered next to the manual transfer (JIKU-165). */
+  online: boolean;
 }
 
 export function BillingView({
@@ -49,6 +52,7 @@ export function BillingView({
   payments,
   activation,
   canManage,
+  online,
 }: BillingViewProps) {
   const t = useTranslations("billing.event");
   const locale = useLocale();
@@ -139,13 +143,19 @@ export function BillingView({
                       </p>
                     ) : null}
                   </div>
-                  <Button
-                    size="sm"
-                    onClick={() => requestTier(quote.tier)}
-                    disabled={pendingTier !== null}
-                  >
-                    {pendingTier === quote.tier ? t("requesting") : t("activate")}
-                  </Button>
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <Button
+                      size="sm"
+                      variant={online ? "outline" : "default"}
+                      onClick={() => requestTier(quote.tier)}
+                      disabled={pendingTier !== null}
+                    >
+                      {pendingTier === quote.tier ? t("requesting") : t("activate")}
+                    </Button>
+                    {online ? (
+                      <PayOnlineButton size="sm" target={{ kind: "tier", eventId, tier: quote.tier }} />
+                    ) : null}
+                  </div>
                 </div>
               </div>
             ))}
