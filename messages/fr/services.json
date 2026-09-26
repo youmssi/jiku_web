@@ -34,7 +34,7 @@
     "more": "Ouvrir le menu",
     "title": "Actions",
     "manage": "Gérer",
-    "configuration": "Rappels",
+    "configuration": "Réglages",
     "line": "Ligne du jour",
     "rename": "Renommer",
     "delete": "Supprimer le service",
@@ -139,7 +139,8 @@
     "addOffset": "Ajouter un moment",
     "saving": "Enregistrement…",
     "save": "Enregistrer",
-    "saved": "Rappels enregistrés."
+    "saved": "Rappels enregistrés.",
+    "settingsTitle": "Réglages du service"
   },
   "errors": {
     "notFound": "Ce service est introuvable.",
@@ -162,6 +163,17 @@
     "availabilityRemove": "Impossible de retirer l'horaire.",
     "closuresLoad": "Impossible de charger les fermetures.",
     "closureAdd": "Impossible d'ajouter la fermeture.",
-    "closureRemove": "Impossible de retirer la fermeture."
+    "closureRemove": "Impossible de retirer la fermeture.",
+    "groupTooLarge": "Votre offre ne permet pas autant de clients par créneau."
+  },
+  "group": {
+    "title": "Séances collectives",
+    "text": "Recevez plusieurs clients sur le même créneau, pour un cours ou une visite guidée. Chaque client réserve sa place ; le créneau se ferme quand il est complet.",
+    "label": "Clients par créneau",
+    "limit": "Votre offre permet jusqu'à {max} clients par créneau.",
+    "single": "Votre offre reçoit un client à la fois. Les séances collectives sont incluses dans Teams (10 clients) et Organisation (30 clients).",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Séances enregistrées."
   }
 }

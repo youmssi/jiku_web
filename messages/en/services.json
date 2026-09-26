@@ -34,7 +34,7 @@
     "more": "Open menu",
     "title": "Actions",
     "manage": "Manage",
-    "configuration": "Reminders",
+    "configuration": "Settings",
     "line": "Today's line",
     "rename": "Rename",
     "delete": "Delete service",
@@ -139,7 +139,8 @@
     "addOffset": "Add a time",
     "saving": "Saving…",
     "save": "Save",
-    "saved": "Reminders saved."
+    "saved": "Reminders saved.",
+    "settingsTitle": "Service settings"
   },
   "errors": {
     "notFound": "This service doesn't exist.",
@@ -162,6 +163,17 @@
     "availabilityRemove": "The hours couldn't be removed.",
     "closuresLoad": "The closures couldn't be loaded.",
     "closureAdd": "The closure couldn't be added.",
-    "closureRemove": "The closure couldn't be removed."
+    "closureRemove": "The closure couldn't be removed.",
+    "groupTooLarge": "Your plan doesn't allow that many clients per slot."
+  },
+  "group": {
+    "title": "Group sessions",
+    "text": "Take several clients in the same slot, for a class or a guided tour. Each client books a place; the slot closes when it is full.",
+    "label": "Clients per slot",
+    "limit": "Your plan allows up to {max} clients per slot.",
+    "single": "Your plan takes one client at a time. Group sessions come with Teams (10 clients) and Organisation (30 clients).",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Group sessions saved."
   }
 }

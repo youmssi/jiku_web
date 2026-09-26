@@ -45,6 +45,24 @@ export async function updateReminderPolicyAction(
   });
 }
 
+/** Sets how many clients one slot takes together (group sessions, capped by the plan). */
+export async function updateClientsPerSlotAction(
+  serviceId: string,
+  clientsPerSlot: number,
+): Promise<ActionResult<ServiceConfiguration>> {
+  const t = await getTranslations("services.errors");
+  const response = await serverFetch(`/services/${serviceId}/configuration`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ clientsPerSlot }),
+  });
+  return fromResponse<ServiceConfiguration>(response, {
+    404: t("notFound"),
+    409: t("groupTooLarge"),
+    default: t("saveConfig"),
+  });
+}
+
 /** Fetches one service's name for navigation chrome (breadcrumbs); null when unavailable. */
 export async function getServiceNameAction(serviceId: string): Promise<string | null> {
   const response = await serverFetch(`/services/${serviceId}`);

@@ -136,7 +136,8 @@
       "name": "Your name",
       "phone": "Your phone",
       "submit": "Book this time",
-      "submitting": "Booking…"
+      "submitting": "Booking…",
+      "placesLeft": "{count, plural, one {# place left} other {# places left}}"
     },
     "booked": {
       "title": "Your appointment is booked",

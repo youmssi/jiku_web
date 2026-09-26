@@ -94,6 +94,7 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
   const selectedDate = useMemo(() => (date ? parseDateOnly(date) : todayUtc()), [date]);
   const calendarLocale = locale === "en" ? enUS : fr;
   const names = view?.professionals.join(", ") ?? "";
+  const groupSessions = (view?.clientsPerSlot ?? 1) > 1;
 
   if (booked) {
     return (
@@ -209,6 +210,11 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
                   )}
                 >
                   {format.dateTime(new Date(slot.startsAt), { timeZone, hour: "2-digit", minute: "2-digit" })}
+                  {groupSessions && slot.placesLeft !== undefined ? (
+                    <span className="block text-xs font-normal text-muted-foreground">
+                      {t("booking.placesLeft", { count: slot.placesLeft })}
+                    </span>
+                  ) : null}
                 </button>
               ))}
               {view && view.slots.length === 0 ? (

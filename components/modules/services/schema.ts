@@ -29,6 +29,10 @@ export interface ServiceConfiguration {
   reminderChannel: ReminderChannel;
   reminderOffsetsMinutes: number[];
   occupancyMinutes: number;
+  /** Clients served together per slot, within the plan's cap. */
+  clientsPerSlot: number;
+  /** The most clients per slot the plan allows. */
+  maxClientsPerSlot: number;
 }
 
 /** Mise à jour partielle (PUT /services/{id}/configuration) — les rappels (JIKU-89). */
