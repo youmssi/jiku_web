@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import {
   Combobox,
   ComboboxContent,
@@ -34,6 +35,7 @@ export function EventCombobox({
   onChange: (event: AdminEventSummary | null) => void;
   id?: string;
 }) {
+  const t = useTranslations("admin.pickers");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<AdminEventSummary[]>([]);
   const [isPending, startTransition] = useTransition();
@@ -78,16 +80,12 @@ export function EventCombobox({
     >
       <ComboboxInput
         id={id}
-        placeholder={tenantId ? "Search this organization's events…" : "Pick an organization first"}
+        placeholder={tenantId ? t("searchEvents") : t("pickOrganizationFirst")}
       />
       <ComboboxContent>
         <ComboboxList>
           <ComboboxEmpty>
-            {isPending
-              ? "Searching…"
-              : query.trim()
-                ? "No matching event."
-                : "Type to search, or leave blank to see recent events."}
+            {isPending ? t("searching") : query.trim() ? t("noEvent") : t("typeToSearchEvents")}
           </ComboboxEmpty>
           {items.map((event) => (
             <ComboboxItem key={event.id} value={event}>

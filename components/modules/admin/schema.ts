@@ -172,21 +172,21 @@ const adminEventReferenceSchema = z.object({ id: z.string().min(1) });
 export const grantTrialSchema = z.object({
   tenant: z
     .union([adminTenantReferenceSchema, z.null()])
-    .refine((tenant) => tenant !== null, "Pick an organization first."),
+    .refine((tenant) => tenant !== null, "pickOrganization"),
   event: z
     .union([adminEventReferenceSchema, z.null()])
-    .refine((event) => event !== null, "Pick an event first."),
-  tier: z.string().min(1, "Pick a tier."),
+    .refine((event) => event !== null, "pickEvent"),
+  tier: z.string().min(1, "pickTier"),
   expiresAt: z
     .string()
-    .min(1, "Set an expiry date.")
+    .min(1, "required")
     .refine(
       (value) => !Number.isNaN(new Date(value).getTime()),
-      "Enter a valid expiry date.",
+      "invalidDate",
     )
     .refine(
       (value) => new Date(value).getTime() > Date.now(),
-      "The expiry must be in the future.",
+      "dateInFuture",
     ),
 });
 export interface GrantTrialFormValues {
@@ -200,22 +200,22 @@ export const createAgreementSchema = z
   .object({
     tenant: z
       .union([adminTenantReferenceSchema, z.null()])
-      .refine((tenant) => tenant !== null, "Pick an organization first."),
+      .refine((tenant) => tenant !== null, "pickOrganization"),
     kind: z.enum(["ENTERPRISE_SAAS", "ON_PREMISE"]),
-    periodStart: z.string().min(1, "Set a start date."),
-    periodEnd: z.string().min(1, "Set an end date."),
+    periodStart: z.string().min(1, "required"),
+    periodEnd: z.string().min(1, "required"),
     amount: z
       .string()
       .optional()
       .refine(
         (value) => !value || /^\d+$/.test(value),
-        "Enter a whole amount.",
+        "wholeNumber",
       ),
     notes: z.string(),
   })
   .refine(
     (values) => new Date(values.periodEnd) >= new Date(values.periodStart),
-    { message: "The period must end after it starts.", path: ["periodEnd"] },
+    { message: "endBeforeStart", path: ["periodEnd"] },
   );
 export interface CreateAgreementFormValues {
   tenant: TenantDirectoryEntry | null;
@@ -231,7 +231,7 @@ export interface ActionDialogFormValues {
   value: string;
 }
 
-// ─── Réglages de facturation du bureau admin ─────────────────────────────────
+// ─── Billing settings of the admin desk ──────────────────────────────────────
 
 export interface AdminPayeeDetails {
   payeeName: string | null;
@@ -260,45 +260,45 @@ export interface AdminBillingSettingsView {
   managedInDatabase: boolean;
 }
 
-const amount = z.coerce.number().int().nonnegative("Price must be zero or more.");
+const amount = z.coerce.number().int("wholeNumber").nonnegative("nonNegative");
 const priceListSchema = z.object({ gnf: amount, fcfa: amount, usdCents: amount });
 
 export const adminBillingSettingsSchema = z.object({
   payee: z.object({
-    payeeName: z.string().trim().max(120, "Keep the name under 120 characters."),
+    payeeName: z.string().trim().max(120, "tooLong"),
     contactEmail: z
       .string()
       .trim()
       .refine((value) => !value || z.string().email().safeParse(value).success, {
-        message: "Enter a valid email or leave it empty.",
+        message: "email",
       }),
-    contactPhone: z.string().trim().max(40, "Keep the phone under 40 characters."),
-    mobileMoneyNumber: z.string().trim().max(40, "Keep the number under 40 characters."),
-    mobileMoneyOperator: z.string().trim().max(40, "Keep the operator under 40 characters."),
-    bankDetails: z.string().max(2000, "Keep the bank details under 2000 characters."),
+    contactPhone: z.string().trim().max(40, "tooLong"),
+    mobileMoneyNumber: z.string().trim().max(40, "tooLong"),
+    mobileMoneyOperator: z.string().trim().max(40, "tooLong"),
+    bankDetails: z.string().max(2000, "tooLong"),
   }),
   tiers: z
     .array(
       z.object({
-        name: z.string().trim().min(1, "Tier name is required.").max(40),
-        maxGuests: z.coerce.number().int().positive("Guests must be a positive number."),
+        name: z.string().trim().min(1, "required").max(40, "tooLong"),
+        maxGuests: z.coerce.number().int("wholeNumber").positive("positive"),
         price: priceListSchema,
       }),
     )
-    .min(1, "At least one tier is required."),
+    .min(1, "atLeastOneTier"),
   subscriptionPlans: z
     .array(
       z.object({
-        name: z.string().trim().min(1, "Plan name is required.").max(40),
-        includedPeople: z.coerce.number().int().positive("Included people must be a positive number."),
+        name: z.string().trim().min(1, "required").max(40, "tooLong"),
+        includedPeople: z.coerce.number().int("wholeNumber").positive("positive"),
         /** Empty means no cap. */
-        maxPeople: z.string().trim().regex(/^\d*$/, "Leave empty or enter a whole number."),
+        maxPeople: z.string().trim().regex(/^\d*$/, "wholeNumberOrEmpty"),
         monthly: priceListSchema,
         /** All zero means the plan takes no one beyond its included people. */
         extraPerson: priceListSchema,
       }),
     )
-    .min(1, "At least one subscription plan is required."),
+    .min(1, "atLeastOnePlan"),
 });
 export type AdminBillingSettingsFormValues = z.infer<typeof adminBillingSettingsSchema>;
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { FileSignature, Plus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
@@ -27,11 +28,8 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import {
-  Field,
-  FieldError,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { FormFieldError } from "@/components/shared";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -55,10 +53,13 @@ import {
   type CreateAgreementFormValues,
 } from "./schema";
 
-const COLUMNS: ColumnDef<DataTableFeatures, AdminAgreement>[] = [
+function useColumns(): ColumnDef<DataTableFeatures, AdminAgreement>[] {
+  const t = useTranslations("admin.agreements");
+  const common = useTranslations("admin.common");
+  return [
   {
     id: "tenant",
-    header: "Tenant",
+    header: t("tenant"),
     enableSorting: false,
     cell: ({ row }) => (
       <span className="font-mono text-xs text-muted-foreground">
@@ -68,11 +69,11 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminAgreement>[] = [
   },
   {
     accessorKey: "kind",
-    header: "Kind",
+    header: t("kind"),
   },
   {
     id: "period",
-    header: "Period",
+    header: t("period"),
     enableSorting: false,
     cell: ({ row }) => (
       <span className="whitespace-nowrap">
@@ -83,12 +84,12 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminAgreement>[] = [
   },
   {
     accessorKey: "renewalAt",
-    header: "Renewal",
+    header: t("renewal"),
     cell: ({ row }) => formatLocalDateTime(row.original.renewalAt),
   },
   {
     id: "amount",
-    header: "Amount",
+    header: t("amount"),
     enableSorting: false,
     cell: ({ row }) =>
       row.original.amountMinor != null && row.original.currency
@@ -97,12 +98,12 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminAgreement>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: common("status"),
     cell: ({ row }) => <StatusBadge status={row.original.status} />,
   },
   {
     id: "notes",
-    header: "Notes",
+    header: t("notes"),
     enableSorting: false,
     cell: ({ row }) => (
       <span className="block max-w-48 truncate text-muted-foreground">
@@ -112,27 +113,27 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminAgreement>[] = [
   },
   {
     id: "actions",
-    header: "Actions",
+    header: common("actions"),
     enableSorting: false,
     cell: ({ row }) =>
       row.original.status === "ACTIVE" ? (
         <div className="flex gap-2">
           <ActionDialog
-            trigger="Renew"
-            title="Renew this agreement"
-            description="Closes the current period and opens the next one, ending at the date below."
-            fieldLabel="New period end (YYYY-MM-DD)"
-            confirmLabel="Renew"
+            trigger={t("renew")}
+            title={t("renewTitle")}
+            description={t("renewText")}
+            fieldLabel={t("newEnd")}
+            confirmLabel={t("renew")}
             onConfirm={(date) =>
               renewAgreementAction(row.original.id, toInstant(date))
             }
           />
           <ActionDialog
-            trigger="Interrupt"
-            title="Interrupt this agreement"
-            description="For an ENTERPRISE_SAAS deal this also suspends the tenant immediately."
-            fieldLabel="Reason"
-            confirmLabel="Interrupt"
+            trigger={t("interrupt")}
+            title={t("interruptTitle")}
+            description={t("interruptText")}
+            fieldLabel={t("reason")}
+            confirmLabel={t("interrupt")}
             destructive
             onConfirm={(reason) =>
               interruptAgreementAction(row.original.id, reason)
@@ -144,6 +145,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminAgreement>[] = [
       ),
   },
 ];
+}
 
 export function AgreementsView({
   agreements,
@@ -152,12 +154,12 @@ export function AgreementsView({
   agreements: AdminAgreement[];
   catalog: AdminTierCatalog;
 }) {
+  const t = useTranslations("admin.agreements");
+  const columns = useColumns();
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-xs text-muted-foreground">
-          Every enterprise or on-premise billing period on record.
-        </p>
+        <p className="text-xs text-muted-foreground">{t("intro")}</p>
         <CreateAgreementDialog currency={catalog.currency} />
       </div>
 
@@ -167,14 +169,12 @@ export function AgreementsView({
             <EmptyMedia variant="icon">
               <FileSignature />
             </EmptyMedia>
-            <EmptyTitle>No agreements yet</EmptyTitle>
-            <EmptyDescription>
-              Create an agreement to open a billing period for a tenant.
-            </EmptyDescription>
+            <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+            <EmptyDescription>{t("emptyText")}</EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
-        <DataTable columns={COLUMNS} data={agreements} />
+        <DataTable columns={columns} data={agreements} />
       )}
     </div>
   );
@@ -191,6 +191,7 @@ function toInstant(date: string): string {
  * the table — the same pattern as inviting a teammate or granting a trial.
  */
 function CreateAgreementDialog({ currency }: { currency: string }) {
+  const t = useTranslations("admin.agreements");
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const {
@@ -216,7 +217,7 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
 
   async function onSubmit(values: CreateAgreementFormValues) {
     if (!values.tenant) {
-      toast.error("Pick an organization first.");
+      toast.error(t("pickOrganization"));
       return;
     }
     const amount = values.amount?.trim();
@@ -235,7 +236,7 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
       toast.error(result.error);
       return;
     }
-    toast.success("Agreement recorded.");
+    toast.success(t("created"));
     reset();
     setOpen(false);
     router.refresh();
@@ -252,16 +253,13 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
       <DialogTrigger asChild>
         <Button>
           <Plus className="size-3.5" data-icon="inline-start" />
-          Create agreement
+          {t("create")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Create agreement</DialogTitle>
-          <DialogDescription>
-            Open a billing period for an enterprise or on-premise deal. The
-            amount is optional — the platform currency is {currency}.
-          </DialogDescription>
+          <DialogTitle>{t("create")}</DialogTitle>
+          <DialogDescription>{t("createText", { currency })}</DialogDescription>
         </DialogHeader>
         <form id="create-agreement-form" onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
           <Controller
@@ -269,15 +267,13 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
             name="tenant"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="agr-tenant">Organization</FieldLabel>
+                <FieldLabel htmlFor="agr-tenant">{t("organization")}</FieldLabel>
                 <TenantCombobox
                   id="agr-tenant"
                   value={field.value}
                   onChange={field.onChange}
                 />
-                {fieldState.invalid ? (
-                  <FieldError errors={[fieldState.error]} />
-                ) : null}
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
@@ -286,7 +282,7 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
             name="kind"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="agr-kind">Kind</FieldLabel>
+                <FieldLabel htmlFor="agr-kind">{t("kind")}</FieldLabel>
                 <Select
                   name={field.name}
                   value={field.value}
@@ -306,9 +302,7 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
                     <SelectItem value="ON_PREMISE">ON_PREMISE</SelectItem>
                   </SelectContent>
                 </Select>
-                {fieldState.invalid ? (
-                  <FieldError errors={[fieldState.error]} />
-                ) : null}
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
@@ -318,16 +312,14 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
               name="periodStart"
               render={({ field, fieldState }) => (
                 <Field className="min-w-40 grow basis-40" data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Starts</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{t("starts")}</FieldLabel>
                   <Input
                     {...field}
                     id={field.name}
                     type="date"
                     aria-invalid={fieldState.invalid}
                   />
-                  {fieldState.invalid ? (
-                    <FieldError errors={[fieldState.error]} />
-                  ) : null}
+                  <FormFieldError error={fieldState.error} />
                 </Field>
               )}
             />
@@ -336,16 +328,14 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
               name="periodEnd"
               render={({ field, fieldState }) => (
                 <Field className="min-w-40 grow basis-40" data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Ends</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{t("ends")}</FieldLabel>
                   <Input
                     {...field}
                     id={field.name}
                     type="date"
                     aria-invalid={fieldState.invalid}
                   />
-                  {fieldState.invalid ? (
-                    <FieldError errors={[fieldState.error]} />
-                  ) : null}
+                  <FormFieldError error={fieldState.error} />
                 </Field>
               )}
             />
@@ -355,9 +345,7 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
             name="amount"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>
-                  Amount ({currency}, optional)
-                </FieldLabel>
+                <FieldLabel htmlFor={field.name}>{t("amountLabel", { currency })}</FieldLabel>
                 <Input
                   {...field}
                   id={field.name}
@@ -365,9 +353,7 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
                   min="0"
                   aria-invalid={fieldState.invalid}
                 />
-                {fieldState.invalid ? (
-                  <FieldError errors={[fieldState.error]} />
-                ) : null}
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
@@ -376,25 +362,23 @@ function CreateAgreementDialog({ currency }: { currency: string }) {
             name="notes"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Notes</FieldLabel>
+                <FieldLabel htmlFor={field.name}>{t("notes")}</FieldLabel>
                 <Input
                   {...field}
                   id={field.name}
                   aria-invalid={fieldState.invalid}
                 />
-                {fieldState.invalid ? (
-                  <FieldError errors={[fieldState.error]} />
-                ) : null}
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
         </form>
         <DialogFooter>
           <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button type="submit" form="create-agreement-form" disabled={isSubmitting}>
-            {isSubmitting ? "Creating…" : "Create agreement"}
+            {isSubmitting ? t("creating") : t("create")}
           </Button>
         </DialogFooter>
       </DialogContent>
