@@ -97,14 +97,5 @@ export const createServiceSchema = z.object({
 
 export type CreateServiceInput = z.infer<typeof createServiceSchema>;
 
-export const RESOURCE_TYPES: { value: ResourceType; label: string }[] = [
-  { value: "PERSON", label: "Personne" },
-  { value: "LOCATION", label: "Lieu" },
-  { value: "EQUIPMENT", label: "Équipement" },
-];
-
-export const RESOURCE_TYPE_LABEL: Record<ResourceType, string> = {
-  PERSON: "Personne",
-  LOCATION: "Lieu",
-  EQUIPMENT: "Équipement",
-};
+/** Resource kinds in display order; labels are `services.resourceTypes` keys. */
+export const RESOURCE_TYPES: readonly ResourceType[] = ["PERSON", "LOCATION", "EQUIPMENT"];

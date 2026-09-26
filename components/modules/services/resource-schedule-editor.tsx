@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -26,7 +27,8 @@ import type {
   ServiceResource,
 } from "@/components/modules/services/schema";
 
-const DAY_LABELS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+/** 1 January 2024 was a Monday: day `n` (ISO, 1 = Monday) falls on 2024-01-0n. */
+const FIRST_MONDAY_UTC = Date.UTC(2024, 0, 1);
 
 /**
  * Éditeur d'horaires d'une ressource (JIKU-84) : les disponibilités hebdomadaires
@@ -35,6 +37,15 @@ const DAY_LABELS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi",
  * ces horaires. Seuls les créneaux où tout est disponible sont réservables.
  */
 export function ResourceScheduleEditor({ resource }: { resource: ServiceResource }) {
+  const t = useTranslations("services.schedule");
+  const format = useFormatter();
+  const dayLabels = useMemo(
+    () =>
+      Array.from({ length: 7 }, (_, index) =>
+        format.dateTime(new Date(FIRST_MONDAY_UTC + index * 86_400_000), { weekday: "long", timeZone: "UTC" }),
+      ),
+    [format],
+  );
   const [availability, setAvailability] = useState<ResourceAvailability[]>([]);
   const [unavailability, setUnavailability] = useState<ResourceUnavailability[]>([]);
   const [day, setDay] = useState("1");
@@ -71,7 +82,7 @@ export function ResourceScheduleEditor({ resource }: { resource: ServiceResource
       return;
     }
     setAvailability((current) => [...current.filter((a) => a.id !== result.data.id), result.data]);
-    toast.success("Horaire ajouté.");
+    toast.success(t("added"));
   }
 
   async function removeAvailability(id: string) {
@@ -99,7 +110,7 @@ export function ResourceScheduleEditor({ resource }: { resource: ServiceResource
     setUnavailability((current) => [...current.filter((u) => u.id !== result.data.id), result.data]);
     setUnavFrom("");
     setUnavTo("");
-    toast.success("Fermeture enregistrée.");
+    toast.success(t("closureSaved"));
   }
 
   async function removeUnavailability(id: string) {
@@ -116,20 +127,20 @@ export function ResourceScheduleEditor({ resource }: { resource: ServiceResource
   return (
     <div className="mt-3 rounded-lg border bg-muted/20 p-3">
       <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        Horaires hebdomadaires
+        {t("weekly")}
       </p>
       {availability.length === 0 ? (
-        <p className="text-xs text-muted-foreground">Aucun horaire — la ressource n&apos;est jamais proposée.</p>
+        <p className="text-xs text-muted-foreground">{t("weeklyEmpty")}</p>
       ) : (
         <ul className="space-y-1 text-xs">
           {availability.map((slot) => (
             <li key={slot.id} className="flex items-center justify-between gap-3">
               <span>
-                {DAY_LABELS[slot.dayOfWeek - 1] ?? slot.dayOfWeek} · {slot.start.slice(0, 5)}–
+                <span className="capitalize">{dayLabels[slot.dayOfWeek - 1] ?? slot.dayOfWeek}</span> · {slot.start.slice(0, 5)}–
                 {slot.end.slice(0, 5)}
               </span>
               <Button size="sm" variant="ghost" disabled={saving} onClick={() => removeAvailability(slot.id)}>
-                Retirer
+                {t("remove")}
               </Button>
             </li>
           ))}
@@ -137,51 +148,46 @@ export function ResourceScheduleEditor({ resource }: { resource: ServiceResource
       )}
       <div className="mt-2 flex flex-wrap items-end gap-2">
         <Select value={day} onValueChange={setDay}>
-          <SelectTrigger className="w-32">
+          <SelectTrigger className="w-32 capitalize" aria-label={t("day")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {DAY_LABELS.map((label, index) => (
-              <SelectItem key={index + 1} value={String(index + 1)}>
+            {dayLabels.map((label, index) => (
+              <SelectItem key={index + 1} value={String(index + 1)} className="capitalize">
                 {label}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Field>
-          <FieldLabel htmlFor={`${resource.id}-start`}>Début</FieldLabel>
+          <FieldLabel htmlFor={`${resource.id}-start`}>{t("start")}</FieldLabel>
           <Input id={`${resource.id}-start`} type="time" value={start} onChange={(e) => setStart(e.target.value)} />
         </Field>
         <Field>
-          <FieldLabel htmlFor={`${resource.id}-end`}>Fin</FieldLabel>
+          <FieldLabel htmlFor={`${resource.id}-end`}>{t("end")}</FieldLabel>
           <Input id={`${resource.id}-end`} type="time" value={end} onChange={(e) => setEnd(e.target.value)} />
         </Field>
         <Button size="sm" disabled={saving} onClick={addAvailability}>
-          Ajouter
+          {t("add")}
         </Button>
       </div>
 
       <p className="mb-2 mt-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        Fermetures (congés, maintenance)
+        {t("closures")}
       </p>
       {unavailability.length === 0 ? (
-        <p className="text-xs text-muted-foreground">Aucune fermeture.</p>
+        <p className="text-xs text-muted-foreground">{t("closuresEmpty")}</p>
       ) : (
         <ul className="space-y-1 text-xs">
           {unavailability.map((slot) => (
             <li key={slot.id} className="flex items-center justify-between gap-3">
               <span>
-                {new Intl.DateTimeFormat("fr-FR", { dateStyle: "short", timeStyle: "short" }).format(
-                  new Date(slot.startsAt),
-                )}{" "}
-                –{" "}
-                {new Intl.DateTimeFormat("fr-FR", { dateStyle: "short", timeStyle: "short" }).format(
-                  new Date(slot.endsAt),
-                )}
+                {format.dateTime(new Date(slot.startsAt), { dateStyle: "short", timeStyle: "short" })} –{" "}
+                {format.dateTime(new Date(slot.endsAt), { dateStyle: "short", timeStyle: "short" })}
                 {slot.reason ? ` (${slot.reason})` : ""}
               </span>
               <Button size="sm" variant="ghost" disabled={saving} onClick={() => removeUnavailability(slot.id)}>
-                Retirer
+                {t("remove")}
               </Button>
             </li>
           ))}
@@ -189,7 +195,7 @@ export function ResourceScheduleEditor({ resource }: { resource: ServiceResource
       )}
       <div className="mt-2 flex flex-wrap items-end gap-2">
         <Field>
-          <FieldLabel htmlFor={`${resource.id}-unav-from`}>Du</FieldLabel>
+          <FieldLabel htmlFor={`${resource.id}-unav-from`}>{t("from")}</FieldLabel>
           <Input
             id={`${resource.id}-unav-from`}
             type="datetime-local"
@@ -198,7 +204,7 @@ export function ResourceScheduleEditor({ resource }: { resource: ServiceResource
           />
         </Field>
         <Field>
-          <FieldLabel htmlFor={`${resource.id}-unav-to`}>Au</FieldLabel>
+          <FieldLabel htmlFor={`${resource.id}-unav-to`}>{t("to")}</FieldLabel>
           <Input
             id={`${resource.id}-unav-to`}
             type="datetime-local"
@@ -207,7 +213,7 @@ export function ResourceScheduleEditor({ resource }: { resource: ServiceResource
           />
         </Field>
         <Button size="sm" disabled={saving || !unavFrom || !unavTo} onClick={addUnavailability}>
-          Ajouter
+          {t("add")}
         </Button>
       </div>
     </div>

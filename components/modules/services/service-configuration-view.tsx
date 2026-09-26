@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,14 +18,14 @@ import type { ReminderChannel, ServiceConfiguration } from "@/components/modules
 
 const DEFAULT_OFFSETS = [1440, 120];
 
-function offsetLabel(minutes: number): string {
+function offsetLabel(minutes: number, t: ReturnType<typeof useTranslations<"services.reminders">>): string {
   switch (minutes) {
     case 1440:
-      return "La veille (J-1)";
+      return t("dayBefore");
     case 120:
-      return "Deux heures avant (H-2)";
+      return t("twoHours");
     default:
-      return `${minutes} minutes avant`;
+      return t("minutesBefore", { minutes });
   }
 }
 
@@ -40,6 +41,7 @@ export function ServiceConfigurationPanel({
   serviceId: string;
   initial: ServiceConfiguration;
 }) {
+  const t = useTranslations("services.reminders");
   const [channel, setChannel] = useState<ReminderChannel>(initial.reminderChannel);
   const [offsets, setOffsets] = useState<number[]>(initial.reminderOffsetsMinutes);
   const [isSaving, startSave] = useTransition();
@@ -57,7 +59,7 @@ export function ServiceConfigurationPanel({
         return;
       }
       setOffsets(result.data.reminderOffsetsMinutes);
-      toast.success("Rappels enregistrés.");
+      toast.success(t("saved"));
     });
   }
 
@@ -71,14 +73,12 @@ export function ServiceConfigurationPanel({
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-10">
-      <h1 className="text-2xl font-semibold">Rappels de rendez-vous</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Envoyez à vos clients un rappel avant leur rendez-vous pour réduire les absences.
-      </p>
+      <h1 className="text-2xl font-semibold">{t("title")}</h1>
+      <p className="mt-1 text-sm text-muted-foreground">{t("text")}</p>
 
       <div className="mt-6 flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Label>Activer les rappels</Label>
+          <Label>{t("enable")}</Label>
           <div className="max-w-xs">
             <Select value={channel} onValueChange={(value: ReminderChannel) => setChannel(value)}>
               <SelectTrigger>
@@ -86,7 +86,7 @@ export function ServiceConfigurationPanel({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="WHATSAPP">WhatsApp</SelectItem>
-                <SelectItem value="NONE">Désactivé</SelectItem>
+                <SelectItem value="NONE">{t("off")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -94,19 +94,17 @@ export function ServiceConfigurationPanel({
 
         {remindersActive && (
           <div className="flex flex-col gap-3">
-            <Label>Décalages d&apos;envoi</Label>
-            <p className="text-sm text-muted-foreground">
-              Un rappel est envoyé à chaque moment choisi avant le début du rendez-vous.
-            </p>
+            <Label>{t("offsets")}</Label>
+            <p className="text-sm text-muted-foreground">{t("offsetsText")}</p>
             {offsets.map((offset, index) => (
               <div key={index} className="flex items-center gap-3">
-                <div className="w-48 text-sm">{offsetLabel(offset)}</div>
+                <div className="w-48 text-sm">{offsetLabel(offset, t)}</div>
                 <div className="w-36">
                   <Input
                     type="number"
                     min={1}
                     value={offset}
-                    aria-label="Minutes avant le rendez-vous"
+                    aria-label={t("minutesLabel")}
                     onChange={(event) => changeOffset(index, event.target.value)}
                   />
                 </div>
@@ -116,7 +114,7 @@ export function ServiceConfigurationPanel({
                   size="sm"
                   onClick={() => setOffsets((current) => current.filter((_, i) => i !== index))}
                 >
-                  Retirer
+                  {t("remove")}
                 </Button>
               </div>
             ))}
@@ -127,7 +125,7 @@ export function ServiceConfigurationPanel({
                 size="sm"
                 onClick={() => setOffsets((current) => [...current, DEFAULT_OFFSETS[1]])}
               >
-                Ajouter un décalage
+                {t("addOffset")}
               </Button>
             </div>
           </div>
@@ -135,7 +133,7 @@ export function ServiceConfigurationPanel({
 
         <div className="mt-2">
           <Button onClick={save} disabled={isSaving || (remindersActive && offsets.length === 0)}>
-            {isSaving ? "Enregistrement…" : "Enregistrer"}
+            {isSaving ? t("saving") : t("save")}
           </Button>
         </div>
       </div>

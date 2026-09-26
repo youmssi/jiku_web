@@ -18,15 +18,14 @@ import type {
   StaffLinkCreated,
 } from "./schema";
 
-// ─── Configuration d'un service (JIKU-89) ───────────────────────────────────
-
 export async function fetchServiceConfigurationAction(
   serviceId: string,
 ): Promise<ActionResult<ServiceConfiguration>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/services/${serviceId}/configuration`);
   return fromResponse<ServiceConfiguration>(response, {
-    404: "Ce service est introuvable.",
-    default: "Impossible de charger la configuration du service.",
+    404: t("notFound"),
+    default: t("loadConfig"),
   });
 }
 
@@ -34,14 +33,15 @@ export async function updateReminderPolicyAction(
   serviceId: string,
   update: ReminderPolicyUpdate,
 ): Promise<ActionResult<ServiceConfiguration>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/services/${serviceId}/configuration`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(update),
   });
   return fromResponse<ServiceConfiguration>(response, {
-    404: "Ce service est introuvable.",
-    default: "Impossible d'enregistrer la configuration.",
+    404: t("notFound"),
+    default: t("saveConfig"),
   });
 }
 
@@ -75,24 +75,26 @@ export async function renameServiceAction(
   serviceId: string,
   name: string,
 ): Promise<ActionResult<ServiceSummary>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/services/${serviceId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name }),
   });
   return fromResponse<ServiceSummary>(response, {
-    404: "Ce service est introuvable.",
-    default: "Impossible de renommer le service.",
+    404: t("notFound"),
+    default: t("rename"),
   });
 }
 
 /** Supprime un service et tout ce qui lui appartenait (créneaux, billets, ressources liées). */
 export async function deleteServiceAction(serviceId: string): Promise<ActionResult<null>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/services/${serviceId}`, { method: "DELETE" });
   if (!response.ok) {
     return fromResponse<null>(response, {
-      404: "Ce service est introuvable.",
-      default: "Impossible de supprimer le service.",
+      404: t("notFound"),
+      default: t("delete"),
     });
   }
   return { ok: true, data: null };
@@ -102,17 +104,19 @@ export async function deleteServiceAction(serviceId: string): Promise<ActionResu
 export async function fetchBookingLinkAction(
   serviceId: string,
 ): Promise<ActionResult<{ token: string; shortCode: string }>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/services/${serviceId}/booking-link`);
   return fromResponse<{ token: string; shortCode: string }>(response, {
-    404: "Ce service est introuvable.",
-    default: "Impossible de générer le lien de réservation.",
+    404: t("notFound"),
+    default: t("bookingLink"),
   });
 }
 
 export async function listStaffLinksAction(serviceId: string): Promise<ActionResult<StaffLink[]>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/services/${serviceId}/staff-links`);
   return fromResponse<StaffLink[]>(response, {
-    default: "Impossible de charger les liens de comptoir.",
+    default: t("staffLoad"),
   });
 }
 
@@ -120,29 +124,32 @@ export async function createStaffLinkAction(
   serviceId: string,
   label: string,
 ): Promise<ActionResult<StaffLinkCreated>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/services/${serviceId}/staff-links`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ label }),
   });
   return fromResponse<StaffLinkCreated>(response, {
-    default: "Impossible de créer le lien de comptoir.",
+    default: t("staffCreate"),
   });
 }
 
 export async function revokeStaffLinkAction(serviceId: string, staffId: string): Promise<ActionResult<null>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/services/${serviceId}/staff-links/${staffId}`, {
     method: "DELETE",
   });
   return response.ok ? { ok: true, data: null } : fromResponse<null>(response, {
-    default: "Impossible de révoquer le lien.",
+    default: t("staffRevoke"),
   });
 }
 
 export async function listResourcesAction(): Promise<ActionResult<ServiceResource[]>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/resources`);
   return fromResponse<ServiceResource[]>(response, {
-    default: "Impossible de charger les ressources.",
+    default: t("resourcesLoad"),
   });
 }
 
@@ -151,31 +158,34 @@ export async function createResourceAction(
   type: ResourceType,
   timezone: string,
 ): Promise<ActionResult<ServiceResource>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/resources`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, type, timezone }),
   });
   return fromResponse<ServiceResource>(response, {
-    default: "Impossible de créer la ressource.",
+    default: t("resourceCreate"),
   });
 }
 
 export async function setResourceActiveAction(id: string, active: boolean): Promise<ActionResult<ServiceResource>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/resources/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ active }),
   });
   return fromResponse<ServiceResource>(response, {
-    default: "Impossible de mettre à jour la ressource.",
+    default: t("resourceUpdate"),
   });
 }
 
 export async function listRequirementsAction(serviceId: string): Promise<ActionResult<ServiceRequirement[]>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/services/${serviceId}/requirements`);
   return fromResponse<ServiceRequirement[]>(response, {
-    default: "Impossible de charger les exigences.",
+    default: t("requirementsLoad"),
   });
 }
 
@@ -184,28 +194,31 @@ export async function addRequirementAction(
   type: ResourceType,
   quantity: number,
 ): Promise<ActionResult<ServiceRequirement>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/services/${serviceId}/requirements`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ type, quantity }),
   });
   return fromResponse<ServiceRequirement>(response, {
-    default: "Impossible d'ajouter l'exigence.",
+    default: t("requirementAdd"),
   });
 }
 
 export async function removeRequirementAction(serviceId: string, requirementId: string): Promise<ActionResult<null>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/services/${serviceId}/requirements/${requirementId}`, {
     method: "DELETE",
   });
   return response.ok ? { ok: true, data: null } : fromResponse<null>(response, {
-    default: "Impossible de retirer l'exigence.",
+    default: t("requirementRemove"),
   });
 }
 
 export async function listAvailabilityAction(resourceId: string): Promise<ActionResult<ResourceAvailability[]>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/resources/${resourceId}/availability`);
-  return fromResponse<ResourceAvailability[]>(response, { default: "Impossible de charger les horaires." });
+  return fromResponse<ResourceAvailability[]>(response, { default: t("availabilityLoad") });
 }
 
 export async function addAvailabilityAction(
@@ -214,22 +227,25 @@ export async function addAvailabilityAction(
   start: string,
   end: string,
 ): Promise<ActionResult<ResourceAvailability>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/resources/${resourceId}/availability`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ dayOfWeek, start, end }),
   });
-  return fromResponse<ResourceAvailability>(response, { default: "Impossible d'ajouter l'horaire." });
+  return fromResponse<ResourceAvailability>(response, { default: t("availabilityAdd") });
 }
 
 export async function removeAvailabilityAction(resourceId: string, availabilityId: string): Promise<ActionResult<null>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/resources/${resourceId}/availability/${availabilityId}`, { method: "DELETE" });
-  return response.ok ? { ok: true, data: null } : fromResponse<null>(response, { default: "Impossible de retirer l'horaire." });
+  return response.ok ? { ok: true, data: null } : fromResponse<null>(response, { default: t("availabilityRemove") });
 }
 
 export async function listUnavailabilityAction(resourceId: string): Promise<ActionResult<ResourceUnavailability[]>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/resources/${resourceId}/unavailability`);
-  return fromResponse<ResourceUnavailability[]>(response, { default: "Impossible de charger les indisponibilités." });
+  return fromResponse<ResourceUnavailability[]>(response, { default: t("closuresLoad") });
 }
 
 export async function addUnavailabilityAction(
@@ -237,15 +253,17 @@ export async function addUnavailabilityAction(
   startsAt: string,
   endsAt: string,
 ): Promise<ActionResult<ResourceUnavailability>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/resources/${resourceId}/unavailability`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ startsAt, endsAt }),
   });
-  return fromResponse<ResourceUnavailability>(response, { default: "Impossible d'ajouter l'indisponibilité." });
+  return fromResponse<ResourceUnavailability>(response, { default: t("closureAdd") });
 }
 
 export async function removeUnavailabilityAction(resourceId: string, unavailabilityId: string): Promise<ActionResult<null>> {
+  const t = await getTranslations("services.errors");
   const response = await serverFetch(`/resources/${resourceId}/unavailability/${unavailabilityId}`, { method: "DELETE" });
-  return response.ok ? { ok: true, data: null } : fromResponse<null>(response, { default: "Impossible de retirer l'indisponibilité." });
+  return response.ok ? { ok: true, data: null } : fromResponse<null>(response, { default: t("closureRemove") });
 }
