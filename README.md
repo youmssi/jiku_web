@@ -1,132 +1,219 @@
-# Jikū — Frontend Service
+<div align="center">
 
-**Jikū** is a white-label SaaS platform for event invitation, ticketing, RSVP, and check-in. This repository contains the frontend service built with Next.js (App Router), TypeScript, and Tailwind CSS.
+<img src="public/jiku-logo.svg" alt="Jikū" width="96" height="96">
 
-## Prerequisites
+# Jikū
 
-- **Node.js 20+**
-- **pnpm** (preferred package manager)
+**Invitations, tickets, appointments and queues for organizations in francophone Africa.**
 
-## Quick Start
+The web app of Jikū: Next.js 16, React 19, TypeScript and Tailwind CSS, in French and English.
 
-### 1. Install dependencies
+[API](https://github.com/youmssi/jiku_app) ·
+[Architecture](#architecture) ·
+[Getting started](#getting-started) ·
+[Contributing](CONTRIBUTING.md)
 
-```bash
-pnpm install
-```
+![Next.js](https://img.shields.io/badge/Next.js-16.2-000000?logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
+![Languages](https://img.shields.io/badge/i18n-FR%20%7C%20EN-1f6f5c)
 
-### 2. Set up environment variables
+<img src="docs/images/landing.png" alt="Jikū landing page" width="880">
 
-Copy `.env.example` to `.env.local` and fill in the required values:
+</div>
 
-```bash
-cp .env.example .env.local
-```
+---
 
-### 3. Start the development server
+## About
 
-```bash
-pnpm dev
-```
+Jikū replaces the WhatsApp groups, spreadsheets and printed cards organizations
+use to receive people. Wedding planners, hotels, clinics, banks and
+administrations use it for two jobs:
 
-The application starts on `http://localhost:3000`.
+- **Events.** Invite guests by WhatsApp, e-mail or SMS, collect RSVPs, send QR
+  tickets and check people in at the door, even when the network drops.
+- **Services.** Clients book an appointment or take a ticket for today's line
+  from a QR code at the entrance, follow their place on their phone, and are
+  called in order at the counter.
 
-### 4. Build for production
+No app to install: guests, clients and staff use the web on any phone.
 
-```bash
-pnpm build
-```
+<table>
+<tr>
+<td width="50%" valign="top">
 
-## Project Structure
+**For organizers**
 
-```
-web/
-├── app/                          # ROUTING LAYER — route groups, params, guards
-│   ├── [locale]/                 # i18n segment: "/" = fr (default), "/en/..." = en
-│   │   ├── (organizer)/          # /dashboard, /events, /events/[id]/...
-│   │   │   ├── (auth)/           # /login, /register, password reset, verify email
-│   │   │   └── (app)/            # authenticated organizer app
-│   │   ├── (guest)/              # /invitation/[token], /o/[username], /privacy
-│   │   ├── (operator)/           # /checkin/[token] (door), /line/[token] (counter)
-│   │   ├── (admin)/              # /admin/... platform admin desk
-│   │   ├── layout.tsx            # Root layout (locale-aware)
-│   │   └── page.tsx              # Landing page (both locales)
-│   ├── api/                      # BFF route handlers (locale-agnostic)
-│   └── globals.css               # Global styles & Tailwind
-├── i18n/                         # next-intl config: routing, request, navigation
-├── messages/                     # translation catalogs (fr.json, en.json)
-├── proxy.ts                      # locale resolution + organizer session guard
-├── components/
-│   ├── ui/                       # shadcn/ui primitives (no domain logic)
-│   ├── shared/                   # cross-cutting: SupportButton, service worker, shared types
-│   └── modules/<domain>/         # feature modules — FLAT, one folder per business domain
-│       ├── identity/             # organizer auth  ← REFERENCE shape (index.ts + server.ts)
-│       ├── event/                # event creation & editing
-│       ├── guest/                # organizer guest-list management (import, invitations)
-│       ├── dashboard/            # live event metrics
-│       ├── invitation/           # guest-facing RSVP / ticket / data deletion
-│       └── checkin/              # validator scanning console (online + offline)
-├── lib/                          # api, api-server, auth, constants, datetime, utils
-├── .env.example                  # Environment variable reference
-├── package.json
-├── next.config.ts
-└── tsconfig.json
-```
+- A "Today" home with what needs attention
+- Events with ticket categories, prices and payment rules, publish checklist, live dashboard and analytics
+- Guest lists by CSV import, three delivery modes, reminders
+- Services, resources, weekly schedules, booking links, short codes and an embeddable widget
+- Operators with a scope and a personal link
+- Branding, members and roles, legal identity for invoices
+- Billing in GNF, FCFA or USD: plans, the Organizer Pack, event tiers, online payment with Mobile Money or card, invoices
+
+</td>
+<td width="50%" valign="top">
+
+**For guests, clients and staff**
+
+- Invitation page with RSVP, ticket transfer and calendar link
+- Ticket page with QR code and what is left to pay
+- Appointment booking and self-service cancellation
+- A ticket for today's line from the entrance QR, with the live rank
+- Door console with offline scanning, duplicate detection and payment collection
+- Counter console: one line for appointments and walk-ins, "next" in one tap
+
+<img src="docs/images/day-line.png" alt="Counter console" width="300">
+
+</td>
+</tr>
+</table>
+
+A platform desk for the Jikū team covers tenants, payments, trials, agreements,
+prices, WhatsApp health, feedback and the audit log.
 
 ## Architecture
 
-Modules are split **by business domain, not by role**. Every module is a flat folder
-with the same shape — when in doubt, copy `components/modules/identity/`:
+The app is a backend-for-frontend: the browser never calls the API directly for
+signed-in pages. Server Components and Server Actions call the
+[Jikū API](https://github.com/youmssi/jiku_app) with the session held in
+httpOnly cookies.
+
+### Routes
+
+Routes are grouped by who uses them. Groups do not change the URL.
 
 ```
-schema.ts             CONTRACT — Zod schemas + inferred types / DTOs mirroring the backend
-<domain>.service.ts   SERVICE  — the module's writes and client-triggered reads, as Server
-                                 Actions returning `ActionResult<T>` (lib/action-result); the
-                                 only layer, with queries, that inspects HTTP statuses
-<domain>.queries.ts   SERVICE  — optional server-only reads for Server Components
-                                 (`import "server-only"`): never Server Actions, so no client
-                                 can call them; a failed read falls back to an empty state
-use<Domain>.ts        CACHE    — client polling/cache hooks (optional; omit when nothing
-                                 changes after the initial load)
-<feature>.tsx         COMPONENT— UI + validation only (RHF + Zod); calls actions/hooks,
-                                 never raw fetch
-index.ts              BARREL   — the module's public surface (components, hooks, public types);
-                                 deep imports never cross the module boundary
-server.ts             BARREL   — optional server-only surface (`import "server-only"`): loaders
-                                 that read the session cookie, for Server Components only, so
-                                 they can never reach a client bundle through index.ts
+app/
+├── [locale]/                 "/" is French (default), "/en/..." is English
+│   ├── (organizer)/
+│   │   ├── (auth)/           /login, /register, /forgot-password, /reset-password, /verify-email
+│   │   └── (app)/            /dashboard, /events, /services, /operators, /billing, /settings
+│   ├── (guest)/              /invitation/[token], /o/[username]
+│   ├── (operator)/           /checkin/[token], /line/[token], /operator/[code]
+│   ├── (admin)/              /admin/...
+│   ├── r/[code]              booking link, today's line, a client's ticket
+│   ├── widget/[token]        embeddable booking widget
+│   └── page.tsx              landing page, simulator, use cases, FAQ, legal pages
+└── api/                      route handlers for file downloads (receipts, exports, certificates)
 ```
 
-Layer dependency is one-way — routing → component → cache → service → contract:
+### Modules
 
-| Layer | Location | Responsibility |
+Code is split by business domain, not by role. Each module in
+`components/modules/<domain>/` is a flat folder with the same layers, and
+dependencies point one way:
+
+```
+routing (app/)  →  component  →  cache hook  →  service  →  contract
+```
+
+| File | Layer | Responsibility |
 |---|---|---|
-| **Routing** | `app/**` | Route groups, params, guards; renders a module component (imported from its barrel) |
-| **Component** | `modules/<domain>/<feature>.tsx` | UI + validation only |
-| **Cache/Data** | `modules/<domain>/use<Domain>.ts` | Client polling/cache (optional) |
-| **Service** | `modules/<domain>/<domain>.service.ts` | Server Actions / `fetch`; sole HTTP-status handler |
-| **Contract** | `modules/<domain>/schema.ts` | Zod schemas + types |
+| `schema.ts` | Contract | Zod schemas and types; API shapes are aliases of the generated OpenAPI types |
+| `<domain>.service.ts` | Service | Server Actions returning `ActionResult<T>`; the only place HTTP statuses become messages |
+| `<domain>.queries.ts` | Service | Server-only reads for Server Components |
+| `use<Domain>.ts` | Cache | Client polling hooks, paused while the tab is hidden |
+| `<feature>.tsx` | Component | UI and validation (react-hook-form with Zod); never calls `fetch` |
+| `index.ts`, `server.ts` | Barrels | The module's public surface; server-only loaders stay out of client bundles |
 
-## Key Conventions
+Other modules import a module only through its barrel. Shared code lives in
+`components/shared/`, and shadcn/ui primitives in `components/ui/`.
 
-- **Server Components** are the default; use `"use client"` only when interactivity or browser APIs are needed
-- **Route groups** (parentheses syntax) keep URL paths clean while allowing per-role layouts
-- **i18n (next-intl)** — locales live in `i18n/routing.ts` (`fr` default, unprefixed; `/en/...` prefixed). Import `Link`/`useRouter`/`usePathname` from `@/i18n/navigation` (not `next/link` / `next/navigation`) so the active locale survives navigation; on the server, redirect with `localeRedirect` from `@/i18n/redirect`. File downloads served by `app/api/**` are plain `<a download>` links, never `Link`. Every user-facing string lives in `messages/<locale>/<namespace>.json` (one catalog per namespace, listed in `i18n/messages.ts`); French is the reference whose shape types every key, and `pnpm i18n:check` (run in CI) fails when English drifts from it. Components use `useTranslations` / `getTranslations`; Server Actions translate their messages with `getTranslations`; Zod schemas carry `common.validation` keys that `FormFieldError` translates. Long-form marketing copy (landing, simulator, use cases) stays in its typed per-locale content modules
-- **Route names** — URL segments are English and specific (`/services/[id]/manage`, `/services/[id]/line`); the language lives in the locale prefix, not in the path.
-- **Pages stay thin** — a `page.tsx` reads params and renders one module component; data loading, fallbacks and role checks live in the module
-- **No hardcoded config** — environment variables via `.env` files only
-- **API calls** go through service layers, never directly in components
+### Conventions
 
-## Available Scripts
+- **Server Components first.** `"use client"` only for interactivity, browser
+  APIs or client state.
+- **Every string is translated.** Catalogs live in `messages/<locale>/<namespace>.json`;
+  French is the reference that types every key, and `pnpm i18n:check` fails CI
+  when English drifts. Zod messages are `common.validation` keys.
+- **Locale-aware navigation.** `Link`, `useRouter` and `redirect` come from
+  `@/i18n/navigation` so the active locale survives navigation.
+- **Typed API contract.** `lib/api-types.ts` is generated from the API's
+  OpenAPI document; a backend change becomes a type error, not a runtime surprise.
+- **Thin pages.** A `page.tsx` reads params and renders one module component.
+- **No hardcoded configuration.** Every URL, key and threshold is an
+  environment variable, documented in `.env.example`.
 
-| Script     | Command            |
-|------------|--------------------|
-| Dev server | `pnpm dev`         |
-| Build      | `pnpm build`       |
-| Start      | `pnpm start`       |
-| Lint       | `pnpm lint`        |
+## Tech stack
+
+| | |
+|---|---|
+| Framework | Next.js 16 (App Router, Server Actions), React 19 |
+| Language | TypeScript, strict |
+| UI | Tailwind CSS 4, shadcn/ui, Radix, Lucide |
+| Forms | react-hook-form, Zod |
+| i18n | next-intl, French and English |
+| Data | Server-side `fetch` to the API with typed contracts from openapi-typescript |
+| Offline | Service worker and IndexedDB for the door console |
+| Observability | Sentry, Umami (cookie-free analytics) |
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 20 or later
+- pnpm
+- The [Jikū API](https://github.com/youmssi/jiku_app) running locally (`./gradlew bootRun`)
+
+### Run locally
+
+```bash
+pnpm install
+cp .env.example .env.local   # optional: defaults point at http://localhost:8080
+pnpm dev                     # http://localhost:3000
+```
+
+### Scripts
+
+| Command | What it does |
+|---|---|
+| `pnpm dev` | Development server |
+| `pnpm build` | Production build (type checks included) |
+| `pnpm start` | Serve the production build |
+| `pnpm lint` | ESLint |
+| `pnpm i18n:check` | Checks the English catalogs match the French reference |
+
+### Regenerate API types
+
+After a backend contract change:
+
+```bash
+cp ../jiku_app/openapi/openapi.json openapi/openapi.json
+npx openapi-typescript openapi/openapi.json -o lib/api-types.ts
+```
+
+Commit both files together. See [`openapi/README.md`](openapi/README.md).
+
+## Configuration
+
+[`.env.example`](.env.example) lists every variable in two sections:
+
+- **Required in production:** the public site URL, the API URL for the browser
+  and the server, and the support e-mail.
+- **Optional, per feature:** Google sign-in, online payment
+  (`ONLINE_PAYMENT_ENABLED`), support WhatsApp and sales e-mail, error tracking
+  (Sentry), analytics (Umami), Google Search Console.
+
+`NEXT_PUBLIC_*` values are inlined at build time and public; everything else is
+server-only.
+
+## Deployment
+
+The app deploys to Vercel. Every pull request gets a preview deployment;
+`develop` is the integration branch and merging `develop` into `main` releases
+to production. The embeddable booking widget is documented in
+[`docs/widget-integration.md`](docs/widget-integration.md).
 
 ## Contributing
 
-`CONTRIBUTING.md` is the workflow from story to merge: one branch per story from
-an up-to-date `develop`, merged before the next story starts.
+[`CONTRIBUTING.md`](CONTRIBUTING.md) describes the workflow: one branch per
+story (`jiku-{n}-{slug}`) from an up-to-date `develop`, Conventional Commits with
+a `Refs: JIKU-<n>` trailer, and a squash merge once lint and build are green.
+[`AGENTS.md`](AGENTS.md) holds the engineering rules.
+
+## License
+
+This repository is private. All rights reserved.
