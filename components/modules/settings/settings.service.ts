@@ -6,6 +6,8 @@ import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import type {
   CompleteEmbeddedSignupRequest,
+  PaymentMethodsInfo,
+  PaymentMethodsInput,
   ProviderSettingsResponse,
   UpdateBrandingRequest,
   UpdateEmailProviderRequest,
@@ -116,6 +118,23 @@ export async function testSendAction(
     return fail("The test message could not be sent.");
   }
   return ok((await response.json()) as TestSendResponse);
+}
+
+// ─── Payment methods (JIKU-109) ─────────────────────────────────────────────
+
+export async function updatePaymentMethodsAction(
+  input: PaymentMethodsInput,
+): Promise<ActionResult<PaymentMethodsInfo>> {
+  const response = await serverFetch("/settings/payment-methods", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail((await getTranslations("settings.paymentMethods.errors"))("failed"));
+  }
+  return ok((await response.json()) as PaymentMethodsInfo);
 }
 
 // ─── Legal identity (JIKU-69) ───────────────────────────────────────────────

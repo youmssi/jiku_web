@@ -9,7 +9,7 @@ import { TicketActions } from "@/components/modules/invitation/ticket-actions";
 import { DataDeletion } from "@/components/modules/invitation/data-deletion";
 import { googleCalendarLink } from "@/components/modules/invitation/calendar-link";
 import type { RsvpView } from "@/components/modules/invitation/schema";
-import { StateMessage } from "@/components/shared";
+import { PaymentDue, StateMessage } from "@/components/shared";
 import { siteUrl } from "@/components/modules/seo";
 
 /** Guest-facing ticket screen, shown once the guest has confirmed. */
@@ -93,6 +93,11 @@ export async function TicketView({ params }: { params: Promise<{ token: string }
         location={rsvp.eventLocation}
         cancelled={cancelled}
       />
+      {rsvp.payment && !cancelled ? (
+        <div className="mt-4 w-full max-w-sm print:hidden">
+          <PaymentDue {...rsvp.payment} />
+        </div>
+      ) : null}
       <TicketActions calendarUrl={calendarUrl} />
       <p className="mt-3 text-center text-xs text-muted-foreground print:hidden">{t("brightness")}</p>
       <div className="w-full max-w-sm print:hidden">

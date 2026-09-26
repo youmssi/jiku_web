@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { Schema } from "@/lib/api-contract";
 
 // CONTRACT — types mirroring the branding and provider settings APIs (JIKU-45).
@@ -138,3 +139,30 @@ export interface TemplatePreviewRequest {
 export interface TemplatePreviewResponse {
   body: string;
 }
+
+// ─── Payment methods (JIKU-109) ─────────────────────────────────────────────
+
+/** How the organization's clients pay it; blank fields are cleared. */
+export type PaymentMethodsInfo = Schema<"TenantPaymentMethodsInfo">;
+
+const PHONE = /^\+?[0-9 ]{6,20}$/;
+const optionalPhone = z.string().trim().max(32, "tooLong").refine((value) => value === "" || PHONE.test(value), "phone");
+
+export const paymentMethodsSchema = z
+  .object({
+    payeeName: z.string().trim().max(120, "tooLong"),
+    orangeMoneyNumber: optionalPhone,
+    mtnMomoNumber: optionalPhone,
+    waveNumber: optionalPhone,
+    paymentLinkUrl: z
+      .string()
+      .trim()
+      .max(500, "tooLong")
+      .refine((value) => value === "" || /^https:\/\/\S+$/.test(value), "httpsUrl"),
+  })
+  .refine(
+    (value) => value.payeeName !== "" || (!value.orangeMoneyNumber && !value.mtnMomoNumber && !value.waveNumber),
+    { message: "payeeRequired", path: ["payeeName"] },
+  );
+
+export type PaymentMethodsInput = z.infer<typeof paymentMethodsSchema>;

@@ -109,5 +109,16 @@
       "closed": "La file de ce service n'est pas ouverte pour le moment.",
       "failed": "Impossible de prendre un ticket. Réessayez."
     }
+  },
+  "payment": {
+    "due": "À régler : {amount}",
+    "dueAfter": "À régler après le service : {amount}",
+    "paid": "Réglé : {amount}",
+    "payee": "Bénéficiaire : {name}",
+    "orangeMoney": "Orange Money",
+    "mtnMomo": "MTN MoMo",
+    "wave": "Wave",
+    "payOnline": "Payer en ligne",
+    "askOrganizer": "L'organisateur vous indiquera comment régler."
   }
 }

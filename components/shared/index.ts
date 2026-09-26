@@ -5,6 +5,7 @@ export {
 export {FormFieldError} from "./form-field-error";
 export {ServiceWorkerRegister} from "./service-worker-register";
 export {useRoleLabel} from "./use-role-label";
+export {PaymentDue} from "./payment-due";
 export {StateMessage} from "./state-message";
 export {Stat} from "./stat";
 export {SupportButton} from "./support-button";

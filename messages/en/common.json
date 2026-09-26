@@ -25,7 +25,8 @@
     "phone": "Use the international format, e.g. +224620000000.",
     "tooShort": "Too short.",
     "httpsUrl": "Enter an address that starts with https://",
-    "hexColor": "Enter a colour in the #RRGGBB format"
+    "hexColor": "Enter a colour in the #RRGGBB format",
+    "payeeRequired": "Enter the payee name your clients will see."
   },
   "roles": {
     "OWNER": "Owner",
