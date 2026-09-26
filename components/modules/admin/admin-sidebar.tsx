@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { LogoutIcon } from "@hugeicons/core-free-icons";
 import {
@@ -18,7 +19,7 @@ import { JikūLogo } from "@/components/ui/jiku-logo";
 import { Link, usePathname } from "@/i18n/navigation";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import { adminLogoutAction } from "./admin.service";
-import { ADMIN_NAV_GROUPS } from "./admin-nav";
+import { useAdminNavGroups } from "./admin-nav";
 
 /**
  * Back-office shell following the shadcn sidebar-07 template structure: brand
@@ -28,18 +29,19 @@ import { ADMIN_NAV_GROUPS } from "./admin-nav";
  * app — this surface is for the operating team only.
  */
 export function AdminSidebar(props: React.ComponentProps<typeof Sidebar>) {
+  const t = useTranslations("admin.shell");
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild tooltip="Jikū admin">
+            <SidebarMenuButton size="lg" asChild tooltip={t("brand")}>
               <Link href={ADMIN_ROUTES.TENANTS}>
                 <JikūLogo variant="mark" className="size-5 rounded-md" />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Jikū</span>
                   <span className="truncate text-xs text-muted-foreground">
-                    Admin
+                    {t("admin")}
                   </span>
                 </div>
               </Link>
@@ -56,12 +58,12 @@ export function AdminSidebar(props: React.ComponentProps<typeof Sidebar>) {
             <form action={adminLogoutAction} className="w-full">
               <SidebarMenuButton
                 asChild
-                tooltip="Sign out"
+                tooltip={t("signOut")}
                 className="text-muted-foreground"
               >
                 <button type="submit">
                   <HugeiconsIcon icon={LogoutIcon} strokeWidth={2} />
-                  <span>Sign out</span>
+                  <span>{t("signOut")}</span>
                 </button>
               </SidebarMenuButton>
             </form>
@@ -75,10 +77,11 @@ export function AdminSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
 function AdminNavGroups() {
   const pathname = usePathname();
+  const groups = useAdminNavGroups();
 
   return (
     <>
-      {ADMIN_NAV_GROUPS.map((group) => (
+      {groups.map((group) => (
         <SidebarGroup key={group.label}>
           <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
           <SidebarMenu>

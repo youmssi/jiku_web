@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ScrollText } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -20,10 +21,12 @@ import { ADMIN_ROUTES } from "@/lib/constants";
 import { formatLocalDateTime } from "@/lib/datetime";
 import type { AuditEntry, AuditPage } from "./schema";
 
-const COLUMNS: ColumnDef<DataTableFeatures, AuditEntry>[] = [
+function useColumns(): ColumnDef<DataTableFeatures, AuditEntry>[] {
+  const t = useTranslations("admin.audit");
+  return [
   {
     accessorKey: "createdAt",
-    header: "When",
+    header: t("when"),
     cell: ({ row }) => (
       <span className="whitespace-nowrap">
         {formatLocalDateTime(row.original.createdAt)}
@@ -32,14 +35,14 @@ const COLUMNS: ColumnDef<DataTableFeatures, AuditEntry>[] = [
   },
   {
     accessorKey: "action",
-    header: "Action",
+    header: t("action"),
     cell: ({ row }) => (
       <span className="font-mono text-xs">{row.original.action}</span>
     ),
   },
   {
     accessorKey: "target",
-    header: "Target",
+    header: t("target"),
     cell: ({ row }) => (
       <span className="font-mono text-xs text-muted-foreground">
         {row.original.target}
@@ -48,7 +51,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, AuditEntry>[] = [
   },
   {
     accessorKey: "note",
-    header: "Note",
+    header: t("note"),
     cell: ({ row }) => (
       <span className="block max-w-64 truncate text-muted-foreground">
         {row.original.note ?? "—"}
@@ -57,7 +60,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, AuditEntry>[] = [
   },
   {
     id: "admin",
-    header: "Admin",
+    header: t("admin"),
     enableSorting: false,
     cell: ({ row }) => (
       <span className="font-mono text-xs text-muted-foreground">
@@ -66,8 +69,11 @@ const COLUMNS: ColumnDef<DataTableFeatures, AuditEntry>[] = [
     ),
   },
 ];
+}
 
 export function AuditView({ audit }: { audit: AuditPage }) {
+  const t = useTranslations("admin.audit");
+  const columns = useColumns();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [action, setAction] = useState(searchParams.get("action") ?? "");
@@ -85,11 +91,11 @@ export function AuditView({ audit }: { audit: AuditPage }) {
         <Input
           value={action}
           onChange={(event) => setAction(event.target.value)}
-          placeholder="Filter by action (e.g. PAYMENT_CONFIRMED)…"
+          placeholder={t("filter")}
           className="max-w-sm font-mono"
         />
         <Button type="submit" variant="outline">
-          Filter
+          {t("filterButton")}
         </Button>
       </form>
 
@@ -99,15 +105,15 @@ export function AuditView({ audit }: { audit: AuditPage }) {
             <EmptyMedia variant="icon">
               <ScrollText />
             </EmptyMedia>
-            <EmptyTitle>No audit entries</EmptyTitle>
-            <EmptyDescription>No audit entries match this filter.</EmptyDescription>
+            <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+            <EmptyDescription>{t("emptyText")}</EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
         <>
-          <DataTable columns={COLUMNS} data={audit.entries} />
+          <DataTable columns={columns} data={audit.entries} />
           <p className="text-xs text-muted-foreground">
-            {audit.total} entrie(s)
+            {t("total", { count: audit.total })}
           </p>
         </>
       )}

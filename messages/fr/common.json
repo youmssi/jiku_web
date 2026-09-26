@@ -26,7 +26,16 @@
     "tooShort": "Trop court.",
     "httpsUrl": "Indiquez une adresse qui commence par https://",
     "hexColor": "Indiquez une couleur au format #RRGGBB",
-    "payeeRequired": "Indiquez le nom du bénéficiaire que vos clients verront."
+    "payeeRequired": "Indiquez le nom du bénéficiaire que vos clients verront.",
+    "pickOrganization": "Choisissez d'abord une organisation.",
+    "pickEvent": "Choisissez d'abord un événement.",
+    "pickTier": "Choisissez un palier.",
+    "invalidDate": "Saisissez une date valide.",
+    "dateInFuture": "La date doit être dans le futur.",
+    "nonNegative": "Saisissez zéro ou plus.",
+    "wholeNumberOrEmpty": "Laissez vide ou saisissez un nombre entier.",
+    "atLeastOneTier": "Il faut au moins un palier.",
+    "atLeastOnePlan": "Il faut au moins une formule."
   },
   "roles": {
     "OWNER": "Propriétaire",

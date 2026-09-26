@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,6 +37,7 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 export function StatusBadge({ status }: { status: string }) {
+  const t = useTranslations("admin.status");
   const style =
     STATUS_STYLES[status] ??
     "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300";
@@ -43,7 +45,7 @@ export function StatusBadge({ status }: { status: string }) {
     <span
       className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${style}`}
     >
-      {status}
+      {t.has(status as never) ? t(status as never) : status}
     </span>
   );
 }
@@ -60,14 +62,8 @@ const TRIAL_STATUS_STYLES: Record<string, string> = {
   EXPIRED: "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300",
   ENDED: "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300",
 };
-const TRIAL_STATUS_LABELS: Record<string, string> = {
-  ACTIVE: "Active",
-  CONVERTED: "Converted",
-  EXPIRED: "Expired",
-  ENDED: "Ended",
-};
-
 export function TrialStatusBadge({ status }: { status: string }) {
+  const t = useTranslations("admin.trialStatus");
   const style =
     TRIAL_STATUS_STYLES[status] ??
     "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300";
@@ -75,7 +71,7 @@ export function TrialStatusBadge({ status }: { status: string }) {
     <span
       className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${style}`}
     >
-      {TRIAL_STATUS_LABELS[status] ?? status}
+      {t.has(status as never) ? t(status as never) : status}
     </span>
   );
 }
@@ -95,6 +91,7 @@ export function IdentityCell({
   /** Shown instead of the id-prefix fallback when `name` is null (e.g. "Unknown event"). */
   fallbackLabel: string;
 }) {
+  const t = useTranslations("admin.common");
   const [copied, setCopied] = useState(false);
 
   async function copyId() {
@@ -119,7 +116,7 @@ export function IdentityCell({
           <span className="font-mono text-xs text-muted-foreground">{id}</span>
           <Button variant="ghost" size="icon-sm" onClick={copyId} className="shrink-0">
             {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-            <span className="sr-only">Copy id</span>
+            <span className="sr-only">{t("copyId")}</span>
           </Button>
         </div>
       </HoverCardContent>

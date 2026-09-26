@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { getTranslations } from "next-intl/server";
 import { localeRedirect } from "@/i18n/redirect";
 import { AdminSidebar } from "@/components/modules/admin";
 import { NavCommandPalette } from "@/components/shared";
@@ -27,6 +28,7 @@ export default async function AdminAppLayout({
   if (!(await getAdminAccessToken())) {
     return localeRedirect(ADMIN_ROUTES.LOGIN);
   }
+  const t = await getTranslations("admin.shell");
   return (
     <TooltipProvider>
       <SidebarProvider>
@@ -39,7 +41,7 @@ export default async function AdminAppLayout({
                 orientation="vertical"
                 className="mr-2 data-vertical:h-4 data-vertical:self-auto"
               />
-              <span className="text-sm font-medium">Jikū admin</span>
+              <span className="text-sm font-medium">{t("brand")}</span>
             </div>
             <div className="ml-auto flex items-center px-4">
               <NavCommandPalette variant="admin" />

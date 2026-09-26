@@ -1,0 +1,174 @@
+{
+  "shell": {
+    "brand": "Administration Jikū",
+    "admin": "Admin",
+    "signOut": "Se déconnecter"
+  },
+  "nav": {
+    "platform": "Plateforme",
+    "desk": "Bureau",
+    "tenants": "Organisations",
+    "payments": "Paiements",
+    "trials": "Essais",
+    "agreements": "Contrats",
+    "billingInfo": "Facturation",
+    "audit": "Journal",
+    "whatsapp": "WhatsApp",
+    "prospects": "Prospects",
+    "feedback": "Retours",
+    "diagnostics": "Diagnostic"
+  },
+  "pages": {
+    "tenants": "Organisations",
+    "payments": "Bureau des paiements",
+    "trials": "Essais",
+    "agreements": "Contrats entreprise",
+    "billingInfo": "Informations de facturation",
+    "audit": "Journal d'audit",
+    "whatsapp": "WhatsApp",
+    "prospects": "Prospects",
+    "feedback": "Retours",
+    "diagnostics": "Diagnostic",
+    "billingLoadFailed": "Impossible de charger les réglages de facturation."
+  },
+  "login": {
+    "metaTitle": "Jikū - Administration",
+    "title": "Administration Jikū",
+    "description": "Réservé aux opérateurs de la plateforme. Chaque action est journalisée.",
+    "failed": "Connexion impossible",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "submitting": "Connexion…"
+  },
+  "status": {
+    "ACTIVE": "Active",
+    "SUCCEEDED": "Réussi",
+    "CONVERTED": "Converti",
+    "PENDING": "En attente",
+    "EXPIRING": "Bientôt expiré",
+    "SUSPENDED": "Suspendue",
+    "FAILED": "Échoué",
+    "INTERRUPTED": "Interrompu",
+    "EXPIRED": "Expiré",
+    "ENDED": "Terminé",
+    "RENEWED": "Renouvelé",
+    "VERIFIED": "Vérifié",
+    "REJECTED": "Rejeté",
+    "CANCELLED": "Annulé",
+    "REFUNDED": "Remboursé",
+    "DUPLICATE": "Doublon"
+  },
+  "trialStatus": {
+    "ACTIVE": "En cours",
+    "CONVERTED": "Converti",
+    "EXPIRED": "Expiré",
+    "ENDED": "Terminé"
+  },
+  "common": {
+    "copyId": "Copier l'identifiant",
+    "actions": "Actions",
+    "status": "Statut",
+    "cancel": "Annuler",
+    "working": "En cours…",
+    "done": "{title} : fait.",
+    "fieldRequired": "{field} est obligatoire.",
+    "save": "Enregistrer",
+    "saved": "Enregistré."
+  },
+  "tenants": {
+    "tenant": "Organisation",
+    "contact": "Contact",
+    "organizers": "Organisateurs",
+    "created": "Créée le",
+    "reactivate": "Réactiver",
+    "reactivateTitle": "Réactiver {name}",
+    "reactivateText": "Les organisateurs retrouvent l'accès immédiatement.",
+    "note": "Note",
+    "suspend": "Suspendre",
+    "suspendTitle": "Suspendre {name}",
+    "suspendText": "Bloque l'accès des organisateurs et désactive les liens invités et portiers dès la requête suivante.",
+    "noteWhy": "Note (motif)",
+    "search": "Nom ou e-mail de contact…",
+    "searchButton": "Rechercher",
+    "emptyTitle": "Aucune organisation",
+    "emptyText": "Aucune organisation ne correspond à cette recherche.",
+    "total": "{count, plural, one {# organisation} other {# organisations}}"
+  },
+  "payments": {
+    "date": "Date",
+    "reference": "Référence",
+    "tier": "Palier",
+    "amount": "Montant",
+    "provider": "Prestataire",
+    "tenant": "Organisation",
+    "markPaid": "Marquer payé",
+    "confirmTitle": "Confirmer {reference}",
+    "confirmText": "Ne confirmez qu'une fois le virement visible sur le compte de réception. Le palier est débloqué immédiatement.",
+    "observedReference": "Référence de transaction constatée",
+    "confirm": "Confirmer le paiement",
+    "reject": "Rejeter",
+    "rejectTitle": "Rejeter {reference}",
+    "rejectText": "L'organisateur est prévenu et peut envoyer une nouvelle demande.",
+    "reason": "Motif",
+    "filters": {
+      "PENDING": "En attente",
+      "SUCCEEDED": "Réussis",
+      "FAILED": "Échoués"
+    },
+    "emptyTitle": "Aucun paiement",
+    "emptyText": "Aucun paiement dans cette catégorie."
+  },
+  "audit": {
+    "when": "Quand",
+    "action": "Action",
+    "target": "Cible",
+    "note": "Note",
+    "admin": "Admin",
+    "filter": "Filtrer par action (ex. PAYMENT_CONFIRMED)…",
+    "filterButton": "Filtrer",
+    "emptyTitle": "Aucune entrée",
+    "emptyText": "Aucune entrée ne correspond à ce filtre.",
+    "total": "{count, plural, one {# entrée} other {# entrées}}"
+  },
+  "feedbackInbox": {
+    "noRatings": "Aucune note sur les 30 derniers jours.",
+    "ratings": "{responses, plural, one {# note} other {# notes}} · {dismissed, plural, one {# ignorée} other {# ignorées}}",
+    "all": "Tous",
+    "everyStatus": "Tous les statuts",
+    "total": "{count, plural, one {# message} other {# messages}}",
+    "emptyTitle": "Rien à lire",
+    "emptyText": "Aucun message ne correspond à ces filtres.",
+    "note": "Note interne",
+    "kinds": {
+      "COMPLAINT": "réclamation",
+      "PROBLEM": "problème",
+      "QUESTION": "question",
+      "IDEA": "idée",
+      "RATING": "note"
+    },
+    "statuses": {
+      "NEW": "nouveau",
+      "IN_PROGRESS": "en cours",
+      "ANSWERED": "répondu",
+      "CLOSED": "clos"
+    },
+    "moments": {
+      "event_published": "Événement publié",
+      "invitations_sent": "Invitations envoyées",
+      "guests_imported": "Invités importés",
+      "service_created": "Service créé"
+    }
+  },
+  "errors": {
+    "invalidCredentials": "E-mail ou mot de passe incorrect.",
+    "signInFailed": "La connexion a échoué. Réessayez.",
+    "conflict": "Cette action est incompatible avec l'état actuel.",
+    "failed": "L'action a échoué. Réessayez.",
+    "pricing": "Impossible de mettre à jour le tarif.",
+    "override": "Impossible de modifier la surcharge de contenu.",
+    "prospect": "Impossible de marquer cette piste comme contactée.",
+    "diagnostics": "Aucune erreur déclenchée : réponse inattendue.",
+    "billingSettings": "Les réglages n'ont pas pu être enregistrés."
+  }
+}

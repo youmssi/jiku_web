@@ -1,17 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { FormFieldError } from "@/components/shared";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { adminLoginAction } from "./admin.service";
@@ -26,6 +23,7 @@ import {
  * a dead one an operator could click.
  */
 export function AdminLoginForm() {
+  const t = useTranslations("admin.login");
   const [formError, setFormError] = useState<string | null>(null);
   const {
     control,
@@ -52,7 +50,7 @@ export function AdminLoginForm() {
       <FieldGroup>
         {formError ? (
           <Alert variant="destructive">
-            <AlertTitle>We couldn&apos;t sign you in</AlertTitle>
+            <AlertTitle>{t("failed")}</AlertTitle>
             <AlertDescription>{formError}</AlertDescription>
           </Alert>
         ) : null}
@@ -61,7 +59,7 @@ export function AdminLoginForm() {
           name="email"
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+              <FieldLabel htmlFor={field.name}>{t("email")}</FieldLabel>
               <Input
                 {...field}
                 id={field.name}
@@ -69,9 +67,7 @@ export function AdminLoginForm() {
                 aria-invalid={fieldState.invalid}
                 autoComplete="username"
               />
-              {fieldState.invalid ? (
-                <FieldError errors={[fieldState.error]} />
-              ) : null}
+              <FormFieldError error={fieldState.error} />
             </Field>
           )}
         />
@@ -80,21 +76,19 @@ export function AdminLoginForm() {
           name="password"
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+              <FieldLabel htmlFor={field.name}>{t("password")}</FieldLabel>
               <PasswordInput
                 {...field}
                 id={field.name}
                 aria-invalid={fieldState.invalid}
                 autoComplete="current-password"
               />
-              {fieldState.invalid ? (
-                <FieldError errors={[fieldState.error]} />
-              ) : null}
+              <FormFieldError error={fieldState.error} />
             </Field>
           )}
         />
         <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting ? "Signing in…" : "Sign in"}
+          {isSubmitting ? t("submitting") : t("submit")}
         </Button>
       </FieldGroup>
     </form>
