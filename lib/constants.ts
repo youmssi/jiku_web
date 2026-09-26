@@ -19,6 +19,7 @@ export const ROUTES = {
   SERVICES: "/services",
   BILLING: "/billing",
   SETTINGS: "/settings",
+  OPERATORS: "/operators",
 } as const;
 
 export function serviceLineRoute(id: string): string {
