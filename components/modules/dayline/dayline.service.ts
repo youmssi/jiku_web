@@ -8,6 +8,7 @@ import type {
   LineActionResult,
   LineTicket,
   LineTransition,
+  CollectedPaymentMethod,
   PendingAppointmentRequest,
   WalkInInput,
 } from "@/components/modules/dayline/schema";
@@ -32,6 +33,7 @@ function fetchFor(auth: DayLineAuth, path: string, init: RequestInit = {}): Prom
 function lineMessages(staff: boolean): Partial<Record<number, string>> & { default?: string } {
   return {
     409: "Cette entrée vient d'être traitée par un autre poste — la liste est à jour.",
+    402: "Ce client n'a pas encore réglé : enregistrez d'abord son paiement.",
     404: staff
       ? "Ce lien n'est plus valide."
       : "Cette entrée n'existe pas ou n'appartient pas à ce service.",
@@ -98,6 +100,20 @@ export async function transitionAction(
     method: "POST",
   });
   return fromResponse<LineActionResult>(response, lineMessages(auth.kind === "staff"));
+}
+
+/** Records that the client paid the organization (JIKU-110), by [method]. */
+export async function markPaidAction(
+  auth: DayLineAuth,
+  ticketCode: string,
+  method: CollectedPaymentMethod,
+): Promise<ActionResult<LineTicket>> {
+  const response = await fetchFor(auth, `${basePath(auth)}/tickets/${ticketCode}/paid`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ method }),
+  });
+  return fromResponse<LineTicket>(response, lineMessages(auth.kind === "staff"));
 }
 
 /** Demandes de rendez-vous en attente de confirmation (mode « sur demande »). */

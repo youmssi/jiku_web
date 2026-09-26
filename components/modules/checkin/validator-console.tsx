@@ -2,9 +2,12 @@
 
 import { useCallback, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { formatDateTimeInZone, formatTimeInZone } from "@/lib/datetime";
 import { useOfflineCheckIn } from "@/components/modules/checkin/useOfflineCheckin";
 import { CheckInResult } from "@/components/modules/checkin/checkin-result";
+import { markTicketPaid } from "@/components/modules/checkin/checkin.service";
 import { GuestSearch } from "@/components/modules/checkin/guest-search";
 import type { ValidatorContext } from "@/components/modules/checkin/schema";
 
@@ -73,6 +76,22 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
       checkInByGuest(guestId);
     },
     [checkInByGuest],
+  );
+
+  const collect = useTranslations("operator.collect");
+  const collectPayment = useCallback(
+    async (method: "MOBILE_MONEY" | "CASH") => {
+      const ticketCode = result?.ticketCode;
+      if (!ticketCode) return;
+      const paid = await markTicketPaid(token, ticketCode, method);
+      if (paid.error) {
+        toast.error(paid.error);
+        return;
+      }
+      toast.success(collect("done"));
+      await checkInByCode(ticketCode);
+    },
+    [result, token, checkInByCode, collect],
   );
 
   const dismiss = useCallback(() => {
@@ -168,7 +187,7 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
       </main>
 
       {result ? (
-        <CheckInResult result={result} timezone={context.timezone} onDismiss={dismiss} />
+        <CheckInResult result={result} timezone={context.timezone} onDismiss={dismiss} onCollect={collectPayment} />
       ) : null}
 
       {linkInvalid ? (

@@ -1,0 +1,30 @@
+{
+  "checkin": {
+    "CHECKED_IN": "Entrée validée",
+    "ALREADY_CHECKED_IN": "Déjà entré",
+    "CANCELLED": "Billet annulé",
+    "EVENT_CANCELLED": "Événement annulé",
+    "NOT_FOUND": "Introuvable",
+    "PAYMENT_DUE": "Paiement dû",
+    "by": "par {name}",
+    "byAt": "par {name} à {time}",
+    "notFound": "Aucun billet ne correspond. Cherchez plutôt par nom.",
+    "cancelled": "Ce billet est annulé : l'invité a décliné.",
+    "eventCancelled": "Cet événement est annulé : aucun billet n'est valable.",
+    "due": "À régler avant d'entrer : {amount}",
+    "dueNoAmount": "Ce billet n'est pas encore réglé.",
+    "next": "Scanner le suivant",
+    "close": "Fermer"
+  },
+  "collect": {
+    "mobileMoney": "Payé en Mobile Money",
+    "cash": "Payé en espèces",
+    "link": "Payé par lien",
+    "saving": "Enregistrement…",
+    "done": "Paiement enregistré.",
+    "due": "À régler : {amount}",
+    "dueAfter": "À régler après : {amount}",
+    "paid": "Réglé",
+    "collect": "Encaisser"
+  }
+}

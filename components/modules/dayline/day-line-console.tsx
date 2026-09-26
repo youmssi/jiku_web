@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,14 +15,22 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import {
+  markPaidAction,
   nextAction,
   transitionAction,
   walkInAction,
 } from "@/components/modules/dayline/dayline.service";
 import type {
+  CollectedPaymentMethod,
   DayLineAuth,
   DayLineView,
   LineStatus,
@@ -31,6 +40,7 @@ import type {
   WalkInInput,
 } from "@/components/modules/dayline/schema";
 import { useDayLine } from "@/components/modules/dayline/useDayLine";
+import { formatAmount } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 
 /** Caméra chargée paresseusement : le scan n'est qu'une façon secondaire de servir. */
@@ -137,6 +147,8 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
   const [walkInOpen, setWalkInOpen] = useState(false);
   const [scannerOpen, setScannerOpen] = useState(false);
   const [scanLocked, setScanLocked] = useState(false);
+  const c = useTranslations("operator.collect");
+  const locale = useLocale();
 
   async function act(ticket: LineTicket, transition: LineTransition) {
     const key = `${ticket.ticketCode}:${transition}`;
@@ -147,6 +159,18 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
       toast.error(result.error ?? "L'action a échoué.");
       return;
     }
+    await refresh();
+  }
+
+  async function collect(ticket: LineTicket, method: CollectedPaymentMethod) {
+    setBusy(`${ticket.ticketCode}:paid`);
+    const result = await markPaidAction(auth, ticket.ticketCode, method);
+    setBusy(null);
+    if (!result.ok) {
+      toast.error(result.error ?? "L'action a échoué.");
+      return;
+    }
+    toast.success(c("done"));
     await refresh();
   }
 
@@ -247,10 +271,35 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
                       {KIND_TEXT[entry.kind]}
                     </Badge>
                     <span>{STATUS_TEXT[entry.status]}</span>
+                    {entry.paymentStatus === "PAID" ? <Badge variant="outline">{c("paid")}</Badge> : null}
+                    {entry.paymentStatus === "DUE" || entry.paymentStatus === "DUE_AFTER_SERVICE" ? (
+                      <span className="font-medium text-orange-700 dark:text-orange-400">
+                        {entry.amountDueMinor != null && entry.amountDueCurrency
+                          ? c(entry.paymentStatus === "DUE" ? "due" : "dueAfter", {
+                              amount: formatAmount(entry.amountDueMinor, entry.amountDueCurrency, locale),
+                            })
+                          : null}
+                      </span>
+                    ) : null}
                   </div>
                 </div>
               </div>
               <div className="flex shrink-0 gap-2 pl-14 sm:pl-0">
+                {(entry.paymentStatus === "DUE" || entry.paymentStatus === "DUE_AFTER_SERVICE") &&
+                entry.status !== "NO_SHOW" ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button size="sm" variant="outline" disabled={busy !== null}>
+                        {busy === `${entry.ticketCode}:paid` ? <Spinner className="h-4 w-4" /> : c("collect")}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onSelect={() => void collect(entry, "MOBILE_MONEY")}>{c("mobileMoney")}</DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => void collect(entry, "CASH")}>{c("cash")}</DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => void collect(entry, "PAYMENT_LINK")}>{c("link")}</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : null}
                 {entry.status === "CALLED" ? (
                   <Button size="sm" variant="outline" onClick={() => act(entry, "no-show")} disabled={busy !== null}>
                     Absent

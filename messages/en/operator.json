@@ -1,0 +1,30 @@
+{
+  "checkin": {
+    "CHECKED_IN": "Checked in",
+    "ALREADY_CHECKED_IN": "Already checked in",
+    "CANCELLED": "Ticket cancelled",
+    "EVENT_CANCELLED": "Event cancelled",
+    "NOT_FOUND": "Not found",
+    "PAYMENT_DUE": "Payment due",
+    "by": "by {name}",
+    "byAt": "by {name} at {time}",
+    "notFound": "No matching ticket. Try searching by name instead.",
+    "cancelled": "This ticket was cancelled: the guest declined.",
+    "eventCancelled": "This event has been cancelled: no ticket is valid for entry.",
+    "due": "To pay before entering: {amount}",
+    "dueNoAmount": "This ticket isn't paid yet.",
+    "next": "Scan next",
+    "close": "Close"
+  },
+  "collect": {
+    "mobileMoney": "Paid by Mobile Money",
+    "cash": "Paid in cash",
+    "link": "Paid by link",
+    "saving": "Saving…",
+    "done": "Payment recorded.",
+    "due": "To pay: {amount}",
+    "dueAfter": "To pay after: {amount}",
+    "paid": "Paid",
+    "collect": "Collect"
+  }
+}
