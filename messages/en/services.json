@@ -10,5 +10,13 @@
     "submitting": "Creating…",
     "created": "Service created.",
     "failed": "The service could not be created."
+  },
+  "entranceQr": {
+    "title": "Entrance QR for today's line",
+    "text": "Show this QR at your entrance: walk-in clients scan it, take a ticket and follow their place on their phone. They're told when it's their turn.",
+    "show": "Show the QR",
+    "download": "Download to print",
+    "open": "Open the page",
+    "fileName": "entrance-qr-{service}.png"
   }
 }

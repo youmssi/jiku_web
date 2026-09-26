@@ -70,5 +70,44 @@
     "save": "Save as PDF",
     "brightness": "Turn your screen brightness up for a quick scan.",
     "cancelled": "This event has been cancelled: this ticket is no longer valid."
+  },
+  "line": {
+    "take": {
+      "title": "Take a ticket",
+      "subtitle": "Today's line · {service}",
+      "text": "Enter your name and number: you follow your place on your phone and we tell you when it's your turn.",
+      "name": "Your name",
+      "phone": "Your phone number",
+      "phoneHelp": "In international format, for example +224620000000.",
+      "submit": "Take my ticket",
+      "submitting": "One moment…"
+    },
+    "status": {
+      "title": "Your ticket",
+      "number": "Ticket no. {rank}",
+      "code": "Code {code}",
+      "ahead": "{count, plural, =0 {You're next.} one {# person ahead of you.} other {# people ahead of you.}}",
+      "wait": "{minutes, plural, =0 {Estimated wait: a few moments} one {Estimated wait: about # minute} other {Estimated wait: about # minutes}}",
+      "appointmentsNote": "A client with an appointment may go before you at their time.",
+      "called": "It's your turn!",
+      "calledCounter": "Please go to {counter}.",
+      "calledNoCounter": "Please go to the front desk.",
+      "inService": "You're being served.",
+      "done": "Thank you for your visit.",
+      "noShow": "Your ticket was closed: you weren't there when called. Take a new ticket if needed.",
+      "issued": "Your ticket is recorded.",
+      "due": "To pay: {amount}",
+      "dueAfter": "To pay after the service: {amount}",
+      "paid": "Paid",
+      "refreshed": "Updates automatically.",
+      "keepOpen": "Keep this page open: it updates by itself.",
+      "gone": "This ticket is no longer in today's line.",
+      "newTicket": "Take a new ticket"
+    },
+    "errors": {
+      "invalid": "Check your name and number.",
+      "closed": "This service's line isn't open right now.",
+      "failed": "We couldn't give you a ticket. Please try again."
+    }
   }
 }

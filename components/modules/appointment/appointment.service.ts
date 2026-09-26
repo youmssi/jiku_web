@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { publicFetch } from "@/lib/api-server";
 import { type ActionResult, fail, fromResponse, ok } from "@/lib/action-result";
 import type {
@@ -7,6 +8,8 @@ import type {
   AppointmentServiceView,
   AppointmentStatusView,
   BookingInput,
+  ClientLineTicketView,
+  TakeLineTicketInput,
 } from "@/components/modules/appointment/schema";
 
 /**
@@ -81,4 +84,35 @@ export async function cancelAppointment(
     return fail("L'annulation a échoué. Réessayez.");
   }
   return ok(null);
+}
+
+/** A client takes a ticket for today's line from the QR shown at the entrance (JIKU-113). */
+export async function takeLineTicket(
+  ref: AppointmentLinkRef,
+  input: TakeLineTicketInput,
+): Promise<ActionResult<ClientLineTicketView>> {
+  const response = await publicFetch(`${basePath(ref)}/line`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  const t = await getTranslations("guest.line.errors");
+  return fromResponse<ClientLineTicketView>(response, {
+    400: t("invalid"),
+    404: t("closed"),
+    409: t("closed"),
+    default: t("failed"),
+  });
+}
+
+/** The client's place in today's line; null once the ticket is no longer in it. */
+export async function loadLineTicket(
+  ref: AppointmentLinkRef,
+  ticketCode: string,
+): Promise<ClientLineTicketView | null> {
+  const response = await publicFetch(`${basePath(ref)}/line/${encodeURIComponent(ticketCode)}`);
+  if (!response.ok) {
+    return null;
+  }
+  return (await response.json()) as ClientLineTicketView;
 }
