@@ -70,5 +70,44 @@
     "save": "Enregistrer en PDF",
     "brightness": "Montez la luminosité de l'écran pour un scan rapide.",
     "cancelled": "Cet événement a été annulé : ce billet n'est plus valable."
+  },
+  "line": {
+    "take": {
+      "title": "Prendre un ticket",
+      "subtitle": "File du jour · {service}",
+      "text": "Indiquez votre nom et votre numéro : vous suivez votre rang sur votre téléphone et nous vous prévenons quand c'est votre tour.",
+      "name": "Votre nom",
+      "phone": "Votre numéro de téléphone",
+      "phoneHelp": "Au format international, par exemple +224620000000.",
+      "submit": "Prendre mon ticket",
+      "submitting": "Un instant…"
+    },
+    "status": {
+      "title": "Votre ticket",
+      "number": "Ticket n° {rank}",
+      "code": "Code {code}",
+      "ahead": "{count, plural, =0 {Vous êtes le prochain.} one {# personne avant vous.} other {# personnes avant vous.}}",
+      "wait": "{minutes, plural, =0 {Attente estimée : quelques instants} one {Attente estimée : environ # minute} other {Attente estimée : environ # minutes}}",
+      "appointmentsNote": "Un client avec rendez-vous peut passer avant vous à son heure.",
+      "called": "C'est votre tour !",
+      "calledCounter": "Présentez-vous au {counter}.",
+      "calledNoCounter": "Présentez-vous à l'accueil.",
+      "inService": "Vous êtes pris en charge.",
+      "done": "Merci de votre visite.",
+      "noShow": "Votre ticket a été clôturé : vous n'étiez pas là à l'appel. Reprenez un ticket si besoin.",
+      "issued": "Votre ticket est enregistré.",
+      "due": "À régler : {amount}",
+      "dueAfter": "À régler après le service : {amount}",
+      "paid": "Réglé",
+      "refreshed": "Mis à jour automatiquement.",
+      "keepOpen": "Gardez cette page ouverte : elle se met à jour toute seule.",
+      "gone": "Ce ticket n'est plus dans la file du jour.",
+      "newTicket": "Prendre un nouveau ticket"
+    },
+    "errors": {
+      "invalid": "Vérifiez votre nom et votre numéro.",
+      "closed": "La file de ce service n'est pas ouverte pour le moment.",
+      "failed": "Impossible de prendre un ticket. Réessayez."
+    }
   }
 }

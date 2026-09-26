@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import { EntranceQrCard } from "@/components/modules/services/entrance-qr-card";
 import { ResourceScheduleEditor } from "@/components/modules/services/resource-schedule-editor";
 import {
   addRequirementAction,
@@ -350,6 +351,8 @@ export function ServiceManagePanel({
           </div>
         </CardContent>
       </Card>
+
+      <EntranceQrCard serviceId={service.id} serviceName={service.name} />
 
       <Card>
         <CardHeader>
