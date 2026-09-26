@@ -24,7 +24,18 @@ export interface LineTicket {
   /** Heure d'arrivée au comptoir, renseignée dès l'entrée en attente. */
   arrivedAt: string | null;
   dayRank: number | null;
+  /** What the client owes the organization (JIKU-110); service cannot start while DUE. */
+  paymentStatus: TicketPaymentStatus;
+  amountDueMinor: number | null;
+  amountDueCurrency: string | null;
+  /** The counter the client was called to, once called. */
+  counter: string | null;
 }
+
+export type TicketPaymentStatus = "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID";
+
+/** How the client paid the organization; Jikū never handles the money. */
+export type CollectedPaymentMethod = "MOBILE_MONEY" | "PAYMENT_LINK" | "CASH";
 
 export interface DayLineView {
   serviceId: string;

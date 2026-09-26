@@ -55,6 +55,19 @@ export async function submitScan(
   });
 }
 
+/** Records that the guest paid the organization at the door (JIKU-110). */
+export async function markTicketPaid(
+  token: string,
+  ticketCode: string,
+  method: "MOBILE_MONEY" | "PAYMENT_LINK" | "CASH",
+): Promise<ServiceResult<unknown>> {
+  return call<unknown>(`${token}/tickets/${encodeURIComponent(ticketCode)}/paid`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ method }),
+  });
+}
+
 export async function submitManualCheckIn(
   token: string,
   guestId: string,
