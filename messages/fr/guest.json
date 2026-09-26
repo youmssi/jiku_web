@@ -120,5 +120,50 @@
     "wave": "Wave",
     "payOnline": "Payer en ligne",
     "askOrganizer": "L'organisateur vous indiquera comment régler."
+  },
+  "appointment": {
+    "metaTitle": "Réserver un rendez-vous",
+    "statusMetaTitle": "Mon rendez-vous",
+    "booking": {
+      "title": "Rendez-vous",
+      "loading": "Chargement…",
+      "withNames": "Avec {names} — sans compte, en trois gestes.",
+      "noAccount": "Choisissez un créneau, sans compte.",
+      "failed": "Réservation impossible",
+      "previousDay": "Jour précédent",
+      "nextDay": "Jour suivant",
+      "noSlots": "Aucun créneau ouvert ce jour-là.",
+      "name": "Votre nom",
+      "phone": "Votre téléphone",
+      "submit": "Réserver ce créneau",
+      "submitting": "Réservation…"
+    },
+    "booked": {
+      "title": "Votre rendez-vous est enregistré",
+      "PENDING": "En attente de confirmation : vous recevrez la confirmation du professionnel.",
+      "CONFIRMED": "Votre rendez-vous est confirmé.",
+      "withNames": "Avec {names}",
+      "number": "N° de réservation : {number}",
+      "manage": "Voir ou annuler mon rendez-vous"
+    },
+    "status": {
+      "title": "Votre rendez-vous",
+      "PENDING": "En attente de confirmation.",
+      "CONFIRMED": "Confirmé.",
+      "notFound": "Réservation introuvable",
+      "notFoundText": "Vérifiez le lien ou votre numéro de réservation.",
+      "cancel": "Annuler ce rendez-vous",
+      "cancelling": "Annulation…",
+      "cancelFailed": "Annulation impossible",
+      "cancelledTitle": "Rendez-vous annulé",
+      "cancelledText": "Votre rendez-vous a été annulé et le créneau libéré."
+    },
+    "errors": {
+      "taken": "Ce créneau vient d'être pris. Choisissez-en un autre.",
+      "failed": "La réservation a échoué. Réessayez.",
+      "notFound": "Cette réservation est introuvable.",
+      "notCancellable": "Ce rendez-vous ne peut plus être annulé.",
+      "cancelFailed": "L'annulation a échoué. Réessayez."
+    }
   }
 }

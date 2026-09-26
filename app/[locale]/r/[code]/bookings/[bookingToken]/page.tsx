@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { AppointmentStatus, loadAppointment } from "@/components/modules/appointment";
 
-export const metadata: Metadata = {
-  title: "Mon rendez-vous",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("guest.appointment");
+  return { title: t("statusMetaTitle"), robots: { index: false, follow: false } };
+}
 
 export default async function ShortLinkStatusPage({
   params,

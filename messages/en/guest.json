@@ -120,5 +120,50 @@
     "wave": "Wave",
     "payOnline": "Pay online",
     "askOrganizer": "The organizer will tell you how to pay."
+  },
+  "appointment": {
+    "metaTitle": "Book an appointment",
+    "statusMetaTitle": "My appointment",
+    "booking": {
+      "title": "Appointment",
+      "loading": "Loading…",
+      "withNames": "With {names} — no account, three steps.",
+      "noAccount": "Pick a time, no account needed.",
+      "failed": "Booking not possible",
+      "previousDay": "Previous day",
+      "nextDay": "Next day",
+      "noSlots": "No times open on this day.",
+      "name": "Your name",
+      "phone": "Your phone",
+      "submit": "Book this time",
+      "submitting": "Booking…"
+    },
+    "booked": {
+      "title": "Your appointment is booked",
+      "PENDING": "Awaiting confirmation: the professional will confirm it.",
+      "CONFIRMED": "Your appointment is confirmed.",
+      "withNames": "With {names}",
+      "number": "Booking number: {number}",
+      "manage": "View or cancel my appointment"
+    },
+    "status": {
+      "title": "Your appointment",
+      "PENDING": "Awaiting confirmation.",
+      "CONFIRMED": "Confirmed.",
+      "notFound": "Booking not found",
+      "notFoundText": "Check the link or your booking number.",
+      "cancel": "Cancel this appointment",
+      "cancelling": "Cancelling…",
+      "cancelFailed": "Cancellation not possible",
+      "cancelledTitle": "Appointment cancelled",
+      "cancelledText": "Your appointment is cancelled and the time is free again."
+    },
+    "errors": {
+      "taken": "This time was just taken. Pick another one.",
+      "failed": "The booking failed. Try again.",
+      "notFound": "This booking cannot be found.",
+      "notCancellable": "This appointment can no longer be cancelled.",
+      "cancelFailed": "The cancellation failed. Try again."
+    }
   }
 }
