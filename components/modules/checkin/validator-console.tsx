@@ -30,7 +30,7 @@ const QrScanner = dynamic(
 type Mode = "scan" | "search";
 
 interface ValidatorConsoleProps {
-  token: string;
+  door: string;
   context: ValidatorContext;
 }
 
@@ -40,7 +40,7 @@ interface ValidatorConsoleProps {
  * feedback after each check-in. Pre-sync the roster to keep checking guests in
  * offline (JIKU-25); queued check-ins flush automatically on reconnection.
  */
-export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
+export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
   const [mode, setMode] = useState<Mode>("scan");
   const eventCancelled = context.eventStatus === "CANCELLED";
   const [isSyncing, setIsSyncing] = useState(false);
@@ -57,7 +57,7 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
     checkInByGuest,
     syncForOffline,
     clearResult,
-  } = useOfflineCheckIn(token, { checkedIn: context.checkedIn, confirmed: context.confirmed });
+  } = useOfflineCheckIn(door, { checkedIn: context.checkedIn, confirmed: context.confirmed });
   const lockRef = useRef(false);
 
   const handleDetect = useCallback(
@@ -83,7 +83,7 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
     async (method: "MOBILE_MONEY" | "CASH") => {
       const ticketCode = result?.ticketCode;
       if (!ticketCode) return;
-      const paid = await markTicketPaid(token, ticketCode, method);
+      const paid = await markTicketPaid(door, ticketCode, method);
       if (paid.error) {
         toast.error(paid.error);
         return;
@@ -91,7 +91,7 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
       toast.success(collect("done"));
       await checkInByCode(ticketCode);
     },
-    [result, token, checkInByCode, collect],
+    [result, door, checkInByCode, collect],
   );
 
   const dismiss = useCallback(() => {
@@ -177,7 +177,7 @@ export function ValidatorConsole({ token, context }: ValidatorConsoleProps) {
           </>
         ) : (
           <GuestSearch
-            token={token}
+            door={door}
             onSelect={handleSelect}
             isSubmitting={isSubmitting}
             offline={!isOnline}

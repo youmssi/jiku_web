@@ -58,7 +58,11 @@ export interface LineActionResult {
 /** Qui ouvre la console : l'organisateur connecté, ou le personnel par son lien. */
 export type DayLineAuth =
   | { kind: "organizer"; serviceId: string }
-  | { kind: "staff"; token: string };
+  /**
+   * A counter link (`line/{token}`) or an operator's link on this service
+   * (`operator/{token}/services/{serviceId}`, JIKU-116): the path is the credential.
+   */
+  | { kind: "staff"; base: string };
 
 export const walkInSchema = z.object({
   clientName: z.string().trim().min(2, "Indiquez le nom du client"),

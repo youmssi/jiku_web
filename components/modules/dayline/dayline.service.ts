@@ -16,14 +16,18 @@ import type {
 /**
  * Day-line console service layer (JIKU-88). The same operations serve the two
  * entrances of the console: the organizer (authenticated, `/services/{id}/day-line`)
- * and the counter staff (signed link in the path, `/line/{token}`). Which surface
+ * and the counter staff (signed link in the path, `/line/{token}`, or an operator's
+ * `/operator/{token}/services/{serviceId}`). Which surface
  * is used is carried by [DayLineAuth]; the backend endpoints are otherwise identical.
  */
 
+/** The only two shapes a staff link can take; anything else never reaches the API. */
+const STAFF_BASE = /^(line\/[A-Za-z0-9._-]+|operator\/[A-Za-z0-9._-]+\/services\/[0-9a-f-]{36})$/;
+
 function basePath(auth: DayLineAuth): string {
-  return auth.kind === "organizer"
-    ? `/services/${auth.serviceId}/day-line`
-    : `/line/${auth.token}`;
+  if (auth.kind === "organizer") return `/services/${auth.serviceId}/day-line`;
+  if (!STAFF_BASE.test(auth.base)) throw new Error("Not a staff link");
+  return `/${auth.base}`;
 }
 
 function fetchFor(auth: DayLineAuth, path: string, init: RequestInit = {}): Promise<Response> {
