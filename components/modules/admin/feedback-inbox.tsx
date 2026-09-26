@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { Mail, MessageSquareHeart } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -39,6 +40,8 @@ export function FeedbackInbox({
   kind?: string;
   status?: string;
 }) {
+  const t = useTranslations("admin.feedbackInbox");
+  const common = useTranslations("admin.common");
   const router = useRouter();
   const pathname = usePathname();
 
@@ -57,19 +60,23 @@ export function FeedbackInbox({
     <div className="flex flex-col gap-8">
       <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {ratings.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No ratings in the last 30 days.</p>
+          <p className="text-sm text-muted-foreground">{t("noRatings")}</p>
         ) : (
           ratings.map((rating) => (
             <Card key={rating.moment} size="sm">
               <CardHeader>
-                <CardDescription>{rating.moment.replaceAll("_", " ")}</CardDescription>
+                <CardDescription>
+                  {t.has(`moments.${rating.moment}` as never)
+                    ? t(`moments.${rating.moment}` as never)
+                    : rating.moment.replaceAll("_", " ")}
+                </CardDescription>
                 <CardTitle className="text-2xl">
                   {rating.average === null ? "—" : rating.average.toFixed(1)}
                   <span className="text-sm font-normal text-muted-foreground"> / 5</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-xs text-muted-foreground">
-                {rating.responses} ratings · {rating.dismissed} dismissed
+                {t("ratings", { responses: rating.responses, dismissed: rating.dismissed })}
               </CardContent>
             </Card>
           ))
@@ -85,23 +92,23 @@ export function FeedbackInbox({
         >
           {KINDS.map((value) => (
             <ToggleGroupItem key={value} value={value} className="px-3 text-xs">
-              {value === "ALL" ? "All" : value.toLowerCase()}
+              {value === "ALL" ? t("all") : t(`kinds.${value}`)}
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
         <NativeSelect
-          aria-label="Status"
+          aria-label={common("status")}
           value={status ?? "ALL"}
           onChange={(event) => filter({ status: event.target.value })}
         >
-          <NativeSelectOption value="ALL">Every status</NativeSelectOption>
+          <NativeSelectOption value="ALL">{t("everyStatus")}</NativeSelectOption>
           {FEEDBACK_STATUSES.map((value) => (
             <NativeSelectOption key={value} value={value}>
-              {value.replace("_", " ").toLowerCase()}
+              {t(`statuses.${value}`)}
             </NativeSelectOption>
           ))}
         </NativeSelect>
-        <span className="text-sm text-muted-foreground">{page.total} messages</span>
+        <span className="text-sm text-muted-foreground">{t("total", { count: page.total })}</span>
       </div>
 
       {messages.length === 0 ? (
@@ -110,8 +117,8 @@ export function FeedbackInbox({
             <EmptyMedia variant="icon">
               <MessageSquareHeart />
             </EmptyMedia>
-            <EmptyTitle>Nothing to read</EmptyTitle>
-            <EmptyDescription>No message matches these filters.</EmptyDescription>
+            <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+            <EmptyDescription>{t("emptyText")}</EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
@@ -126,6 +133,9 @@ export function FeedbackInbox({
 }
 
 function FeedbackCard({ entry }: { entry: FeedbackEntry }) {
+  const t = useTranslations("admin.feedbackInbox");
+  const common = useTranslations("admin.common");
+  const format = useFormatter();
   const router = useRouter();
   const [status, setStatus] = useState(entry.status);
   const [note, setNote] = useState(entry.adminNote ?? "");
@@ -139,7 +149,7 @@ function FeedbackCard({ entry }: { entry: FeedbackEntry }) {
         toast.error(result.error);
         return;
       }
-      toast.success("Saved.");
+      toast.success(common("saved"));
       router.refresh();
     });
   }
@@ -147,9 +157,9 @@ function FeedbackCard({ entry }: { entry: FeedbackEntry }) {
   return (
     <li className="rounded-2xl border p-5">
       <div className="flex flex-wrap items-center gap-2 text-sm">
-        <Badge variant={KIND_TONE[entry.kind] ?? "outline"}>{entry.kind.toLowerCase()}</Badge>
+        <Badge variant={KIND_TONE[entry.kind] ?? "outline"}>{t.has(`kinds.${entry.kind}` as never) ? t(`kinds.${entry.kind}` as never) : entry.kind}</Badge>
         <span className="font-medium">{entry.organizationName ?? "—"}</span>
-        <span className="text-muted-foreground">· {new Date(entry.createdAt).toLocaleString("en-GB")}</span>
+        <span className="text-muted-foreground">· {format.dateTime(new Date(entry.createdAt), { dateStyle: "medium", timeStyle: "short" })}</span>
         {entry.page ? <span className="text-muted-foreground">· {entry.page}</span> : null}
       </div>
       <p className="mt-3 text-sm leading-relaxed whitespace-pre-line">{entry.message}</p>
@@ -160,10 +170,10 @@ function FeedbackCard({ entry }: { entry: FeedbackEntry }) {
         </a>
       ) : null}
       <div className="mt-4 grid gap-3 sm:grid-cols-[12rem_1fr_auto] sm:items-start">
-        <NativeSelect aria-label="Status" value={status} onChange={(event) => setStatus(event.target.value)}>
+        <NativeSelect aria-label={common("status")} value={status} onChange={(event) => setStatus(event.target.value)}>
           {FEEDBACK_STATUSES.map((value) => (
             <NativeSelectOption key={value} value={value}>
-              {value.replace("_", " ").toLowerCase()}
+              {t(`statuses.${value}`)}
             </NativeSelectOption>
           ))}
         </NativeSelect>
@@ -172,11 +182,11 @@ function FeedbackCard({ entry }: { entry: FeedbackEntry }) {
           onChange={(event) => setNote(event.target.value)}
           rows={1}
           maxLength={2000}
-          placeholder="Internal note"
-          aria-label="Internal note"
+          placeholder={t("note")}
+          aria-label={t("note")}
         />
         <Button size="sm" disabled={!changed || pending} onClick={save}>
-          Save
+          {common("save")}
         </Button>
       </div>
     </li>

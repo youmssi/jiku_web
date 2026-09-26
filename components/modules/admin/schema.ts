@@ -161,8 +161,8 @@ export interface ProspectLead {
 const adminTenantReferenceSchema = z.object({ id: z.string().min(1) });
 
 export const adminLoginSchema = z.object({
-  email: z.string().trim().email("Enter a valid email."),
-  password: z.string().min(1, "Enter your password."),
+  email: z.string().trim().email("email"),
+  password: z.string().min(1, "required"),
 });
 export type AdminLoginFormValues = z.infer<typeof adminLoginSchema>;
 

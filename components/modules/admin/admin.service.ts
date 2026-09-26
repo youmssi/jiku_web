@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { localeRedirect } from "@/i18n/redirect";
 import { revalidatePath } from "next/cache";
 import { type ActionResult, fail, failWithReason, ok, reportApiError } from "@/lib/action-result";
@@ -22,12 +23,13 @@ export async function adminLoginAction(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
+  const t = await getTranslations("admin.errors");
   if (response.status === 401) {
-    return fail("Invalid email or password.");
+    return fail(t("invalidCredentials"));
   }
   if (!response.ok) {
     reportApiError(response, "admin");
-    return fail("Sign-in failed. Please try again.");
+    return fail(t("signInFailed"));
   }
   const tokens = (await response.json()) as { accessToken: string };
   await setAdminAuthCookie(tokens.accessToken);
@@ -50,10 +52,8 @@ async function adminMutation(path: string, body: unknown): Promise<ActionResult>
     body: JSON.stringify(body),
   });
   if (!response.ok) {
-    return failWithReason(
-      response,
-      response.status === 409 ? "This action conflicts with the current state." : "The action failed. Please try again.",
-    );
+    const t = await getTranslations("admin.errors");
+    return failWithReason(response, response.status === 409 ? t("conflict") : t("failed"));
   }
   revalidatePath("/admin", "layout");
   return ok(null);
@@ -157,7 +157,7 @@ export async function updateWhatsAppPricingAction(
     body: JSON.stringify({ costUsdMinor }),
   });
   if (!response.ok) {
-    return failWithReason(response, "Impossible de mettre à jour le tarif.");
+    return failWithReason(response, (await getTranslations("admin.errors"))("pricing"));
   }
   revalidatePath("/admin/whatsapp", "layout");
   return ok(null);
@@ -173,7 +173,7 @@ export async function setWhatsAppOverrideAction(
     body: JSON.stringify({ active, reason }),
   });
   if (!response.ok) {
-    return failWithReason(response, "Impossible de modifier la surcharge de contenu.");
+    return failWithReason(response, (await getTranslations("admin.errors"))("override"));
   }
   revalidatePath("/admin/whatsapp", "layout");
   return ok(null);
@@ -186,7 +186,7 @@ export async function markProspectContactedAction(id: string): Promise<ActionRes
     body: JSON.stringify({}),
   });
   if (!response.ok) {
-    return failWithReason(response, "Impossible de marquer cette piste comme contactée.");
+    return failWithReason(response, (await getTranslations("admin.errors"))("prospect"));
   }
   revalidatePath("/admin/prospects", "layout");
   return ok(null);
@@ -199,7 +199,7 @@ export async function markProspectContactedAction(id: string): Promise<ActionRes
 export async function triggerDiagnosticsAction(): Promise<ActionResult<{ requestId: string | null }>> {
   const response = await adminFetch("/admin/diagnostics/error", { method: "POST" });
   if (response.ok) {
-    return fail("Aucune erreur déclenchée — réponse inattendue.");
+    return fail((await getTranslations("admin.errors"))("diagnostics"));
   }
   return ok({ requestId: response.headers.get("X-Request-Id") });
 }
@@ -230,7 +230,7 @@ export async function updateBillingSettingsAction(
     }),
   });
   if (!response.ok) {
-    return failWithReason(response, "Les réglages n'ont pas pu être enregistrés.");
+    return failWithReason(response, (await getTranslations("admin.errors"))("billingSettings"));
   }
   revalidatePath("/admin", "layout");
   return ok(null);

@@ -17,7 +17,7 @@ import { Kbd } from "@/components/ui/kbd";
 // server-only view components, which would drag server-only code into this
 // client component's bundle — same reason the breadcrumb imports services'
 // action directly too.
-import { ADMIN_NAV_GROUPS } from "@/components/modules/admin/admin-nav";
+import { useAdminNavGroups } from "@/components/modules/admin/admin-nav";
 import { ORGANIZER_NAV_ITEMS } from "@/components/shared/organizer-nav";
 
 export type NavCommandPaletteVariant = "organizer" | "admin";
@@ -33,6 +33,7 @@ export type NavCommandPaletteVariant = "organizer" | "admin";
  */
 export function NavCommandPalette({ variant }: { variant: NavCommandPaletteVariant }) {
   const t = useTranslations("shell");
+  const adminGroups = useAdminNavGroups();
   const groups =
     variant === "organizer"
       ? [
@@ -41,7 +42,7 @@ export function NavCommandPalette({ variant }: { variant: NavCommandPaletteVaria
             items: ORGANIZER_NAV_ITEMS.map((item) => ({ ...item, label: t(`nav.${item.labelKey}`) })),
           },
         ]
-      : ADMIN_NAV_GROUPS;
+      : adminGroups;
   const [open, setOpen] = useState(false);
   const router = useRouter();
 

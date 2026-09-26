@@ -1,0 +1,174 @@
+{
+  "shell": {
+    "brand": "Jikū admin",
+    "admin": "Admin",
+    "signOut": "Sign out"
+  },
+  "nav": {
+    "platform": "Platform",
+    "desk": "Desk",
+    "tenants": "Tenants",
+    "payments": "Payments",
+    "trials": "Trials",
+    "agreements": "Agreements",
+    "billingInfo": "Billing info",
+    "audit": "Audit",
+    "whatsapp": "WhatsApp",
+    "prospects": "Prospects",
+    "feedback": "Feedback",
+    "diagnostics": "Diagnostics"
+  },
+  "pages": {
+    "tenants": "Tenants",
+    "payments": "Payments desk",
+    "trials": "Trials",
+    "agreements": "Enterprise agreements",
+    "billingInfo": "Billing info",
+    "audit": "Audit log",
+    "whatsapp": "WhatsApp",
+    "prospects": "Prospects",
+    "feedback": "Feedback",
+    "diagnostics": "Diagnostics",
+    "billingLoadFailed": "The billing settings couldn't be loaded."
+  },
+  "login": {
+    "metaTitle": "Jikū - Administration",
+    "title": "Jikū administration",
+    "description": "Platform operators only. All actions are audit-logged.",
+    "failed": "We couldn't sign you in",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…"
+  },
+  "status": {
+    "ACTIVE": "Active",
+    "SUCCEEDED": "Succeeded",
+    "CONVERTED": "Converted",
+    "PENDING": "Pending",
+    "EXPIRING": "Expiring",
+    "SUSPENDED": "Suspended",
+    "FAILED": "Failed",
+    "INTERRUPTED": "Interrupted",
+    "EXPIRED": "Expired",
+    "ENDED": "Ended",
+    "RENEWED": "Renewed",
+    "VERIFIED": "Verified",
+    "REJECTED": "Rejected",
+    "CANCELLED": "Cancelled",
+    "REFUNDED": "Refunded",
+    "DUPLICATE": "Duplicate"
+  },
+  "trialStatus": {
+    "ACTIVE": "Active",
+    "CONVERTED": "Converted",
+    "EXPIRED": "Expired",
+    "ENDED": "Ended"
+  },
+  "common": {
+    "copyId": "Copy id",
+    "actions": "Actions",
+    "status": "Status",
+    "cancel": "Cancel",
+    "working": "Working…",
+    "done": "{title}: done.",
+    "fieldRequired": "{field} is required.",
+    "save": "Save",
+    "saved": "Saved."
+  },
+  "tenants": {
+    "tenant": "Tenant",
+    "contact": "Contact",
+    "organizers": "Organizers",
+    "created": "Created",
+    "reactivate": "Reactivate",
+    "reactivateTitle": "Reactivate {name}",
+    "reactivateText": "The tenant's organizers regain access immediately.",
+    "note": "Note",
+    "suspend": "Suspend",
+    "suspendTitle": "Suspend {name}",
+    "suspendText": "Blocks organizer access and stops guest/validator links from resolving, on the very next request.",
+    "noteWhy": "Note (why)",
+    "search": "Search by name or contact email…",
+    "searchButton": "Search",
+    "emptyTitle": "No tenants found",
+    "emptyText": "No tenants match this search.",
+    "total": "{count, plural, one {# tenant} other {# tenants}}"
+  },
+  "payments": {
+    "date": "Date",
+    "reference": "Reference",
+    "tier": "Tier",
+    "amount": "Amount",
+    "provider": "Provider",
+    "tenant": "Tenant",
+    "markPaid": "Mark paid",
+    "confirmTitle": "Confirm {reference}",
+    "confirmText": "Only confirm after the transfer is visible on the receiving account. This unlocks the tier immediately.",
+    "observedReference": "Observed transaction reference",
+    "confirm": "Confirm payment",
+    "reject": "Reject",
+    "rejectTitle": "Reject {reference}",
+    "rejectText": "The organizer is notified and can submit a new request.",
+    "reason": "Reason",
+    "filters": {
+      "PENDING": "Pending",
+      "SUCCEEDED": "Succeeded",
+      "FAILED": "Failed"
+    },
+    "emptyTitle": "No payments",
+    "emptyText": "No payments in this category."
+  },
+  "audit": {
+    "when": "When",
+    "action": "Action",
+    "target": "Target",
+    "note": "Note",
+    "admin": "Admin",
+    "filter": "Filter by action (e.g. PAYMENT_CONFIRMED)…",
+    "filterButton": "Filter",
+    "emptyTitle": "No audit entries",
+    "emptyText": "No audit entries match this filter.",
+    "total": "{count, plural, one {# entry} other {# entries}}"
+  },
+  "feedbackInbox": {
+    "noRatings": "No ratings in the last 30 days.",
+    "ratings": "{responses, plural, one {# rating} other {# ratings}} · {dismissed} dismissed",
+    "all": "All",
+    "everyStatus": "Every status",
+    "total": "{count, plural, one {# message} other {# messages}}",
+    "emptyTitle": "Nothing to read",
+    "emptyText": "No message matches these filters.",
+    "note": "Internal note",
+    "kinds": {
+      "COMPLAINT": "complaint",
+      "PROBLEM": "problem",
+      "QUESTION": "question",
+      "IDEA": "idea",
+      "RATING": "rating"
+    },
+    "statuses": {
+      "NEW": "new",
+      "IN_PROGRESS": "in progress",
+      "ANSWERED": "answered",
+      "CLOSED": "closed"
+    },
+    "moments": {
+      "event_published": "Event published",
+      "invitations_sent": "Invitations sent",
+      "guests_imported": "Guests imported",
+      "service_created": "Service created"
+    }
+  },
+  "errors": {
+    "invalidCredentials": "Invalid email or password.",
+    "signInFailed": "Sign-in failed. Please try again.",
+    "conflict": "This action conflicts with the current state.",
+    "failed": "The action failed. Please try again.",
+    "pricing": "The price couldn't be updated.",
+    "override": "The content override couldn't be changed.",
+    "prospect": "This lead couldn't be marked as contacted.",
+    "diagnostics": "No error was triggered: unexpected response.",
+    "billingSettings": "The settings couldn't be saved."
+  }
+}
