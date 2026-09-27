@@ -93,6 +93,16 @@ export function ticketRoute(token: string): string {
   return `/invitation/${token}/ticket`;
 }
 
+/** The public sale page of an event (JIKU-177), under its organization's username. */
+export function saleRoute(username: string, eventId: string): string {
+  return `/o/${username}/events/${eventId}`;
+}
+
+/** The buyer's order, reached by its link token (JIKU-177). */
+export function orderRoute(token: string): string {
+  return `/orders/${token}`;
+}
+
 export const COOKIES = {
   ACCESS_TOKEN: "jiku_access_token",
   REFRESH_TOKEN: "jiku_refresh_token",
