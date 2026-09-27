@@ -8,6 +8,7 @@ import { adminFetch, publicFetch } from "@/lib/api-server";
 import { clearAdminAuthCookie, setAdminAuthCookie } from "@/lib/auth";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import type {
+  VerificationDocumentLink,
   TenantDirectoryEntry,
   TenantDirectoryPage,
   AdminBillingSettingsFormValues,
@@ -239,4 +240,28 @@ export async function updateBillingSettingsAction(
 /** Moves a feedback message along the desk's triage, with an optional note. */
 export async function updateFeedbackStatusAction(id: string, status: string, note: string): Promise<ActionResult> {
   return adminMutation(`/admin/feedback/${id}/status`, { status, note: note || null });
+}
+
+// ─── Organization verification (JIKU-175) ────────────────────────────────────
+
+export async function approveVerificationAction(id: string): Promise<ActionResult> {
+  return adminMutation(`/admin/verifications/${id}/approve`, {});
+}
+
+export async function rejectVerificationAction(id: string, reason: string): Promise<ActionResult> {
+  return adminMutation(`/admin/verifications/${id}/reject`, { reason });
+}
+
+/**
+ * Short-lived links to a request's documents, fetched when the reviewer opens
+ * them rather than with the queue: each link expires within minutes and every
+ * opening is written to the audit log.
+ */
+export async function verificationDocumentsAction(id: string): Promise<ActionResult<VerificationDocumentLink[]>> {
+  const response = await adminFetch(`/admin/verifications/${id}/documents`);
+  if (!response.ok) {
+    const t = await getTranslations("admin.verifications");
+    return failWithReason(response, t(response.status === 503 ? "storageUnavailable" : "documentsFailed"));
+  }
+  return ok((await response.json()) as VerificationDocumentLink[]);
 }

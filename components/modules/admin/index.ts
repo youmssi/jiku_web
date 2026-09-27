@@ -25,3 +25,4 @@ export type {
 export { WhatsAppAdmin, ProspectsTable, DiagnosticsPanel } from "./admin-extras";
 export type { WhatsAppPricingInfo, WhatsAppOverrideStatus, ProspectLead } from "./schema";
 export { FeedbackInbox } from "./feedback-inbox";
+export { VerificationsView } from "./verifications-view";

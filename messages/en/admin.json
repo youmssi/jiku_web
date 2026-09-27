@@ -16,7 +16,8 @@
     "whatsapp": "WhatsApp",
     "prospects": "Prospects",
     "feedback": "Feedback",
-    "diagnostics": "Diagnostics"
+    "diagnostics": "Diagnostics",
+    "verifications": "Verifications"
   },
   "pages": {
     "tenants": "Tenants",
@@ -29,7 +30,8 @@
     "prospects": "Prospects",
     "feedback": "Feedback",
     "diagnostics": "Diagnostics",
-    "billingLoadFailed": "The billing settings couldn't be loaded."
+    "billingLoadFailed": "The billing settings couldn't be loaded.",
+    "verifications": "Organization verifications"
   },
   "login": {
     "metaTitle": "Jikū - Administration",
@@ -57,7 +59,8 @@
     "REJECTED": "Rejected",
     "CANCELLED": "Cancelled",
     "REFUNDED": "Refunded",
-    "DUPLICATE": "Duplicate"
+    "DUPLICATE": "Duplicate",
+    "APPROVED": "Approved"
   },
   "trialStatus": {
     "ACTIVE": "Active",
@@ -334,5 +337,42 @@
     "gnf": "GNF",
     "fcfa": "FCFA",
     "usdCents": "USD (cents)"
+  },
+  "verifications": {
+    "filters": {
+      "PENDING": "To review",
+      "APPROVED": "Approved",
+      "REJECTED": "Refused"
+    },
+    "kinds": {
+      "PERSONAL": "Personal verification",
+      "COMPANY": "Company verification"
+    },
+    "organization": "Organization",
+    "identity": "Declared identity",
+    "submitted": "Sent on",
+    "rccm": "RCCM: {value}",
+    "nif": "Tax ID: {value}",
+    "phone": "Confirmed phone: {value}",
+    "documents": "Documents",
+    "opening": "Opening…",
+    "documentsTitle": "Documents of {name}",
+    "documentsText": "Each link opens in a new tab and expires after a few minutes. Opening them is written to the audit log.",
+    "document": "Document {position} ({type})",
+    "image": "image",
+    "documentsGone": "This request's documents have been deleted.",
+    "approve": "Approve",
+    "approveTitle": "Approve this verification?",
+    "approveText": "{name} ({organization}) will be able to take payments, and its guests will see the verification badge. Check that the documents are readable and match the declared name.",
+    "approved": "Verification approved.",
+    "cancel": "Cancel",
+    "reject": "Refuse",
+    "rejectTitle": "Refuse this verification",
+    "rejectText": "The organization will read this reason and can send a new request. Its documents are deleted as soon as it is refused.",
+    "reason": "Reason for refusal",
+    "emptyTitle": "No requests",
+    "emptyText": "No verification request in this state.",
+    "documentsFailed": "The documents couldn't be opened.",
+    "storageUnavailable": "Document storage is unavailable."
   }
 }

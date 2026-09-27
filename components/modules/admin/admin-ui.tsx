@@ -24,6 +24,7 @@ const STATUS_STYLES: Record<string, string> = {
   EXPIRED: "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300",
   ENDED: "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300",
   RENEWED: "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300",
+  APPROVED: "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300",
   VERIFIED: "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300",
   REJECTED: "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300",
   CANCELLED: "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300",
