@@ -11,7 +11,8 @@
     "dayLine": "File du jour",
     "manage": "Gérer",
     "configuration": "Configuration",
-    "operators": "Opérateurs"
+    "operators": "Opérateurs",
+    "orders": "Commandes"
   },
   "sidebar": {
     "platform": "Plateforme",

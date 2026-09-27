@@ -45,6 +45,11 @@ export function eventTicketsRoute(id: string): string {
   return `/events/${id}/tickets`;
 }
 
+/** The event's ticket orders (JIKU-177): payments to confirm, sales so far. */
+export function eventOrdersRoute(id: string): string {
+  return `/events/${id}/orders`;
+}
+
 export function eventSettingsRoute(id: string): string {
   return `/events/${id}/settings`;
 }

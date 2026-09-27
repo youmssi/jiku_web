@@ -340,5 +340,58 @@
       "location": "Location",
       "undated": "Date to be set"
     }
+  },
+  "orders": {
+    "title": "Orders",
+    "text": "Tickets bought on your sale page. Check each declared payment in your Mobile Money account, then confirm it: the tickets go out at once.",
+    "link": {
+      "title": "Sale link",
+      "text": "Share this link wherever you sell: social networks, WhatsApp, posters.",
+      "copy": "Copy the link",
+      "open": "Open the page",
+      "copyFailed": "The link couldn't be copied.",
+      "noUsername": "First choose your organization's public username: the sale link is built on it.",
+      "setUsername": "Choose the username"
+    },
+    "stats": {
+      "toConfirm": "To confirm",
+      "ticketsSold": "Tickets sold",
+      "collected": "Collected"
+    },
+    "filterLabel": "Filter orders",
+    "filters": {
+      "DECLARED": "To confirm",
+      "AWAITING_PAYMENT": "Awaiting payment",
+      "PAID": "Paid",
+      "ALL": "All"
+    },
+    "status": {
+      "AWAITING_PAYMENT": "Awaiting",
+      "DECLARED": "Payment declared",
+      "PAID": "Paid",
+      "EXPIRED": "Expired",
+      "REJECTED": "Refused"
+    },
+    "declaredWith": "Payment declared on {when}, reference {reference}",
+    "expiresAt": "Places held until {when}",
+    "refusedBecause": "Refused: {reason}",
+    "placedAt": "Ordered on {when}",
+    "confirm": "Confirm the payment",
+    "confirmTitle": "Confirm this payment?",
+    "confirmText": "Check that you received {amount} (reference {reference}). {count, plural, one {# ticket will be issued} other {# tickets will be issued}} in the buyer's name, already paid.",
+    "confirmed": "{count, plural, one {Payment confirmed: # ticket issued.} other {Payment confirmed: # tickets issued.}}",
+    "refuse": "Refuse",
+    "refuseTitle": "Refuse this order",
+    "refuseText": "The places go back on sale and the buyer reads your reason on their order.",
+    "reason": "Reason",
+    "refused": "Order refused; its places are back on sale.",
+    "cancel": "Cancel",
+    "working": "Working…",
+    "emptyTitle": "No orders",
+    "emptyText": "No order in this list yet.",
+    "errors": {
+      "alreadyDecided": "This order was already handled or has expired.",
+      "failed": "We couldn't process this order. Try again."
+    }
   }
 }

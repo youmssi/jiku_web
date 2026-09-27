@@ -1,9 +1,20 @@
 "use server";
 
 import { getTranslations } from "next-intl/server";
-import { publicFetch } from "@/lib/api-server";
+import { revalidatePath } from "next/cache";
+import { publicFetch, serverFetch } from "@/lib/api-server";
+import { eventOrdersRoute } from "@/lib/constants";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
-import { checkoutSchema, declareSchema, type CheckoutInput, type DeclareInput, type PlacedOrder } from "./schema";
+import {
+  checkoutSchema,
+  declareSchema,
+  rejectSchema,
+  type CheckoutInput,
+  type DeclareInput,
+  type PlacedOrder,
+  type RejectInput,
+  type SalesSettings,
+} from "./schema";
 
 function errors() {
   return getTranslations("guest.sale.errors");
@@ -66,4 +77,48 @@ export async function declarePaymentAction(token: string, input: DeclareInput): 
   if (response.status === 409) return fail(t("cannotDeclare"));
   if (response.status >= 500) reportApiError(response, "sale");
   return fail(t("failed"));
+}
+
+async function decide(eventId: string, orderId: string, action: "confirm" | "reject", body: object): Promise<ActionResult> {
+  const t = await getTranslations("events.orders.errors");
+  const response = await serverFetch(`/events/${encodeURIComponent(eventId)}/orders/${encodeURIComponent(orderId)}/${action}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (response.status === 409) return fail(t("alreadyDecided"));
+  if (!response.ok) {
+    reportApiError(response, "sale");
+    return fail(t("failed"));
+  }
+  revalidatePath(eventOrdersRoute(eventId));
+  return ok(null);
+}
+
+/** The money arrived: the order is paid and its tickets are issued, already paid. */
+export async function confirmOrderAction(eventId: string, orderId: string): Promise<ActionResult> {
+  return decide(eventId, orderId, "confirm", {});
+}
+
+/** The money did not arrive: the places go back on sale and the client reads [reason]. */
+export async function rejectOrderAction(eventId: string, orderId: string, input: RejectInput): Promise<ActionResult> {
+  const parsed = rejectSchema.safeParse(input);
+  if (!parsed.success) return fail((await getTranslations("events.orders.errors"))("failed"));
+  return decide(eventId, orderId, "reject", parsed.data);
+}
+
+/** How long an unpaid order keeps its places; null restores the platform default. */
+export async function updateOrderHoldAction(orderHoldMinutes: number | null): Promise<ActionResult<SalesSettings>> {
+  const t = await getTranslations("settings.sales");
+  const response = await serverFetch("/settings/sales", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ orderHoldMinutes }),
+  });
+  if (response.status === 400) return fail(t("refused"));
+  if (!response.ok) {
+    reportApiError(response, "sale");
+    return fail(t("failed"));
+  }
+  return ok((await response.json()) as SalesSettings);
 }

@@ -340,5 +340,58 @@
       "location": "Lieu",
       "undated": "Date à définir"
     }
+  },
+  "orders": {
+    "title": "Commandes",
+    "text": "Les billets achetés sur votre page de vente. Vérifiez chaque paiement déclaré dans votre compte Mobile Money, puis confirmez-le : les billets partent aussitôt.",
+    "link": {
+      "title": "Lien de vente",
+      "text": "Partagez ce lien là où vous vendez : réseaux sociaux, WhatsApp, affiches.",
+      "copy": "Copier le lien",
+      "open": "Ouvrir la page",
+      "copyFailed": "Impossible de copier le lien.",
+      "noUsername": "Choisissez d'abord l'identifiant public de votre organisation : le lien de vente est construit dessus.",
+      "setUsername": "Choisir l'identifiant"
+    },
+    "stats": {
+      "toConfirm": "À confirmer",
+      "ticketsSold": "Billets vendus",
+      "collected": "Encaissé"
+    },
+    "filterLabel": "Filtrer les commandes",
+    "filters": {
+      "DECLARED": "À confirmer",
+      "AWAITING_PAYMENT": "En attente de paiement",
+      "PAID": "Payées",
+      "ALL": "Toutes"
+    },
+    "status": {
+      "AWAITING_PAYMENT": "En attente",
+      "DECLARED": "Paiement déclaré",
+      "PAID": "Payée",
+      "EXPIRED": "Expirée",
+      "REJECTED": "Refusée"
+    },
+    "declaredWith": "Paiement déclaré le {when}, référence {reference}",
+    "expiresAt": "Places gardées jusqu'à {when}",
+    "refusedBecause": "Refusée : {reason}",
+    "placedAt": "Commandée le {when}",
+    "confirm": "Confirmer le paiement",
+    "confirmTitle": "Confirmer ce paiement ?",
+    "confirmText": "Vérifiez que vous avez bien reçu {amount} (référence {reference}). Les {count, plural, one {# billet sera émis} other {# billets seront émis}} au nom de l'acheteur, déjà payés.",
+    "confirmed": "{count, plural, one {Paiement confirmé : # billet émis.} other {Paiement confirmé : # billets émis.}}",
+    "refuse": "Refuser",
+    "refuseTitle": "Refuser cette commande",
+    "refuseText": "Les places sont remises en vente et l'acheteur lit votre motif sur sa commande.",
+    "reason": "Motif",
+    "refused": "Commande refusée ; ses places sont remises en vente.",
+    "cancel": "Annuler",
+    "working": "En cours…",
+    "emptyTitle": "Aucune commande",
+    "emptyText": "Aucune commande dans cette liste pour le moment.",
+    "errors": {
+      "alreadyDecided": "Cette commande a déjà été traitée ou a expiré.",
+      "failed": "Impossible de traiter cette commande. Réessayez."
+    }
   }
 }
