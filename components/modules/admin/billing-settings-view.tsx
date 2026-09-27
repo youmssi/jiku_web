@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { Plus, Trash2 } from "lucide-react";
 import { Controller, useFieldArray, useForm, type Control, type FieldPath } from "react-hook-form";
@@ -18,12 +19,12 @@ import {
 import {
   Field,
   FieldDescription,
-  FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { FormFieldError } from "@/components/shared";
 import { updateBillingSettingsAction } from "./admin.service";
 import type { AdminBillingSettingsView } from "./schema";
 import {
@@ -39,6 +40,7 @@ import {
  * vigueur.
  */
 export function BillingSettingsView({ initial }: { initial: AdminBillingSettingsView }) {
+  const t = useTranslations("admin.billing");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const {
@@ -77,7 +79,7 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
         toast.error(result.error);
         return;
       }
-      toast.success("Réglages de facturation enregistrés.");
+      toast.success(t("saved"));
       router.refresh();
     });
   }
@@ -86,21 +88,15 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-6">
       {!initial.managedInDatabase ? (
         <Alert>
-          <AlertTitle>Defaults from configuration</AlertTitle>
-          <AlertDescription>
-            Nothing has been saved yet, so the values below come from the platform
-            configuration. Saving here takes over and becomes the source of truth.
-          </AlertDescription>
+          <AlertTitle>{t("defaultsTitle")}</AlertTitle>
+          <AlertDescription>{t("defaultsText")}</AlertDescription>
         </Alert>
       ) : null}
 
       <Card>
         <CardHeader>
-          <CardTitle>Payee</CardTitle>
-          <CardDescription>
-            Where organizers send their Mobile Money or bank transfers. Shown
-            verbatim in every payment instruction.
-          </CardDescription>
+          <CardTitle>{t("payeeTitle")}</CardTitle>
+          <CardDescription>{t("payeeText")}</CardDescription>
         </CardHeader>
         <CardContent>
           <FieldGroup className="grid gap-4 sm:grid-cols-2">
@@ -109,9 +105,9 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
               name="payee.payeeName"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Account holder name</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{t("payeeName")}</FieldLabel>
                   <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
-                  {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                  <FormFieldError error={fieldState.error} />
                 </Field>
               )}
             />
@@ -120,9 +116,9 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
               name="payee.mobileMoneyNumber"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Mobile Money number</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{t("mobileMoneyNumber")}</FieldLabel>
                   <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
-                  {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                  <FormFieldError error={fieldState.error} />
                 </Field>
               )}
             />
@@ -131,9 +127,9 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
               name="payee.mobileMoneyOperator"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Mobile Money operator</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{t("mobileMoneyOperator")}</FieldLabel>
                   <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
-                  {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                  <FormFieldError error={fieldState.error} />
                 </Field>
               )}
             />
@@ -142,9 +138,9 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
               name="payee.contactEmail"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Contact email</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{t("contactEmail")}</FieldLabel>
                   <Input {...field} id={field.name} type="email" aria-invalid={fieldState.invalid} />
-                  {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                  <FormFieldError error={fieldState.error} />
                 </Field>
               )}
             />
@@ -153,9 +149,9 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
               name="payee.contactPhone"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Contact phone</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{t("contactPhone")}</FieldLabel>
                   <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
-                  {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                  <FormFieldError error={fieldState.error} />
                 </Field>
               )}
             />
@@ -164,18 +160,16 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
               name="payee.bankDetails"
               render={({ field, fieldState }) => (
                 <Field className="sm:col-span-2" data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Bank transfer details</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{t("bankDetails")}</FieldLabel>
                   <Textarea
                     {...field}
                     id={field.name}
                     rows={3}
                     aria-invalid={fieldState.invalid}
-                    placeholder="Bank, branch, account number, account name…"
+                    placeholder={t("bankPlaceholder")}
                   />
-                  <FieldDescription>
-                    Free text shown to the organizer. Leave empty to hide the bank option.
-                  </FieldDescription>
-                  {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                  <FieldDescription>{t("bankHint")}</FieldDescription>
+                  <FormFieldError error={fieldState.error} />
                 </Field>
               )}
             />
@@ -185,18 +179,15 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
 
       <Card>
         <CardHeader>
-          <CardTitle>Event tiers</CardTitle>
-          <CardDescription>
-            The capacity tiers an organizer can request for an event, ascending by guests. Each
-            price is set by hand in GNF, FCFA (XOF and XAF) and US cents (ADR 105).
-          </CardDescription>
+          <CardTitle>{t("tiersTitle")}</CardTitle>
+          <CardDescription>{t("tiersText")}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {tiers.fields.map((tier, index) => (
             <div key={tier.id} className="flex flex-col gap-2 rounded-lg border p-3">
               <div className="grid grid-cols-[1fr_8rem_auto] items-end gap-2">
-                <NumberField control={control} name={`tiers.${index}.name`} label="Tier name" text />
-                <NumberField control={control} name={`tiers.${index}.maxGuests`} label="Max guests" />
+                <NumberField control={control} name={`tiers.${index}.name`} label={t("tierName")} text />
+                <NumberField control={control} name={`tiers.${index}.maxGuests`} label={t("maxGuests")} />
                 <Button
                   type="button"
                   variant="ghost"
@@ -205,7 +196,7 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
                   onClick={() => tiers.remove(index)}
                 >
                   <Trash2 className="size-4" />
-                  <span className="sr-only">Remove tier</span>
+                  <span className="sr-only">{t("removeTier")}</span>
                 </Button>
               </div>
               <PriceFields control={control} prefix={`tiers.${index}.price`} />
@@ -219,7 +210,7 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
               onClick={() => tiers.append({ name: "", maxGuests: 0, price: { gnf: 0, fcfa: 0, usdCents: 0 } })}
             >
               <Plus className="size-3.5" />
-              Add tier
+              {t("addTier")}
             </Button>
           </div>
         </CardContent>
@@ -227,20 +218,16 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
 
       <Card>
         <CardHeader>
-          <CardTitle>Services plans (per month)</CardTitle>
-          <CardDescription>
-            Priced for the team: the monthly price covers the included people, then each extra
-            person costs the extra price. Leave the cap empty for no limit, and the extra price at
-            zero for a plan that takes no one more. Yearly payment charges ten months.
-          </CardDescription>
+          <CardTitle>{t("plansTitle")}</CardTitle>
+          <CardDescription>{t("plansText")}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {plans.fields.map((plan, index) => (
             <div key={plan.id} className="flex flex-col gap-2 rounded-lg border p-3">
               <div className="grid grid-cols-[1fr_8rem_8rem_auto] items-end gap-2">
-                <NumberField control={control} name={`subscriptionPlans.${index}.name`} label="Plan name" text />
-                <NumberField control={control} name={`subscriptionPlans.${index}.includedPeople`} label="Included people" />
-                <NumberField control={control} name={`subscriptionPlans.${index}.maxPeople`} label="People cap" text />
+                <NumberField control={control} name={`subscriptionPlans.${index}.name`} label={t("planName")} text />
+                <NumberField control={control} name={`subscriptionPlans.${index}.includedPeople`} label={t("includedPeople")} />
+                <NumberField control={control} name={`subscriptionPlans.${index}.maxPeople`} label={t("peopleCap")} text />
                 <Button
                   type="button"
                   variant="ghost"
@@ -249,12 +236,12 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
                   onClick={() => plans.remove(index)}
                 >
                   <Trash2 className="size-4" />
-                  <span className="sr-only">Remove plan</span>
+                  <span className="sr-only">{t("removePlan")}</span>
                 </Button>
               </div>
-              <p className="text-xs font-medium text-muted-foreground">Monthly price</p>
+              <p className="text-xs font-medium text-muted-foreground">{t("monthly")}</p>
               <PriceFields control={control} prefix={`subscriptionPlans.${index}.monthly`} />
-              <p className="text-xs font-medium text-muted-foreground">Each extra person</p>
+              <p className="text-xs font-medium text-muted-foreground">{t("extraPerson")}</p>
               <PriceFields control={control} prefix={`subscriptionPlans.${index}.extraPerson`} />
             </div>
           ))}
@@ -274,7 +261,7 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
               }
             >
               <Plus className="size-3.5" />
-              Add plan
+              {t("addPlan")}
             </Button>
           </div>
         </CardContent>
@@ -282,7 +269,7 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
 
       <div>
         <Button type="submit" disabled={isPending || isSubmitting}>
-          {(isPending || isSubmitting) ? "Saving…" : "Save billing settings"}
+          {isPending || isSubmitting ? t("saving") : t("save")}
         </Button>
       </div>
     </form>
@@ -320,7 +307,7 @@ function NumberField({
             type={text ? "text" : "number"}
             aria-invalid={fieldState.invalid}
           />
-          {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+          <FormFieldError error={fieldState.error} />
         </Field>
       )}
     />
@@ -329,11 +316,12 @@ function NumberField({
 
 /** The three hand-set amounts of one price: GNF, FCFA (XOF and XAF) and US cents. */
 function PriceFields({ control, prefix }: { control: FormControl; prefix: string }) {
+  const t = useTranslations("admin.billing");
   return (
     <div className="grid grid-cols-3 gap-2">
-      <NumberField control={control} name={`${prefix}.gnf` as FormPath} label="GNF" />
-      <NumberField control={control} name={`${prefix}.fcfa` as FormPath} label="FCFA" />
-      <NumberField control={control} name={`${prefix}.usdCents` as FormPath} label="USD (cents)" />
+      <NumberField control={control} name={`${prefix}.gnf` as FormPath} label={t("gnf")} />
+      <NumberField control={control} name={`${prefix}.fcfa` as FormPath} label={t("fcfa")} />
+      <NumberField control={control} name={`${prefix}.usdCents` as FormPath} label={t("usdCents")} />
     </div>
   );
 }

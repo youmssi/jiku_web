@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useGuestSearch } from "@/components/modules/checkin/useGuestSearch";
@@ -31,6 +32,7 @@ const MIN_QUERY = 2;
  * filters the locally cached roster for instant results with no network (JIKU-25).
  */
 export function GuestSearch({ door, onSelect, isSubmitting, offline, roster }: GuestSearchProps) {
+  const t = useTranslations("operator.door");
   const search = useGuestSearch(door, !offline);
 
   const localResults = useMemo<Row[]>(() => {
@@ -53,18 +55,18 @@ export function GuestSearch({ door, onSelect, isSubmitting, offline, roster }: G
         autoFocus
         value={search.query}
         onChange={(event) => search.setQuery(event.target.value)}
-        placeholder="Search by name, email or phone"
+        placeholder={t("searchPlaceholder")}
         className="h-12 border-zinc-700 bg-zinc-900 text-zinc-100 placeholder:text-zinc-500"
       />
 
       {isSearching ? (
         <div className="flex items-center justify-center gap-2 py-6 text-sm text-zinc-400">
-          <Spinner className="size-4" /> Searching…
+          <Spinner className="size-4" /> {t("searching")}
         </div>
       ) : null}
 
       {!isSearching && hasQuery && results.length === 0 ? (
-        <p className="py-6 text-center text-sm text-zinc-400">No matching guests.</p>
+        <p className="py-6 text-center text-sm text-zinc-400">{t("noMatch")}</p>
       ) : null}
 
       <ul className="flex flex-col gap-2">
@@ -93,7 +95,7 @@ export function GuestSearch({ door, onSelect, isSubmitting, offline, roster }: G
                       : "bg-zinc-100 text-zinc-900"
                   }`}
                 >
-                  {checkedIn ? "Checked in" : "Check in"}
+                  {checkedIn ? t("checkedIn") : t("checkIn")}
                 </span>
               </button>
             </li>

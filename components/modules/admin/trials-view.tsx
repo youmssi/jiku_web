@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { ArrowUpDown, Plus, Timer } from "lucide-react";
 import { Controller, useForm, useWatch } from "react-hook-form";
@@ -38,7 +39,6 @@ import {
 import {
   Field,
   FieldDescription,
-  FieldError,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -46,7 +46,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Stat } from "@/components/shared";
+import { FormFieldError, Stat } from "@/components/shared";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { formatLocalDateTime } from "@/lib/datetime";
@@ -64,13 +64,7 @@ import {
   type GrantTrialFormValues,
 } from "./schema";
 
-const TRIAL_STATUS_OPTIONS = [
-  { value: "ALL", label: "All statuses" },
-  { value: "ACTIVE", label: "Active" },
-  { value: "CONVERTED", label: "Converted" },
-  { value: "ENDED", label: "Ended" },
-  { value: "EXPIRED", label: "Expired" },
-];
+const TRIAL_STATUSES = ["ACTIVE", "CONVERTED", "ENDED", "EXPIRED"] as const;
 
 /** Sentinel filter value the "Expiring ≤ 7d" toolbar chip sets on the Expires column. */
 const EXPIRING_SOON_FILTER = "EXPIRING_SOON";
@@ -84,11 +78,11 @@ function isExpiringSoon(trial: AdminTrial): boolean {
   return trial.status === "ACTIVE" && daysUntil(trial.expiresAt) <= 7;
 }
 
-function countdownLabel(days: number): string {
-  if (days < 0) return "Overdue";
-  if (days === 0) return "Expires today";
-  if (days === 1) return "Expires tomorrow";
-  return `Expires in ${days} days`;
+function countdownLabel(days: number, t: ReturnType<typeof useTranslations<"admin.trials">>): string {
+  if (days < 0) return t("overdue");
+  if (days === 0) return t("expiresToday");
+  if (days === 1) return t("expiresTomorrow");
+  return t("expiresIn", { days });
 }
 
 /** How much of the trial's granted window has elapsed, 0-100. */
@@ -105,7 +99,10 @@ function urgencyTone(days: number): "urgent" | "warn" | null {
   return null;
 }
 
-const COLUMNS: ColumnDef<DataTableFeatures, AdminTrial>[] = [
+function useColumns(): ColumnDef<DataTableFeatures, AdminTrial>[] {
+  const t = useTranslations("admin.trials");
+  const common = useTranslations("admin.common");
+  return [
   {
     accessorKey: "createdAt",
     header: ({ column }) => (
@@ -114,7 +111,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminTrial>[] = [
         className="-ml-3 h-8"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Granted
+        {t("granted")}
         <ArrowUpDown className="size-3.5" />
       </Button>
     ),
@@ -122,7 +119,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminTrial>[] = [
   },
   {
     id: "tenant",
-    header: "Organization",
+    header: t("organization"),
     enableSorting: false,
     cell: ({ row }) => (
       <IdentityCell
@@ -134,7 +131,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminTrial>[] = [
   },
   {
     id: "event",
-    header: "Event",
+    header: t("event"),
     enableSorting: false,
     cell: ({ row }) => (
       <IdentityCell
@@ -146,12 +143,12 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminTrial>[] = [
   },
   {
     accessorKey: "tier",
-    header: "Tier",
+    header: t("tier"),
     filterFn: "includesString",
   },
   {
     accessorKey: "expiresAt",
-    header: "Expires",
+    header: t("expires"),
     // Only used by the toolbar's "Expiring ≤ 7d" chip — every other value passes through.
     filterFn: (row, _columnId, filterValue) =>
       filterValue === EXPIRING_SOON_FILTER ? isExpiringSoon(row.original) : true,
@@ -173,7 +170,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminTrial>[] = [
                   tone === "warn" && "text-amber-600 dark:text-amber-500",
                 )}
               >
-                {countdownLabel(days)}
+                {countdownLabel(days, t)}
               </span>
               <Progress
                 value={runwayPercent(trial)}
@@ -185,29 +182,29 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminTrial>[] = [
               />
             </div>
           </TooltipTrigger>
-          <TooltipContent>Expires {formatLocalDateTime(trial.expiresAt)}</TooltipContent>
+          <TooltipContent>{t("expiresOn", { date: formatLocalDateTime(trial.expiresAt) })}</TooltipContent>
         </Tooltip>
       );
     },
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: common("status"),
     filterFn: "includesString",
     cell: ({ row }) => <TrialStatusBadge status={row.original.status} />,
   },
   {
     id: "actions",
-    header: "Actions",
+    header: common("actions"),
     enableSorting: false,
     cell: ({ row }) =>
       row.original.status === "ACTIVE" ? (
         <ActionDialog
-          trigger="End early"
-          title="End this trial"
-          description="The event's allowance reverts to its paid entitlement and the organizer is notified."
-          fieldLabel="Reason"
-          confirmLabel="End trial"
+          trigger={t("endEarly")}
+          title={t("endTitle")}
+          description={t("endText")}
+          fieldLabel={t("reason")}
+          confirmLabel={t("endConfirm")}
           destructive
           onConfirm={(reason) => endTrialAction(row.original.id, reason)}
         />
@@ -218,6 +215,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminTrial>[] = [
       ),
   },
 ];
+}
 
 export function TrialsView({
   trialsPage,
@@ -228,6 +226,8 @@ export function TrialsView({
   stats: AdminTrialStats;
   catalog: AdminTierCatalog;
 }) {
+  const t = useTranslations("admin.trials");
+  const columns = useColumns();
   const { entries: trials } = trialsPage;
 
   return (
@@ -235,9 +235,7 @@ export function TrialsView({
       <TrialsOverview stats={stats} />
 
       <div className="flex items-center justify-between gap-2">
-        <p className="text-xs text-muted-foreground">
-          Every trial ever granted, newest first.
-        </p>
+        <p className="text-xs text-muted-foreground">{t("intro")}</p>
         <GrantTrialDialog catalog={catalog} />
       </div>
 
@@ -247,16 +245,14 @@ export function TrialsView({
             <EmptyMedia variant="icon">
               <Timer />
             </EmptyMedia>
-            <EmptyTitle>No trials yet</EmptyTitle>
-            <EmptyDescription>
-              Grant a trial to unlock a free allowance for one event.
-            </EmptyDescription>
+            <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+            <EmptyDescription>{t("emptyText")}</EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
         <>
           <DataTable
-            columns={COLUMNS}
+            columns={columns}
             data={trials}
             pageSize={trialsPage.size}
             toolbar={(table) => <TrialsToolbar table={table} catalog={catalog} />}
@@ -274,17 +270,18 @@ export function TrialsView({
  * the funnel is converting overall.
  */
 function TrialsOverview({ stats }: { stats: AdminTrialStats }) {
+  const t = useTranslations("admin.trials.stats");
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-      <Stat label="Active trials" value={stats.active} />
+      <Stat label={t("active")} value={stats.active} />
       <Stat
-        label="Expiring ≤ 7 days"
+        label={t("expiring")}
         value={stats.expiringWithin7Days}
         tone={stats.expiringWithin7Days > 0 ? "urgent" : "default"}
       />
-      <Stat label="Converted this month" value={stats.convertedThisMonth} tone="positive" />
+      <Stat label={t("converted")} value={stats.convertedThisMonth} tone="positive" />
       <Stat
-        label="Conversion rate"
+        label={t("rate")}
         value={stats.conversionRatePercent === null ? "—" : `${Math.round(stats.conversionRatePercent)}%`}
       />
     </div>
@@ -292,11 +289,12 @@ function TrialsOverview({ stats }: { stats: AdminTrialStats }) {
 }
 
 function TrialsPager({ page, size, total }: { page: number; size: number; total: number }) {
+  const t = useTranslations("admin.trials");
   const pageCount = Math.max(1, Math.ceil(total / size));
   if (pageCount <= 1) {
     return (
       <p className="text-xs text-muted-foreground">
-        Showing all {total} trial{total === 1 ? "" : "s"}.
+        {t("showingAll", { count: total })}
       </p>
     );
   }
@@ -306,30 +304,30 @@ function TrialsPager({ page, size, total }: { page: number; size: number; total:
   const rangeEnd = Math.min(total, (page + 1) * size);
 
   return (
-    <nav aria-label="pagination" className="flex items-center justify-between gap-2">
+    <nav aria-label={t("pagination")} className="flex items-center justify-between gap-2">
       <span className="text-xs text-muted-foreground">
-        Showing {rangeStart}–{rangeEnd} of {total} trials
+        {t("showing", { start: rangeStart, end: rangeEnd, total })}
       </span>
       <div className="flex items-center gap-2">
         {hasPrevious ? (
           <Button asChild variant="outline" size="sm">
-            <Link href={`${ADMIN_ROUTES.TRIALS}?page=${page - 1}`}>Previous</Link>
+            <Link href={`${ADMIN_ROUTES.TRIALS}?page=${page - 1}`}>{t("previous")}</Link>
           </Button>
         ) : (
           <Button variant="outline" size="sm" disabled>
-            Previous
+            {t("previous")}
           </Button>
         )}
         <span className="text-xs text-muted-foreground">
-          Page {page + 1} of {pageCount}
+          {t("page", { page: page + 1, count: pageCount })}
         </span>
         {hasNext ? (
           <Button asChild variant="outline" size="sm">
-            <Link href={`${ADMIN_ROUTES.TRIALS}?page=${page + 1}`}>Next</Link>
+            <Link href={`${ADMIN_ROUTES.TRIALS}?page=${page + 1}`}>{t("next")}</Link>
           </Button>
         ) : (
           <Button variant="outline" size="sm" disabled>
-            Next
+            {t("next")}
           </Button>
         )}
       </div>
@@ -349,6 +347,8 @@ function TrialsToolbar({
   table: import("@tanstack/react-table").Table<DataTableFeatures, AdminTrial>;
   catalog: AdminTierCatalog;
 }) {
+  const t = useTranslations("admin.trials");
+  const statusLabel = useTranslations("admin.trialStatus");
   const [status, setStatus] = useState("ALL");
   const [expiringOnly, setExpiringOnly] = useState(false);
 
@@ -364,12 +364,13 @@ function TrialsToolbar({
             ?.setFilterValue(next === "ALL" ? "" : next);
         }}
       >
-        <ComboboxInput className="w-44" placeholder="Status" />
+        <ComboboxInput className="w-44" placeholder={t("status")} />
         <ComboboxContent>
           <ComboboxList>
-            {TRIAL_STATUS_OPTIONS.map((option) => (
-              <ComboboxItem key={option.value} value={option.value}>
-                {option.label}
+            <ComboboxItem value="ALL">{t("allStatuses")}</ComboboxItem>
+            {TRIAL_STATUSES.map((value) => (
+              <ComboboxItem key={value} value={value}>
+                {statusLabel(value)}
               </ComboboxItem>
             ))}
           </ComboboxList>
@@ -387,7 +388,7 @@ function TrialsToolbar({
           table.getColumn("expiresAt")?.setFilterValue(next ? EXPIRING_SOON_FILTER : undefined);
         }}
       >
-        Expiring ≤ 7d
+        {t("expiringChip")}
       </Button>
     </div>
   );
@@ -400,6 +401,7 @@ function TierFilter({
   table: import("@tanstack/react-table").Table<DataTableFeatures, AdminTrial>;
   catalog: AdminTierCatalog;
 }) {
+  const t = useTranslations("admin.trials");
   const [tier, setTier] = useState("ALL");
 
   return (
@@ -411,10 +413,10 @@ function TierFilter({
         table.getColumn("tier")?.setFilterValue(next === "ALL" ? "" : next);
       }}
     >
-      <ComboboxInput className="w-44" placeholder="Tier" />
+      <ComboboxInput className="w-44" placeholder={t("tier")} />
       <ComboboxContent>
         <ComboboxList>
-          <ComboboxItem value="ALL">All tiers</ComboboxItem>
+          <ComboboxItem value="ALL">{t("allTiers")}</ComboboxItem>
           {catalog.tiers.map((option) => (
             <ComboboxItem key={option.name} value={option.name}>
               {option.name}
@@ -431,6 +433,7 @@ function TierFilter({
  * overview strip or the table — the same pattern as inviting a teammate.
  */
 function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
+  const t = useTranslations("admin.trials");
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const defaultTier = catalog.tiers[0]?.name ?? "";
@@ -460,7 +463,7 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
 
   async function onSubmit(values: GrantTrialFormValues) {
     if (!values.tenant || !values.event) {
-      toast.error("Pick an organization and an event first.");
+      toast.error(t("pickBoth"));
       return;
     }
     const result = await grantTrialAction({
@@ -473,7 +476,7 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
       toast.error(result.error);
       return;
     }
-    toast.success("Trial granted — the organizer has been notified.");
+    toast.success(t("grantedToast"));
     resetForm();
     setOpen(false);
     router.refresh();
@@ -490,17 +493,13 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
       <DialogTrigger asChild>
         <Button>
           <Plus className="size-3.5" data-icon="inline-start" />
-          Grant trial
+          {t("grant")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Grant trial</DialogTitle>
-          <DialogDescription>
-            Grant a free allowance for one event. The organizer is notified
-            instantly and sees a countdown to the deadline in their own
-            dashboard.
-          </DialogDescription>
+          <DialogTitle>{t("grant")}</DialogTitle>
+          <DialogDescription>{t("grantText")}</DialogDescription>
         </DialogHeader>
         <form id="grant-trial-form" onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
           <Controller
@@ -508,7 +507,7 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
             name="tenant"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="trial-tenant">Organization</FieldLabel>
+                <FieldLabel htmlFor="trial-tenant">{t("organization")}</FieldLabel>
                 <TenantCombobox
                   id="trial-tenant"
                   value={field.value}
@@ -518,9 +517,7 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
                     setValue("event", null);
                   }}
                 />
-                {fieldState.invalid ? (
-                  <FieldError errors={[fieldState.error]} />
-                ) : null}
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
@@ -529,16 +526,14 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
             name="event"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="trial-event">Event</FieldLabel>
+                <FieldLabel htmlFor="trial-event">{t("event")}</FieldLabel>
                 <EventCombobox
                   id="trial-event"
                   tenantId={tenant?.id ?? null}
                   value={field.value}
                   onChange={field.onChange}
                 />
-                {fieldState.invalid ? (
-                  <FieldError errors={[fieldState.error]} />
-                ) : null}
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
@@ -547,7 +542,7 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
             name="tier"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Tier</FieldLabel>
+                <FieldLabel>{t("tier")}</FieldLabel>
                 <RadioGroup
                   value={field.value}
                   onValueChange={field.onChange}
@@ -564,7 +559,7 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
                         <RadioGroupItem value={option.name} id={`trial-tier-${option.name}`} />
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        Up to {option.maxGuests.toLocaleString()} guests
+                        {t("upToGuests", { count: option.maxGuests })}
                       </span>
                       <span className="text-sm font-semibold">
                         {formatAmount(option.priceMinor, catalog.currency)}
@@ -572,12 +567,8 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
                     </Label>
                   ))}
                 </RadioGroup>
-                <FieldDescription>
-                  This capacity and price are granted for free — pick deliberately.
-                </FieldDescription>
-                {fieldState.invalid ? (
-                  <FieldError errors={[fieldState.error]} />
-                ) : null}
+                <FieldDescription>{t("tierHint")}</FieldDescription>
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
@@ -586,26 +577,24 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
             name="expiresAt"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Expires</FieldLabel>
+                <FieldLabel htmlFor={field.name}>{t("expires")}</FieldLabel>
                 <Input
                   {...field}
                   id={field.name}
                   type="datetime-local"
                   aria-invalid={fieldState.invalid}
                 />
-                {fieldState.invalid ? (
-                  <FieldError errors={[fieldState.error]} />
-                ) : null}
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
         </form>
         <DialogFooter>
           <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button type="submit" form="grant-trial-form" disabled={isSubmitting}>
-            {isSubmitting ? "Granting…" : "Grant trial"}
+            {isSubmitting ? t("granting") : t("grant")}
           </Button>
         </DialogFooter>
       </DialogContent>

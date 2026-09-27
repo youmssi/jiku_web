@@ -38,7 +38,7 @@
     "services": "Your services",
     "cancelled": "Cancelled",
     "empty": "No event or service is assigned to you yet. Ask the organizer.",
-    "back": "My posts",
+    "back": "My stations",
     "invalidTitle": "Link unavailable",
     "invalidText": "This link was revoked or is no longer valid. Ask the organizer for a new one."
   },
@@ -168,6 +168,62 @@
       "requestsNotFound": "No requests found.",
       "requestsFailed": "Pending requests could not load.",
       "requestConflict": "Another counter just handled this request — the list is up to date."
+    }
+  },
+  "door": {
+    "attendance": "<b>{checkedIn}</b> / {confirmed} checked in",
+    "online": "Online",
+    "offline": "Offline",
+    "queued": "{count} queued",
+    "syncing": "Syncing…",
+    "synced": "Synced {time} · re-sync",
+    "sync": "Sync for offline use",
+    "scan": "Scan QR",
+    "search": "Search",
+    "startingCamera": "Starting camera…",
+    "pointCamera": "Point the camera at the guest's ticket QR code.",
+    "linkInvalidTitle": "Link no longer valid",
+    "linkInvalidText": "This check-in link has been revoked or has expired. Ask the organizer for a new one.",
+    "eventCancelledTitle": "{name} has been cancelled",
+    "eventCancelledText": "The organizer cancelled this event, so check-in is closed and no ticket is valid for entry.",
+    "revokedTitle": "Link revoked",
+    "revokedText": "This check-in link has been revoked. Ask the organizer for a new one.",
+    "invalidTitle": "Invalid check-in link",
+    "invalidText": "This check-in link is invalid or has expired.",
+    "searchPlaceholder": "Search by name, email or phone",
+    "searching": "Searching…",
+    "noMatch": "No matching guests.",
+    "checkedIn": "Checked in",
+    "checkIn": "Check in",
+    "youOffline": "You (offline)",
+    "errors": {
+      "linkInvalid": "This check-in link is no longer valid.",
+      "network": "Network error. Check your connection and try again.",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "doorLinks": {
+    "new": "New link",
+    "fresh": "Link created. It's shown only once:",
+    "copy": "Copy the link",
+    "copied": "Link copied.",
+    "copyFailed": "Couldn't copy the link.",
+    "empty": "No door links yet. Create one and give it to the person at the entrance.",
+    "revoked": "revoked",
+    "active": "active",
+    "revoke": "Revoke",
+    "revokedToast": "The “{label}” link was revoked.",
+    "dialogTitle": "New door link",
+    "dialogText": "Name the entrance (e.g. “Main entrance”, “VIP”). The link will be shown only once.",
+    "name": "Entrance name",
+    "namePlaceholder": "Main entrance",
+    "cancel": "Cancel",
+    "create": "Create the link",
+    "errors": {
+      "unpublished": "Publish the event first to create door links.",
+      "notFound": "This event doesn't exist.",
+      "load": "The door links couldn't be loaded.",
+      "generic": "That didn't work. Try again."
     }
   }
 }

@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { localeRedirect } from "@/i18n/redirect";
 import { revalidatePath } from "next/cache";
 import { type ActionResult, fail, failWithReason, ok, reportApiError } from "@/lib/action-result";
@@ -7,6 +8,7 @@ import { adminFetch, publicFetch } from "@/lib/api-server";
 import { clearAdminAuthCookie, setAdminAuthCookie } from "@/lib/auth";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import type {
+  VerificationDocumentLink,
   TenantDirectoryEntry,
   TenantDirectoryPage,
   AdminBillingSettingsFormValues,
@@ -22,12 +24,13 @@ export async function adminLoginAction(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
+  const t = await getTranslations("admin.errors");
   if (response.status === 401) {
-    return fail("Invalid email or password.");
+    return fail(t("invalidCredentials"));
   }
   if (!response.ok) {
     reportApiError(response, "admin");
-    return fail("Sign-in failed. Please try again.");
+    return fail(t("signInFailed"));
   }
   const tokens = (await response.json()) as { accessToken: string };
   await setAdminAuthCookie(tokens.accessToken);
@@ -50,10 +53,8 @@ async function adminMutation(path: string, body: unknown): Promise<ActionResult>
     body: JSON.stringify(body),
   });
   if (!response.ok) {
-    return failWithReason(
-      response,
-      response.status === 409 ? "This action conflicts with the current state." : "The action failed. Please try again.",
-    );
+    const t = await getTranslations("admin.errors");
+    return failWithReason(response, response.status === 409 ? t("conflict") : t("failed"));
   }
   revalidatePath("/admin", "layout");
   return ok(null);
@@ -157,7 +158,7 @@ export async function updateWhatsAppPricingAction(
     body: JSON.stringify({ costUsdMinor }),
   });
   if (!response.ok) {
-    return failWithReason(response, "Impossible de mettre à jour le tarif.");
+    return failWithReason(response, (await getTranslations("admin.errors"))("pricing"));
   }
   revalidatePath("/admin/whatsapp", "layout");
   return ok(null);
@@ -173,7 +174,7 @@ export async function setWhatsAppOverrideAction(
     body: JSON.stringify({ active, reason }),
   });
   if (!response.ok) {
-    return failWithReason(response, "Impossible de modifier la surcharge de contenu.");
+    return failWithReason(response, (await getTranslations("admin.errors"))("override"));
   }
   revalidatePath("/admin/whatsapp", "layout");
   return ok(null);
@@ -186,7 +187,7 @@ export async function markProspectContactedAction(id: string): Promise<ActionRes
     body: JSON.stringify({}),
   });
   if (!response.ok) {
-    return failWithReason(response, "Impossible de marquer cette piste comme contactée.");
+    return failWithReason(response, (await getTranslations("admin.errors"))("prospect"));
   }
   revalidatePath("/admin/prospects", "layout");
   return ok(null);
@@ -199,7 +200,7 @@ export async function markProspectContactedAction(id: string): Promise<ActionRes
 export async function triggerDiagnosticsAction(): Promise<ActionResult<{ requestId: string | null }>> {
   const response = await adminFetch("/admin/diagnostics/error", { method: "POST" });
   if (response.ok) {
-    return fail("Aucune erreur déclenchée — réponse inattendue.");
+    return fail((await getTranslations("admin.errors"))("diagnostics"));
   }
   return ok({ requestId: response.headers.get("X-Request-Id") });
 }
@@ -230,7 +231,7 @@ export async function updateBillingSettingsAction(
     }),
   });
   if (!response.ok) {
-    return failWithReason(response, "Les réglages n'ont pas pu être enregistrés.");
+    return failWithReason(response, (await getTranslations("admin.errors"))("billingSettings"));
   }
   revalidatePath("/admin", "layout");
   return ok(null);
@@ -239,4 +240,28 @@ export async function updateBillingSettingsAction(
 /** Moves a feedback message along the desk's triage, with an optional note. */
 export async function updateFeedbackStatusAction(id: string, status: string, note: string): Promise<ActionResult> {
   return adminMutation(`/admin/feedback/${id}/status`, { status, note: note || null });
+}
+
+// ─── Organization verification (JIKU-175) ────────────────────────────────────
+
+export async function approveVerificationAction(id: string): Promise<ActionResult> {
+  return adminMutation(`/admin/verifications/${id}/approve`, {});
+}
+
+export async function rejectVerificationAction(id: string, reason: string): Promise<ActionResult> {
+  return adminMutation(`/admin/verifications/${id}/reject`, { reason });
+}
+
+/**
+ * Short-lived links to a request's documents, fetched when the reviewer opens
+ * them rather than with the queue: each link expires within minutes and every
+ * opening is written to the audit log.
+ */
+export async function verificationDocumentsAction(id: string): Promise<ActionResult<VerificationDocumentLink[]>> {
+  const response = await adminFetch(`/admin/verifications/${id}/documents`);
+  if (!response.ok) {
+    const t = await getTranslations("admin.verifications");
+    return failWithReason(response, t(response.status === 503 ? "storageUnavailable" : "documentsFailed"));
+  }
+  return ok((await response.json()) as VerificationDocumentLink[]);
 }

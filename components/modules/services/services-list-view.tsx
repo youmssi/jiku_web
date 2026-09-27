@@ -1,4 +1,5 @@
 import { Scissors } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import {
   Empty,
   EmptyContent,
@@ -17,6 +18,7 @@ import type { ServiceSummary } from "@/components/modules/services/schema";
  * et sa configuration (JIKU-89). Liste en data-table avec état vide.
  */
 export async function ServicesListView() {
+  const t = await getTranslations("services.list");
   const response = await serverFetch("/services");
   const services: ServiceSummary[] = response.ok
     ? ((await response.json()) as ServiceSummary[])
@@ -25,7 +27,7 @@ export async function ServicesListView() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Services</h1>
+        <h1 className="text-2xl font-semibold">{t("title")}</h1>
         <CreateServiceButton />
       </div>
 
@@ -35,10 +37,8 @@ export async function ServicesListView() {
             <EmptyMedia variant="icon">
               <Scissors />
             </EmptyMedia>
-            <EmptyTitle>Aucun service</EmptyTitle>
-            <EmptyDescription>
-              Créez un service pour ouvrir sa ligne du jour et partager son lien de réservation.
-            </EmptyDescription>
+            <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+            <EmptyDescription>{t("emptyText")}</EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <CreateServiceButton />

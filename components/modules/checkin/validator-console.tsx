@@ -2,9 +2,8 @@
 
 import { useCallback, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { formatDateTimeInZone, formatTimeInZone } from "@/lib/datetime";
 import { useOfflineCheckIn } from "@/components/modules/checkin/useOfflineCheckin";
 import { CheckInResult } from "@/components/modules/checkin/checkin-result";
 import { markTicketPaid } from "@/components/modules/checkin/checkin.service";
@@ -19,11 +18,7 @@ const QrScanner = dynamic(
     ),
   {
     ssr: false,
-    loading: () => (
-      <div className="flex aspect-square w-full max-w-sm items-center justify-center rounded-2xl bg-zinc-900 text-sm text-zinc-500">
-        Starting camera…
-      </div>
-    ),
+    loading: () => <CameraLoading />,
   },
 );
 
@@ -41,6 +36,8 @@ interface ValidatorConsoleProps {
  * offline (JIKU-25); queued check-ins flush automatically on reconnection.
  */
 export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
+  const t = useTranslations("operator.door");
+  const format = useFormatter();
   const [mode, setMode] = useState<Mode>("scan");
   const eventCancelled = context.eventStatus === "CANCELLED";
   const [isSyncing, setIsSyncing] = useState(false);
@@ -57,7 +54,7 @@ export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
     checkInByGuest,
     syncForOffline,
     clearResult,
-  } = useOfflineCheckIn(door, { checkedIn: context.checkedIn, confirmed: context.confirmed });
+  } = useOfflineCheckIn(door, { checkedIn: context.checkedIn, confirmed: context.confirmed }, t("youOffline"));
   const lockRef = useRef(false);
 
   const handleDetect = useCallback(
@@ -108,7 +105,16 @@ export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
     }
   }, [syncForOffline]);
 
-  const eventWhen = formatDateTimeInZone(context.startDateTime, context.timezone);
+  const eventWhen = context.startDateTime
+    ? format.dateTime(new Date(context.startDateTime), {
+        timeZone: context.timezone,
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "";
 
   return (
     <div className="flex flex-1 flex-col text-zinc-100">
@@ -126,9 +132,11 @@ export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
           </span>
         </div>
         <p className="mt-2 text-sm text-zinc-400">
-          <span className="font-semibold text-zinc-100">{attendance.checkedIn}</span>
-          {" / "}
-          {attendance.confirmed} checked in
+          {t.rich("attendance", {
+            checkedIn: attendance.checkedIn,
+            confirmed: attendance.confirmed,
+            b: (chunks) => <span className="font-semibold text-zinc-100">{chunks}</span>,
+          })}
         </p>
       </header>
 
@@ -140,8 +148,8 @@ export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
             }`}
           />
           <span className="text-zinc-400">
-            {isOnline ? "Online" : "Offline"}
-            {pendingCount > 0 ? ` · ${pendingCount} queued` : ""}
+            {isOnline ? t("online") : t("offline")}
+            {pendingCount > 0 ? ` · ${t("queued", { count: pendingCount })}` : ""}
           </span>
         </span>
         <button
@@ -151,19 +159,25 @@ export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
           className="rounded-md bg-zinc-800 px-3 py-1.5 font-medium text-zinc-200 disabled:opacity-50"
         >
           {isSyncing
-            ? "Syncing…"
+            ? t("syncing")
             : lastSyncedAt
-              ? `Synced ${formatTimeInZone(lastSyncedAt, context.timezone)} · re-sync`
-              : "Sync for offline use"}
+              ? t("synced", {
+                  time: format.dateTime(new Date(lastSyncedAt), {
+                    timeZone: context.timezone,
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }),
+                })
+              : t("sync")}
         </button>
       </div>
 
       <div className="grid grid-cols-2 gap-1 px-5 pt-4">
         <ModeButton active={mode === "scan"} onClick={() => setMode("scan")}>
-          Scan QR
+          {t("scan")}
         </ModeButton>
         <ModeButton active={mode === "search"} onClick={() => setMode("search")}>
-          Search
+          {t("search")}
         </ModeButton>
       </div>
 
@@ -171,9 +185,7 @@ export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
         {mode === "scan" ? (
           <>
             <QrScanner onDetect={handleDetect} active={!result && !isSubmitting} />
-            <p className="text-center text-sm text-zinc-500">
-              Point the camera at the guest&apos;s ticket QR code.
-            </p>
+            <p className="text-center text-sm text-zinc-500">{t("pointCamera")}</p>
           </>
         ) : (
           <GuestSearch
@@ -192,23 +204,26 @@ export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
 
       {linkInvalid ? (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-zinc-950 px-6 text-center">
-          <h2 className="text-2xl font-semibold">Link no longer valid</h2>
-          <p className="mt-2 max-w-xs text-zinc-400">
-            This check-in link has been revoked or has expired. Ask the organizer
-            for a new one.
-          </p>
+          <h2 className="text-2xl font-semibold">{t("linkInvalidTitle")}</h2>
+          <p className="mt-2 max-w-xs text-zinc-400">{t("linkInvalidText")}</p>
         </div>
       ) : null}
 
       {eventCancelled ? (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-zinc-950 px-6 text-center">
-          <h2 className="text-2xl font-semibold">{context.eventName} has been cancelled</h2>
-          <p className="mt-2 max-w-xs text-zinc-400">
-            The organizer cancelled this event, so check-in is closed and no
-            ticket is valid for entry.
-          </p>
+          <h2 className="text-2xl font-semibold">{t("eventCancelledTitle", { name: context.eventName })}</h2>
+          <p className="mt-2 max-w-xs text-zinc-400">{t("eventCancelledText")}</p>
         </div>
       ) : null}
+    </div>
+  );
+}
+
+function CameraLoading() {
+  const t = useTranslations("operator.door");
+  return (
+    <div className="flex aspect-square w-full max-w-sm items-center justify-center rounded-2xl bg-zinc-900 text-sm text-zinc-500">
+      {t("startingCamera")}
     </div>
   );
 }

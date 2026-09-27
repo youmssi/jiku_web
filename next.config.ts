@@ -24,6 +24,13 @@ const nextConfig: NextConfig = {
   // ships only the compiled app and its runtime dependencies, not node_modules.
   // Vercel ignores this setting; it only affects self-hosted/container builds.
   output: "standalone",
+  experimental: {
+    serverActions: {
+      // Verification documents are uploaded through a Server Action; the
+      // default 1 MB would refuse a single phone photo (see .env.example).
+      bodySizeLimit: (process.env.SERVER_ACTIONS_BODY_LIMIT ?? "8mb") as `${number}mb`,
+    },
+  },
   async headers() {
     return [
       {
@@ -39,6 +46,7 @@ const nextConfig: NextConfig = {
         ],
       },
       noindexRoute("/invitation/:path*"),
+      noindexRoute("/orders/:path*"),
       noindexRoute("/checkin/:path*"),
       noindexRoute("/line/:path*"),
       noindexRoute("/admin/:path*"),

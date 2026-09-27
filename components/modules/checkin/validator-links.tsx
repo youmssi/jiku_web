@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ import {
  * reflètent ces liens (label).
  */
 export function ValidatorLinks({ eventId }: { eventId: string }) {
+  const t = useTranslations("operator.doorLinks");
   const [links, setLinks] = useState<ValidatorLink[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -81,39 +83,33 @@ export function ValidatorLinks({ eventId }: { eventId: string }) {
       toast.error(result.error);
       return;
     }
-    toast.success(`Le lien « ${linkLabel} » a été révoqué.`);
+    toast.success(t("revokedToast", { label: linkLabel }));
     await refresh();
   }
 
   async function copy(link: string) {
     try {
       await navigator.clipboard.writeText(link);
-      toast.success("Lien copié dans le presse-papiers.");
+      toast.success(t("copied"));
     } catch {
-      toast.error("Impossible de copier le lien.");
+      toast.error(t("copyFailed"));
     }
   }
 
   return (
-    <div className="rounded-xl border p-5">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <p className="text-sm font-medium">Door links</p>
-          <p className="text-xs text-muted-foreground">
-            One link per entrance, given to the door person. Revoke to cut access.
-          </p>
-        </div>
+    <div>
+      <div className="flex justify-end">
         <Button size="sm" onClick={() => setDialogOpen(true)}>
-          New link
+          {t("new")}
         </Button>
       </div>
 
       {freshLink ? (
         <div className="mt-4 rounded-lg border border-green-600/30 bg-green-50 p-3 text-sm text-green-900 dark:bg-green-950/30 dark:text-green-200">
-          <p className="font-medium">Lien créé — montrez-le une seule fois :</p>
+          <p className="font-medium">{t("fresh")}</p>
           <p className="mt-1 break-all font-mono text-xs">{freshLink}</p>
           <Button size="sm" variant="outline" className="mt-2" onClick={() => copy(freshLink)}>
-            Copier le lien
+            {t("copy")}
           </Button>
         </div>
       ) : null}
@@ -124,20 +120,14 @@ export function ValidatorLinks({ eventId }: { eventId: string }) {
             <Spinner />
           </div>
         ) : links.length === 0 ? (
-          <p className="py-3 text-sm text-muted-foreground">
-            No door links yet — create one and share it with the entrance staff.
-          </p>
+          <p className="py-3 text-sm text-muted-foreground">{t("empty")}</p>
         ) : (
           <ul className="divide-y">
             {links.map((link) => (
               <li key={link.id} className="flex items-center justify-between gap-3 py-2 text-sm">
                 <div className="flex items-center gap-2">
                   <span>{link.label}</span>
-                  {link.revoked ? (
-                    <Badge variant="outline">révoqué</Badge>
-                  ) : (
-                    <Badge>actif</Badge>
-                  )}
+                  {link.revoked ? <Badge variant="outline">{t("revoked")}</Badge> : <Badge>{t("active")}</Badge>}
                 </div>
                 {!link.revoked ? (
                   <div className="flex gap-2">
@@ -146,7 +136,7 @@ export function ValidatorLinks({ eventId }: { eventId: string }) {
                       variant="outline"
                       onClick={() => revoke(link.id, link.label)}
                     >
-                      Revoke
+                      {t("revoke")}
                     </Button>
                   </div>
                 ) : null}
@@ -159,27 +149,24 @@ export function ValidatorLinks({ eventId }: { eventId: string }) {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Nouveau lien de portier</DialogTitle>
-            <DialogDescription>
-              Nommez le point d&apos;entrée (ex. « Entrée principale », « VIP ») — le lien
-              sera montré une seule fois.
-            </DialogDescription>
+            <DialogTitle>{t("dialogTitle")}</DialogTitle>
+            <DialogDescription>{t("dialogText")}</DialogDescription>
           </DialogHeader>
           <Field>
-            <FieldLabel htmlFor="validator-label">Nom de l&apos;entrée</FieldLabel>
+            <FieldLabel htmlFor="validator-label">{t("name")}</FieldLabel>
             <Input
               id="validator-label"
               value={label}
               onChange={(event) => setLabel(event.target.value)}
-              placeholder="Entrée principale"
+              placeholder={t("namePlaceholder")}
             />
           </Field>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>
-              Annuler
+              {t("cancel")}
             </Button>
             <Button onClick={submitCreate} disabled={creating || !label.trim()}>
-              Créer le lien
+              {t("create")}
             </Button>
           </DialogFooter>
         </DialogContent>

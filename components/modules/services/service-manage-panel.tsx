@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Check, Copy, ExternalLink } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -44,11 +45,7 @@ import type {
   ServiceSummary,
   StaffLink,
 } from "@/components/modules/services/schema";
-import {
-  RESOURCE_TYPES,
-  RESOURCE_TYPE_LABEL,
-  SERVICE_TIMEZONES,
-} from "@/components/modules/services/schema";
+import { RESOURCE_TYPES, SERVICE_TIMEZONES } from "@/components/modules/services/schema";
 
 /**
  * Gestion complète d'un service (JIKU-84/86) : lien public de réservation à
@@ -66,6 +63,8 @@ export function ServiceManagePanel({
   initialRequirements: ServiceRequirement[];
   initialStaffLinks: StaffLink[];
 }) {
+  const t = useTranslations("services.manage");
+  const types = useTranslations("services.resourceTypes");
   const [resources, setResources] = useState<ServiceResource[]>(initialResources);
   const [requirements, setRequirements] = useState<ServiceRequirement[]>(initialRequirements);
   const [staff, setStaff] = useState<StaffLink[]>(initialStaffLinks);
@@ -106,7 +105,7 @@ export function ServiceManagePanel({
       setLinkCopied(true);
       setTimeout(() => setLinkCopied(false), 2000);
     } catch {
-      toast.error("Impossible de copier.");
+      toast.error(t("copyFailed"));
     }
   }
 
@@ -120,7 +119,7 @@ export function ServiceManagePanel({
       setCopiedStaffId(staffId);
       setTimeout(() => setCopiedStaffId((current) => (current === staffId ? null : current)), 2000);
     } catch {
-      toast.error("Impossible de copier.");
+      toast.error(t("copyFailed"));
     }
   }
 
@@ -149,7 +148,7 @@ export function ServiceManagePanel({
       toast.error(result.error);
       return;
     }
-    toast.success(`Le lien « ${staffLabelName} » a été révoqué.`);
+    toast.success(t("staff.revokedToast", { label: staffLabelName }));
     setStaff((current) => current.map((s) => (s.id === staffId ? { ...s, revoked: true } : s)));
   }
 
@@ -165,7 +164,7 @@ export function ServiceManagePanel({
     }
     setResName("");
     setResources((current) => [...current, result.data]);
-    toast.success("Ressource créée.");
+    toast.success(t("resources.created"));
   }
 
   async function toggleResource(resource: ServiceResource) {
@@ -204,19 +203,19 @@ export function ServiceManagePanel({
   const staffColumns: ColumnDef<DataTableFeatures, StaffLink>[] = [
     {
       accessorKey: "label",
-      header: "Poste",
+      header: t("staff.station"),
       filterFn: "includesString",
     },
     {
       id: "status",
-      header: "Statut",
+      header: t("status"),
       enableSorting: false,
       cell: ({ row }) =>
-        row.original.revoked ? <Badge variant="outline">révoqué</Badge> : <Badge>actif</Badge>,
+        row.original.revoked ? <Badge variant="outline">{t("staff.revoked")}</Badge> : <Badge>{t("staff.active")}</Badge>,
     },
     {
       id: "actions",
-      header: "Actions",
+      header: t("actions"),
       enableSorting: false,
       cell: ({ row }) => {
         const link = row.original;
@@ -229,18 +228,18 @@ export function ServiceManagePanel({
               <ButtonGroup>
                 <Button size="icon-sm" variant="outline" onClick={() => copyStaffLink(link.id, link.code!)}>
                   {copiedStaffId === link.id ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-                  <span className="sr-only">Copier le lien</span>
+                  <span className="sr-only">{t("copy")}</span>
                 </Button>
                 <Button size="icon-sm" variant="outline" asChild>
                   <a href={staffLinkUrl(link.code)} target="_blank" rel="noreferrer">
                     <ExternalLink className="size-3.5" />
-                    <span className="sr-only">Ouvrir le lien dans un nouvel onglet</span>
+                    <span className="sr-only">{t("open")}</span>
                   </a>
                 </Button>
               </ButtonGroup>
             ) : null}
             <Button size="sm" variant="outline" disabled={busy} onClick={() => revokeStaff(link.id, link.label)}>
-              Révoquer
+              {t("staff.revoke")}
             </Button>
           </div>
         );
@@ -251,35 +250,35 @@ export function ServiceManagePanel({
   const resourceColumns: ColumnDef<DataTableFeatures, ServiceResource>[] = [
     {
       accessorKey: "name",
-      header: "Nom",
+      header: t("resources.name"),
       filterFn: "includesString",
     },
     {
       id: "type",
-      header: "Type",
-      cell: ({ row }) => RESOURCE_TYPE_LABEL[row.original.type],
+      header: t("resources.type"),
+      cell: ({ row }) => types(row.original.type),
     },
     {
       accessorKey: "timezone",
-      header: "Fuseau",
+      header: t("resources.timezone"),
     },
     {
       id: "status",
-      header: "Statut",
+      header: t("status"),
       enableSorting: false,
-      cell: ({ row }) => (row.original.active ? <Badge>active</Badge> : <Badge variant="outline">désactivée</Badge>),
+      cell: ({ row }) => (row.original.active ? <Badge>{t("resources.active")}</Badge> : <Badge variant="outline">{t("resources.inactive")}</Badge>),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: t("actions"),
       enableSorting: false,
       cell: ({ row }) => (
         <ButtonGroup>
           <Button size="sm" variant="outline" onClick={() => setScheduleFor(row.original)}>
-            Horaires
+            {t("resources.schedule")}
           </Button>
           <Button size="sm" variant="outline" onClick={() => toggleResource(row.original)}>
-            {row.original.active ? "Désactiver" : "Activer"}
+            {row.original.active ? t("resources.deactivate") : t("resources.activate")}
           </Button>
         </ButtonGroup>
       ),
@@ -289,20 +288,20 @@ export function ServiceManagePanel({
   const requirementColumns: ColumnDef<DataTableFeatures, ServiceRequirement>[] = [
     {
       id: "type",
-      header: "Type",
-      cell: ({ row }) => RESOURCE_TYPE_LABEL[row.original.type],
+      header: t("resources.type"),
+      cell: ({ row }) => types(row.original.type),
     },
     {
       accessorKey: "quantity",
-      header: "Quantité",
+      header: t("requirements.quantity"),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: t("actions"),
       enableSorting: false,
       cell: ({ row }) => (
         <Button size="sm" variant="outline" disabled={busy} onClick={() => removeRequirement(row.original.id)}>
-          Retirer
+          {t("remove")}
         </Button>
       ),
     },
@@ -317,13 +316,10 @@ export function ServiceManagePanel({
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Lien public de réservation</CardTitle>
+          <CardTitle className="text-base">{t("bookingLink.title")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
-          <p className="text-sm text-muted-foreground">
-            Partagez ce lien (WhatsApp, bio, message) : toute personne qui l&apos;a peut
-            choisir un créneau sans compte.
-          </p>
+          <p className="text-sm text-muted-foreground">{t("bookingLink.text")}</p>
           <div className="flex flex-wrap items-center gap-2">
             {bookingLink ? (
               <>
@@ -333,19 +329,19 @@ export function ServiceManagePanel({
                 <ButtonGroup>
                   <Button size="icon-sm" variant="outline" onClick={copyLink}>
                     {linkCopied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-                    <span className="sr-only">Copier le lien</span>
+                    <span className="sr-only">{t("copy")}</span>
                   </Button>
                   <Button size="icon-sm" variant="outline" asChild>
                     <a href={bookingLink} target="_blank" rel="noreferrer">
                       <ExternalLink className="size-3.5" />
-                      <span className="sr-only">Ouvrir le lien dans un nouvel onglet</span>
+                      <span className="sr-only">{t("open")}</span>
                     </a>
                   </Button>
                 </ButtonGroup>
               </>
             ) : (
               <Button size="sm" variant="outline" onClick={showBookingLink}>
-                Afficher le lien
+                {t("bookingLink.show")}
               </Button>
             )}
           </div>
@@ -356,32 +352,29 @@ export function ServiceManagePanel({
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Personnel de comptoir</CardTitle>
+          <CardTitle className="text-base">{t("staff.title")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
-          <p className="text-sm text-muted-foreground">
-            Chaque lien ouvre la console sur un téléphone. Un employé qui part : révoquez
-            son lien, l&apos;accès s&apos;arrête immédiatement.
-          </p>
+          <p className="text-sm text-muted-foreground">{t("staff.text")}</p>
           {staff.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Aucun lien de comptoir pour le moment.</p>
+            <p className="text-sm text-muted-foreground">{t("staff.empty")}</p>
           ) : (
             <DataTable columns={staffColumns} data={staff} />
           )}
           {freshStaff ? (
             <div className="rounded-lg border border-green-600/30 bg-green-50 p-3 text-sm dark:bg-green-950/30 dark:text-green-200">
-              <p className="font-medium">Lien pour « {freshStaff.label} » :</p>
+              <p className="font-medium">{t("staff.fresh", { label: freshStaff.label })}</p>
               <div className="mt-1 flex flex-wrap items-center gap-2">
                 <p className="break-all font-mono text-xs">{staffLinkUrl(freshStaff.code)}</p>
                 <ButtonGroup>
                   <Button size="icon-sm" variant="outline" onClick={() => copyStaffLink(freshStaff.code, freshStaff.code)}>
                     {copiedStaffId === freshStaff.code ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-                    <span className="sr-only">Copier le lien</span>
+                    <span className="sr-only">{t("copy")}</span>
                   </Button>
                   <Button size="icon-sm" variant="outline" asChild>
                     <a href={staffLinkUrl(freshStaff.code)} target="_blank" rel="noreferrer">
                       <ExternalLink className="size-3.5" />
-                      <span className="sr-only">Ouvrir le lien dans un nouvel onglet</span>
+                      <span className="sr-only">{t("open")}</span>
                     </a>
                   </Button>
                 </ButtonGroup>
@@ -390,11 +383,11 @@ export function ServiceManagePanel({
           ) : null}
           <div className="mt-2 flex flex-wrap items-end gap-2">
             <Field>
-              <FieldLabel htmlFor="staff-label">Nom du poste</FieldLabel>
-              <Input id="staff-label" value={staffLabel} onChange={(e) => setStaffLabel(e.target.value)} placeholder="Comptoir" />
+              <FieldLabel htmlFor="staff-label">{t("staff.name")}</FieldLabel>
+              <Input id="staff-label" value={staffLabel} onChange={(e) => setStaffLabel(e.target.value)} placeholder={t("staff.namePlaceholder")} />
             </Field>
             <Button onClick={addStaff} disabled={busy || !staffLabel.trim()}>
-              Créer le lien
+              {t("staff.create")}
             </Button>
           </div>
         </CardContent>
@@ -402,41 +395,38 @@ export function ServiceManagePanel({
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Ressources</CardTitle>
+          <CardTitle className="text-base">{t("resources.title")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
-          <p className="text-sm text-muted-foreground">
-            Personnes, lieux et équipements nécessaires pour un créneau. Une ressource
-            désactivée cesse d&apos;être proposée sans déranger les créneaux existants.
-          </p>
+          <p className="text-sm text-muted-foreground">{t("resources.text")}</p>
           {resources.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Aucune ressource pour le moment.</p>
+            <p className="text-sm text-muted-foreground">{t("resources.empty")}</p>
           ) : (
             <DataTable columns={resourceColumns} data={resources} />
           )}
           <div className="mt-2 grid gap-3 sm:grid-cols-2">
             <Field>
-              <FieldLabel htmlFor="res-name">Nom</FieldLabel>
-              <Input id="res-name" value={resName} onChange={(e) => setResName(e.target.value)} placeholder="Coumba (coiffeuse)" />
+              <FieldLabel htmlFor="res-name">{t("resources.name")}</FieldLabel>
+              <Input id="res-name" value={resName} onChange={(e) => setResName(e.target.value)} placeholder={t("resources.namePlaceholder")} />
             </Field>
             <div className="grid grid-cols-2 gap-2">
               <Field>
-                <FieldLabel htmlFor="res-type">Type</FieldLabel>
+                <FieldLabel htmlFor="res-type">{t("resources.type")}</FieldLabel>
                 <Select value={resType} onValueChange={(v) => setResType(v as ResourceType)}>
                   <SelectTrigger id="res-type">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {RESOURCE_TYPES.map((t) => (
-                      <SelectItem key={t.value} value={t.value}>
-                        {t.label}
+                    {RESOURCE_TYPES.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {types(type)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </Field>
               <Field>
-                <FieldLabel htmlFor="res-zone">Fuseau</FieldLabel>
+                <FieldLabel htmlFor="res-zone">{t("resources.timezone")}</FieldLabel>
                 <Select value={resTimezone} onValueChange={setResTimezone}>
                   <SelectTrigger id="res-zone">
                     <SelectValue />
@@ -454,7 +444,7 @@ export function ServiceManagePanel({
           </div>
           <div>
             <Button onClick={addResource} disabled={busy || !resName.trim()}>
-              Ajouter la ressource
+              {t("resources.add")}
             </Button>
           </div>
         </CardContent>
@@ -462,27 +452,24 @@ export function ServiceManagePanel({
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Exigences du service</CardTitle>
+          <CardTitle className="text-base">{t("requirements.title")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
-          <p className="text-sm text-muted-foreground">
-            Ce qu&apos;un créneau consomme : un créneau n&apos;est proposé que si chaque exigence
-            est satisfaite (ex. 1 personne + 1 lieu pour une coloration).
-          </p>
+          <p className="text-sm text-muted-foreground">{t("requirements.text")}</p>
           {requirements.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Aucune exigence — ajoutez-en au moins une pour ouvrir des créneaux.</p>
+            <p className="text-sm text-muted-foreground">{t("requirements.empty")}</p>
           ) : (
             <DataTable columns={requirementColumns} data={requirements} />
           )}
           <div className="mt-2 flex flex-wrap items-end gap-2">
             <Select value={reqType} onValueChange={(v) => setReqType(v as ResourceType)}>
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-40" aria-label={t("requirements.type")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {RESOURCE_TYPES.map((t) => (
-                  <SelectItem key={t.value} value={t.value}>
-                    {t.label}
+                {RESOURCE_TYPES.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {types(type)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -493,10 +480,10 @@ export function ServiceManagePanel({
               min={1}
               value={reqQuantity}
               onChange={(e) => setReqQuantity(e.target.value)}
-              aria-label="Quantité"
+              aria-label={t("requirements.quantity")}
             />
             <Button onClick={addRequirement} disabled={busy}>
-              Ajouter l&apos;exigence
+              {t("requirements.add")}
             </Button>
           </div>
         </CardContent>
@@ -511,7 +498,7 @@ export function ServiceManagePanel({
       <Dialog open={scheduleFor != null} onOpenChange={(open) => !open && setScheduleFor(null)}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Horaires — {scheduleFor?.name}</DialogTitle>
+            <DialogTitle>{t("resources.scheduleTitle", { name: scheduleFor?.name ?? "" })}</DialogTitle>
           </DialogHeader>
           {scheduleFor ? <ResourceScheduleEditor resource={scheduleFor} /> : null}
         </DialogContent>

@@ -242,7 +242,8 @@
         "SUBSCRIPTION": "{tier} plan",
         "PACK": "Organizer Pack",
         "PACK_EXTRA": "Extra Pack guests",
-        "WHATSAPP_NUMBER": "Your own WhatsApp number"
+        "WHATSAPP_NUMBER": "Your own WhatsApp number",
+        "COMMISSION": "Commission on tickets sold"
       }
     }
   }

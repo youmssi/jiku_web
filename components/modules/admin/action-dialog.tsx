@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -47,6 +48,7 @@ export function ActionDialog({
   destructive?: boolean;
   onConfirm: (value: string) => Promise<ActionResult>;
 }) {
+  const t = useTranslations("admin.common");
   const [open, setOpen] = useState(false);
 
   // The only rule is "the field is filled" — the message names the field so it
@@ -54,9 +56,9 @@ export function ActionDialog({
   const schema = useMemo(
     () =>
       z.object({
-        value: z.string().trim().min(1, `${fieldLabel} is required.`),
+        value: z.string().trim().min(1, t("fieldRequired", { field: fieldLabel })),
       }),
-    [fieldLabel],
+    [fieldLabel, t],
   );
 
   const {
@@ -75,7 +77,7 @@ export function ActionDialog({
       toast.error(result.error);
       return;
     }
-    toast.success(`${title} — done.`);
+    toast.success(t("done", { title }));
     reset();
     setOpen(false);
   }
@@ -118,14 +120,14 @@ export function ActionDialog({
               onClick={() => setOpen(false)}
               disabled={isSubmitting}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               type="submit"
               variant={destructive ? "destructive" : "default"}
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Working…" : confirmLabel}
+              {isSubmitting ? t("working") : confirmLabel}
             </Button>
           </DialogFooter>
         </form>

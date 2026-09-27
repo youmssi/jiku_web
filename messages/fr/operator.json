@@ -169,5 +169,61 @@
       "requestsFailed": "Impossible de charger les demandes en attente.",
       "requestConflict": "Cette demande vient d'être traitée par un autre poste — la liste est à jour."
     }
+  },
+  "door": {
+    "attendance": "<b>{checkedIn}</b> / {confirmed} présents",
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "queued": "{count} en attente",
+    "syncing": "Synchronisation…",
+    "synced": "Synchronisé à {time} · resynchroniser",
+    "sync": "Préparer le mode hors ligne",
+    "scan": "Scanner le QR",
+    "search": "Rechercher",
+    "startingCamera": "Démarrage de la caméra…",
+    "pointCamera": "Visez le QR du billet de l'invité.",
+    "linkInvalidTitle": "Lien plus valable",
+    "linkInvalidText": "Ce lien de contrôle a été révoqué ou a expiré. Demandez-en un nouveau à l'organisateur.",
+    "eventCancelledTitle": "{name} a été annulé",
+    "eventCancelledText": "L'organisateur a annulé cet événement : le contrôle est fermé et aucun billet ne donne accès.",
+    "revokedTitle": "Lien révoqué",
+    "revokedText": "Ce lien de contrôle a été révoqué. Demandez-en un nouveau à l'organisateur.",
+    "invalidTitle": "Lien de contrôle invalide",
+    "invalidText": "Ce lien de contrôle est invalide ou a expiré.",
+    "searchPlaceholder": "Nom, e-mail ou téléphone",
+    "searching": "Recherche…",
+    "noMatch": "Aucun invité ne correspond.",
+    "checkedIn": "Entré",
+    "checkIn": "Faire entrer",
+    "youOffline": "Vous (hors ligne)",
+    "errors": {
+      "linkInvalid": "Ce lien de contrôle n'est plus valable.",
+      "network": "Erreur réseau. Vérifiez la connexion et réessayez.",
+      "generic": "Une erreur est survenue. Réessayez."
+    }
+  },
+  "doorLinks": {
+    "new": "Nouveau lien",
+    "fresh": "Lien créé, il n'est montré qu'une fois :",
+    "copy": "Copier le lien",
+    "copied": "Lien copié.",
+    "copyFailed": "Impossible de copier le lien.",
+    "empty": "Aucun lien de portier pour le moment : créez-en un et donnez-le à la personne à l'entrée.",
+    "revoked": "révoqué",
+    "active": "actif",
+    "revoke": "Révoquer",
+    "revokedToast": "Le lien « {label} » a été révoqué.",
+    "dialogTitle": "Nouveau lien de portier",
+    "dialogText": "Nommez le point d'entrée (ex. « Entrée principale », « VIP »). Le lien ne sera montré qu'une fois.",
+    "name": "Nom de l'entrée",
+    "namePlaceholder": "Entrée principale",
+    "cancel": "Annuler",
+    "create": "Créer le lien",
+    "errors": {
+      "unpublished": "Publiez d'abord l'événement pour créer des liens de portier.",
+      "notFound": "Cet événement est introuvable.",
+      "load": "Impossible de charger les liens de portier.",
+      "generic": "L'action a échoué. Réessayez."
+    }
   }
 }

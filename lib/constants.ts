@@ -45,6 +45,11 @@ export function eventTicketsRoute(id: string): string {
   return `/events/${id}/tickets`;
 }
 
+/** The event's ticket orders (JIKU-177): payments to confirm, sales so far. */
+export function eventOrdersRoute(id: string): string {
+  return `/events/${id}/orders`;
+}
+
 export function eventSettingsRoute(id: string): string {
   return `/events/${id}/settings`;
 }
@@ -93,6 +98,16 @@ export function ticketRoute(token: string): string {
   return `/invitation/${token}/ticket`;
 }
 
+/** The public sale page of an event (JIKU-177), under its organization's username. */
+export function saleRoute(username: string, eventId: string): string {
+  return `/o/${username}/events/${eventId}`;
+}
+
+/** The buyer's order, reached by its link token (JIKU-177). */
+export function orderRoute(token: string): string {
+  return `/orders/${token}`;
+}
+
 export const COOKIES = {
   ACCESS_TOKEN: "jiku_access_token",
   REFRESH_TOKEN: "jiku_refresh_token",
@@ -120,4 +135,5 @@ export const ADMIN_ROUTES = {
   FEEDBACK: "/admin/feedback",
   DIAGNOSTICS: "/admin/diagnostics",
   BILLING_INFO: "/admin/billing-info",
+  VERIFICATIONS: "/admin/verifications",
 } as const;

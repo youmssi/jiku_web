@@ -36,7 +36,8 @@ interface Initial {
  * offline, and flushes the queue automatically when connectivity returns —
  * reconciling each result against the server's first-timestamp-wins decision.
  */
-export function useOfflineCheckIn(door: string, initial: Initial) {
+/** `offlineBy` names who checked a guest in while offline, in the door person's language. */
+export function useOfflineCheckIn(door: string, initial: Initial, offlineBy: string) {
   const [result, setResult] = useState<CheckInResponse | null>(null);
   const [attendance, setAttendance] = useState<AttendanceResponse>(initial);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -159,7 +160,7 @@ export function useOfflineCheckIn(door: string, initial: Initial) {
         scannedAt,
         guestName,
       });
-      patchLocal(ticketCode, "You (offline)", scannedAt);
+      patchLocal(ticketCode, offlineBy, scannedAt);
       setPendingCount((count) => count + 1);
       // Le roster porte la catégorie (JIKU-93) : sans réseau, c'est la seule
       // source dont dispose l'appareil pour la montrer au portier.
@@ -168,13 +169,13 @@ export function useOfflineCheckIn(door: string, initial: Initial) {
         guestName: guestName ?? local?.name ?? null,
         ticketCode,
         checkedInAt: scannedAt,
-        checkedInBy: "You (offline)",
+        checkedInBy: offlineBy,
         ticketTypeLabel: local?.ticketTypeLabel ?? null,
         ticketTypeColor: local?.ticketTypeColor ?? null,
         ...NO_AMOUNT_DUE,
       };
     },
-    [door, localByCode, patchLocal],
+    [door, localByCode, patchLocal, offlineBy],
   );
 
   const runOnline = useCallback(

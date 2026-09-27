@@ -119,7 +119,8 @@
     "mtnMomo": "MTN MoMo",
     "wave": "Wave",
     "payOnline": "Pay online",
-    "askOrganizer": "The organizer will tell you how to pay."
+    "askOrganizer": "The organizer will tell you how to pay.",
+    "unverified": "This organizer's identity has not been verified by Jikū yet. Only pay if you know them."
   },
   "appointment": {
     "metaTitle": "Book an appointment",
@@ -136,7 +137,8 @@
       "name": "Your name",
       "phone": "Your phone",
       "submit": "Book this time",
-      "submitting": "Booking…"
+      "submitting": "Booking…",
+      "placesLeft": "{count, plural, one {# place left} other {# places left}}"
     },
     "booked": {
       "title": "Your appointment is booked",
@@ -165,5 +167,73 @@
       "notCancellable": "This appointment can no longer be cancelled.",
       "cancelFailed": "The cancellation failed. Try again."
     }
+  },
+  "verification": {
+    "company": "Verified organization",
+    "personal": "Verified identity",
+    "hint": "The Jikū team checked this organizer's official documents."
+  },
+  "sale": {
+    "organizedBy": "Organized by {organizer}",
+    "left": "{count, plural, one {# place left} other {# places left}}",
+    "soldOutLabel": "Sold out",
+    "less": "Remove a {label} ticket",
+    "more": "Add a {label} ticket",
+    "ticketCount": "{count, plural, =0 {No ticket chosen} one {# ticket} other {# tickets}}",
+    "buyerName": "Your name",
+    "buyerNameHelp": "It is printed on the tickets. You can transfer a ticket to someone else later.",
+    "buyerPhone": "Your phone",
+    "buyerEmail": "Your email (optional)",
+    "order": "Order",
+    "ordering": "Ordering…",
+    "holdNotice": "Your places are held for {minutes} minutes while you pay the organizer.",
+    "closedTitle": "Tickets unavailable",
+    "closed": {
+      "NOT_PUBLISHED": "Ticket sales have not opened yet.",
+      "CANCELLED": "This event has been cancelled.",
+      "ENDED": "This event is over.",
+      "NOTHING_FOR_SALE": "No tickets are on sale for this event.",
+      "ORGANIZER_NOT_VERIFIED": "Sales are not open yet: the organizer must first have their identity verified.",
+      "NO_PAYMENT_METHOD": "Sales are not open yet: the organizer has not said how to pay them.",
+      "PAUSED": "Tickets will be on sale again very soon. Come back a little later."
+    },
+    "errors": {
+      "invalid": "Check what you entered.",
+      "nothingChosen": "Choose at least one ticket.",
+      "soldOut": "There are not enough places left, or the sale just closed. The places have been updated.",
+      "tooMany": "Too many orders from this connection. Try again in a few minutes.",
+      "cannotDeclare": "This payment can no longer be declared: the order has expired or was already handled.",
+      "failed": "We couldn't process your request. Try again."
+    },
+    "pausedLabel": "Available again soon"
+  },
+  "order": {
+    "orderOf": "Your order · {organizer}",
+    "reference": "Transaction reference",
+    "status": {
+      "AWAITING_PAYMENT": "To pay",
+      "DECLARED": "Payment declared",
+      "PAID": "Paid",
+      "EXPIRED": "Expired",
+      "REJECTED": "Refused"
+    },
+    "total": "Total",
+    "buyer": "In the name of {name}",
+    "holdLeft": "Your places are held for another <time></time>.",
+    "quoteReference": "Quote the reference {reference} in your payment's note, then declare it below.",
+    "referenceHelp": "The transaction number you received by SMS after your Mobile Money payment.",
+    "declare": "I have paid",
+    "declaring": "Sending…",
+    "declared": "Payment declared. The organizer will check it.",
+    "declaredText": "Payment declared (reference {reference}). The organizer is checking it; your tickets will appear here as soon as they confirm. Your places stay held.",
+    "paidText": "Payment confirmed. Here are your tickets: show each one at the entrance.",
+    "ticket": "Ticket {number}",
+    "transferHint": "Is a ticket for someone else? Open it and transfer it to their name.",
+    "expiredText": "This order expired without a declared payment; its places went back on sale. You can order again.",
+    "rejectedText": "The organizer refused this order: {reason}",
+    "keepLink": "Keep this link: it is the only way back to your order.",
+    "unavailableTitle": "Order not found",
+    "unavailableText": "This order link is not valid.",
+    "orderReference": "Reference {reference}"
   }
 }

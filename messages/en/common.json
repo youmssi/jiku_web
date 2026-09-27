@@ -26,7 +26,21 @@
     "tooShort": "Too short.",
     "httpsUrl": "Enter an address that starts with https://",
     "hexColor": "Enter a colour in the #RRGGBB format",
-    "payeeRequired": "Enter the payee name your clients will see."
+    "payeeRequired": "Enter the payee name your clients will see.",
+    "pickOrganization": "Pick an organization first.",
+    "pickEvent": "Pick an event first.",
+    "pickTier": "Pick a tier.",
+    "invalidDate": "Enter a valid date.",
+    "dateInFuture": "The date must be in the future.",
+    "nonNegative": "Enter zero or more.",
+    "wholeNumberOrEmpty": "Leave empty or enter a whole number.",
+    "atLeastOneTier": "At least one tier is required.",
+    "atLeastOnePlan": "At least one plan is required.",
+    "sixDigitCode": "Enter the 6 digits you received.",
+    "attachDocument": "Attach at least one document.",
+    "tooManyFiles": "You picked too many files.",
+    "fileTooLarge": "A file is over the size limit, even compressed.",
+    "fileType": "Attach JPEG, PNG or PDF files."
   },
   "roles": {
     "OWNER": "Owner",

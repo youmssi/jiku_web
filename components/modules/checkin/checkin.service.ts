@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { publicFetch } from "@/lib/api-server";
 import { reportApiError } from "@/lib/action-result";
 import type {
@@ -34,21 +35,22 @@ async function call<T>(
   path: string,
   init: RequestInit,
 ): Promise<ServiceResult<T>> {
+  const t = await getTranslations("operator.door.errors");
   if (!DOOR.test(door)) {
-    return { linkInvalid: true, error: "This check-in link is no longer valid." };
+    return { linkInvalid: true, error: t("linkInvalid") };
   }
   let response: Response;
   try {
     response = await publicFetch(`/${door}${path}`, init);
   } catch {
-    return { error: "Network error. Check your connection and try again." };
+    return { error: t("network") };
   }
   if (response.status === 403 || response.status === 404) {
-    return { linkInvalid: true, error: "This check-in link is no longer valid." };
+    return { linkInvalid: true, error: t("linkInvalid") };
   }
   if (!response.ok) {
     reportApiError(response);
-    return { error: "Something went wrong. Please try again." };
+    return { error: t("generic") };
   }
   return { data: (await response.json()) as T };
 }

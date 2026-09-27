@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { ServiceManagePanel } from "@/components/modules/services/service-manage-panel";
 import type {
@@ -20,12 +21,11 @@ export async function ServiceManageView({ serviceId }: { serviceId: string }) {
   ]);
 
   if (!serviceRes.ok) {
+    const t = await getTranslations("services.manage");
     return (
       <div className="mx-auto w-full max-w-4xl px-4 py-10">
         <p className="text-muted-foreground">
-          {serviceRes.status === 404
-            ? "Ce service est introuvable ou ne vous appartient pas."
-            : "Impossible de charger ce service."}
+          {serviceRes.status === 404 ? t("notFound") : t("loadFailed")}
         </p>
       </div>
     );

@@ -11,8 +11,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list"];
-        put: operations["save"];
+        get: operations["vocabularyList"];
+        put: operations["vocabularySave"];
         post?: never;
         delete?: never;
         options?: never;
@@ -27,8 +27,24 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["detail"];
-        put: operations["save_1"];
+        get: operations["templatesDetail"];
+        put: operations["templatesSave"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/settings/sales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["salesSettingsGet"];
+        put: operations["salesSettingsUpdate"];
         post?: never;
         delete?: never;
         options?: never;
@@ -44,7 +60,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["updateWhatsApp"];
+        put: operations["providerSettingsUpdateWhatsApp"];
         post?: never;
         delete?: never;
         options?: never;
@@ -60,7 +76,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["updateEmail"];
+        put: operations["providerSettingsUpdateEmail"];
         post?: never;
         delete?: never;
         options?: never;
@@ -75,8 +91,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get"];
-        put: operations["update"];
+        get: operations["paymentMethodsGet"];
+        put: operations["paymentMethodsUpdate"];
         post?: never;
         delete?: never;
         options?: never;
@@ -91,8 +107,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["configuration"];
-        put: operations["updateConfiguration"];
+        get: operations["serviceConfiguration"];
+        put: operations["serviceUpdateConfiguration"];
         post?: never;
         delete?: never;
         options?: never;
@@ -108,7 +124,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["updateUsername"];
+        put: operations["orgUpdateUsername"];
         post?: never;
         delete?: never;
         options?: never;
@@ -124,7 +140,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["update_1"];
+        put: operations["operatorUpdate"];
         post?: never;
         delete?: never;
         options?: never;
@@ -140,7 +156,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["changeRole"];
+        put: operations["memberChangeRole"];
         post?: never;
         delete?: never;
         options?: never;
@@ -155,8 +171,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_1"];
-        put: operations["update_2"];
+        get: operations["legalIdentityGet"];
+        put: operations["legalIdentityUpdate"];
         post?: never;
         delete?: never;
         options?: never;
@@ -171,10 +187,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_2"];
-        put: operations["update_3"];
+        get: operations["eventGet"];
+        put: operations["eventUpdate"];
         post?: never;
-        delete: operations["delete"];
+        delete: operations["eventDelete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -188,7 +204,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["setQuorum"];
+        put: operations["eventSetQuorum"];
         post?: never;
         delete?: never;
         options?: never;
@@ -204,9 +220,9 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["update_4"];
+        put: operations["ticketTypeUpdate"];
         post?: never;
-        delete: operations["delete_1"];
+        delete: operations["ticketTypeDelete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -219,8 +235,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_3"];
-        put: operations["update_5"];
+        get: operations["brandingGet"];
+        put: operations["brandingUpdate"];
         post?: never;
         delete?: never;
         options?: never;
@@ -236,7 +252,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["updatePricing"];
+        put: operations["adminWhatsAppUpdatePricing"];
         post?: never;
         delete?: never;
         options?: never;
@@ -251,8 +267,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["settings"];
-        put: operations["update_6"];
+        get: operations["adminBillingSettingsSettings"];
+        put: operations["adminBillingSettingsUpdate"];
         post?: never;
         delete?: never;
         options?: never;
@@ -267,9 +283,57 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["verifySubscription"];
+        get: operations["whatsAppWebhookVerifySubscription"];
         put?: never;
-        post: operations["receiveMessages"];
+        post: operations["whatsAppWebhookReceiveMessages"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/settings/verification/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["verificationSubmit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/settings/verification/phone": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["verificationRequestPhoneCode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/settings/verification/phone/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["verificationConfirmPhone"];
         delete?: never;
         options?: never;
         head?: never;
@@ -285,7 +349,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["preview"];
+        post: operations["templatesPreview"];
         delete?: never;
         options?: never;
         head?: never;
@@ -301,7 +365,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["testSend"];
+        post: operations["providerSettingsTestSend"];
         delete?: never;
         options?: never;
         head?: never;
@@ -315,9 +379,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["embeddedSignupConfig"];
+        get: operations["providerSettingsEmbeddedSignupConfig"];
         put?: never;
-        post: operations["completeEmbeddedSignup"];
+        post: operations["providerSettingsCompleteEmbeddedSignup"];
         delete?: never;
         options?: never;
         head?: never;
@@ -331,9 +395,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_1"];
+        get: operations["serviceList"];
         put?: never;
-        post: operations["create"];
+        post: operations["serviceCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -347,9 +411,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_2"];
+        get: operations["serviceStaffList"];
         put?: never;
-        post: operations["create_1"];
+        post: operations["serviceStaffCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -365,7 +429,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["walkIn"];
+        post: operations["serviceDayLineWalkIn"];
         delete?: never;
         options?: never;
         head?: never;
@@ -381,7 +445,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["present"];
+        post: operations["serviceDayLinePresent"];
         delete?: never;
         options?: never;
         head?: never;
@@ -397,7 +461,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["markPaid"];
+        post: operations["serviceDayLineMarkPaid"];
         delete?: never;
         options?: never;
         head?: never;
@@ -413,7 +477,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["noShow"];
+        post: operations["serviceDayLineNoShow"];
         delete?: never;
         options?: never;
         head?: never;
@@ -429,7 +493,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["finish"];
+        post: operations["serviceDayLineFinish"];
         delete?: never;
         options?: never;
         head?: never;
@@ -445,7 +509,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["call"];
+        post: operations["serviceDayLineCall"];
         delete?: never;
         options?: never;
         head?: never;
@@ -461,7 +525,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["arrive"];
+        post: operations["serviceDayLineArrive"];
         delete?: never;
         options?: never;
         head?: never;
@@ -477,7 +541,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["rejectRequest"];
+        post: operations["serviceDayLineRejectRequest"];
         delete?: never;
         options?: never;
         head?: never;
@@ -493,7 +557,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["acceptRequest"];
+        post: operations["serviceDayLineAcceptRequest"];
         delete?: never;
         options?: never;
         head?: never;
@@ -509,7 +573,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["next"];
+        post: operations["serviceDayLineNext"];
         delete?: never;
         options?: never;
         head?: never;
@@ -523,9 +587,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["requirements"];
+        get: operations["serviceRequirements"];
         put?: never;
-        post: operations["addRequirement"];
+        post: operations["serviceAddRequirement"];
         delete?: never;
         options?: never;
         head?: never;
@@ -541,7 +605,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["transfer"];
+        post: operations["rsvpTransfer"];
         delete?: never;
         options?: never;
         head?: never;
@@ -557,7 +621,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["erase"];
+        post: operations["rsvpErase"];
         delete?: never;
         options?: never;
         head?: never;
@@ -573,7 +637,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["decline"];
+        post: operations["rsvpDecline"];
         delete?: never;
         options?: never;
         head?: never;
@@ -589,7 +653,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["confirm"];
+        post: operations["rsvpConfirm"];
         delete?: never;
         options?: never;
         head?: never;
@@ -603,9 +667,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_3"];
+        get: operations["resourceList"];
         put?: never;
-        post: operations["create_2"];
+        post: operations["resourceCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -619,9 +683,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["unavailability"];
+        get: operations["resourceUnavailability"];
         put?: never;
-        post: operations["addUnavailability"];
+        post: operations["resourceAddUnavailability"];
         delete?: never;
         options?: never;
         head?: never;
@@ -635,9 +699,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["availability"];
+        get: operations["resourceAvailability"];
         put?: never;
-        post: operations["addAvailability"];
+        post: operations["resourceAddAvailability"];
         delete?: never;
         options?: never;
         head?: never;
@@ -653,7 +717,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["takeTicket"];
+        post: operations["shortLinkPublicTakeTicket"];
         delete?: never;
         options?: never;
         head?: never;
@@ -669,7 +733,23 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["book"];
+        post: operations["shortLinkPublicBook"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/public/orgs/{username}/events/{eventId}/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["publicTicketOrderPlace"];
         delete?: never;
         options?: never;
         head?: never;
@@ -685,7 +765,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["register"];
+        post: operations["prospectLeadRegister"];
         delete?: never;
         options?: never;
         head?: never;
@@ -701,7 +781,23 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["create_3"];
+        post: operations["orgCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orders/{token}/declare": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["publicTicketOrderDeclare"];
         delete?: never;
         options?: never;
         head?: never;
@@ -715,9 +811,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["team"];
+        get: operations["operatorTeam"];
         put?: never;
-        post: operations["create_4"];
+        post: operations["operatorCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -733,7 +829,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["revoke"];
+        post: operations["operatorRevoke"];
         delete?: never;
         options?: never;
         head?: never;
@@ -749,7 +845,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["receive"];
+        post: operations["emailFeedbackReceive"];
         delete?: never;
         options?: never;
         head?: never;
@@ -765,7 +861,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["receive_1"];
+        post: operations["resendEmailFeedbackReceive"];
         delete?: never;
         options?: never;
         head?: never;
@@ -779,9 +875,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["invitations"];
+        get: operations["memberInvitations"];
         put?: never;
-        post: operations["invite"];
+        post: operations["memberInvite"];
         delete?: never;
         options?: never;
         head?: never;
@@ -797,7 +893,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["walkIn_1"];
+        post: operations["lineStaffWalkIn"];
         delete?: never;
         options?: never;
         head?: never;
@@ -813,7 +909,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["walkIn_2"];
+        post: operations["lineStaffWalkIn_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -829,7 +925,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["present_1"];
+        post: operations["lineStaffPresent"];
         delete?: never;
         options?: never;
         head?: never;
@@ -845,7 +941,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["present_2"];
+        post: operations["lineStaffPresent_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -861,7 +957,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["markPaid_1"];
+        post: operations["lineStaffMarkPaid"];
         delete?: never;
         options?: never;
         head?: never;
@@ -877,7 +973,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["markPaid_2"];
+        post: operations["lineStaffMarkPaid_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -893,7 +989,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["noShow_1"];
+        post: operations["lineStaffNoShow_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -909,7 +1005,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["noShow_2"];
+        post: operations["lineStaffNoShow"];
         delete?: never;
         options?: never;
         head?: never;
@@ -925,7 +1021,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["finish_1"];
+        post: operations["lineStaffFinish"];
         delete?: never;
         options?: never;
         head?: never;
@@ -941,7 +1037,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["finish_2"];
+        post: operations["lineStaffFinish_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -957,7 +1053,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["call_1"];
+        post: operations["lineStaffCall"];
         delete?: never;
         options?: never;
         head?: never;
@@ -973,7 +1069,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["call_2"];
+        post: operations["lineStaffCall_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -989,7 +1085,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["arrive_1"];
+        post: operations["lineStaffArrive"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1005,7 +1101,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["arrive_2"];
+        post: operations["lineStaffArrive_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1021,7 +1117,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["rejectRequest_1"];
+        post: operations["lineStaffRejectRequest_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1037,7 +1133,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["rejectRequest_2"];
+        post: operations["lineStaffRejectRequest"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1053,7 +1149,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["acceptRequest_1"];
+        post: operations["lineStaffAcceptRequest"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1069,7 +1165,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["acceptRequest_2"];
+        post: operations["lineStaffAcceptRequest_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1085,7 +1181,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["next_1"];
+        post: operations["lineStaffNext_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1101,7 +1197,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["next_2"];
+        post: operations["lineStaffNext"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1117,7 +1213,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["submit"];
+        post: operations["feedbackSubmit"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1133,7 +1229,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["rate"];
+        post: operations["feedbackRate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1147,9 +1243,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_4"];
+        get: operations["eventList"];
         put?: never;
-        post: operations["create_5"];
+        post: operations["eventCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1165,7 +1261,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["publish"];
+        post: operations["eventPublish"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1181,7 +1277,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["cancel"];
+        post: operations["eventCancel"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1195,9 +1291,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_5"];
+        get: operations["validatorList"];
         put?: never;
-        post: operations["create_6"];
+        post: operations["validatorCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1213,7 +1309,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["revoke_1"];
+        post: operations["validatorRevoke"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1227,9 +1323,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_6"];
+        get: operations["ticketTypeList"];
         put?: never;
-        post: operations["create_7"];
+        post: operations["ticketTypeCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1243,9 +1339,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_7"];
+        get: operations["eventQuestionList"];
         put?: never;
-        post: operations["create_8"];
+        post: operations["eventQuestionCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1261,7 +1357,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["initiate"];
+        post: operations["paymentInitiate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1275,9 +1371,41 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["current"];
+        get: operations["manualPaymentCurrent"];
         put?: never;
-        post: operations["request"];
+        post: operations["manualPaymentRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/orders/{orderId}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketOrderReject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/orders/{orderId}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketOrderConfirm"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1291,9 +1419,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_8"];
+        get: operations["eventOccurrenceList"];
         put?: never;
-        post: operations["create_9"];
+        post: operations["eventOccurrenceCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1309,7 +1437,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["send"];
+        post: operations["invitationSend"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1325,7 +1453,23 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["import"];
+        post: operations["guestImport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/commission/batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["commissionOpen"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1341,7 +1485,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["markPaid_3"];
+        post: operations["checkInMarkPaid"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1357,7 +1501,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["scan"];
+        post: operations["checkInScan"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1373,7 +1517,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["manual"];
+        post: operations["checkInManual"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1389,7 +1533,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["markPaid_4"];
+        post: operations["operatorCheckInMarkPaid"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1405,7 +1549,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["markPaid_5"];
+        post: operations["operatorCheckInMarkPaid_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1421,7 +1565,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["sync"];
+        post: operations["operatorCheckInSync"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1437,7 +1581,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["sync_1"];
+        post: operations["operatorCheckInSync_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1453,7 +1597,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["scan_1"];
+        post: operations["operatorCheckInScan"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1469,7 +1613,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["scan_2"];
+        post: operations["operatorCheckInScan_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1485,7 +1629,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["manual_1"];
+        post: operations["operatorCheckInManual_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1501,7 +1645,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["manual_2"];
+        post: operations["operatorCheckInManual"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1517,7 +1661,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["requestOwnNumber"];
+        post: operations["ownWhatsAppNumberRequestOwnNumber"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1533,7 +1677,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["checkoutOwnNumber"];
+        post: operations["ownWhatsAppNumberCheckoutOwnNumber"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1549,7 +1693,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["request_1"];
+        post: operations["subscriptionRequest"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1565,7 +1709,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["checkout"];
+        post: operations["subscriptionCheckout"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1581,7 +1725,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["callback"];
+        post: operations["paymentCallbackCallback"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1597,7 +1741,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["providerCallback"];
+        post: operations["paymentCallbackProviderCallback"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1613,7 +1757,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["requestPack"];
+        post: operations["organizerPackRequestPack"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1629,7 +1773,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["requestPackExtra"];
+        post: operations["organizerPackRequestPackExtra"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1645,7 +1789,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["checkoutPackExtra"];
+        post: operations["organizerPackCheckoutPackExtra"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1661,7 +1805,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["checkoutPack"];
+        post: operations["organizerPackCheckoutPack"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1677,7 +1821,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["creditNote"];
+        post: operations["invoiceCreditNote"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1693,7 +1837,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["issueForPayment"];
+        post: operations["invoiceIssueForPayment"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1709,7 +1853,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["verifyEmail"];
+        post: operations["authVerifyEmail"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1725,7 +1869,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["resendVerification"];
+        post: operations["authResendVerification"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1741,7 +1885,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["switchOrg"];
+        post: operations["authSwitchOrg"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1757,7 +1901,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["resetPassword"];
+        post: operations["authResetPassword"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1773,7 +1917,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["register_1"];
+        post: operations["authRegister"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1789,7 +1933,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["refresh"];
+        post: operations["authRefresh"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1805,7 +1949,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["login"];
+        post: operations["authLogin"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1821,7 +1965,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["accept"];
+        post: operations["memberInvitationAcceptAccept"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1837,7 +1981,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["google"];
+        post: operations["authGoogle"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1853,7 +1997,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["forgotPassword"];
+        post: operations["authForgotPassword"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1869,7 +2013,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["takeTicket_1"];
+        post: operations["appointmentPublicTakeTicket"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1885,7 +2029,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["book_1"];
+        post: operations["appointmentPublicBook"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1899,9 +2043,41 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["contentOverride"];
+        get: operations["adminWhatsAppContentOverride"];
         put?: never;
-        post: operations["setContentOverride"];
+        post: operations["adminWhatsAppSetContentOverride"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/{id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminVerificationReject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/{id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminVerificationApprove"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1915,9 +2091,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_9"];
+        get: operations["adminTrialList"];
         put?: never;
-        post: operations["grant"];
+        post: operations["adminTrialGrant"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1933,7 +2109,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["end"];
+        post: operations["adminTrialEnd"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1949,7 +2125,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["suspend"];
+        post: operations["adminTenantSuspend"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1965,7 +2141,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["reactivate"];
+        post: operations["adminTenantReactivate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1981,7 +2157,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["markContacted"];
+        post: operations["adminProspectLeadMarkContacted"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1997,7 +2173,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["reject"];
+        post: operations["adminPaymentReject"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2013,7 +2189,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["confirm_1"];
+        post: operations["adminPaymentConfirm"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2029,7 +2205,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["updateStatus"];
+        post: operations["adminFeedbackUpdateStatus"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2045,7 +2221,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["triggerError"];
+        post: operations["adminDiagnosticsTriggerError"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2061,7 +2237,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["refresh_1"];
+        post: operations["adminAuthRefresh"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2077,7 +2253,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["login_1"];
+        post: operations["adminAuthLogin"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2091,9 +2267,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_10"];
+        get: operations["adminAgreementList"];
         put?: never;
-        post: operations["create_10"];
+        post: operations["adminAgreementCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2109,7 +2285,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["renew"];
+        post: operations["adminAgreementRenew"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2125,7 +2301,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["interrupt"];
+        post: operations["adminAgreementInterrupt"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2139,13 +2315,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_4"];
+        get: operations["serviceGet"];
         put?: never;
         post?: never;
-        delete: operations["delete_2"];
+        delete: operations["serviceDelete"];
         options?: never;
         head?: never;
-        patch: operations["update_7"];
+        patch: operations["serviceUpdate"];
         trace?: never;
     };
     "/api/v1/resources/{id}": {
@@ -2155,13 +2331,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_5"];
+        get: operations["resourceGet"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["update_8"];
+        patch: operations["resourceUpdate"];
         trace?: never;
     };
     "/api/v1/events/{eventId}/guests/{guestId}/ticket-type": {
@@ -2177,7 +2353,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["setTicketType"];
+        patch: operations["guestSetTicketType"];
         trace?: never;
     };
     "/api/v1/events/{eventId}/guests/{guestId}/exclusion": {
@@ -2193,7 +2369,23 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["setExclusion"];
+        patch: operations["guestSetExclusion"];
+        trace?: never;
+    };
+    "/api/v1/settings/verification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["verificationOverview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/settings/templates": {
@@ -2203,7 +2395,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_11"];
+        get: operations["templatesList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2219,7 +2411,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["overview"];
+        get: operations["providerSettingsOverview"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2235,7 +2427,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["view"];
+        get: operations["serviceDayLineView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2251,7 +2443,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["pendingRequests"];
+        get: operations["serviceDayLinePendingRequests"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2267,7 +2459,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["bookingLink"];
+        get: operations["serviceBookingLink"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2283,7 +2475,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["view_1"];
+        get: operations["rsvpView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2299,7 +2491,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["qrCode"];
+        get: operations["rsvpQrCode"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2315,7 +2507,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["free"];
+        get: operations["resourceFree"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2331,7 +2523,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["view_2"];
+        get: operations["shortLinkPublicView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2347,7 +2539,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["lineTicket"];
+        get: operations["shortLinkPublicLineTicket"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2363,10 +2555,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["status"];
+        get: operations["shortLinkPublicStatus"];
         put?: never;
         post?: never;
-        delete: operations["cancel_1"];
+        delete: operations["shortLinkPublicCancel"];
         options?: never;
         head?: never;
         patch?: never;
@@ -2379,7 +2571,23 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["profile"];
+        get: operations["publicOrgProfile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/public/orgs/{username}/events/{eventId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicTicketOrderSale"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2395,7 +2603,23 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["profile_1"];
+        get: operations["orgProfile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orders/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicTicketOrderView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2411,7 +2635,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["console"];
+        get: operations["operatorConsoleConsole"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2427,7 +2651,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["resolve"];
+        get: operations["operatorConsoleResolve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2443,7 +2667,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["members"];
+        get: operations["memberMembers"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2459,7 +2683,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["pendingRequests_1"];
+        get: operations["lineStaffPendingRequests"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2475,7 +2699,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["pendingRequests_2"];
+        get: operations["lineStaffPendingRequests_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2491,7 +2715,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["view_3"];
+        get: operations["lineStaffView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2507,7 +2731,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["view_4"];
+        get: operations["lineStaffView_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2523,7 +2747,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["resolve_1"];
+        get: operations["lineCodeResolve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2539,7 +2763,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["health"];
+        get: operations["healthHealth"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2555,7 +2779,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["prompt"];
+        get: operations["feedbackPrompt"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2571,7 +2795,23 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["usage"];
+        get: operations["billingUsage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketOrderList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2587,7 +2827,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["statuses"];
+        get: operations["invitationStatuses"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2603,7 +2843,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_12"];
+        get: operations["guestList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2619,7 +2859,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["export"];
+        get: operations["guestExport"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2635,7 +2875,39 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_6"];
+        get: operations["dashboardGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/commission": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["commissionOverview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/commission/quote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["commissionQuote"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2651,7 +2923,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["stats"];
+        get: operations["checkInStats"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2667,7 +2939,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["search"];
+        get: operations["checkInSearch"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2683,7 +2955,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["quotes"];
+        get: operations["eventTierQuotesQuotes"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2699,7 +2971,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["register_2"];
+        get: operations["attendanceCertificateRegister"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2715,7 +2987,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["certificate"];
+        get: operations["attendanceCertificateCertificate"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2731,7 +3003,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_7"];
+        get: operations["analyticsGet"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2747,7 +3019,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["stats_1"];
+        get: operations["operatorCheckInStats_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2763,7 +3035,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["stats_2"];
+        get: operations["operatorCheckInStats"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2779,7 +3051,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["search_1"];
+        get: operations["operatorCheckInSearch_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2795,7 +3067,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["search_2"];
+        get: operations["operatorCheckInSearch"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2811,7 +3083,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["roster"];
+        get: operations["operatorCheckInRoster"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2827,7 +3099,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["roster_1"];
+        get: operations["operatorCheckInRoster_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2843,7 +3115,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["context"];
+        get: operations["operatorCheckInContext"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2859,7 +3131,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["context_1"];
+        get: operations["operatorCheckInContext_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2875,7 +3147,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["ownNumberView"];
+        get: operations["ownWhatsAppNumberOwnNumberView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2891,7 +3163,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["tiers"];
+        get: operations["billingTiersTiers"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2907,7 +3179,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["customQuote"];
+        get: operations["billingTiersCustomQuote"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2923,7 +3195,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["view_5"];
+        get: operations["subscriptionView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2939,7 +3211,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["history"];
+        get: operations["billingHistoryHistory"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2955,7 +3227,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["status_1"];
+        get: operations["billingHistoryStatus"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2971,7 +3243,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["receipt"];
+        get: operations["billingHistoryReceipt"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2987,7 +3259,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["packView"];
+        get: operations["organizerPackPackView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3003,7 +3275,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_13"];
+        get: operations["invoiceList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3019,7 +3291,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_8"];
+        get: operations["invoiceGet"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3035,7 +3307,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["document"];
+        get: operations["invoiceDocument"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3051,7 +3323,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["me"];
+        get: operations["authMe"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3067,7 +3339,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["preview_1"];
+        get: operations["memberInvitationAcceptPreview"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3083,7 +3355,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["view_6"];
+        get: operations["appointmentPublicView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3099,7 +3371,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["lineTicket_1"];
+        get: operations["appointmentPublicLineTicket"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3115,10 +3387,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["status_2"];
+        get: operations["appointmentPublicStatus"];
         put?: never;
         post?: never;
-        delete: operations["cancel_2"];
+        delete: operations["appointmentPublicCancel"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3131,7 +3403,39 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["pricing"];
+        get: operations["adminWhatsAppPricing"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminVerificationList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/{id}/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminVerificationDocuments"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3147,7 +3451,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["stats_3"];
+        get: operations["adminTrialStats"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3163,7 +3467,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_14"];
+        get: operations["adminTenantList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3179,7 +3483,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["events"];
+        get: operations["adminTenantEvents"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3195,7 +3499,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_15"];
+        get: operations["adminProspectLeadList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3211,7 +3515,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_16"];
+        get: operations["adminPaymentList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3227,7 +3531,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_17"];
+        get: operations["adminFeedbackList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3243,7 +3547,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["ratings"];
+        get: operations["adminFeedbackRatings"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3259,7 +3563,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["catalog"];
+        get: operations["adminBillingCatalogCatalog"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3275,7 +3579,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_18"];
+        get: operations["adminAuditList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3294,7 +3598,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["remove"];
+        delete: operations["providerSettingsRemove"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3310,7 +3614,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["revoke_2"];
+        delete: operations["serviceStaffRevoke"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3326,7 +3630,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["removeRequirement"];
+        delete: operations["serviceRemoveRequirement"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3342,7 +3646,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["removeUnavailability"];
+        delete: operations["resourceRemoveUnavailability"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3358,7 +3662,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["removeAvailability"];
+        delete: operations["resourceRemoveAvailability"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3374,7 +3678,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["remove_1"];
+        delete: operations["memberRemove"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3390,7 +3694,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["revoke_3"];
+        delete: operations["memberRevoke"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3406,7 +3710,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["delete_3"];
+        delete: operations["eventQuestionDelete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3422,7 +3726,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["delete_4"];
+        delete: operations["eventOccurrenceDelete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3438,7 +3742,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["remove_2"];
+        delete: operations["guestRemove"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3482,6 +3786,22 @@ export interface components {
             label?: string;
             sample?: string;
             required?: boolean;
+        };
+        UpdateSalesSettingsRequest: {
+            /** Format: int32 */
+            orderHoldMinutes?: number | null;
+        };
+        SalesSettingsView: {
+            /** Format: int32 */
+            orderHoldMinutes?: number | null;
+            /** Format: int32 */
+            effectiveOrderHoldMinutes?: number;
+            /** Format: int32 */
+            defaultOrderHoldMinutes?: number;
+            /** Format: int32 */
+            minOrderHoldMinutes?: number;
+            /** Format: int32 */
+            maxOrderHoldMinutes?: number;
         };
         UpdateWhatsAppProviderRequest: {
             accessToken: string;
@@ -3554,6 +3874,8 @@ export interface components {
             /** @enum {string|null} */
             reminderChannel?: "WHATSAPP" | "SMS" | "WHATSAPP_OR_SMS" | "NONE" | null;
             reminderOffsetsMinutes?: number[] | null;
+            /** Format: int32 */
+            clientsPerSlot?: number | null;
         };
         EffectiveServiceConfig: {
             /** @enum {string} */
@@ -3578,6 +3900,10 @@ export interface components {
             /** @enum {string} */
             reminderChannel?: "WHATSAPP" | "SMS" | "WHATSAPP_OR_SMS" | "NONE";
             reminderOffsetsMinutes?: number[];
+            /** Format: int32 */
+            clientsPerSlot?: number;
+            /** Format: int32 */
+            maxClientsPerSlot?: number;
             /** Format: int64 */
             occupancyMinutes?: number;
         };
@@ -3838,6 +4164,35 @@ export interface components {
             subscriptionPlans?: components["schemas"]["SubscriptionPlanOption"][];
             managedInDatabase?: boolean;
         };
+        VerificationRequestView: {
+            /** Format: uuid */
+            id?: string;
+            /** @enum {string} */
+            kind?: "PERSONAL" | "COMPANY";
+            /** @enum {string} */
+            status?: "PENDING" | "APPROVED" | "REJECTED";
+            legalName?: string;
+            documentType?: string;
+            /** Format: date-time */
+            submittedAt?: string;
+            /** Format: date-time */
+            decidedAt?: string | null;
+            rejectionReason?: string | null;
+        };
+        PhoneCodeRequest: {
+            phone: string;
+        };
+        PhoneCodeSent: {
+            /** Format: date-time */
+            expiresAt?: string;
+        };
+        PhoneConfirmRequest: {
+            code: string;
+        };
+        PhoneStatusView: {
+            phone?: string | null;
+            verified?: boolean;
+        };
         TemplatePreviewRequest: {
             channel?: string;
             body?: string | null;
@@ -4015,6 +4370,7 @@ export interface components {
             transferDeadline?: string | null;
             transferredTo?: string | null;
             questions?: components["schemas"]["RsvpQuestion"][];
+            organizerVerification?: string | null;
             payment?: components["schemas"]["RsvpPayment"] | null;
             /** Format: date-time */
             eventStart?: string | null;
@@ -4102,6 +4458,60 @@ export interface components {
             /** Format: date-time */
             endsAt?: string;
         };
+        OrderLineRequest: {
+            /** Format: uuid */
+            ticketTypeId?: string;
+            /** Format: int32 */
+            quantity?: number;
+        };
+        PlaceOrderRequest: {
+            lines: components["schemas"]["OrderLineRequest"][];
+            buyerName: string;
+            buyerPhone: string;
+            /** Format: email */
+            buyerEmail?: string | null;
+        };
+        OrderLineView: {
+            /** Format: uuid */
+            ticketTypeId?: string;
+            label?: string;
+            /** Format: int32 */
+            quantity?: number;
+            /** Format: int64 */
+            unitPriceMinor?: number;
+        };
+        OrderView: {
+            reference?: string;
+            /** @enum {string} */
+            status?: "AWAITING_PAYMENT" | "DECLARED" | "PAID" | "EXPIRED" | "REJECTED";
+            /** Format: uuid */
+            eventId?: string;
+            eventName?: string;
+            /** Format: date-time */
+            eventStart?: string | null;
+            eventTimezone?: string;
+            organizerName?: string;
+            organizerVerification?: string | null;
+            buyerName?: string;
+            lines?: components["schemas"]["OrderLineView"][];
+            /** Format: int64 */
+            totalMinor?: number;
+            currency?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            expiresAt?: string;
+            /** Format: date-time */
+            declaredAt?: string | null;
+            paymentReference?: string | null;
+            rejectionReason?: string | null;
+            paymentMethods?: components["schemas"]["TenantPaymentMethodsInfo"] | null;
+            ticketTokens?: string[];
+        };
+        PlacedOrderView: {
+            token?: string;
+            order?: components["schemas"]["OrderView"];
+        };
         ProspectLeadRequest: {
             businessName: string;
             contactName: string;
@@ -4126,6 +4536,9 @@ export interface components {
             accessToken?: string;
             refreshToken?: string;
             tokenType?: string;
+        };
+        DeclarePaymentRequest: {
+            paymentReference: string;
         };
         EmailFeedbackEventDto: {
             recipient: string;
@@ -4245,6 +4658,35 @@ export interface components {
             status?: string;
             payee?: components["schemas"]["PayeeDetails"];
         };
+        RejectOrderRequest: {
+            reason: string;
+        };
+        OrganizerOrderView: {
+            /** Format: uuid */
+            id?: string;
+            reference?: string;
+            /** @enum {string} */
+            status?: "AWAITING_PAYMENT" | "DECLARED" | "PAID" | "EXPIRED" | "REJECTED";
+            buyerName?: string;
+            buyerPhone?: string;
+            buyerEmail?: string | null;
+            lines?: components["schemas"]["OrderLineView"][];
+            /** Format: int32 */
+            ticketCount?: number;
+            /** Format: int64 */
+            totalMinor?: number;
+            currency?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            expiresAt?: string;
+            /** Format: date-time */
+            declaredAt?: string | null;
+            paymentReference?: string | null;
+            /** Format: date-time */
+            decidedAt?: string | null;
+            rejectionReason?: string | null;
+        };
         CreateEventOccurrenceRequest: {
             /** Format: date-time */
             startsAt: string;
@@ -4283,6 +4725,28 @@ export interface components {
             /** Format: int32 */
             row?: number;
             reason?: string;
+        };
+        OpenBatchRequest: {
+            /** Format: uuid */
+            ticketTypeId?: string;
+            /** @enum {string} */
+            mode?: "FREE" | "CREDIT" | "PAY";
+            manual?: boolean;
+        };
+        OpenedBatchView: {
+            /** Format: uuid */
+            batchId?: string;
+            /** @enum {string} */
+            funding?: "FREE" | "PAID" | "CREDIT" | "OVERAGE";
+            /** @enum {string} */
+            status?: "PENDING_PAYMENT" | "ACTIVE" | "CLOSED" | "CANCELLED";
+            /** Format: int32 */
+            size?: number;
+            /** Format: int64 */
+            totalMinor?: number;
+            currency?: string;
+            payment?: components["schemas"]["PaymentInitiationResult"] | null;
+            instructions?: components["schemas"]["ManualPaymentInstructions"] | null;
         };
         ScanRequest: {
             ticketCode: string;
@@ -4424,6 +4888,28 @@ export interface components {
             activatedBy?: string | null;
             /** Format: date-time */
             activatedAt?: string | null;
+        };
+        VerificationRejectRequest: {
+            reason: string;
+        };
+        AdminVerificationView: {
+            /** Format: uuid */
+            id?: string;
+            tenantId?: string;
+            tenantName?: string | null;
+            kind?: string;
+            status?: string;
+            legalName?: string;
+            documentType?: string;
+            registrationNumber?: string | null;
+            taxIdentifier?: string | null;
+            phone?: string | null;
+            /** Format: date-time */
+            submittedAt?: string;
+            /** Format: date-time */
+            decidedAt?: string | null;
+            rejectionReason?: string | null;
+            documentsAvailable?: boolean;
         };
         GrantTrialRequest: {
             /** Format: uuid */
@@ -4623,6 +5109,19 @@ export interface components {
         SetGuestExclusionRequest: {
             excluded?: boolean;
         };
+        VerificationLimits: {
+            /** Format: int32 */
+            maxFiles?: number;
+            /** Format: int32 */
+            maxFileBytes?: number;
+        };
+        VerificationOverview: {
+            verified?: boolean;
+            personal?: components["schemas"]["VerificationRequestView"] | null;
+            company?: components["schemas"]["VerificationRequestView"] | null;
+            phone?: components["schemas"]["PhoneStatusView"];
+            limits?: components["schemas"]["VerificationLimits"];
+        };
         TemplateSummary: {
             name?: string;
             label?: string;
@@ -4676,12 +5175,17 @@ export interface components {
             confirmationMode?: string;
             professionals?: string[];
             slots?: components["schemas"]["AppointmentSlotView"][];
+            /** Format: int32 */
+            clientsPerSlot?: number;
+            organizerVerification?: string | null;
         };
         AppointmentSlotView: {
             /** Format: date-time */
             startsAt?: string;
             /** Format: date-time */
             endsAt?: string;
+            /** Format: int32 */
+            placesLeft?: number;
         };
         AppointmentStatusView: {
             status?: string;
@@ -4697,12 +5201,48 @@ export interface components {
             bannerUrl?: string | null;
             primaryColor?: string;
             services?: components["schemas"]["PublicOrgServiceView"][];
+            verification?: string | null;
         };
         PublicOrgServiceView: {
             /** Format: uuid */
             serviceId?: string;
             name?: string;
             shortCode?: string;
+        };
+        PublicSaleCategoryView: {
+            /** Format: uuid */
+            id?: string;
+            label?: string;
+            colorHex?: string;
+            /** Format: int64 */
+            priceMinor?: number;
+            currency?: string;
+            /** Format: int32 */
+            available?: number | null;
+            paused?: boolean;
+        };
+        PublicSaleView: {
+            /** Format: uuid */
+            eventId?: string;
+            eventName?: string;
+            /** Format: date-time */
+            eventStart?: string | null;
+            /** Format: date-time */
+            eventEnd?: string | null;
+            eventTimezone?: string;
+            eventLocation?: string | null;
+            organizerName?: string;
+            logoUrl?: string | null;
+            primaryColor?: string;
+            organizerVerification?: string | null;
+            categories?: components["schemas"]["PublicSaleCategoryView"][];
+            /** Format: int32 */
+            maxTicketsPerOrder?: number;
+            /** Format: int64 */
+            holdMinutes?: number;
+            onSale?: boolean;
+            /** @enum {string|null} */
+            closedReason?: "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "NOTHING_FOR_SALE" | "ORGANIZER_NOT_VERIFIED" | "NO_PAYMENT_METHOD" | "PAUSED" | null;
         };
         OperatorTeamView: {
             operators?: components["schemas"]["OperatorView"][];
@@ -4819,6 +5359,57 @@ export interface components {
             tier?: string;
             withinAllowance?: boolean;
             dataRetention?: components["schemas"]["DataRetentionNotice"] | null;
+        };
+        CommissionCategoryView: {
+            /** Format: uuid */
+            ticketTypeId?: string;
+            label?: string;
+            /** Format: int64 */
+            priceMinor?: number;
+            /** Format: int64 */
+            unitCommissionMinor?: number;
+            /** Format: int32 */
+            covered?: number;
+            /** Format: int32 */
+            sold?: number;
+            pendingPayment?: boolean;
+            /** Format: int32 */
+            nextBatchSize?: number;
+        };
+        CommissionOverview: {
+            /** Format: uuid */
+            eventId?: string;
+            currency?: string;
+            ratePercent?: string;
+            /** Format: int32 */
+            batchSize?: number;
+            onEventDay?: boolean;
+            categories?: components["schemas"]["CommissionCategoryView"][];
+            /** Format: int64 */
+            owedMinor?: number;
+            /** Format: int64 */
+            creditMinor?: number;
+            freeBatchAvailable?: boolean;
+            creditBatchAvailable?: boolean;
+        };
+        CommissionQuote: {
+            /** Format: uuid */
+            ticketTypeId?: string;
+            /** Format: int32 */
+            size?: number;
+            /** Format: int64 */
+            unitCommissionMinor?: number;
+            /** Format: int64 */
+            amountMinor?: number;
+            /** Format: int64 */
+            owedMinor?: number;
+            /** Format: int64 */
+            creditAppliedMinor?: number;
+            /** Format: int64 */
+            totalMinor?: number;
+            currency?: string;
+            freeBatchAvailable?: boolean;
+            creditBatchAvailable?: boolean;
         };
         AttendanceResponse: {
             /** Format: int64 */
@@ -5121,6 +5712,12 @@ export interface components {
             email?: string;
             role?: string;
         };
+        VerificationDocumentLink: {
+            /** Format: int32 */
+            position?: number;
+            contentType?: string;
+            url?: string;
+        };
         AdminTrialPage: {
             entries?: components["schemas"]["AdminTrialView"][];
             /** Format: int64 */
@@ -5219,7 +5816,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    list: {
+    vocabularyList: {
         parameters: {
             query?: never;
             header?: never;
@@ -5239,7 +5836,7 @@ export interface operations {
             };
         };
     };
-    save: {
+    vocabularySave: {
         parameters: {
             query?: never;
             header?: never;
@@ -5263,7 +5860,7 @@ export interface operations {
             };
         };
     };
-    detail: {
+    templatesDetail: {
         parameters: {
             query?: never;
             header?: never;
@@ -5285,7 +5882,7 @@ export interface operations {
             };
         };
     };
-    save_1: {
+    templatesSave: {
         parameters: {
             query?: never;
             header?: never;
@@ -5311,7 +5908,51 @@ export interface operations {
             };
         };
     };
-    updateWhatsApp: {
+    salesSettingsGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SalesSettingsView"];
+                };
+            };
+        };
+    };
+    salesSettingsUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSalesSettingsRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SalesSettingsView"];
+                };
+            };
+        };
+    };
+    providerSettingsUpdateWhatsApp: {
         parameters: {
             query?: never;
             header?: never;
@@ -5335,7 +5976,7 @@ export interface operations {
             };
         };
     };
-    updateEmail: {
+    providerSettingsUpdateEmail: {
         parameters: {
             query?: never;
             header?: never;
@@ -5359,7 +6000,7 @@ export interface operations {
             };
         };
     };
-    get: {
+    paymentMethodsGet: {
         parameters: {
             query?: never;
             header?: never;
@@ -5379,7 +6020,7 @@ export interface operations {
             };
         };
     };
-    update: {
+    paymentMethodsUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -5403,7 +6044,7 @@ export interface operations {
             };
         };
     };
-    configuration: {
+    serviceConfiguration: {
         parameters: {
             query?: never;
             header?: never;
@@ -5425,7 +6066,7 @@ export interface operations {
             };
         };
     };
-    updateConfiguration: {
+    serviceUpdateConfiguration: {
         parameters: {
             query?: never;
             header?: never;
@@ -5451,7 +6092,7 @@ export interface operations {
             };
         };
     };
-    updateUsername: {
+    orgUpdateUsername: {
         parameters: {
             query?: never;
             header?: never;
@@ -5475,7 +6116,7 @@ export interface operations {
             };
         };
     };
-    update_1: {
+    operatorUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -5501,7 +6142,7 @@ export interface operations {
             };
         };
     };
-    changeRole: {
+    memberChangeRole: {
         parameters: {
             query?: never;
             header?: never;
@@ -5527,7 +6168,7 @@ export interface operations {
             };
         };
     };
-    get_1: {
+    legalIdentityGet: {
         parameters: {
             query?: never;
             header?: never;
@@ -5547,7 +6188,7 @@ export interface operations {
             };
         };
     };
-    update_2: {
+    legalIdentityUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -5571,7 +6212,7 @@ export interface operations {
             };
         };
     };
-    get_2: {
+    eventGet: {
         parameters: {
             query?: never;
             header?: never;
@@ -5593,7 +6234,7 @@ export interface operations {
             };
         };
     };
-    update_3: {
+    eventUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -5619,7 +6260,7 @@ export interface operations {
             };
         };
     };
-    delete: {
+    eventDelete: {
         parameters: {
             query?: never;
             header?: never;
@@ -5639,7 +6280,7 @@ export interface operations {
             };
         };
     };
-    setQuorum: {
+    eventSetQuorum: {
         parameters: {
             query?: never;
             header?: never;
@@ -5665,7 +6306,7 @@ export interface operations {
             };
         };
     };
-    update_4: {
+    ticketTypeUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -5692,7 +6333,7 @@ export interface operations {
             };
         };
     };
-    delete_1: {
+    ticketTypeDelete: {
         parameters: {
             query?: never;
             header?: never;
@@ -5713,7 +6354,7 @@ export interface operations {
             };
         };
     };
-    get_3: {
+    brandingGet: {
         parameters: {
             query?: never;
             header?: never;
@@ -5733,7 +6374,7 @@ export interface operations {
             };
         };
     };
-    update_5: {
+    brandingUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -5757,7 +6398,7 @@ export interface operations {
             };
         };
     };
-    updatePricing: {
+    adminWhatsAppUpdatePricing: {
         parameters: {
             query?: never;
             header?: never;
@@ -5783,7 +6424,7 @@ export interface operations {
             };
         };
     };
-    settings: {
+    adminBillingSettingsSettings: {
         parameters: {
             query?: never;
             header?: never;
@@ -5803,7 +6444,7 @@ export interface operations {
             };
         };
     };
-    update_6: {
+    adminBillingSettingsUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -5827,7 +6468,7 @@ export interface operations {
             };
         };
     };
-    verifySubscription: {
+    whatsAppWebhookVerifySubscription: {
         parameters: {
             query?: {
                 "hub.mode"?: string;
@@ -5851,7 +6492,7 @@ export interface operations {
             };
         };
     };
-    receiveMessages: {
+    whatsAppWebhookReceiveMessages: {
         parameters: {
             query?: never;
             header?: {
@@ -5875,7 +6516,88 @@ export interface operations {
             };
         };
     };
-    preview: {
+    verificationSubmit: {
+        parameters: {
+            query: {
+                legalName: string;
+                documentType: string;
+                registrationNumber?: string;
+                taxIdentifier?: string;
+            };
+            header?: never;
+            path: {
+                kind: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    files: string[];
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["VerificationRequestView"];
+                };
+            };
+        };
+    };
+    verificationRequestPhoneCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PhoneCodeRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PhoneCodeSent"];
+                };
+            };
+        };
+    };
+    verificationConfirmPhone: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PhoneConfirmRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PhoneStatusView"];
+                };
+            };
+        };
+    };
+    templatesPreview: {
         parameters: {
             query?: never;
             header?: never;
@@ -5901,7 +6623,7 @@ export interface operations {
             };
         };
     };
-    testSend: {
+    providerSettingsTestSend: {
         parameters: {
             query?: never;
             header?: never;
@@ -5927,7 +6649,7 @@ export interface operations {
             };
         };
     };
-    embeddedSignupConfig: {
+    providerSettingsEmbeddedSignupConfig: {
         parameters: {
             query?: never;
             header?: never;
@@ -5947,7 +6669,7 @@ export interface operations {
             };
         };
     };
-    completeEmbeddedSignup: {
+    providerSettingsCompleteEmbeddedSignup: {
         parameters: {
             query?: never;
             header?: never;
@@ -5971,7 +6693,7 @@ export interface operations {
             };
         };
     };
-    list_1: {
+    serviceList: {
         parameters: {
             query?: never;
             header?: never;
@@ -5991,7 +6713,7 @@ export interface operations {
             };
         };
     };
-    create: {
+    serviceCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -6015,7 +6737,7 @@ export interface operations {
             };
         };
     };
-    list_2: {
+    serviceStaffList: {
         parameters: {
             query?: never;
             header?: never;
@@ -6037,7 +6759,7 @@ export interface operations {
             };
         };
     };
-    create_1: {
+    serviceStaffCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -6063,7 +6785,7 @@ export interface operations {
             };
         };
     };
-    walkIn: {
+    serviceDayLineWalkIn: {
         parameters: {
             query?: never;
             header?: never;
@@ -6089,7 +6811,7 @@ export interface operations {
             };
         };
     };
-    present: {
+    serviceDayLinePresent: {
         parameters: {
             query?: never;
             header?: never;
@@ -6112,7 +6834,7 @@ export interface operations {
             };
         };
     };
-    markPaid: {
+    serviceDayLineMarkPaid: {
         parameters: {
             query?: never;
             header?: never;
@@ -6139,7 +6861,7 @@ export interface operations {
             };
         };
     };
-    noShow: {
+    serviceDayLineNoShow: {
         parameters: {
             query?: never;
             header?: never;
@@ -6162,7 +6884,7 @@ export interface operations {
             };
         };
     };
-    finish: {
+    serviceDayLineFinish: {
         parameters: {
             query?: never;
             header?: never;
@@ -6185,7 +6907,7 @@ export interface operations {
             };
         };
     };
-    call: {
+    serviceDayLineCall: {
         parameters: {
             query?: {
                 counter?: string;
@@ -6210,7 +6932,7 @@ export interface operations {
             };
         };
     };
-    arrive: {
+    serviceDayLineArrive: {
         parameters: {
             query?: never;
             header?: never;
@@ -6233,7 +6955,7 @@ export interface operations {
             };
         };
     };
-    rejectRequest: {
+    serviceDayLineRejectRequest: {
         parameters: {
             query?: never;
             header?: never;
@@ -6254,7 +6976,7 @@ export interface operations {
             };
         };
     };
-    acceptRequest: {
+    serviceDayLineAcceptRequest: {
         parameters: {
             query?: never;
             header?: never;
@@ -6275,7 +6997,7 @@ export interface operations {
             };
         };
     };
-    next: {
+    serviceDayLineNext: {
         parameters: {
             query?: {
                 counter?: string;
@@ -6299,7 +7021,7 @@ export interface operations {
             };
         };
     };
-    requirements: {
+    serviceRequirements: {
         parameters: {
             query?: never;
             header?: never;
@@ -6321,7 +7043,7 @@ export interface operations {
             };
         };
     };
-    addRequirement: {
+    serviceAddRequirement: {
         parameters: {
             query?: never;
             header?: never;
@@ -6347,7 +7069,7 @@ export interface operations {
             };
         };
     };
-    transfer: {
+    rsvpTransfer: {
         parameters: {
             query?: never;
             header?: never;
@@ -6373,7 +7095,7 @@ export interface operations {
             };
         };
     };
-    erase: {
+    rsvpErase: {
         parameters: {
             query?: never;
             header?: never;
@@ -6395,7 +7117,7 @@ export interface operations {
             };
         };
     };
-    decline: {
+    rsvpDecline: {
         parameters: {
             query?: never;
             header?: never;
@@ -6417,7 +7139,7 @@ export interface operations {
             };
         };
     };
-    confirm: {
+    rsvpConfirm: {
         parameters: {
             query?: never;
             header?: never;
@@ -6439,7 +7161,7 @@ export interface operations {
             };
         };
     };
-    list_3: {
+    resourceList: {
         parameters: {
             query?: never;
             header?: never;
@@ -6459,7 +7181,7 @@ export interface operations {
             };
         };
     };
-    create_2: {
+    resourceCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -6483,7 +7205,7 @@ export interface operations {
             };
         };
     };
-    unavailability: {
+    resourceUnavailability: {
         parameters: {
             query?: never;
             header?: never;
@@ -6505,7 +7227,7 @@ export interface operations {
             };
         };
     };
-    addUnavailability: {
+    resourceAddUnavailability: {
         parameters: {
             query?: never;
             header?: never;
@@ -6531,7 +7253,7 @@ export interface operations {
             };
         };
     };
-    availability: {
+    resourceAvailability: {
         parameters: {
             query?: never;
             header?: never;
@@ -6553,7 +7275,7 @@ export interface operations {
             };
         };
     };
-    addAvailability: {
+    resourceAddAvailability: {
         parameters: {
             query?: never;
             header?: never;
@@ -6579,7 +7301,7 @@ export interface operations {
             };
         };
     };
-    takeTicket: {
+    shortLinkPublicTakeTicket: {
         parameters: {
             query?: never;
             header?: never;
@@ -6605,7 +7327,7 @@ export interface operations {
             };
         };
     };
-    book: {
+    shortLinkPublicBook: {
         parameters: {
             query?: never;
             header?: never;
@@ -6631,7 +7353,34 @@ export interface operations {
             };
         };
     };
-    register: {
+    publicTicketOrderPlace: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                username: string;
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaceOrderRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PlacedOrderView"];
+                };
+            };
+        };
+    };
+    prospectLeadRegister: {
         parameters: {
             query?: never;
             header?: never;
@@ -6655,7 +7404,7 @@ export interface operations {
             };
         };
     };
-    create_3: {
+    orgCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -6679,7 +7428,33 @@ export interface operations {
             };
         };
     };
-    team: {
+    publicTicketOrderDeclare: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeclarePaymentRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrderView"];
+                };
+            };
+        };
+    };
+    operatorTeam: {
         parameters: {
             query?: never;
             header?: never;
@@ -6699,7 +7474,7 @@ export interface operations {
             };
         };
     };
-    create_4: {
+    operatorCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -6723,7 +7498,7 @@ export interface operations {
             };
         };
     };
-    revoke: {
+    operatorRevoke: {
         parameters: {
             query?: never;
             header?: never;
@@ -6745,7 +7520,7 @@ export interface operations {
             };
         };
     };
-    receive: {
+    emailFeedbackReceive: {
         parameters: {
             query?: never;
             header?: {
@@ -6769,7 +7544,7 @@ export interface operations {
             };
         };
     };
-    receive_1: {
+    resendEmailFeedbackReceive: {
         parameters: {
             query?: never;
             header?: {
@@ -6795,7 +7570,7 @@ export interface operations {
             };
         };
     };
-    invitations: {
+    memberInvitations: {
         parameters: {
             query?: never;
             header?: never;
@@ -6815,7 +7590,7 @@ export interface operations {
             };
         };
     };
-    invite: {
+    memberInvite: {
         parameters: {
             query?: never;
             header?: never;
@@ -6839,7 +7614,7 @@ export interface operations {
             };
         };
     };
-    walkIn_1: {
+    lineStaffWalkIn: {
         parameters: {
             query?: never;
             header?: never;
@@ -6865,7 +7640,7 @@ export interface operations {
             };
         };
     };
-    walkIn_2: {
+    lineStaffWalkIn_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -6892,7 +7667,7 @@ export interface operations {
             };
         };
     };
-    present_1: {
+    lineStaffPresent: {
         parameters: {
             query?: never;
             header?: never;
@@ -6915,7 +7690,7 @@ export interface operations {
             };
         };
     };
-    present_2: {
+    lineStaffPresent_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -6939,7 +7714,7 @@ export interface operations {
             };
         };
     };
-    markPaid_1: {
+    lineStaffMarkPaid: {
         parameters: {
             query?: never;
             header?: never;
@@ -6966,7 +7741,7 @@ export interface operations {
             };
         };
     };
-    markPaid_2: {
+    lineStaffMarkPaid_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -6994,7 +7769,7 @@ export interface operations {
             };
         };
     };
-    noShow_1: {
+    lineStaffNoShow_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -7018,7 +7793,7 @@ export interface operations {
             };
         };
     };
-    noShow_2: {
+    lineStaffNoShow: {
         parameters: {
             query?: never;
             header?: never;
@@ -7041,7 +7816,7 @@ export interface operations {
             };
         };
     };
-    finish_1: {
+    lineStaffFinish: {
         parameters: {
             query?: never;
             header?: never;
@@ -7064,7 +7839,7 @@ export interface operations {
             };
         };
     };
-    finish_2: {
+    lineStaffFinish_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -7088,7 +7863,7 @@ export interface operations {
             };
         };
     };
-    call_1: {
+    lineStaffCall: {
         parameters: {
             query?: {
                 counter?: string;
@@ -7113,7 +7888,7 @@ export interface operations {
             };
         };
     };
-    call_2: {
+    lineStaffCall_1: {
         parameters: {
             query?: {
                 counter?: string;
@@ -7139,7 +7914,7 @@ export interface operations {
             };
         };
     };
-    arrive_1: {
+    lineStaffArrive: {
         parameters: {
             query?: never;
             header?: never;
@@ -7162,7 +7937,7 @@ export interface operations {
             };
         };
     };
-    arrive_2: {
+    lineStaffArrive_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -7186,7 +7961,7 @@ export interface operations {
             };
         };
     };
-    rejectRequest_1: {
+    lineStaffRejectRequest_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -7208,7 +7983,7 @@ export interface operations {
             };
         };
     };
-    rejectRequest_2: {
+    lineStaffRejectRequest: {
         parameters: {
             query?: never;
             header?: never;
@@ -7229,7 +8004,7 @@ export interface operations {
             };
         };
     };
-    acceptRequest_1: {
+    lineStaffAcceptRequest: {
         parameters: {
             query?: never;
             header?: never;
@@ -7250,7 +8025,7 @@ export interface operations {
             };
         };
     };
-    acceptRequest_2: {
+    lineStaffAcceptRequest_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -7272,7 +8047,7 @@ export interface operations {
             };
         };
     };
-    next_1: {
+    lineStaffNext_1: {
         parameters: {
             query?: {
                 counter?: string;
@@ -7297,7 +8072,7 @@ export interface operations {
             };
         };
     };
-    next_2: {
+    lineStaffNext: {
         parameters: {
             query?: {
                 counter?: string;
@@ -7321,7 +8096,7 @@ export interface operations {
             };
         };
     };
-    submit: {
+    feedbackSubmit: {
         parameters: {
             query?: never;
             header?: never;
@@ -7345,7 +8120,7 @@ export interface operations {
             };
         };
     };
-    rate: {
+    feedbackRate: {
         parameters: {
             query?: never;
             header?: never;
@@ -7369,7 +8144,7 @@ export interface operations {
             };
         };
     };
-    list_4: {
+    eventList: {
         parameters: {
             query?: never;
             header?: never;
@@ -7389,7 +8164,7 @@ export interface operations {
             };
         };
     };
-    create_5: {
+    eventCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -7413,7 +8188,7 @@ export interface operations {
             };
         };
     };
-    publish: {
+    eventPublish: {
         parameters: {
             query?: never;
             header?: never;
@@ -7435,7 +8210,7 @@ export interface operations {
             };
         };
     };
-    cancel: {
+    eventCancel: {
         parameters: {
             query?: never;
             header?: never;
@@ -7461,7 +8236,7 @@ export interface operations {
             };
         };
     };
-    list_5: {
+    validatorList: {
         parameters: {
             query?: never;
             header?: never;
@@ -7483,7 +8258,7 @@ export interface operations {
             };
         };
     };
-    create_6: {
+    validatorCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -7509,7 +8284,7 @@ export interface operations {
             };
         };
     };
-    revoke_1: {
+    validatorRevoke: {
         parameters: {
             query?: never;
             header?: never;
@@ -7532,7 +8307,7 @@ export interface operations {
             };
         };
     };
-    list_6: {
+    ticketTypeList: {
         parameters: {
             query?: never;
             header?: never;
@@ -7554,7 +8329,7 @@ export interface operations {
             };
         };
     };
-    create_7: {
+    ticketTypeCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -7580,7 +8355,7 @@ export interface operations {
             };
         };
     };
-    list_7: {
+    eventQuestionList: {
         parameters: {
             query?: never;
             header?: never;
@@ -7602,7 +8377,7 @@ export interface operations {
             };
         };
     };
-    create_8: {
+    eventQuestionCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -7628,7 +8403,7 @@ export interface operations {
             };
         };
     };
-    initiate: {
+    paymentInitiate: {
         parameters: {
             query?: never;
             header?: never;
@@ -7654,7 +8429,7 @@ export interface operations {
             };
         };
     };
-    current: {
+    manualPaymentCurrent: {
         parameters: {
             query?: never;
             header?: never;
@@ -7676,7 +8451,7 @@ export interface operations {
             };
         };
     };
-    request: {
+    manualPaymentRequest: {
         parameters: {
             query?: never;
             header?: never;
@@ -7702,7 +8477,57 @@ export interface operations {
             };
         };
     };
-    list_8: {
+    ticketOrderReject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                orderId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RejectOrderRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerOrderView"];
+                };
+            };
+        };
+    };
+    ticketOrderConfirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                orderId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerOrderView"];
+                };
+            };
+        };
+    };
+    eventOccurrenceList: {
         parameters: {
             query?: never;
             header?: never;
@@ -7724,7 +8549,7 @@ export interface operations {
             };
         };
     };
-    create_9: {
+    eventOccurrenceCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -7750,7 +8575,7 @@ export interface operations {
             };
         };
     };
-    send: {
+    invitationSend: {
         parameters: {
             query?: {
                 channels?: ("EMAIL" | "WHATSAPP")[];
@@ -7775,7 +8600,7 @@ export interface operations {
             };
         };
     };
-    import: {
+    guestImport: {
         parameters: {
             query?: never;
             header?: never;
@@ -7804,7 +8629,33 @@ export interface operations {
             };
         };
     };
-    markPaid_3: {
+    commissionOpen: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OpenBatchRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OpenedBatchView"];
+                };
+            };
+        };
+    };
+    checkInMarkPaid: {
         parameters: {
             query?: never;
             header?: never;
@@ -7831,7 +8682,7 @@ export interface operations {
             };
         };
     };
-    scan: {
+    checkInScan: {
         parameters: {
             query?: never;
             header?: never;
@@ -7857,7 +8708,7 @@ export interface operations {
             };
         };
     };
-    manual: {
+    checkInManual: {
         parameters: {
             query?: never;
             header?: never;
@@ -7883,7 +8734,7 @@ export interface operations {
             };
         };
     };
-    markPaid_4: {
+    operatorCheckInMarkPaid: {
         parameters: {
             query?: never;
             header?: never;
@@ -7910,7 +8761,7 @@ export interface operations {
             };
         };
     };
-    markPaid_5: {
+    operatorCheckInMarkPaid_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -7938,7 +8789,7 @@ export interface operations {
             };
         };
     };
-    sync: {
+    operatorCheckInSync: {
         parameters: {
             query?: never;
             header?: never;
@@ -7964,7 +8815,7 @@ export interface operations {
             };
         };
     };
-    sync_1: {
+    operatorCheckInSync_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -7991,7 +8842,7 @@ export interface operations {
             };
         };
     };
-    scan_1: {
+    operatorCheckInScan: {
         parameters: {
             query?: never;
             header?: never;
@@ -8017,7 +8868,7 @@ export interface operations {
             };
         };
     };
-    scan_2: {
+    operatorCheckInScan_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -8044,7 +8895,7 @@ export interface operations {
             };
         };
     };
-    manual_1: {
+    operatorCheckInManual_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -8071,7 +8922,7 @@ export interface operations {
             };
         };
     };
-    manual_2: {
+    operatorCheckInManual: {
         parameters: {
             query?: never;
             header?: never;
@@ -8097,7 +8948,7 @@ export interface operations {
             };
         };
     };
-    requestOwnNumber: {
+    ownWhatsAppNumberRequestOwnNumber: {
         parameters: {
             query?: never;
             header?: never;
@@ -8121,7 +8972,7 @@ export interface operations {
             };
         };
     };
-    checkoutOwnNumber: {
+    ownWhatsAppNumberCheckoutOwnNumber: {
         parameters: {
             query?: never;
             header?: never;
@@ -8145,7 +8996,7 @@ export interface operations {
             };
         };
     };
-    request_1: {
+    subscriptionRequest: {
         parameters: {
             query?: never;
             header?: never;
@@ -8169,7 +9020,7 @@ export interface operations {
             };
         };
     };
-    checkout: {
+    subscriptionCheckout: {
         parameters: {
             query?: never;
             header?: never;
@@ -8193,7 +9044,7 @@ export interface operations {
             };
         };
     };
-    callback: {
+    paymentCallbackCallback: {
         parameters: {
             query?: never;
             header?: {
@@ -8217,7 +9068,7 @@ export interface operations {
             };
         };
     };
-    providerCallback: {
+    paymentCallbackProviderCallback: {
         parameters: {
             query?: never;
             header?: {
@@ -8243,7 +9094,7 @@ export interface operations {
             };
         };
     };
-    requestPack: {
+    organizerPackRequestPack: {
         parameters: {
             query?: never;
             header?: never;
@@ -8267,7 +9118,7 @@ export interface operations {
             };
         };
     };
-    requestPackExtra: {
+    organizerPackRequestPackExtra: {
         parameters: {
             query?: never;
             header?: never;
@@ -8291,7 +9142,7 @@ export interface operations {
             };
         };
     };
-    checkoutPackExtra: {
+    organizerPackCheckoutPackExtra: {
         parameters: {
             query?: never;
             header?: never;
@@ -8315,7 +9166,7 @@ export interface operations {
             };
         };
     };
-    checkoutPack: {
+    organizerPackCheckoutPack: {
         parameters: {
             query?: never;
             header?: never;
@@ -8339,7 +9190,7 @@ export interface operations {
             };
         };
     };
-    creditNote: {
+    invoiceCreditNote: {
         parameters: {
             query?: never;
             header?: never;
@@ -8361,7 +9212,7 @@ export interface operations {
             };
         };
     };
-    issueForPayment: {
+    invoiceIssueForPayment: {
         parameters: {
             query?: never;
             header?: never;
@@ -8383,7 +9234,7 @@ export interface operations {
             };
         };
     };
-    verifyEmail: {
+    authVerifyEmail: {
         parameters: {
             query?: never;
             header?: never;
@@ -8405,7 +9256,7 @@ export interface operations {
             };
         };
     };
-    resendVerification: {
+    authResendVerification: {
         parameters: {
             query?: never;
             header?: never;
@@ -8423,7 +9274,7 @@ export interface operations {
             };
         };
     };
-    switchOrg: {
+    authSwitchOrg: {
         parameters: {
             query?: never;
             header?: never;
@@ -8447,7 +9298,7 @@ export interface operations {
             };
         };
     };
-    resetPassword: {
+    authResetPassword: {
         parameters: {
             query?: never;
             header?: never;
@@ -8469,7 +9320,7 @@ export interface operations {
             };
         };
     };
-    register_1: {
+    authRegister: {
         parameters: {
             query?: never;
             header?: never;
@@ -8493,7 +9344,7 @@ export interface operations {
             };
         };
     };
-    refresh: {
+    authRefresh: {
         parameters: {
             query?: never;
             header?: never;
@@ -8517,7 +9368,7 @@ export interface operations {
             };
         };
     };
-    login: {
+    authLogin: {
         parameters: {
             query?: never;
             header?: never;
@@ -8541,7 +9392,7 @@ export interface operations {
             };
         };
     };
-    accept: {
+    memberInvitationAcceptAccept: {
         parameters: {
             query?: never;
             header?: never;
@@ -8565,7 +9416,7 @@ export interface operations {
             };
         };
     };
-    google: {
+    authGoogle: {
         parameters: {
             query?: never;
             header?: never;
@@ -8589,7 +9440,7 @@ export interface operations {
             };
         };
     };
-    forgotPassword: {
+    authForgotPassword: {
         parameters: {
             query?: never;
             header?: never;
@@ -8611,7 +9462,7 @@ export interface operations {
             };
         };
     };
-    takeTicket_1: {
+    appointmentPublicTakeTicket: {
         parameters: {
             query?: never;
             header?: never;
@@ -8637,7 +9488,7 @@ export interface operations {
             };
         };
     };
-    book_1: {
+    appointmentPublicBook: {
         parameters: {
             query?: never;
             header?: never;
@@ -8663,7 +9514,7 @@ export interface operations {
             };
         };
     };
-    contentOverride: {
+    adminWhatsAppContentOverride: {
         parameters: {
             query?: never;
             header?: never;
@@ -8683,7 +9534,7 @@ export interface operations {
             };
         };
     };
-    setContentOverride: {
+    adminWhatsAppSetContentOverride: {
         parameters: {
             query?: never;
             header?: never;
@@ -8707,7 +9558,55 @@ export interface operations {
             };
         };
     };
-    list_9: {
+    adminVerificationReject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerificationRejectRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminVerificationView"];
+                };
+            };
+        };
+    };
+    adminVerificationApprove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminVerificationView"];
+                };
+            };
+        };
+    };
+    adminTrialList: {
         parameters: {
             query?: {
                 status?: string;
@@ -8732,7 +9631,7 @@ export interface operations {
             };
         };
     };
-    grant: {
+    adminTrialGrant: {
         parameters: {
             query?: never;
             header?: never;
@@ -8756,7 +9655,7 @@ export interface operations {
             };
         };
     };
-    end: {
+    adminTrialEnd: {
         parameters: {
             query?: never;
             header?: never;
@@ -8782,7 +9681,7 @@ export interface operations {
             };
         };
     };
-    suspend: {
+    adminTenantSuspend: {
         parameters: {
             query?: never;
             header?: never;
@@ -8808,7 +9707,7 @@ export interface operations {
             };
         };
     };
-    reactivate: {
+    adminTenantReactivate: {
         parameters: {
             query?: never;
             header?: never;
@@ -8834,7 +9733,7 @@ export interface operations {
             };
         };
     };
-    markContacted: {
+    adminProspectLeadMarkContacted: {
         parameters: {
             query?: never;
             header?: never;
@@ -8856,7 +9755,7 @@ export interface operations {
             };
         };
     };
-    reject: {
+    adminPaymentReject: {
         parameters: {
             query?: never;
             header?: never;
@@ -8882,7 +9781,7 @@ export interface operations {
             };
         };
     };
-    confirm_1: {
+    adminPaymentConfirm: {
         parameters: {
             query?: never;
             header?: never;
@@ -8908,7 +9807,7 @@ export interface operations {
             };
         };
     };
-    updateStatus: {
+    adminFeedbackUpdateStatus: {
         parameters: {
             query?: never;
             header?: never;
@@ -8934,7 +9833,7 @@ export interface operations {
             };
         };
     };
-    triggerError: {
+    adminDiagnosticsTriggerError: {
         parameters: {
             query?: never;
             header?: never;
@@ -8952,7 +9851,7 @@ export interface operations {
             };
         };
     };
-    refresh_1: {
+    adminAuthRefresh: {
         parameters: {
             query?: never;
             header?: never;
@@ -8976,7 +9875,7 @@ export interface operations {
             };
         };
     };
-    login_1: {
+    adminAuthLogin: {
         parameters: {
             query?: never;
             header?: never;
@@ -9000,7 +9899,7 @@ export interface operations {
             };
         };
     };
-    list_10: {
+    adminAgreementList: {
         parameters: {
             query?: {
                 status?: string;
@@ -9026,7 +9925,7 @@ export interface operations {
             };
         };
     };
-    create_10: {
+    adminAgreementCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -9050,7 +9949,7 @@ export interface operations {
             };
         };
     };
-    renew: {
+    adminAgreementRenew: {
         parameters: {
             query?: never;
             header?: never;
@@ -9076,7 +9975,7 @@ export interface operations {
             };
         };
     };
-    interrupt: {
+    adminAgreementInterrupt: {
         parameters: {
             query?: never;
             header?: never;
@@ -9102,7 +10001,7 @@ export interface operations {
             };
         };
     };
-    get_4: {
+    serviceGet: {
         parameters: {
             query?: never;
             header?: never;
@@ -9124,7 +10023,7 @@ export interface operations {
             };
         };
     };
-    delete_2: {
+    serviceDelete: {
         parameters: {
             query?: never;
             header?: never;
@@ -9144,7 +10043,7 @@ export interface operations {
             };
         };
     };
-    update_7: {
+    serviceUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -9170,7 +10069,7 @@ export interface operations {
             };
         };
     };
-    get_5: {
+    resourceGet: {
         parameters: {
             query?: never;
             header?: never;
@@ -9192,7 +10091,7 @@ export interface operations {
             };
         };
     };
-    update_8: {
+    resourceUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -9218,7 +10117,7 @@ export interface operations {
             };
         };
     };
-    setTicketType: {
+    guestSetTicketType: {
         parameters: {
             query?: never;
             header?: never;
@@ -9245,7 +10144,7 @@ export interface operations {
             };
         };
     };
-    setExclusion: {
+    guestSetExclusion: {
         parameters: {
             query?: never;
             header?: never;
@@ -9272,7 +10171,27 @@ export interface operations {
             };
         };
     };
-    list_11: {
+    verificationOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["VerificationOverview"];
+                };
+            };
+        };
+    };
+    templatesList: {
         parameters: {
             query?: never;
             header?: never;
@@ -9292,7 +10211,7 @@ export interface operations {
             };
         };
     };
-    overview: {
+    providerSettingsOverview: {
         parameters: {
             query?: never;
             header?: never;
@@ -9312,7 +10231,7 @@ export interface operations {
             };
         };
     };
-    view: {
+    serviceDayLineView: {
         parameters: {
             query?: {
                 date?: string;
@@ -9336,7 +10255,7 @@ export interface operations {
             };
         };
     };
-    pendingRequests: {
+    serviceDayLinePendingRequests: {
         parameters: {
             query?: {
                 date?: string;
@@ -9360,7 +10279,7 @@ export interface operations {
             };
         };
     };
-    bookingLink: {
+    serviceBookingLink: {
         parameters: {
             query?: never;
             header?: never;
@@ -9382,7 +10301,7 @@ export interface operations {
             };
         };
     };
-    view_1: {
+    rsvpView: {
         parameters: {
             query?: never;
             header?: never;
@@ -9404,7 +10323,7 @@ export interface operations {
             };
         };
     };
-    qrCode: {
+    rsvpQrCode: {
         parameters: {
             query?: never;
             header?: never;
@@ -9426,7 +10345,7 @@ export interface operations {
             };
         };
     };
-    free: {
+    resourceFree: {
         parameters: {
             query: {
                 from: string;
@@ -9451,7 +10370,7 @@ export interface operations {
             };
         };
     };
-    view_2: {
+    shortLinkPublicView: {
         parameters: {
             query?: {
                 date?: string;
@@ -9475,7 +10394,7 @@ export interface operations {
             };
         };
     };
-    lineTicket: {
+    shortLinkPublicLineTicket: {
         parameters: {
             query?: never;
             header?: never;
@@ -9498,7 +10417,7 @@ export interface operations {
             };
         };
     };
-    status: {
+    shortLinkPublicStatus: {
         parameters: {
             query?: never;
             header?: never;
@@ -9521,7 +10440,7 @@ export interface operations {
             };
         };
     };
-    cancel_1: {
+    shortLinkPublicCancel: {
         parameters: {
             query?: never;
             header?: never;
@@ -9542,7 +10461,7 @@ export interface operations {
             };
         };
     };
-    profile: {
+    publicOrgProfile: {
         parameters: {
             query?: never;
             header?: never;
@@ -9564,7 +10483,30 @@ export interface operations {
             };
         };
     };
-    profile_1: {
+    publicTicketOrderSale: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                username: string;
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PublicSaleView"];
+                };
+            };
+        };
+    };
+    orgProfile: {
         parameters: {
             query?: never;
             header?: never;
@@ -9584,7 +10526,29 @@ export interface operations {
             };
         };
     };
-    console: {
+    publicTicketOrderView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrderView"];
+                };
+            };
+        };
+    };
+    operatorConsoleConsole: {
         parameters: {
             query?: never;
             header?: never;
@@ -9606,7 +10570,7 @@ export interface operations {
             };
         };
     };
-    resolve: {
+    operatorConsoleResolve: {
         parameters: {
             query?: never;
             header?: never;
@@ -9628,7 +10592,7 @@ export interface operations {
             };
         };
     };
-    members: {
+    memberMembers: {
         parameters: {
             query?: never;
             header?: never;
@@ -9648,7 +10612,7 @@ export interface operations {
             };
         };
     };
-    pendingRequests_1: {
+    lineStaffPendingRequests: {
         parameters: {
             query?: {
                 date?: string;
@@ -9672,7 +10636,7 @@ export interface operations {
             };
         };
     };
-    pendingRequests_2: {
+    lineStaffPendingRequests_1: {
         parameters: {
             query?: {
                 date?: string;
@@ -9697,7 +10661,7 @@ export interface operations {
             };
         };
     };
-    view_3: {
+    lineStaffView: {
         parameters: {
             query?: {
                 date?: string;
@@ -9721,7 +10685,7 @@ export interface operations {
             };
         };
     };
-    view_4: {
+    lineStaffView_1: {
         parameters: {
             query?: {
                 date?: string;
@@ -9746,7 +10710,7 @@ export interface operations {
             };
         };
     };
-    resolve_1: {
+    lineCodeResolve: {
         parameters: {
             query?: never;
             header?: never;
@@ -9768,7 +10732,7 @@ export interface operations {
             };
         };
     };
-    health: {
+    healthHealth: {
         parameters: {
             query?: never;
             header?: never;
@@ -9790,7 +10754,7 @@ export interface operations {
             };
         };
     };
-    prompt: {
+    feedbackPrompt: {
         parameters: {
             query: {
                 moment: string;
@@ -9812,7 +10776,7 @@ export interface operations {
             };
         };
     };
-    usage: {
+    billingUsage: {
         parameters: {
             query?: never;
             header?: never;
@@ -9834,7 +10798,31 @@ export interface operations {
             };
         };
     };
-    statuses: {
+    ticketOrderList: {
+        parameters: {
+            query?: {
+                status?: "AWAITING_PAYMENT" | "DECLARED" | "PAID" | "EXPIRED" | "REJECTED";
+            };
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerOrderView"][];
+                };
+            };
+        };
+    };
+    invitationStatuses: {
         parameters: {
             query?: never;
             header?: never;
@@ -9856,7 +10844,7 @@ export interface operations {
             };
         };
     };
-    list_12: {
+    guestList: {
         parameters: {
             query?: never;
             header?: never;
@@ -9878,7 +10866,7 @@ export interface operations {
             };
         };
     };
-    export: {
+    guestExport: {
         parameters: {
             query?: never;
             header?: never;
@@ -9898,7 +10886,7 @@ export interface operations {
             };
         };
     };
-    get_6: {
+    dashboardGet: {
         parameters: {
             query?: never;
             header?: never;
@@ -9920,7 +10908,53 @@ export interface operations {
             };
         };
     };
-    stats: {
+    commissionOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommissionOverview"];
+                };
+            };
+        };
+    };
+    commissionQuote: {
+        parameters: {
+            query: {
+                ticketTypeId: string;
+            };
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommissionQuote"];
+                };
+            };
+        };
+    };
+    checkInStats: {
         parameters: {
             query?: never;
             header?: never;
@@ -9942,7 +10976,7 @@ export interface operations {
             };
         };
     };
-    search: {
+    checkInSearch: {
         parameters: {
             query: {
                 q: string;
@@ -9966,7 +11000,7 @@ export interface operations {
             };
         };
     };
-    quotes: {
+    eventTierQuotesQuotes: {
         parameters: {
             query?: never;
             header?: never;
@@ -9988,7 +11022,7 @@ export interface operations {
             };
         };
     };
-    register_2: {
+    attendanceCertificateRegister: {
         parameters: {
             query?: never;
             header?: never;
@@ -10010,7 +11044,7 @@ export interface operations {
             };
         };
     };
-    certificate: {
+    attendanceCertificateCertificate: {
         parameters: {
             query?: never;
             header?: never;
@@ -10033,7 +11067,7 @@ export interface operations {
             };
         };
     };
-    get_7: {
+    analyticsGet: {
         parameters: {
             query?: never;
             header?: never;
@@ -10055,7 +11089,7 @@ export interface operations {
             };
         };
     };
-    stats_1: {
+    operatorCheckInStats_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -10078,7 +11112,7 @@ export interface operations {
             };
         };
     };
-    stats_2: {
+    operatorCheckInStats: {
         parameters: {
             query?: never;
             header?: never;
@@ -10100,7 +11134,7 @@ export interface operations {
             };
         };
     };
-    search_1: {
+    operatorCheckInSearch_1: {
         parameters: {
             query: {
                 q: string;
@@ -10125,7 +11159,7 @@ export interface operations {
             };
         };
     };
-    search_2: {
+    operatorCheckInSearch: {
         parameters: {
             query: {
                 q: string;
@@ -10149,7 +11183,7 @@ export interface operations {
             };
         };
     };
-    roster: {
+    operatorCheckInRoster: {
         parameters: {
             query?: never;
             header?: never;
@@ -10171,7 +11205,7 @@ export interface operations {
             };
         };
     };
-    roster_1: {
+    operatorCheckInRoster_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -10194,7 +11228,7 @@ export interface operations {
             };
         };
     };
-    context: {
+    operatorCheckInContext: {
         parameters: {
             query?: never;
             header?: never;
@@ -10216,7 +11250,7 @@ export interface operations {
             };
         };
     };
-    context_1: {
+    operatorCheckInContext_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -10239,7 +11273,7 @@ export interface operations {
             };
         };
     };
-    ownNumberView: {
+    ownWhatsAppNumberOwnNumberView: {
         parameters: {
             query?: never;
             header?: never;
@@ -10259,7 +11293,7 @@ export interface operations {
             };
         };
     };
-    tiers: {
+    billingTiersTiers: {
         parameters: {
             query?: never;
             header?: never;
@@ -10279,7 +11313,7 @@ export interface operations {
             };
         };
     };
-    customQuote: {
+    billingTiersCustomQuote: {
         parameters: {
             query: {
                 guestCount: number;
@@ -10302,7 +11336,7 @@ export interface operations {
             };
         };
     };
-    view_5: {
+    subscriptionView: {
         parameters: {
             query?: never;
             header?: never;
@@ -10322,7 +11356,7 @@ export interface operations {
             };
         };
     };
-    history: {
+    billingHistoryHistory: {
         parameters: {
             query?: never;
             header?: never;
@@ -10342,7 +11376,7 @@ export interface operations {
             };
         };
     };
-    status_1: {
+    billingHistoryStatus: {
         parameters: {
             query?: never;
             header?: never;
@@ -10364,7 +11398,7 @@ export interface operations {
             };
         };
     };
-    receipt: {
+    billingHistoryReceipt: {
         parameters: {
             query?: never;
             header?: never;
@@ -10386,7 +11420,7 @@ export interface operations {
             };
         };
     };
-    packView: {
+    organizerPackPackView: {
         parameters: {
             query?: never;
             header?: never;
@@ -10406,7 +11440,7 @@ export interface operations {
             };
         };
     };
-    list_13: {
+    invoiceList: {
         parameters: {
             query?: never;
             header?: never;
@@ -10426,7 +11460,7 @@ export interface operations {
             };
         };
     };
-    get_8: {
+    invoiceGet: {
         parameters: {
             query?: never;
             header?: never;
@@ -10448,7 +11482,7 @@ export interface operations {
             };
         };
     };
-    document: {
+    invoiceDocument: {
         parameters: {
             query?: never;
             header?: never;
@@ -10470,7 +11504,7 @@ export interface operations {
             };
         };
     };
-    me: {
+    authMe: {
         parameters: {
             query?: never;
             header?: never;
@@ -10490,7 +11524,7 @@ export interface operations {
             };
         };
     };
-    preview_1: {
+    memberInvitationAcceptPreview: {
         parameters: {
             query?: never;
             header?: never;
@@ -10512,7 +11546,7 @@ export interface operations {
             };
         };
     };
-    view_6: {
+    appointmentPublicView: {
         parameters: {
             query?: {
                 date?: string;
@@ -10536,7 +11570,7 @@ export interface operations {
             };
         };
     };
-    lineTicket_1: {
+    appointmentPublicLineTicket: {
         parameters: {
             query?: never;
             header?: never;
@@ -10559,7 +11593,7 @@ export interface operations {
             };
         };
     };
-    status_2: {
+    appointmentPublicStatus: {
         parameters: {
             query?: never;
             header?: never;
@@ -10582,7 +11616,7 @@ export interface operations {
             };
         };
     };
-    cancel_2: {
+    appointmentPublicCancel: {
         parameters: {
             query?: never;
             header?: never;
@@ -10603,7 +11637,7 @@ export interface operations {
             };
         };
     };
-    pricing: {
+    adminWhatsAppPricing: {
         parameters: {
             query?: never;
             header?: never;
@@ -10623,7 +11657,52 @@ export interface operations {
             };
         };
     };
-    stats_3: {
+    adminVerificationList: {
+        parameters: {
+            query?: {
+                status?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminVerificationView"][];
+                };
+            };
+        };
+    };
+    adminVerificationDocuments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["VerificationDocumentLink"][];
+                };
+            };
+        };
+    };
+    adminTrialStats: {
         parameters: {
             query?: never;
             header?: never;
@@ -10643,7 +11722,7 @@ export interface operations {
             };
         };
     };
-    list_14: {
+    adminTenantList: {
         parameters: {
             query?: {
                 query?: string;
@@ -10667,7 +11746,7 @@ export interface operations {
             };
         };
     };
-    events: {
+    adminTenantEvents: {
         parameters: {
             query?: {
                 query?: string;
@@ -10691,7 +11770,7 @@ export interface operations {
             };
         };
     };
-    list_15: {
+    adminProspectLeadList: {
         parameters: {
             query?: {
                 status?: string;
@@ -10713,7 +11792,7 @@ export interface operations {
             };
         };
     };
-    list_16: {
+    adminPaymentList: {
         parameters: {
             query?: {
                 status?: string;
@@ -10739,7 +11818,7 @@ export interface operations {
             };
         };
     };
-    list_17: {
+    adminFeedbackList: {
         parameters: {
             query?: {
                 kind?: string;
@@ -10764,7 +11843,7 @@ export interface operations {
             };
         };
     };
-    ratings: {
+    adminFeedbackRatings: {
         parameters: {
             query?: {
                 days?: number;
@@ -10786,7 +11865,7 @@ export interface operations {
             };
         };
     };
-    catalog: {
+    adminBillingCatalogCatalog: {
         parameters: {
             query?: never;
             header?: never;
@@ -10806,7 +11885,7 @@ export interface operations {
             };
         };
     };
-    list_18: {
+    adminAuditList: {
         parameters: {
             query?: {
                 action?: string;
@@ -10830,7 +11909,7 @@ export interface operations {
             };
         };
     };
-    remove: {
+    providerSettingsRemove: {
         parameters: {
             query?: never;
             header?: never;
@@ -10852,7 +11931,7 @@ export interface operations {
             };
         };
     };
-    revoke_2: {
+    serviceStaffRevoke: {
         parameters: {
             query?: never;
             header?: never;
@@ -10873,7 +11952,7 @@ export interface operations {
             };
         };
     };
-    removeRequirement: {
+    serviceRemoveRequirement: {
         parameters: {
             query?: never;
             header?: never;
@@ -10894,7 +11973,7 @@ export interface operations {
             };
         };
     };
-    removeUnavailability: {
+    resourceRemoveUnavailability: {
         parameters: {
             query?: never;
             header?: never;
@@ -10915,7 +11994,7 @@ export interface operations {
             };
         };
     };
-    removeAvailability: {
+    resourceRemoveAvailability: {
         parameters: {
             query?: never;
             header?: never;
@@ -10936,7 +12015,7 @@ export interface operations {
             };
         };
     };
-    remove_1: {
+    memberRemove: {
         parameters: {
             query?: never;
             header?: never;
@@ -10956,7 +12035,7 @@ export interface operations {
             };
         };
     };
-    revoke_3: {
+    memberRevoke: {
         parameters: {
             query?: never;
             header?: never;
@@ -10976,7 +12055,7 @@ export interface operations {
             };
         };
     };
-    delete_3: {
+    eventQuestionDelete: {
         parameters: {
             query?: never;
             header?: never;
@@ -10997,7 +12076,7 @@ export interface operations {
             };
         };
     };
-    delete_4: {
+    eventOccurrenceDelete: {
         parameters: {
             query?: never;
             header?: never;
@@ -11018,7 +12097,7 @@ export interface operations {
             };
         };
     };
-    remove_2: {
+    guestRemove: {
         parameters: {
             query?: never;
             header?: never;

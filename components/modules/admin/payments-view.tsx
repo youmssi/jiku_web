@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { ArrowUpDown, CreditCard } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -23,7 +24,10 @@ import type { AdminPayment } from "./schema";
 
 const STATUS_FILTERS = ["PENDING", "SUCCEEDED", "FAILED"] as const;
 
-const COLUMNS: ColumnDef<DataTableFeatures, AdminPayment>[] = [
+function useColumns(): ColumnDef<DataTableFeatures, AdminPayment>[] {
+  const t = useTranslations("admin.payments");
+  const common = useTranslations("admin.common");
+  return [
   {
     accessorKey: "createdAt",
     header: ({ column }) => (
@@ -32,7 +36,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminPayment>[] = [
         className="-ml-3 h-8"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Date
+        {t("date")}
         <ArrowUpDown className="size-3.5" />
       </Button>
     ),
@@ -40,7 +44,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminPayment>[] = [
   },
   {
     accessorKey: "reference",
-    header: "Reference",
+    header: t("reference"),
     cell: ({ row }) => (
       <span className="font-mono font-medium">
         {row.original.reference || "—"}
@@ -49,21 +53,21 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminPayment>[] = [
   },
   {
     accessorKey: "tier",
-    header: "Tier",
+    header: t("tier"),
   },
   {
     accessorKey: "amountMinor",
-    header: "Amount",
+    header: t("amount"),
     cell: ({ row }) =>
       formatAmount(row.original.amountMinor, row.original.currency),
   },
   {
     accessorKey: "provider",
-    header: "Provider",
+    header: t("provider"),
   },
   {
     id: "tenant",
-    header: "Tenant",
+    header: t("tenant"),
     enableSorting: false,
     cell: ({ row }) => (
       <span className="font-mono text-xs text-muted-foreground">
@@ -73,33 +77,33 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminPayment>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: common("status"),
     cell: ({ row }) => <StatusBadge status={row.original.status} />,
   },
   {
     id: "actions",
-    header: "Actions",
+    header: common("actions"),
     enableSorting: false,
     cell: ({ row }) =>
       row.original.status === "PENDING" &&
       row.original.provider === "manual" ? (
         <div className="flex gap-2">
           <ActionDialog
-            trigger="Mark paid"
-            title={`Confirm ${row.original.reference}`}
-            description="Only confirm after the transfer is visible on the receiving account. This unlocks the tier immediately."
-            fieldLabel="Observed transaction reference"
-            confirmLabel="Confirm payment"
+            trigger={t("markPaid")}
+            title={t("confirmTitle", { reference: row.original.reference })}
+            description={t("confirmText")}
+            fieldLabel={t("observedReference")}
+            confirmLabel={t("confirm")}
             onConfirm={(reference) =>
               confirmPaymentAction(row.original.id, reference)
             }
           />
           <ActionDialog
-            trigger="Reject"
-            title={`Reject ${row.original.reference}`}
-            description="The organizer is notified and can submit a new request."
-            fieldLabel="Reason"
-            confirmLabel="Reject"
+            trigger={t("reject")}
+            title={t("rejectTitle", { reference: row.original.reference })}
+            description={t("rejectText")}
+            fieldLabel={t("reason")}
+            confirmLabel={t("reject")}
             destructive
             onConfirm={(reason) =>
               rejectPaymentAction(row.original.id, reason)
@@ -111,8 +115,11 @@ const COLUMNS: ColumnDef<DataTableFeatures, AdminPayment>[] = [
       ),
   },
 ];
+}
 
 export function PaymentsView({ payments }: { payments: AdminPayment[] }) {
+  const t = useTranslations("admin.payments");
+  const columns = useColumns();
   const router = useRouter();
   const searchParams = useSearchParams();
   const active = searchParams.get("status") ?? "PENDING";
@@ -133,7 +140,7 @@ export function PaymentsView({ payments }: { payments: AdminPayment[] }) {
             variant={active === status ? "default" : "outline"}
             onClick={() => filter(status)}
           >
-            {status}
+            {t(`filters.${status}`)}
           </Button>
         ))}
       </div>
@@ -144,14 +151,12 @@ export function PaymentsView({ payments }: { payments: AdminPayment[] }) {
             <EmptyMedia variant="icon">
               <CreditCard />
             </EmptyMedia>
-            <EmptyTitle>No payments</EmptyTitle>
-            <EmptyDescription>
-              {`No ${active.toLowerCase()} payments.`}
-            </EmptyDescription>
+            <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+            <EmptyDescription>{t("emptyText")}</EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
-        <DataTable columns={COLUMNS} data={payments} />
+        <DataTable columns={columns} data={payments} />
       )}
     </div>
   );

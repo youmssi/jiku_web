@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ArrowUpDown, Building2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,10 @@ import { reactivateTenantAction, suspendTenantAction } from "./admin.service";
 import { StatusBadge } from "./admin-ui";
 import type { TenantDirectoryEntry, TenantDirectoryPage } from "./schema";
 
-const COLUMNS: ColumnDef<DataTableFeatures, TenantDirectoryEntry>[] = [
+function useColumns(): ColumnDef<DataTableFeatures, TenantDirectoryEntry>[] {
+  const t = useTranslations("admin.tenants");
+  const common = useTranslations("admin.common");
+  return [
     {
       accessorKey: "name",
       header: ({ column }) => (
@@ -32,7 +36,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, TenantDirectoryEntry>[] = [
           className="-ml-3 h-8"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Tenant
+          {t("tenant")}
           <ArrowUpDown className="size-3.5" />
         </Button>
       ),
@@ -42,7 +46,7 @@ const COLUMNS: ColumnDef<DataTableFeatures, TenantDirectoryEntry>[] = [
     },
     {
       accessorKey: "contactEmail",
-      header: "Contact",
+      header: t("contact"),
       cell: ({ row }) => (
         <span className="text-muted-foreground">
           {row.original.contactEmail}
@@ -51,47 +55,50 @@ const COLUMNS: ColumnDef<DataTableFeatures, TenantDirectoryEntry>[] = [
     },
     {
       accessorKey: "organizerCount",
-      header: "Organizers",
+      header: t("organizers"),
     },
     {
       accessorKey: "createdAt",
-      header: "Created",
+      header: t("created"),
       cell: ({ row }) => formatLocalDateTime(row.original.createdAt),
     },
     {
       accessorKey: "status",
-      header: "Status",
+      header: common("status"),
       cell: ({ row }) => <StatusBadge status={row.original.status} />,
     },
     {
       id: "actions",
-      header: "Actions",
+      header: common("actions"),
       enableSorting: false,
       cell: ({ row }) =>
         row.original.status === "SUSPENDED" ? (
           <ActionDialog
-            trigger="Reactivate"
-            title={`Reactivate ${row.original.name}`}
-            description="The tenant's organizers regain access immediately."
-            fieldLabel="Note"
-            confirmLabel="Reactivate"
+            trigger={t("reactivate")}
+            title={t("reactivateTitle", { name: row.original.name })}
+            description={t("reactivateText")}
+            fieldLabel={t("note")}
+            confirmLabel={t("reactivate")}
             onConfirm={(note) => reactivateTenantAction(row.original.id, note)}
           />
         ) : (
           <ActionDialog
-            trigger="Suspend"
-            title={`Suspend ${row.original.name}`}
-            description="Blocks organizer access and stops guest/validator links from resolving, on the very next request."
-            fieldLabel="Note (why)"
-            confirmLabel="Suspend"
+            trigger={t("suspend")}
+            title={t("suspendTitle", { name: row.original.name })}
+            description={t("suspendText")}
+            fieldLabel={t("noteWhy")}
+            confirmLabel={t("suspend")}
             destructive
             onConfirm={(note) => suspendTenantAction(row.original.id, note)}
           />
         ),
     },
   ];
+}
 
 export function TenantsView({ directory }: { directory: TenantDirectoryPage }) {
+  const t = useTranslations("admin.tenants");
+  const columns = useColumns();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("query") ?? "");
@@ -109,11 +116,11 @@ export function TenantsView({ directory }: { directory: TenantDirectoryPage }) {
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search by name or contact email…"
+          placeholder={t("search")}
           className="max-w-sm"
         />
         <Button type="submit" variant="outline">
-          Search
+          {t("searchButton")}
         </Button>
       </form>
 
@@ -123,15 +130,15 @@ export function TenantsView({ directory }: { directory: TenantDirectoryPage }) {
             <EmptyMedia variant="icon">
               <Building2 />
             </EmptyMedia>
-            <EmptyTitle>No tenants found</EmptyTitle>
-            <EmptyDescription>No tenants match this search.</EmptyDescription>
+            <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+            <EmptyDescription>{t("emptyText")}</EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
         <>
-          <DataTable columns={COLUMNS} data={directory.entries} />
+          <DataTable columns={columns} data={directory.entries} />
           <p className="text-xs text-muted-foreground">
-            {directory.total} tenant(s)
+            {t("total", { count: directory.total })}
           </p>
         </>
       )}

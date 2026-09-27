@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { fromResponse, type ActionResult } from "@/lib/action-result";
 
@@ -19,20 +20,15 @@ export interface ValidatorLink {
   revokedAt: string | null;
 }
 
-function requestMessages(): Partial<Record<number, string>> & { default?: string } {
-  return {
-    409: "Publiez d'abord l'événement pour créer des liens de portier.",
-    404: "Cet événement est introuvable.",
-    default: "L'action a échoué. Réessayez.",
-  };
+async function requestMessages(): Promise<Partial<Record<number, string>> & { default?: string }> {
+  const t = await getTranslations("operator.doorLinks.errors");
+  return { 409: t("unpublished"), 404: t("notFound"), default: t("generic") };
 }
 
 export async function listValidatorLinks(eventId: string): Promise<ActionResult<ValidatorLink[]>> {
+  const t = await getTranslations("operator.doorLinks.errors");
   const response = await serverFetch(`/events/${eventId}/validators`);
-  return fromResponse<ValidatorLink[]>(response, {
-    404: "Cet événement est introuvable.",
-    default: "Impossible de charger les liens de portier.",
-  });
+  return fromResponse<ValidatorLink[]>(response, { 404: t("notFound"), default: t("load") });
 }
 
 export async function createValidatorLink(
@@ -44,7 +40,7 @@ export async function createValidatorLink(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ label }),
   });
-  return fromResponse<ValidatorLink>(response, requestMessages());
+  return fromResponse<ValidatorLink>(response, await requestMessages());
 }
 
 export async function revokeValidatorLink(
@@ -54,5 +50,5 @@ export async function revokeValidatorLink(
   const response = await serverFetch(`/events/${eventId}/validators/${validatorId}/revoke`, {
     method: "POST",
   });
-  return fromResponse<ValidatorLink>(response, requestMessages());
+  return fromResponse<ValidatorLink>(response, await requestMessages());
 }

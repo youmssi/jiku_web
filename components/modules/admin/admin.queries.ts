@@ -11,6 +11,7 @@ import type {
   AdminTierCatalog,
   AdminTrialPage,
   AdminTrialStats,
+  AdminVerification,
   AuditPage,
   FeedbackPage,
   ProspectLead,
@@ -147,4 +148,9 @@ export function loadProspects(): Promise<ProspectLead[]> {
  */
 export function loadBillingSettings(): Promise<AdminBillingSettingsView | null> {
   return adminRead<AdminBillingSettingsView | null>("/admin/billing/settings", null);
+}
+
+/** The verification queue in [status], oldest request first (JIKU-175). */
+export function loadVerifications(status = "PENDING"): Promise<AdminVerification[]> {
+  return adminRead(`/admin/verifications?${query({ status, limit: DESK_PAGE_SIZE })}`, []);
 }

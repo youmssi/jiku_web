@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import {
   Combobox,
   ComboboxContent,
@@ -22,7 +23,7 @@ const SEARCH_DELAY_MS = 250;
 export function TenantCombobox({
   value,
   onChange,
-  placeholder = "Search organizations by name…",
+  placeholder,
   id,
 }: {
   value: TenantDirectoryEntry | null;
@@ -30,6 +31,7 @@ export function TenantCombobox({
   placeholder?: string;
   id?: string;
 }) {
+  const t = useTranslations("admin.pickers");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<TenantDirectoryEntry[]>([]);
   const [isPending, startTransition] = useTransition();
@@ -73,11 +75,11 @@ export function TenantCombobox({
       itemToStringLabel={(tenant) => tenant.name}
       isItemEqualToValue={(a, b) => a.id === b.id}
     >
-      <ComboboxInput id={id} placeholder={placeholder} />
+      <ComboboxInput id={id} placeholder={placeholder ?? t("searchOrganizations")} />
       <ComboboxContent>
         <ComboboxList>
           <ComboboxEmpty>
-            {isPending ? "Searching…" : query.trim() ? "No matching organization." : "Type to search."}
+            {isPending ? t("searching") : query.trim() ? t("noOrganization") : t("typeToSearch")}
           </ComboboxEmpty>
           {items.map((tenant) => (
             <ComboboxItem key={tenant.id} value={tenant}>

@@ -11,7 +11,8 @@
     "dayLine": "Day line",
     "manage": "Manage",
     "configuration": "Configuration",
-    "operators": "Operators"
+    "operators": "Operators",
+    "orders": "Orders"
   },
   "sidebar": {
     "platform": "Platform",

@@ -119,7 +119,8 @@
     "mtnMomo": "MTN MoMo",
     "wave": "Wave",
     "payOnline": "Payer en ligne",
-    "askOrganizer": "L'organisateur vous indiquera comment régler."
+    "askOrganizer": "L'organisateur vous indiquera comment régler.",
+    "unverified": "L'identité de cet organisateur n'a pas encore été vérifiée par Jikū. Payez seulement si vous le connaissez."
   },
   "appointment": {
     "metaTitle": "Réserver un rendez-vous",
@@ -136,7 +137,8 @@
       "name": "Votre nom",
       "phone": "Votre téléphone",
       "submit": "Réserver ce créneau",
-      "submitting": "Réservation…"
+      "submitting": "Réservation…",
+      "placesLeft": "{count, plural, one {# place} other {# places}}"
     },
     "booked": {
       "title": "Votre rendez-vous est enregistré",
@@ -165,5 +167,73 @@
       "notCancellable": "Ce rendez-vous ne peut plus être annulé.",
       "cancelFailed": "L'annulation a échoué. Réessayez."
     }
+  },
+  "verification": {
+    "company": "Organisation vérifiée",
+    "personal": "Identité vérifiée",
+    "hint": "L'équipe Jikū a vérifié les documents officiels de cet organisateur."
+  },
+  "sale": {
+    "organizedBy": "Organisé par {organizer}",
+    "left": "{count, plural, one {# place restante} other {# places restantes}}",
+    "soldOutLabel": "Complet",
+    "less": "Retirer un billet {label}",
+    "more": "Ajouter un billet {label}",
+    "ticketCount": "{count, plural, =0 {Aucun billet choisi} one {# billet} other {# billets}}",
+    "buyerName": "Votre nom",
+    "buyerNameHelp": "Il figure sur les billets. Vous pourrez transférer un billet à quelqu'un d'autre ensuite.",
+    "buyerPhone": "Votre téléphone",
+    "buyerEmail": "Votre e-mail (facultatif)",
+    "order": "Commander",
+    "ordering": "Commande en cours…",
+    "holdNotice": "Vos places sont gardées {minutes} minutes, le temps de payer l'organisateur.",
+    "closedTitle": "Billets indisponibles",
+    "closed": {
+      "NOT_PUBLISHED": "La vente de billets n'a pas encore ouvert.",
+      "CANCELLED": "Cet événement a été annulé.",
+      "ENDED": "Cet événement est terminé.",
+      "NOTHING_FOR_SALE": "Aucun billet n'est en vente pour cet événement.",
+      "ORGANIZER_NOT_VERIFIED": "La vente n'est pas encore ouverte : l'organisateur doit d'abord faire vérifier son identité.",
+      "NO_PAYMENT_METHOD": "La vente n'est pas encore ouverte : l'organisateur n'a pas indiqué comment le payer.",
+      "PAUSED": "Les billets seront de nouveau en vente très bientôt. Revenez un peu plus tard."
+    },
+    "errors": {
+      "invalid": "Vérifiez les informations saisies.",
+      "nothingChosen": "Choisissez au moins un billet.",
+      "soldOut": "Il ne reste plus assez de places, ou la vente vient de fermer. Les places ont été mises à jour.",
+      "tooMany": "Trop de commandes depuis cette connexion. Réessayez dans quelques minutes.",
+      "cannotDeclare": "Ce paiement ne peut plus être déclaré : la commande a expiré ou a déjà été traitée.",
+      "failed": "Impossible de traiter votre demande. Réessayez."
+    },
+    "pausedLabel": "Bientôt disponible"
+  },
+  "order": {
+    "orderOf": "Votre commande · {organizer}",
+    "reference": "Référence de la transaction",
+    "status": {
+      "AWAITING_PAYMENT": "À payer",
+      "DECLARED": "Paiement déclaré",
+      "PAID": "Payée",
+      "EXPIRED": "Expirée",
+      "REJECTED": "Refusée"
+    },
+    "total": "Total",
+    "buyer": "Au nom de {name}",
+    "holdLeft": "Vos places sont gardées encore <time></time>.",
+    "quoteReference": "Indiquez la référence {reference} dans le motif de votre paiement, puis déclarez-le ci-dessous.",
+    "referenceHelp": "Le numéro de transaction reçu par SMS après votre paiement Mobile Money.",
+    "declare": "J'ai payé",
+    "declaring": "Envoi…",
+    "declared": "Paiement déclaré. L'organisateur va le vérifier.",
+    "declaredText": "Paiement déclaré (référence {reference}). L'organisateur le vérifie ; vos billets apparaîtront ici dès sa confirmation. Vos places restent gardées.",
+    "paidText": "Paiement confirmé. Voici vos billets : présentez chacun à l'entrée.",
+    "ticket": "Billet {number}",
+    "transferHint": "Un billet est pour quelqu'un d'autre ? Ouvrez-le et transférez-le à son nom.",
+    "expiredText": "Cette commande a expiré sans paiement déclaré ; ses places ont été remises en vente. Vous pouvez commander à nouveau.",
+    "rejectedText": "L'organisateur a refusé cette commande : {reason}",
+    "keepLink": "Gardez ce lien : c'est le seul moyen de revenir à votre commande.",
+    "unavailableTitle": "Commande introuvable",
+    "unavailableText": "Ce lien de commande n'est pas valide.",
+    "orderReference": "Référence {reference}"
   }
 }
