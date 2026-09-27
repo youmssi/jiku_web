@@ -9,7 +9,7 @@ Jikū is a white-label SaaS platform for event invitation, ticketing, RSVP, and 
 
 | Technology | Version | Notes |
 |---|---|---|
-| **Next.js** | 16.2.9 | App Router with route groups |
+| **Next.js** | 16.3.6 | App Router with route groups |
 | **React** | 19.2.4 | Server Components by default |
 | **TypeScript** | ^5 | Strict mode enabled |
 | **Tailwind CSS** | ^4 | PostCSS configuration |
