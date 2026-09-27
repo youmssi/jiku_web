@@ -22,6 +22,8 @@ interface CardDetails {
   location: string | null;
   organizerName: string;
   primaryColor: string | null;
+  /** The last moment to answer, already written for people; null when answers stay open until the event. */
+  answerBy: string | null;
 }
 
 /**
@@ -36,7 +38,11 @@ export function SharePanel({ code, card }: { code: string; card: CardDetails }) 
   const [copied, setCopied] = useState(false);
   const qr = useRef<HTMLCanvasElement>(null);
 
-  const message = t("message", { event: card.eventName, when: card.when ?? "", url });
+  const message = t("message", {
+    event: card.eventName,
+    when: [card.when, card.answerBy ? t("cardAnswerBy", { date: card.answerBy }) : null].filter(Boolean).join("\n"),
+    url,
+  });
 
   async function copy() {
     try {
@@ -49,7 +55,11 @@ export function SharePanel({ code, card }: { code: string; card: CardDetails }) 
   }
 
   function download() {
-    const image = drawCard(card, qr.current, { answer: t("cardAnswer"), footer: t("cardFooter") });
+    const image = drawCard(card, qr.current, {
+      answer: t("cardAnswer"),
+      footer: t("cardFooter"),
+      answerBy: card.answerBy ? t("cardAnswerBy", { date: card.answerBy }) : null,
+    });
     if (!image) return;
     const anchor = document.createElement("a");
     anchor.href = image;
@@ -105,7 +115,7 @@ function noSubscription() {
 function drawCard(
   card: CardDetails,
   qr: HTMLCanvasElement | null,
-  labels: { answer: string; footer: string },
+  labels: { answer: string; footer: string; answerBy: string | null },
 ): string | null {
   if (!qr) return null;
   const canvas = document.createElement("canvas");
@@ -136,6 +146,16 @@ function drawCard(
   for (const line of [card.when, card.location].filter((value): value is string => Boolean(value))) {
     context.fillText(line, CARD_WIDTH / 2, y);
     y += 56;
+  }
+
+  if (labels.answerBy) {
+    context.font = "500 30px sans-serif";
+    const width = context.measureText(labels.answerBy).width + 56;
+    context.fillStyle = "rgba(255,255,255,0.18)";
+    roundedRect(context, (CARD_WIDTH - width) / 2, y - 8, width, 56, 28);
+    context.fillStyle = "#FFFFFF";
+    context.fillText(labels.answerBy, CARD_WIDTH / 2, y + 31);
+    y += 70;
   }
 
   const qrTop = Math.max(y + 30, 600);

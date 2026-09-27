@@ -26,7 +26,16 @@ export default async function OpenInvitationImage({ params }: { params: Promise<
       eyebrow: invitation ? t("invitedBy", { organizer: invitation.organizerName }) : "Jikū",
       headline: invitation?.eventName ?? t("previewFallback"),
       subtitle: [when, invitation?.eventLocation].filter(Boolean).join(" · "),
-      badges: [t("previewBadge")],
+      badges: [
+        t("previewBadge"),
+        ...(invitation?.closesAt && invitation.accepting
+          ? [
+              t("answerBy", {
+                date: `${formatEventDay(invitation.closesAt, invitation.eventTimezone, locale)} · ${formatEventTime(invitation.closesAt, invitation.eventTimezone, locale)}`,
+              }),
+            ]
+          : []),
+      ],
     }),
     size,
   );

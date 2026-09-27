@@ -465,6 +465,7 @@
       "download": "Télécharger la carte",
       "message": "{event}\n{when}\nRépondez ici : {url}",
       "cardAnswer": "Scannez pour répondre",
+      "cardAnswerBy": "Répondez avant le {date}",
       "cardFooter": "Invitation créée avec Jikū",
       "fileName": "Invitation {event}.png"
     },
@@ -511,6 +512,9 @@
       "companionsHelp": "Combien de personnes chacun peut amener, au plus {max}.",
       "closesAt": "Date limite pour répondre",
       "closesAtHelp": "Laissez vide pour accepter les réponses jusqu'à l'événement.",
+      "notifyOnCancel": "Prévenir en cas d'annulation",
+      "notifyOnCancelHelp": "Si vous annulez l'événement, les personnes qui ont répondu « oui » ou « peut-être » reçoivent un message WhatsApp.",
+      "notifyOnCancelIncluded": "Inclus dans votre formule : les personnes qui ont répondu « oui » ou « peut-être » reçoivent un message WhatsApp si vous annulez.",
       "save": "Enregistrer",
       "saved": "Réglages enregistrés."
     },

@@ -21,7 +21,11 @@ function toLocalInput(instant: string | null): string {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
-/** The settings of an open invitation (JIKU-184): on or off, the host's word, companions, and when answers close. */
+/**
+ * The settings of an open invitation (JIKU-184): on or off, the host's word,
+ * companions, when answers close, and whether the people who answered are told
+ * by WhatsApp if the event is cancelled (JIKU-187), which a paid tier includes.
+ */
 export function OpenSettingsForm({ eventId, invitation }: { eventId: string; invitation: OpenInvitation }) {
   const t = useTranslations("events.openInvitation.settings");
   const {
@@ -37,6 +41,7 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
       welcomeMessage: invitation.welcomeMessage ?? "",
       maxCompanions: invitation.maxCompanions,
       closesAt: toLocalInput(invitation.closesAt),
+      notifyOnCancel: invitation.notifyOnCancel,
     },
   });
 
@@ -108,6 +113,26 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
               <FieldLabel htmlFor="open-closes">{t("closesAt")}</FieldLabel>
               <Input {...field} id="open-closes" type="datetime-local" className="w-60" />
               <FieldDescription>{t("closesAtHelp")}</FieldDescription>
+            </Field>
+          )}
+        />
+        <Controller
+          control={control}
+          name="notifyOnCancel"
+          render={({ field }) => (
+            <Field orientation="horizontal">
+              <FieldContent>
+                <FieldLabel htmlFor="open-notify-cancel">{t("notifyOnCancel")}</FieldLabel>
+                <FieldDescription>
+                  {invitation.cancelNoticeIncluded ? t("notifyOnCancelIncluded") : t("notifyOnCancelHelp")}
+                </FieldDescription>
+              </FieldContent>
+              <Switch
+                id="open-notify-cancel"
+                checked={invitation.cancelNoticeIncluded || field.value}
+                disabled={invitation.cancelNoticeIncluded}
+                onCheckedChange={field.onChange}
+              />
             </Field>
           )}
         />

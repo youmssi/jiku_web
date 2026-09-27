@@ -1,5 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { CalendarDays, MapPin, MessageCircle } from "lucide-react";
+import { CalendarDays, Hourglass, MapPin, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StateMessage, VerifiedBadge } from "@/components/shared";
 import { formatEventDay, formatEventTime } from "@/lib/datetime";
@@ -18,6 +18,10 @@ export async function OpenInvitationPage({ invitation }: { invitation: PublicOpe
   const when = invitation.eventStart
     ? `${formatEventDay(invitation.eventStart, zone, locale)} · ${formatEventTime(invitation.eventStart, zone, locale)}`
     : null;
+  const answerBy =
+    invitation.closesAt && invitation.accepting
+      ? `${formatEventDay(invitation.closesAt, zone, locale)} · ${formatEventTime(invitation.closesAt, zone, locale)}`
+      : null;
   const whatsapp = invitation.whatsappNumber
     ? whatsappAnswerLink(invitation.whatsappNumber, t("whatsappMessage", { code: invitation.code }))
     : null;
@@ -50,6 +54,12 @@ export async function OpenInvitationPage({ invitation }: { invitation: PublicOpe
               </p>
             ) : null}
           </div>
+          {answerBy ? (
+            <p className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-900 dark:bg-amber-950 dark:text-amber-200">
+              <Hourglass aria-hidden className="size-3.5 shrink-0" />
+              {t("answerBy", { date: answerBy })}
+            </p>
+          ) : null}
           {invitation.welcomeMessage ? (
             <p className="mt-4 whitespace-pre-line text-pretty text-sm">{invitation.welcomeMessage}</p>
           ) : null}
