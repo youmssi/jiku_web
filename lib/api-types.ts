@@ -1460,6 +1460,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/commission/batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["open"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/checkin/tickets/{ticketCode}/paid": {
         parameters: {
             query?: never;
@@ -2860,6 +2876,38 @@ export interface paths {
             cookie?: never;
         };
         get: operations["get_7"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/commission": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["overview_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/commission/quote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["quote"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4678,6 +4726,28 @@ export interface components {
             row?: number;
             reason?: string;
         };
+        OpenBatchRequest: {
+            /** Format: uuid */
+            ticketTypeId?: string;
+            /** @enum {string} */
+            mode?: "FREE" | "CREDIT" | "PAY";
+            manual?: boolean;
+        };
+        OpenedBatchView: {
+            /** Format: uuid */
+            batchId?: string;
+            /** @enum {string} */
+            funding?: "FREE" | "PAID" | "CREDIT" | "OVERAGE";
+            /** @enum {string} */
+            status?: "PENDING_PAYMENT" | "ACTIVE" | "CLOSED" | "CANCELLED";
+            /** Format: int32 */
+            size?: number;
+            /** Format: int64 */
+            totalMinor?: number;
+            currency?: string;
+            payment?: components["schemas"]["PaymentInitiationResult"] | null;
+            instructions?: components["schemas"]["ManualPaymentInstructions"] | null;
+        };
         ScanRequest: {
             ticketCode: string;
         };
@@ -5149,6 +5219,7 @@ export interface components {
             currency?: string;
             /** Format: int32 */
             available?: number | null;
+            paused?: boolean;
         };
         PublicSaleView: {
             /** Format: uuid */
@@ -5171,7 +5242,7 @@ export interface components {
             holdMinutes?: number;
             onSale?: boolean;
             /** @enum {string|null} */
-            closedReason?: "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "NOTHING_FOR_SALE" | "ORGANIZER_NOT_VERIFIED" | "NO_PAYMENT_METHOD" | null;
+            closedReason?: "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "NOTHING_FOR_SALE" | "ORGANIZER_NOT_VERIFIED" | "NO_PAYMENT_METHOD" | "PAUSED" | null;
         };
         OperatorTeamView: {
             operators?: components["schemas"]["OperatorView"][];
@@ -5288,6 +5359,57 @@ export interface components {
             tier?: string;
             withinAllowance?: boolean;
             dataRetention?: components["schemas"]["DataRetentionNotice"] | null;
+        };
+        CommissionCategoryView: {
+            /** Format: uuid */
+            ticketTypeId?: string;
+            label?: string;
+            /** Format: int64 */
+            priceMinor?: number;
+            /** Format: int64 */
+            unitCommissionMinor?: number;
+            /** Format: int32 */
+            covered?: number;
+            /** Format: int32 */
+            sold?: number;
+            pendingPayment?: boolean;
+            /** Format: int32 */
+            nextBatchSize?: number;
+        };
+        CommissionOverview: {
+            /** Format: uuid */
+            eventId?: string;
+            currency?: string;
+            ratePercent?: string;
+            /** Format: int32 */
+            batchSize?: number;
+            onEventDay?: boolean;
+            categories?: components["schemas"]["CommissionCategoryView"][];
+            /** Format: int64 */
+            owedMinor?: number;
+            /** Format: int64 */
+            creditMinor?: number;
+            freeBatchAvailable?: boolean;
+            creditBatchAvailable?: boolean;
+        };
+        CommissionQuote: {
+            /** Format: uuid */
+            ticketTypeId?: string;
+            /** Format: int32 */
+            size?: number;
+            /** Format: int64 */
+            unitCommissionMinor?: number;
+            /** Format: int64 */
+            amountMinor?: number;
+            /** Format: int64 */
+            owedMinor?: number;
+            /** Format: int64 */
+            creditAppliedMinor?: number;
+            /** Format: int64 */
+            totalMinor?: number;
+            currency?: string;
+            freeBatchAvailable?: boolean;
+            creditBatchAvailable?: boolean;
         };
         AttendanceResponse: {
             /** Format: int64 */
@@ -8507,6 +8629,32 @@ export interface operations {
             };
         };
     };
+    open: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OpenBatchRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OpenedBatchView"];
+                };
+            };
+        };
+    };
     markPaid_3: {
         parameters: {
             query?: never;
@@ -10756,6 +10904,52 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["DashboardResponse"];
+                };
+            };
+        };
+    };
+    overview_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommissionOverview"];
+                };
+            };
+        };
+    };
+    quote: {
+        parameters: {
+            query: {
+                ticketTypeId: string;
+            };
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommissionQuote"];
                 };
             };
         };

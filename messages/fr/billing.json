@@ -242,7 +242,8 @@
         "SUBSCRIPTION": "Formule {tier}",
         "PACK": "Pack Organisateur",
         "PACK_EXTRA": "Invités supplémentaires du Pack",
-        "WHATSAPP_NUMBER": "Votre propre numéro WhatsApp"
+        "WHATSAPP_NUMBER": "Votre propre numéro WhatsApp",
+        "COMMISSION": "Commission sur les billets vendus"
       }
     }
   }

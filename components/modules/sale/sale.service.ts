@@ -13,6 +13,9 @@ import {
   type DeclareInput,
   type PlacedOrder,
   type RejectInput,
+  type BatchMode,
+  type CommissionQuote,
+  type OpenedBatch,
   type SalesSettings,
 } from "./schema";
 
@@ -121,4 +124,41 @@ export async function updateOrderHoldAction(orderHoldMinutes: number | null): Pr
     return fail(t("failed"));
   }
   return ok((await response.json()) as SalesSettings);
+}
+
+/** What the category's next commission batch costs now, with what is owed and the credit (JIKU-178). */
+export async function commissionQuoteAction(eventId: string, ticketTypeId: string): Promise<ActionResult<CommissionQuote>> {
+  const response = await serverFetch(
+    `/events/${encodeURIComponent(eventId)}/commission/quote?ticketTypeId=${encodeURIComponent(ticketTypeId)}`,
+  );
+  if (response.ok) return ok((await response.json()) as CommissionQuote);
+  reportApiError(response, "sale");
+  return fail((await getTranslations("events.commission.errors"))("failed"));
+}
+
+/**
+ * Opens the category's next batch: free or on credit at once, or paid online
+ * (the result carries the provider's page) or by transfer (it carries what to
+ * transfer and the reference to quote).
+ */
+export async function openBatchAction(
+  eventId: string,
+  ticketTypeId: string,
+  mode: BatchMode,
+  manual: boolean,
+): Promise<ActionResult<OpenedBatch>> {
+  const t = await getTranslations("events.commission.errors");
+  const response = await serverFetch(`/events/${encodeURIComponent(eventId)}/commission/batches`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ticketTypeId, mode, manual }),
+  });
+  if (response.ok) {
+    revalidatePath(eventOrdersRoute(eventId));
+    return ok((await response.json()) as OpenedBatch);
+  }
+  if (response.status === 409) return fail(t("notAvailable"));
+  if (response.status === 502) return fail(t("provider"));
+  reportApiError(response, "sale");
+  return fail(t("failed"));
 }

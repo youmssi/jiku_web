@@ -194,7 +194,8 @@
       "ENDED": "Cet événement est terminé.",
       "NOTHING_FOR_SALE": "Aucun billet n'est en vente pour cet événement.",
       "ORGANIZER_NOT_VERIFIED": "La vente n'est pas encore ouverte : l'organisateur doit d'abord faire vérifier son identité.",
-      "NO_PAYMENT_METHOD": "La vente n'est pas encore ouverte : l'organisateur n'a pas indiqué comment le payer."
+      "NO_PAYMENT_METHOD": "La vente n'est pas encore ouverte : l'organisateur n'a pas indiqué comment le payer.",
+      "PAUSED": "Les billets seront de nouveau en vente très bientôt. Revenez un peu plus tard."
     },
     "errors": {
       "invalid": "Vérifiez les informations saisies.",
@@ -203,7 +204,8 @@
       "tooMany": "Trop de commandes depuis cette connexion. Réessayez dans quelques minutes.",
       "cannotDeclare": "Ce paiement ne peut plus être déclaré : la commande a expiré ou a déjà été traitée.",
       "failed": "Impossible de traiter votre demande. Réessayez."
-    }
+    },
+    "pausedLabel": "Bientôt disponible"
   },
   "order": {
     "orderOf": "Votre commande · {organizer}",

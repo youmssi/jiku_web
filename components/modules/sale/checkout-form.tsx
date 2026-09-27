@@ -69,7 +69,8 @@ export function CheckoutForm({ sale, username }: { sale: PublicSale; username: s
       <ul className="flex flex-col divide-y rounded-xl border">
         {sale.categories.map((category) => {
           const quantity = quantities[category.id] ?? 0;
-          const soldOut = category.available === 0;
+          const soldOut = category.available === 0 && !category.paused;
+          const unavailable = soldOut || category.paused;
           return (
             <li key={category.id} className="flex items-center gap-3 p-4">
               <span aria-hidden className="size-3 shrink-0 rounded-full" style={{ backgroundColor: category.colorHex }} />
@@ -77,7 +78,9 @@ export function CheckoutForm({ sale, username }: { sale: PublicSale; username: s
                 <p className="font-medium">{category.label}</p>
                 <p className="text-sm text-muted-foreground">
                   {formatAmount(category.priceMinor, category.currency, locale)}
-                  {soldOut
+                  {category.paused
+                    ? ` · ${t("pausedLabel")}`
+                    : soldOut
                     ? ` · ${t("soldOutLabel")}`
                     : category.available !== null && category.available <= 20
                       ? ` · ${t("left", { count: category.available })}`
@@ -103,7 +106,7 @@ export function CheckoutForm({ sale, username }: { sale: PublicSale; username: s
                   size="icon"
                   variant="outline"
                   aria-label={t("more", { label: category.label })}
-                  disabled={soldOut || count >= sale.maxTicketsPerOrder || (category.available !== null && quantity >= category.available)}
+                  disabled={unavailable || count >= sale.maxTicketsPerOrder || (category.available !== null && quantity >= category.available)}
                   onClick={() => change(category.id, 1)}
                 >
                   <Plus aria-hidden />

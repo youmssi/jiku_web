@@ -393,5 +393,42 @@
       "alreadyDecided": "Cette commande a déjà été traitée ou a expiré.",
       "failed": "Impossible de traiter cette commande. Réessayez."
     }
+  },
+  "commission": {
+    "title": "Commission Jikū ({rate} %)",
+    "text": "Chaque billet vendu coûte cette commission à votre organisation. Elle se paie d'avance, par tranche de {size} billets au plus d'une catégorie ; une catégorie se met en pause quand ses tranches sont épuisées.",
+    "eventDay": "C'est le jour de l'événement : la vente ne s'arrête pas. Les billets vendus au-delà de vos tranches seront à régler après l'événement.",
+    "owed": "À régler : {amount}. Ce montant s'ajoute au paiement de votre prochaine tranche.",
+    "credit": "Avoir disponible : {amount}. Il est déduit de vos prochains paiements de commission.",
+    "paused": "En pause",
+    "pendingPayment": "Paiement en attente",
+    "row": "{sold, plural, =0 {Aucun billet vendu} one {# billet vendu} other {# billets vendus}} · {covered, plural, =0 {aucune place couverte} one {# place couverte} other {# places couvertes}} · {commission} par billet",
+    "allCovered": "Toutes les places sont couvertes",
+    "openBatch": "{count, plural, one {Couvrir # billet} other {Couvrir # billets}}",
+    "dialogTitle": "Nouvelle tranche : {label}",
+    "dialogText": "La tranche couvre les prochains billets de cette catégorie. Ce qui n'est pas utilisé à la fin de l'événement devient un avoir.",
+    "loading": "Calcul du montant…",
+    "batch": "{count, plural, one {# billet} other {# billets}} × {commission}",
+    "owedLine": "Commission à régler",
+    "creditLine": "Avoir déduit",
+    "total": "Total",
+    "choices": {
+      "FREE": "Première tranche offerte",
+      "CREDIT": "À crédit : réglée avec votre prochain paiement",
+      "COVERED": "Couverte par votre avoir : rien à payer",
+      "ONLINE": "Payer {amount} en ligne (Orange Money, MTN MoMo, carte)",
+      "TRANSFER": "Payer {amount} par transfert, confirmé par notre équipe"
+    },
+    "batchLabel": "{count, plural, one {tranche de # billet} other {tranche de # billets}} ({label})",
+    "opened": "{count, plural, one {Tranche ouverte : # billet en vente.} other {Tranche ouverte : # billets en vente.}}",
+    "confirm": "Ouvrir la tranche",
+    "working": "En cours…",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "errors": {
+      "failed": "Impossible de traiter la tranche. Réessayez.",
+      "notAvailable": "Cette option n'est plus disponible ; rechargez la page.",
+      "provider": "Le paiement en ligne est indisponible pour le moment. Réessayez ou payez par transfert."
+    }
   }
 }

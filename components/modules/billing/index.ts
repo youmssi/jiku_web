@@ -8,6 +8,7 @@ export { PackSection } from "./pack-section";
 export { OwnNumberSection } from "./own-number-section";
 export { PayOnlineButton } from "./pay-online-button";
 export { PaymentReturn, PaymentReturnMissing } from "./payment-return";
+export { ActivationInstructions } from "./activation-instructions";
 export {
   fetchInvoicesAction,
   issueInvoiceAction,
