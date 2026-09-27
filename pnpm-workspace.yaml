@@ -13,3 +13,12 @@ ignoredBuiltDependencies:
   - unrs-resolver
   - '@parcel/watcher'
   - '@swc/core'
+
+# Security fixes for transitive dependencies whose parents do not yet ship them
+# (pnpm audit, security review F-6). Each one is the smallest fixed version in
+# the same major line; remove an entry once its parent depends on a fixed one.
+overrides:
+  brace-expansion@>=4.0.0 <5.0.9: ^5.0.9
+  browserslist@<4.28.7: ^4.28.7
+  fast-uri@>=3.0.0 <3.1.6: ^3.1.6
+  sharp@<0.35.4: ^0.35.4
