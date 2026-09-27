@@ -3,7 +3,8 @@ import { Link } from "@/i18n/navigation";
 import { publicFetch } from "@/lib/api-server";
 import { invitationRoute, PRIVACY_ROUTE, ticketRoute } from "@/lib/constants";
 import { zoneCity } from "@/lib/datetime";
-import { fullWhen, shortDay, shortTime } from "@/lib/short-dates";
+import { datePart, fullWhen, shortTime } from "@/lib/short-dates";
+import { cardStyleOf } from "@/lib/card-style";
 import { routing } from "@/i18n/routing";
 import { TicketCard } from "@/components/modules/invitation/ticket-card";
 import { TicketActions } from "@/components/modules/invitation/ticket-actions";
@@ -83,12 +84,16 @@ export async function TicketView({ params }: { params: Promise<{ token: string }
         categoryName={rsvp.categoryName}
         companions={rsvp.companions}
         start={start}
-        when={
+        style={cardStyleOf(rsvp.cardStyle)}
+        bannerUrl={rsvp.bannerUrl ?? null}
+        day={start && zone ? datePart(start, zone, locale, { day: "numeric" }) : null}
+        month={start && zone ? datePart(start, zone, locale, { month: "short" }) : null}
+        time={
           start && zone
-            ? `${shortDay(start, zone, locale)} · ${[start, rsvp.eventEnd]
+            ? [start, rsvp.eventEnd]
                 .filter((instant): instant is string => Boolean(instant))
                 .map((instant) => shortTime(instant, zone, locale))
-                .join(" – ")}`
+                .join(" – ")
             : null
         }
         whenFull={start && zone ? fullWhen(start, zone, locale) : null}

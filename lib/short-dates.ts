@@ -113,3 +113,13 @@ export function fullWhen(utcInstant: string, timeZone: string, locale: string): 
     timeZone,
   }).format(new Date(utcInstant));
 }
+
+/** One part of the date (the day number, the short month…) in the event's timezone, for a stub. */
+export function datePart(
+  utcInstant: string,
+  timeZone: string,
+  locale: string,
+  options: Intl.DateTimeFormatOptions,
+): string {
+  return new Intl.DateTimeFormat(locale, { ...options, timeZone }).format(new Date(utcInstant));
+}
