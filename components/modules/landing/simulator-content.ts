@@ -95,7 +95,7 @@ export interface SimulatorContent {
     pack: { title: string; text: string; price: string; cta: string; mailSubject: string };
   };
   sell: {
-    soon: string;
+    badge: string;
     intro: string;
     priceLabel: string;
     countLabel: string;
@@ -343,7 +343,7 @@ const fr: SimulatorContent = {
     },
   },
   sell: {
-    soon: "Ouverture prochaine",
+    badge: "Disponible",
     intro:
       "Vous vendez vos billets ? Jikū prend 3 % du prix de chaque billet vendu, rien si rien n'est vendu. Ces billets ne comptent pas dans les paliers d'invités.",
     priceLabel: "Prix d'un billet",
@@ -360,7 +360,7 @@ const fr: SimulatorContent = {
       { title: "Jamais bloqué le jour J", text: "Le jour de l'événement, la vente et l'entrée continuent même si la tranche est épuisée. Ce qui n'a pas servi est reporté sur 12 mois." },
     ],
     verification:
-      "Avant votre première vente, une vérification légère de votre identité protège vos acheteurs. Une vérification complète, facultative, vous donne le badge « Organisation vérifiée ».",
+      "Avant votre première vente, vous vérifiez votre organisation, en tant que particulier ou entreprise, et notre équipe valide vos documents. Vos acheteurs voient alors le badge « Organisation vérifiée ».",
   },
   sms: "SMS en option : le prix exact s'affiche avant chaque envoi. L'e-mail et WhatsApp sont inclus.",
   both: {
@@ -614,7 +614,7 @@ const en: SimulatorContent = {
     },
   },
   sell: {
-    soon: "Opening soon",
+    badge: "Available now",
     intro:
       "You sell your tickets? Jikū takes 3% of the price of each ticket sold, nothing if nothing sells. These tickets don't count towards guest tiers.",
     priceLabel: "Ticket price",
@@ -631,7 +631,7 @@ const en: SimulatorContent = {
       { title: "Never blocked on the day", text: "On the event day, sales and entry continue even when the tranche runs out. Whatever goes unused carries over for 12 months." },
     ],
     verification:
-      "Before your first sale, a light identity check protects your buyers. An optional full check gives you the “Verified organization” badge.",
+      "Before your first sale, you verify your organization, as an individual or a company, and our team checks your documents. Buyers then see the “Verified organization” badge.",
   },
   sms: "SMS as an option: the exact price shows before each send. Email and WhatsApp are included.",
   both: {
