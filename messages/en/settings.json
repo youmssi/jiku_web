@@ -151,5 +151,21 @@
       "storageUnavailable": "Document upload is unavailable for now. Try again later.",
       "failed": "We couldn't send your request. Try again."
     }
+  },
+  "sales": {
+    "tab": "Sales",
+    "title": "Holding places",
+    "text": "When a client orders tickets, their places are held while they pay you. Without a declared payment in time, they go back on sale. A declared payment keeps the places until you decide.",
+    "hold": "Hold time (minutes)",
+    "holdHelp": "Between {min} and {max} minutes. {default} minutes by default.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Hold time saved.",
+    "useDefault": "Back to {minutes} minutes",
+    "outOfRange": "Choose between {min} and {max} minutes.",
+    "wholeNumber": "Enter a whole number of minutes.",
+    "failed": "We couldn't save. Try again.",
+    "loadFailed": "We couldn't load your sales settings.",
+    "refused": "This hold time is not allowed."
   }
 }

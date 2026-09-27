@@ -37,3 +37,10 @@ export const rejectSchema = z.object({
 });
 
 export type RejectInput = z.infer<typeof rejectSchema>;
+
+/** The hold an organization picks, in minutes, within the platform's bounds. */
+export function holdSchema(min: number, max: number) {
+  return z.object({ minutes: z.number().int("wholeNumber").min(min, "outOfRange").max(max, "outOfRange") });
+}
+
+export type HoldInput = z.infer<ReturnType<typeof holdSchema>>;

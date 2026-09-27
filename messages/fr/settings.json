@@ -151,5 +151,21 @@
       "storageUnavailable": "L'envoi de documents est momentanément indisponible. Réessayez plus tard.",
       "failed": "Impossible d'envoyer votre demande. Réessayez."
     }
+  },
+  "sales": {
+    "tab": "Ventes",
+    "title": "Garde des places",
+    "text": "Quand un client commande des billets, ses places lui sont gardées le temps de vous payer. Sans paiement déclaré à temps, elles sont remises en vente. Un paiement déclaré garde les places jusqu'à votre décision.",
+    "hold": "Durée de garde (minutes)",
+    "holdHelp": "Entre {min} et {max} minutes. {default} minutes par défaut.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Durée de garde enregistrée.",
+    "useDefault": "Revenir à {minutes} minutes",
+    "outOfRange": "Choisissez entre {min} et {max} minutes.",
+    "wholeNumber": "Saisissez un nombre entier de minutes.",
+    "failed": "Impossible d'enregistrer. Réessayez.",
+    "loadFailed": "Impossible de charger vos réglages de vente.",
+    "refused": "Cette durée n'est pas autorisée."
   }
 }

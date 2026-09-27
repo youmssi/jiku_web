@@ -4,6 +4,8 @@ import { getTranslations } from "next-intl/server";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getOrganizerContext } from "@/components/modules/identity/server";
 import { MembersView, fetchMembersAction } from "@/components/modules/members";
+import { SalesSettingsForm } from "@/components/modules/sale";
+import { loadSalesSettings } from "@/components/modules/sale/server";
 import { VerificationView } from "@/components/modules/verification";
 import { loadVerification } from "@/components/modules/verification/server";
 import { AccountView } from "@/components/modules/settings/account-view";
@@ -69,7 +71,7 @@ const EMPTY_LEGAL_IDENTITY: LegalIdentityResponse = {
  * blocking the others.
  */
 async function loadManagerSettings() {
-  const [username, branding, providers, embeddedSignup, paymentMethods, legalIdentity, members, vocabulary, templates, verification] =
+  const [username, branding, providers, embeddedSignup, paymentMethods, legalIdentity, members, vocabulary, templates, verification, sales] =
     await Promise.all([
     loadOrgUsername(),
     loadBranding(),
@@ -81,6 +83,7 @@ async function loadManagerSettings() {
     loadVocabulary(),
     loadTemplates(),
     loadVerification(),
+    loadSalesSettings(),
   ]);
   return {
     username,
@@ -93,6 +96,7 @@ async function loadManagerSettings() {
     vocabulary,
     templates,
     verification,
+    sales,
   };
 }
 
@@ -106,7 +110,7 @@ export async function SettingsView({ tab }: { tab?: string }) {
   const context = await getOrganizerContext();
   const isManager = context !== null && MANAGER_ROLES.includes(context.role);
   const settings = isManager ? await loadManagerSettings() : null;
-  const t = await getTranslations("settings.verification");
+  const [t, tSales] = await Promise.all([getTranslations("settings.verification"), getTranslations("settings.sales")]);
 
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-8">
@@ -123,6 +127,7 @@ export async function SettingsView({ tab }: { tab?: string }) {
           {settings ? <TabsTrigger value="messaging">Messaging providers</TabsTrigger> : null}
           {settings ? <TabsTrigger value="verification">{t("tab")}</TabsTrigger> : null}
           {settings ? <TabsTrigger value="payments">Payment methods</TabsTrigger> : null}
+          {settings ? <TabsTrigger value="sales">{tSales("tab")}</TabsTrigger> : null}
           {settings ? <TabsTrigger value="legal">Invoicing details</TabsTrigger> : null}
           {settings ? <TabsTrigger value="personalisation">Personalisation</TabsTrigger> : null}
           <TabsTrigger value="account">Account</TabsTrigger>
@@ -160,6 +165,9 @@ export async function SettingsView({ tab }: { tab?: string }) {
             </TabsContent>
             <TabsContent value="payments" className="mt-0">
               <PaymentMethodsForm initial={settings.paymentMethods} />
+            </TabsContent>
+            <TabsContent value="sales" className="mt-0">
+              <SalesSettingsForm initial={settings.sales} />
             </TabsContent>
             <TabsContent value="legal" className="mt-0">
               <LegalIdentityView identity={settings.legalIdentity} />
