@@ -9,7 +9,7 @@ This file configures Claude Code for the Jikū frontend service. It includes all
 ### Before Writing Any Code
 
 1. Read `AGENTS.md` fully — do not skip this step
-2. Read the relevant API docs in `node_modules/next/dist/docs/` for any Next.js API you plan to use — this version (16.2) has breaking changes
+2. Read the relevant API docs in `node_modules/next/dist/docs/` for any Next.js API you plan to use — this version (16.3) has breaking changes
 3. Check if the file or pattern you're about to create already exists in the project
 
 ### Code Style
