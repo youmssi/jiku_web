@@ -13,6 +13,8 @@ interface TicketCardProps {
   logoUrl: string | null;
   guestName: string;
   categoryName: string | null;
+  /** People admitted with the guest on this ticket, from an open invitation (JIKU-184). */
+  companions: number;
   /** The event day and time, already written in the viewer's language and the event's timezone. */
   day: string | null;
   time: string | null;
@@ -50,6 +52,7 @@ export function TicketCard({
   logoUrl,
   guestName,
   categoryName,
+  companions,
   day,
   time,
   zone,
@@ -123,7 +126,11 @@ export function TicketCard({
 
         {/* Details, laid out like a pass: who, when, where. */}
         <dl className="grid grid-cols-2 gap-x-4 gap-y-3 px-6 pt-7 text-left">
-          <Detail label={t("guest")} value={guestName} wide />
+          <Detail
+            label={t("guest")}
+            value={companions > 0 ? t("guestWith", { name: guestName, count: companions }) : guestName}
+            wide
+          />
           {day ? <Detail label={t("date")} value={day} wide /> : null}
           {time ? <Detail label={t("time")} value={time} hint={zone ? t("timezone", { zone }) : null} /> : null}
           {location ? <Detail label={t("place")} value={location} wide /> : null}

@@ -228,6 +228,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/open-invitation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["openInvitationSettings"];
+        put: operations["openInvitationUpdate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/branding": {
         parameters: {
             query?: never;
@@ -830,6 +846,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["operatorRevoke"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/open/{code}/responses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["publicOpenInvitationRespond"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2660,6 +2692,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/open/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicOpenInvitationView"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/members": {
         parameters: {
             query?: never;
@@ -2812,6 +2860,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["ticketOrderList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/open-invitation/responses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["openInvitationResponses"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3716,6 +3780,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/open-invitation/responses/{responseId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["openInvitationRemove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/occurrences/{occurrenceId}": {
         parameters: {
             query?: never;
@@ -4082,6 +4162,44 @@ export interface components {
             priceMinor?: number | null;
             currency?: string | null;
         };
+        OpenInvitationSettingsRequest: {
+            enabled?: boolean;
+            welcomeMessage?: string | null;
+            /** Format: int32 */
+            maxCompanions?: number | null;
+            /** Format: date-time */
+            closesAt?: string | null;
+        };
+        OpenInvitationCounts: {
+            /** Format: int32 */
+            yes?: number;
+            /** Format: int32 */
+            maybe?: number;
+            /** Format: int32 */
+            no?: number;
+            /** Format: int32 */
+            expected?: number;
+        };
+        OpenInvitationView: {
+            /** Format: uuid */
+            eventId?: string;
+            code?: string;
+            enabled?: boolean;
+            welcomeMessage?: string | null;
+            /** Format: int32 */
+            maxCompanions?: number;
+            /** Format: int32 */
+            maxCompanionsAllowed?: number;
+            /** Format: date-time */
+            closesAt?: string | null;
+            accepting?: boolean;
+            /** @enum {string|null} */
+            closedReason?: "DISABLED" | "CLOSED" | "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "FULL" | null;
+            /** Format: int32 */
+            remainingPlaces?: number | null;
+            counts?: components["schemas"]["OpenInvitationCounts"];
+            whatsappNumber?: string | null;
+        };
         UpdateBrandingRequest: {
             displayName?: string | null;
             logoUrl?: string | null;
@@ -4378,6 +4496,8 @@ export interface components {
             eventEnd?: string | null;
             eventTimezone?: string | null;
             categoryName?: string | null;
+            /** Format: int32 */
+            companions?: number;
         };
         ResourceCreateRequest: {
             name: string;
@@ -4539,6 +4659,21 @@ export interface components {
         };
         DeclarePaymentRequest: {
             paymentReference: string;
+        };
+        OpenResponseRequest: {
+            name: string;
+            phone: string;
+            /** @enum {string} */
+            answer?: "YES" | "MAYBE" | "NO";
+            /** Format: int32 */
+            companions?: number;
+        };
+        OpenResponseView: {
+            /** @enum {string} */
+            answer?: "YES" | "MAYBE" | "NO";
+            /** Format: int32 */
+            companions?: number;
+            ticketToken?: string | null;
         };
         EmailFeedbackEventDto: {
             recipient: string;
@@ -5274,6 +5409,27 @@ export interface components {
         OperatorLinkResolution: {
             token?: string;
         };
+        PublicOpenInvitationView: {
+            code?: string;
+            eventName?: string;
+            /** Format: date-time */
+            eventStart?: string | null;
+            /** Format: date-time */
+            eventEnd?: string | null;
+            eventTimezone?: string;
+            eventLocation?: string | null;
+            welcomeMessage?: string | null;
+            organizerName?: string;
+            logoUrl?: string | null;
+            primaryColor?: string | null;
+            organizerVerification?: string | null;
+            /** Format: int32 */
+            maxCompanions?: number;
+            accepting?: boolean;
+            /** @enum {string|null} */
+            closedReason?: "DISABLED" | "CLOSED" | "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "FULL" | null;
+            whatsappNumber?: string | null;
+        };
         LineCodeResolution: {
             token?: string;
         };
@@ -5295,6 +5451,20 @@ export interface components {
             invitationsSentEmail?: number;
             /** Format: int64 */
             invitationsSentWhatsapp?: number;
+        };
+        OrganizerOpenResponseView: {
+            /** Format: uuid */
+            id?: string;
+            name?: string;
+            phone?: string;
+            /** @enum {string} */
+            answer?: "YES" | "MAYBE" | "NO";
+            /** Format: int32 */
+            companions?: number;
+            /** @enum {string} */
+            channel?: "WEB" | "WHATSAPP";
+            /** Format: date-time */
+            updatedAt?: string;
         };
         InvitationStatusResponse: {
             /** Format: uuid */
@@ -6351,6 +6521,54 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    openInvitationSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OpenInvitationView"];
+                };
+            };
+        };
+    };
+    openInvitationUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OpenInvitationSettingsRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OpenInvitationView"];
+                };
             };
         };
     };
@@ -7516,6 +7734,32 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["OperatorView"];
+                };
+            };
+        };
+    };
+    publicOpenInvitationRespond: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OpenResponseRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OpenResponseView"];
                 };
             };
         };
@@ -10592,6 +10836,28 @@ export interface operations {
             };
         };
     };
+    publicOpenInvitationView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PublicOpenInvitationView"];
+                };
+            };
+        };
+    };
     memberMembers: {
         parameters: {
             query?: never;
@@ -10818,6 +11084,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["OrganizerOrderView"][];
+                };
+            };
+        };
+    };
+    openInvitationResponses: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerOpenResponseView"][];
                 };
             };
         };
@@ -12062,6 +12350,27 @@ export interface operations {
             path: {
                 eventId: string;
                 questionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    openInvitationRemove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                responseId: string;
             };
             cookie?: never;
         };

@@ -80,6 +80,7 @@ export async function TicketView({ params }: { params: Promise<{ token: string }
         logoUrl={rsvp.logoUrl}
         guestName={rsvp.guestName}
         categoryName={rsvp.categoryName}
+        companions={rsvp.companions}
         day={start && zone ? formatEventDay(start, zone, locale) : null}
         time={
           start && zone

@@ -40,7 +40,8 @@
     "attachDocument": "Attach at least one document.",
     "tooManyFiles": "You picked too many files.",
     "fileTooLarge": "A file is over the size limit, even compressed.",
-    "fileType": "Attach JPEG, PNG or PDF files."
+    "fileType": "Attach JPEG, PNG or PDF files.",
+    "outOfRange": "Enter a value within the limits shown."
   },
   "roles": {
     "OWNER": "Owner",

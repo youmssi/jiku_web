@@ -12,7 +12,8 @@
     "manage": "Manage",
     "configuration": "Configuration",
     "operators": "Operators",
-    "orders": "Orders"
+    "orders": "Orders",
+    "openInvitation": "Open invitation"
   },
   "sidebar": {
     "platform": "Platform",
