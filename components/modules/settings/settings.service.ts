@@ -130,6 +130,9 @@ export async function updatePaymentMethodsAction(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
+  if (response.status === 403) {
+    return fail((await getTranslations("settings.paymentMethods.errors"))("verifyFirst"));
+  }
   if (!response.ok) {
     reportApiError(response);
     return fail((await getTranslations("settings.paymentMethods.errors"))("failed"));

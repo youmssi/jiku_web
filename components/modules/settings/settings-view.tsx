@@ -1,8 +1,11 @@
 import "server-only";
 
+import { getTranslations } from "next-intl/server";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getOrganizerContext } from "@/components/modules/identity/server";
 import { MembersView, fetchMembersAction } from "@/components/modules/members";
+import { VerificationView } from "@/components/modules/verification";
+import { loadVerification } from "@/components/modules/verification/server";
 import { AccountView } from "@/components/modules/settings/account-view";
 import { BrandingView } from "@/components/modules/settings/branding-view";
 import { LegalIdentityView } from "@/components/modules/settings/legal-identity-view";
@@ -66,7 +69,7 @@ const EMPTY_LEGAL_IDENTITY: LegalIdentityResponse = {
  * blocking the others.
  */
 async function loadManagerSettings() {
-  const [username, branding, providers, embeddedSignup, paymentMethods, legalIdentity, members, vocabulary, templates] =
+  const [username, branding, providers, embeddedSignup, paymentMethods, legalIdentity, members, vocabulary, templates, verification] =
     await Promise.all([
     loadOrgUsername(),
     loadBranding(),
@@ -77,6 +80,7 @@ async function loadManagerSettings() {
     fetchMembersAction(),
     loadVocabulary(),
     loadTemplates(),
+    loadVerification(),
   ]);
   return {
     username,
@@ -88,6 +92,7 @@ async function loadManagerSettings() {
     team: members.ok ? members.data : null,
     vocabulary,
     templates,
+    verification,
   };
 }
 
@@ -101,6 +106,7 @@ export async function SettingsView({ tab }: { tab?: string }) {
   const context = await getOrganizerContext();
   const isManager = context !== null && MANAGER_ROLES.includes(context.role);
   const settings = isManager ? await loadManagerSettings() : null;
+  const t = await getTranslations("settings.verification");
 
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-8">
@@ -115,6 +121,7 @@ export async function SettingsView({ tab }: { tab?: string }) {
           {settings ? <TabsTrigger value="branding">Branding</TabsTrigger> : null}
           {settings?.team ? <TabsTrigger value="members">Members</TabsTrigger> : null}
           {settings ? <TabsTrigger value="messaging">Messaging providers</TabsTrigger> : null}
+          {settings ? <TabsTrigger value="verification">{t("tab")}</TabsTrigger> : null}
           {settings ? <TabsTrigger value="payments">Payment methods</TabsTrigger> : null}
           {settings ? <TabsTrigger value="legal">Invoicing details</TabsTrigger> : null}
           {settings ? <TabsTrigger value="personalisation">Personalisation</TabsTrigger> : null}
@@ -147,6 +154,9 @@ export async function SettingsView({ tab }: { tab?: string }) {
             ) : null}
             <TabsContent value="messaging" className="mt-0">
               <ProviderSettingsView initial={settings.providers} embeddedSignup={settings.embeddedSignup} />
+            </TabsContent>
+            <TabsContent value="verification" className="mt-0">
+              <VerificationView overview={settings.verification} />
             </TabsContent>
             <TabsContent value="payments" className="mt-0">
               <PaymentMethodsForm initial={settings.paymentMethods} />

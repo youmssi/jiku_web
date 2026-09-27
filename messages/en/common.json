@@ -35,7 +35,12 @@
     "nonNegative": "Enter zero or more.",
     "wholeNumberOrEmpty": "Leave empty or enter a whole number.",
     "atLeastOneTier": "At least one tier is required.",
-    "atLeastOnePlan": "At least one plan is required."
+    "atLeastOnePlan": "At least one plan is required.",
+    "sixDigitCode": "Enter the 6 digits you received.",
+    "attachDocument": "Attach at least one document.",
+    "tooManyFiles": "You picked too many files.",
+    "fileTooLarge": "A file is over the size limit, even compressed.",
+    "fileType": "Attach JPEG, PNG or PDF files."
   },
   "roles": {
     "OWNER": "Owner",

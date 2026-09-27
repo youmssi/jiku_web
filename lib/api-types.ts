@@ -276,6 +276,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/settings/verification/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["submit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/settings/verification/phone": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["requestPhoneCode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/settings/verification/phone/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["confirmPhone"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/settings/templates/{name}/preview": {
         parameters: {
             query?: never;
@@ -1117,7 +1165,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["submit"];
+        post: operations["submit_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1908,6 +1956,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/verifications/{id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["reject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/{id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["approve"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/trials": {
         parameters: {
             query?: never;
@@ -1997,7 +2077,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["reject"];
+        post: operations["reject_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2196,6 +2276,22 @@ export interface paths {
         patch: operations["setExclusion"];
         trace?: never;
     };
+    "/api/v1/settings/verification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/settings/templates": {
         parameters: {
             query?: never;
@@ -2219,7 +2315,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["overview"];
+        get: operations["overview_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3140,6 +3236,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/verifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["list_14"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/{id}/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["documents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/trials/stats": {
         parameters: {
             query?: never;
@@ -3163,7 +3291,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_14"];
+        get: operations["list_15"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3195,7 +3323,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_15"];
+        get: operations["list_16"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3211,7 +3339,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_16"];
+        get: operations["list_17"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3227,7 +3355,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_17"];
+        get: operations["list_18"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3275,7 +3403,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_18"];
+        get: operations["list_19"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3844,6 +3972,35 @@ export interface components {
             subscriptionPlans?: components["schemas"]["SubscriptionPlanOption"][];
             managedInDatabase?: boolean;
         };
+        VerificationRequestView: {
+            /** Format: uuid */
+            id?: string;
+            /** @enum {string} */
+            kind?: "PERSONAL" | "COMPANY";
+            /** @enum {string} */
+            status?: "PENDING" | "APPROVED" | "REJECTED";
+            legalName?: string;
+            documentType?: string;
+            /** Format: date-time */
+            submittedAt?: string;
+            /** Format: date-time */
+            decidedAt?: string | null;
+            rejectionReason?: string | null;
+        };
+        PhoneCodeRequest: {
+            phone: string;
+        };
+        PhoneCodeSent: {
+            /** Format: date-time */
+            expiresAt?: string;
+        };
+        PhoneConfirmRequest: {
+            code: string;
+        };
+        PhoneStatusView: {
+            phone?: string | null;
+            verified?: boolean;
+        };
         TemplatePreviewRequest: {
             channel?: string;
             body?: string | null;
@@ -4021,6 +4178,7 @@ export interface components {
             transferDeadline?: string | null;
             transferredTo?: string | null;
             questions?: components["schemas"]["RsvpQuestion"][];
+            organizerVerification?: string | null;
             payment?: components["schemas"]["RsvpPayment"] | null;
             /** Format: date-time */
             eventStart?: string | null;
@@ -4431,6 +4589,28 @@ export interface components {
             /** Format: date-time */
             activatedAt?: string | null;
         };
+        VerificationRejectRequest: {
+            reason: string;
+        };
+        AdminVerificationView: {
+            /** Format: uuid */
+            id?: string;
+            tenantId?: string;
+            tenantName?: string | null;
+            kind?: string;
+            status?: string;
+            legalName?: string;
+            documentType?: string;
+            registrationNumber?: string | null;
+            taxIdentifier?: string | null;
+            phone?: string | null;
+            /** Format: date-time */
+            submittedAt?: string;
+            /** Format: date-time */
+            decidedAt?: string | null;
+            rejectionReason?: string | null;
+            documentsAvailable?: boolean;
+        };
         GrantTrialRequest: {
             /** Format: uuid */
             tenantId: string | null;
@@ -4629,6 +4809,19 @@ export interface components {
         SetGuestExclusionRequest: {
             excluded?: boolean;
         };
+        VerificationLimits: {
+            /** Format: int32 */
+            maxFiles?: number;
+            /** Format: int32 */
+            maxFileBytes?: number;
+        };
+        VerificationOverview: {
+            verified?: boolean;
+            personal?: components["schemas"]["VerificationRequestView"] | null;
+            company?: components["schemas"]["VerificationRequestView"] | null;
+            phone?: components["schemas"]["PhoneStatusView"];
+            limits?: components["schemas"]["VerificationLimits"];
+        };
         TemplateSummary: {
             name?: string;
             label?: string;
@@ -4684,6 +4877,7 @@ export interface components {
             slots?: components["schemas"]["AppointmentSlotView"][];
             /** Format: int32 */
             clientsPerSlot?: number;
+            organizerVerification?: string | null;
         };
         AppointmentSlotView: {
             /** Format: date-time */
@@ -4707,6 +4901,7 @@ export interface components {
             bannerUrl?: string | null;
             primaryColor?: string;
             services?: components["schemas"]["PublicOrgServiceView"][];
+            verification?: string | null;
         };
         PublicOrgServiceView: {
             /** Format: uuid */
@@ -5130,6 +5325,12 @@ export interface components {
             organizationName?: string;
             email?: string;
             role?: string;
+        };
+        VerificationDocumentLink: {
+            /** Format: int32 */
+            position?: number;
+            contentType?: string;
+            url?: string;
         };
         AdminTrialPage: {
             entries?: components["schemas"]["AdminTrialView"][];
@@ -5882,6 +6083,87 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    submit: {
+        parameters: {
+            query: {
+                legalName: string;
+                documentType: string;
+                registrationNumber?: string;
+                taxIdentifier?: string;
+            };
+            header?: never;
+            path: {
+                kind: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    files: string[];
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["VerificationRequestView"];
+                };
+            };
+        };
+    };
+    requestPhoneCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PhoneCodeRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PhoneCodeSent"];
+                };
+            };
+        };
+    };
+    confirmPhone: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PhoneConfirmRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PhoneStatusView"];
+                };
             };
         };
     };
@@ -7331,7 +7613,7 @@ export interface operations {
             };
         };
     };
-    submit: {
+    submit_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -8717,6 +8999,54 @@ export interface operations {
             };
         };
     };
+    reject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerificationRejectRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminVerificationView"];
+                };
+            };
+        };
+    };
+    approve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminVerificationView"];
+                };
+            };
+        };
+    };
     list_9: {
         parameters: {
             query?: {
@@ -8866,7 +9196,7 @@ export interface operations {
             };
         };
     };
-    reject: {
+    reject_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -9282,6 +9612,26 @@ export interface operations {
             };
         };
     };
+    overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["VerificationOverview"];
+                };
+            };
+        };
+    };
     list_11: {
         parameters: {
             query?: never;
@@ -9302,7 +9652,7 @@ export interface operations {
             };
         };
     };
-    overview: {
+    overview_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -10633,6 +10983,51 @@ export interface operations {
             };
         };
     };
+    list_14: {
+        parameters: {
+            query?: {
+                status?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminVerificationView"][];
+                };
+            };
+        };
+    };
+    documents: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["VerificationDocumentLink"][];
+                };
+            };
+        };
+    };
     stats_3: {
         parameters: {
             query?: never;
@@ -10653,7 +11048,7 @@ export interface operations {
             };
         };
     };
-    list_14: {
+    list_15: {
         parameters: {
             query?: {
                 query?: string;
@@ -10701,7 +11096,7 @@ export interface operations {
             };
         };
     };
-    list_15: {
+    list_16: {
         parameters: {
             query?: {
                 status?: string;
@@ -10723,7 +11118,7 @@ export interface operations {
             };
         };
     };
-    list_16: {
+    list_17: {
         parameters: {
             query?: {
                 status?: string;
@@ -10749,7 +11144,7 @@ export interface operations {
             };
         };
     };
-    list_17: {
+    list_18: {
         parameters: {
             query?: {
                 kind?: string;
@@ -10816,7 +11211,7 @@ export interface operations {
             };
         };
     };
-    list_18: {
+    list_19: {
         parameters: {
             query?: {
                 action?: string;

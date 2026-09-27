@@ -204,6 +204,9 @@ export async function saveTicketTypeAction(
   if (response.status === 409) {
     return fail(t(typeId ? "ticketTypeLocked" : "ticketTypeDuplicate"));
   }
+  if (response.status === 403) {
+    return fail(t("ticketTypeVerifyFirst"));
+  }
   if (!response.ok) {
     reportApiError(response);
     return fail(t("ticketTypeFailed"));
