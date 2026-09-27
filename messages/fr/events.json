@@ -116,6 +116,7 @@
     "quorumFailed": "Le quorum n'a pas pu être enregistré. Réessayez.",
     "ticketTypeDuplicate": "Une catégorie porte déjà ce nom sur cet événement.",
     "ticketTypeLocked": "Des billets de cette catégorie sont confirmés : son prix ne peut plus changer.",
+    "ticketTypeVerifyFirst": "Vérifiez votre organisation dans Paramètres › Vérification avant de fixer un prix.",
     "ticketTypeFailed": "La catégorie n'a pas pu être enregistrée. Réessayez.",
     "ticketTypeInUse": "{count, plural, =0 {Des invités sont rattachés à cette catégorie} one {# invité est rattaché à cette catégorie} other {# invités sont rattachés à cette catégorie}} : déplacez-les avant de la supprimer.",
     "ticketTypeDeleteFailed": "La catégorie n'a pas pu être supprimée. Réessayez."

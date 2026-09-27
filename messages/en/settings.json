@@ -58,7 +58,98 @@
     "saving": "Saving…",
     "saved": "Payment methods saved.",
     "errors": {
-      "failed": "We couldn't save your payment methods. Please try again."
+      "failed": "We couldn't save your payment methods. Please try again.",
+      "verifyFirst": "Verify your organization before saving payment methods (Verification tab)."
+    }
+  },
+  "verification": {
+    "tab": "Verification",
+    "title": "Verify your organization",
+    "text": "Verification is required before you ask clients to pay: paid tickets, paid services or payment methods. It is recommended to every organization, because your guests see that it is verified. A personal or a company verification is enough.",
+    "status": {
+      "verifiedCompany": "Verified organization",
+      "verifiedPersonal": "Verified identity",
+      "verifiedText": "You can take payments from your clients, and your guests see the verification badge on your pages.",
+      "notVerified": "Organization not verified",
+      "notVerifiedText": "Until a verification is approved, you cannot set a price, make a service paid or save payment methods."
+    },
+    "phone": {
+      "title": "Phone number",
+      "text": "We send you a code by SMS to confirm the number you can be reached on. A personal verification needs it.",
+      "label": "Phone number",
+      "help": "In the international format, e.g. +224 620 00 00 00.",
+      "send": "Get a code",
+      "sending": "Sending…",
+      "sent": "Code sent by SMS.",
+      "codeLabel": "Code received",
+      "codeHelp": "Enter the 6 digits sent to {phone}.",
+      "confirm": "Confirm",
+      "confirming": "Checking…",
+      "confirmed": "Number confirmed.",
+      "changeNumber": "Use another number",
+      "verifiedAs": "Confirmed number: {phone}",
+      "change": "Change",
+      "cancel": "Cancel"
+    },
+    "personal": {
+      "title": "Personal verification",
+      "text": "For a person organizing in their own name: an identity document and a confirmed phone number.",
+      "needsPhone": "Confirm your phone number above first."
+    },
+    "company": {
+      "title": "Company verification",
+      "text": "For a company, an association or a venue: its registration papers."
+    },
+    "request": {
+      "status": {
+        "PENDING": "Under review",
+        "APPROVED": "Approved",
+        "REJECTED": "Refused"
+      },
+      "submittedOn": "Request in the name of {name}, sent on {date}.",
+      "pendingText": "The Jikū team is reviewing your documents, usually within two working days. You will be told the decision.",
+      "rejectedTitle": "Request refused",
+      "noReason": "No reason was given.",
+      "fullName": "Full name",
+      "companyName": "Company name",
+      "legalNameHelp": "Exactly as it appears on the documents.",
+      "documentType": "Document type",
+      "pickDocumentType": "Choose…",
+      "registrationNumber": "RCCM number",
+      "taxIdentifier": "Tax ID (optional)",
+      "files": "Documents",
+      "filesHelpPersonal": "Front and back of the document, {max} files at most, as JPEG, PNG or PDF. Photos over {size} MB are shrunk automatically.",
+      "filesHelpCompany": "{max} files at most, as JPEG, PNG or PDF, {size} MB each. Heavier photos are shrunk automatically.",
+      "privacy": "Your documents are kept in private storage, read only by the Jikū team for this verification, then deleted: at once if refused, or shortly after approval.",
+      "submit": "Send the request",
+      "submitting": "Sending…",
+      "submitted": "Request sent. We will tell you the decision."
+    },
+    "documentTypes": {
+      "NATIONAL_ID": "National identity card",
+      "PASSPORT": "Passport",
+      "DRIVING_LICENCE": "Driving licence",
+      "RESIDENCE_PERMIT": "Residence permit",
+      "RCCM_EXTRACT": "RCCM extract",
+      "ARTICLES": "Articles of association",
+      "TAX_CERTIFICATE": "Tax certificate (NIF)",
+      "OTHER": "Other official document"
+    },
+    "errors": {
+      "loadFailed": "We couldn't load your verification. Reload the page.",
+      "phoneInvalid": "Use the international format, e.g. +224620000000.",
+      "tooManyCodes": "Too many codes requested. Try again in an hour.",
+      "codeNotSent": "We couldn't send the code. Try again.",
+      "wrongCode": "This is not the code we sent.",
+      "requestCodeFirst": "Request a code first.",
+      "codeExpired": "This code has expired. Request a new one.",
+      "incomplete": "Check what you entered and try again.",
+      "phoneFirstOrPending": "Confirm your number, or wait for the decision on the request under review.",
+      "alreadyPending": "A request is already under review or approved.",
+      "fileTooLarge": "A file is over the size limit.",
+      "fileType": "Attach JPEG, PNG or PDF files.",
+      "storageUnavailable": "Document upload is unavailable for now. Try again later.",
+      "failed": "We couldn't send your request. Try again."
     }
   }
 }

@@ -116,6 +116,7 @@
     "quorumFailed": "The quorum could not be saved. Try again.",
     "ticketTypeDuplicate": "A category with this name already exists on this event.",
     "ticketTypeLocked": "Tickets in this category are confirmed: its price can no longer change.",
+    "ticketTypeVerifyFirst": "Verify your organization in Settings › Verification before setting a price.",
     "ticketTypeFailed": "The category could not be saved. Try again.",
     "ticketTypeInUse": "{count, plural, =0 {Guests are assigned to this category} one {# guest is assigned to this category} other {# guests are assigned to this category}}: move them before deleting it.",
     "ticketTypeDeleteFailed": "The category could not be deleted. Try again."

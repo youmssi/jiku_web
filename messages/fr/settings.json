@@ -58,7 +58,98 @@
     "saving": "Enregistrement…",
     "saved": "Moyens de paiement enregistrés.",
     "errors": {
-      "failed": "Impossible d'enregistrer vos moyens de paiement. Réessayez."
+      "failed": "Impossible d'enregistrer vos moyens de paiement. Réessayez.",
+      "verifyFirst": "Vérifiez votre organisation avant d'enregistrer des moyens de paiement (onglet Vérification)."
+    }
+  },
+  "verification": {
+    "tab": "Vérification",
+    "title": "Vérifier votre organisation",
+    "text": "La vérification est obligatoire pour demander un paiement à vos clients : billets payants, services payants ou moyens de paiement. Elle reste recommandée à toutes les organisations, car vos invités voient qu'elle est vérifiée. Une vérification personnelle ou une vérification d'entreprise suffit.",
+    "status": {
+      "verifiedCompany": "Organisation vérifiée",
+      "verifiedPersonal": "Identité vérifiée",
+      "verifiedText": "Vous pouvez encaisser vos clients, et vos invités voient le badge de vérification sur vos pages.",
+      "notVerified": "Organisation non vérifiée",
+      "notVerifiedText": "Tant qu'aucune vérification n'est approuvée, vous ne pouvez ni fixer un prix, ni rendre un service payant, ni enregistrer des moyens de paiement."
+    },
+    "phone": {
+      "title": "Numéro de téléphone",
+      "text": "Nous vous envoyons un code par SMS pour confirmer le numéro sur lequel vous joindre. Il est nécessaire pour la vérification personnelle.",
+      "label": "Numéro de téléphone",
+      "help": "Au format international, par ex. +224 620 00 00 00.",
+      "send": "Recevoir un code",
+      "sending": "Envoi…",
+      "sent": "Code envoyé par SMS.",
+      "codeLabel": "Code reçu",
+      "codeHelp": "Saisissez les 6 chiffres envoyés au {phone}.",
+      "confirm": "Confirmer",
+      "confirming": "Vérification…",
+      "confirmed": "Numéro confirmé.",
+      "changeNumber": "Changer de numéro",
+      "verifiedAs": "Numéro confirmé : {phone}",
+      "change": "Changer",
+      "cancel": "Annuler"
+    },
+    "personal": {
+      "title": "Vérification personnelle",
+      "text": "Pour une personne qui organise en son nom : une pièce d'identité et un numéro de téléphone confirmé.",
+      "needsPhone": "Confirmez d'abord votre numéro de téléphone ci-dessus."
+    },
+    "company": {
+      "title": "Vérification d'entreprise",
+      "text": "Pour une société, une association ou un établissement : ses documents d'immatriculation."
+    },
+    "request": {
+      "status": {
+        "PENDING": "En cours d'examen",
+        "APPROVED": "Approuvée",
+        "REJECTED": "Refusée"
+      },
+      "submittedOn": "Demande au nom de {name}, envoyée le {date}.",
+      "pendingText": "L'équipe Jikū examine vos documents, en général sous deux jours ouvrés. Vous serez prévenu de la décision.",
+      "rejectedTitle": "Demande refusée",
+      "noReason": "Aucun motif n'a été indiqué.",
+      "fullName": "Nom complet",
+      "companyName": "Raison sociale",
+      "legalNameHelp": "Exactement comme il figure sur les documents.",
+      "documentType": "Type de document",
+      "pickDocumentType": "Choisissez…",
+      "registrationNumber": "Numéro RCCM",
+      "taxIdentifier": "NIF (facultatif)",
+      "files": "Documents",
+      "filesHelpPersonal": "Recto et verso de la pièce, {max} fichiers au plus, en JPEG, PNG ou PDF. Les photos de plus de {size} Mo sont réduites automatiquement.",
+      "filesHelpCompany": "{max} fichiers au plus, en JPEG, PNG ou PDF, de {size} Mo chacun. Les photos plus lourdes sont réduites automatiquement.",
+      "privacy": "Vos documents sont stockés dans un espace privé, consultés uniquement par l'équipe Jikū pour cette vérification, puis supprimés : dès un refus, ou peu après l'approbation.",
+      "submit": "Envoyer la demande",
+      "submitting": "Envoi…",
+      "submitted": "Demande envoyée. Nous vous préviendrons de la décision."
+    },
+    "documentTypes": {
+      "NATIONAL_ID": "Carte d'identité nationale",
+      "PASSPORT": "Passeport",
+      "DRIVING_LICENCE": "Permis de conduire",
+      "RESIDENCE_PERMIT": "Carte de séjour",
+      "RCCM_EXTRACT": "Extrait RCCM",
+      "ARTICLES": "Statuts",
+      "TAX_CERTIFICATE": "Attestation fiscale (NIF)",
+      "OTHER": "Autre document officiel"
+    },
+    "errors": {
+      "loadFailed": "Impossible de charger l'état de votre vérification. Rechargez la page.",
+      "phoneInvalid": "Utilisez le format international, par ex. +224620000000.",
+      "tooManyCodes": "Trop de codes demandés. Réessayez dans une heure.",
+      "codeNotSent": "Impossible d'envoyer le code. Réessayez.",
+      "wrongCode": "Ce n'est pas le code envoyé.",
+      "requestCodeFirst": "Demandez d'abord un code.",
+      "codeExpired": "Ce code a expiré. Demandez-en un nouveau.",
+      "incomplete": "Vérifiez les informations saisies et réessayez.",
+      "phoneFirstOrPending": "Confirmez votre numéro, ou attendez la décision sur la demande en cours.",
+      "alreadyPending": "Une demande est déjà en cours d'examen ou approuvée.",
+      "fileTooLarge": "Un fichier dépasse la taille autorisée.",
+      "fileType": "Joignez des fichiers JPEG, PNG ou PDF.",
+      "storageUnavailable": "L'envoi de documents est momentanément indisponible. Réessayez plus tard.",
+      "failed": "Impossible d'envoyer votre demande. Réessayez."
     }
   }
 }
