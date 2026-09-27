@@ -46,6 +46,7 @@ const nextConfig: NextConfig = {
         ],
       },
       noindexRoute("/invitation/:path*"),
+      noindexRoute("/orders/:path*"),
       noindexRoute("/checkin/:path*"),
       noindexRoute("/line/:path*"),
       noindexRoute("/admin/:path*"),
