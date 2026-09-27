@@ -2,7 +2,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { publicFetch } from "@/lib/api-server";
 import { invitationRoute, PRIVACY_ROUTE, ticketRoute } from "@/lib/constants";
-import { formatEventDay, formatEventTime, zoneCity } from "@/lib/datetime";
+import { zoneCity } from "@/lib/datetime";
+import { fullWhen, shortDay, shortTime } from "@/lib/short-dates";
 import { routing } from "@/i18n/routing";
 import { TicketCard } from "@/components/modules/invitation/ticket-card";
 import { TicketActions } from "@/components/modules/invitation/ticket-actions";
@@ -81,16 +82,18 @@ export async function TicketView({ params }: { params: Promise<{ token: string }
         guestName={rsvp.guestName}
         categoryName={rsvp.categoryName}
         companions={rsvp.companions}
-        day={start && zone ? formatEventDay(start, zone, locale) : null}
-        time={
+        start={start}
+        when={
           start && zone
-            ? [start, rsvp.eventEnd]
+            ? `${shortDay(start, zone, locale)} · ${[start, rsvp.eventEnd]
                 .filter((instant): instant is string => Boolean(instant))
-                .map((instant) => formatEventTime(instant, zone, locale))
-                .join(" – ")
+                .map((instant) => shortTime(instant, zone, locale))
+                .join(" – ")}`
             : null
         }
-        zone={zone ? zoneCity(zone) : null}
+        whenFull={start && zone ? fullWhen(start, zone, locale) : null}
+        timeZone={zone}
+        zoneCity={zone ? zoneCity(zone) : null}
         location={rsvp.eventLocation}
         cancelled={cancelled}
       />
@@ -101,7 +104,6 @@ export async function TicketView({ params }: { params: Promise<{ token: string }
       ) : null}
       <VerifiedBadge kind={rsvp.organizerVerification} className="mt-4 print:hidden" />
       <TicketActions calendarUrl={calendarUrl} />
-      <p className="mt-3 text-center text-xs text-muted-foreground print:hidden">{t("brightness")}</p>
       <div className="w-full max-w-sm print:hidden">
         <DataDeletion token={token} erased={rsvp.erased} />
         <p className="mt-4 text-xs text-muted-foreground">

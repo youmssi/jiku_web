@@ -70,10 +70,7 @@ export function SharePanel({ code, card }: { code: string; card: CardDetails }) 
   return (
     <div className="grid gap-6 rounded-xl border p-4 md:grid-cols-[1fr_auto]">
       <div className="flex min-w-0 flex-col gap-3">
-        <div>
-          <p className="text-sm font-medium">{t("title")}</p>
-          <p className="mt-1 text-sm text-muted-foreground">{t("text")}</p>
-        </div>
+        <p className="text-sm font-medium">{t("title")}</p>
         <div className="flex gap-2">
           <Input readOnly value={url} aria-label={t("link")} className="font-mono text-xs" />
           <Button type="button" variant="outline" size="icon" onClick={copy} aria-label={t("copy")}>

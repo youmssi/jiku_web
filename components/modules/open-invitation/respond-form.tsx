@@ -8,7 +8,7 @@ import { Check, Minus, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { FormFieldError } from "@/components/shared";
@@ -122,7 +122,6 @@ export function RespondForm({ invitation }: { invitation: PublicOpenInvitation }
                 <Plus aria-hidden />
               </Button>
             </div>
-            <FieldDescription>{t("companionsHelp", { max: invitation.maxCompanions })}</FieldDescription>
           </Field>
         ) : null}
 
@@ -152,7 +151,6 @@ export function RespondForm({ invitation }: { invitation: PublicOpenInvitation }
                 placeholder="+224 620 00 00 00"
                 aria-invalid={fieldState.invalid}
               />
-              <FieldDescription>{t("phoneHelp")}</FieldDescription>
               <FormFieldError error={fieldState.error} />
             </Field>
           )}

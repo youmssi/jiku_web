@@ -433,7 +433,7 @@
   },
   "openInvitation": {
     "title": "Open invitation",
-    "text": "Share a card in your WhatsApp groups, with no guest list: everyone answers in one tap and gets a ticket if they come.",
+    "text": "Share a card: every “yes” gets a ticket.",
     "loadFailedTitle": "Invitation unavailable",
     "loadFailed": "We could not load the open invitation. Try again in a moment.",
     "closedTitle": "Answers are closed",
@@ -456,7 +456,6 @@
     },
     "share": {
       "title": "Your card",
-      "text": "Post it in your WhatsApp groups or share its link anywhere else.",
       "link": "Card link",
       "copy": "Copy the link",
       "open": "Open the card",
@@ -465,8 +464,8 @@
       "download": "Download the card",
       "message": "{event}\n{when}\nAnswer here: {url}",
       "cardAnswer": "Scan to answer",
-      "cardAnswerBy": "Answer by {date}",
-      "cardFooter": "Invitation made with Jikū",
+      "cardAnswerBy": "Until {date}",
+      "cardFooter": "Made with Jikū",
       "fileName": "Invitation {event}.png"
     },
     "stats": {
@@ -504,17 +503,18 @@
     },
     "settings": {
       "title": "Settings",
+      "moreInfo": "More information",
       "enabled": "Take answers",
-      "enabledHelp": "Turn off to close the card at any time.",
+      "enabledHelp": "Turn off to close the card.",
       "welcome": "Welcome message",
       "welcomePlaceholder": "Come celebrate my 30th birthday with me!",
       "companions": "Companions per answer",
-      "companionsHelp": "How many people each person may bring, at most {max}.",
+      "companionsHelp": "At most {max}.",
       "closesAt": "Deadline to answer",
-      "closesAtHelp": "Leave empty to take answers until the event.",
+      "closesAtHelp": "Empty: answers open until the event.",
       "notifyOnCancel": "Tell people if you cancel",
-      "notifyOnCancelHelp": "If you cancel the event, people who answered “yes” or “maybe” get a WhatsApp message.",
-      "notifyOnCancelIncluded": "Included in your plan: people who answered “yes” or “maybe” get a WhatsApp message if you cancel.",
+      "notifyOnCancelHelp": "“Yes” and “maybe” answers get a WhatsApp message if you cancel.",
+      "notifyOnCancelIncluded": "Included in your plan.",
       "save": "Save",
       "saved": "Settings saved."
     },
