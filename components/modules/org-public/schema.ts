@@ -12,4 +12,6 @@ export interface PublicOrgProfile {
   bannerUrl: string | null;
   primaryColor: string;
   services: PublicOrgService[];
+  /** The organization's approved verification (`COMPANY`, `PERSONAL`), or null. */
+  verification: string | null;
 }

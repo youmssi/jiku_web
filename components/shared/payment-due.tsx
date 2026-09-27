@@ -10,6 +10,8 @@ interface PaymentDueProps {
   amountMinor: number;
   currency: string;
   methods: PaymentMethods | null;
+  /** The organizer's approved verification; without one the client is warned before paying. */
+  organizerVerification?: string | null;
 }
 
 /**
@@ -18,7 +20,7 @@ interface PaymentDueProps {
  * to, and the organization's payment link (JIKU-109). Nothing shows when the
  * ticket is free; a paid ticket says so.
  */
-export async function PaymentDue({ status, amountMinor, currency, methods }: PaymentDueProps) {
+export async function PaymentDue({ status, amountMinor, currency, methods, organizerVerification }: PaymentDueProps) {
   if (status === "NOT_REQUIRED") return null;
   const [t, locale] = await Promise.all([getTranslations("guest.payment"), getLocale()]);
   const amount = formatAmount(amountMinor, currency, locale);
@@ -36,6 +38,11 @@ export async function PaymentDue({ status, amountMinor, currency, methods }: Pay
   return (
     <div className="rounded-lg border px-4 py-3 text-left text-sm">
       <p className="font-medium">{status === "DUE_AFTER_SERVICE" ? t("dueAfter", { amount }) : t("due", { amount })}</p>
+      {organizerVerification === null ? (
+        <p className="mt-2 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-900 dark:bg-amber-950 dark:text-amber-200">
+          {t("unverified")}
+        </p>
+      ) : null}
       {numbers.length > 0 ? (
         <div className="mt-2 space-y-1">
           {methods?.payeeName ? <p className="text-muted-foreground">{t("payee", { name: methods.payeeName })}</p> : null}

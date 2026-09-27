@@ -1,4 +1,5 @@
 import { Link } from "@/i18n/navigation";
+import { VerifiedBadge } from "@/components/shared";
 import { ArrowRight, CalendarDays, Sparkles } from "lucide-react";
 import {
   Empty,
@@ -111,6 +112,7 @@ export function OrgPublicView({ profile }: OrgPublicViewProps) {
             {profile.organizationName}
             <Sparkles className="size-4 text-muted-foreground" aria-hidden />
           </h1>
+          <VerifiedBadge kind={profile.verification} className="mt-2" />
           <p className="mt-1 text-sm text-muted-foreground">
             Book an appointment in a few taps — no account needed.
           </p>

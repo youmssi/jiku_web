@@ -4,7 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { publicFetch } from "@/lib/api-server";
 import { PRIVACY_ROUTE } from "@/lib/constants";
 import { formatEventDay, formatEventTime } from "@/lib/datetime";
-import { PaymentDue, StateMessage } from "@/components/shared";
+import { PaymentDue, StateMessage, VerifiedBadge } from "@/components/shared";
 import { RsvpActions } from "@/components/modules/invitation/rsvp-actions";
 import { DataDeletion } from "@/components/modules/invitation/data-deletion";
 import type { RsvpView } from "@/components/modules/invitation/schema";
@@ -43,6 +43,7 @@ export async function InvitationView({ params }: { params: Promise<{ token: stri
         <p className="text-sm text-muted-foreground">
           {t("invites", { organizer: rsvp.organizerName })}
         </p>
+        <VerifiedBadge kind={rsvp.organizerVerification} className="mt-2" />
         <h1 className="mt-1 text-balance text-2xl font-semibold">{rsvp.eventName}</h1>
         <div className="mt-3 space-y-1.5 text-sm text-muted-foreground">
           {when ? (
@@ -61,7 +62,7 @@ export async function InvitationView({ params }: { params: Promise<{ token: stri
         <p className="mt-4 text-sm">{t("greeting", { name: rsvp.guestName })}</p>
         {rsvp.payment && !cancelled ? (
           <div className="mt-4">
-            <PaymentDue {...rsvp.payment} />
+            <PaymentDue {...rsvp.payment} organizerVerification={rsvp.organizerVerification} />
           </div>
         ) : null}
         {cancelled ? (

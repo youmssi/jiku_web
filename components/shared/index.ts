@@ -12,3 +12,4 @@ export {SupportButton} from "./support-button";
 export {TrackedAnchor, TrackedLink} from "./tracked-link";
 export {UmamiScript} from "./umami-script";
 export {ViewTracker} from "./view-tracker";
+export {VerifiedBadge} from "./verified-badge";
