@@ -12,6 +12,7 @@ export {
   loadRatingSummary,
   loadTenantDirectory,
   loadTrials,
+  loadVerifications,
   loadWhatsApp,
   requireAdminSession,
 } from "./admin.queries";

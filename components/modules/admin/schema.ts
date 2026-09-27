@@ -2,6 +2,7 @@ import type { components } from "@/lib/api-types";
 // CONTRACT — types mirroring the backend platform-admin API (JIKU-40/41/42/43).
 
 import { z } from "zod";
+import type { Schema } from "@/lib/api-contract";
 
 export interface TenantDirectoryEntry {
   id: string;
@@ -316,3 +317,8 @@ export interface FeedbackPage {
 
 export const FEEDBACK_STATUSES = ["NEW", "IN_PROGRESS", "ANSWERED", "CLOSED"] as const;
 export type FeedbackStatus = (typeof FEEDBACK_STATUSES)[number];
+
+// ─── Organization verification (JIKU-175) ────────────────────────────────────
+
+export type AdminVerification = Schema<"AdminVerificationView">;
+export type VerificationDocumentLink = Schema<"VerificationDocumentLink">;

@@ -16,7 +16,8 @@
     "whatsapp": "WhatsApp",
     "prospects": "Prospects",
     "feedback": "Retours",
-    "diagnostics": "Diagnostic"
+    "diagnostics": "Diagnostic",
+    "verifications": "Vérifications"
   },
   "pages": {
     "tenants": "Organisations",
@@ -29,7 +30,8 @@
     "prospects": "Prospects",
     "feedback": "Retours",
     "diagnostics": "Diagnostic",
-    "billingLoadFailed": "Impossible de charger les réglages de facturation."
+    "billingLoadFailed": "Impossible de charger les réglages de facturation.",
+    "verifications": "Vérifications d'organisations"
   },
   "login": {
     "metaTitle": "Jikū - Administration",
@@ -57,7 +59,8 @@
     "REJECTED": "Rejeté",
     "CANCELLED": "Annulé",
     "REFUNDED": "Remboursé",
-    "DUPLICATE": "Doublon"
+    "DUPLICATE": "Doublon",
+    "APPROVED": "Approuvée"
   },
   "trialStatus": {
     "ACTIVE": "En cours",
@@ -334,5 +337,42 @@
     "gnf": "GNF",
     "fcfa": "FCFA",
     "usdCents": "USD (centimes)"
+  },
+  "verifications": {
+    "filters": {
+      "PENDING": "À examiner",
+      "APPROVED": "Approuvées",
+      "REJECTED": "Refusées"
+    },
+    "kinds": {
+      "PERSONAL": "Vérification personnelle",
+      "COMPANY": "Vérification d'entreprise"
+    },
+    "organization": "Organisation",
+    "identity": "Identité déclarée",
+    "submitted": "Envoyée le",
+    "rccm": "RCCM : {value}",
+    "nif": "NIF : {value}",
+    "phone": "Téléphone confirmé : {value}",
+    "documents": "Documents",
+    "opening": "Ouverture…",
+    "documentsTitle": "Documents de {name}",
+    "documentsText": "Chaque lien s'ouvre dans un nouvel onglet et expire au bout de quelques minutes. L'ouverture est inscrite au journal d'audit.",
+    "document": "Document {position} ({type})",
+    "image": "image",
+    "documentsGone": "Les documents de cette demande ont été supprimés.",
+    "approve": "Approuver",
+    "approveTitle": "Approuver cette vérification ?",
+    "approveText": "{name} ({organization}) pourra encaisser ses clients, et ses invités verront le badge de vérification. Vérifiez que les documents sont lisibles et correspondent au nom déclaré.",
+    "approved": "Vérification approuvée.",
+    "cancel": "Annuler",
+    "reject": "Refuser",
+    "rejectTitle": "Refuser cette vérification",
+    "rejectText": "L'organisation lira ce motif et pourra envoyer une nouvelle demande. Ses documents sont supprimés dès le refus.",
+    "reason": "Motif du refus",
+    "emptyTitle": "Aucune demande",
+    "emptyText": "Aucune demande de vérification dans cet état.",
+    "documentsFailed": "Impossible d'ouvrir les documents.",
+    "storageUnavailable": "Le stockage des documents est indisponible."
   }
 }

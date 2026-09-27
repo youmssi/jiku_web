@@ -7,6 +7,7 @@ import {
   MessageSquareHeart,
   ScrollText,
   Settings2,
+  ShieldCheck,
   Timer,
   UserPlus,
 } from "lucide-react";
@@ -71,6 +72,12 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
   {
     labelKey: "desk",
     items: [
+      {
+        labelKey: "verifications",
+        href: ADMIN_ROUTES.VERIFICATIONS,
+        icon: ShieldCheck,
+        match: (pathname) => pathname === ADMIN_ROUTES.VERIFICATIONS,
+      },
       {
         labelKey: "audit",
         href: ADMIN_ROUTES.AUDIT,
