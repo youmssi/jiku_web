@@ -194,7 +194,8 @@
       "ENDED": "This event is over.",
       "NOTHING_FOR_SALE": "No tickets are on sale for this event.",
       "ORGANIZER_NOT_VERIFIED": "Sales are not open yet: the organizer must first have their identity verified.",
-      "NO_PAYMENT_METHOD": "Sales are not open yet: the organizer has not said how to pay them."
+      "NO_PAYMENT_METHOD": "Sales are not open yet: the organizer has not said how to pay them.",
+      "PAUSED": "Tickets will be on sale again very soon. Come back a little later."
     },
     "errors": {
       "invalid": "Check what you entered.",
@@ -203,7 +204,8 @@
       "tooMany": "Too many orders from this connection. Try again in a few minutes.",
       "cannotDeclare": "This payment can no longer be declared: the order has expired or was already handled.",
       "failed": "We couldn't process your request. Try again."
-    }
+    },
+    "pausedLabel": "Available again soon"
   },
   "order": {
     "orderOf": "Your order · {organizer}",

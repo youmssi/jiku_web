@@ -393,5 +393,42 @@
       "alreadyDecided": "This order was already handled or has expired.",
       "failed": "We couldn't process this order. Try again."
     }
+  },
+  "commission": {
+    "title": "Jikū commission ({rate}%)",
+    "text": "Each ticket sold costs your organization this commission. It is paid ahead, by batches of at most {size} tickets of a category; a category pauses when its batches are used up.",
+    "eventDay": "It is the event's day: the sale never stops. Tickets sold beyond your batches will be settled after the event.",
+    "owed": "To settle: {amount}. It is added to your next batch payment.",
+    "credit": "Credit available: {amount}. It is deducted from your next commission payments.",
+    "paused": "Paused",
+    "pendingPayment": "Payment pending",
+    "row": "{sold, plural, =0 {No ticket sold} one {# ticket sold} other {# tickets sold}} · {covered, plural, =0 {no place covered} one {# place covered} other {# places covered}} · {commission} per ticket",
+    "allCovered": "Every place is covered",
+    "openBatch": "{count, plural, one {Cover # ticket} other {Cover # tickets}}",
+    "dialogTitle": "New batch: {label}",
+    "dialogText": "The batch covers this category's next tickets. What is not used by the end of the event becomes a credit.",
+    "loading": "Working out the amount…",
+    "batch": "{count, plural, one {# ticket} other {# tickets}} × {commission}",
+    "owedLine": "Commission to settle",
+    "creditLine": "Credit deducted",
+    "total": "Total",
+    "choices": {
+      "FREE": "First batch free",
+      "CREDIT": "On credit: settled with your next payment",
+      "COVERED": "Covered by your credit: nothing to pay",
+      "ONLINE": "Pay {amount} online (Orange Money, MTN MoMo, card)",
+      "TRANSFER": "Pay {amount} by transfer, confirmed by our team"
+    },
+    "batchLabel": "{count, plural, one {batch of # ticket} other {batch of # tickets}} ({label})",
+    "opened": "{count, plural, one {Batch opened: # ticket on sale.} other {Batch opened: # tickets on sale.}}",
+    "confirm": "Open the batch",
+    "working": "Working…",
+    "cancel": "Cancel",
+    "close": "Close",
+    "errors": {
+      "failed": "We couldn't process the batch. Try again.",
+      "notAvailable": "This option is no longer available; reload the page.",
+      "provider": "Online payment is unavailable right now. Try again or pay by transfer."
+    }
   }
 }

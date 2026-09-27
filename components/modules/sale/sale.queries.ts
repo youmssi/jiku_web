@@ -2,7 +2,7 @@ import "server-only";
 
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { reportApiError } from "@/lib/action-result";
-import type { Order, OrganizerOrder, PublicSale, SalesSettings } from "./schema";
+import type { CommissionOverview, Order, OrganizerOrder, PublicSale, SalesSettings } from "./schema";
 
 /** The event's sale page; null for an unknown event or organization (a 404, never a degraded page). */
 export async function fetchPublicSale(username: string, eventId: string): Promise<PublicSale | null> {
@@ -52,4 +52,14 @@ export async function loadSalesSettings(): Promise<SalesSettings | null> {
     return null;
   }
   return (await response.json()) as SalesSettings;
+}
+
+/** The commission side of the event's sale; null when the read fails or the organizer is not a manager. */
+export async function loadCommission(eventId: string): Promise<CommissionOverview | null> {
+  const response = await serverFetch(`/events/${encodeURIComponent(eventId)}/commission`);
+  if (!response.ok) {
+    if (response.status >= 500) reportApiError(response, "sale");
+    return null;
+  }
+  return (await response.json()) as CommissionOverview;
 }

@@ -44,3 +44,11 @@ export function holdSchema(min: number, max: number) {
 }
 
 export type HoldInput = z.infer<ReturnType<typeof holdSchema>>;
+
+// ─── Commission on tickets sold (JIKU-178) ───────────────────────────────────
+
+export type CommissionOverview = Schema<"CommissionOverview">;
+export type CommissionCategory = Schema<"CommissionCategoryView">;
+export type CommissionQuote = Schema<"CommissionQuote">;
+export type OpenedBatch = Schema<"OpenedBatchView">;
+export type BatchMode = "FREE" | "CREDIT" | "PAY";

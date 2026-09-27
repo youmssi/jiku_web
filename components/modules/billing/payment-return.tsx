@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
 import { formatAmount } from "@/lib/currency";
-import { billingRoute, ROUTES } from "@/lib/constants";
+import { billingRoute, eventOrdersRoute, ROUTES } from "@/lib/constants";
 import { usePaymentStatus } from "@/components/modules/billing/usePaymentStatus";
 import type { PaymentStatusView } from "@/components/modules/billing/schema";
 
@@ -20,7 +20,12 @@ export function PaymentReturn({ initial }: { initial: PaymentStatusView }) {
   const locale = useLocale();
   const { payment, timedOut } = usePaymentStatus(initial.paymentId, initial);
   const state = payment.status === "PENDING" ? (timedOut ? "late" : "pending") : payment.status === "SUCCEEDED" ? "paid" : "failed";
-  const back = payment.kind === "TIER" && payment.eventId ? billingRoute(payment.eventId) : ROUTES.BILLING;
+  const back =
+    payment.kind === "TIER" && payment.eventId
+      ? billingRoute(payment.eventId)
+      : payment.kind === "COMMISSION" && payment.eventId
+        ? eventOrdersRoute(payment.eventId)
+        : ROUTES.BILLING;
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 items-center px-4 py-12">
@@ -46,7 +51,7 @@ export function PaymentReturn({ initial }: { initial: PaymentStatusView }) {
 
 type ReturnState = "pending" | "late" | "paid" | "failed";
 
-const KINDS = ["TIER", "SUBSCRIPTION", "PACK", "PACK_EXTRA", "WHATSAPP_NUMBER"] as const;
+const KINDS = ["TIER", "SUBSCRIPTION", "PACK", "PACK_EXTRA", "WHATSAPP_NUMBER", "COMMISSION"] as const;
 type PaymentKind = (typeof KINDS)[number];
 
 function kindKey(kind: string): PaymentKind {
