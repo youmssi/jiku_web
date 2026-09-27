@@ -4,55 +4,23 @@
  */
 
 export interface paths {
-    "/api/v1/settings/vocabulary": {
+    "/api/v1/admin/agreements": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["vocabularyList"];
-        put: operations["vocabularySave"];
-        post?: never;
+        get: operations["adminAgreementList"];
+        put?: never;
+        post: operations["adminAgreementCreate"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/settings/templates/{name}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["templatesDetail"];
-        put: operations["templatesSave"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/settings/sales": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["salesSettingsGet"];
-        put: operations["salesSettingsUpdate"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/settings/providers/whatsapp": {
+    "/api/v1/admin/agreements/{id}/interrupt": {
         parameters: {
             query?: never;
             header?: never;
@@ -60,15 +28,15 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["providerSettingsUpdateWhatsApp"];
-        post?: never;
+        put?: never;
+        post: operations["adminAgreementInterrupt"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/settings/providers/email": {
+    "/api/v1/admin/agreements/{id}/renew": {
         parameters: {
             query?: never;
             header?: never;
@@ -76,23 +44,23 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["providerSettingsUpdateEmail"];
-        post?: never;
+        put?: never;
+        post: operations["adminAgreementRenew"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/settings/payment-methods": {
+    "/api/v1/admin/audit": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["paymentMethodsGet"];
-        put: operations["paymentMethodsUpdate"];
+        get: operations["adminAuditList"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -100,23 +68,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/services/{id}/configuration": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["serviceConfiguration"];
-        put: operations["serviceUpdateConfiguration"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/orgs/username": {
+    "/api/v1/admin/auth/login": {
         parameters: {
             query?: never;
             header?: never;
@@ -124,15 +76,15 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["orgUpdateUsername"];
-        post?: never;
+        put?: never;
+        post: operations["adminAuthLogin"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/operators/{operatorId}": {
+    "/api/v1/admin/auth/refresh": {
         parameters: {
             query?: never;
             header?: never;
@@ -140,7 +92,23 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["operatorUpdate"];
+        put?: never;
+        post: operations["adminAuthRefresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/billing/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminBillingSettingsSettings"];
+        put: operations["adminBillingSettingsUpdate"];
         post?: never;
         delete?: never;
         options?: never;
@@ -148,7 +116,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/members/{userId}/role": {
+    "/api/v1/admin/billing/tiers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminBillingCatalogCatalog"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/diagnostics/error": {
         parameters: {
             query?: never;
             header?: never;
@@ -156,7 +140,23 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["memberChangeRole"];
+        put?: never;
+        post: operations["adminDiagnosticsTriggerError"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminFeedbackList"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -164,15 +164,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/legal-identity": {
+    "/api/v1/admin/feedback/ratings": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["legalIdentityGet"];
-        put: operations["legalIdentityUpdate"];
+        get: operations["adminFeedbackRatings"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -180,23 +180,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["eventGet"];
-        put: operations["eventUpdate"];
-        post?: never;
-        delete: operations["eventDelete"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{id}/quorum": {
+    "/api/v1/admin/feedback/{id}/status": {
         parameters: {
             query?: never;
             header?: never;
@@ -204,7 +188,23 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["eventSetQuorum"];
+        put?: never;
+        post: operations["adminFeedbackUpdateStatus"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminPaymentList"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -212,7 +212,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/ticket-types/{typeId}": {
+    "/api/v1/admin/payments/{id}/confirm": {
         parameters: {
             query?: never;
             header?: never;
@@ -220,23 +220,263 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["ticketTypeUpdate"];
-        post?: never;
-        delete: operations["ticketTypeDelete"];
+        put?: never;
+        post: operations["adminPaymentConfirm"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/branding": {
+    "/api/v1/admin/payments/{id}/reject": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["brandingGet"];
-        put: operations["brandingUpdate"];
+        get?: never;
+        put?: never;
+        post: operations["adminPaymentReject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/prospects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminProspectLeadList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/prospects/{id}/contacted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminProspectLeadMarkContacted"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/tenants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminTenantList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/tenants/{id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminTenantEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/tenants/{id}/reactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminTenantReactivate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/tenants/{id}/suspend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminTenantSuspend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/trials": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminTrialList"];
+        put?: never;
+        post: operations["adminTrialGrant"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/trials/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminTrialStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/trials/{id}/end": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminTrialEnd"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminVerificationList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/{id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminVerificationApprove"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/{id}/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminVerificationDocuments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/{id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminVerificationReject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/whatsapp/content-override": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminWhatsAppContentOverride"];
+        put?: never;
+        post: operations["adminWhatsAppSetContentOverride"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/whatsapp/pricing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminWhatsAppPricing"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -260,15 +500,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/billing/settings": {
+    "/api/v1/appointments/{token}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["adminBillingSettingsSettings"];
-        put: operations["adminBillingSettingsUpdate"];
+        get: operations["appointmentPublicView"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -276,1383 +516,39 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/whatsapp/webhook": {
+    "/api/v1/appointments/{token}/book": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["whatsAppWebhookVerifySubscription"];
-        put?: never;
-        post: operations["whatsAppWebhookReceiveMessages"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/settings/verification/{kind}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["verificationSubmit"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/settings/verification/phone": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["verificationRequestPhoneCode"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/settings/verification/phone/confirm": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["verificationConfirmPhone"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/settings/templates/{name}/preview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["templatesPreview"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/settings/providers/{channel}/test": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["providerSettingsTestSend"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/settings/providers/whatsapp/embedded-signup": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["providerSettingsEmbeddedSignupConfig"];
-        put?: never;
-        post: operations["providerSettingsCompleteEmbeddedSignup"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["serviceList"];
-        put?: never;
-        post: operations["serviceCreate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/staff-links": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["serviceStaffList"];
-        put?: never;
-        post: operations["serviceStaffCreate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line/walk-in": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["serviceDayLineWalkIn"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/present": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["serviceDayLinePresent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/paid": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["serviceDayLineMarkPaid"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/no-show": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["serviceDayLineNoShow"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/finish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["serviceDayLineFinish"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/call": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["serviceDayLineCall"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/arrive": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["serviceDayLineArrive"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line/requests/{requestId}/reject": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["serviceDayLineRejectRequest"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line/requests/{requestId}/accept": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["serviceDayLineAcceptRequest"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line/next": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["serviceDayLineNext"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{id}/requirements": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["serviceRequirements"];
-        put?: never;
-        post: operations["serviceAddRequirement"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/rsvp/{token}/transfer": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["rsvpTransfer"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/rsvp/{token}/erase": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["rsvpErase"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/rsvp/{token}/decline": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["rsvpDecline"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/rsvp/{token}/confirm": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["rsvpConfirm"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/resources": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["resourceList"];
-        put?: never;
-        post: operations["resourceCreate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/resources/{id}/unavailability": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["resourceUnavailability"];
-        put?: never;
-        post: operations["resourceAddUnavailability"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/resources/{id}/availability": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["resourceAvailability"];
-        put?: never;
-        post: operations["resourceAddAvailability"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/r/{code}/line": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["shortLinkPublicTakeTicket"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/r/{code}/book": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["shortLinkPublicBook"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/public/orgs/{username}/events/{eventId}/orders": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["publicTicketOrderPlace"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/prospects": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["prospectLeadRegister"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/orgs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["orgCreate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/orders/{token}/declare": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["publicTicketOrderDeclare"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operators": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["operatorTeam"];
-        put?: never;
-        post: operations["operatorCreate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operators/{operatorId}/revoke": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["operatorRevoke"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/notifications/email-feedback": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["emailFeedbackReceive"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/notifications/email-feedback/resend": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["resendEmailFeedbackReceive"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/members/invitations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["memberInvitations"];
-        put?: never;
-        post: operations["memberInvite"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}/walk-in": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffWalkIn"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}/walk-in": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffWalkIn_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}/tickets/{ticketCode}/present": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffPresent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/present": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffPresent_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}/tickets/{ticketCode}/paid": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffMarkPaid"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/paid": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffMarkPaid_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/no-show": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffNoShow_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}/tickets/{ticketCode}/no-show": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffNoShow"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}/tickets/{ticketCode}/finish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffFinish"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/finish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffFinish_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}/tickets/{ticketCode}/call": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffCall"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/call": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffCall_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}/tickets/{ticketCode}/arrive": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffArrive"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/arrive": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffArrive_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}/requests/{requestId}/reject": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffRejectRequest_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}/requests/{requestId}/reject": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffRejectRequest"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}/requests/{requestId}/accept": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffAcceptRequest"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}/requests/{requestId}/accept": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffAcceptRequest_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}/next": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffNext_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}/next": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["lineStaffNext"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/feedback": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["feedbackSubmit"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/feedback/ratings": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["feedbackRate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["eventList"];
-        put?: never;
-        post: operations["eventCreate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{id}/publish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["eventPublish"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{id}/cancel": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["eventCancel"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/validators": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["validatorList"];
-        put?: never;
-        post: operations["validatorCreate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/validators/{validatorId}/revoke": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["validatorRevoke"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/ticket-types": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ticketTypeList"];
-        put?: never;
-        post: operations["ticketTypeCreate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/questions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["eventQuestionList"];
-        put?: never;
-        post: operations["eventQuestionCreate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/payments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["paymentInitiate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/payments/manual": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["manualPaymentCurrent"];
-        put?: never;
-        post: operations["manualPaymentRequest"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/orders/{orderId}/reject": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["ticketOrderReject"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/orders/{orderId}/confirm": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["ticketOrderConfirm"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/occurrences": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["eventOccurrenceList"];
-        put?: never;
-        post: operations["eventOccurrenceCreate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/invitations/send": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["invitationSend"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/guests/import": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["guestImport"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/commission/batches": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["commissionOpen"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/checkin/tickets/{ticketCode}/paid": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["checkInMarkPaid"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/checkin/scan": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["checkInScan"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/checkin/manual": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["checkInManual"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/checkin/{token}/tickets/{ticketCode}/paid": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["operatorCheckInMarkPaid"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/events/{eventId}/tickets/{ticketCode}/paid": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["operatorCheckInMarkPaid_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/checkin/{token}/sync": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["operatorCheckInSync"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/events/{eventId}/sync": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["operatorCheckInSync_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/checkin/{token}/scan": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
         get?: never;
         put?: never;
-        post: operations["operatorCheckInScan"];
+        post: operations["appointmentPublicBook"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/operator/{token}/events/{eventId}/scan": {
+    "/api/v1/appointments/{token}/booking/{bookingToken}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        post: operations["operatorCheckInScan_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/events/{eventId}/manual": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["operatorCheckInManual_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/checkin/{token}/manual": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
+        get: operations["appointmentPublicStatus"];
         put?: never;
-        post: operations["operatorCheckInManual"];
-        delete?: never;
+        post?: never;
+        delete: operations["appointmentPublicCancel"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/whatsapp-number/request": {
+    "/api/v1/appointments/{token}/line": {
         parameters: {
             query?: never;
             header?: never;
@@ -1661,30 +557,30 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["ownWhatsAppNumberRequestOwnNumber"];
+        post: operations["appointmentPublicTakeTicket"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/whatsapp-number/checkout": {
+    "/api/v1/appointments/{token}/line/{ticketCode}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["appointmentPublicLineTicket"];
         put?: never;
-        post: operations["ownWhatsAppNumberCheckoutOwnNumber"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/subscription/request": {
+    "/api/v1/auth/forgot-password": {
         parameters: {
             query?: never;
             header?: never;
@@ -1693,14 +589,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["subscriptionRequest"];
+        post: operations["authForgotPassword"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/subscription/checkout": {
+    "/api/v1/auth/google": {
         parameters: {
             query?: never;
             header?: never;
@@ -1709,14 +605,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["subscriptionCheckout"];
+        post: operations["authGoogle"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/payments/callback": {
+    "/api/v1/auth/invitations/accept": {
         parameters: {
             query?: never;
             header?: never;
@@ -1725,30 +621,30 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["paymentCallbackCallback"];
+        post: operations["memberInvitationAcceptAccept"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/payments/callback/{provider}": {
+    "/api/v1/auth/invitations/{token}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["memberInvitationAcceptPreview"];
         put?: never;
-        post: operations["paymentCallbackProviderCallback"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/pack/request": {
+    "/api/v1/auth/login": {
         parameters: {
             query?: never;
             header?: never;
@@ -1757,30 +653,30 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["organizerPackRequestPack"];
+        post: operations["authLogin"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/pack/extra": {
+    "/api/v1/auth/me": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["authMe"];
         put?: never;
-        post: operations["organizerPackRequestPackExtra"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/pack/extra/checkout": {
+    "/api/v1/auth/refresh": {
         parameters: {
             query?: never;
             header?: never;
@@ -1789,14 +685,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["organizerPackCheckoutPackExtra"];
+        post: operations["authRefresh"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/pack/checkout": {
+    "/api/v1/auth/register": {
         parameters: {
             query?: never;
             header?: never;
@@ -1805,14 +701,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["organizerPackCheckoutPack"];
+        post: operations["authRegister"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/invoices/{invoiceId}/credit-note": {
+    "/api/v1/auth/reset-password": {
         parameters: {
             query?: never;
             header?: never;
@@ -1821,14 +717,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["invoiceCreditNote"];
+        post: operations["authResetPassword"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/invoices/payments/{paymentId}": {
+    "/api/v1/auth/switch-org": {
         parameters: {
             query?: never;
             header?: never;
@@ -1837,7 +733,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["invoiceIssueForPayment"];
+        post: operations["authSwitchOrg"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1876,7 +772,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/switch-org": {
+    "/api/v1/billing/invoices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["invoiceList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/invoices/payments/{paymentId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1885,14 +797,30 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["authSwitchOrg"];
+        post: operations["invoiceIssueForPayment"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/reset-password": {
+    "/api/v1/billing/invoices/{invoiceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["invoiceGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/invoices/{invoiceId}/credit-note": {
         parameters: {
             query?: never;
             header?: never;
@@ -1901,14 +829,46 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["authResetPassword"];
+        post: operations["invoiceCreditNote"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/register": {
+    "/api/v1/billing/invoices/{invoiceId}/document": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["invoiceDocument"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/pack": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["organizerPackPackView"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/pack/checkout": {
         parameters: {
             query?: never;
             header?: never;
@@ -1917,14 +877,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["authRegister"];
+        post: operations["organizerPackCheckoutPack"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/refresh": {
+    "/api/v1/billing/pack/extra": {
         parameters: {
             query?: never;
             header?: never;
@@ -1933,14 +893,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["authRefresh"];
+        post: operations["organizerPackRequestPackExtra"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/login": {
+    "/api/v1/billing/pack/extra/checkout": {
         parameters: {
             query?: never;
             header?: never;
@@ -1949,14 +909,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["authLogin"];
+        post: operations["organizerPackCheckoutPackExtra"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/invitations/accept": {
+    "/api/v1/billing/pack/request": {
         parameters: {
             query?: never;
             header?: never;
@@ -1965,14 +925,30 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["memberInvitationAcceptAccept"];
+        post: operations["organizerPackRequestPack"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/google": {
+    "/api/v1/billing/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["billingHistoryHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/payments/callback": {
         parameters: {
             query?: never;
             header?: never;
@@ -1981,14 +957,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["authGoogle"];
+        post: operations["paymentCallbackCallback"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/forgot-password": {
+    "/api/v1/billing/payments/callback/{provider}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1997,14 +973,62 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["authForgotPassword"];
+        post: operations["paymentCallbackProviderCallback"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/appointments/{token}/line": {
+    "/api/v1/billing/payments/{paymentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["billingHistoryStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/payments/{paymentId}/receipt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["billingHistoryReceipt"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/subscription": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["subscriptionView"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/subscription/checkout": {
         parameters: {
             query?: never;
             header?: never;
@@ -2013,14 +1037,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["appointmentPublicTakeTicket"];
+        post: operations["subscriptionCheckout"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/appointments/{token}/book": {
+    "/api/v1/billing/subscription/request": {
         parameters: {
             query?: never;
             header?: never;
@@ -2029,30 +1053,62 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["appointmentPublicBook"];
+        post: operations["subscriptionRequest"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/whatsapp/content-override": {
+    "/api/v1/billing/tiers": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["adminWhatsAppContentOverride"];
+        get: operations["billingTiersTiers"];
         put?: never;
-        post: operations["adminWhatsAppSetContentOverride"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/verifications/{id}/reject": {
+    "/api/v1/billing/tiers/custom-quote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["billingTiersCustomQuote"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/whatsapp-number": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ownWhatsAppNumberOwnNumberView"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/whatsapp-number/checkout": {
         parameters: {
             query?: never;
             header?: never;
@@ -2061,14 +1117,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["adminVerificationReject"];
+        post: operations["ownWhatsAppNumberCheckoutOwnNumber"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/verifications/{id}/approve": {
+    "/api/v1/billing/whatsapp-number/request": {
         parameters: {
             query?: never;
             header?: never;
@@ -2077,30 +1133,46 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["adminVerificationApprove"];
+        post: operations["ownWhatsAppNumberRequestOwnNumber"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/trials": {
+    "/api/v1/branding": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["adminTrialList"];
-        put?: never;
-        post: operations["adminTrialGrant"];
+        get: operations["brandingGet"];
+        put: operations["brandingUpdate"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/trials/{id}/end": {
+    "/api/v1/checkin/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["operatorCheckInContext"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/checkin/{token}/manual": {
         parameters: {
             query?: never;
             header?: never;
@@ -2109,14 +1181,30 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["adminTrialEnd"];
+        post: operations["operatorCheckInManual"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/tenants/{id}/suspend": {
+    "/api/v1/checkin/{token}/roster": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["operatorCheckInRoster"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/checkin/{token}/scan": {
         parameters: {
             query?: never;
             header?: never;
@@ -2125,14 +1213,46 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["adminTenantSuspend"];
+        post: operations["operatorCheckInScan"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/tenants/{id}/reactivate": {
+    "/api/v1/checkin/{token}/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["operatorCheckInSearch"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/checkin/{token}/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["operatorCheckInStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/checkin/{token}/sync": {
         parameters: {
             query?: never;
             header?: never;
@@ -2141,14 +1261,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["adminTenantReactivate"];
+        post: operations["operatorCheckInSync"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/prospects/{id}/contacted": {
+    "/api/v1/checkin/{token}/tickets/{ticketCode}/paid": {
         parameters: {
             query?: never;
             header?: never;
@@ -2157,14 +1277,94 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["adminProspectLeadMarkContacted"];
+        post: operations["operatorCheckInMarkPaid"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/payments/{id}/reject": {
+    "/api/v1/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["eventList"];
+        put?: never;
+        post: operations["eventCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/analytics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["analyticsGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/attendance/certificate/{guestId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["attendanceCertificateCertificate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/attendance/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["attendanceCertificateRegister"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/billing/quotes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["eventTierQuotesQuotes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/checkin/manual": {
         parameters: {
             query?: never;
             header?: never;
@@ -2173,14 +1373,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["adminPaymentReject"];
+        post: operations["checkInManual"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/payments/{id}/confirm": {
+    "/api/v1/events/{eventId}/checkin/scan": {
         parameters: {
             query?: never;
             header?: never;
@@ -2189,14 +1389,46 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["adminPaymentConfirm"];
+        post: operations["checkInScan"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/feedback/{id}/status": {
+    "/api/v1/events/{eventId}/checkin/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["checkInSearch"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/checkin/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["checkInStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/checkin/tickets/{ticketCode}/paid": {
         parameters: {
             query?: never;
             header?: never;
@@ -2205,14 +1437,30 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["adminFeedbackUpdateStatus"];
+        post: operations["checkInMarkPaid"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/diagnostics/error": {
+    "/api/v1/events/{eventId}/commission": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["commissionOverview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/commission/batches": {
         parameters: {
             query?: never;
             header?: never;
@@ -2221,165 +1469,21 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["adminDiagnosticsTriggerError"];
+        post: operations["commissionOpen"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/auth/refresh": {
+    "/api/v1/events/{eventId}/commission/quote": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        post: operations["adminAuthRefresh"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/auth/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["adminAuthLogin"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/agreements": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["adminAgreementList"];
-        put?: never;
-        post: operations["adminAgreementCreate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/agreements/{id}/renew": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["adminAgreementRenew"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/agreements/{id}/interrupt": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["adminAgreementInterrupt"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["serviceGet"];
-        put?: never;
-        post?: never;
-        delete: operations["serviceDelete"];
-        options?: never;
-        head?: never;
-        patch: operations["serviceUpdate"];
-        trace?: never;
-    };
-    "/api/v1/resources/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["resourceGet"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["resourceUpdate"];
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/guests/{guestId}/ticket-type": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["guestSetTicketType"];
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/guests/{guestId}/exclusion": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["guestSetExclusion"];
-        trace?: never;
-    };
-    "/api/v1/settings/verification": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["verificationOverview"];
+        get: operations["commissionQuote"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2388,446 +1492,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/settings/templates": {
+    "/api/v1/events/{eventId}/dashboard": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["templatesList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/settings/providers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["providerSettingsOverview"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["serviceDayLineView"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{serviceId}/day-line/requests": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["serviceDayLinePendingRequests"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/services/{id}/booking-link": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["serviceBookingLink"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/rsvp/{token}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["rsvpView"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/rsvp/{token}/qr.png": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["rsvpQrCode"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/resources/{id}/free": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["resourceFree"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/r/{code}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["shortLinkPublicView"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/r/{code}/line/{ticketCode}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["shortLinkPublicLineTicket"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/r/{code}/booking/{bookingToken}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["shortLinkPublicStatus"];
-        put?: never;
-        post?: never;
-        delete: operations["shortLinkPublicCancel"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/public/orgs/{username}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["publicOrgProfile"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/public/orgs/{username}/events/{eventId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["publicTicketOrderSale"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/orgs/profile": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["orgProfile"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/orders/{token}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["publicTicketOrderView"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["operatorConsoleConsole"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator-codes/{code}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["operatorConsoleResolve"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/members": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["memberMembers"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}/requests": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["lineStaffPendingRequests"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}/requests": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["lineStaffPendingRequests_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line/{token}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["lineStaffView"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/services/{serviceId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["lineStaffView_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/line-codes/{code}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["lineCodeResolve"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["healthHealth"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/feedback/prompt": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["feedbackPrompt"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/usage": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["billingUsage"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/orders": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ticketOrderList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/events/{eventId}/invitations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["invitationStatuses"];
+        get: operations["dashboardGet"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2868,14 +1540,78 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/dashboard": {
+    "/api/v1/events/{eventId}/guests/import": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["dashboardGet"];
+        get?: never;
+        put?: never;
+        post: operations["guestImport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/guests/{guestId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["guestRemove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/guests/{guestId}/exclusion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["guestSetExclusion"];
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/guests/{guestId}/ticket-type": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["guestSetTicketType"];
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/invitations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["invitationStatuses"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2884,14 +1620,78 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/commission": {
+    "/api/v1/events/{eventId}/invitations/send": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["commissionOverview"];
+        get?: never;
+        put?: never;
+        post: operations["invitationSend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/occurrences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["eventOccurrenceList"];
+        put?: never;
+        post: operations["eventOccurrenceCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/occurrences/{occurrenceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["eventOccurrenceDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/open-invitation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["openInvitationSettings"];
+        put: operations["openInvitationUpdate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/open-invitation/responses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["openInvitationResponses"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2900,14 +1700,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/commission/quote": {
+    "/api/v1/events/{eventId}/open-invitation/responses/{responseId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["commissionQuote"];
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["openInvitationRemove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketOrderList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2916,14 +1732,142 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/checkin/stats": {
+    "/api/v1/events/{eventId}/orders/{orderId}/confirm": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["checkInStats"];
+        get?: never;
+        put?: never;
+        post: operations["ticketOrderConfirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/orders/{orderId}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketOrderReject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["paymentInitiate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/payments/manual": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["manualPaymentCurrent"];
+        put?: never;
+        post: operations["manualPaymentRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/questions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["eventQuestionList"];
+        put?: never;
+        post: operations["eventQuestionCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/questions/{questionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["eventQuestionDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/ticket-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketTypeList"];
+        put?: never;
+        post: operations["ticketTypeCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/ticket-types/{typeId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["ticketTypeUpdate"];
+        post?: never;
+        delete: operations["ticketTypeDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/usage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["billingUsage"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2932,14 +1876,126 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/checkin/search": {
+    "/api/v1/events/{eventId}/validators": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["checkInSearch"];
+        get: operations["validatorList"];
+        put?: never;
+        post: operations["validatorCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/validators/{validatorId}/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["validatorRevoke"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["eventGet"];
+        put: operations["eventUpdate"];
+        post?: never;
+        delete: operations["eventDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["eventCancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{id}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["eventPublish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{id}/quorum": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["eventSetQuorum"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["feedbackSubmit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/prompt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["feedbackPrompt"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2948,14 +2004,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/billing/quotes": {
+    "/api/v1/feedback/ratings": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["eventTierQuotesQuotes"];
+        get?: never;
+        put?: never;
+        post: operations["feedbackRate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["healthHealth"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2964,14 +2036,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/attendance/register": {
+    "/api/v1/legal-identity": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["attendanceCertificateRegister"];
+        get: operations["legalIdentityGet"];
+        put: operations["legalIdentityUpdate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/line-codes/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["lineCodeResolve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2980,14 +2068,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/attendance/certificate/{guestId}": {
+    "/api/v1/line/{token}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["attendanceCertificateCertificate"];
+        get: operations["lineStaffView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2996,14 +2084,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/analytics": {
+    "/api/v1/line/{token}/next": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["analyticsGet"];
+        get?: never;
+        put?: never;
+        post: operations["lineStaffNext"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/line/{token}/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["lineStaffPendingRequests"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3012,14 +2116,158 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/operator/{token}/events/{eventId}/stats": {
+    "/api/v1/line/{token}/requests/{requestId}/accept": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["operatorCheckInStats_1"];
+        get?: never;
+        put?: never;
+        post: operations["lineStaffAcceptRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/line/{token}/requests/{requestId}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffRejectRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/line/{token}/tickets/{ticketCode}/arrive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffArrive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/line/{token}/tickets/{ticketCode}/call": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffCall"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/line/{token}/tickets/{ticketCode}/finish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffFinish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/line/{token}/tickets/{ticketCode}/no-show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffNoShow"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/line/{token}/tickets/{ticketCode}/paid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffMarkPaid"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/line/{token}/tickets/{ticketCode}/present": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffPresent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/line/{token}/walk-in": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffWalkIn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["memberMembers"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3028,14 +2276,110 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/checkin/{token}/stats": {
+    "/api/v1/members/invitations": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["operatorCheckInStats"];
+        get: operations["memberInvitations"];
+        put?: never;
+        post: operations["memberInvite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/members/invitations/{invitationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["memberRevoke"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/members/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["memberRemove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/members/{userId}/role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["memberChangeRole"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/email-feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["emailFeedbackReceive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/email-feedback/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["resendEmailFeedbackReceive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/open/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicOpenInvitationView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3044,14 +2388,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/operator/{token}/events/{eventId}/search": {
+    "/api/v1/open/{code}/responses": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["operatorCheckInSearch_1"];
+        get?: never;
+        put?: never;
+        post: operations["publicOpenInvitationRespond"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator-codes/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["operatorConsoleResolve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3060,62 +2420,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/checkin/{token}/search": {
+    "/api/v1/operator/{token}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["operatorCheckInSearch"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/checkin/{token}/roster": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["operatorCheckInRoster"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/operator/{token}/events/{eventId}/roster": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["operatorCheckInRoster_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/checkin/{token}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["operatorCheckInContext"];
+        get: operations["operatorConsoleConsole"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3140,14 +2452,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/whatsapp-number": {
+    "/api/v1/operator/{token}/events/{eventId}/manual": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["ownWhatsAppNumberOwnNumberView"];
+        get?: never;
+        put?: never;
+        post: operations["operatorCheckInManual_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/events/{eventId}/roster": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["operatorCheckInRoster_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3156,14 +2484,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/tiers": {
+    "/api/v1/operator/{token}/events/{eventId}/scan": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["billingTiersTiers"];
+        get?: never;
+        put?: never;
+        post: operations["operatorCheckInScan_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/events/{eventId}/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["operatorCheckInSearch_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3172,14 +2516,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/tiers/custom-quote": {
+    "/api/v1/operator/{token}/events/{eventId}/stats": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["billingTiersCustomQuote"];
+        get: operations["operatorCheckInStats_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3188,14 +2532,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/subscription": {
+    "/api/v1/operator/{token}/events/{eventId}/sync": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["subscriptionView"];
+        get?: never;
+        put?: never;
+        post: operations["operatorCheckInSync_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/events/{eventId}/tickets/{ticketCode}/paid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["operatorCheckInMarkPaid_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["lineStaffView_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3204,14 +2580,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/payments": {
+    "/api/v1/operator/{token}/services/{serviceId}/next": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["billingHistoryHistory"];
+        get?: never;
+        put?: never;
+        post: operations["lineStaffNext_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["lineStaffPendingRequests_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3220,14 +2612,206 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/payments/{paymentId}": {
+    "/api/v1/operator/{token}/services/{serviceId}/requests/{requestId}/accept": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["billingHistoryStatus"];
+        get?: never;
+        put?: never;
+        post: operations["lineStaffAcceptRequest_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}/requests/{requestId}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffRejectRequest_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/arrive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffArrive_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/call": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffCall_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/finish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffFinish_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/no-show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffNoShow_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/paid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffMarkPaid_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}/tickets/{ticketCode}/present": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffPresent_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}/walk-in": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffWalkIn_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operators": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["operatorTeam"];
+        put?: never;
+        post: operations["operatorCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operators/{operatorId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["operatorUpdate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operators/{operatorId}/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["operatorRevoke"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orders/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicTicketOrderView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3236,14 +2820,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/payments/{paymentId}/receipt": {
+    "/api/v1/orders/{token}/declare": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["billingHistoryReceipt"];
+        get?: never;
+        put?: never;
+        post: operations["publicTicketOrderDeclare"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orgs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["orgCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orgs/profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["orgProfile"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3252,14 +2868,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/pack": {
+    "/api/v1/orgs/username": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["organizerPackPackView"];
+        get?: never;
+        put: operations["orgUpdateUsername"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/prospects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["prospectLeadRegister"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/public/orgs/{username}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicOrgProfile"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3268,14 +2916,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/invoices": {
+    "/api/v1/public/orgs/{username}/events/{eventId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["invoiceList"];
+        get: operations["publicTicketOrderSale"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3284,14 +2932,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/invoices/{invoiceId}": {
+    "/api/v1/public/orgs/{username}/events/{eventId}/orders": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["invoiceGet"];
+        get?: never;
+        put?: never;
+        post: operations["publicTicketOrderPlace"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/r/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["shortLinkPublicView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3300,14 +2964,62 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/invoices/{invoiceId}/document": {
+    "/api/v1/r/{code}/book": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["invoiceDocument"];
+        get?: never;
+        put?: never;
+        post: operations["shortLinkPublicBook"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/r/{code}/booking/{bookingToken}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["shortLinkPublicStatus"];
+        put?: never;
+        post?: never;
+        delete: operations["shortLinkPublicCancel"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/r/{code}/line": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["shortLinkPublicTakeTicket"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/r/{code}/line/{ticketCode}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["shortLinkPublicLineTicket"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3316,14 +3028,78 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/me": {
+    "/api/v1/resources": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["authMe"];
+        get: operations["resourceList"];
+        put?: never;
+        post: operations["resourceCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resources/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["resourceGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["resourceUpdate"];
+        trace?: never;
+    };
+    "/api/v1/resources/{id}/availability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["resourceAvailability"];
+        put?: never;
+        post: operations["resourceAddAvailability"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resources/{id}/availability/{availabilityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["resourceRemoveAvailability"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resources/{id}/free": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["resourceFree"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3332,14 +3108,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/invitations/{token}": {
+    "/api/v1/resources/{id}/unavailability": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["memberInvitationAcceptPreview"];
+        get: operations["resourceUnavailability"];
+        put?: never;
+        post: operations["resourceAddUnavailability"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resources/{id}/unavailability/{unavailabilityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["resourceRemoveUnavailability"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rsvp/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["rsvpView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3348,14 +3156,62 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/appointments/{token}": {
+    "/api/v1/rsvp/{token}/confirm": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["appointmentPublicView"];
+        get?: never;
+        put?: never;
+        post: operations["rsvpConfirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rsvp/{token}/decline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["rsvpDecline"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rsvp/{token}/erase": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["rsvpErase"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rsvp/{token}/qr.png": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["rsvpQrCode"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3364,14 +3220,62 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/appointments/{token}/line/{ticketCode}": {
+    "/api/v1/rsvp/{token}/transfer": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["appointmentPublicLineTicket"];
+        get?: never;
+        put?: never;
+        post: operations["rsvpTransfer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["serviceList"];
+        put?: never;
+        post: operations["serviceCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["serviceGet"];
+        put?: never;
+        post?: never;
+        delete: operations["serviceDelete"];
+        options?: never;
+        head?: never;
+        patch: operations["serviceUpdate"];
+        trace?: never;
+    };
+    "/api/v1/services/{id}/booking-link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["serviceBookingLink"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3380,30 +3284,62 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/appointments/{token}/booking/{bookingToken}": {
+    "/api/v1/services/{id}/configuration": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["appointmentPublicStatus"];
-        put?: never;
+        get: operations["serviceConfiguration"];
+        put: operations["serviceUpdateConfiguration"];
         post?: never;
-        delete: operations["appointmentPublicCancel"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/whatsapp/pricing": {
+    "/api/v1/services/{id}/requirements": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["adminWhatsAppPricing"];
+        get: operations["serviceRequirements"];
+        put?: never;
+        post: operations["serviceAddRequirement"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{id}/requirements/{requirementId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["serviceRemoveRequirement"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["serviceDayLineView"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3412,14 +3348,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/verifications": {
+    "/api/v1/services/{serviceId}/day-line/next": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["adminVerificationList"];
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLineNext"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["serviceDayLinePendingRequests"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3428,14 +3380,206 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/verifications/{id}/documents": {
+    "/api/v1/services/{serviceId}/day-line/requests/{requestId}/accept": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["adminVerificationDocuments"];
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLineAcceptRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line/requests/{requestId}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLineRejectRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/arrive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLineArrive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/call": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLineCall"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/finish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLineFinish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/no-show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLineNoShow"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/paid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLineMarkPaid"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line/tickets/{ticketCode}/present": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLinePresent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line/walk-in": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLineWalkIn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/staff-links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["serviceStaffList"];
+        put?: never;
+        post: operations["serviceStaffCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/staff-links/{staffId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["serviceStaffRevoke"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/settings/payment-methods": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["paymentMethodsGet"];
+        put: operations["paymentMethodsUpdate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/settings/providers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["providerSettingsOverview"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3444,15 +3588,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/trials/stats": {
+    "/api/v1/settings/providers/email": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["adminTrialStats"];
-        put?: never;
+        get?: never;
+        put: operations["providerSettingsUpdateEmail"];
         post?: never;
         delete?: never;
         options?: never;
@@ -3460,15 +3604,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/tenants": {
+    "/api/v1/settings/providers/whatsapp": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["adminTenantList"];
-        put?: never;
+        get?: never;
+        put: operations["providerSettingsUpdateWhatsApp"];
         post?: never;
         delete?: never;
         options?: never;
@@ -3476,112 +3620,16 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/tenants/{id}/events": {
+    "/api/v1/settings/providers/whatsapp/embedded-signup": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["adminTenantEvents"];
+        get: operations["providerSettingsEmbeddedSignupConfig"];
         put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/prospects": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["adminProspectLeadList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/payments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["adminPaymentList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/feedback": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["adminFeedbackList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/feedback/ratings": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["adminFeedbackRatings"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/billing/tiers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["adminBillingCatalogCatalog"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/audit": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["adminAuditList"];
-        put?: never;
-        post?: never;
+        post: operations["providerSettingsCompleteEmbeddedSignup"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3604,7 +3652,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/services/{serviceId}/staff-links/{staffId}": {
+    "/api/v1/settings/providers/{channel}/test": {
         parameters: {
             query?: never;
             header?: never;
@@ -3613,62 +3661,62 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post?: never;
-        delete: operations["serviceStaffRevoke"];
+        post: operations["providerSettingsTestSend"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/services/{id}/requirements/{requirementId}": {
+    "/api/v1/settings/sales": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
+        get: operations["salesSettingsGet"];
+        put: operations["salesSettingsUpdate"];
         post?: never;
-        delete: operations["serviceRemoveRequirement"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/resources/{id}/unavailability/{unavailabilityId}": {
+    "/api/v1/settings/templates": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["templatesList"];
         put?: never;
         post?: never;
-        delete: operations["resourceRemoveUnavailability"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/resources/{id}/availability/{availabilityId}": {
+    "/api/v1/settings/templates/{name}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
+        get: operations["templatesDetail"];
+        put: operations["templatesSave"];
         post?: never;
-        delete: operations["resourceRemoveAvailability"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/members/{userId}": {
+    "/api/v1/settings/templates/{name}/preview": {
         parameters: {
             query?: never;
             header?: never;
@@ -3677,30 +3725,30 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post?: never;
-        delete: operations["memberRemove"];
+        post: operations["templatesPreview"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/members/invitations/{invitationId}": {
+    "/api/v1/settings/verification": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["verificationOverview"];
         put?: never;
         post?: never;
-        delete: operations["memberRevoke"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/questions/{questionId}": {
+    "/api/v1/settings/verification/phone": {
         parameters: {
             query?: never;
             header?: never;
@@ -3709,14 +3757,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post?: never;
-        delete: operations["eventQuestionDelete"];
+        post: operations["verificationRequestPhoneCode"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/occurrences/{occurrenceId}": {
+    "/api/v1/settings/verification/phone/confirm": {
         parameters: {
             query?: never;
             header?: never;
@@ -3725,14 +3773,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post?: never;
-        delete: operations["eventOccurrenceDelete"];
+        post: operations["verificationConfirmPhone"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/guests/{guestId}": {
+    "/api/v1/settings/verification/{kind}": {
         parameters: {
             query?: never;
             header?: never;
@@ -3741,8 +3789,40 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        post: operations["verificationSubmit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/settings/vocabulary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["vocabularyList"];
+        put: operations["vocabularySave"];
         post?: never;
-        delete: operations["guestRemove"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/whatsapp/webhook": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["whatsAppWebhookVerifySubscription"];
+        put?: never;
+        post: operations["whatsAppWebhookReceiveMessages"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -3752,1264 +3832,8 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        VocabularyUpdate: {
-            key?: string;
-            value?: string | null;
-        };
-        VocabularyEntry: {
-            key?: string;
-            label?: string;
-            defaultValue?: string;
-            value?: string;
-            overridden?: boolean;
-        };
-        TemplateUpdate: {
-            channel?: string;
-            body?: string;
-            active?: boolean;
-        };
-        TemplateChannelView: {
-            channel?: string;
-            defaultBody?: string;
-            body?: string;
-            active?: boolean;
-            override?: boolean;
-        };
-        TemplateDetail: {
-            name?: string;
-            label?: string;
-            channels?: components["schemas"]["TemplateChannelView"][];
-            variables?: components["schemas"]["TemplateVariable"][];
-        };
-        TemplateVariable: {
-            name?: string;
-            label?: string;
-            sample?: string;
-            required?: boolean;
-        };
-        UpdateSalesSettingsRequest: {
-            /** Format: int32 */
-            orderHoldMinutes?: number | null;
-        };
-        SalesSettingsView: {
-            /** Format: int32 */
-            orderHoldMinutes?: number | null;
-            /** Format: int32 */
-            effectiveOrderHoldMinutes?: number;
-            /** Format: int32 */
-            defaultOrderHoldMinutes?: number;
-            /** Format: int32 */
-            minOrderHoldMinutes?: number;
-            /** Format: int32 */
-            maxOrderHoldMinutes?: number;
-        };
-        UpdateWhatsAppProviderRequest: {
-            accessToken: string;
-            phoneNumberId: string;
-            templateName?: string | null;
-            templateLanguage?: string | null;
-        };
-        EmailProviderView: {
-            configured?: boolean;
-            provider?: string | null;
-            from?: string | null;
-            fromName?: string | null;
-            apiKeyMasked?: string | null;
-        };
-        ProviderSettingsResponse: {
-            email?: components["schemas"]["EmailProviderView"];
-            whatsapp?: components["schemas"]["WhatsAppProviderView"];
-        };
-        WhatsAppProviderView: {
-            configured?: boolean;
-            provider?: string | null;
-            phoneNumberId?: string | null;
-            accessTokenMasked?: string | null;
-            templateName?: string | null;
-            templateLanguage?: string | null;
-            allowed?: boolean;
-            displayPhoneNumber?: string | null;
-            verifiedName?: string | null;
-        };
-        UpdateEmailProviderRequest: {
-            apiKey: string;
-            /** Format: email */
-            from: string;
-            fromName?: string | null;
-        };
-        UpdatePaymentMethodsRequest: {
-            payeeName?: string | null;
-            orangeMoneyNumber?: string | null;
-            mtnMomoNumber?: string | null;
-            waveNumber?: string | null;
-            paymentLinkUrl?: string | null;
-        };
-        TenantPaymentMethodsInfo: {
-            payeeName?: string | null;
-            orangeMoneyNumber?: string | null;
-            mtnMomoNumber?: string | null;
-            waveNumber?: string | null;
-            paymentLinkUrl?: string | null;
-        };
-        ServiceConfigUpdate: {
-            /** @enum {string|null} */
-            confirmationMode?: "INSTANTANEOUS" | "ON_REQUEST" | null;
-            /** Format: int32 */
-            stepMinutes?: number | null;
-            /** Format: int32 */
-            durationMinutes?: number | null;
-            /** Format: int32 */
-            bufferMinutes?: number | null;
-            /** Format: int32 */
-            minHorizonMinutes?: number | null;
-            /** Format: int32 */
-            maxHorizonDays?: number | null;
-            /** Format: int64 */
-            holdMinutes?: number | null;
-            /** Format: int32 */
-            cancelDeadlineHours?: number | null;
-            /** Format: int32 */
-            noShowToleranceMinutes?: number | null;
-            walkInsAllowed?: boolean | null;
-            /** @enum {string|null} */
-            reminderChannel?: "WHATSAPP" | "SMS" | "WHATSAPP_OR_SMS" | "NONE" | null;
-            reminderOffsetsMinutes?: number[] | null;
-            /** Format: int32 */
-            clientsPerSlot?: number | null;
-        };
-        EffectiveServiceConfig: {
-            /** @enum {string} */
-            confirmationMode?: "INSTANTANEOUS" | "ON_REQUEST";
-            /** Format: int32 */
-            stepMinutes?: number;
-            /** Format: int32 */
-            durationMinutes?: number;
-            /** Format: int32 */
-            bufferMinutes?: number;
-            /** Format: int32 */
-            minHorizonMinutes?: number;
-            /** Format: int32 */
-            maxHorizonDays?: number;
-            /** Format: int64 */
-            holdMinutes?: number;
-            /** Format: int32 */
-            cancelDeadlineHours?: number;
-            /** Format: int32 */
-            noShowToleranceMinutes?: number;
-            walkInsAllowed?: boolean;
-            /** @enum {string} */
-            reminderChannel?: "WHATSAPP" | "SMS" | "WHATSAPP_OR_SMS" | "NONE";
-            reminderOffsetsMinutes?: number[];
-            /** Format: int32 */
-            clientsPerSlot?: number;
-            /** Format: int32 */
-            maxClientsPerSlot?: number;
-            /** Format: int64 */
-            occupancyMinutes?: number;
-        };
-        UpdateOrgUsernameRequest: {
-            username?: string;
-        };
-        TenantInfo: {
-            /** Format: uuid */
-            id?: string;
-            name?: string;
-            contactEmail?: string;
-            status?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            displayName?: string;
-            logoUrl?: string | null;
-            bannerUrl?: string | null;
-            primaryColor?: string;
-            legalIdentity?: components["schemas"]["TenantLegalIdentityInfo"] | null;
-            username?: string | null;
-            country?: string;
-            currency?: string;
-            paymentMethods?: components["schemas"]["TenantPaymentMethodsInfo"] | null;
-        };
-        TenantLegalIdentityInfo: {
-            legalName?: string;
-            registrationNumber?: string | null;
-            taxIdentifier?: string | null;
-            addressLine?: string;
-            city?: string;
-            country?: string;
-        };
-        OperatorRequest: {
-            label: string;
-            eventIds?: string[];
-            serviceIds?: string[];
-            actions: ("CHECK_IN" | "QUEUE" | "COLLECT")[];
-        };
-        OperatorScopeItem: {
-            /** Format: uuid */
-            id?: string;
-            name?: string;
-        };
-        OperatorView: {
-            /** Format: uuid */
-            id?: string;
-            label?: string;
-            code?: string | null;
-            link?: string | null;
-            events?: components["schemas"]["OperatorScopeItem"][];
-            services?: components["schemas"]["OperatorScopeItem"][];
-            actions?: ("CHECK_IN" | "QUEUE" | "COLLECT")[];
-            billable?: boolean;
-            revoked?: boolean;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            revokedAt?: string | null;
-        };
-        ChangeRoleRequest: {
-            role: string;
-        };
-        MemberView: {
-            /** Format: uuid */
-            userId?: string;
-            email?: string;
-            role?: string;
-            /** Format: date-time */
-            joinedAt?: string;
-        };
-        UpdateLegalIdentityRequest: {
-            legalName?: string | null;
-            registrationNumber?: string | null;
-            taxIdentifier?: string | null;
-            addressLine?: string | null;
-            city?: string | null;
-            country?: string | null;
-        };
-        LegalIdentityResponse: {
-            legalName?: string | null;
-            registrationNumber?: string | null;
-            taxIdentifier?: string | null;
-            addressLine?: string | null;
-            city?: string | null;
-            country?: string | null;
-            completeForInvoicing?: boolean;
-        };
-        EventSettingsDto: {
-            transferAllowed?: boolean;
-            /** Format: date-time */
-            transferDeadline?: string | null;
-            overbookingAllowed?: boolean;
-            /** Format: int32 */
-            maxOverbookingCount?: number | null;
-            /** @enum {string} */
-            deliveryMode?: "LINK" | "DIRECT_TICKET" | "INTERACTIVE";
-            brandName?: string | null;
-            brandLogoUrl?: string | null;
-            brandColor?: string | null;
-        };
-        UpdateEventRequest: {
-            name: string;
-            description?: string | null;
-            /** Format: date-time */
-            startDateTime?: string | null;
-            /** Format: date-time */
-            endDateTime?: string | null;
-            timezone: string;
-            location?: string | null;
-            /** Format: int32 */
-            maxCapacity?: number | null;
-            settings?: components["schemas"]["EventSettingsDto"];
-            invitationChannels?: ("EMAIL" | "WHATSAPP")[];
-        };
-        EventResponse: {
-            /** Format: uuid */
-            id?: string;
-            name?: string;
-            description?: string | null;
-            /** Format: date-time */
-            startDateTime?: string | null;
-            /** Format: date-time */
-            endDateTime?: string | null;
-            timezone?: string;
-            location?: string | null;
-            /** Format: int32 */
-            maxCapacity?: number | null;
-            status?: string;
-            settings?: components["schemas"]["EventSettingsDto"];
-            invitationChannels?: ("EMAIL" | "WHATSAPP")[];
-            quorum?: components["schemas"]["QuorumResponse"] | null;
-        };
-        QuorumResponse: {
-            mode?: string;
-            /** Format: int32 */
-            numerator?: number | null;
-            /** Format: int32 */
-            denominator?: number | null;
-            /** Format: int32 */
-            absolute?: number | null;
-            /** Format: date-time */
-            reachedAt?: string | null;
-        };
-        UpdateQuorumRequest: {
-            /** @enum {string} */
-            mode: "NONE" | "FRACTION" | "ABSOLUTE";
-            /** Format: int32 */
-            numerator?: number | null;
-            /** Format: int32 */
-            denominator?: number | null;
-            /** Format: int32 */
-            absolute?: number | null;
-        };
-        UpsertTicketTypeRequest: {
-            label: string;
-            /** Format: int32 */
-            maxCapacity?: number | null;
-            colorHex?: string;
-            /** Format: int32 */
-            position?: number;
-            /** Format: int64 */
-            priceMinor?: number | null;
-        };
-        TicketTypeResponse: {
-            /** Format: uuid */
-            id?: string;
-            label?: string;
-            colorHex?: string;
-            /** Format: int32 */
-            maxCapacity?: number | null;
-            /** Format: int32 */
-            confirmedCount?: number;
-            /** Format: int32 */
-            position?: number;
-            /** Format: int64 */
-            priceMinor?: number | null;
-            currency?: string | null;
-        };
-        UpdateBrandingRequest: {
-            displayName?: string | null;
-            logoUrl?: string | null;
-            bannerUrl?: string | null;
-            primaryColor?: string | null;
-        };
-        BrandingResponse: {
-            displayName?: string;
-            logoUrl?: string | null;
-            bannerUrl?: string | null;
-            primaryColor?: string;
-        };
-        UpdatePricingRequest: {
-            /** Format: int64 */
-            costUsdMinor?: number;
-        };
-        WhatsAppPricingInfo: {
-            category?: string;
-            /** Format: int64 */
-            costUsdMinor?: number;
-        };
-        BillingTierOption: {
-            name?: string;
-            /** Format: int64 */
-            maxGuests?: number;
-            price?: components["schemas"]["PriceList"];
-            /**
-             * Format: int64
-             * @deprecated
-             * @description Use price
-             */
-            priceMinor?: number;
-        };
-        PayeeDetails: {
-            payeeName?: string | null;
-            contactEmail?: string | null;
-            contactPhone?: string | null;
-            mobileMoneyNumber?: string | null;
-            mobileMoneyOperator?: string | null;
-            bankDetails?: string | null;
-        };
-        PlatformBillingSettingsUpdate: {
-            payee?: components["schemas"]["PayeeDetails"];
-            tiers?: components["schemas"]["BillingTierOption"][];
-            subscriptionPlans?: components["schemas"]["SubscriptionPlanOption"][];
-        };
-        PriceList: {
-            /** Format: int64 */
-            gnf?: number;
-            /** Format: int64 */
-            fcfa?: number;
-            /** Format: int64 */
-            usdCents?: number;
-        };
-        SubscriptionPlanOption: {
-            name?: string;
-            /** Format: int64 */
-            includedPeople?: number;
-            /** Format: int64 */
-            maxPeople?: number | null;
-            monthly?: components["schemas"]["PriceList"];
-            extraPerson?: components["schemas"]["PriceList"] | null;
-            /**
-             * Format: int64
-             * @deprecated
-             * @description Use maxPeople and includedPeople
-             */
-            maxResources?: number;
-            /**
-             * Format: int64
-             * @deprecated
-             * @description Use monthly
-             */
-            priceMinorPerMonth?: number;
-        };
-        PlatformBillingSettingsView: {
-            currency?: string;
-            payee?: components["schemas"]["PayeeDetails"];
-            tiers?: components["schemas"]["BillingTierOption"][];
-            subscriptionPlans?: components["schemas"]["SubscriptionPlanOption"][];
-            managedInDatabase?: boolean;
-        };
-        VerificationRequestView: {
-            /** Format: uuid */
-            id?: string;
-            /** @enum {string} */
-            kind?: "PERSONAL" | "COMPANY";
-            /** @enum {string} */
-            status?: "PENDING" | "APPROVED" | "REJECTED";
-            legalName?: string;
-            documentType?: string;
-            /** Format: date-time */
-            submittedAt?: string;
-            /** Format: date-time */
-            decidedAt?: string | null;
-            rejectionReason?: string | null;
-        };
-        PhoneCodeRequest: {
-            phone: string;
-        };
-        PhoneCodeSent: {
-            /** Format: date-time */
-            expiresAt?: string;
-        };
-        PhoneConfirmRequest: {
-            code: string;
-        };
-        PhoneStatusView: {
-            phone?: string | null;
-            verified?: boolean;
-        };
-        TemplatePreviewRequest: {
-            channel?: string;
-            body?: string | null;
-        };
-        TemplatePreviewResponse: {
-            body?: string;
-        };
-        TestSendRequest: {
-            recipient: string;
-        };
-        TestSendResponse: {
-            delivered?: boolean;
-            usingTenantProvider?: boolean;
-            error?: string | null;
-        };
-        CompleteEmbeddedSignupRequest: {
-            code: string;
-            wabaId: string;
-            phoneNumberId: string;
-        };
-        ServiceCreateRequest: {
-            name: string;
-            timezone: string;
-            /** @enum {string} */
-            paymentRule?: "FREE" | "BEFORE" | "AFTER_SERVICE";
-            /** Format: int64 */
-            priceMinor?: number | null;
-        };
-        ServiceResponse: {
-            /** Format: uuid */
-            id?: string;
-            name?: string;
-            timezone?: string;
-            /** @enum {string} */
-            paymentRule?: "FREE" | "BEFORE" | "AFTER_SERVICE";
-            /** Format: int64 */
-            priceMinor?: number | null;
-            currency?: string | null;
-        };
-        ServiceStaffCreateRequest: {
-            label: string;
-        };
-        ServiceStaffCreatedResponse: {
-            /** Format: uuid */
-            id?: string;
-            label?: string;
-            token?: string;
-            code?: string | null;
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        WalkInRequest: {
-            clientName: string;
-            clientPhone: string;
-        };
-        DayLineView: {
-            /** Format: uuid */
-            serviceId?: string;
-            serviceName?: string;
-            timezone?: string;
-            /** Format: date */
-            date?: string;
-            entries?: components["schemas"]["LineTicket"][];
-        };
-        LineTicket: {
-            /** Format: uuid */
-            id?: string;
-            ticketCode?: string;
-            kind?: string;
-            status?: string;
-            clientName?: string | null;
-            clientPhone?: string | null;
-            /** Format: date-time */
-            startsAt?: string | null;
-            /** Format: date-time */
-            endsAt?: string | null;
-            /** Format: date-time */
-            arrivedAt?: string | null;
-            /** Format: int32 */
-            dayRank?: number | null;
-            /** @enum {string} */
-            paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID";
-            /** Format: int64 */
-            amountDueMinor?: number | null;
-            amountDueCurrency?: string | null;
-            counter?: string | null;
-        };
-        LineActionResult: {
-            /** @enum {string} */
-            outcome?: "OK" | "NOT_FOUND" | "WRONG_STATE" | "PAYMENT_DUE";
-            ticket?: components["schemas"]["LineTicket"] | null;
-        };
-        MarkPaidRequest: {
-            /** @enum {string} */
-            method?: "MOBILE_MONEY" | "PAYMENT_LINK" | "CASH";
-        };
-        TicketInfo: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            eventId?: string | null;
-            /** Format: uuid */
-            serviceId?: string | null;
-            /** Format: uuid */
-            guestId?: string;
-            ticketCode?: string;
-            status?: string;
-            /** Format: date-time */
-            issuedAt?: string;
-            /** Format: date-time */
-            checkedInAt?: string | null;
-            checkedInBy?: string | null;
-            /** Format: uuid */
-            ticketTypeId?: string | null;
-            /** @enum {string} */
-            paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID";
-            /** Format: int64 */
-            amountDueMinor?: number | null;
-            amountDueCurrency?: string | null;
-        };
-        NextResponse: {
-            ticket?: components["schemas"]["LineTicket"] | null;
-        };
-        ServiceRequirementRequest: {
-            /** @enum {string} */
-            type?: "PERSON" | "LOCATION" | "EQUIPMENT";
-            /** Format: int32 */
-            quantity?: number;
-        };
-        ServiceRequirementResponse: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            serviceId?: string;
-            /** @enum {string} */
-            type?: "PERSON" | "LOCATION" | "EQUIPMENT";
-            /** Format: int32 */
-            quantity?: number;
-        };
-        TransferTicketRequest: {
-            firstName: string;
-            lastName: string;
-            /** Format: email */
-            email?: string | null;
-            phoneNumber?: string | null;
-        };
-        RsvpPayment: {
-            /** @enum {string} */
-            status?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID";
-            /** Format: int64 */
-            amountMinor?: number;
-            currency?: string;
-            methods?: components["schemas"]["TenantPaymentMethodsInfo"] | null;
-        };
-        RsvpQuestion: {
-            /** Format: uuid */
-            questionId?: string;
-            prompt?: string;
-            required?: boolean;
-        };
-        RsvpView: {
-            eventName?: string;
-            eventWhen?: string | null;
-            eventLocation?: string | null;
-            organizerName?: string;
-            primaryColor?: string;
-            logoUrl?: string | null;
-            guestName?: string;
-            status?: string;
-            ticketCode?: string | null;
-            eventStatus?: string | null;
-            erased?: boolean;
-            transferAllowed?: boolean;
-            /** Format: date-time */
-            transferDeadline?: string | null;
-            transferredTo?: string | null;
-            questions?: components["schemas"]["RsvpQuestion"][];
-            organizerVerification?: string | null;
-            payment?: components["schemas"]["RsvpPayment"] | null;
-            /** Format: date-time */
-            eventStart?: string | null;
-            /** Format: date-time */
-            eventEnd?: string | null;
-            eventTimezone?: string | null;
-            categoryName?: string | null;
-        };
-        ResourceCreateRequest: {
-            name: string;
-            /** @enum {string} */
-            type?: "PERSON" | "LOCATION" | "EQUIPMENT";
-            timezone: string;
-        };
-        ResourceView: {
-            /** Format: uuid */
-            id?: string;
-            name?: string;
-            /** @enum {string} */
-            type?: "PERSON" | "LOCATION" | "EQUIPMENT";
-            timezone?: string;
-            active?: boolean;
-        };
-        UnavailabilityRequest: {
-            /** Format: date-time */
-            startsAt?: string;
-            /** Format: date-time */
-            endsAt?: string;
-            reason?: string | null;
-        };
-        ResourceUnavailabilityView: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            resourceId?: string;
-            /** Format: date-time */
-            startsAt?: string;
-            /** Format: date-time */
-            endsAt?: string;
-            reason?: string | null;
-        };
-        AvailabilityRequest: {
-            /** Format: int32 */
-            dayOfWeek?: number;
-            start?: string;
-            end?: string;
-        };
-        ResourceAvailabilityView: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            resourceId?: string;
-            /** Format: int32 */
-            dayOfWeek?: number;
-            start?: string;
-            end?: string;
-        };
-        ClientLineTicketView: {
-            ticketCode?: string;
-            status?: string;
-            /** Format: int32 */
-            dayRank?: number | null;
-            /** Format: int32 */
-            peopleAhead?: number;
-            /** Format: int64 */
-            estimatedWaitMinutes?: number;
-            counter?: string | null;
-            /** @enum {string} */
-            paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID";
-            /** Format: int64 */
-            amountDueMinor?: number | null;
-            amountDueCurrency?: string | null;
-        };
-        AppointmentBookingRequest: {
-            clientName: string;
-            clientPhone: string;
-            /** Format: date-time */
-            startsAt?: string;
-        };
-        AppointmentBookingView: {
-            bookingToken?: string;
-            status?: string;
-            /** Format: date-time */
-            startsAt?: string;
-            /** Format: date-time */
-            endsAt?: string;
-        };
-        OrderLineRequest: {
-            /** Format: uuid */
-            ticketTypeId?: string;
-            /** Format: int32 */
-            quantity?: number;
-        };
-        PlaceOrderRequest: {
-            lines: components["schemas"]["OrderLineRequest"][];
-            buyerName: string;
-            buyerPhone: string;
-            /** Format: email */
-            buyerEmail?: string | null;
-        };
-        OrderLineView: {
-            /** Format: uuid */
-            ticketTypeId?: string;
-            label?: string;
-            /** Format: int32 */
-            quantity?: number;
-            /** Format: int64 */
-            unitPriceMinor?: number;
-        };
-        OrderView: {
-            reference?: string;
-            /** @enum {string} */
-            status?: "AWAITING_PAYMENT" | "DECLARED" | "PAID" | "EXPIRED" | "REJECTED";
-            /** Format: uuid */
-            eventId?: string;
-            eventName?: string;
-            /** Format: date-time */
-            eventStart?: string | null;
-            eventTimezone?: string;
-            organizerName?: string;
-            organizerVerification?: string | null;
-            buyerName?: string;
-            lines?: components["schemas"]["OrderLineView"][];
-            /** Format: int64 */
-            totalMinor?: number;
-            currency?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            expiresAt?: string;
-            /** Format: date-time */
-            declaredAt?: string | null;
-            paymentReference?: string | null;
-            rejectionReason?: string | null;
-            paymentMethods?: components["schemas"]["TenantPaymentMethodsInfo"] | null;
-            ticketTokens?: string[];
-        };
-        PlacedOrderView: {
-            token?: string;
-            order?: components["schemas"]["OrderView"];
-        };
-        ProspectLeadRequest: {
-            businessName: string;
-            contactName: string;
-            phone: string;
-            sector: string;
-            /** Format: email */
-            email?: string | null;
-            city?: string | null;
-            weeklyVolume?: string | null;
-            note?: string | null;
-            source?: string | null;
-        };
-        ProspectLeadAck: {
-            /** Format: uuid */
-            id?: string;
-        };
-        CreateOrgRequest: {
-            name: string;
-            country?: string | null;
-        };
-        AuthResponse: {
-            accessToken?: string;
-            refreshToken?: string;
-            tokenType?: string;
-        };
-        DeclarePaymentRequest: {
-            paymentReference: string;
-        };
-        EmailFeedbackEventDto: {
-            recipient: string;
-            type: string;
-        };
-        EmailFeedbackWebhookRequest: {
-            events?: components["schemas"]["EmailFeedbackEventDto"][];
-        };
-        InviteMemberRequest: {
-            /** Format: email */
-            email: string;
-            role: string;
-        };
-        InvitationView: {
-            /** Format: uuid */
-            id?: string;
-            email?: string;
-            role?: string;
-            /** Format: date-time */
-            expiresAt?: string;
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        FeedbackRequest: {
-            kind: string;
-            message: string;
-            page?: string | null;
-            /** Format: email */
-            contactEmail?: string | null;
-            language?: string | null;
-        };
-        FeedbackAck: {
-            /** Format: uuid */
-            id?: string;
-        };
-        RatingRequest: {
-            moment: string;
-            /** Format: int32 */
-            score?: number | null;
-            comment?: string | null;
-            page?: string | null;
-        };
-        CreateEventRequest: {
-            name: string;
-            description?: string | null;
-            /** Format: date-time */
-            startDateTime?: string | null;
-            /** Format: date-time */
-            endDateTime?: string | null;
-            timezone: string;
-            location?: string | null;
-            /** Format: int32 */
-            maxCapacity?: number | null;
-            settings?: components["schemas"]["EventSettingsDto"];
-            invitationChannels?: ("EMAIL" | "WHATSAPP")[];
-        };
-        CancelEventRequest: {
-            notifyGuests?: boolean | null;
-        };
-        CreateValidatorRequest: {
-            label?: string | null;
-        };
-        ValidatorResponse: {
-            /** Format: uuid */
-            id?: string;
-            label?: string;
-            link?: string;
-            revoked?: boolean;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            revokedAt?: string | null;
-        };
-        CreateEventQuestionRequest: {
-            prompt: string;
-            required?: boolean;
-            /** Format: int32 */
-            position?: number;
-        };
-        EventQuestionResponse: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            eventId?: string;
-            prompt?: string;
-            required?: boolean;
-            /** Format: int32 */
-            position?: number;
-        };
-        InitiatePaymentRequest: {
-            tier: string;
-        };
-        PaymentInitiationResult: {
-            /** Format: uuid */
-            paymentId?: string;
-            status?: string;
-            /** Format: int64 */
-            amountMinor?: number;
-            currency?: string;
-            instruction?: components["schemas"]["PaymentInstruction"];
-        };
-        PaymentInstruction: {
-            type?: string;
-            value?: string;
-        };
-        ManualPaymentRequest: {
-            tier: string;
-        };
-        ManualPaymentInstructions: {
-            /** Format: uuid */
-            paymentId?: string;
-            reference?: string;
-            tier?: string;
-            /** Format: int64 */
-            amountMinor?: number;
-            currency?: string;
-            status?: string;
-            payee?: components["schemas"]["PayeeDetails"];
-        };
-        RejectOrderRequest: {
-            reason: string;
-        };
-        OrganizerOrderView: {
-            /** Format: uuid */
-            id?: string;
-            reference?: string;
-            /** @enum {string} */
-            status?: "AWAITING_PAYMENT" | "DECLARED" | "PAID" | "EXPIRED" | "REJECTED";
-            buyerName?: string;
-            buyerPhone?: string;
-            buyerEmail?: string | null;
-            lines?: components["schemas"]["OrderLineView"][];
-            /** Format: int32 */
-            ticketCount?: number;
-            /** Format: int64 */
-            totalMinor?: number;
-            currency?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            expiresAt?: string;
-            /** Format: date-time */
-            declaredAt?: string | null;
-            paymentReference?: string | null;
-            /** Format: date-time */
-            decidedAt?: string | null;
-            rejectionReason?: string | null;
-        };
-        CreateEventOccurrenceRequest: {
-            /** Format: date-time */
-            startsAt: string;
-            /** Format: date-time */
-            endsAt?: string | null;
-            /** Format: int32 */
-            capacity?: number | null;
-        };
-        EventOccurrenceResponse: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            eventId?: string;
-            /** Format: date-time */
-            startsAt?: string;
-            /** Format: date-time */
-            endsAt?: string | null;
-            /** Format: int32 */
-            capacity?: number | null;
-        };
-        SendInvitationsResult: {
-            /** Format: int32 */
-            queued?: number;
-        };
-        GuestImportResult: {
-            /** Format: int32 */
-            imported?: number;
-            /** Format: int32 */
-            skippedDuplicates?: number;
-            /** Format: int32 */
-            failed?: number;
-            failures?: components["schemas"]["RowIssue"][];
-            warnings?: components["schemas"]["RowIssue"][];
-        };
-        RowIssue: {
-            /** Format: int32 */
-            row?: number;
-            reason?: string;
-        };
-        OpenBatchRequest: {
-            /** Format: uuid */
-            ticketTypeId?: string;
-            /** @enum {string} */
-            mode?: "FREE" | "CREDIT" | "PAY";
-            manual?: boolean;
-        };
-        OpenedBatchView: {
-            /** Format: uuid */
-            batchId?: string;
-            /** @enum {string} */
-            funding?: "FREE" | "PAID" | "CREDIT" | "OVERAGE";
-            /** @enum {string} */
-            status?: "PENDING_PAYMENT" | "ACTIVE" | "CLOSED" | "CANCELLED";
-            /** Format: int32 */
-            size?: number;
-            /** Format: int64 */
-            totalMinor?: number;
-            currency?: string;
-            payment?: components["schemas"]["PaymentInitiationResult"] | null;
-            instructions?: components["schemas"]["ManualPaymentInstructions"] | null;
-        };
-        ScanRequest: {
-            ticketCode: string;
-        };
-        CheckInResponse: {
-            outcome?: string;
-            guestName?: string | null;
-            ticketCode?: string | null;
-            /** Format: date-time */
-            checkedInAt?: string | null;
-            checkedInBy?: string | null;
-            ticketTypeLabel?: string | null;
-            ticketTypeColor?: string | null;
-            /** Format: int64 */
-            amountDueMinor?: number | null;
-            amountDueCurrency?: string | null;
-        };
-        ManualCheckInRequest: {
-            /** Format: uuid */
-            guestId?: string;
-        };
-        SyncItem: {
-            ticketCode: string;
-            /** Format: date-time */
-            scannedAt?: string;
-        };
-        SyncRequest: {
-            items?: components["schemas"]["SyncItem"][];
-        };
-        SyncResultEntry: {
-            ticketCode?: string;
-            outcome?: string;
-            guestName?: string | null;
-            /** Format: date-time */
-            checkedInAt?: string | null;
-            checkedInBy?: string | null;
-        };
-        PackRequest: {
-            /** Format: int32 */
-            months?: number;
-        };
-        SubscriptionRequest: {
-            plan: string;
-            /** Format: int32 */
-            months?: number;
-        };
-        PackExtraRequest: {
-            /** Format: int32 */
-            blocks?: number;
-        };
-        InvoiceDetail: {
-            /** Format: uuid */
-            id?: string;
-            invoiceNumber?: string;
-            documentType?: string;
-            /** Format: uuid */
-            correctedInvoiceId?: string | null;
-            buyer?: components["schemas"]["InvoiceParty"];
-            seller?: components["schemas"]["InvoiceParty"];
-            currency?: string;
-            lines?: components["schemas"]["InvoiceLineView"][];
-            /** Format: int64 */
-            subtotalMinor?: number;
-            taxLabel?: string | null;
-            taxRate?: number;
-            /** Format: int64 */
-            taxAmountMinor?: number;
-            /** Format: int64 */
-            totalMinor?: number;
-            /** Format: date */
-            issueDate?: string;
-            /** Format: date-time */
-            issuedAt?: string;
-            /** Format: uuid */
-            paymentId?: string | null;
-        };
-        InvoiceLineView: {
-            /** Format: int32 */
-            lineNumber?: number;
-            description?: string;
-            /** Format: int64 */
-            quantity?: number;
-            /** Format: int64 */
-            unitPriceMinor?: number;
-            /** Format: int64 */
-            lineTotalMinor?: number;
-        };
-        InvoiceParty: {
-            legalName?: string;
-            addressLine?: string | null;
-            city?: string | null;
-            country?: string | null;
-            registrationNumber?: string | null;
-            taxIdentifier?: string | null;
-        };
-        VerifyEmailRequest: {
-            token: string;
-        };
-        SwitchOrgRequest: {
-            tenantId: string;
-        };
-        ResetPasswordRequest: {
-            token: string;
-            password: string;
-        };
-        RegisterRequest: {
-            name?: string | null;
-            fullName?: string | null;
-            /** Format: email */
-            email: string;
-            password: string;
-            country?: string | null;
-        };
-        RefreshRequest: {
-            refreshToken: string;
-        };
-        LoginRequest: {
-            /** Format: email */
-            email: string;
-            password: string;
-        };
         AcceptInvitationRequest: {
             token: string;
-        };
-        GoogleLoginRequest: {
-            idToken: string;
-        };
-        ForgotPasswordRequest: {
-            /** Format: email */
-            email: string;
-        };
-        SetContentOverrideRequest: {
-            active?: boolean;
-            reason: string;
-        };
-        WhatsAppOverrideStatus: {
-            active?: boolean;
-            reason?: string | null;
-            activatedBy?: string | null;
-            /** Format: date-time */
-            activatedAt?: string | null;
-        };
-        VerificationRejectRequest: {
-            reason: string;
-        };
-        AdminVerificationView: {
-            /** Format: uuid */
-            id?: string;
-            tenantId?: string;
-            tenantName?: string | null;
-            kind?: string;
-            status?: string;
-            legalName?: string;
-            documentType?: string;
-            registrationNumber?: string | null;
-            taxIdentifier?: string | null;
-            phone?: string | null;
-            /** Format: date-time */
-            submittedAt?: string;
-            /** Format: date-time */
-            decidedAt?: string | null;
-            rejectionReason?: string | null;
-            documentsAvailable?: boolean;
-        };
-        GrantTrialRequest: {
-            /** Format: uuid */
-            tenantId: string | null;
-            /** Format: uuid */
-            eventId: string | null;
-            tier: string;
-            /** Format: date-time */
-            expiresAt: string | null;
-        };
-        AdminTrialView: {
-            /** Format: uuid */
-            id?: string;
-            tenantId?: string;
-            tenantName?: string | null;
-            /** Format: uuid */
-            eventId?: string;
-            eventName?: string | null;
-            tier?: string;
-            /** Format: int64 */
-            grantedAllowance?: number;
-            /** Format: date-time */
-            expiresAt?: string;
-            status?: string;
-            endedReason?: string | null;
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        EndTrialRequest: {
-            reason: string;
-        };
-        TenantStatusChangeRequest: {
-            note: string;
-        };
-        ProspectLeadView: {
-            /** Format: uuid */
-            id?: string;
-            businessName?: string;
-            contactName?: string;
-            phone?: string;
-            email?: string | null;
-            sector?: string;
-            city?: string | null;
-            weeklyVolume?: string | null;
-            note?: string | null;
-            source?: string | null;
-            status?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            contactedAt?: string | null;
-        };
-        RejectPaymentRequest: {
-            reason: string;
-        };
-        AdminPaymentView: {
-            /** Format: uuid */
-            id?: string;
-            tenantId?: string;
-            /** Format: uuid */
-            eventId?: string | null;
-            tier?: string;
-            /** Format: int64 */
-            amountMinor?: number;
-            currency?: string;
-            provider?: string;
-            reference?: string;
-            status?: string;
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        ConfirmPaymentRequest: {
-            transactionReference: string;
-        };
-        FeedbackStatusRequest: {
-            status: string;
-            note?: string | null;
-        };
-        FeedbackView: {
-            /** Format: uuid */
-            id?: string;
-            kind?: string;
-            moment?: string | null;
-            /** Format: int32 */
-            score?: number | null;
-            message?: string | null;
-            page?: string | null;
-            contactEmail?: string | null;
-            language?: string | null;
-            tenantId?: string | null;
-            organizationName?: string | null;
-            status?: string;
-            adminNote?: string | null;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string | null;
-        };
-        AdminRefreshRequest: {
-            refreshToken?: string;
         };
         AdminAuthResponse: {
             accessToken?: string;
@@ -5019,397 +3843,154 @@ export interface components {
             email?: string;
             password?: string;
         };
-        CreateAgreementRequest: {
-            /** Format: uuid */
-            tenantId: string | null;
-            kind: string;
-            /** Format: date-time */
-            periodStart: string | null;
-            /** Format: date-time */
-            periodEnd: string | null;
-            /** Format: date-time */
-            renewalAt?: string | null;
+        AdminPaymentView: {
             /** Format: int64 */
-            amountMinor?: number | null;
-            currency?: string | null;
-            notes?: string | null;
-        };
-        AgreementView: {
+            amountMinor?: number;
+            /** Format: date-time */
+            createdAt?: string;
+            currency?: string;
+            /** Format: uuid */
+            eventId?: string | null;
             /** Format: uuid */
             id?: string;
-            /** Format: uuid */
+            provider?: string;
+            reference?: string;
+            status?: string;
             tenantId?: string;
-            kind?: string;
+            tier?: string;
+        };
+        AdminRefreshRequest: {
+            refreshToken?: string;
+        };
+        AdminTierCatalog: {
+            currency?: string;
+            tiers?: components["schemas"]["BillingTierOption"][];
+        };
+        AdminTrialPage: {
+            entries?: components["schemas"]["AdminTrialView"][];
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            size?: number;
+            /** Format: int64 */
+            total?: number;
+        };
+        AdminTrialStats: {
+            /** Format: int64 */
+            active?: number;
+            /** Format: double */
+            conversionRatePercent?: number | null;
+            /** Format: int64 */
+            convertedThisMonth?: number;
+            /** Format: int64 */
+            expiringWithin7Days?: number;
+        };
+        AdminTrialView: {
             /** Format: date-time */
-            periodStart?: string;
+            createdAt?: string;
+            endedReason?: string | null;
+            /** Format: uuid */
+            eventId?: string;
+            eventName?: string | null;
+            /** Format: date-time */
+            expiresAt?: string;
+            /** Format: int64 */
+            grantedAllowance?: number;
+            /** Format: uuid */
+            id?: string;
+            status?: string;
+            tenantId?: string;
+            tenantName?: string | null;
+            tier?: string;
+        };
+        AdminVerificationView: {
+            /** Format: date-time */
+            decidedAt?: string | null;
+            documentType?: string;
+            documentsAvailable?: boolean;
+            /** Format: uuid */
+            id?: string;
+            kind?: string;
+            legalName?: string;
+            phone?: string | null;
+            registrationNumber?: string | null;
+            rejectionReason?: string | null;
+            status?: string;
+            /** Format: date-time */
+            submittedAt?: string;
+            taxIdentifier?: string | null;
+            tenantId?: string;
+            tenantName?: string | null;
+        };
+        AgreementView: {
+            /** Format: int64 */
+            amountMinor?: number | null;
+            /** Format: date-time */
+            createdAt?: string;
+            currency?: string | null;
+            /** Format: uuid */
+            id?: string;
+            interruptedReason?: string | null;
+            kind?: string;
+            notes?: string | null;
             /** Format: date-time */
             periodEnd?: string;
             /** Format: date-time */
+            periodStart?: string;
+            /** Format: date-time */
             renewalAt?: string;
-            /** Format: int64 */
-            amountMinor?: number | null;
-            currency?: string | null;
-            status?: string;
-            notes?: string | null;
-            interruptedReason?: string | null;
             /** Format: uuid */
             renewedBy?: string | null;
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        RenewAgreementRequest: {
-            /** Format: date-time */
-            periodEnd: string | null;
-            /** Format: date-time */
-            renewalAt?: string | null;
-            /** Format: int64 */
-            amountMinor?: number | null;
-            currency?: string | null;
-            notes?: string | null;
-        };
-        InterruptAgreementRequest: {
-            reason: string;
-        };
-        ServiceUpdateRequest: {
-            name?: string | null;
-            /** @enum {string|null} */
-            paymentRule?: "FREE" | "BEFORE" | "AFTER_SERVICE" | null;
-            /** Format: int64 */
-            priceMinor?: number | null;
-        };
-        ResourceUpdateRequest: {
-            name?: string | null;
-            active?: boolean | null;
-        };
-        SetGuestTicketTypeRequest: {
+            status?: string;
             /** Format: uuid */
-            ticketTypeId?: string | null;
+            tenantId?: string;
         };
-        GuestResponse: {
-            /** Format: uuid */
-            id?: string;
-            firstName?: string;
-            lastName?: string;
-            email?: string | null;
-            phoneNumber?: string | null;
-            excludedFromInvitations?: boolean;
-            /** Format: date-time */
-            checkedInAt?: string | null;
-            /** Format: uuid */
-            ticketTypeId?: string | null;
-            /** @enum {string} */
-            rsvpStatus?: "PENDING" | "CONFIRMED" | "DECLINED" | "TRANSFERRED";
-            ticketCode?: string | null;
-            /** @enum {string|null} */
-            paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID" | null;
-            /** Format: int64 */
-            amountDueMinor?: number | null;
-            amountDueCurrency?: string | null;
+        AnalyticsResponse: {
+            channelBreakdown?: components["schemas"]["ChannelBreakdown"][];
+            checkInTimeline?: components["schemas"]["TimeBucket"][];
+            guestGrowth?: components["schemas"]["DateCount"][];
         };
-        SetGuestExclusionRequest: {
-            excluded?: boolean;
-        };
-        VerificationLimits: {
-            /** Format: int32 */
-            maxFiles?: number;
-            /** Format: int32 */
-            maxFileBytes?: number;
-        };
-        VerificationOverview: {
-            verified?: boolean;
-            personal?: components["schemas"]["VerificationRequestView"] | null;
-            company?: components["schemas"]["VerificationRequestView"] | null;
-            phone?: components["schemas"]["PhoneStatusView"];
-            limits?: components["schemas"]["VerificationLimits"];
-        };
-        TemplateSummary: {
-            name?: string;
-            label?: string;
-            channels?: string[];
-        };
-        EmbeddedSignupConfig: {
-            enabled?: boolean;
-            appId?: string | null;
-            configId?: string | null;
-            graphVersion?: string | null;
-        };
-        ServiceStaffView: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            serviceId?: string;
-            label?: string;
-            revoked?: boolean;
-            code?: string | null;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            revokedAt?: string | null;
-        };
-        PendingAppointmentRequest: {
-            /** Format: uuid */
-            id?: string;
+        AppointmentBookingRequest: {
+            clientName: string;
+            clientPhone: string;
             /** Format: date-time */
             startsAt?: string;
+        };
+        AppointmentBookingView: {
+            bookingToken?: string;
             /** Format: date-time */
             endsAt?: string;
-            clientName?: string | null;
-            clientPhone?: string | null;
-            /** Format: date-time */
-            requestedAt?: string;
-            /** Format: date-time */
-            heldUntil?: string | null;
-        };
-        BookingLinkResponse: {
-            token?: string;
-            shortCode?: string;
-        };
-        FreeSlotResponse: {
-            free?: boolean;
-        };
-        AppointmentServiceView: {
-            /** Format: uuid */
-            serviceId?: string;
-            name?: string;
-            timezone?: string;
-            confirmationMode?: string;
-            professionals?: string[];
-            slots?: components["schemas"]["AppointmentSlotView"][];
-            /** Format: int32 */
-            clientsPerSlot?: number;
-            organizerVerification?: string | null;
-        };
-        AppointmentSlotView: {
             /** Format: date-time */
             startsAt?: string;
+            status?: string;
+        };
+        AppointmentServiceView: {
+            /** Format: int32 */
+            clientsPerSlot?: number;
+            confirmationMode?: string;
+            name?: string;
+            organizerVerification?: string | null;
+            professionals?: string[];
+            /** Format: uuid */
+            serviceId?: string;
+            slots?: components["schemas"]["AppointmentSlotView"][];
+            timezone?: string;
+        };
+        AppointmentSlotView: {
             /** Format: date-time */
             endsAt?: string;
             /** Format: int32 */
             placesLeft?: number;
-        };
-        AppointmentStatusView: {
-            status?: string;
             /** Format: date-time */
             startsAt?: string;
+        };
+        AppointmentStatusView: {
+            clientName?: string | null;
             /** Format: date-time */
             endsAt?: string;
-            clientName?: string | null;
-        };
-        PublicOrgProfileView: {
-            organizationName?: string;
-            logoUrl?: string | null;
-            bannerUrl?: string | null;
-            primaryColor?: string;
-            services?: components["schemas"]["PublicOrgServiceView"][];
-            verification?: string | null;
-        };
-        PublicOrgServiceView: {
-            /** Format: uuid */
-            serviceId?: string;
-            name?: string;
-            shortCode?: string;
-        };
-        PublicSaleCategoryView: {
-            /** Format: uuid */
-            id?: string;
-            label?: string;
-            colorHex?: string;
-            /** Format: int64 */
-            priceMinor?: number;
-            currency?: string;
-            /** Format: int32 */
-            available?: number | null;
-            paused?: boolean;
-        };
-        PublicSaleView: {
-            /** Format: uuid */
-            eventId?: string;
-            eventName?: string;
             /** Format: date-time */
-            eventStart?: string | null;
-            /** Format: date-time */
-            eventEnd?: string | null;
-            eventTimezone?: string;
-            eventLocation?: string | null;
-            organizerName?: string;
-            logoUrl?: string | null;
-            primaryColor?: string;
-            organizerVerification?: string | null;
-            categories?: components["schemas"]["PublicSaleCategoryView"][];
-            /** Format: int32 */
-            maxTicketsPerOrder?: number;
-            /** Format: int64 */
-            holdMinutes?: number;
-            onSale?: boolean;
-            /** @enum {string|null} */
-            closedReason?: "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "NOTHING_FOR_SALE" | "ORGANIZER_NOT_VERIFIED" | "NO_PAYMENT_METHOD" | "PAUSED" | null;
-        };
-        OperatorTeamView: {
-            operators?: components["schemas"]["OperatorView"][];
-            /** Format: int32 */
-            billableSeats?: number;
-        };
-        OperatorConsoleEvent: {
-            /** Format: uuid */
-            id?: string;
-            name?: string;
+            startsAt?: string;
             status?: string;
-            /** Format: date-time */
-            startDateTime?: string | null;
-            timezone?: string;
-            location?: string | null;
-        };
-        OperatorConsoleService: {
-            /** Format: uuid */
-            id?: string;
-            name?: string;
-            timezone?: string;
-        };
-        OperatorConsoleView: {
-            label?: string;
-            actions?: ("CHECK_IN" | "QUEUE" | "COLLECT")[];
-            events?: components["schemas"]["OperatorConsoleEvent"][];
-            services?: components["schemas"]["OperatorConsoleService"][];
-        };
-        OperatorLinkResolution: {
-            token?: string;
-        };
-        LineCodeResolution: {
-            token?: string;
-        };
-        PromptDecision: {
-            show?: boolean;
-        };
-        BillingAllowance: {
-            /** Format: int64 */
-            invitedGuests?: number;
-            /** Format: int64 */
-            allowance?: number;
-            /** Format: int64 */
-            remaining?: number;
-            withinAllowance?: boolean;
-            tier?: string;
-            /** Format: int64 */
-            guestsImported?: number;
-            /** Format: int64 */
-            invitationsSentEmail?: number;
-            /** Format: int64 */
-            invitationsSentWhatsapp?: number;
-        };
-        InvitationStatusResponse: {
-            /** Format: uuid */
-            guestId?: string;
-            channel?: string;
-            status?: string;
-            /** Format: int32 */
-            attempts?: number;
-            /** Format: date-time */
-            sentAt?: string | null;
-        };
-        DashboardResponse: {
-            eventName?: string;
-            eventStatus?: string;
-            /** Format: int64 */
-            totalGuests?: number;
-            /** Format: int64 */
-            invited?: number;
-            /** Format: int64 */
-            confirmed?: number;
-            /** Format: int64 */
-            declined?: number;
-            /** Format: int64 */
-            pending?: number;
-            /** Format: int64 */
-            checkedIn?: number;
-            entrances?: components["schemas"]["EntranceCount"][];
-            quorum?: components["schemas"]["QuorumView"] | null;
-            deliverability?: components["schemas"]["DeliverabilityFlag"];
-            usage?: components["schemas"]["UsageSummary"];
-        };
-        DataRetentionNotice: {
-            /** Format: date-time */
-            anonymizeOn?: string;
-        };
-        DeliverabilityFlag: {
-            /** Format: int32 */
-            bounceRatePercent?: number;
-            warn?: boolean;
-        };
-        EntranceCount: {
-            label?: string;
-            /** Format: int64 */
-            checkedIn?: number;
-        };
-        QuorumView: {
-            /** Format: int64 */
-            required?: number;
-            /** Format: int64 */
-            current?: number;
-            reached?: boolean;
-            /** Format: date-time */
-            reachedAt?: string | null;
-        };
-        UsageSummary: {
-            /** Format: int64 */
-            invited?: number;
-            /** Format: int64 */
-            allowance?: number;
-            /** Format: int64 */
-            remaining?: number;
-            tier?: string;
-            withinAllowance?: boolean;
-            dataRetention?: components["schemas"]["DataRetentionNotice"] | null;
-        };
-        CommissionCategoryView: {
-            /** Format: uuid */
-            ticketTypeId?: string;
-            label?: string;
-            /** Format: int64 */
-            priceMinor?: number;
-            /** Format: int64 */
-            unitCommissionMinor?: number;
-            /** Format: int32 */
-            covered?: number;
-            /** Format: int32 */
-            sold?: number;
-            pendingPayment?: boolean;
-            /** Format: int32 */
-            nextBatchSize?: number;
-        };
-        CommissionOverview: {
-            /** Format: uuid */
-            eventId?: string;
-            currency?: string;
-            ratePercent?: string;
-            /** Format: int32 */
-            batchSize?: number;
-            onEventDay?: boolean;
-            categories?: components["schemas"]["CommissionCategoryView"][];
-            /** Format: int64 */
-            owedMinor?: number;
-            /** Format: int64 */
-            creditMinor?: number;
-            freeBatchAvailable?: boolean;
-            creditBatchAvailable?: boolean;
-        };
-        CommissionQuote: {
-            /** Format: uuid */
-            ticketTypeId?: string;
-            /** Format: int32 */
-            size?: number;
-            /** Format: int64 */
-            unitCommissionMinor?: number;
-            /** Format: int64 */
-            amountMinor?: number;
-            /** Format: int64 */
-            owedMinor?: number;
-            /** Format: int64 */
-            creditAppliedMinor?: number;
-            /** Format: int64 */
-            totalMinor?: number;
-            currency?: string;
-            freeBatchAvailable?: boolean;
-            creditBatchAvailable?: boolean;
         };
         AttendanceResponse: {
             /** Format: int64 */
@@ -5417,113 +3998,234 @@ export interface components {
             /** Format: int64 */
             confirmed?: number;
         };
-        GuestMatch: {
+        AuditEntry: {
+            action?: string;
             /** Format: uuid */
-            guestId?: string;
-            name?: string;
-            email?: string | null;
-            phoneNumber?: string | null;
-            rsvpStatus?: string;
-            ticketCode?: string | null;
-            ticketStatus?: string | null;
+            adminId?: string;
             /** Format: date-time */
-            checkedInAt?: string | null;
-            checkedInBy?: string | null;
-            ticketTypeLabel?: string | null;
-            ticketTypeColor?: string | null;
+            createdAt?: string;
+            /** Format: uuid */
+            id?: string;
+            note?: string | null;
+            target?: string;
         };
-        EventTierQuote: {
+        AuditPage: {
+            entries?: components["schemas"]["AuditEntry"][];
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            size?: number;
+            /** Format: int64 */
+            total?: number;
+        };
+        AuthResponse: {
+            accessToken?: string;
+            refreshToken?: string;
+            tokenType?: string;
+        };
+        AvailabilityRequest: {
+            /** Format: int32 */
+            dayOfWeek?: number;
+            end?: string;
+            start?: string;
+        };
+        BillingAllowance: {
+            /** Format: int64 */
+            allowance?: number;
+            /** Format: int64 */
+            guestsImported?: number;
+            /** Format: int64 */
+            invitationsSentEmail?: number;
+            /** Format: int64 */
+            invitationsSentWhatsapp?: number;
+            /** Format: int64 */
+            invitedGuests?: number;
+            /** Format: int64 */
+            remaining?: number;
             tier?: string;
+            withinAllowance?: boolean;
+        };
+        BillingTierOption: {
             /** Format: int64 */
             maxGuests?: number;
-            /** Format: int64 */
-            amountMinor?: number;
-            /** Format: int64 */
-            surchargeMinor?: number;
-            currency?: string;
-            interactive?: boolean;
+            name?: string;
+            price?: components["schemas"]["PriceList"];
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use price
+             */
+            priceMinor?: number;
         };
-        AnalyticsResponse: {
-            checkInTimeline?: components["schemas"]["TimeBucket"][];
-            channelBreakdown?: components["schemas"]["ChannelBreakdown"][];
-            guestGrowth?: components["schemas"]["DateCount"][];
+        BookingLinkResponse: {
+            shortCode?: string;
+            token?: string;
+        };
+        BrandingResponse: {
+            bannerUrl?: string | null;
+            displayName?: string;
+            logoUrl?: string | null;
+            primaryColor?: string;
+        };
+        CancelEventRequest: {
+            notifyGuests?: boolean | null;
+        };
+        ChangeRoleRequest: {
+            role: string;
         };
         ChannelBreakdown: {
             channel?: string;
             /** Format: int64 */
-            sent?: number;
-            /** Format: int64 */
             failed?: number;
             /** Format: int64 */
             pending?: number;
-        };
-        DateCount: {
-            date?: string;
             /** Format: int64 */
-            count?: number;
+            sent?: number;
         };
-        TimeBucket: {
-            label?: string;
+        CheckInResponse: {
+            amountDueCurrency?: string | null;
             /** Format: int64 */
-            count?: number;
-        };
-        RosterEntry: {
-            /** Format: uuid */
-            guestId?: string;
-            name?: string;
-            email?: string | null;
-            phoneNumber?: string | null;
-            rsvpStatus?: string;
-            ticketCode?: string | null;
-            ticketStatus?: string | null;
+            amountDueMinor?: number | null;
             /** Format: date-time */
             checkedInAt?: string | null;
             checkedInBy?: string | null;
-            ticketTypeLabel?: string | null;
+            guestName?: string | null;
+            outcome?: string;
+            ticketCode?: string | null;
             ticketTypeColor?: string | null;
-            /** @enum {string|null} */
-            paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID" | null;
+            ticketTypeLabel?: string | null;
         };
-        ValidatorContextResponse: {
-            eventName?: string;
-            eventStatus?: string;
+        ClientLineTicketView: {
+            amountDueCurrency?: string | null;
+            /** Format: int64 */
+            amountDueMinor?: number | null;
+            counter?: string | null;
+            /** Format: int32 */
+            dayRank?: number | null;
+            /** Format: int64 */
+            estimatedWaitMinutes?: number;
+            /** @enum {string} */
+            paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID";
+            /** Format: int32 */
+            peopleAhead?: number;
+            status?: string;
+            ticketCode?: string;
+        };
+        CommissionCategoryView: {
+            /** Format: int32 */
+            covered?: number;
+            label?: string;
+            /** Format: int32 */
+            nextBatchSize?: number;
+            pendingPayment?: boolean;
+            /** Format: int64 */
+            priceMinor?: number;
+            /** Format: int32 */
+            sold?: number;
+            /** Format: uuid */
+            ticketTypeId?: string;
+            /** Format: int64 */
+            unitCommissionMinor?: number;
+        };
+        CommissionOverview: {
+            /** Format: int32 */
+            batchSize?: number;
+            categories?: components["schemas"]["CommissionCategoryView"][];
+            creditBatchAvailable?: boolean;
+            /** Format: int64 */
+            creditMinor?: number;
+            currency?: string;
+            /** Format: uuid */
+            eventId?: string;
+            freeBatchAvailable?: boolean;
+            onEventDay?: boolean;
+            /** Format: int64 */
+            owedMinor?: number;
+            ratePercent?: string;
+        };
+        CommissionQuote: {
+            /** Format: int64 */
+            amountMinor?: number;
+            /** Format: int64 */
+            creditAppliedMinor?: number;
+            creditBatchAvailable?: boolean;
+            currency?: string;
+            freeBatchAvailable?: boolean;
+            /** Format: int64 */
+            owedMinor?: number;
+            /** Format: int32 */
+            size?: number;
+            /** Format: uuid */
+            ticketTypeId?: string;
+            /** Format: int64 */
+            totalMinor?: number;
+            /** Format: int64 */
+            unitCommissionMinor?: number;
+        };
+        CompleteEmbeddedSignupRequest: {
+            code: string;
+            phoneNumberId: string;
+            wabaId: string;
+        };
+        ConfirmPaymentRequest: {
+            transactionReference: string;
+        };
+        CreateAgreementRequest: {
+            /** Format: int64 */
+            amountMinor?: number | null;
+            currency?: string | null;
+            kind: string;
+            notes?: string | null;
+            /** Format: date-time */
+            periodEnd: string | null;
+            /** Format: date-time */
+            periodStart: string | null;
+            /** Format: date-time */
+            renewalAt?: string | null;
+            /** Format: uuid */
+            tenantId: string | null;
+        };
+        CreateEventOccurrenceRequest: {
+            /** Format: int32 */
+            capacity?: number | null;
+            /** Format: date-time */
+            endsAt?: string | null;
+            /** Format: date-time */
+            startsAt: string;
+        };
+        CreateEventQuestionRequest: {
+            /** Format: int32 */
+            position?: number;
+            prompt: string;
+            required?: boolean;
+        };
+        CreateEventRequest: {
+            description?: string | null;
+            /** Format: date-time */
+            endDateTime?: string | null;
+            invitationChannels?: ("EMAIL" | "WHATSAPP")[];
+            location?: string | null;
+            /** Format: int32 */
+            maxCapacity?: number | null;
+            name: string;
+            settings?: components["schemas"]["EventSettingsDto"];
             /** Format: date-time */
             startDateTime?: string | null;
-            timezone?: string;
-            eventLocation?: string | null;
-            organizerName?: string;
-            primaryColor?: string;
-            logoUrl?: string | null;
-            validatorLabel?: string;
-            actions?: ("CHECK_IN" | "QUEUE" | "COLLECT")[];
-            /** Format: int64 */
-            checkedIn?: number;
-            /** Format: int64 */
-            confirmed?: number;
+            timezone: string;
         };
-        MonthOption: {
-            /** Format: int32 */
-            months?: number;
-            /** Format: int32 */
-            chargedMonths?: number;
-            /**
-             * Format: int32
-             * @deprecated
-             * @description Use chargedMonths
-             */
-            factorMilli?: number;
+        CreateOrgRequest: {
+            country?: string | null;
+            name: string;
         };
-        OwnWhatsAppNumberView: {
-            allowed?: boolean;
-            /** @enum {string} */
-            source?: "PLAN" | "PACK" | "ADDON" | "NONE";
-            /** Format: date-time */
-            addonExpiresAt?: string | null;
-            includedPlans?: string[];
+        CreateValidatorRequest: {
+            label?: string | null;
+        };
+        CustomQuote: {
             currency?: string;
             /** Format: int64 */
-            monthlyMinor?: number;
-            months?: components["schemas"]["MonthOption"][];
+            guestCount?: number;
+            /** Format: int64 */
+            priceMinor?: number;
         };
         CustomTierOption: {
             /** Format: int64 */
@@ -5541,221 +4243,162 @@ export interface components {
              */
             setupFeeUsdCents?: number;
         };
-        TierCatalog: {
-            currency?: string;
+        DashboardResponse: {
             /** Format: int64 */
-            freeTierGuests?: number;
-            tiers?: components["schemas"]["TierOption"][];
+            checkedIn?: number;
             /** Format: int64 */
-            interactivePerGuestMinor?: number;
-            custom?: components["schemas"]["CustomTierOption"];
-        };
-        TierOption: {
-            name?: string;
+            confirmed?: number;
             /** Format: int64 */
-            maxGuests?: number;
-            /** Format: int64 */
-            priceMinor?: number;
-        };
-        CustomQuote: {
-            /** Format: int64 */
-            guestCount?: number;
-            /** Format: int64 */
-            priceMinor?: number;
-            currency?: string;
-        };
-        PlanOption: {
-            name?: string;
-            /** Format: int64 */
-            includedPeople?: number;
-            /** Format: int64 */
-            maxPeople?: number | null;
-            /** Format: int64 */
-            monthlyMinor?: number;
-            /** Format: int64 */
-            extraPersonMinor?: number | null;
-            /** Format: int64 */
-            teamMonthlyMinor?: number | null;
-            /**
-             * Format: int64
-             * @deprecated
-             * @description Use maxPeople and includedPeople
-             */
-            maxResources?: number;
-            /**
-             * Format: int64
-             * @deprecated
-             * @description Use monthlyMinor
-             */
-            priceMinorPerMonth?: number;
-        };
-        ReminderAllowance: {
-            /** Format: int32 */
-            sent?: number;
-            /** Format: int32 */
-            limit?: number;
-        };
-        SubscriptionView: {
-            plan?: string;
-            currency?: string;
-            /** Format: int64 */
-            resourcesActive?: number;
-            /** Format: int64 */
-            resourcesIncluded?: number;
-            overLimit?: boolean;
-            status?: string;
-            /** Format: date-time */
-            startedAt?: string;
-            /** Format: date-time */
-            expiresAt?: string | null;
-            /** Format: date-time */
-            suspensionAt?: string | null;
-            /** Format: int64 */
-            monthlyMinor?: number;
-            plans?: components["schemas"]["PlanOption"][];
-            months?: components["schemas"]["MonthOption"][];
-            whatsAppReminders?: components["schemas"]["ReminderAllowance"] | null;
-        };
-        PaymentHistoryItem: {
-            /** Format: uuid */
-            paymentId?: string;
-            /** Format: uuid */
-            eventId?: string | null;
+            declined?: number;
+            deliverability?: components["schemas"]["DeliverabilityFlag"];
+            entrances?: components["schemas"]["EntranceCount"][];
             eventName?: string;
-            tier?: string;
+            eventStatus?: string;
             /** Format: int64 */
-            amountMinor?: number;
-            currency?: string;
-            status?: string;
-            /** Format: date-time */
-            createdAt?: string;
+            invited?: number;
+            /** Format: int64 */
+            pending?: number;
+            quorum?: components["schemas"]["QuorumView"] | null;
+            /** Format: int64 */
+            totalGuests?: number;
+            usage?: components["schemas"]["UsageSummary"];
         };
-        PaymentStatusView: {
+        DataRetentionNotice: {
+            /** Format: date-time */
+            anonymizeOn?: string;
+        };
+        DateCount: {
+            /** Format: int64 */
+            count?: number;
+            date?: string;
+        };
+        DayLineView: {
+            /** Format: date */
+            date?: string;
+            entries?: components["schemas"]["LineTicket"][];
             /** Format: uuid */
-            paymentId?: string;
-            kind?: string;
-            tier?: string;
-            /** Format: uuid */
-            eventId?: string | null;
+            serviceId?: string;
+            serviceName?: string;
+            timezone?: string;
+        };
+        DeclarePaymentRequest: {
+            paymentReference: string;
+        };
+        DeliverabilityFlag: {
             /** Format: int32 */
-            months?: number | null;
-            /** Format: int64 */
-            guests?: number | null;
-            /** Format: int64 */
-            amountMinor?: number;
-            currency?: string;
-            status?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
+            bounceRatePercent?: number;
+            warn?: boolean;
         };
-        PackView: {
-            active?: boolean;
-            /** Format: date-time */
-            startedAt?: string | null;
-            /** Format: date-time */
-            expiresAt?: string | null;
-            /** Format: date-time */
-            monthStart?: string | null;
-            /** Format: date-time */
-            monthEnd?: string | null;
+        EffectiveServiceConfig: {
+            /** Format: int32 */
+            bufferMinutes?: number;
+            /** Format: int32 */
+            cancelDeadlineHours?: number;
+            /** Format: int32 */
+            clientsPerSlot?: number;
+            /** @enum {string} */
+            confirmationMode?: "INSTANTANEOUS" | "ON_REQUEST";
+            /** Format: int32 */
+            durationMinutes?: number;
             /** Format: int64 */
-            includedGuests?: number;
+            holdMinutes?: number;
+            /** Format: int32 */
+            maxClientsPerSlot?: number;
+            /** Format: int32 */
+            maxHorizonDays?: number;
+            /** Format: int32 */
+            minHorizonMinutes?: number;
+            /** Format: int32 */
+            noShowToleranceMinutes?: number;
             /** Format: int64 */
-            extraGuests?: number;
-            /** Format: int64 */
-            usedGuests?: number;
-            /** Format: int64 */
-            remainingGuests?: number;
-            /** Format: int64 */
-            owedGuests?: number;
-            currency?: string;
-            /** Format: int64 */
-            monthlyMinor?: number;
-            /** Format: int64 */
-            extraPerGuestMinor?: number;
-            /** Format: int64 */
-            extraBlockGuests?: number;
-            /** Format: int64 */
-            owedMinor?: number;
-            months?: components["schemas"]["MonthOption"][];
+            occupancyMinutes?: number;
+            /** @enum {string} */
+            reminderChannel?: "WHATSAPP" | "SMS" | "WHATSAPP_OR_SMS" | "NONE";
+            reminderOffsetsMinutes?: number[];
+            /** Format: int32 */
+            stepMinutes?: number;
+            walkInsAllowed?: boolean;
         };
-        InvoiceSummary: {
+        EmailFeedbackEventDto: {
+            recipient: string;
+            type: string;
+        };
+        EmailFeedbackWebhookRequest: {
+            events?: components["schemas"]["EmailFeedbackEventDto"][];
+        };
+        EmailProviderView: {
+            apiKeyMasked?: string | null;
+            configured?: boolean;
+            from?: string | null;
+            fromName?: string | null;
+            provider?: string | null;
+        };
+        EmbeddedSignupConfig: {
+            appId?: string | null;
+            configId?: string | null;
+            enabled?: boolean;
+            graphVersion?: string | null;
+        };
+        EndTrialRequest: {
+            reason: string;
+        };
+        EntranceCount: {
+            /** Format: int64 */
+            checkedIn?: number;
+            label?: string;
+        };
+        EventOccurrenceResponse: {
+            /** Format: int32 */
+            capacity?: number | null;
+            /** Format: date-time */
+            endsAt?: string | null;
+            /** Format: uuid */
+            eventId?: string;
             /** Format: uuid */
             id?: string;
-            invoiceNumber?: string;
-            documentType?: string;
-            currency?: string;
-            /** Format: int64 */
-            totalMinor?: number;
-            /** Format: date */
-            issueDate?: string;
             /** Format: date-time */
-            issuedAt?: string;
+            startsAt?: string;
         };
-        MeResponse: {
-            userId?: string;
-            email?: string;
-            fullName?: string | null;
-            tenantId?: string;
-            role?: string;
-            memberships?: components["schemas"]["MembershipView"][];
-        };
-        MembershipView: {
-            tenantId?: string;
-            tenantName?: string;
-            role?: string;
-        };
-        InvitationPreview: {
-            organizationName?: string;
-            email?: string;
-            role?: string;
-        };
-        VerificationDocumentLink: {
+        EventQuestionResponse: {
+            /** Format: uuid */
+            eventId?: string;
+            /** Format: uuid */
+            id?: string;
             /** Format: int32 */
             position?: number;
-            contentType?: string;
-            url?: string;
+            prompt?: string;
+            required?: boolean;
         };
-        AdminTrialPage: {
-            entries?: components["schemas"]["AdminTrialView"][];
-            /** Format: int64 */
-            total?: number;
-            /** Format: int32 */
-            page?: number;
-            /** Format: int32 */
-            size?: number;
-        };
-        AdminTrialStats: {
-            /** Format: int64 */
-            active?: number;
-            /** Format: int64 */
-            expiringWithin7Days?: number;
-            /** Format: int64 */
-            convertedThisMonth?: number;
-            /** Format: double */
-            conversionRatePercent?: number | null;
-        };
-        TenantDirectoryEntry: {
+        EventResponse: {
+            description?: string | null;
+            /** Format: date-time */
+            endDateTime?: string | null;
             /** Format: uuid */
             id?: string;
+            invitationChannels?: ("EMAIL" | "WHATSAPP")[];
+            location?: string | null;
+            /** Format: int32 */
+            maxCapacity?: number | null;
             name?: string;
-            contactEmail?: string;
-            status?: string;
+            quorum?: components["schemas"]["QuorumResponse"] | null;
+            settings?: components["schemas"]["EventSettingsDto"];
             /** Format: date-time */
-            createdAt?: string;
-            /** Format: int64 */
-            organizerCount?: number;
+            startDateTime?: string | null;
+            status?: string;
+            timezone?: string;
         };
-        TenantDirectoryPage: {
-            entries?: components["schemas"]["TenantDirectoryEntry"][];
-            /** Format: int64 */
-            total?: number;
+        EventSettingsDto: {
+            brandColor?: string | null;
+            brandLogoUrl?: string | null;
+            brandName?: string | null;
+            /** @enum {string} */
+            deliveryMode?: "LINK" | "DIRECT_TICKET" | "INTERACTIVE";
             /** Format: int32 */
-            page?: number;
-            /** Format: int32 */
-            size?: number;
+            maxOverbookingCount?: number | null;
+            overbookingAllowed?: boolean;
+            transferAllowed?: boolean;
+            /** Format: date-time */
+            transferDeadline?: string | null;
         };
         EventSummary: {
             /** Format: uuid */
@@ -5765,47 +4408,1574 @@ export interface components {
             startDateTime?: string | null;
             status?: string;
         };
+        EventTierQuote: {
+            /** Format: int64 */
+            amountMinor?: number;
+            currency?: string;
+            interactive?: boolean;
+            /** Format: int64 */
+            maxGuests?: number;
+            /** Format: int64 */
+            surchargeMinor?: number;
+            tier?: string;
+        };
+        FeedbackAck: {
+            /** Format: uuid */
+            id?: string;
+        };
         FeedbackPage: {
             items?: components["schemas"]["FeedbackView"][];
-            /** Format: int64 */
-            total?: number;
             /** Format: int32 */
             page?: number;
             /** Format: int32 */
             size?: number;
+            /** Format: int64 */
+            total?: number;
+        };
+        FeedbackRequest: {
+            /** Format: email */
+            contactEmail?: string | null;
+            kind: string;
+            language?: string | null;
+            message: string;
+            page?: string | null;
+        };
+        FeedbackStatusRequest: {
+            note?: string | null;
+            status: string;
+        };
+        FeedbackView: {
+            adminNote?: string | null;
+            contactEmail?: string | null;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: uuid */
+            id?: string;
+            kind?: string;
+            language?: string | null;
+            message?: string | null;
+            moment?: string | null;
+            organizationName?: string | null;
+            page?: string | null;
+            /** Format: int32 */
+            score?: number | null;
+            status?: string;
+            tenantId?: string | null;
+            /** Format: date-time */
+            updatedAt?: string | null;
+        };
+        ForgotPasswordRequest: {
+            /** Format: email */
+            email: string;
+        };
+        FreeSlotResponse: {
+            free?: boolean;
+        };
+        GoogleLoginRequest: {
+            idToken: string;
+        };
+        GrantTrialRequest: {
+            /** Format: uuid */
+            eventId: string | null;
+            /** Format: date-time */
+            expiresAt: string | null;
+            /** Format: uuid */
+            tenantId: string | null;
+            tier: string;
+        };
+        GuestImportResult: {
+            /** Format: int32 */
+            failed?: number;
+            failures?: components["schemas"]["RowIssue"][];
+            /** Format: int32 */
+            imported?: number;
+            /** Format: int32 */
+            skippedDuplicates?: number;
+            warnings?: components["schemas"]["RowIssue"][];
+        };
+        GuestMatch: {
+            /** Format: date-time */
+            checkedInAt?: string | null;
+            checkedInBy?: string | null;
+            email?: string | null;
+            /** Format: uuid */
+            guestId?: string;
+            name?: string;
+            phoneNumber?: string | null;
+            rsvpStatus?: string;
+            ticketCode?: string | null;
+            ticketStatus?: string | null;
+            ticketTypeColor?: string | null;
+            ticketTypeLabel?: string | null;
+        };
+        GuestResponse: {
+            amountDueCurrency?: string | null;
+            /** Format: int64 */
+            amountDueMinor?: number | null;
+            /** Format: date-time */
+            checkedInAt?: string | null;
+            email?: string | null;
+            excludedFromInvitations?: boolean;
+            firstName?: string;
+            /** Format: uuid */
+            id?: string;
+            lastName?: string;
+            /** @enum {string|null} */
+            paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID" | null;
+            phoneNumber?: string | null;
+            /** @enum {string} */
+            rsvpStatus?: "PENDING" | "CONFIRMED" | "DECLINED" | "TRANSFERRED";
+            ticketCode?: string | null;
+            /** Format: uuid */
+            ticketTypeId?: string | null;
+        };
+        InitiatePaymentRequest: {
+            tier: string;
+        };
+        InterruptAgreementRequest: {
+            reason: string;
+        };
+        InvitationPreview: {
+            email?: string;
+            organizationName?: string;
+            role?: string;
+        };
+        InvitationStatusResponse: {
+            /** Format: int32 */
+            attempts?: number;
+            channel?: string;
+            /** Format: uuid */
+            guestId?: string;
+            /** Format: date-time */
+            sentAt?: string | null;
+            status?: string;
+        };
+        InvitationView: {
+            /** Format: date-time */
+            createdAt?: string;
+            email?: string;
+            /** Format: date-time */
+            expiresAt?: string;
+            /** Format: uuid */
+            id?: string;
+            role?: string;
+        };
+        InviteMemberRequest: {
+            /** Format: email */
+            email: string;
+            role: string;
+        };
+        InvoiceDetail: {
+            buyer?: components["schemas"]["InvoiceParty"];
+            /** Format: uuid */
+            correctedInvoiceId?: string | null;
+            currency?: string;
+            documentType?: string;
+            /** Format: uuid */
+            id?: string;
+            invoiceNumber?: string;
+            /** Format: date */
+            issueDate?: string;
+            /** Format: date-time */
+            issuedAt?: string;
+            lines?: components["schemas"]["InvoiceLineView"][];
+            /** Format: uuid */
+            paymentId?: string | null;
+            seller?: components["schemas"]["InvoiceParty"];
+            /** Format: int64 */
+            subtotalMinor?: number;
+            /** Format: int64 */
+            taxAmountMinor?: number;
+            taxLabel?: string | null;
+            taxRate?: number;
+            /** Format: int64 */
+            totalMinor?: number;
+        };
+        InvoiceLineView: {
+            description?: string;
+            /** Format: int32 */
+            lineNumber?: number;
+            /** Format: int64 */
+            lineTotalMinor?: number;
+            /** Format: int64 */
+            quantity?: number;
+            /** Format: int64 */
+            unitPriceMinor?: number;
+        };
+        InvoiceParty: {
+            addressLine?: string | null;
+            city?: string | null;
+            country?: string | null;
+            legalName?: string;
+            registrationNumber?: string | null;
+            taxIdentifier?: string | null;
+        };
+        InvoiceSummary: {
+            currency?: string;
+            documentType?: string;
+            /** Format: uuid */
+            id?: string;
+            invoiceNumber?: string;
+            /** Format: date */
+            issueDate?: string;
+            /** Format: date-time */
+            issuedAt?: string;
+            /** Format: int64 */
+            totalMinor?: number;
+        };
+        LegalIdentityResponse: {
+            addressLine?: string | null;
+            city?: string | null;
+            completeForInvoicing?: boolean;
+            country?: string | null;
+            legalName?: string | null;
+            registrationNumber?: string | null;
+            taxIdentifier?: string | null;
+        };
+        LineActionResult: {
+            /** @enum {string} */
+            outcome?: "OK" | "NOT_FOUND" | "WRONG_STATE" | "PAYMENT_DUE";
+            ticket?: components["schemas"]["LineTicket"] | null;
+        };
+        LineCodeResolution: {
+            token?: string;
+        };
+        LineTicket: {
+            amountDueCurrency?: string | null;
+            /** Format: int64 */
+            amountDueMinor?: number | null;
+            /** Format: date-time */
+            arrivedAt?: string | null;
+            clientName?: string | null;
+            clientPhone?: string | null;
+            counter?: string | null;
+            /** Format: int32 */
+            dayRank?: number | null;
+            /** Format: date-time */
+            endsAt?: string | null;
+            /** Format: uuid */
+            id?: string;
+            kind?: string;
+            /** @enum {string} */
+            paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID";
+            /** Format: date-time */
+            startsAt?: string | null;
+            status?: string;
+            ticketCode?: string;
+        };
+        LoginRequest: {
+            /** Format: email */
+            email: string;
+            password: string;
+        };
+        ManualCheckInRequest: {
+            /** Format: uuid */
+            guestId?: string;
+        };
+        ManualPaymentInstructions: {
+            /** Format: int64 */
+            amountMinor?: number;
+            currency?: string;
+            payee?: components["schemas"]["PayeeDetails"];
+            /** Format: uuid */
+            paymentId?: string;
+            reference?: string;
+            status?: string;
+            tier?: string;
+        };
+        ManualPaymentRequest: {
+            tier: string;
+        };
+        MarkPaidRequest: {
+            /** @enum {string} */
+            method?: "MOBILE_MONEY" | "PAYMENT_LINK" | "CASH";
+        };
+        MeResponse: {
+            email?: string;
+            fullName?: string | null;
+            memberships?: components["schemas"]["MembershipView"][];
+            role?: string;
+            tenantId?: string;
+            userId?: string;
+        };
+        MemberView: {
+            email?: string;
+            /** Format: date-time */
+            joinedAt?: string;
+            role?: string;
+            /** Format: uuid */
+            userId?: string;
+        };
+        MembershipView: {
+            role?: string;
+            tenantId?: string;
+            tenantName?: string;
+        };
+        MonthOption: {
+            /** Format: int32 */
+            chargedMonths?: number;
+            /**
+             * Format: int32
+             * @deprecated
+             * @description Use chargedMonths
+             */
+            factorMilli?: number;
+            /** Format: int32 */
+            months?: number;
+        };
+        NextResponse: {
+            ticket?: components["schemas"]["LineTicket"] | null;
+        };
+        OpenBatchRequest: {
+            manual?: boolean;
+            /** @enum {string} */
+            mode?: "FREE" | "CREDIT" | "PAY";
+            /** Format: uuid */
+            ticketTypeId?: string;
+        };
+        OpenInvitationCounts: {
+            /** Format: int32 */
+            expected?: number;
+            /** Format: int32 */
+            maybe?: number;
+            /** Format: int32 */
+            no?: number;
+            /** Format: int32 */
+            yes?: number;
+        };
+        OpenInvitationSettingsRequest: {
+            /** Format: date-time */
+            closesAt?: string | null;
+            enabled?: boolean;
+            /** Format: int32 */
+            maxCompanions?: number | null;
+            welcomeMessage?: string | null;
+        };
+        OpenInvitationView: {
+            accepting?: boolean;
+            /** @enum {string|null} */
+            closedReason?: "DISABLED" | "CLOSED" | "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "FULL" | null;
+            /** Format: date-time */
+            closesAt?: string | null;
+            code?: string;
+            counts?: components["schemas"]["OpenInvitationCounts"];
+            enabled?: boolean;
+            /** Format: uuid */
+            eventId?: string;
+            /** Format: int32 */
+            maxCompanions?: number;
+            /** Format: int32 */
+            maxCompanionsAllowed?: number;
+            /** Format: int32 */
+            remainingPlaces?: number | null;
+            welcomeMessage?: string | null;
+            whatsappNumber?: string | null;
+        };
+        OpenResponseRequest: {
+            /** @enum {string} */
+            answer?: "YES" | "MAYBE" | "NO";
+            /** Format: int32 */
+            companions?: number;
+            name: string;
+            phone: string;
+        };
+        OpenResponseView: {
+            /** @enum {string} */
+            answer?: "YES" | "MAYBE" | "NO";
+            /** Format: int32 */
+            companions?: number;
+            ticketToken?: string | null;
+        };
+        OpenedBatchView: {
+            /** Format: uuid */
+            batchId?: string;
+            currency?: string;
+            /** @enum {string} */
+            funding?: "FREE" | "PAID" | "CREDIT" | "OVERAGE";
+            instructions?: components["schemas"]["ManualPaymentInstructions"] | null;
+            payment?: components["schemas"]["PaymentInitiationResult"] | null;
+            /** Format: int32 */
+            size?: number;
+            /** @enum {string} */
+            status?: "PENDING_PAYMENT" | "ACTIVE" | "CLOSED" | "CANCELLED";
+            /** Format: int64 */
+            totalMinor?: number;
+        };
+        OperatorConsoleEvent: {
+            /** Format: uuid */
+            id?: string;
+            location?: string | null;
+            name?: string;
+            /** Format: date-time */
+            startDateTime?: string | null;
+            status?: string;
+            timezone?: string;
+        };
+        OperatorConsoleService: {
+            /** Format: uuid */
+            id?: string;
+            name?: string;
+            timezone?: string;
+        };
+        OperatorConsoleView: {
+            actions?: ("CHECK_IN" | "QUEUE" | "COLLECT")[];
+            events?: components["schemas"]["OperatorConsoleEvent"][];
+            label?: string;
+            services?: components["schemas"]["OperatorConsoleService"][];
+        };
+        OperatorLinkResolution: {
+            token?: string;
+        };
+        OperatorRequest: {
+            actions: ("CHECK_IN" | "QUEUE" | "COLLECT")[];
+            eventIds?: string[];
+            label: string;
+            serviceIds?: string[];
+        };
+        OperatorScopeItem: {
+            /** Format: uuid */
+            id?: string;
+            name?: string;
+        };
+        OperatorTeamView: {
+            /** Format: int32 */
+            billableSeats?: number;
+            operators?: components["schemas"]["OperatorView"][];
+        };
+        OperatorView: {
+            actions?: ("CHECK_IN" | "QUEUE" | "COLLECT")[];
+            billable?: boolean;
+            code?: string | null;
+            /** Format: date-time */
+            createdAt?: string;
+            events?: components["schemas"]["OperatorScopeItem"][];
+            /** Format: uuid */
+            id?: string;
+            label?: string;
+            link?: string | null;
+            revoked?: boolean;
+            /** Format: date-time */
+            revokedAt?: string | null;
+            services?: components["schemas"]["OperatorScopeItem"][];
+        };
+        OrderLineRequest: {
+            /** Format: int32 */
+            quantity?: number;
+            /** Format: uuid */
+            ticketTypeId?: string;
+        };
+        OrderLineView: {
+            label?: string;
+            /** Format: int32 */
+            quantity?: number;
+            /** Format: uuid */
+            ticketTypeId?: string;
+            /** Format: int64 */
+            unitPriceMinor?: number;
+        };
+        OrderView: {
+            buyerName?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            currency?: string;
+            /** Format: date-time */
+            declaredAt?: string | null;
+            /** Format: uuid */
+            eventId?: string;
+            eventName?: string;
+            /** Format: date-time */
+            eventStart?: string | null;
+            eventTimezone?: string;
+            /** Format: date-time */
+            expiresAt?: string;
+            lines?: components["schemas"]["OrderLineView"][];
+            organizerName?: string;
+            organizerVerification?: string | null;
+            paymentMethods?: components["schemas"]["TenantPaymentMethodsInfo"] | null;
+            paymentReference?: string | null;
+            reference?: string;
+            rejectionReason?: string | null;
+            /** @enum {string} */
+            status?: "AWAITING_PAYMENT" | "DECLARED" | "PAID" | "EXPIRED" | "REJECTED";
+            ticketTokens?: string[];
+            /** Format: int64 */
+            totalMinor?: number;
+        };
+        OrganizerOpenResponseView: {
+            /** @enum {string} */
+            answer?: "YES" | "MAYBE" | "NO";
+            /** @enum {string} */
+            channel?: "WEB" | "WHATSAPP";
+            /** Format: int32 */
+            companions?: number;
+            /** Format: uuid */
+            id?: string;
+            name?: string;
+            phone?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
+        OrganizerOrderView: {
+            buyerEmail?: string | null;
+            buyerName?: string;
+            buyerPhone?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            currency?: string;
+            /** Format: date-time */
+            decidedAt?: string | null;
+            /** Format: date-time */
+            declaredAt?: string | null;
+            /** Format: date-time */
+            expiresAt?: string;
+            /** Format: uuid */
+            id?: string;
+            lines?: components["schemas"]["OrderLineView"][];
+            paymentReference?: string | null;
+            reference?: string;
+            rejectionReason?: string | null;
+            /** @enum {string} */
+            status?: "AWAITING_PAYMENT" | "DECLARED" | "PAID" | "EXPIRED" | "REJECTED";
+            /** Format: int32 */
+            ticketCount?: number;
+            /** Format: int64 */
+            totalMinor?: number;
+        };
+        OwnWhatsAppNumberView: {
+            /** Format: date-time */
+            addonExpiresAt?: string | null;
+            allowed?: boolean;
+            currency?: string;
+            includedPlans?: string[];
+            /** Format: int64 */
+            monthlyMinor?: number;
+            months?: components["schemas"]["MonthOption"][];
+            /** @enum {string} */
+            source?: "PLAN" | "PACK" | "ADDON" | "NONE";
+        };
+        PackExtraRequest: {
+            /** Format: int32 */
+            blocks?: number;
+        };
+        PackRequest: {
+            /** Format: int32 */
+            months?: number;
+        };
+        PackView: {
+            active?: boolean;
+            currency?: string;
+            /** Format: date-time */
+            expiresAt?: string | null;
+            /** Format: int64 */
+            extraBlockGuests?: number;
+            /** Format: int64 */
+            extraGuests?: number;
+            /** Format: int64 */
+            extraPerGuestMinor?: number;
+            /** Format: int64 */
+            includedGuests?: number;
+            /** Format: date-time */
+            monthEnd?: string | null;
+            /** Format: date-time */
+            monthStart?: string | null;
+            /** Format: int64 */
+            monthlyMinor?: number;
+            months?: components["schemas"]["MonthOption"][];
+            /** Format: int64 */
+            owedGuests?: number;
+            /** Format: int64 */
+            owedMinor?: number;
+            /** Format: int64 */
+            remainingGuests?: number;
+            /** Format: date-time */
+            startedAt?: string | null;
+            /** Format: int64 */
+            usedGuests?: number;
+        };
+        PayeeDetails: {
+            bankDetails?: string | null;
+            contactEmail?: string | null;
+            contactPhone?: string | null;
+            mobileMoneyNumber?: string | null;
+            mobileMoneyOperator?: string | null;
+            payeeName?: string | null;
+        };
+        PaymentHistoryItem: {
+            /** Format: int64 */
+            amountMinor?: number;
+            /** Format: date-time */
+            createdAt?: string;
+            currency?: string;
+            /** Format: uuid */
+            eventId?: string | null;
+            eventName?: string;
+            /** Format: uuid */
+            paymentId?: string;
+            status?: string;
+            tier?: string;
+        };
+        PaymentInitiationResult: {
+            /** Format: int64 */
+            amountMinor?: number;
+            currency?: string;
+            instruction?: components["schemas"]["PaymentInstruction"];
+            /** Format: uuid */
+            paymentId?: string;
+            status?: string;
+        };
+        PaymentInstruction: {
+            type?: string;
+            value?: string;
+        };
+        PaymentStatusView: {
+            /** Format: int64 */
+            amountMinor?: number;
+            /** Format: date-time */
+            createdAt?: string;
+            currency?: string;
+            /** Format: uuid */
+            eventId?: string | null;
+            /** Format: int64 */
+            guests?: number | null;
+            kind?: string;
+            /** Format: int32 */
+            months?: number | null;
+            /** Format: uuid */
+            paymentId?: string;
+            status?: string;
+            tier?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
+        PendingAppointmentRequest: {
+            clientName?: string | null;
+            clientPhone?: string | null;
+            /** Format: date-time */
+            endsAt?: string;
+            /** Format: date-time */
+            heldUntil?: string | null;
+            /** Format: uuid */
+            id?: string;
+            /** Format: date-time */
+            requestedAt?: string;
+            /** Format: date-time */
+            startsAt?: string;
+        };
+        PhoneCodeRequest: {
+            phone: string;
+        };
+        PhoneCodeSent: {
+            /** Format: date-time */
+            expiresAt?: string;
+        };
+        PhoneConfirmRequest: {
+            code: string;
+        };
+        PhoneStatusView: {
+            phone?: string | null;
+            verified?: boolean;
+        };
+        PlaceOrderRequest: {
+            /** Format: email */
+            buyerEmail?: string | null;
+            buyerName: string;
+            buyerPhone: string;
+            lines: components["schemas"]["OrderLineRequest"][];
+        };
+        PlacedOrderView: {
+            order?: components["schemas"]["OrderView"];
+            token?: string;
+        };
+        PlanOption: {
+            /** Format: int64 */
+            extraPersonMinor?: number | null;
+            /** Format: int64 */
+            includedPeople?: number;
+            /** Format: int64 */
+            maxPeople?: number | null;
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use maxPeople and includedPeople
+             */
+            maxResources?: number;
+            /** Format: int64 */
+            monthlyMinor?: number;
+            name?: string;
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use monthlyMinor
+             */
+            priceMinorPerMonth?: number;
+            /** Format: int64 */
+            teamMonthlyMinor?: number | null;
+        };
+        PlatformBillingSettingsUpdate: {
+            payee?: components["schemas"]["PayeeDetails"];
+            subscriptionPlans?: components["schemas"]["SubscriptionPlanOption"][];
+            tiers?: components["schemas"]["BillingTierOption"][];
+        };
+        PlatformBillingSettingsView: {
+            currency?: string;
+            managedInDatabase?: boolean;
+            payee?: components["schemas"]["PayeeDetails"];
+            subscriptionPlans?: components["schemas"]["SubscriptionPlanOption"][];
+            tiers?: components["schemas"]["BillingTierOption"][];
+        };
+        PriceList: {
+            /** Format: int64 */
+            fcfa?: number;
+            /** Format: int64 */
+            gnf?: number;
+            /** Format: int64 */
+            usdCents?: number;
+        };
+        PromptDecision: {
+            show?: boolean;
+        };
+        ProspectLeadAck: {
+            /** Format: uuid */
+            id?: string;
+        };
+        ProspectLeadRequest: {
+            businessName: string;
+            city?: string | null;
+            contactName: string;
+            /** Format: email */
+            email?: string | null;
+            note?: string | null;
+            phone: string;
+            sector: string;
+            source?: string | null;
+            weeklyVolume?: string | null;
+        };
+        ProspectLeadView: {
+            businessName?: string;
+            city?: string | null;
+            contactName?: string;
+            /** Format: date-time */
+            contactedAt?: string | null;
+            /** Format: date-time */
+            createdAt?: string;
+            email?: string | null;
+            /** Format: uuid */
+            id?: string;
+            note?: string | null;
+            phone?: string;
+            sector?: string;
+            source?: string | null;
+            status?: string;
+            weeklyVolume?: string | null;
+        };
+        ProviderSettingsResponse: {
+            email?: components["schemas"]["EmailProviderView"];
+            whatsapp?: components["schemas"]["WhatsAppProviderView"];
+        };
+        PublicOpenInvitationView: {
+            accepting?: boolean;
+            /** @enum {string|null} */
+            closedReason?: "DISABLED" | "CLOSED" | "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "FULL" | null;
+            code?: string;
+            /** Format: date-time */
+            eventEnd?: string | null;
+            eventLocation?: string | null;
+            eventName?: string;
+            /** Format: date-time */
+            eventStart?: string | null;
+            eventTimezone?: string;
+            logoUrl?: string | null;
+            /** Format: int32 */
+            maxCompanions?: number;
+            organizerName?: string;
+            organizerVerification?: string | null;
+            primaryColor?: string | null;
+            welcomeMessage?: string | null;
+            whatsappNumber?: string | null;
+        };
+        PublicOrgProfileView: {
+            bannerUrl?: string | null;
+            logoUrl?: string | null;
+            organizationName?: string;
+            primaryColor?: string;
+            services?: components["schemas"]["PublicOrgServiceView"][];
+            verification?: string | null;
+        };
+        PublicOrgServiceView: {
+            name?: string;
+            /** Format: uuid */
+            serviceId?: string;
+            shortCode?: string;
+        };
+        PublicSaleCategoryView: {
+            /** Format: int32 */
+            available?: number | null;
+            colorHex?: string;
+            currency?: string;
+            /** Format: uuid */
+            id?: string;
+            label?: string;
+            paused?: boolean;
+            /** Format: int64 */
+            priceMinor?: number;
+        };
+        PublicSaleView: {
+            categories?: components["schemas"]["PublicSaleCategoryView"][];
+            /** @enum {string|null} */
+            closedReason?: "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "NOTHING_FOR_SALE" | "ORGANIZER_NOT_VERIFIED" | "NO_PAYMENT_METHOD" | "PAUSED" | null;
+            /** Format: date-time */
+            eventEnd?: string | null;
+            /** Format: uuid */
+            eventId?: string;
+            eventLocation?: string | null;
+            eventName?: string;
+            /** Format: date-time */
+            eventStart?: string | null;
+            eventTimezone?: string;
+            /** Format: int64 */
+            holdMinutes?: number;
+            logoUrl?: string | null;
+            /** Format: int32 */
+            maxTicketsPerOrder?: number;
+            onSale?: boolean;
+            organizerName?: string;
+            organizerVerification?: string | null;
+            primaryColor?: string;
+        };
+        QuorumResponse: {
+            /** Format: int32 */
+            absolute?: number | null;
+            /** Format: int32 */
+            denominator?: number | null;
+            mode?: string;
+            /** Format: int32 */
+            numerator?: number | null;
+            /** Format: date-time */
+            reachedAt?: string | null;
+        };
+        QuorumView: {
+            /** Format: int64 */
+            current?: number;
+            reached?: boolean;
+            /** Format: date-time */
+            reachedAt?: string | null;
+            /** Format: int64 */
+            required?: number;
+        };
+        RatingRequest: {
+            comment?: string | null;
+            moment: string;
+            page?: string | null;
+            /** Format: int32 */
+            score?: number | null;
         };
         RatingSummary: {
+            /** Format: double */
+            average?: number | null;
+            /** Format: int32 */
+            dismissed?: number;
             moment?: string;
             /** Format: int32 */
             responses?: number;
+        };
+        RefreshRequest: {
+            refreshToken: string;
+        };
+        RegisterRequest: {
+            country?: string | null;
+            /** Format: email */
+            email: string;
+            fullName?: string | null;
+            name?: string | null;
+            password: string;
+        };
+        RejectOrderRequest: {
+            reason: string;
+        };
+        RejectPaymentRequest: {
+            reason: string;
+        };
+        ReminderAllowance: {
             /** Format: int32 */
-            dismissed?: number;
-            /** Format: double */
-            average?: number | null;
+            limit?: number;
+            /** Format: int32 */
+            sent?: number;
         };
-        AdminTierCatalog: {
-            currency?: string;
-            tiers?: components["schemas"]["BillingTierOption"][];
+        RenewAgreementRequest: {
+            /** Format: int64 */
+            amountMinor?: number | null;
+            currency?: string | null;
+            notes?: string | null;
+            /** Format: date-time */
+            periodEnd: string | null;
+            /** Format: date-time */
+            renewalAt?: string | null;
         };
-        AuditEntry: {
+        ResetPasswordRequest: {
+            password: string;
+            token: string;
+        };
+        ResourceAvailabilityView: {
+            /** Format: int32 */
+            dayOfWeek?: number;
+            end?: string;
             /** Format: uuid */
             id?: string;
             /** Format: uuid */
-            adminId?: string;
-            action?: string;
-            target?: string;
-            note?: string | null;
+            resourceId?: string;
+            start?: string;
+        };
+        ResourceCreateRequest: {
+            name: string;
+            timezone: string;
+            /** @enum {string} */
+            type?: "PERSON" | "LOCATION" | "EQUIPMENT";
+        };
+        ResourceUnavailabilityView: {
+            /** Format: date-time */
+            endsAt?: string;
+            /** Format: uuid */
+            id?: string;
+            reason?: string | null;
+            /** Format: uuid */
+            resourceId?: string;
+            /** Format: date-time */
+            startsAt?: string;
+        };
+        ResourceUpdateRequest: {
+            active?: boolean | null;
+            name?: string | null;
+        };
+        ResourceView: {
+            active?: boolean;
+            /** Format: uuid */
+            id?: string;
+            name?: string;
+            timezone?: string;
+            /** @enum {string} */
+            type?: "PERSON" | "LOCATION" | "EQUIPMENT";
+        };
+        RosterEntry: {
+            /** Format: date-time */
+            checkedInAt?: string | null;
+            checkedInBy?: string | null;
+            email?: string | null;
+            /** Format: uuid */
+            guestId?: string;
+            name?: string;
+            /** @enum {string|null} */
+            paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID" | null;
+            phoneNumber?: string | null;
+            rsvpStatus?: string;
+            ticketCode?: string | null;
+            ticketStatus?: string | null;
+            ticketTypeColor?: string | null;
+            ticketTypeLabel?: string | null;
+        };
+        RowIssue: {
+            reason?: string;
+            /** Format: int32 */
+            row?: number;
+        };
+        RsvpPayment: {
+            /** Format: int64 */
+            amountMinor?: number;
+            currency?: string;
+            methods?: components["schemas"]["TenantPaymentMethodsInfo"] | null;
+            /** @enum {string} */
+            status?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID";
+        };
+        RsvpQuestion: {
+            prompt?: string;
+            /** Format: uuid */
+            questionId?: string;
+            required?: boolean;
+        };
+        RsvpView: {
+            categoryName?: string | null;
+            /** Format: int32 */
+            companions?: number;
+            erased?: boolean;
+            /** Format: date-time */
+            eventEnd?: string | null;
+            eventLocation?: string | null;
+            eventName?: string;
+            /** Format: date-time */
+            eventStart?: string | null;
+            eventStatus?: string | null;
+            eventTimezone?: string | null;
+            eventWhen?: string | null;
+            guestName?: string;
+            logoUrl?: string | null;
+            organizerName?: string;
+            organizerVerification?: string | null;
+            payment?: components["schemas"]["RsvpPayment"] | null;
+            primaryColor?: string;
+            questions?: components["schemas"]["RsvpQuestion"][];
+            status?: string;
+            ticketCode?: string | null;
+            transferAllowed?: boolean;
+            /** Format: date-time */
+            transferDeadline?: string | null;
+            transferredTo?: string | null;
+        };
+        SalesSettingsView: {
+            /** Format: int32 */
+            defaultOrderHoldMinutes?: number;
+            /** Format: int32 */
+            effectiveOrderHoldMinutes?: number;
+            /** Format: int32 */
+            maxOrderHoldMinutes?: number;
+            /** Format: int32 */
+            minOrderHoldMinutes?: number;
+            /** Format: int32 */
+            orderHoldMinutes?: number | null;
+        };
+        ScanRequest: {
+            ticketCode: string;
+        };
+        SendInvitationsResult: {
+            /** Format: int32 */
+            queued?: number;
+        };
+        ServiceConfigUpdate: {
+            /** Format: int32 */
+            bufferMinutes?: number | null;
+            /** Format: int32 */
+            cancelDeadlineHours?: number | null;
+            /** Format: int32 */
+            clientsPerSlot?: number | null;
+            /** @enum {string|null} */
+            confirmationMode?: "INSTANTANEOUS" | "ON_REQUEST" | null;
+            /** Format: int32 */
+            durationMinutes?: number | null;
+            /** Format: int64 */
+            holdMinutes?: number | null;
+            /** Format: int32 */
+            maxHorizonDays?: number | null;
+            /** Format: int32 */
+            minHorizonMinutes?: number | null;
+            /** Format: int32 */
+            noShowToleranceMinutes?: number | null;
+            /** @enum {string|null} */
+            reminderChannel?: "WHATSAPP" | "SMS" | "WHATSAPP_OR_SMS" | "NONE" | null;
+            reminderOffsetsMinutes?: number[] | null;
+            /** Format: int32 */
+            stepMinutes?: number | null;
+            walkInsAllowed?: boolean | null;
+        };
+        ServiceCreateRequest: {
+            name: string;
+            /** @enum {string} */
+            paymentRule?: "FREE" | "BEFORE" | "AFTER_SERVICE";
+            /** Format: int64 */
+            priceMinor?: number | null;
+            timezone: string;
+        };
+        ServiceRequirementRequest: {
+            /** Format: int32 */
+            quantity?: number;
+            /** @enum {string} */
+            type?: "PERSON" | "LOCATION" | "EQUIPMENT";
+        };
+        ServiceRequirementResponse: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: int32 */
+            quantity?: number;
+            /** Format: uuid */
+            serviceId?: string;
+            /** @enum {string} */
+            type?: "PERSON" | "LOCATION" | "EQUIPMENT";
+        };
+        ServiceResponse: {
+            currency?: string | null;
+            /** Format: uuid */
+            id?: string;
+            name?: string;
+            /** @enum {string} */
+            paymentRule?: "FREE" | "BEFORE" | "AFTER_SERVICE";
+            /** Format: int64 */
+            priceMinor?: number | null;
+            timezone?: string;
+        };
+        ServiceStaffCreateRequest: {
+            label: string;
+        };
+        ServiceStaffCreatedResponse: {
+            code?: string | null;
             /** Format: date-time */
             createdAt?: string;
+            /** Format: uuid */
+            id?: string;
+            label?: string;
+            token?: string;
         };
-        AuditPage: {
-            entries?: components["schemas"]["AuditEntry"][];
+        ServiceStaffView: {
+            code?: string | null;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: uuid */
+            id?: string;
+            label?: string;
+            revoked?: boolean;
+            /** Format: date-time */
+            revokedAt?: string | null;
+            /** Format: uuid */
+            serviceId?: string;
+        };
+        ServiceUpdateRequest: {
+            name?: string | null;
+            /** @enum {string|null} */
+            paymentRule?: "FREE" | "BEFORE" | "AFTER_SERVICE" | null;
             /** Format: int64 */
-            total?: number;
+            priceMinor?: number | null;
+        };
+        SetContentOverrideRequest: {
+            active?: boolean;
+            reason: string;
+        };
+        SetGuestExclusionRequest: {
+            excluded?: boolean;
+        };
+        SetGuestTicketTypeRequest: {
+            /** Format: uuid */
+            ticketTypeId?: string | null;
+        };
+        SubscriptionPlanOption: {
+            extraPerson?: components["schemas"]["PriceList"] | null;
+            /** Format: int64 */
+            includedPeople?: number;
+            /** Format: int64 */
+            maxPeople?: number | null;
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use maxPeople and includedPeople
+             */
+            maxResources?: number;
+            monthly?: components["schemas"]["PriceList"];
+            name?: string;
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use monthly
+             */
+            priceMinorPerMonth?: number;
+        };
+        SubscriptionRequest: {
+            /** Format: int32 */
+            months?: number;
+            plan: string;
+        };
+        SubscriptionView: {
+            currency?: string;
+            /** Format: date-time */
+            expiresAt?: string | null;
+            /** Format: int64 */
+            monthlyMinor?: number;
+            months?: components["schemas"]["MonthOption"][];
+            overLimit?: boolean;
+            plan?: string;
+            plans?: components["schemas"]["PlanOption"][];
+            /** Format: int64 */
+            resourcesActive?: number;
+            /** Format: int64 */
+            resourcesIncluded?: number;
+            /** Format: date-time */
+            startedAt?: string;
+            status?: string;
+            /** Format: date-time */
+            suspensionAt?: string | null;
+            whatsAppReminders?: components["schemas"]["ReminderAllowance"] | null;
+        };
+        SwitchOrgRequest: {
+            tenantId: string;
+        };
+        SyncItem: {
+            /** Format: date-time */
+            scannedAt?: string;
+            ticketCode: string;
+        };
+        SyncRequest: {
+            items?: components["schemas"]["SyncItem"][];
+        };
+        SyncResultEntry: {
+            /** Format: date-time */
+            checkedInAt?: string | null;
+            checkedInBy?: string | null;
+            guestName?: string | null;
+            outcome?: string;
+            ticketCode?: string;
+        };
+        TemplateChannelView: {
+            active?: boolean;
+            body?: string;
+            channel?: string;
+            defaultBody?: string;
+            override?: boolean;
+        };
+        TemplateDetail: {
+            channels?: components["schemas"]["TemplateChannelView"][];
+            label?: string;
+            name?: string;
+            variables?: components["schemas"]["TemplateVariable"][];
+        };
+        TemplatePreviewRequest: {
+            body?: string | null;
+            channel?: string;
+        };
+        TemplatePreviewResponse: {
+            body?: string;
+        };
+        TemplateSummary: {
+            channels?: string[];
+            label?: string;
+            name?: string;
+        };
+        TemplateUpdate: {
+            active?: boolean;
+            body?: string;
+            channel?: string;
+        };
+        TemplateVariable: {
+            label?: string;
+            name?: string;
+            required?: boolean;
+            sample?: string;
+        };
+        TenantDirectoryEntry: {
+            contactEmail?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: uuid */
+            id?: string;
+            name?: string;
+            /** Format: int64 */
+            organizerCount?: number;
+            status?: string;
+        };
+        TenantDirectoryPage: {
+            entries?: components["schemas"]["TenantDirectoryEntry"][];
             /** Format: int32 */
             page?: number;
             /** Format: int32 */
             size?: number;
+            /** Format: int64 */
+            total?: number;
+        };
+        TenantInfo: {
+            bannerUrl?: string | null;
+            contactEmail?: string;
+            country?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            currency?: string;
+            displayName?: string;
+            /** Format: uuid */
+            id?: string;
+            legalIdentity?: components["schemas"]["TenantLegalIdentityInfo"] | null;
+            logoUrl?: string | null;
+            name?: string;
+            paymentMethods?: components["schemas"]["TenantPaymentMethodsInfo"] | null;
+            primaryColor?: string;
+            status?: string;
+            username?: string | null;
+        };
+        TenantLegalIdentityInfo: {
+            addressLine?: string;
+            city?: string;
+            country?: string;
+            legalName?: string;
+            registrationNumber?: string | null;
+            taxIdentifier?: string | null;
+        };
+        TenantPaymentMethodsInfo: {
+            mtnMomoNumber?: string | null;
+            orangeMoneyNumber?: string | null;
+            payeeName?: string | null;
+            paymentLinkUrl?: string | null;
+            waveNumber?: string | null;
+        };
+        TenantStatusChangeRequest: {
+            note: string;
+        };
+        TestSendRequest: {
+            recipient: string;
+        };
+        TestSendResponse: {
+            delivered?: boolean;
+            error?: string | null;
+            usingTenantProvider?: boolean;
+        };
+        TicketInfo: {
+            amountDueCurrency?: string | null;
+            /** Format: int64 */
+            amountDueMinor?: number | null;
+            /** Format: date-time */
+            checkedInAt?: string | null;
+            checkedInBy?: string | null;
+            /** Format: uuid */
+            eventId?: string | null;
+            /** Format: uuid */
+            guestId?: string;
+            /** Format: uuid */
+            id?: string;
+            /** Format: date-time */
+            issuedAt?: string;
+            /** @enum {string} */
+            paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID";
+            /** Format: uuid */
+            serviceId?: string | null;
+            status?: string;
+            ticketCode?: string;
+            /** Format: uuid */
+            ticketTypeId?: string | null;
+        };
+        TicketTypeResponse: {
+            colorHex?: string;
+            /** Format: int32 */
+            confirmedCount?: number;
+            currency?: string | null;
+            /** Format: uuid */
+            id?: string;
+            label?: string;
+            /** Format: int32 */
+            maxCapacity?: number | null;
+            /** Format: int32 */
+            position?: number;
+            /** Format: int64 */
+            priceMinor?: number | null;
+        };
+        TierCatalog: {
+            currency?: string;
+            custom?: components["schemas"]["CustomTierOption"];
+            /** Format: int64 */
+            freeTierGuests?: number;
+            /** Format: int64 */
+            interactivePerGuestMinor?: number;
+            tiers?: components["schemas"]["TierOption"][];
+        };
+        TierOption: {
+            /** Format: int64 */
+            maxGuests?: number;
+            name?: string;
+            /** Format: int64 */
+            priceMinor?: number;
+        };
+        TimeBucket: {
+            /** Format: int64 */
+            count?: number;
+            label?: string;
+        };
+        TransferTicketRequest: {
+            /** Format: email */
+            email?: string | null;
+            firstName: string;
+            lastName: string;
+            phoneNumber?: string | null;
+        };
+        UnavailabilityRequest: {
+            /** Format: date-time */
+            endsAt?: string;
+            reason?: string | null;
+            /** Format: date-time */
+            startsAt?: string;
+        };
+        UpdateBrandingRequest: {
+            bannerUrl?: string | null;
+            displayName?: string | null;
+            logoUrl?: string | null;
+            primaryColor?: string | null;
+        };
+        UpdateEmailProviderRequest: {
+            apiKey: string;
+            /** Format: email */
+            from: string;
+            fromName?: string | null;
+        };
+        UpdateEventRequest: {
+            description?: string | null;
+            /** Format: date-time */
+            endDateTime?: string | null;
+            invitationChannels?: ("EMAIL" | "WHATSAPP")[];
+            location?: string | null;
+            /** Format: int32 */
+            maxCapacity?: number | null;
+            name: string;
+            settings?: components["schemas"]["EventSettingsDto"];
+            /** Format: date-time */
+            startDateTime?: string | null;
+            timezone: string;
+        };
+        UpdateLegalIdentityRequest: {
+            addressLine?: string | null;
+            city?: string | null;
+            country?: string | null;
+            legalName?: string | null;
+            registrationNumber?: string | null;
+            taxIdentifier?: string | null;
+        };
+        UpdateOrgUsernameRequest: {
+            username?: string;
+        };
+        UpdatePaymentMethodsRequest: {
+            mtnMomoNumber?: string | null;
+            orangeMoneyNumber?: string | null;
+            payeeName?: string | null;
+            paymentLinkUrl?: string | null;
+            waveNumber?: string | null;
+        };
+        UpdatePricingRequest: {
+            /** Format: int64 */
+            costUsdMinor?: number;
+        };
+        UpdateQuorumRequest: {
+            /** Format: int32 */
+            absolute?: number | null;
+            /** Format: int32 */
+            denominator?: number | null;
+            /** @enum {string} */
+            mode: "NONE" | "FRACTION" | "ABSOLUTE";
+            /** Format: int32 */
+            numerator?: number | null;
+        };
+        UpdateSalesSettingsRequest: {
+            /** Format: int32 */
+            orderHoldMinutes?: number | null;
+        };
+        UpdateWhatsAppProviderRequest: {
+            accessToken: string;
+            phoneNumberId: string;
+            templateLanguage?: string | null;
+            templateName?: string | null;
+        };
+        UpsertTicketTypeRequest: {
+            colorHex?: string;
+            label: string;
+            /** Format: int32 */
+            maxCapacity?: number | null;
+            /** Format: int32 */
+            position?: number;
+            /** Format: int64 */
+            priceMinor?: number | null;
+        };
+        UsageSummary: {
+            /** Format: int64 */
+            allowance?: number;
+            dataRetention?: components["schemas"]["DataRetentionNotice"] | null;
+            /** Format: int64 */
+            invited?: number;
+            /** Format: int64 */
+            remaining?: number;
+            tier?: string;
+            withinAllowance?: boolean;
+        };
+        ValidatorContextResponse: {
+            actions?: ("CHECK_IN" | "QUEUE" | "COLLECT")[];
+            /** Format: int64 */
+            checkedIn?: number;
+            /** Format: int64 */
+            confirmed?: number;
+            eventLocation?: string | null;
+            eventName?: string;
+            eventStatus?: string;
+            logoUrl?: string | null;
+            organizerName?: string;
+            primaryColor?: string;
+            /** Format: date-time */
+            startDateTime?: string | null;
+            timezone?: string;
+            validatorLabel?: string;
+        };
+        ValidatorResponse: {
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: uuid */
+            id?: string;
+            label?: string;
+            link?: string;
+            revoked?: boolean;
+            /** Format: date-time */
+            revokedAt?: string | null;
+        };
+        VerificationDocumentLink: {
+            contentType?: string;
+            /** Format: int32 */
+            position?: number;
+            url?: string;
+        };
+        VerificationLimits: {
+            /** Format: int32 */
+            maxFileBytes?: number;
+            /** Format: int32 */
+            maxFiles?: number;
+        };
+        VerificationOverview: {
+            company?: components["schemas"]["VerificationRequestView"] | null;
+            limits?: components["schemas"]["VerificationLimits"];
+            personal?: components["schemas"]["VerificationRequestView"] | null;
+            phone?: components["schemas"]["PhoneStatusView"];
+            verified?: boolean;
+        };
+        VerificationRejectRequest: {
+            reason: string;
+        };
+        VerificationRequestView: {
+            /** Format: date-time */
+            decidedAt?: string | null;
+            documentType?: string;
+            /** Format: uuid */
+            id?: string;
+            /** @enum {string} */
+            kind?: "PERSONAL" | "COMPANY";
+            legalName?: string;
+            rejectionReason?: string | null;
+            /** @enum {string} */
+            status?: "PENDING" | "APPROVED" | "REJECTED";
+            /** Format: date-time */
+            submittedAt?: string;
+        };
+        VerifyEmailRequest: {
+            token: string;
+        };
+        VocabularyEntry: {
+            defaultValue?: string;
+            key?: string;
+            label?: string;
+            overridden?: boolean;
+            value?: string;
+        };
+        VocabularyUpdate: {
+            key?: string;
+            value?: string | null;
+        };
+        WalkInRequest: {
+            clientName: string;
+            clientPhone: string;
+        };
+        WhatsAppOverrideStatus: {
+            /** Format: date-time */
+            activatedAt?: string | null;
+            activatedBy?: string | null;
+            active?: boolean;
+            reason?: string | null;
+        };
+        WhatsAppPricingInfo: {
+            category?: string;
+            /** Format: int64 */
+            costUsdMinor?: number;
+        };
+        WhatsAppProviderView: {
+            accessTokenMasked?: string | null;
+            allowed?: boolean;
+            configured?: boolean;
+            displayPhoneNumber?: string | null;
+            phoneNumberId?: string | null;
+            provider?: string | null;
+            templateLanguage?: string | null;
+            templateName?: string | null;
+            verifiedName?: string | null;
         };
     };
     responses: never;
@@ -5816,9 +5986,15 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    vocabularyList: {
+    adminAgreementList: {
         parameters: {
-            query?: never;
+            query?: {
+                status?: string;
+                kind?: string;
+                tenantId?: string;
+                page?: number;
+                size?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -5831,12 +6007,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["VocabularyEntry"][];
+                    "*/*": components["schemas"]["AgreementView"][];
                 };
             };
         };
     };
-    vocabularySave: {
+    adminAgreementCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -5845,7 +6021,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["VocabularyUpdate"][];
+                "application/json": components["schemas"]["CreateAgreementRequest"];
             };
         };
         responses: {
@@ -5855,218 +6031,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["VocabularyEntry"][];
+                    "*/*": components["schemas"]["AgreementView"];
                 };
             };
         };
     };
-    templatesDetail: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                name: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TemplateDetail"];
-                };
-            };
-        };
-    };
-    templatesSave: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                name: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TemplateUpdate"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TemplateDetail"];
-                };
-            };
-        };
-    };
-    salesSettingsGet: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SalesSettingsView"];
-                };
-            };
-        };
-    };
-    salesSettingsUpdate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateSalesSettingsRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SalesSettingsView"];
-                };
-            };
-        };
-    };
-    providerSettingsUpdateWhatsApp: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateWhatsAppProviderRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ProviderSettingsResponse"];
-                };
-            };
-        };
-    };
-    providerSettingsUpdateEmail: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateEmailProviderRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ProviderSettingsResponse"];
-                };
-            };
-        };
-    };
-    paymentMethodsGet: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TenantPaymentMethodsInfo"];
-                };
-            };
-        };
-    };
-    paymentMethodsUpdate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdatePaymentMethodsRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TenantPaymentMethodsInfo"];
-                };
-            };
-        };
-    };
-    serviceConfiguration: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["EffectiveServiceConfig"];
-                };
-            };
-        };
-    };
-    serviceUpdateConfiguration: {
+    adminAgreementInterrupt: {
         parameters: {
             query?: never;
             header?: never;
@@ -6077,7 +6047,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ServiceConfigUpdate"];
+                "application/json": components["schemas"]["InterruptAgreementRequest"];
             };
         };
         responses: {
@@ -6087,154 +6057,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["EffectiveServiceConfig"];
+                    "*/*": components["schemas"]["AgreementView"];
                 };
             };
         };
     };
-    orgUpdateUsername: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateOrgUsernameRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TenantInfo"];
-                };
-            };
-        };
-    };
-    operatorUpdate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                operatorId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["OperatorRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["OperatorView"];
-                };
-            };
-        };
-    };
-    memberChangeRole: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                userId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ChangeRoleRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MemberView"];
-                };
-            };
-        };
-    };
-    legalIdentityGet: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LegalIdentityResponse"];
-                };
-            };
-        };
-    };
-    legalIdentityUpdate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateLegalIdentityRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LegalIdentityResponse"];
-                };
-            };
-        };
-    };
-    eventGet: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["EventResponse"];
-                };
-            };
-        };
-    };
-    eventUpdate: {
+    adminAgreementRenew: {
         parameters: {
             query?: never;
             header?: never;
@@ -6245,7 +6073,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateEventRequest"];
+                "application/json": components["schemas"]["RenewAgreementRequest"];
             };
         };
         responses: {
@@ -6255,108 +6083,18 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["EventResponse"];
+                    "*/*": components["schemas"]["AgreementView"];
                 };
             };
         };
     };
-    eventDelete: {
+    adminAuditList: {
         parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
+            query?: {
+                action?: string;
+                page?: number;
+                size?: number;
             };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    eventSetQuorum: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateQuorumRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["QuorumResponse"];
-                };
-            };
-        };
-    };
-    ticketTypeUpdate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-                typeId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpsertTicketTypeRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TicketTypeResponse"];
-                };
-            };
-        };
-    };
-    ticketTypeDelete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-                typeId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    brandingGet: {
-        parameters: {
-            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
@@ -6369,12 +6107,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["BrandingResponse"];
+                    "*/*": components["schemas"]["AuditPage"];
                 };
             };
         };
     };
-    brandingUpdate: {
+    adminAuthLogin: {
         parameters: {
             query?: never;
             header?: never;
@@ -6383,7 +6121,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateBrandingRequest"];
+                "application/json": components["schemas"]["AdminLoginRequest"];
             };
         };
         responses: {
@@ -6393,23 +6131,21 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["BrandingResponse"];
+                    "*/*": components["schemas"]["AdminAuthResponse"];
                 };
             };
         };
     };
-    adminWhatsAppUpdatePricing: {
+    adminAuthRefresh: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                category: string;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdatePricingRequest"];
+                "application/json": components["schemas"]["AdminRefreshRequest"];
             };
         };
         responses: {
@@ -6419,7 +6155,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["WhatsAppPricingInfo"];
+                    "*/*": components["schemas"]["AdminAuthResponse"];
                 };
             };
         };
@@ -6468,188 +6204,7 @@ export interface operations {
             };
         };
     };
-    whatsAppWebhookVerifySubscription: {
-        parameters: {
-            query?: {
-                "hub.mode"?: string;
-                "hub.verify_token"?: string;
-                "hub.challenge"?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "text/plain": string;
-                };
-            };
-        };
-    };
-    whatsAppWebhookReceiveMessages: {
-        parameters: {
-            query?: never;
-            header?: {
-                "X-Hub-Signature-256"?: string;
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": string;
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    verificationSubmit: {
-        parameters: {
-            query: {
-                legalName: string;
-                documentType: string;
-                registrationNumber?: string;
-                taxIdentifier?: string;
-            };
-            header?: never;
-            path: {
-                kind: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "multipart/form-data": {
-                    files: string[];
-                };
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["VerificationRequestView"];
-                };
-            };
-        };
-    };
-    verificationRequestPhoneCode: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PhoneCodeRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PhoneCodeSent"];
-                };
-            };
-        };
-    };
-    verificationConfirmPhone: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PhoneConfirmRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PhoneStatusView"];
-                };
-            };
-        };
-    };
-    templatesPreview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                name: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TemplatePreviewRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TemplatePreviewResponse"];
-                };
-            };
-        };
-    };
-    providerSettingsTestSend: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channel: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TestSendRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TestSendResponse"];
-                };
-            };
-        };
-    };
-    providerSettingsEmbeddedSignupConfig: {
+    adminBillingCatalogCatalog: {
         parameters: {
             query?: never;
             header?: never;
@@ -6664,305 +6219,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["EmbeddedSignupConfig"];
+                    "*/*": components["schemas"]["AdminTierCatalog"];
                 };
             };
         };
     };
-    providerSettingsCompleteEmbeddedSignup: {
+    adminDiagnosticsTriggerError: {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CompleteEmbeddedSignupRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ProviderSettingsResponse"];
-                };
-            };
-        };
-    };
-    serviceList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ServiceResponse"][];
-                };
-            };
-        };
-    };
-    serviceCreate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ServiceCreateRequest"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ServiceResponse"];
-                };
-            };
-        };
-    };
-    serviceStaffList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ServiceStaffView"][];
-                };
-            };
-        };
-    };
-    serviceStaffCreate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ServiceStaffCreateRequest"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ServiceStaffCreatedResponse"];
-                };
-            };
-        };
-    };
-    serviceDayLineWalkIn: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["WalkInRequest"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["DayLineView"];
-                };
-            };
-        };
-    };
-    serviceDayLinePresent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                serviceId: string;
-                ticketCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    serviceDayLineMarkPaid: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                serviceId: string;
-                ticketCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["MarkPaidRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TicketInfo"];
-                };
-            };
-        };
-    };
-    serviceDayLineNoShow: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                serviceId: string;
-                ticketCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    serviceDayLineFinish: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                serviceId: string;
-                ticketCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    serviceDayLineCall: {
-        parameters: {
-            query?: {
-                counter?: string;
-            };
-            header?: never;
-            path: {
-                serviceId: string;
-                ticketCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    serviceDayLineArrive: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                serviceId: string;
-                ticketCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    serviceDayLineRejectRequest: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                serviceId: string;
-                requestId: string;
-            };
             cookie?: never;
         };
         requestBody?: never;
@@ -6976,36 +6242,16 @@ export interface operations {
             };
         };
     };
-    serviceDayLineAcceptRequest: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                serviceId: string;
-                requestId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    serviceDayLineNext: {
+    adminFeedbackList: {
         parameters: {
             query?: {
-                counter?: string;
+                kind?: string;
+                status?: string;
+                page?: number;
+                size?: number;
             };
             header?: never;
-            path: {
-                serviceId: string;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
@@ -7016,12 +6262,160 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["NextResponse"];
+                    "*/*": components["schemas"]["FeedbackPage"];
                 };
             };
         };
     };
-    serviceRequirements: {
+    adminFeedbackRatings: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RatingSummary"][];
+                };
+            };
+        };
+    };
+    adminFeedbackUpdateStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackStatusRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["FeedbackView"];
+                };
+            };
+        };
+    };
+    adminPaymentList: {
+        parameters: {
+            query?: {
+                status?: string;
+                provider?: string;
+                tenantId?: string;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminPaymentView"][];
+                };
+            };
+        };
+    };
+    adminPaymentConfirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConfirmPaymentRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminPaymentView"];
+                };
+            };
+        };
+    };
+    adminPaymentReject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RejectPaymentRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminPaymentView"];
+                };
+            };
+        };
+    };
+    adminProspectLeadList: {
+        parameters: {
+            query?: {
+                status?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ProspectLeadView"][];
+                };
+            };
+        };
+    };
+    adminProspectLeadMarkContacted: {
         parameters: {
             query?: never;
             header?: never;
@@ -7038,12 +6432,60 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ServiceRequirementResponse"][];
+                    "*/*": components["schemas"]["ProspectLeadView"];
                 };
             };
         };
     };
-    serviceAddRequirement: {
+    adminTenantList: {
+        parameters: {
+            query?: {
+                query?: string;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TenantDirectoryPage"];
+                };
+            };
+        };
+    };
+    adminTenantEvents: {
+        parameters: {
+            query?: {
+                query?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventSummary"][];
+                };
+            };
+        };
+    };
+    adminTenantReactivate: {
         parameters: {
             query?: never;
             header?: never;
@@ -7054,33 +6496,33 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ServiceRequirementRequest"];
+                "application/json": components["schemas"]["TenantStatusChangeRequest"];
             };
         };
         responses: {
-            /** @description Created */
-            201: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ServiceRequirementResponse"];
+                    "*/*": components["schemas"]["TenantInfo"];
                 };
             };
         };
     };
-    rsvpTransfer: {
+    adminTenantSuspend: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                token: string;
+                id: string;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["TransferTicketRequest"];
+                "application/json": components["schemas"]["TenantStatusChangeRequest"];
             };
         };
         responses: {
@@ -7090,18 +6532,21 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["RsvpView"];
+                    "*/*": components["schemas"]["TenantInfo"];
                 };
             };
         };
     };
-    rsvpErase: {
+    adminTrialList: {
         parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
+            query?: {
+                status?: string;
+                tenantId?: string;
+                page?: number;
+                size?: number;
             };
+            header?: never;
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
@@ -7112,21 +6557,23 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["RsvpView"];
+                    "*/*": components["schemas"]["AdminTrialPage"];
                 };
             };
         };
     };
-    rsvpDecline: {
+    adminTrialGrant: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                token: string;
-            };
+            path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GrantTrialRequest"];
+            };
+        };
         responses: {
             /** @description OK */
             200: {
@@ -7134,34 +6581,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["RsvpView"];
+                    "*/*": components["schemas"]["AdminTrialView"];
                 };
             };
         };
     };
-    rsvpConfirm: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["RsvpView"];
-                };
-            };
-        };
-    };
-    resourceList: {
+    adminTrialStats: {
         parameters: {
             query?: never;
             header?: never;
@@ -7176,12 +6601,151 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ResourceView"][];
+                    "*/*": components["schemas"]["AdminTrialStats"];
                 };
             };
         };
     };
-    resourceCreate: {
+    adminTrialEnd: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EndTrialRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminTrialView"];
+                };
+            };
+        };
+    };
+    adminVerificationList: {
+        parameters: {
+            query?: {
+                status?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminVerificationView"][];
+                };
+            };
+        };
+    };
+    adminVerificationApprove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminVerificationView"];
+                };
+            };
+        };
+    };
+    adminVerificationDocuments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["VerificationDocumentLink"][];
+                };
+            };
+        };
+    };
+    adminVerificationReject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerificationRejectRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminVerificationView"];
+                };
+            };
+        };
+    };
+    adminWhatsAppContentOverride: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["WhatsAppOverrideStatus"];
+                };
+            };
+        };
+    };
+    adminWhatsAppSetContentOverride: {
         parameters: {
             query?: never;
             header?: never;
@@ -7190,27 +6754,75 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ResourceCreateRequest"];
+                "application/json": components["schemas"]["SetContentOverrideRequest"];
             };
         };
         responses: {
-            /** @description Created */
-            201: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ResourceView"];
+                    "*/*": components["schemas"]["WhatsAppOverrideStatus"];
                 };
             };
         };
     };
-    resourceUnavailability: {
+    adminWhatsAppPricing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["WhatsAppPricingInfo"][];
+                };
+            };
+        };
+    };
+    adminWhatsAppUpdatePricing: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                category: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePricingRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["WhatsAppPricingInfo"];
+                };
+            };
+        };
+    };
+    appointmentPublicView: {
+        parameters: {
+            query?: {
+                date?: string;
+            };
+            header?: never;
+            path: {
+                token: string;
             };
             cookie?: never;
         };
@@ -7222,117 +6834,17 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ResourceUnavailabilityView"][];
+                    "*/*": components["schemas"]["AppointmentServiceView"];
                 };
             };
         };
     };
-    resourceAddUnavailability: {
+    appointmentPublicBook: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UnavailabilityRequest"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ResourceUnavailabilityView"];
-                };
-            };
-        };
-    };
-    resourceAvailability: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ResourceAvailabilityView"][];
-                };
-            };
-        };
-    };
-    resourceAddAvailability: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AvailabilityRequest"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ResourceAvailabilityView"];
-                };
-            };
-        };
-    };
-    shortLinkPublicTakeTicket: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                code: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["WalkInRequest"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ClientLineTicketView"];
-                };
-            };
-        };
-    };
-    shortLinkPublicBook: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                code: string;
+                token: string;
             };
             cookie?: never;
         };
@@ -7353,19 +6865,62 @@ export interface operations {
             };
         };
     };
-    publicTicketOrderPlace: {
+    appointmentPublicStatus: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                username: string;
-                eventId: string;
+                token: string;
+                bookingToken: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AppointmentStatusView"];
+                };
+            };
+        };
+    };
+    appointmentPublicCancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                bookingToken: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    appointmentPublicTakeTicket: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["PlaceOrderRequest"];
+                "application/json": components["schemas"]["WalkInRequest"];
             };
         };
         responses: {
@@ -7375,36 +6930,35 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["PlacedOrderView"];
+                    "*/*": components["schemas"]["ClientLineTicketView"];
                 };
             };
         };
     };
-    prospectLeadRegister: {
+    appointmentPublicLineTicket: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                token: string;
+                ticketCode: string;
+            };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ProspectLeadRequest"];
-            };
-        };
+        requestBody?: never;
         responses: {
-            /** @description Created */
-            201: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ProspectLeadAck"];
+                    "*/*": components["schemas"]["ClientLineTicketView"];
                 };
             };
         };
     };
-    orgCreate: {
+    authForgotPassword: {
         parameters: {
             query?: never;
             header?: never;
@@ -7413,7 +6967,167 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateOrgRequest"];
+                "application/json": components["schemas"]["ForgotPasswordRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    authGoogle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GoogleLoginRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AuthResponse"];
+                };
+            };
+        };
+    };
+    memberInvitationAcceptAccept: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AcceptInvitationRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AuthResponse"];
+                };
+            };
+        };
+    };
+    memberInvitationAcceptPreview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InvitationPreview"];
+                };
+            };
+        };
+    };
+    authLogin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AuthResponse"];
+                };
+            };
+        };
+    };
+    authMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MeResponse"];
+                };
+            };
+        };
+    };
+    authRefresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RefreshRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AuthResponse"];
+                };
+            };
+        };
+    };
+    authRegister: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterRequest"];
             };
         };
         responses: {
@@ -7428,53 +7142,7 @@ export interface operations {
             };
         };
     };
-    publicTicketOrderDeclare: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DeclarePaymentRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["OrderView"];
-                };
-            };
-        };
-    };
-    operatorTeam: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["OperatorTeamView"];
-                };
-            };
-        };
-    };
-    operatorCreate: {
+    authResetPassword: {
         parameters: {
             query?: never;
             header?: never;
@@ -7483,60 +7151,12 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["OperatorRequest"];
+                "application/json": components["schemas"]["ResetPasswordRequest"];
             };
         };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["OperatorView"];
-                };
-            };
-        };
-    };
-    operatorRevoke: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                operatorId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["OperatorView"];
-                };
-            };
-        };
-    };
-    emailFeedbackReceive: {
-        parameters: {
-            query?: never;
-            header?: {
-                "X-Webhook-Secret"?: string;
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EmailFeedbackWebhookRequest"];
-            };
-        };
-        responses: {
-            /** @description Accepted */
-            202: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -7544,13 +7164,319 @@ export interface operations {
             };
         };
     };
-    resendEmailFeedbackReceive: {
+    authSwitchOrg: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SwitchOrgRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AuthResponse"];
+                };
+            };
+        };
+    };
+    authVerifyEmail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyEmailRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    authResendVerification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    invoiceList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InvoiceSummary"][];
+                };
+            };
+        };
+    };
+    invoiceIssueForPayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                paymentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InvoiceDetail"];
+                };
+            };
+        };
+    };
+    invoiceGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invoiceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InvoiceDetail"];
+                };
+            };
+        };
+    };
+    invoiceCreditNote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invoiceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InvoiceDetail"];
+                };
+            };
+        };
+    };
+    invoiceDocument: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invoiceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": string;
+                };
+            };
+        };
+    };
+    organizerPackPackView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PackView"];
+                };
+            };
+        };
+    };
+    organizerPackCheckoutPack: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PaymentInitiationResult"];
+                };
+            };
+        };
+    };
+    organizerPackRequestPackExtra: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackExtraRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ManualPaymentInstructions"];
+                };
+            };
+        };
+    };
+    organizerPackCheckoutPackExtra: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackExtraRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PaymentInitiationResult"];
+                };
+            };
+        };
+    };
+    organizerPackRequestPack: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ManualPaymentInstructions"];
+                };
+            };
+        };
+    };
+    billingHistoryHistory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PaymentHistoryItem"][];
+                };
+            };
+        };
+    };
+    paymentCallbackCallback: {
         parameters: {
             query?: never;
             header?: {
-                "svix-id"?: string;
-                "svix-timestamp"?: string;
-                "svix-signature"?: string;
+                "X-Signature"?: string;
             };
             path?: never;
             cookie?: never;
@@ -7561,8 +7487,8 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Accepted */
-            202: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -7570,7 +7496,77 @@ export interface operations {
             };
         };
     };
-    memberInvitations: {
+    paymentCallbackProviderCallback: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Signature"?: string;
+            };
+            path: {
+                provider: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string;
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    billingHistoryStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                paymentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PaymentStatusView"];
+                };
+            };
+        };
+    };
+    billingHistoryReceipt: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                paymentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+        };
+    };
+    subscriptionView: {
         parameters: {
             query?: never;
             header?: never;
@@ -7585,12 +7581,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["InvitationView"][];
+                    "*/*": components["schemas"]["SubscriptionView"];
                 };
             };
         };
     };
-    memberInvite: {
+    subscriptionCheckout: {
         parameters: {
             query?: never;
             header?: never;
@@ -7599,81 +7595,206 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["InviteMemberRequest"];
+                "application/json": components["schemas"]["SubscriptionRequest"];
             };
         };
         responses: {
-            /** @description Created */
-            201: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["InvitationView"];
+                    "*/*": components["schemas"]["PaymentInitiationResult"];
                 };
             };
         };
     };
-    lineStaffWalkIn: {
+    subscriptionRequest: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                token: string;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["WalkInRequest"];
+                "application/json": components["schemas"]["SubscriptionRequest"];
             };
         };
         responses: {
-            /** @description Created */
-            201: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DayLineView"];
+                    "*/*": components["schemas"]["ManualPaymentInstructions"];
                 };
             };
         };
     };
-    lineStaffWalkIn_1: {
+    billingTiersTiers: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                token: string;
-                serviceId: string;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TierCatalog"];
+                };
             };
+        };
+    };
+    billingTiersCustomQuote: {
+        parameters: {
+            query: {
+                guestCount: number;
+                interactive?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CustomQuote"];
+                };
+            };
+        };
+    };
+    ownWhatsAppNumberOwnNumberView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OwnWhatsAppNumberView"];
+                };
+            };
+        };
+    };
+    ownWhatsAppNumberCheckoutOwnNumber: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["WalkInRequest"];
+                "application/json": components["schemas"]["PackRequest"];
             };
         };
         responses: {
-            /** @description Created */
-            201: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DayLineView"];
+                    "*/*": components["schemas"]["PaymentInitiationResult"];
                 };
             };
         };
     };
-    lineStaffPresent: {
+    ownWhatsAppNumberRequestOwnNumber: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ManualPaymentInstructions"];
+                };
+            };
+        };
+    };
+    brandingGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BrandingResponse"];
+                };
+            };
+        };
+    };
+    brandingUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateBrandingRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BrandingResponse"];
+                };
+            };
+        };
+    };
+    operatorCheckInContext: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 token: string;
-                ticketCode: string;
             };
             cookie?: never;
         };
@@ -7685,19 +7806,43 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["LineActionResult"];
+                    "*/*": components["schemas"]["ValidatorContextResponse"];
                 };
             };
         };
     };
-    lineStaffPresent_1: {
+    operatorCheckInManual: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 token: string;
-                ticketCode: string;
-                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ManualCheckInRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CheckInResponse"];
+                };
+            };
+        };
+    };
+    operatorCheckInRoster: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
             };
             cookie?: never;
         };
@@ -7709,12 +7854,110 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["LineActionResult"];
+                    "*/*": components["schemas"]["RosterEntry"][];
                 };
             };
         };
     };
-    lineStaffMarkPaid: {
+    operatorCheckInScan: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScanRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CheckInResponse"];
+                };
+            };
+        };
+    };
+    operatorCheckInSearch: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GuestMatch"][];
+                };
+            };
+        };
+    };
+    operatorCheckInStats: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AttendanceResponse"];
+                };
+            };
+        };
+    };
+    operatorCheckInSync: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SyncRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SyncResultEntry"][];
+                };
+            };
+        };
+    };
+    operatorCheckInMarkPaid: {
         parameters: {
             query?: never;
             header?: never;
@@ -7737,409 +7980,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["TicketInfo"];
-                };
-            };
-        };
-    };
-    lineStaffMarkPaid_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                ticketCode: string;
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["MarkPaidRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TicketInfo"];
-                };
-            };
-        };
-    };
-    lineStaffNoShow_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                ticketCode: string;
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    lineStaffNoShow: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                ticketCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    lineStaffFinish: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                ticketCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    lineStaffFinish_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                ticketCode: string;
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    lineStaffCall: {
-        parameters: {
-            query?: {
-                counter?: string;
-            };
-            header?: never;
-            path: {
-                token: string;
-                ticketCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    lineStaffCall_1: {
-        parameters: {
-            query?: {
-                counter?: string;
-            };
-            header?: never;
-            path: {
-                token: string;
-                ticketCode: string;
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    lineStaffArrive: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                ticketCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    lineStaffArrive_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                ticketCode: string;
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LineActionResult"];
-                };
-            };
-        };
-    };
-    lineStaffRejectRequest_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                requestId: string;
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    lineStaffRejectRequest: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                requestId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    lineStaffAcceptRequest: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                requestId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    lineStaffAcceptRequest_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                requestId: string;
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    lineStaffNext_1: {
-        parameters: {
-            query?: {
-                counter?: string;
-            };
-            header?: never;
-            path: {
-                token: string;
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["NextResponse"];
-                };
-            };
-        };
-    };
-    lineStaffNext: {
-        parameters: {
-            query?: {
-                counter?: string;
-            };
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["NextResponse"];
-                };
-            };
-        };
-    };
-    feedbackSubmit: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["FeedbackRequest"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["FeedbackAck"];
-                };
-            };
-        };
-    };
-    feedbackRate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RatingRequest"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["FeedbackAck"];
                 };
             };
         };
@@ -8188,12 +8028,12 @@ export interface operations {
             };
         };
     };
-    eventPublish: {
+    analyticsGet: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                eventId: string;
             };
             cookie?: never;
         };
@@ -8205,23 +8045,354 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["EventResponse"];
+                    "*/*": components["schemas"]["AnalyticsResponse"];
                 };
             };
         };
     };
-    eventCancel: {
+    attendanceCertificateCertificate: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                eventId: string;
+                guestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": string;
+                };
+            };
+        };
+    };
+    attendanceCertificateRegister: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": string;
+                };
+            };
+        };
+    };
+    eventTierQuotesQuotes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventTierQuote"][];
+                };
+            };
+        };
+    };
+    checkInManual: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ManualCheckInRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CheckInResponse"];
+                };
+            };
+        };
+    };
+    checkInScan: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScanRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CheckInResponse"];
+                };
+            };
+        };
+    };
+    checkInSearch: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GuestMatch"][];
+                };
+            };
+        };
+    };
+    checkInStats: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AttendanceResponse"];
+                };
+            };
+        };
+    };
+    checkInMarkPaid: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarkPaidRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TicketInfo"];
+                };
+            };
+        };
+    };
+    commissionOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommissionOverview"];
+                };
+            };
+        };
+    };
+    commissionOpen: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OpenBatchRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OpenedBatchView"];
+                };
+            };
+        };
+    };
+    commissionQuote: {
+        parameters: {
+            query: {
+                ticketTypeId: string;
+            };
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommissionQuote"];
+                };
+            };
+        };
+    };
+    dashboardGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["DashboardResponse"];
+                };
+            };
+        };
+    };
+    guestList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GuestResponse"][];
+                };
+            };
+        };
+    };
+    guestExport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    guestImport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
             };
             cookie?: never;
         };
         requestBody?: {
             content: {
-                "application/json": components["schemas"]["CancelEventRequest"];
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
             };
         };
         responses: {
@@ -8231,12 +8402,87 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["EventResponse"];
+                    "*/*": components["schemas"]["GuestImportResult"];
                 };
             };
         };
     };
-    validatorList: {
+    guestRemove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                guestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    guestSetExclusion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                guestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetGuestExclusionRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GuestResponse"];
+                };
+            };
+        };
+    };
+    guestSetTicketType: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                guestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetGuestTicketTypeRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GuestResponse"];
+                };
+            };
+        };
+    };
+    invitationStatuses: {
         parameters: {
             query?: never;
             header?: never;
@@ -8253,12 +8499,59 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ValidatorResponse"][];
+                    "*/*": components["schemas"]["InvitationStatusResponse"][];
                 };
             };
         };
     };
-    validatorCreate: {
+    invitationSend: {
+        parameters: {
+            query?: {
+                channels?: ("EMAIL" | "WHATSAPP")[];
+                onlyUnsent?: boolean;
+            };
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SendInvitationsResult"];
+                };
+            };
+        };
+    };
+    eventOccurrenceList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventOccurrenceResponse"][];
+                };
+            };
+        };
+    };
+    eventOccurrenceCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -8269,7 +8562,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateValidatorRequest"];
+                "application/json": components["schemas"]["CreateEventOccurrenceRequest"];
             };
         };
         responses: {
@@ -8279,18 +8572,38 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ValidatorResponse"];
+                    "*/*": components["schemas"]["EventOccurrenceResponse"];
                 };
             };
         };
     };
-    validatorRevoke: {
+    eventOccurrenceDelete: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 eventId: string;
-                validatorId: string;
+                occurrenceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    openInvitationSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
             };
             cookie?: never;
         };
@@ -8302,34 +8615,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ValidatorResponse"];
+                    "*/*": components["schemas"]["OpenInvitationView"];
                 };
             };
         };
     };
-    ticketTypeList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TicketTypeResponse"][];
-                };
-            };
-        };
-    };
-    ticketTypeCreate: {
+    openInvitationUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -8340,22 +8631,22 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpsertTicketTypeRequest"];
+                "application/json": components["schemas"]["OpenInvitationSettingsRequest"];
             };
         };
         responses: {
-            /** @description Created */
-            201: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TicketTypeResponse"];
+                    "*/*": components["schemas"]["OpenInvitationView"];
                 };
             };
         };
     };
-    eventQuestionList: {
+    openInvitationResponses: {
         parameters: {
             query?: never;
             header?: never;
@@ -8372,33 +8663,102 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["EventQuestionResponse"][];
+                    "*/*": components["schemas"]["OrganizerOpenResponseView"][];
                 };
             };
         };
     };
-    eventQuestionCreate: {
+    openInvitationRemove: {
         parameters: {
             query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                responseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ticketOrderList: {
+        parameters: {
+            query?: {
+                status?: "AWAITING_PAYMENT" | "DECLARED" | "PAID" | "EXPIRED" | "REJECTED";
+            };
             header?: never;
             path: {
                 eventId: string;
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateEventQuestionRequest"];
-            };
-        };
+        requestBody?: never;
         responses: {
-            /** @description Created */
-            201: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["EventQuestionResponse"];
+                    "*/*": components["schemas"]["OrganizerOrderView"][];
+                };
+            };
+        };
+    };
+    ticketOrderConfirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                orderId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerOrderView"];
+                };
+            };
+        };
+    };
+    ticketOrderReject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                orderId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RejectOrderRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerOrderView"];
                 };
             };
         };
@@ -8477,57 +8837,7 @@ export interface operations {
             };
         };
     };
-    ticketOrderReject: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-                orderId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RejectOrderRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["OrganizerOrderView"];
-                };
-            };
-        };
-    };
-    ticketOrderConfirm: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-                orderId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["OrganizerOrderView"];
-                };
-            };
-        };
-    };
-    eventOccurrenceList: {
+    eventQuestionList: {
         parameters: {
             query?: never;
             header?: never;
@@ -8544,12 +8854,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["EventOccurrenceResponse"][];
+                    "*/*": components["schemas"]["EventQuestionResponse"][];
                 };
             };
         };
     };
-    eventOccurrenceCreate: {
+    eventQuestionCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -8560,7 +8870,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateEventOccurrenceRequest"];
+                "application/json": components["schemas"]["CreateEventQuestionRequest"];
             };
         };
         responses: {
@@ -8570,17 +8880,35 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["EventOccurrenceResponse"];
+                    "*/*": components["schemas"]["EventQuestionResponse"];
                 };
             };
         };
     };
-    invitationSend: {
+    eventQuestionDelete: {
         parameters: {
-            query?: {
-                channels?: ("EMAIL" | "WHATSAPP")[];
-                onlyUnsent?: boolean;
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                questionId: string;
             };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ticketTypeList: {
+        parameters: {
+            query?: never;
             header?: never;
             path: {
                 eventId: string;
@@ -8595,26 +8923,258 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SendInvitationsResult"];
+                    "*/*": components["schemas"]["TicketTypeResponse"][];
                 };
             };
         };
     };
-    guestImport: {
+    ticketTypeCreate: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertTicketTypeRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TicketTypeResponse"];
+                };
+            };
+        };
+    };
+    ticketTypeUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                typeId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertTicketTypeRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TicketTypeResponse"];
+                };
+            };
+        };
+    };
+    ticketTypeDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                typeId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    billingUsage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BillingAllowance"];
+                };
+            };
+        };
+    };
+    validatorList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ValidatorResponse"][];
+                };
+            };
+        };
+    };
+    validatorCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateValidatorRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ValidatorResponse"];
+                };
+            };
+        };
+    };
+    validatorRevoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                validatorId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ValidatorResponse"];
+                };
+            };
+        };
+    };
+    eventGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventResponse"];
+                };
+            };
+        };
+    };
+    eventUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateEventRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventResponse"];
+                };
+            };
+        };
+    };
+    eventDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    eventCancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
             };
             cookie?: never;
         };
         requestBody?: {
             content: {
-                "multipart/form-data": {
-                    /** Format: binary */
-                    file: string;
-                };
+                "application/json": components["schemas"]["CancelEventRequest"];
             };
         };
         responses: {
@@ -8624,23 +9184,45 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["GuestImportResult"];
+                    "*/*": components["schemas"]["EventResponse"];
                 };
             };
         };
     };
-    commissionOpen: {
+    eventPublish: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                eventId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventResponse"];
+                };
+            };
+        };
+    };
+    eventSetQuorum: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["OpenBatchRequest"];
+                "application/json": components["schemas"]["UpdateQuorumRequest"];
             };
         };
         responses: {
@@ -8650,26 +9232,294 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["OpenedBatchView"];
+                    "*/*": components["schemas"]["QuorumResponse"];
                 };
             };
         };
     };
-    checkInMarkPaid: {
+    feedbackSubmit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["FeedbackAck"];
+                };
+            };
+        };
+    };
+    feedbackPrompt: {
+        parameters: {
+            query: {
+                moment: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PromptDecision"];
+                };
+            };
+        };
+    };
+    feedbackRate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RatingRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["FeedbackAck"];
+                };
+            };
+        };
+    };
+    healthHealth: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": {
+                        [key: string]: string;
+                    };
+                };
+            };
+        };
+    };
+    legalIdentityGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LegalIdentityResponse"];
+                };
+            };
+        };
+    };
+    legalIdentityUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateLegalIdentityRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LegalIdentityResponse"];
+                };
+            };
+        };
+    };
+    lineCodeResolve: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                eventId: string;
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LineCodeResolution"];
+                };
+            };
+        };
+    };
+    lineStaffView: {
+        parameters: {
+            query?: {
+                date?: string;
+            };
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["DayLineView"];
+                };
+            };
+        };
+    };
+    lineStaffNext: {
+        parameters: {
+            query?: {
+                counter?: string;
+            };
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["NextResponse"];
+                };
+            };
+        };
+    };
+    lineStaffPendingRequests: {
+        parameters: {
+            query?: {
+                date?: string;
+            };
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PendingAppointmentRequest"][];
+                };
+            };
+        };
+    };
+    lineStaffAcceptRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                requestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    lineStaffRejectRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                requestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    lineStaffArrive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
                 ticketCode: string;
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["MarkPaidRequest"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -8677,25 +9527,47 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TicketInfo"];
+                    "*/*": components["schemas"]["LineActionResult"];
                 };
             };
         };
     };
-    checkInScan: {
+    lineStaffCall: {
+        parameters: {
+            query?: {
+                counter?: string;
+            };
+            header?: never;
+            path: {
+                token: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LineActionResult"];
+                };
+            };
+        };
+    };
+    lineStaffFinish: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                eventId: string;
+                token: string;
+                ticketCode: string;
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ScanRequest"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -8703,25 +9575,22 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CheckInResponse"];
+                    "*/*": components["schemas"]["LineActionResult"];
                 };
             };
         };
     };
-    checkInManual: {
+    lineStaffNoShow: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                eventId: string;
+                token: string;
+                ticketCode: string;
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ManualCheckInRequest"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -8729,12 +9598,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CheckInResponse"];
+                    "*/*": components["schemas"]["LineActionResult"];
                 };
             };
         };
     };
-    operatorCheckInMarkPaid: {
+    lineStaffMarkPaid: {
         parameters: {
             query?: never;
             header?: never;
@@ -8757,6 +9626,502 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["TicketInfo"];
+                };
+            };
+        };
+    };
+    lineStaffPresent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LineActionResult"];
+                };
+            };
+        };
+    };
+    lineStaffWalkIn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WalkInRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["DayLineView"];
+                };
+            };
+        };
+    };
+    memberMembers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MemberView"][];
+                };
+            };
+        };
+    };
+    memberInvitations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InvitationView"][];
+                };
+            };
+        };
+    };
+    memberInvite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InviteMemberRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InvitationView"];
+                };
+            };
+        };
+    };
+    memberRevoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invitationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    memberRemove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    memberChangeRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeRoleRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MemberView"];
+                };
+            };
+        };
+    };
+    emailFeedbackReceive: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Webhook-Secret"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EmailFeedbackWebhookRequest"];
+            };
+        };
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    resendEmailFeedbackReceive: {
+        parameters: {
+            query?: never;
+            header?: {
+                "svix-id"?: string;
+                "svix-timestamp"?: string;
+                "svix-signature"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string;
+            };
+        };
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    publicOpenInvitationView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PublicOpenInvitationView"];
+                };
+            };
+        };
+    };
+    publicOpenInvitationRespond: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OpenResponseRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OpenResponseView"];
+                };
+            };
+        };
+    };
+    operatorConsoleResolve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OperatorLinkResolution"];
+                };
+            };
+        };
+    };
+    operatorConsoleConsole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OperatorConsoleView"];
+                };
+            };
+        };
+    };
+    operatorCheckInContext_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ValidatorContextResponse"];
+                };
+            };
+        };
+    };
+    operatorCheckInManual_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ManualCheckInRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CheckInResponse"];
+                };
+            };
+        };
+    };
+    operatorCheckInRoster_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RosterEntry"][];
+                };
+            };
+        };
+    };
+    operatorCheckInScan_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScanRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CheckInResponse"];
+                };
+            };
+        };
+    };
+    operatorCheckInSearch_1: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path: {
+                token: string;
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GuestMatch"][];
+                };
+            };
+        };
+    };
+    operatorCheckInStats_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AttendanceResponse"];
+                };
+            };
+        };
+    };
+    operatorCheckInSync_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SyncRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SyncResultEntry"][];
                 };
             };
         };
@@ -8789,413 +10154,15 @@ export interface operations {
             };
         };
     };
-    operatorCheckInSync: {
+    lineStaffView_1: {
         parameters: {
-            query?: never;
+            query?: {
+                date?: string;
+            };
             header?: never;
             path: {
                 token: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SyncRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SyncResultEntry"][];
-                };
-            };
-        };
-    };
-    operatorCheckInSync_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SyncRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SyncResultEntry"][];
-                };
-            };
-        };
-    };
-    operatorCheckInScan: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ScanRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CheckInResponse"];
-                };
-            };
-        };
-    };
-    operatorCheckInScan_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ScanRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CheckInResponse"];
-                };
-            };
-        };
-    };
-    operatorCheckInManual_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ManualCheckInRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CheckInResponse"];
-                };
-            };
-        };
-    };
-    operatorCheckInManual: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ManualCheckInRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CheckInResponse"];
-                };
-            };
-        };
-    };
-    ownWhatsAppNumberRequestOwnNumber: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PackRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ManualPaymentInstructions"];
-                };
-            };
-        };
-    };
-    ownWhatsAppNumberCheckoutOwnNumber: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PackRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PaymentInitiationResult"];
-                };
-            };
-        };
-    };
-    subscriptionRequest: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SubscriptionRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ManualPaymentInstructions"];
-                };
-            };
-        };
-    };
-    subscriptionCheckout: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SubscriptionRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PaymentInitiationResult"];
-                };
-            };
-        };
-    };
-    paymentCallbackCallback: {
-        parameters: {
-            query?: never;
-            header?: {
-                "X-Signature"?: string;
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": string;
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    paymentCallbackProviderCallback: {
-        parameters: {
-            query?: never;
-            header?: {
-                "X-Signature"?: string;
-            };
-            path: {
-                provider: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": string;
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    organizerPackRequestPack: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PackRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ManualPaymentInstructions"];
-                };
-            };
-        };
-    };
-    organizerPackRequestPackExtra: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PackExtraRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ManualPaymentInstructions"];
-                };
-            };
-        };
-    };
-    organizerPackCheckoutPackExtra: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PackExtraRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PaymentInitiationResult"];
-                };
-            };
-        };
-    };
-    organizerPackCheckoutPack: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PackRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PaymentInitiationResult"];
-                };
-            };
-        };
-    };
-    invoiceCreditNote: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                invoiceId: string;
+                serviceId: string;
             };
             cookie?: never;
         };
@@ -9207,17 +10174,20 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["InvoiceDetail"];
+                    "*/*": components["schemas"]["DayLineView"];
                 };
             };
         };
     };
-    invoiceIssueForPayment: {
+    lineStaffNext_1: {
         parameters: {
-            query?: never;
+            query?: {
+                counter?: string;
+            };
             header?: never;
             path: {
-                paymentId: string;
+                token: string;
+                serviceId: string;
             };
             cookie?: never;
         };
@@ -9229,38 +10199,45 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["InvoiceDetail"];
+                    "*/*": components["schemas"]["NextResponse"];
                 };
             };
         };
     };
-    authVerifyEmail: {
+    lineStaffPendingRequests_1: {
         parameters: {
-            query?: never;
+            query?: {
+                date?: string;
+            };
             header?: never;
-            path?: never;
+            path: {
+                token: string;
+                serviceId: string;
+            };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["VerifyEmailRequest"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["PendingAppointmentRequest"][];
+                };
             };
         };
     };
-    authResendVerification: {
+    lineStaffAcceptRequest_1: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                token: string;
+                requestId: string;
+                serviceId: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -9274,200 +10251,185 @@ export interface operations {
             };
         };
     };
-    authSwitchOrg: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SwitchOrgRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AuthResponse"];
-                };
-            };
-        };
-    };
-    authResetPassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ResetPasswordRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    authRegister: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RegisterRequest"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AuthResponse"];
-                };
-            };
-        };
-    };
-    authRefresh: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RefreshRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AuthResponse"];
-                };
-            };
-        };
-    };
-    authLogin: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoginRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AuthResponse"];
-                };
-            };
-        };
-    };
-    memberInvitationAcceptAccept: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AcceptInvitationRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AuthResponse"];
-                };
-            };
-        };
-    };
-    authGoogle: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["GoogleLoginRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AuthResponse"];
-                };
-            };
-        };
-    };
-    authForgotPassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ForgotPasswordRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    appointmentPublicTakeTicket: {
+    lineStaffRejectRequest_1: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 token: string;
+                requestId: string;
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    lineStaffArrive_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                ticketCode: string;
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LineActionResult"];
+                };
+            };
+        };
+    };
+    lineStaffCall_1: {
+        parameters: {
+            query?: {
+                counter?: string;
+            };
+            header?: never;
+            path: {
+                token: string;
+                ticketCode: string;
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LineActionResult"];
+                };
+            };
+        };
+    };
+    lineStaffFinish_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                ticketCode: string;
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LineActionResult"];
+                };
+            };
+        };
+    };
+    lineStaffNoShow_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                ticketCode: string;
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LineActionResult"];
+                };
+            };
+        };
+    };
+    lineStaffMarkPaid_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                ticketCode: string;
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarkPaidRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TicketInfo"];
+                };
+            };
+        };
+    };
+    lineStaffPresent_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                ticketCode: string;
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LineActionResult"];
+                };
+            };
+        };
+    };
+    lineStaffWalkIn_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                serviceId: string;
             };
             cookie?: never;
         };
@@ -9483,17 +10445,345 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ClientLineTicketView"];
+                    "*/*": components["schemas"]["DayLineView"];
                 };
             };
         };
     };
-    appointmentPublicBook: {
+    operatorTeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OperatorTeamView"];
+                };
+            };
+        };
+    };
+    operatorCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OperatorRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OperatorView"];
+                };
+            };
+        };
+    };
+    operatorUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                operatorId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OperatorRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OperatorView"];
+                };
+            };
+        };
+    };
+    operatorRevoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                operatorId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OperatorView"];
+                };
+            };
+        };
+    };
+    publicTicketOrderView: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrderView"];
+                };
+            };
+        };
+    };
+    publicTicketOrderDeclare: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeclarePaymentRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrderView"];
+                };
+            };
+        };
+    };
+    orgCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateOrgRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AuthResponse"];
+                };
+            };
+        };
+    };
+    orgProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TenantInfo"];
+                };
+            };
+        };
+    };
+    orgUpdateUsername: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateOrgUsernameRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TenantInfo"];
+                };
+            };
+        };
+    };
+    prospectLeadRegister: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProspectLeadRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ProspectLeadAck"];
+                };
+            };
+        };
+    };
+    publicOrgProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                username: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PublicOrgProfileView"];
+                };
+            };
+        };
+    };
+    publicTicketOrderSale: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                username: string;
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PublicSaleView"];
+                };
+            };
+        };
+    };
+    publicTicketOrderPlace: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                username: string;
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaceOrderRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PlacedOrderView"];
+                };
+            };
+        };
+    };
+    shortLinkPublicView: {
+        parameters: {
+            query?: {
+                date?: string;
+            };
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AppointmentServiceView"];
+                };
+            };
+        };
+    };
+    shortLinkPublicBook: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
             };
             cookie?: never;
         };
@@ -9514,82 +10804,13 @@ export interface operations {
             };
         };
     };
-    adminWhatsAppContentOverride: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["WhatsAppOverrideStatus"];
-                };
-            };
-        };
-    };
-    adminWhatsAppSetContentOverride: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SetContentOverrideRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["WhatsAppOverrideStatus"];
-                };
-            };
-        };
-    };
-    adminVerificationReject: {
+    shortLinkPublicStatus: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["VerificationRejectRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminVerificationView"];
-                };
-            };
-        };
-    };
-    adminVerificationApprove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
+                code: string;
+                bookingToken: string;
             };
             cookie?: never;
         };
@@ -9601,249 +10822,25 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["AdminVerificationView"];
+                    "*/*": components["schemas"]["AppointmentStatusView"];
                 };
             };
         };
     };
-    adminTrialList: {
-        parameters: {
-            query?: {
-                status?: string;
-                tenantId?: string;
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminTrialPage"];
-                };
-            };
-        };
-    };
-    adminTrialGrant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["GrantTrialRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminTrialView"];
-                };
-            };
-        };
-    };
-    adminTrialEnd: {
+    shortLinkPublicCancel: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EndTrialRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminTrialView"];
-                };
-            };
-        };
-    };
-    adminTenantSuspend: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TenantStatusChangeRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TenantInfo"];
-                };
-            };
-        };
-    };
-    adminTenantReactivate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TenantStatusChangeRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TenantInfo"];
-                };
-            };
-        };
-    };
-    adminProspectLeadMarkContacted: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
+                code: string;
+                bookingToken: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ProspectLeadView"];
-                };
-            };
-        };
-    };
-    adminPaymentReject: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RejectPaymentRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminPaymentView"];
-                };
-            };
-        };
-    };
-    adminPaymentConfirm: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ConfirmPaymentRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminPaymentView"];
-                };
-            };
-        };
-    };
-    adminFeedbackUpdateStatus: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["FeedbackStatusRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["FeedbackView"];
-                };
-            };
-        };
-    };
-    adminDiagnosticsTriggerError: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
+            /** @description No Content */
+            204: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -9851,18 +10848,43 @@ export interface operations {
             };
         };
     };
-    adminAuthRefresh: {
+    shortLinkPublicTakeTicket: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                code: string;
+            };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AdminRefreshRequest"];
+                "application/json": components["schemas"]["WalkInRequest"];
             };
         };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ClientLineTicketView"];
+                };
+            };
+        };
+    };
+    shortLinkPublicLineTicket: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -9870,44 +10892,14 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["AdminAuthResponse"];
+                    "*/*": components["schemas"]["ClientLineTicketView"];
                 };
             };
         };
     };
-    adminAuthLogin: {
+    resourceList: {
         parameters: {
             query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AdminLoginRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminAuthResponse"];
-                };
-            };
-        };
-    };
-    adminAgreementList: {
-        parameters: {
-            query?: {
-                status?: string;
-                kind?: string;
-                tenantId?: string;
-                page?: number;
-                size?: number;
-            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -9920,12 +10912,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["AgreementView"][];
+                    "*/*": components["schemas"]["ResourceView"][];
                 };
             };
         };
     };
-    adminAgreementCreate: {
+    resourceCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -9934,9 +10926,31 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateAgreementRequest"];
+                "application/json": components["schemas"]["ResourceCreateRequest"];
             };
         };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ResourceView"];
+                };
+            };
+        };
+    };
+    resourceGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -9944,12 +10958,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["AgreementView"];
+                    "*/*": components["schemas"]["ResourceView"];
                 };
             };
         };
     };
-    adminAgreementRenew: {
+    resourceUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -9960,7 +10974,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["RenewAgreementRequest"];
+                "application/json": components["schemas"]["ResourceUpdateRequest"];
             };
         };
         responses: {
@@ -9970,12 +10984,34 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["AgreementView"];
+                    "*/*": components["schemas"]["ResourceView"];
                 };
             };
         };
     };
-    adminAgreementInterrupt: {
+    resourceAvailability: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ResourceAvailabilityView"][];
+                };
+            };
+        };
+    };
+    resourceAddAvailability: {
         parameters: {
             query?: never;
             header?: never;
@@ -9986,7 +11022,258 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["InterruptAgreementRequest"];
+                "application/json": components["schemas"]["AvailabilityRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ResourceAvailabilityView"];
+                };
+            };
+        };
+    };
+    resourceRemoveAvailability: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                availabilityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    resourceFree: {
+        parameters: {
+            query: {
+                from: string;
+                to: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["FreeSlotResponse"];
+                };
+            };
+        };
+    };
+    resourceUnavailability: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ResourceUnavailabilityView"][];
+                };
+            };
+        };
+    };
+    resourceAddUnavailability: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UnavailabilityRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ResourceUnavailabilityView"];
+                };
+            };
+        };
+    };
+    resourceRemoveUnavailability: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                unavailabilityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    rsvpView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RsvpView"];
+                };
+            };
+        };
+    };
+    rsvpConfirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RsvpView"];
+                };
+            };
+        };
+    };
+    rsvpDecline: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RsvpView"];
+                };
+            };
+        };
+    };
+    rsvpErase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RsvpView"];
+                };
+            };
+        };
+    };
+    rsvpQrCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/png": string;
+                };
+            };
+        };
+    };
+    rsvpTransfer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TransferTicketRequest"];
             };
         };
         responses: {
@@ -9996,7 +11283,51 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["AgreementView"];
+                    "*/*": components["schemas"]["RsvpView"];
+                };
+            };
+        };
+    };
+    serviceList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ServiceResponse"][];
+                };
+            };
+        };
+    };
+    serviceCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ServiceCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ServiceResponse"];
                 };
             };
         };
@@ -10069,7 +11400,7 @@ export interface operations {
             };
         };
     };
-    resourceGet: {
+    serviceBookingLink: {
         parameters: {
             query?: never;
             header?: never;
@@ -10086,12 +11417,34 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ResourceView"];
+                    "*/*": components["schemas"]["BookingLinkResponse"];
                 };
             };
         };
     };
-    resourceUpdate: {
+    serviceConfiguration: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EffectiveServiceConfig"];
+                };
+            };
+        };
+    };
+    serviceUpdateConfiguration: {
         parameters: {
             query?: never;
             header?: never;
@@ -10102,7 +11455,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ResourceUpdateRequest"];
+                "application/json": components["schemas"]["ServiceConfigUpdate"];
             };
         };
         responses: {
@@ -10112,122 +11465,77 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ResourceView"];
+                    "*/*": components["schemas"]["EffectiveServiceConfig"];
                 };
             };
         };
     };
-    guestSetTicketType: {
+    serviceRequirements: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                eventId: string;
-                guestId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ServiceRequirementResponse"][];
+                };
+            };
+        };
+    };
+    serviceAddRequirement: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SetGuestTicketTypeRequest"];
+                "application/json": components["schemas"]["ServiceRequirementRequest"];
             };
         };
         responses: {
-            /** @description OK */
-            200: {
+            /** @description Created */
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["GuestResponse"];
+                    "*/*": components["schemas"]["ServiceRequirementResponse"];
                 };
             };
         };
     };
-    guestSetExclusion: {
+    serviceRemoveRequirement: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                eventId: string;
-                guestId: string;
+                id: string;
+                requirementId: string;
             };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SetGuestExclusionRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["GuestResponse"];
-                };
-            };
-        };
-    };
-    verificationOverview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
-            200: {
+            /** @description No Content */
+            204: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "*/*": components["schemas"]["VerificationOverview"];
-                };
-            };
-        };
-    };
-    templatesList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TemplateSummary"][];
-                };
-            };
-        };
-    };
-    providerSettingsOverview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ProviderSettingsResponse"];
-                };
+                content?: never;
             };
         };
     };
@@ -10251,6 +11559,30 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["DayLineView"];
+                };
+            };
+        };
+    };
+    serviceDayLineNext: {
+        parameters: {
+            query?: {
+                counter?: string;
+            };
+            header?: never;
+            path: {
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["NextResponse"];
                 };
             };
         };
@@ -10279,12 +11611,13 @@ export interface operations {
             };
         };
     };
-    serviceBookingLink: {
+    serviceDayLineAcceptRequest: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                serviceId: string;
+                requestId: string;
             };
             cookie?: never;
         };
@@ -10295,18 +11628,17 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "*/*": components["schemas"]["BookingLinkResponse"];
-                };
+                content?: never;
             };
         };
     };
-    rsvpView: {
+    serviceDayLineRejectRequest: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                token: string;
+                serviceId: string;
+                requestId: string;
             };
             cookie?: never;
         };
@@ -10317,89 +11649,16 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "*/*": components["schemas"]["RsvpView"];
-                };
+                content?: never;
             };
         };
     };
-    rsvpQrCode: {
+    serviceDayLineArrive: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "image/png": string;
-                };
-            };
-        };
-    };
-    resourceFree: {
-        parameters: {
-            query: {
-                from: string;
-                to: string;
-            };
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["FreeSlotResponse"];
-                };
-            };
-        };
-    };
-    shortLinkPublicView: {
-        parameters: {
-            query?: {
-                date?: string;
-            };
-            header?: never;
-            path: {
-                code: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AppointmentServiceView"];
-                };
-            };
-        };
-    };
-    shortLinkPublicLineTicket: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                code: string;
+                serviceId: string;
                 ticketCode: string;
             };
             cookie?: never;
@@ -10412,18 +11671,20 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ClientLineTicketView"];
+                    "*/*": components["schemas"]["LineActionResult"];
                 };
             };
         };
     };
-    shortLinkPublicStatus: {
+    serviceDayLineCall: {
         parameters: {
-            query?: never;
+            query?: {
+                counter?: string;
+            };
             header?: never;
             path: {
-                code: string;
-                bookingToken: string;
+                serviceId: string;
+                ticketCode: string;
             };
             cookie?: never;
         };
@@ -10435,18 +11696,188 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["AppointmentStatusView"];
+                    "*/*": components["schemas"]["LineActionResult"];
                 };
             };
         };
     };
-    shortLinkPublicCancel: {
+    serviceDayLineFinish: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                code: string;
-                bookingToken: string;
+                serviceId: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LineActionResult"];
+                };
+            };
+        };
+    };
+    serviceDayLineNoShow: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                serviceId: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LineActionResult"];
+                };
+            };
+        };
+    };
+    serviceDayLineMarkPaid: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                serviceId: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarkPaidRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TicketInfo"];
+                };
+            };
+        };
+    };
+    serviceDayLinePresent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                serviceId: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LineActionResult"];
+                };
+            };
+        };
+    };
+    serviceDayLineWalkIn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WalkInRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["DayLineView"];
+                };
+            };
+        };
+    };
+    serviceStaffList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ServiceStaffView"][];
+                };
+            };
+        };
+    };
+    serviceStaffCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ServiceStaffCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ServiceStaffCreatedResponse"];
+                };
+            };
+        };
+    };
+    serviceStaffRevoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                serviceId: string;
+                staffId: string;
             };
             cookie?: never;
         };
@@ -10461,52 +11892,7 @@ export interface operations {
             };
         };
     };
-    publicOrgProfile: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                username: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PublicOrgProfileView"];
-                };
-            };
-        };
-    };
-    publicTicketOrderSale: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                username: string;
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PublicSaleView"];
-                };
-            };
-        };
-    };
-    orgProfile: {
+    paymentMethodsGet: {
         parameters: {
             query?: never;
             header?: never;
@@ -10521,21 +11907,23 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TenantInfo"];
+                    "*/*": components["schemas"]["TenantPaymentMethodsInfo"];
                 };
             };
         };
     };
-    publicTicketOrderView: {
+    paymentMethodsUpdate: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                token: string;
-            };
+            path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePaymentMethodsRequest"];
+            };
+        };
         responses: {
             /** @description OK */
             200: {
@@ -10543,56 +11931,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["OrderView"];
+                    "*/*": components["schemas"]["TenantPaymentMethodsInfo"];
                 };
             };
         };
     };
-    operatorConsoleConsole: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["OperatorConsoleView"];
-                };
-            };
-        };
-    };
-    operatorConsoleResolve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                code: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["OperatorLinkResolution"];
-                };
-            };
-        };
-    };
-    memberMembers: {
+    providerSettingsOverview: {
         parameters: {
             query?: never;
             header?: never;
@@ -10607,119 +11951,23 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["MemberView"][];
+                    "*/*": components["schemas"]["ProviderSettingsResponse"];
                 };
             };
         };
     };
-    lineStaffPendingRequests: {
-        parameters: {
-            query?: {
-                date?: string;
-            };
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PendingAppointmentRequest"][];
-                };
-            };
-        };
-    };
-    lineStaffPendingRequests_1: {
-        parameters: {
-            query?: {
-                date?: string;
-            };
-            header?: never;
-            path: {
-                token: string;
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PendingAppointmentRequest"][];
-                };
-            };
-        };
-    };
-    lineStaffView: {
-        parameters: {
-            query?: {
-                date?: string;
-            };
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["DayLineView"];
-                };
-            };
-        };
-    };
-    lineStaffView_1: {
-        parameters: {
-            query?: {
-                date?: string;
-            };
-            header?: never;
-            path: {
-                token: string;
-                serviceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["DayLineView"];
-                };
-            };
-        };
-    };
-    lineCodeResolve: {
+    providerSettingsUpdateEmail: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                code: string;
-            };
+            path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateEmailProviderRequest"];
+            };
+        };
         responses: {
             /** @description OK */
             200: {
@@ -10727,12 +11975,36 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["LineCodeResolution"];
+                    "*/*": components["schemas"]["ProviderSettingsResponse"];
                 };
             };
         };
     };
-    healthHealth: {
+    providerSettingsUpdateWhatsApp: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWhatsAppProviderRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ProviderSettingsResponse"];
+                };
+            };
+        };
+    };
+    providerSettingsEmbeddedSignupConfig: {
         parameters: {
             query?: never;
             header?: never;
@@ -10747,540 +12019,23 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": {
-                        [key: string]: string;
-                    };
+                    "*/*": components["schemas"]["EmbeddedSignupConfig"];
                 };
             };
         };
     };
-    feedbackPrompt: {
-        parameters: {
-            query: {
-                moment: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PromptDecision"];
-                };
-            };
-        };
-    };
-    billingUsage: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["BillingAllowance"];
-                };
-            };
-        };
-    };
-    ticketOrderList: {
-        parameters: {
-            query?: {
-                status?: "AWAITING_PAYMENT" | "DECLARED" | "PAID" | "EXPIRED" | "REJECTED";
-            };
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["OrganizerOrderView"][];
-                };
-            };
-        };
-    };
-    invitationStatuses: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["InvitationStatusResponse"][];
-                };
-            };
-        };
-    };
-    guestList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["GuestResponse"][];
-                };
-            };
-        };
-    };
-    guestExport: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    dashboardGet: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["DashboardResponse"];
-                };
-            };
-        };
-    };
-    commissionOverview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CommissionOverview"];
-                };
-            };
-        };
-    };
-    commissionQuote: {
-        parameters: {
-            query: {
-                ticketTypeId: string;
-            };
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CommissionQuote"];
-                };
-            };
-        };
-    };
-    checkInStats: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AttendanceResponse"];
-                };
-            };
-        };
-    };
-    checkInSearch: {
-        parameters: {
-            query: {
-                q: string;
-            };
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["GuestMatch"][];
-                };
-            };
-        };
-    };
-    eventTierQuotesQuotes: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["EventTierQuote"][];
-                };
-            };
-        };
-    };
-    attendanceCertificateRegister: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/pdf": string;
-                };
-            };
-        };
-    };
-    attendanceCertificateCertificate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-                guestId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/pdf": string;
-                };
-            };
-        };
-    };
-    analyticsGet: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AnalyticsResponse"];
-                };
-            };
-        };
-    };
-    operatorCheckInStats_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AttendanceResponse"];
-                };
-            };
-        };
-    };
-    operatorCheckInStats: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AttendanceResponse"];
-                };
-            };
-        };
-    };
-    operatorCheckInSearch_1: {
-        parameters: {
-            query: {
-                q: string;
-            };
-            header?: never;
-            path: {
-                token: string;
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["GuestMatch"][];
-                };
-            };
-        };
-    };
-    operatorCheckInSearch: {
-        parameters: {
-            query: {
-                q: string;
-            };
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["GuestMatch"][];
-                };
-            };
-        };
-    };
-    operatorCheckInRoster: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["RosterEntry"][];
-                };
-            };
-        };
-    };
-    operatorCheckInRoster_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["RosterEntry"][];
-                };
-            };
-        };
-    };
-    operatorCheckInContext: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ValidatorContextResponse"];
-                };
-            };
-        };
-    };
-    operatorCheckInContext_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ValidatorContextResponse"];
-                };
-            };
-        };
-    };
-    ownWhatsAppNumberOwnNumberView: {
+    providerSettingsCompleteEmbeddedSignup: {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CompleteEmbeddedSignupRequest"];
+            };
+        };
         responses: {
             /** @description OK */
             200: {
@@ -11288,623 +12043,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["OwnWhatsAppNumberView"];
-                };
-            };
-        };
-    };
-    billingTiersTiers: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TierCatalog"];
-                };
-            };
-        };
-    };
-    billingTiersCustomQuote: {
-        parameters: {
-            query: {
-                guestCount: number;
-                interactive?: boolean;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CustomQuote"];
-                };
-            };
-        };
-    };
-    subscriptionView: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SubscriptionView"];
-                };
-            };
-        };
-    };
-    billingHistoryHistory: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PaymentHistoryItem"][];
-                };
-            };
-        };
-    };
-    billingHistoryStatus: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                paymentId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PaymentStatusView"];
-                };
-            };
-        };
-    };
-    billingHistoryReceipt: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                paymentId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "text/plain": string;
-                };
-            };
-        };
-    };
-    organizerPackPackView: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PackView"];
-                };
-            };
-        };
-    };
-    invoiceList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["InvoiceSummary"][];
-                };
-            };
-        };
-    };
-    invoiceGet: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                invoiceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["InvoiceDetail"];
-                };
-            };
-        };
-    };
-    invoiceDocument: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                invoiceId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/pdf": string;
-                };
-            };
-        };
-    };
-    authMe: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MeResponse"];
-                };
-            };
-        };
-    };
-    memberInvitationAcceptPreview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["InvitationPreview"];
-                };
-            };
-        };
-    };
-    appointmentPublicView: {
-        parameters: {
-            query?: {
-                date?: string;
-            };
-            header?: never;
-            path: {
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AppointmentServiceView"];
-                };
-            };
-        };
-    };
-    appointmentPublicLineTicket: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                ticketCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ClientLineTicketView"];
-                };
-            };
-        };
-    };
-    appointmentPublicStatus: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                bookingToken: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AppointmentStatusView"];
-                };
-            };
-        };
-    };
-    appointmentPublicCancel: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                token: string;
-                bookingToken: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    adminWhatsAppPricing: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["WhatsAppPricingInfo"][];
-                };
-            };
-        };
-    };
-    adminVerificationList: {
-        parameters: {
-            query?: {
-                status?: string;
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminVerificationView"][];
-                };
-            };
-        };
-    };
-    adminVerificationDocuments: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["VerificationDocumentLink"][];
-                };
-            };
-        };
-    };
-    adminTrialStats: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminTrialStats"];
-                };
-            };
-        };
-    };
-    adminTenantList: {
-        parameters: {
-            query?: {
-                query?: string;
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TenantDirectoryPage"];
-                };
-            };
-        };
-    };
-    adminTenantEvents: {
-        parameters: {
-            query?: {
-                query?: string;
-            };
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["EventSummary"][];
-                };
-            };
-        };
-    };
-    adminProspectLeadList: {
-        parameters: {
-            query?: {
-                status?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ProspectLeadView"][];
-                };
-            };
-        };
-    };
-    adminPaymentList: {
-        parameters: {
-            query?: {
-                status?: string;
-                provider?: string;
-                tenantId?: string;
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminPaymentView"][];
-                };
-            };
-        };
-    };
-    adminFeedbackList: {
-        parameters: {
-            query?: {
-                kind?: string;
-                status?: string;
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["FeedbackPage"];
-                };
-            };
-        };
-    };
-    adminFeedbackRatings: {
-        parameters: {
-            query?: {
-                days?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["RatingSummary"][];
-                };
-            };
-        };
-    };
-    adminBillingCatalogCatalog: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminTierCatalog"];
-                };
-            };
-        };
-    };
-    adminAuditList: {
-        parameters: {
-            query?: {
-                action?: string;
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AuditPage"];
+                    "*/*": components["schemas"]["ProviderSettingsResponse"];
                 };
             };
         };
@@ -11931,96 +12070,102 @@ export interface operations {
             };
         };
     };
-    serviceStaffRevoke: {
+    providerSettingsTestSend: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                serviceId: string;
-                staffId: string;
+                channel: string;
             };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TestSendRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TestSendResponse"];
+                };
+            };
+        };
+    };
+    salesSettingsGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description No Content */
-            204: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["SalesSettingsView"];
+                };
             };
         };
     };
-    serviceRemoveRequirement: {
+    salesSettingsUpdate: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                id: string;
-                requirementId: string;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSalesSettingsRequest"];
             };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SalesSettingsView"];
+                };
+            };
+        };
+    };
+    templatesList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description No Content */
-            204: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["TemplateSummary"][];
+                };
             };
         };
     };
-    resourceRemoveUnavailability: {
+    templatesDetail: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
-                unavailabilityId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    resourceRemoveAvailability: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-                availabilityId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    memberRemove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                userId: string;
+                name: string;
             };
             cookie?: never;
         };
@@ -12031,17 +12176,69 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["TemplateDetail"];
+                };
             };
         };
     };
-    memberRevoke: {
+    templatesSave: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                invitationId: string;
+                name: string;
             };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TemplateUpdate"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TemplateDetail"];
+                };
+            };
+        };
+    };
+    templatesPreview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TemplatePreviewRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TemplatePreviewResponse"];
+                };
+            };
+        };
+    };
+    verificationOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
@@ -12051,66 +12248,178 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["VerificationOverview"];
+                };
             };
         };
     };
-    eventQuestionDelete: {
+    verificationRequestPhoneCode: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                eventId: string;
-                questionId: string;
-            };
+            path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PhoneCodeRequest"];
+            };
+        };
         responses: {
-            /** @description No Content */
-            204: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["PhoneCodeSent"];
+                };
             };
         };
     };
-    eventOccurrenceDelete: {
+    verificationConfirmPhone: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                eventId: string;
-                occurrenceId: string;
-            };
+            path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PhoneConfirmRequest"];
+            };
+        };
         responses: {
-            /** @description No Content */
-            204: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["PhoneStatusView"];
+                };
             };
         };
     };
-    guestRemove: {
+    verificationSubmit: {
+        parameters: {
+            query: {
+                legalName: string;
+                documentType: string;
+                registrationNumber?: string;
+                taxIdentifier?: string;
+            };
+            header?: never;
+            path: {
+                kind: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    files: string[];
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["VerificationRequestView"];
+                };
+            };
+        };
+    };
+    vocabularyList: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                eventId: string;
-                guestId: string;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description No Content */
-            204: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["VocabularyEntry"][];
+                };
+            };
+        };
+    };
+    vocabularySave: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VocabularyUpdate"][];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["VocabularyEntry"][];
+                };
+            };
+        };
+    };
+    whatsAppWebhookVerifySubscription: {
+        parameters: {
+            query?: {
+                "hub.mode"?: string;
+                "hub.verify_token"?: string;
+                "hub.challenge"?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+        };
+    };
+    whatsAppWebhookReceiveMessages: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Hub-Signature-256"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string;
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };

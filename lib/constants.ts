@@ -50,6 +50,11 @@ export function eventOrdersRoute(id: string): string {
   return `/events/${id}/orders`;
 }
 
+/** The event's open invitation (JIKU-184): its card, its answers and its settings. */
+export function eventOpenInvitationRoute(id: string): string {
+  return `/events/${id}/open-invitation`;
+}
+
 export function eventSettingsRoute(id: string): string {
   return `/events/${id}/settings`;
 }
@@ -101,6 +106,11 @@ export function ticketRoute(token: string): string {
 /** The public sale page of an event (JIKU-177), under its organization's username. */
 export function saleRoute(username: string, eventId: string): string {
   return `/o/${username}/events/${eventId}`;
+}
+
+/** A shared card's page (JIKU-184), reached by the open invitation's code. */
+export function openInvitationRoute(code: string): string {
+  return `/i/${code}`;
 }
 
 /** The buyer's order, reached by its link token (JIKU-177). */

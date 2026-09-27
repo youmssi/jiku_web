@@ -31,6 +31,8 @@ export default function robots(): MetadataRoute.Robots {
         "/verify-email",
         "/reset-password",
         "/offline",
+        // Open invitation cards (/i/) stay reachable: WhatsApp builds a card's
+        // link preview from that page. Their noindex tag keeps them out of search.
       ],
     },
     sitemap: `${origin}/sitemap.xml`,
