@@ -1,8 +1,9 @@
 import type { Messages } from "@/i18n/messages";
-import { CalendarDays, ClipboardList, CreditCard, IdCard, LayoutDashboard, ListOrdered, Settings, ShoppingBag, Ticket, Users } from "lucide-react";
+import { CalendarDays, ClipboardList, CreditCard, IdCard, LayoutDashboard, ListOrdered, Settings, Share2, ShoppingBag, Ticket, Users } from "lucide-react";
 import {
   billingRoute,
   eventGuestsRoute,
+  eventOpenInvitationRoute,
   eventOrdersRoute,
   eventRoute,
   eventSettingsRoute,
@@ -103,6 +104,12 @@ export const EVENT_TABS: EventSubNavItem[] = [
     href: eventOrdersRoute,
     icon: ShoppingBag,
     match: (pathname, eventId) => pathname === eventOrdersRoute(eventId),
+  },
+  {
+    labelKey: "openInvitation",
+    href: eventOpenInvitationRoute,
+    icon: Share2,
+    match: (pathname, eventId) => pathname === eventOpenInvitationRoute(eventId),
   },
   {
     labelKey: "billing",

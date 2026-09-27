@@ -69,7 +69,8 @@
     "addToCalendar": "Ajouter à Google Agenda",
     "save": "Enregistrer en PDF",
     "brightness": "Montez la luminosité de l'écran pour un scan rapide.",
-    "cancelled": "Cet événement a été annulé : ce billet n'est plus valable."
+    "cancelled": "Cet événement a été annulé : ce billet n'est plus valable.",
+    "guestWith": "{name} + {count, plural, one {# personne} other {# personnes}}"
   },
   "line": {
     "take": {
@@ -235,5 +236,54 @@
     "unavailableTitle": "Commande introuvable",
     "unavailableText": "Ce lien de commande n'est pas valide.",
     "orderReference": "Référence {reference}"
+  },
+  "openInvitation": {
+    "invitedBy": "{organizer} vous invite",
+    "answerBy": "Répondez avant le {date}",
+    "question": "Vous venez ?",
+    "answers": {
+      "YES": "Je viens",
+      "MAYBE": "Peut-être",
+      "NO": "Je ne viens pas"
+    },
+    "companions": "Personnes qui viennent avec vous",
+    "companionsHelp": "Au plus {max}.",
+    "fewer": "Une personne de moins",
+    "more": "Une personne de plus",
+    "name": "Votre nom",
+    "phone": "Votre numéro WhatsApp",
+    "phoneHelp": "Avec l'indicatif du pays. Répondre à nouveau avec ce numéro modifie votre réponse.",
+    "submit": "Envoyer ma réponse",
+    "privacy": "Votre nom et votre numéro sont transmis à l'organisateur de cet événement, et à lui seul.",
+    "answerOnWhatsApp": "Répondre sur WhatsApp",
+    "orHere": "ou répondez ici",
+    "whatsappMessage": "Je réponds à l'invitation {code}",
+    "answered": {
+      "YES": "C'est noté, vous êtes attendu(e){count, plural, =0 {} one { avec # personne} other { avec # personnes}} !",
+      "MAYBE": "C'est noté : peut-être.",
+      "NO": "C'est noté, vous ne venez pas."
+    },
+    "seeTicket": "Voir mon billet",
+    "changeAnswer": "Modifier ma réponse",
+    "closedTitle": "Cette invitation ne prend plus de réponses",
+    "closed": {
+      "DISABLED": "L'organisateur a fermé les réponses.",
+      "CLOSED": "La date limite pour répondre est passée.",
+      "NOT_PUBLISHED": "Cet événement n'est pas encore publié.",
+      "CANCELLED": "Cet événement a été annulé.",
+      "ENDED": "Cet événement est terminé.",
+      "FULL": "Il n'y a plus de place."
+    },
+    "previewFallback": "Vous êtes invité(e)",
+    "previewBadge": "Répondez en un geste",
+    "errors": {
+      "invalid": "Vérifiez votre nom et votre numéro.",
+      "limit": "Les réponses sont momentanément fermées.",
+      "removed": "L'organisateur n'accepte plus de réponse de ce numéro.",
+      "notFound": "Cette invitation n'existe plus.",
+      "closed": "Cette invitation ne prend plus de réponse, ou il n'y a plus de place.",
+      "tooMany": "Trop d'essais. Réessayez dans quelques minutes.",
+      "failed": "Impossible d'envoyer votre réponse. Réessayez."
+    }
   }
 }

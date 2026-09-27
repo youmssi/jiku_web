@@ -430,5 +430,98 @@
       "notAvailable": "This option is no longer available; reload the page.",
       "provider": "Online payment is unavailable right now. Try again or pay by transfer."
     }
+  },
+  "openInvitation": {
+    "title": "Open invitation",
+    "text": "Share a card in your WhatsApp groups, with no guest list: everyone answers in one tap and gets a ticket if they come.",
+    "loadFailedTitle": "Invitation unavailable",
+    "loadFailed": "We could not load the open invitation. Try again in a moment.",
+    "closedTitle": "Answers are closed",
+    "closed": {
+      "DISABLED": "The organizer closed the answers.",
+      "CLOSED": "The deadline to answer has passed.",
+      "NOT_PUBLISHED": "This event is not published yet.",
+      "CANCELLED": "This event was cancelled.",
+      "ENDED": "This event is over.",
+      "FULL": "There is no place left."
+    },
+    "start": {
+      "title": "Open an invitation to share",
+      "pointShare": "A card to post in your WhatsApp groups, with its link and QR code.",
+      "pointAnswer": "Everyone answers \"I'm coming\", \"Maybe\" or \"Not coming\", in WhatsApp or on the card's page.",
+      "pointTicket": "Each \"I'm coming\" gets a QR ticket, checked at the door like the others.",
+      "pointCount": "You see live how many people are coming, companions included.",
+      "publishFirst": "Publish the event so the card takes answers.",
+      "open": "Open the invitation"
+    },
+    "share": {
+      "title": "Your card",
+      "text": "Post it in your WhatsApp groups or share its link anywhere else.",
+      "link": "Card link",
+      "copy": "Copy the link",
+      "open": "Open the card",
+      "copyFailed": "Could not copy the link.",
+      "whatsapp": "Share on WhatsApp",
+      "download": "Download the card",
+      "message": "{event}\n{when}\nAnswer here: {url}",
+      "cardAnswer": "Scan to answer",
+      "cardAnswerBy": "Answer by {date}",
+      "cardFooter": "Invitation made with Jikū",
+      "fileName": "Invitation {event}.png"
+    },
+    "stats": {
+      "expected": "People expected",
+      "yes": "Coming",
+      "maybe": "Maybe",
+      "remaining": "Places left",
+      "unlimited": "Unlimited"
+    },
+    "responses": {
+      "title": "Answers",
+      "filterLabel": "Filter answers",
+      "filters": {
+        "YES": "Coming",
+        "MAYBE": "Maybe",
+        "NO": "No",
+        "ALL": "All"
+      },
+      "answers": {
+        "YES": "Coming",
+        "MAYBE": "Maybe",
+        "NO": "Not coming"
+      },
+      "plus": "+{count}",
+      "viaWhatsApp": "Answered on WhatsApp",
+      "viaWeb": "Answered on the page",
+      "emptyTitle": "No answers here",
+      "emptyText": "Answers show up as soon as someone answers the card.",
+      "remove": "Remove {name}",
+      "removeTitle": "Remove {name}?",
+      "removeText": "Their places are freed, their ticket is cancelled and their number can no longer answer this invitation.",
+      "cancel": "Cancel",
+      "confirmRemove": "Remove",
+      "removed": "{name} was removed."
+    },
+    "settings": {
+      "title": "Settings",
+      "enabled": "Take answers",
+      "enabledHelp": "Turn off to close the card at any time.",
+      "welcome": "Welcome message",
+      "welcomePlaceholder": "Come celebrate my 30th birthday with me!",
+      "companions": "Companions per answer",
+      "companionsHelp": "How many people each person may bring, at most {max}.",
+      "closesAt": "Deadline to answer",
+      "closesAtHelp": "Leave empty to take answers until the event.",
+      "notifyOnCancel": "Tell people if you cancel",
+      "notifyOnCancelHelp": "If you cancel the event, people who answered “yes” or “maybe” get a WhatsApp message.",
+      "notifyOnCancelIncluded": "Included in your plan: people who answered “yes” or “maybe” get a WhatsApp message if you cancel.",
+      "save": "Save",
+      "saved": "Settings saved."
+    },
+    "errors": {
+      "invalid": "Check the settings.",
+      "saveFailed": "Could not save. Try again.",
+      "removeFailed": "Could not remove this person. Try again."
+    }
   }
 }

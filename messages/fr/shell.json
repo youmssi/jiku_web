@@ -12,7 +12,8 @@
     "manage": "Gérer",
     "configuration": "Configuration",
     "operators": "Opérateurs",
-    "orders": "Commandes"
+    "orders": "Commandes",
+    "openInvitation": "Invitation ouverte"
   },
   "sidebar": {
     "platform": "Plateforme",

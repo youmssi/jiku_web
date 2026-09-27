@@ -69,7 +69,8 @@
     "addToCalendar": "Add to Google Calendar",
     "save": "Save as PDF",
     "brightness": "Turn your screen brightness up for a quick scan.",
-    "cancelled": "This event has been cancelled: this ticket is no longer valid."
+    "cancelled": "This event has been cancelled: this ticket is no longer valid.",
+    "guestWith": "{name} + {count, plural, one {# person} other {# people}}"
   },
   "line": {
     "take": {
@@ -235,5 +236,54 @@
     "unavailableTitle": "Order not found",
     "unavailableText": "This order link is not valid.",
     "orderReference": "Reference {reference}"
+  },
+  "openInvitation": {
+    "invitedBy": "{organizer} invites you",
+    "answerBy": "Answer by {date}",
+    "question": "Are you coming?",
+    "answers": {
+      "YES": "I'm coming",
+      "MAYBE": "Maybe",
+      "NO": "Not coming"
+    },
+    "companions": "People coming with you",
+    "companionsHelp": "At most {max}.",
+    "fewer": "One person less",
+    "more": "One person more",
+    "name": "Your name",
+    "phone": "Your WhatsApp number",
+    "phoneHelp": "With the country code. Answering again with this number changes your answer.",
+    "submit": "Send my answer",
+    "privacy": "Your name and number are shared with the organizer of this event, and only with them.",
+    "answerOnWhatsApp": "Answer on WhatsApp",
+    "orHere": "or answer here",
+    "whatsappMessage": "I'm answering the invitation {code}",
+    "answered": {
+      "YES": "Noted, you are expected{count, plural, =0 {} one { with # person} other { with # people}}!",
+      "MAYBE": "Noted: maybe.",
+      "NO": "Noted, you are not coming."
+    },
+    "seeTicket": "See my ticket",
+    "changeAnswer": "Change my answer",
+    "closedTitle": "This invitation no longer takes answers",
+    "closed": {
+      "DISABLED": "The organizer closed the answers.",
+      "CLOSED": "The deadline to answer has passed.",
+      "NOT_PUBLISHED": "This event is not published yet.",
+      "CANCELLED": "This event was cancelled.",
+      "ENDED": "This event is over.",
+      "FULL": "There is no place left."
+    },
+    "previewFallback": "You are invited",
+    "previewBadge": "Answer in one tap",
+    "errors": {
+      "invalid": "Check your name and number.",
+      "limit": "Answers are closed for now.",
+      "removed": "The organizer no longer takes answers from this number.",
+      "notFound": "This invitation no longer exists.",
+      "closed": "This invitation no longer takes answers, or there is no place left.",
+      "tooMany": "Too many tries. Try again in a few minutes.",
+      "failed": "Could not send your answer. Try again."
+    }
   }
 }

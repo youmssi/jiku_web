@@ -430,5 +430,98 @@
       "notAvailable": "Cette option n'est plus disponible ; rechargez la page.",
       "provider": "Le paiement en ligne est indisponible pour le moment. Réessayez ou payez par transfert."
     }
+  },
+  "openInvitation": {
+    "title": "Invitation ouverte",
+    "text": "Partagez une carte dans vos groupes WhatsApp, sans liste d'invités : chacun répond en un geste et reçoit son billet s'il vient.",
+    "loadFailedTitle": "Invitation indisponible",
+    "loadFailed": "Nous n'avons pas pu charger l'invitation ouverte. Réessayez dans un instant.",
+    "closedTitle": "Les réponses sont fermées",
+    "closed": {
+      "DISABLED": "L'organisateur a fermé les réponses.",
+      "CLOSED": "La date limite pour répondre est passée.",
+      "NOT_PUBLISHED": "Cet événement n'est pas encore publié.",
+      "CANCELLED": "Cet événement a été annulé.",
+      "ENDED": "Cet événement est terminé.",
+      "FULL": "Il n'y a plus de place."
+    },
+    "start": {
+      "title": "Ouvrez une invitation à partager",
+      "pointShare": "Une carte à publier dans vos groupes WhatsApp, avec son lien et son QR code.",
+      "pointAnswer": "Chacun répond « Je viens », « Peut-être » ou « Je ne viens pas », dans WhatsApp ou sur la page de la carte.",
+      "pointTicket": "Chaque « Je viens » reçoit son billet QR, contrôlé à l'entrée comme les autres.",
+      "pointCount": "Vous voyez en direct combien de personnes viennent, accompagnants compris.",
+      "publishFirst": "Publiez l'événement pour que la carte accepte des réponses.",
+      "open": "Ouvrir l'invitation"
+    },
+    "share": {
+      "title": "Votre carte",
+      "text": "Publiez-la dans vos groupes WhatsApp ou partagez son lien partout ailleurs.",
+      "link": "Lien de la carte",
+      "copy": "Copier le lien",
+      "open": "Ouvrir la carte",
+      "copyFailed": "Impossible de copier le lien.",
+      "whatsapp": "Partager sur WhatsApp",
+      "download": "Télécharger la carte",
+      "message": "{event}\n{when}\nRépondez ici : {url}",
+      "cardAnswer": "Scannez pour répondre",
+      "cardAnswerBy": "Répondez avant le {date}",
+      "cardFooter": "Invitation créée avec Jikū",
+      "fileName": "Invitation {event}.png"
+    },
+    "stats": {
+      "expected": "Personnes attendues",
+      "yes": "Je viens",
+      "maybe": "Peut-être",
+      "remaining": "Places restantes",
+      "unlimited": "Illimité"
+    },
+    "responses": {
+      "title": "Réponses",
+      "filterLabel": "Filtrer les réponses",
+      "filters": {
+        "YES": "Je viens",
+        "MAYBE": "Peut-être",
+        "NO": "Non",
+        "ALL": "Toutes"
+      },
+      "answers": {
+        "YES": "Vient",
+        "MAYBE": "Peut-être",
+        "NO": "Ne vient pas"
+      },
+      "plus": "+{count}",
+      "viaWhatsApp": "Répondu sur WhatsApp",
+      "viaWeb": "Répondu sur la page",
+      "emptyTitle": "Aucune réponse ici",
+      "emptyText": "Les réponses apparaissent dès que quelqu'un répond à la carte.",
+      "remove": "Retirer {name}",
+      "removeTitle": "Retirer {name} ?",
+      "removeText": "Ses places sont libérées, son billet est annulé et son numéro ne pourra plus répondre à cette invitation.",
+      "cancel": "Annuler",
+      "confirmRemove": "Retirer",
+      "removed": "{name} a été retiré(e)."
+    },
+    "settings": {
+      "title": "Réglages",
+      "enabled": "Accepter les réponses",
+      "enabledHelp": "Désactivez pour fermer la carte à tout moment.",
+      "welcome": "Mot d'accueil",
+      "welcomePlaceholder": "Venez fêter mes 30 ans avec moi !",
+      "companions": "Accompagnants par réponse",
+      "companionsHelp": "Combien de personnes chacun peut amener, au plus {max}.",
+      "closesAt": "Date limite pour répondre",
+      "closesAtHelp": "Laissez vide pour accepter les réponses jusqu'à l'événement.",
+      "notifyOnCancel": "Prévenir en cas d'annulation",
+      "notifyOnCancelHelp": "Si vous annulez l'événement, les personnes qui ont répondu « oui » ou « peut-être » reçoivent un message WhatsApp.",
+      "notifyOnCancelIncluded": "Inclus dans votre formule : les personnes qui ont répondu « oui » ou « peut-être » reçoivent un message WhatsApp si vous annulez.",
+      "save": "Enregistrer",
+      "saved": "Réglages enregistrés."
+    },
+    "errors": {
+      "invalid": "Vérifiez les réglages.",
+      "saveFailed": "Impossible d'enregistrer. Réessayez.",
+      "removeFailed": "Impossible de retirer cette personne. Réessayez."
+    }
   }
 }
