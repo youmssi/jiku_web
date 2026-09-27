@@ -152,7 +152,7 @@ const fr: LandingContent = {
     headlineWords: ["invités", "clients", "patients", "participants"],
     headlineSuffix: "passent sans attendre.",
     subtitle:
-      "Jikū gère tout ce qui passe par un billet : les invitations et l'entrée de vos événements, les rendez-vous et la file du jour de vos services. Sans application à installer, même quand le réseau tombe.",
+      "Jikū gère tout ce qui passe par un billet : les invitations, la vente de billets et l'entrée de vos événements, les rendez-vous et la file du jour de vos services. Sans application à installer, même quand le réseau tombe.",
     primaryCta: "Créer mon compte gratuit",
     secondaryCta: "Trouver ma formule",
     ctaNote: "Gratuit jusqu'à 100 invités, sans carte bancaire",
@@ -198,7 +198,7 @@ const fr: LandingContent = {
       },
       {
         title: "Catégories d'accès et billets payants",
-        description: "VIP, presse, standard : chaque catégorie a son prix, sa couleur et sa jauge. Un billet dû n'entre qu'une fois payé.",
+        description: "VIP, presse, standard : chaque catégorie a son prix, sa couleur et sa jauge. Vendez-les sur votre page publique : l'acheteur réserve sa place, vous paie directement et reçoit son billet dès que vous confirmez.",
       },
       {
         title: "Check-in même sans réseau",
@@ -226,7 +226,7 @@ const fr: LandingContent = {
     items: [
       {
         title: "Un lien de réservation à partager",
-        description: "Un lien court et un QR code à afficher : vos clients choisissent un créneau libre, sans compte ni appel.",
+        description: "Un lien court et un QR code à afficher : vos clients choisissent un créneau libre, sans compte ni appel. Cours ou atelier ? Plusieurs clients par créneau.",
       },
       {
         title: "Rappels WhatsApp ou SMS",
@@ -243,12 +243,10 @@ const fr: LandingContent = {
       {
         title: "Le client prend son ticket lui-même",
         description: "Il scanne le QR de l'entrée, prend son ticket et suit sa place en direct depuis son téléphone.",
-        soon: true,
       },
       {
         title: "Payé avant ou après le service",
         description: "Chaque service a son prix et sa règle. Le personnel note « payé » en un geste, espèces ou Mobile Money.",
-        soon: true,
       },
     ],
     visual: {
@@ -268,7 +266,7 @@ const fr: LandingContent = {
     points: [
       { text: "Aucun compte à créer, aucune application à installer" },
       { text: "Chaque action est attribuée à la bonne personne" },
-      { text: "Scan, file du jour et encaissement dans une seule console", soon: true },
+      { text: "Scan, file du jour et encaissement dans une seule console" },
     ],
   },
   money: {
@@ -289,8 +287,8 @@ const fr: LandingContent = {
     points: [
       { text: "Aucune commission sur vos services" },
       { text: "Le statut « payé » noté en un geste, espèces ou Mobile Money" },
-      { text: "Vos numéros et votre lien affichés sur chaque billet dû", soon: true },
-      { text: "Un badge « Organisation vérifiée » sur vos pages publiques", soon: true },
+      { text: "Vos numéros et votre lien affichés sur chaque billet dû" },
+      { text: "Un badge « Organisation vérifiée » sur vos pages publiques, après vérification par notre équipe" },
     ],
   },
   howItWorks: {
@@ -299,7 +297,7 @@ const fr: LandingContent = {
     subheading: "Si vous savez remplir un tableur, vous savez utiliser Jikū.",
     steps: [
       { title: "Créez votre événement ou votre service", description: "Un nom, une date ou des horaires, un prix si besoin. Le reste attend." },
-      { title: "Invitez ou partagez votre lien", description: "Importez votre liste d'invités, ou partagez votre lien de réservation et son QR code." },
+      { title: "Invitez ou partagez votre lien", description: "Importez votre liste d'invités, ouvrez la vente de billets, ou partagez votre lien de réservation et son QR code." },
       { title: "Confiez un lien à votre équipe", description: "Chaque membre ouvre sa console depuis son téléphone : scan, file du jour, encaissement." },
       { title: "Suivez tout en direct", description: "Confirmations, entrées, attente et paiements, sur un seul tableau de bord." },
     ],
@@ -345,9 +343,8 @@ const fr: LandingContent = {
         price: "3 %",
         caption: "du prix de chaque billet vendu",
         points: ["Vos acheteurs vous paient directement", "Première tranche de 50 billets offerte", "Jamais bloqué le jour de l'événement"],
-        cta: "Être prévenu",
-        href: "/register",
-        soon: true,
+        cta: "Estimer ma commission",
+        href: "/simulator",
       },
     ],
     enterprise: {
@@ -422,7 +419,7 @@ const en: LandingContent = {
   meta: {
     title: "Jikū: tickets, invitations, appointments and queues, in your colors",
     description:
-      "One platform for everything that runs on a ticket: invitations and check-in for your events, bookings and the day line for your services. Free for up to 100 guests.",
+      "One platform for everything that runs on a ticket: invitations, ticket sales and check-in for your events, bookings and the day line for your services. Free for up to 100 guests.",
     keywords: [
       "event invitations",
       "QR code tickets",
@@ -492,7 +489,7 @@ const en: LandingContent = {
       { title: "Email and WhatsApp invitations", description: "Every guest gets a personal link, in your colors, on the channel they actually open. Failed sends are retried." },
       { title: "Answers tracked live", description: "Guests confirm or decline in one tap. You see who's coming and whom to remind." },
       { title: "Tamper-proof QR tickets", description: "Every confirmation produces a signed ticket that can't be guessed or reused, ready to scan." },
-      { title: "Access categories and paid tickets", description: "VIP, press, standard: each category has its price, color and capacity. A ticket that's due only gets in once paid." },
+      { title: "Access categories and paid tickets", description: "VIP, press, standard: each category has its price, color and capacity. Sell them on your public page: buyers hold their place, pay you directly and get their ticket as soon as you confirm." },
       { title: "Check-in without a network", description: "The list syncs to the door staff's phone ahead of time. Network down? Keep scanning." },
       { title: "Quorum and attendance proof", description: "Live quorum count, a sign-in sheet and named attendance certificates, generated for you." },
     ],
@@ -510,12 +507,12 @@ const en: LandingContent = {
     heading: "Appointments and a day line that run themselves",
     subheading: "Clinic, salon, agency or public office: your clients book, arrive and get called without a crowd.",
     items: [
-      { title: "A booking link to share", description: "A short link and a QR code to display: clients pick a free slot, no account and no phone call." },
+      { title: "A booking link to share", description: "A short link and a QR code to display: clients pick a free slot, no account and no phone call. A class or a workshop? Several clients per slot." },
       { title: "WhatsApp or SMS reminders", description: "A reminder before every appointment, on WhatsApp, by SMS, or by SMS when WhatsApp fails." },
       { title: "The day line on one screen", description: "Appointments and walk-ins in one list. \"Next\" calls the right person, in the right order." },
       { title: "\"It's your turn, counter 4\"", description: "The client called gets the message with their counter number: they wait outside, not in the hallway." },
-      { title: "Clients take their own ticket", description: "They scan the QR code at the entrance, take a ticket and follow their place live on their phone.", soon: true },
-      { title: "Paid before or after the service", description: "Each service has its price and its rule. Staff mark \"paid\" in one tap, cash or Mobile Money.", soon: true },
+      { title: "Clients take their own ticket", description: "They scan the QR code at the entrance, take a ticket and follow their place live on their phone." },
+      { title: "Paid before or after the service", description: "Each service has its price and its rule. Staff mark \"paid\" in one tap, cash or Mobile Money." },
     ],
     visual: {
       title: "Today's line · Consultations",
@@ -534,7 +531,7 @@ const en: LandingContent = {
     points: [
       { text: "No account to create, no app to install" },
       { text: "Every action is attributed to the right person" },
-      { text: "Scanning, the day line and payments in one console", soon: true },
+      { text: "Scanning, the day line and payments in one console" },
     ],
   },
   money: {
@@ -555,8 +552,8 @@ const en: LandingContent = {
     points: [
       { text: "No commission on your services" },
       { text: "\"Paid\" recorded in one tap, cash or Mobile Money" },
-      { text: "Your numbers and link shown on every ticket that's due", soon: true },
-      { text: "A \"Verified organization\" badge on your public pages", soon: true },
+      { text: "Your numbers and link shown on every ticket that's due" },
+      { text: "A \"Verified organization\" badge on your public pages, once our team has checked you" },
     ],
   },
   howItWorks: {
@@ -565,7 +562,7 @@ const en: LandingContent = {
     subheading: "If you can fill in a spreadsheet, you can use Jikū.",
     steps: [
       { title: "Create your event or service", description: "A name, a date or opening hours, a price if needed. The rest can wait." },
-      { title: "Invite or share your link", description: "Import your guest list, or share your booking link and its QR code." },
+      { title: "Invite or share your link", description: "Import your guest list, open ticket sales, or share your booking link and its QR code." },
       { title: "Hand your team a link", description: "Each member opens their console on their phone: scanning, the day line, payments." },
       { title: "Follow everything live", description: "Confirmations, entries, waiting and payments, on a single dashboard." },
     ],
@@ -611,9 +608,8 @@ const en: LandingContent = {
         price: "3%",
         caption: "of each ticket sold",
         points: ["Buyers pay you directly", "First tranche of 50 tickets free", "Never blocked on the event day"],
-        cta: "Get notified",
-        href: "/register",
-        soon: true,
+        cta: "Estimate my commission",
+        href: "/simulator",
       },
     ],
     enterprise: {

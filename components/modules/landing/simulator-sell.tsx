@@ -32,7 +32,7 @@ export function SellPanel({
   return (
     <div className="flex flex-col gap-8">
       <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 text-center">
-        <Badge variant="secondary">{sell.soon}</Badge>
+        <Badge variant="secondary">{sell.badge}</Badge>
         <p className="text-base leading-relaxed text-muted-foreground">{sell.intro}</p>
       </div>
 
