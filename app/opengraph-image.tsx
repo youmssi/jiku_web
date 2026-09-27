@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { OgBrand } from "@/components/modules/seo";
 
 export const contentType = "image/png";
 export const size = { width: 1200, height: 630 };
@@ -59,23 +60,8 @@ export default function OpenGraphImage() {
           }}
         />
 
-        {/* Brand mark */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "72px",
-            height: "72px",
-            borderRadius: "16px",
-            background: "#2563EB",
-            color: "white",
-            fontSize: "36px",
-            fontWeight: 700,
-            marginBottom: "24px",
-          }}
-        >
-          J
+        <div style={{ display: "flex", marginBottom: "24px" }}>
+          <OgBrand size={56} />
         </div>
 
         {/* Headline */}

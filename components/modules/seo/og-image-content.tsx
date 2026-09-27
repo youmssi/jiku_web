@@ -7,6 +7,42 @@
  */
 
 export const OG_SIZE = { width: 1200, height: 630 };
+
+/**
+ * The Jikū logo for images drawn by `ImageResponse`: the mark of
+ * `public/jiku-logo.svg`, redrawn in light strokes for a dark background, and
+ * the wordmark. Inline, so the image needs no file or network read.
+ */
+export function OgBrand({ size = 44 }: { size?: number }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: `${Math.round(size / 4)}px` }}>
+      <svg width={size} height={size} viewBox="0 0 28 28" fill="none">
+        <g transform="translate(1, 2)">
+          <path
+            d="M 13 16 C 13 22 18 24 22 22 C 26 20 26 14 22 10 C 18 6 10 6 6 10 C 2 14 2 20 6 24"
+            stroke="#F8FAFC"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.35"
+          />
+          <path
+            d="M 13 4 L 13 16 C 13 20 11 22 8 22 C 5 22 3 20 3 17"
+            stroke="#F8FAFC"
+            strokeWidth="2.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+          />
+          <circle cx="13" cy="4" r="1.8" fill="#F8FAFC" />
+        </g>
+      </svg>
+      <div style={{ display: "flex", color: "#F8FAFC", fontSize: `${Math.round(size * 0.62)}px`, fontWeight: 700, letterSpacing: "-0.02em" }}>
+        Jikū
+      </div>
+    </div>
+  );
+}
 export const OG_CONTENT_TYPE = "image/png";
 
 export function buildOgImage({
@@ -137,22 +173,8 @@ export function buildOgImage({
         ))}
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "56px",
-          height: "56px",
-          borderRadius: "14px",
-          background: "#2563EB",
-          color: "white",
-          fontSize: "28px",
-          fontWeight: 700,
-          marginTop: "40px",
-        }}
-      >
-        J
+      <div style={{ display: "flex", marginTop: "40px" }}>
+        <OgBrand />
       </div>
     </div>
   );
