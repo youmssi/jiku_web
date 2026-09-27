@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, type CSSProperties, type MouseEvent } from "react";
+import { useState, useSyncExternalStore, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { QRCodeSVG } from "qrcode.react";
+import { CalendarDays, MapPin, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TicketCardProps {
@@ -15,11 +16,16 @@ interface TicketCardProps {
   categoryName: string | null;
   /** People admitted with the guest on this ticket, from an open invitation (JIKU-184). */
   companions: number;
-  /** The event day and time, already written in the viewer's language and the event's timezone. */
-  day: string | null;
-  time: string | null;
-  /** The event's timezone city, shown under the time so no one reads it in their own zone. */
-  zone: string | null;
+  /** When the event starts, as an instant, for the `<time>` element. */
+  start: string | null;
+  /** The day and time, short ("sam. 14 nov. · 19 h – 23 h"), in the viewer's language and the event's timezone. */
+  when: string | null;
+  /** The same, written out in full, for a tooltip and screen readers. */
+  whenFull: string | null;
+  /** The event's IANA timezone; its city is shown only to a viewer in another zone. */
+  timeZone: string | null;
+  /** The city of [timeZone] ("Conakry"). */
+  zoneCity: string | null;
   location: string | null;
   cancelled: boolean;
 }
@@ -53,14 +59,19 @@ export function TicketCard({
   guestName,
   categoryName,
   companions,
-  day,
-  time,
-  zone,
+  start,
+  when,
+  whenFull,
+  timeZone,
+  zoneCity,
   location,
   cancelled,
 }: TicketCardProps) {
   const t = useTranslations("guest.ticket");
   const [glare, setGlare] = useState<{ x: number; y: number } | null>(null);
+  const [codeShown, setCodeShown] = useState(false);
+  const viewerZone = useSyncExternalStore(noSubscription, viewerTimeZone, () => null);
+  const otherZone = Boolean(start && timeZone && viewerZone && wallClock(start, viewerZone) !== wallClock(start, timeZone));
 
   function handleMouseMove(event: MouseEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -124,17 +135,25 @@ export function TicketCard({
           <div className="absolute inset-x-6 top-0 -translate-y-1/2 border-t-2 border-dashed border-border" />
         </div>
 
-        {/* Details, laid out like a pass: who, when, where. */}
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-3 px-6 pt-7 text-left">
-          <Detail
-            label={t("guest")}
-            value={companions > 0 ? t("guestWith", { name: guestName, count: companions }) : guestName}
-            wide
-          />
-          {day ? <Detail label={t("date")} value={day} wide /> : null}
-          {time ? <Detail label={t("time")} value={time} hint={zone ? t("timezone", { zone }) : null} /> : null}
-          {location ? <Detail label={t("place")} value={location} wide /> : null}
-        </dl>
+        {/* Details, laid out like a pass: who, when, where, each behind its icon. */}
+        <ul className="flex flex-col gap-2.5 px-6 pt-7 text-sm">
+          <Detail icon={UserRound} label={t("guest")}>
+            {companions > 0 ? t("guestWith", { name: guestName, count: companions }) : guestName}
+          </Detail>
+          {when && start ? (
+            <Detail icon={CalendarDays} label={t("date")}>
+              <time dateTime={start} title={whenFull ?? undefined} className="first-letter:uppercase">
+                {when}
+              </time>
+              {otherZone ? <span className="block text-xs font-normal text-muted-foreground">{t("timezone", { zone: zoneCity ?? "" })}</span> : null}
+            </Detail>
+          ) : null}
+          {location ? (
+            <Detail icon={MapPin} label={t("place")}>
+              {location}
+            </Detail>
+          ) : null}
+        </ul>
 
         {/* Scan panel */}
         <div className="relative flex flex-col items-center px-6 pb-6 pt-6">
@@ -152,12 +171,17 @@ export function TicketCard({
               className="h-auto w-full max-w-[216px]"
             />
           </div>
-          <p className="mt-3 flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted-foreground">
-            {t("code")}
-            <span className="select-all rounded-md bg-muted px-2 py-0.5 font-mono text-xs normal-case tracking-wider text-foreground">
-              {ticketCode}
-            </span>
-          </p>
+          {codeShown ? (
+            <p className="mt-3 select-all rounded-md bg-muted px-2 py-0.5 font-mono text-xs tracking-wider">{ticketCode}</p>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setCodeShown(true)}
+              className="mt-3 text-xs text-muted-foreground underline underline-offset-4 print:hidden"
+            >
+              {t("showCode")}
+            </button>
+          )}
         </div>
       </div>
 
@@ -169,21 +193,32 @@ export function TicketCard({
 }
 
 function Detail({
+  icon: Icon,
   label,
-  value,
-  hint,
-  wide,
+  children,
 }: {
+  icon: typeof CalendarDays;
   label: string;
-  value: string;
-  hint?: string | null;
-  wide?: boolean;
+  children: ReactNode;
 }) {
   return (
-    <div className={cn("min-w-0", wide && "col-span-2")}>
-      <dt className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{label}</dt>
-      <dd className="mt-0.5 text-sm font-semibold first-letter:uppercase">{value}</dd>
-      {hint ? <dd className="text-xs text-muted-foreground">{hint}</dd> : null}
-    </div>
+    <li className="flex min-w-0 items-start gap-2.5">
+      <Icon aria-hidden className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+      <span className="sr-only">{label} : </span>
+      <span className="min-w-0 font-semibold">{children}</span>
+    </li>
   );
+}
+
+function noSubscription() {
+  return () => {};
+}
+
+function viewerTimeZone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+/** The date and time [instant] shows in [timeZone]: two zones that show the same need no hint. */
+function wallClock(instant: string, timeZone: string): string {
+  return new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "short", timeZone }).format(new Date(instant));
 }

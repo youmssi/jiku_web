@@ -48,6 +48,9 @@ jobs:
       - name: Translation catalogs
         run: pnpm i18n:check
 
+      - name: Unit tests
+        run: pnpm test
+
       - name: Build
         run: pnpm build
         env:

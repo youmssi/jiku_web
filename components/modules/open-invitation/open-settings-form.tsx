@@ -1,15 +1,16 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { FormFieldError } from "@/components/shared";
+import { FormFieldError, InfoHint } from "@/components/shared";
 import { saveOpenInvitationAction } from "./open-invitation.service";
 import { settingsSchema, type OpenInvitation, type SettingsInput } from "./schema";
 
@@ -64,10 +65,9 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
           name="enabled"
           render={({ field }) => (
             <Field orientation="horizontal">
-              <FieldContent>
-                <FieldLabel htmlFor="open-enabled">{t("enabled")}</FieldLabel>
-                <FieldDescription>{t("enabledHelp")}</FieldDescription>
-              </FieldContent>
+              <Label htmlFor="open-enabled" help={t("enabledHelp")} more={t("moreInfo")}>
+                {t("enabled")}
+              </Label>
               <Switch id="open-enabled" checked={field.value} onCheckedChange={field.onChange} />
             </Field>
           )}
@@ -88,7 +88,9 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
           name="maxCompanions"
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="open-companions">{t("companions")}</FieldLabel>
+              <Label htmlFor="open-companions" help={t("companionsHelp", { max: invitation.maxCompanionsAllowed })} more={t("moreInfo")}>
+                {t("companions")}
+              </Label>
               <Input
                 id="open-companions"
                 type="number"
@@ -100,7 +102,6 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
                 onBlur={field.onBlur}
                 className="w-28"
               />
-              <FieldDescription>{t("companionsHelp", { max: invitation.maxCompanionsAllowed })}</FieldDescription>
               <FormFieldError error={fieldState.error} />
             </Field>
           )}
@@ -110,9 +111,10 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
           name="closesAt"
           render={({ field }) => (
             <Field>
-              <FieldLabel htmlFor="open-closes">{t("closesAt")}</FieldLabel>
+              <Label htmlFor="open-closes" help={t("closesAtHelp")} more={t("moreInfo")}>
+                {t("closesAt")}
+              </Label>
               <Input {...field} id="open-closes" type="datetime-local" className="w-60" />
-              <FieldDescription>{t("closesAtHelp")}</FieldDescription>
             </Field>
           )}
         />
@@ -121,12 +123,13 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
           name="notifyOnCancel"
           render={({ field }) => (
             <Field orientation="horizontal">
-              <FieldContent>
-                <FieldLabel htmlFor="open-notify-cancel">{t("notifyOnCancel")}</FieldLabel>
-                <FieldDescription>
-                  {invitation.cancelNoticeIncluded ? t("notifyOnCancelIncluded") : t("notifyOnCancelHelp")}
-                </FieldDescription>
-              </FieldContent>
+              <Label
+                htmlFor="open-notify-cancel"
+                help={invitation.cancelNoticeIncluded ? `${t("notifyOnCancelHelp")} ${t("notifyOnCancelIncluded")}` : t("notifyOnCancelHelp")}
+                more={t("moreInfo")}
+              >
+                {t("notifyOnCancel")}
+              </Label>
               <Switch
                 id="open-notify-cancel"
                 checked={invitation.cancelNoticeIncluded || field.value}
@@ -141,5 +144,15 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
         {t("save")}
       </Button>
     </form>
+  );
+}
+
+/** A field's label with its explanation behind an ⓘ (JIKU-188), rather than a sentence under the field. */
+function Label({ htmlFor, help, more, children }: { htmlFor: string; help: string; more: string; children: ReactNode }) {
+  return (
+    <div className="flex flex-1 items-center gap-1">
+      <FieldLabel htmlFor={htmlFor}>{children}</FieldLabel>
+      <InfoHint label={more}>{help}</InfoHint>
+    </div>
   );
 }

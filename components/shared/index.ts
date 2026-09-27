@@ -2,7 +2,9 @@ export {
   NavCommandPalette,
   type NavCommandPaletteVariant,
 } from "./nav-command-palette";
+export {ClampedText} from "./clamped-text";
 export {FormFieldError} from "./form-field-error";
+export {InfoHint} from "./info-hint";
 export {ServiceWorkerRegister} from "./service-worker-register";
 export {useRoleLabel} from "./use-role-label";
 export {PaymentDue} from "./payment-due";

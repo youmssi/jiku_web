@@ -1,7 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Stat, StateMessage } from "@/components/shared";
 import { loadEvent } from "@/components/modules/event/server";
-import { formatEventDay, formatEventTime } from "@/lib/datetime";
+import { shortDay, shortTime, shortWhen } from "@/lib/short-dates";
 import { fetchPublicOpenInvitation, loadOpenInvitation, loadOpenResponses } from "./open-invitation.queries";
 import { OpenInvitationStart } from "./open-invitation-start";
 import { OpenResponses } from "./open-responses";
@@ -46,12 +46,10 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
 
   const [responses, card] = await Promise.all([loadOpenResponses(eventId), fetchPublicOpenInvitation(invitation.code)]);
   const zone = event.timezone;
-  const when = event.startDateTime
-    ? `${formatEventDay(event.startDateTime, zone, locale)} · ${formatEventTime(event.startDateTime, zone, locale)}`
-    : null;
+  const when = event.startDateTime ? shortWhen(event.startDateTime, zone, locale) : null;
 
   const answerBy = invitation.closesAt
-    ? `${formatEventDay(invitation.closesAt, zone, locale)} · ${formatEventTime(invitation.closesAt, zone, locale)}`
+    ? `${shortDay(invitation.closesAt, zone, locale, { weekday: false })} · ${shortTime(invitation.closesAt, zone, locale)}`
     : null;
 
   return (
