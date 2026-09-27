@@ -50,6 +50,10 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
     ? `${formatEventDay(event.startDateTime, zone, locale)} · ${formatEventTime(event.startDateTime, zone, locale)}`
     : null;
 
+  const answerBy = invitation.closesAt
+    ? `${formatEventDay(invitation.closesAt, zone, locale)} · ${formatEventTime(invitation.closesAt, zone, locale)}`
+    : null;
+
   return (
     <div className="flex flex-col gap-6">
       {heading}
@@ -64,6 +68,7 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
           location: event.location ?? null,
           organizerName: card?.organizerName ?? event.name,
           primaryColor: card?.primaryColor ?? null,
+          answerBy,
         }}
       />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

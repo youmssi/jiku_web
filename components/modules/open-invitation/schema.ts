@@ -33,6 +33,7 @@ export function settingsSchema(maxCompanions: number) {
     welcomeMessage: z.string().trim().max(500, "tooLong"),
     maxCompanions: z.number().int("wholeNumber").min(0, "outOfRange").max(maxCompanions, "outOfRange"),
     closesAt: z.string(),
+    notifyOnCancel: z.boolean(),
   });
 }
 

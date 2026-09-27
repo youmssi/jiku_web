@@ -239,6 +239,7 @@
   },
   "openInvitation": {
     "invitedBy": "{organizer} vous invite",
+    "answerBy": "Répondez avant le {date}",
     "question": "Vous venez ?",
     "answers": {
       "YES": "Je viens",

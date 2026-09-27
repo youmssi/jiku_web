@@ -53,6 +53,7 @@ export async function saveOpenInvitationAction(eventId: string, input: SettingsI
       welcomeMessage: input.welcomeMessage.trim() || null,
       maxCompanions: input.maxCompanions,
       closesAt: closesAt?.toISOString() ?? null,
+      notifyOnCancel: input.notifyOnCancel,
     }),
   });
   if (!response.ok) {

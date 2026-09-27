@@ -465,6 +465,7 @@
       "download": "Download the card",
       "message": "{event}\n{when}\nAnswer here: {url}",
       "cardAnswer": "Scan to answer",
+      "cardAnswerBy": "Answer by {date}",
       "cardFooter": "Invitation made with Jikū",
       "fileName": "Invitation {event}.png"
     },
@@ -511,6 +512,9 @@
       "companionsHelp": "How many people each person may bring, at most {max}.",
       "closesAt": "Deadline to answer",
       "closesAtHelp": "Leave empty to take answers until the event.",
+      "notifyOnCancel": "Tell people if you cancel",
+      "notifyOnCancelHelp": "If you cancel the event, people who answered “yes” or “maybe” get a WhatsApp message.",
+      "notifyOnCancelIncluded": "Included in your plan: people who answered “yes” or “maybe” get a WhatsApp message if you cancel.",
       "save": "Save",
       "saved": "Settings saved."
     },

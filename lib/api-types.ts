@@ -4749,10 +4749,12 @@ export interface components {
             enabled?: boolean;
             /** Format: int32 */
             maxCompanions?: number | null;
+            notifyOnCancel?: boolean | null;
             welcomeMessage?: string | null;
         };
         OpenInvitationView: {
             accepting?: boolean;
+            cancelNoticeIncluded?: boolean;
             /** @enum {string|null} */
             closedReason?: "DISABLED" | "CLOSED" | "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "FULL" | null;
             /** Format: date-time */
@@ -4766,6 +4768,7 @@ export interface components {
             maxCompanions?: number;
             /** Format: int32 */
             maxCompanionsAllowed?: number;
+            notifyOnCancel?: boolean;
             /** Format: int32 */
             remainingPlaces?: number | null;
             welcomeMessage?: string | null;
@@ -5176,6 +5179,8 @@ export interface components {
             accepting?: boolean;
             /** @enum {string|null} */
             closedReason?: "DISABLED" | "CLOSED" | "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "FULL" | null;
+            /** Format: date-time */
+            closesAt?: string | null;
             code?: string;
             /** Format: date-time */
             eventEnd?: string | null;
