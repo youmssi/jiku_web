@@ -12,6 +12,7 @@ import { trackEvent } from "@/lib/analytics";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { VerifiedBadge } from "@/components/shared";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -139,6 +140,7 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>{view ? view.name : t("booking.title")}</CardTitle>
+          {view ? <VerifiedBadge kind={view.organizerVerification} /> : null}
           <CardDescription>
             {view ? (names ? t("booking.withNames", { names }) : t("booking.noAccount")) : t("booking.loading")}
           </CardDescription>

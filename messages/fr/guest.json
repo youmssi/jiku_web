@@ -119,7 +119,8 @@
     "mtnMomo": "MTN MoMo",
     "wave": "Wave",
     "payOnline": "Payer en ligne",
-    "askOrganizer": "L'organisateur vous indiquera comment régler."
+    "askOrganizer": "L'organisateur vous indiquera comment régler.",
+    "unverified": "L'identité de cet organisateur n'a pas encore été vérifiée par Jikū. Payez seulement si vous le connaissez."
   },
   "appointment": {
     "metaTitle": "Réserver un rendez-vous",
@@ -166,5 +167,10 @@
       "notCancellable": "Ce rendez-vous ne peut plus être annulé.",
       "cancelFailed": "L'annulation a échoué. Réessayez."
     }
+  },
+  "verification": {
+    "company": "Organisation vérifiée",
+    "personal": "Identité vérifiée",
+    "hint": "L'équipe Jikū a vérifié les documents officiels de cet organisateur."
   }
 }

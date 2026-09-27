@@ -17,6 +17,8 @@ export interface AppointmentServiceView {
   slots: AppointmentSlot[];
   /** Clients served together per slot; above 1 the service runs group sessions. */
   clientsPerSlot?: number;
+  /** The organizer's approved verification (`COMPANY`, `PERSONAL`), or null. */
+  organizerVerification?: string | null;
 }
 
 export interface AppointmentBookingView {
