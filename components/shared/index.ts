@@ -2,6 +2,7 @@ export {
   NavCommandPalette,
   type NavCommandPaletteVariant,
 } from "./nav-command-palette";
+export {CardHero, OrganizerMark} from "./card-hero";
 export {ClampedText} from "./clamped-text";
 export {FormFieldError} from "./form-field-error";
 export {InfoHint} from "./info-hint";

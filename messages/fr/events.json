@@ -465,15 +465,15 @@
       "message": "{event}\n{when}\nRépondez ici : {url}",
       "cardAnswer": "Scannez pour répondre",
       "cardAnswerBy": "Jusqu'au {date}",
-      "cardFooter": "Créée avec Jikū",
-      "fileName": "Invitation {event}.png"
+      "fileName": "Invitation {event}.png",
+      "downloadFailed": "Impossible de télécharger la carte. Réessayez."
     },
     "stats": {
       "expected": "Personnes attendues",
       "yes": "Je viens",
       "maybe": "Peut-être",
-      "remaining": "Places restantes",
-      "unlimited": "Illimité"
+      "unlimited": "Illimité",
+      "remainingCount": "{count, plural, =0 {Complet} one {# place restante} other {# places restantes}}"
     },
     "responses": {
       "title": "Réponses",
@@ -521,7 +521,27 @@
     "errors": {
       "invalid": "Vérifiez les réglages.",
       "saveFailed": "Impossible d'enregistrer. Réessayez.",
-      "removeFailed": "Impossible de retirer cette personne. Réessayez."
+      "removeFailed": "Impossible de retirer cette personne. Réessayez.",
+      "photoInvalid": "Cette photo ne peut pas être lue.",
+      "photoTooLarge": "Photo trop lourde, même réduite.",
+      "photoType": "Choisissez une photo JPEG ou PNG."
+    },
+    "look": {
+      "title": "Style de la carte",
+      "text": "La carte, la page de réponse et le billet suivent ce choix.",
+      "styleLabel": "Style",
+      "styles": {
+        "ELEGANT": "Élégant",
+        "MODERN": "Moderne",
+        "FESTIVE": "Festif"
+      },
+      "photo": "Photo de bandeau",
+      "photoHelp": "JPEG ou PNG, 600 × 300 px au moins. Sans photo, votre couleur.",
+      "addPhoto": "Ajouter une photo",
+      "changePhoto": "Changer",
+      "removePhoto": "Retirer",
+      "photoTooSmall": "Photo trop petite : 600 × 300 px au moins.",
+      "preview": "Aperçu de la carte"
     }
   }
 }

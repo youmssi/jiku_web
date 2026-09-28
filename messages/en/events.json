@@ -465,15 +465,15 @@
       "message": "{event}\n{when}\nAnswer here: {url}",
       "cardAnswer": "Scan to answer",
       "cardAnswerBy": "Until {date}",
-      "cardFooter": "Made with Jikū",
-      "fileName": "Invitation {event}.png"
+      "fileName": "Invitation {event}.png",
+      "downloadFailed": "Couldn't download the card. Try again."
     },
     "stats": {
       "expected": "People expected",
       "yes": "Coming",
       "maybe": "Maybe",
-      "remaining": "Places left",
-      "unlimited": "Unlimited"
+      "unlimited": "Unlimited",
+      "remainingCount": "{count, plural, =0 {Full} one {# place left} other {# places left}}"
     },
     "responses": {
       "title": "Answers",
@@ -521,7 +521,27 @@
     "errors": {
       "invalid": "Check the settings.",
       "saveFailed": "Could not save. Try again.",
-      "removeFailed": "Could not remove this person. Try again."
+      "removeFailed": "Could not remove this person. Try again.",
+      "photoInvalid": "This photo can't be read.",
+      "photoTooLarge": "Photo too heavy, even resized.",
+      "photoType": "Choose a JPEG or PNG photo."
+    },
+    "look": {
+      "title": "Card style",
+      "text": "The card, the answer page and the ticket follow this choice.",
+      "styleLabel": "Style",
+      "styles": {
+        "ELEGANT": "Elegant",
+        "MODERN": "Modern",
+        "FESTIVE": "Festive"
+      },
+      "photo": "Banner photo",
+      "photoHelp": "JPEG or PNG, at least 600 × 300 px. Without one, your colour.",
+      "addPhoto": "Add a photo",
+      "changePhoto": "Change",
+      "removePhoto": "Remove",
+      "photoTooSmall": "Photo too small: at least 600 × 300 px.",
+      "preview": "Card preview"
     }
   }
 }
