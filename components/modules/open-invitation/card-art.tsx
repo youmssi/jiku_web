@@ -1,6 +1,6 @@
 import "server-only";
 
-import QRCode from "qrcode";
+import { qrPath } from "@/lib/qr-path";
 import { CARD_STYLE_TOKENS, PHOTO_SHADE, brandBackground, type CardStyle } from "@/lib/card-style";
 
 // The card of an open invitation, drawn for `ImageResponse` (JIKU-194): one
@@ -44,19 +44,6 @@ function initials(name: string): string {
 }
 
 /** The QR code as one SVG path, with a quiet zone of two modules. */
-function qrPath(text: string): { size: number; path: string } {
-  const qr = QRCode.create(text, { errorCorrectionLevel: "M" });
-  const count = qr.modules.size;
-  const quiet = 2;
-  let path = "";
-  for (let row = 0; row < count; row++) {
-    for (let col = 0; col < count; col++) {
-      if (qr.modules.get(row, col)) path += `M${col + quiet} ${row + quiet}h1v1h-1z`;
-    }
-  }
-  return { size: count + quiet * 2, path };
-}
-
 function JikuMark({ size, color }: { size: number; color: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 28 28" fill="none">

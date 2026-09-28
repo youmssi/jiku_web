@@ -6,10 +6,10 @@ import { SectionHeading } from "./section-heading";
 /** What a visitor patches together today, set against what Jikū gives them, row by row. */
 export function ReplaceSection({ content }: { content: LandingContent["replace"] }) {
   return (
-    <section className="py-24">
+    <section className="py-16 sm:py-24">
       <div className="mx-auto max-w-5xl px-6">
         <SectionHeading badge={content.badge} heading={content.heading} subheading={content.subheading} />
-        <div className="mt-14 overflow-hidden rounded-3xl border border-border/50">
+        <div className="mt-10 sm:mt-14 overflow-hidden rounded-3xl border border-border/50">
           <div className="hidden grid-cols-[1fr_auto_1fr] items-center gap-4 border-b border-border/50 bg-muted/40 px-6 py-3 text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase sm:grid">
             <span>{content.beforeLabel}</span>
             <span className="w-5" />

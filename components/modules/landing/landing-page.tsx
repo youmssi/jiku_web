@@ -1,57 +1,45 @@
-import {
-  BellRing,
-  ClipboardCheck,
-  Layers,
-  Link2,
-  ListOrdered,
-  Mail,
-  Megaphone,
-  QrCode,
-  ScanLine,
-  UserRoundCheck,
-  Users,
-  Wallet,
-  WifiOff,
-} from "lucide-react";
+import { BellRing, ClipboardCheck, Layers, Link2, ListOrdered, Mail, QrCode, ScanLine } from "lucide-react";
 import { MotionProvider, RevealFallback } from "@/components/effects";
+import { cardFontVariables } from "@/lib/card-display-fonts";
+import { BentoSection } from "./bento-section";
+import { CardsSection } from "./cards-section";
 import { LANDING_CONTENT, type LandingLocale } from "./content";
 import { CtaSection } from "./cta-section";
 import { FaqSection } from "./faq-section";
-import { BentoSection } from "./bento-section";
 import { FooterSection } from "./footer-section";
 import { HeroSection } from "./hero-section";
-import { HighlightSection } from "./highlight-section";
-import { HowItWorksSection } from "./how-it-works-section";
 import { LandingJsonLd } from "./json-ld";
-import { MoneySection } from "./money-section";
 import { Navigation } from "./navigation";
 import { PricingSection } from "./pricing-section";
 import { DayLineVisual, TicketVisual } from "./product-visuals";
-import { ProofSection } from "./proof-section";
 import { ReplaceSection } from "./replace-section";
+import { StickyCta } from "./sticky-cta";
+import { TrustSection } from "./trust-section";
 import { UseCasesSection } from "./use-cases-section";
 
-const EVENT_ICONS = [Mail, Users, QrCode, Layers, WifiOff, ClipboardCheck];
-const SERVICE_ICONS = [Link2, BellRing, ListOrdered, Megaphone, ScanLine, Wallet];
+const EVENT_ICONS = [Mail, QrCode, Layers, ClipboardCheck];
+const SERVICE_ICONS = [Link2, BellRing, ListOrdered, ScanLine];
 
 /**
- * The landing page for one locale (French at `/`, English at `/en`). It tells
- * the product in the order a visitor decides: the promise, proof, what it
- * replaces, the two uses (events, services), the team and the money, how to
- * start, who it is for, the price, the doubts, and the action.
+ * The landing page for one locale (French at `/`, English at `/en`), in the
+ * order a visitor decides (JIKU-195): the promise with the product, what it
+ * replaces, the shareable card, the two uses, trust, who it is for, the price,
+ * the doubts, and the action. Every idea is said once; the detail lives on
+ * the use-cases page, the simulator and the FAQ.
  */
 export function LandingPage({ locale, siteUrl }: { locale: LandingLocale; siteUrl: string }) {
   const content = LANDING_CONTENT[locale];
+  const heroCard = content.cards.samples.find((sample) => sample.style === "MODERN") ?? content.cards.samples[0];
 
   return (
     <MotionProvider>
       <RevealFallback />
       <LandingJsonLd content={content} locale={locale} siteUrl={siteUrl} />
       <Navigation content={content.nav} />
-      <main>
-        <HeroSection content={content.hero} />
-        <ProofSection content={content.proof} locale={locale} />
+      <main className={cardFontVariables}>
+        <HeroSection content={content.hero} card={heroCard} siteUrl={siteUrl} />
         <ReplaceSection content={content.replace} />
+        <CardsSection content={content.cards} invites={content.hero.card.invites} siteUrl={siteUrl} />
         <BentoSection
           id="events"
           content={content.events}
@@ -66,15 +54,14 @@ export function LandingPage({ locale, siteUrl }: { locale: LandingLocale; siteUr
           visual={<DayLineVisual labels={content.services.visual} />}
           soonLabel={content.soonLabel}
         />
-        <HighlightSection content={content.operators} icon={UserRoundCheck} soonLabel={content.soonLabel} />
-        <MoneySection content={content.money} soonLabel={content.soonLabel} />
-        <HowItWorksSection content={content.howItWorks} />
-        <UseCasesSection content={content.useCases} more={content.useCases.more} />
-        <PricingSection content={content.pricing} soonLabel={content.soonLabel} />
+        <TrustSection content={content.trust} />
+        <UseCasesSection content={content.useCases} />
+        <PricingSection content={content.pricing} locale={locale} />
         <FaqSection content={content.faq} />
         <CtaSection content={content.cta} />
       </main>
       <FooterSection content={content.footer} />
+      <StickyCta label={content.stickyCta} />
     </MotionProvider>
   );
 }

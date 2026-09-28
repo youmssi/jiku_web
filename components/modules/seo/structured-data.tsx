@@ -58,11 +58,11 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbEntry[] }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 }
 
-export function FaqJsonLd({ items }: { items: { question: string; answer: string }[] }) {
+export function FaqJsonLd({ items, locale = "fr" }: { items: { question: string; answer: string }[]; locale?: string }) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    inLanguage: "fr",
+    inLanguage: locale,
     mainEntity: items.map((item) => ({
       "@type": "Question",
       name: item.question,

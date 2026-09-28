@@ -7,8 +7,8 @@ import { SectionHeading, SoonBadge } from "./section-heading";
 
 /**
  * One use of the product as a bento grid: the first capability gets the large
- * tile with a picture of the product, the others sit around it. Icons pair with
- * the items by position.
+ * tile with a picture of the product, the three others stack beside it. Icons
+ * pair with the items by position.
  */
 export function BentoSection({
   id,
@@ -27,11 +27,11 @@ export function BentoSection({
   const LeadIcon = icons[0];
 
   return (
-    <section id={id} className="scroll-mt-24 py-24">
+    <section id={id} className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading badge={content.badge} heading={content.heading} subheading={content.subheading} />
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:auto-rows-fr lg:grid-cols-3">
-          <Reveal className="sm:col-span-2 lg:row-span-2">
+        <div className="mt-10 sm:mt-14 grid gap-4 sm:grid-cols-2 lg:auto-rows-fr lg:grid-cols-3">
+          <Reveal className="sm:col-span-2 lg:row-span-3">
             <SpotlightCard className="flex h-full flex-col gap-6 bg-gradient-to-br from-primary/[0.07] via-card to-card p-8">
               <div>
                 <div className="flex items-start justify-between gap-3">

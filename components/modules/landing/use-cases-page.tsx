@@ -1,76 +1,73 @@
 import {
   ArrowRight,
+  Building2,
   Check,
   ClipboardCheck,
   Gem,
-  GraduationCap,
-  Heart,
-  Landmark,
-  Mic,
+  PartyPopper,
   Presentation,
-  Users,
-  Globe,
   Stethoscope,
-  Scissors,
-  Building2,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { Link } from "@/i18n/navigation";
+import { cardFontVariables } from "@/lib/card-display-fonts";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
 import { OrganizationJsonLd, LocalBusinessJsonLd, BreadcrumbJsonLd } from "@/components/modules/seo";
 import { UseCaseFlows } from "./use-case-flows";
 import { USE_CASE_JOURNEYS } from "./use-case-journeys";
-import type { UseCasesPageContent } from "./use-cases-content";
+import type { UseCaseProfile, UseCaseProfileId, UseCasesPageContent } from "./use-cases-content";
 
-// Icons pair positionally with the flattened case list (ceremonies 2,
-// professional 4, institutional 3, services 3). Keep this list the same length as the
-// total number of cases or a case renders a broken icon.
-const CASE_ICONS: LucideIcon[] = [
-  Gem, // mariage & baptême
-  Heart, // fiançailles & dot
-  Presentation, // séminaires & galas
-  Mic, // conférences de presse
-  Landmark, // inaugurations
-  GraduationCap, // remises de diplômes
-  Users, // assemblées générales
-  ClipboardCheck, // formations
-  Globe, // diaspora
-  Stethoscope, // cliniques
-  Scissors, // salons
-  Building2, // agences et administrations
-];
+const PROFILE_ICONS: Record<UseCaseProfileId, LucideIcon> = {
+  weddings: Gem,
+  parties: PartyPopper,
+  corporate: Presentation,
+  assemblies: ClipboardCheck,
+  clinics: Stethoscope,
+  offices: Building2,
+};
 
-function UseCaseCard({
-  useCase,
-  index,
-}: {
-  useCase: UseCasesPageContent["categories"][number]["cases"][number];
-  index: number;
-}) {
-  const Icon = CASE_ICONS[index];
-
+/** One situation: who it is for, the promise, one sentence, what it relies on, and the way in. */
+function ProfileCard({ profile }: { profile: UseCaseProfile }) {
+  const Icon = PROFILE_ICONS[profile.id];
   return (
-    <div className="group flex flex-col rounded-2xl border border-border/40 bg-card/50 p-7 transition-all duration-300 hover:border-primary/20 hover:shadow-lg">
-      <div className="mb-5 flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
-        <Icon className="size-6" />
+    <article
+      id={profile.id}
+      className="flex scroll-mt-24 flex-col rounded-2xl border border-border/50 bg-card/50 p-6 target:border-primary target:shadow-lg"
+    >
+      <div className="flex items-center gap-3">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <Icon className="size-5" aria-hidden />
+        </span>
+        <p className="text-sm font-medium text-muted-foreground">{profile.label}</p>
       </div>
-      <h3 className="text-base font-semibold tracking-tight">{useCase.title}</h3>
-      <p className="mt-2 text-sm font-medium text-foreground">{useCase.promise}</p>
-      <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{useCase.description}</p>
-      <p className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-primary">
-        <Check className="size-3.5" strokeWidth={2.5} />
-        {useCase.proof}
-      </p>
-    </div>
+      <h3 className="mt-5 text-lg font-semibold tracking-tight">{profile.promise}</h3>
+      <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{profile.text}</p>
+      <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-1.5">
+        {profile.features.map((feature) => (
+          <li key={feature} className="inline-flex items-center gap-1.5 text-xs font-medium">
+            <Check className="size-3.5 text-primary" strokeWidth={2.5} aria-hidden />
+            {feature}
+          </li>
+        ))}
+      </ul>
+      <Link
+        href={ROUTES.REGISTER}
+        className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
+      >
+        {profile.cta}
+        <ArrowRight className="size-4" aria-hidden />
+      </Link>
+    </article>
   );
 }
 
 /**
- * The dedicated use-cases page: the full range of events the shipped product
- * covers, framed per segment ("promise + proof") so a visitor recognises their
- * own situation and the value is obvious before they ever see a price.
+ * The dedicated use-cases page (JIKU-196): the journeys first, so a visitor
+ * sees the product at work in their own situation, then six profiles with one
+ * promise each, and the price in one line. The landing page's "Who it's for"
+ * chips land on the profiles' anchors.
  */
 export function UseCasesPage({
   content,
@@ -118,7 +115,7 @@ export function UseCasesPage({
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-16 sm:py-20">
+      <main className={`mx-auto w-full max-w-7xl flex-1 px-6 py-16 sm:py-20 ${cardFontVariables}`}>
         <div className="mx-auto max-w-3xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
             <JikūLogo variant="mark" className="size-3.5" />
@@ -132,72 +129,25 @@ export function UseCasesPage({
 
         <UseCaseFlows content={USE_CASE_JOURNEYS[locale]} />
 
-        {content.categories.map((category, categoryIndex) => {
-          const startIndex = content.categories
-            .slice(0, categoryIndex)
-            .reduce((sum, c) => sum + c.cases.length, 0);
-
-          return (
-            <section key={category.title} className="mt-20">
-              <div className="mx-auto max-w-2xl text-center">
-                <h2 className="text-balance text-2xl font-bold tracking-tight sm:text-3xl">
-                  {category.title}
-                </h2>
-                <p className="mt-3 text-sm font-medium text-primary sm:text-base">{category.promise}</p>
-              </div>
-              <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {category.cases.map((useCase, i) => (
-                  <UseCaseCard
-                    key={useCase.title}
-                    useCase={useCase}
-                    index={startIndex + i}
-                  />
-                ))}
-              </div>
-            </section>
-          );
-        })}
-
-        <section className="mx-auto mt-24 max-w-5xl">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-balance text-2xl font-bold tracking-tight sm:text-3xl">
-              {content.pricing.heading}
-            </h2>
-            <p className="mt-3 text-sm text-muted-foreground sm:text-base">
-              {content.pricing.intro}
-            </p>
+        <section aria-labelledby="use-case-profiles" className="mt-20">
+          <h2 id="use-case-profiles" className="text-center text-balance text-2xl font-bold tracking-tight sm:text-3xl">
+            {content.profiles.heading}
+          </h2>
+          <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {content.profiles.items.map((profile) => (
+              <ProfileCard key={profile.id} profile={profile} />
+            ))}
           </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <div className="flex flex-col rounded-2xl border border-border/40 bg-card/50 p-7">
-              <h3 className="text-lg font-semibold">{content.pricing.events.title}</h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-                {content.pricing.events.text}
-              </p>
-              <Button asChild variant="outline" className="mt-6 w-full rounded-full">
-                <Link href={SEO_ROUTES.SIMULATOR}>{content.pricing.events.cta}</Link>
-              </Button>
-            </div>
-            <div className="flex flex-col rounded-2xl border border-primary/20 bg-gradient-to-b from-primary/[0.05] to-transparent p-7">
-              <div className="flex items-center justify-between gap-2">
-                <h3 className="text-lg font-semibold">{content.pricing.subscription.title}</h3>
-                <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                  {content.pricing.subscription.note}
-                </span>
-              </div>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-                {content.pricing.subscription.text}
-              </p>
-              <Button asChild className="mt-6 w-full rounded-full">
-                <Link href={SEO_ROUTES.SIMULATOR}>{content.pricing.subscription.cta}</Link>
-              </Button>
-            </div>
-          </div>
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            {content.pricing.guarantee}
-          </p>
         </section>
 
-        <section className="mt-24 rounded-3xl border border-primary/15 bg-gradient-to-b from-primary/[0.06] to-transparent p-8 text-center sm:p-12">
+        <p className="mx-auto mt-14 max-w-2xl text-center text-sm text-muted-foreground sm:text-base">
+          {content.pricing.text}{" "}
+          <Link href={SEO_ROUTES.SIMULATOR} className="font-semibold text-foreground underline-offset-4 hover:underline">
+            {content.pricing.cta}
+          </Link>
+        </p>
+
+        <section className="mt-20 rounded-3xl border border-primary/15 bg-gradient-to-b from-primary/[0.06] to-transparent p-8 text-center sm:p-12">
           <h2 className="text-balance text-2xl font-bold tracking-tight sm:text-3xl">
             {content.cta.heading}
           </h2>

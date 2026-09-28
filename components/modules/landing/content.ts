@@ -2,6 +2,13 @@
 // here, typed, rather than in the app's message catalogs: the structure (lists,
 // sections) is part of the content. Every claim describes what the product does
 // today; what is on its way carries `soon: true` and shows a "Bientôt" badge.
+// Amounts are not written here: pricing captions carry `{price}` and the FAQ's
+// pricing answers are written by `pricingAnswers`, both from `lib/pricing.ts`,
+// the same figures the simulator uses (JIKU-195, JIKU-197).
+
+import type { CardStyle } from "@/lib/card-style";
+import { pricingAnswers } from "./price-anchor";
+import type { UseCaseProfileId } from "./use-cases-content";
 
 export type LandingLocale = "fr" | "en";
 
@@ -11,27 +18,35 @@ export interface LandingFeature {
   soon?: boolean;
 }
 
-export interface LandingPoint {
-  text: string;
-  soon?: boolean;
-}
-
-export interface LandingProof {
-  /** The number to count up to; rendered as is when motion is off. */
-  value: number;
-  suffix?: string;
-  label: string;
-}
+/** Which published price a pricing caption quotes in place of `{price}`. */
+export type LandingPriceAnchor = "firstEventTier" | "teams" | null;
 
 export interface LandingPricingPlan {
   name: string;
   price: string;
+  /** One line under the price; `{price}` is replaced by the [anchor] price. */
   caption: string;
-  points: string[];
+  anchor: LandingPriceAnchor;
   cta: string;
   href: string;
   highlighted?: boolean;
-  soon?: boolean;
+}
+
+/** An example card, drawn with the product's own styles. Names and dates are examples. */
+export interface LandingCardSample {
+  style: CardStyle;
+  event: string;
+  organizer: string;
+  when: string;
+  color: string;
+  photo: boolean;
+}
+
+export interface LandingFaqItem {
+  question: string;
+  answer: string;
+  /** Shown on the landing page; every item shows on `/faq`. */
+  featured?: boolean;
 }
 
 export interface LandingContent {
@@ -48,14 +63,19 @@ export interface LandingContent {
   soonLabel: string;
   hero: {
     badge: string;
-    headlinePrefix: string;
-    headlineWords: string[];
-    headlineSuffix: string;
+    headline: string;
     subtitle: string;
     primaryCta: string;
     secondaryCta: string;
     ctaNote: string;
     uses: { events: string; services: string };
+    /** The card and the ticket drawn next to the promise. */
+    card: {
+      invites: string;
+      answers: [string, string, string];
+      ticket: { guest: string; status: string };
+      alt: string;
+    };
   };
   replace: {
     badge: string;
@@ -65,7 +85,15 @@ export interface LandingContent {
     beforeLabel: string;
     afterLabel: string;
   };
-  proof: LandingProof[];
+  cards: {
+    badge: string;
+    heading: string;
+    subheading: string;
+    styles: Record<CardStyle, string>;
+    samples: LandingCardSample[];
+    steps: { title: string; description: string }[];
+    cta: string;
+  };
   events: {
     badge: string;
     heading: string;
@@ -80,28 +108,33 @@ export interface LandingContent {
     items: LandingFeature[];
     visual: { title: string; serving: string; next: string; waiting: string; counter: string; notice: string };
   };
-  operators: { badge: string; heading: string; text: string; points: LandingPoint[] };
-  money: {
+  trust: {
     badge: string;
     heading: string;
-    subheading: string;
-    clients: { title: string; text: string; methods: string[] };
-    platform: { title: string; text: string; items: string[] };
-    never: string;
-    points: LandingPoint[];
+    items: { title: string; text: string }[];
+    methods: string[];
   };
-  howItWorks: { badge: string; heading: string; subheading: string; steps: { title: string; description: string }[] };
-  useCases: { badge: string; heading: string; subheading: string; more: string; cases: { title: string; description: string }[] };
+  useCases: { badge: string; heading: string; more: string; cases: { label: string; anchor: UseCaseProfileId }[] };
   pricing: {
     badge: string;
     heading: string;
     subheading: string;
     plans: LandingPricingPlan[];
-    enterprise: { title: string; text: string; cta: string; mailSubject: string };
+    enterprise: { text: string; cta: string; mailSubject: string };
     note: string;
   };
-  faq: { badge: string; heading: string; subheading: string; items: { question: string; answer: string }[] };
+  faq: {
+    badge: string;
+    heading: string;
+    subheading: string;
+    more: string;
+    items: LandingFaqItem[];
+    /** The dedicated `/faq` page, which lists every item. */
+    page: { title: string; description: string; heading: string; intro: string; home: string; breadcrumb: string };
+  };
   cta: { heading: string; text: string; primaryCta: string; secondaryCta: string };
+  /** The bar that keeps the main action in reach on a phone once the hero is gone. */
+  stickyCta: string;
   footer: {
     description: string;
     groups: { title: string; links: { label: string; href: string }[] }[];
@@ -111,20 +144,23 @@ export interface LandingContent {
   };
 }
 
+const FR_PRICES = pricingAnswers("fr");
+const EN_PRICES = pricingAnswers("en");
+
 const fr: LandingContent = {
   htmlLang: "fr",
   meta: {
-    title: "Jikū : billets, invitations, rendez-vous et file d'attente, à vos couleurs",
+    title: "Jikū : invitations WhatsApp, billets QR, rendez-vous et file d'attente",
     description:
-      "Une seule plateforme pour tout ce qui passe par un billet : invitations et check-in de vos événements, prise de rendez-vous et file du jour de vos services. Gratuit jusqu'à 100 invités.",
+      "Envoyez vos invitations ou partagez une carte dans vos groupes WhatsApp, faites entrer vos invités par billet QR, même sans réseau. Rendez-vous et file du jour pour vos services. Gratuit jusqu'à 100 invités.",
     keywords: [
-      "invitation événement",
+      "carte d'invitation WhatsApp",
+      "invitation anniversaire",
+      "invitation mariage",
       "billet QR code",
       "check-in hors ligne",
       "prise de rendez-vous",
       "gestion de file d'attente",
-      "ticket d'attente",
-      "invitation WhatsApp",
       "rappel SMS",
       "plateforme événementielle Afrique",
       "marque blanche",
@@ -136,8 +172,6 @@ const fr: LandingContent = {
       { label: "Services", href: "#services" },
       { label: "Tarifs", href: "#pricing" },
       { label: "Cas d'usage", href: "/use-cases" },
-      { label: "Simulateur", href: "/simulator" },
-      { label: "FAQ", href: "#faq" },
     ],
     signIn: "Se connecter",
     register: "Créer un compte",
@@ -147,66 +181,72 @@ const fr: LandingContent = {
   },
   soonLabel: "Bientôt",
   hero: {
-    badge: "Événements et services, à vos couleurs",
-    headlinePrefix: "Vos",
-    headlineWords: ["invités", "clients", "patients", "participants"],
-    headlineSuffix: "passent sans attendre.",
+    badge: "Nouveau : la carte d'invitation à partager",
+    headline: "Vos invités et vos clients passent sans attendre.",
     subtitle:
-      "Jikū gère tout ce qui passe par un billet : les invitations, la vente de billets et l'entrée de vos événements, les rendez-vous et la file du jour de vos services. Sans application à installer, même quand le réseau tombe.",
+      "Invitations, billets QR et entrée pour vos événements. Rendez-vous et file du jour pour vos services. Sur WhatsApp, sans application, même quand le réseau tombe.",
     primaryCta: "Créer mon compte gratuit",
     secondaryCta: "Trouver ma formule",
     ctaNote: "Gratuit jusqu'à 100 invités, sans carte bancaire",
-    uses: { events: "Événements", services: "Services" },
+    uses: { events: "J'organise un événement", services: "Je reçois des clients" },
+    card: {
+      invites: "vous invite",
+      answers: ["Je viens", "Peut-être", "Non"],
+      ticket: { guest: "Mariama Bah + 1", status: "Billet valide" },
+      alt: "Une carte d'invitation Jikū au style Moderne, et le billet QR d'un invité qui a répondu oui.",
+    },
   },
   replace: {
     badge: "Ce que vous remplacez",
     heading: "Fini le groupe WhatsApp, le fichier Excel et la liste papier",
-    subheading: "Tout ce que vous bricolez aujourd'hui, dans un seul outil qui tient debout le jour J.",
+    subheading: "Ce que vous bricolez aujourd'hui, dans un seul outil qui tient le jour J.",
     beforeLabel: "Aujourd'hui",
     afterLabel: "Avec Jikū",
     rows: [
-      { before: "Des invitations copiées-collées une à une sur WhatsApp", after: "Une invitation personnelle par invité, envoyée d'un clic" },
+      { before: "Des invitations copiées-collées une à une sur WhatsApp", after: "Une invitation personnelle, ou une carte à partager dans vos groupes" },
       { before: "Un tableur à jour chez une seule personne", after: "Les réponses en direct, pour toute l'équipe" },
-      { before: "Une liste papier et des billets photocopiés à la porte", after: "Un billet QR signé, scanné même sans réseau" },
+      { before: "Une liste papier et des billets photocopiés à la porte", after: "Un billet QR, scanné même sans réseau" },
       { before: "Une salle d'attente pleine et des clients qui s'impatientent", after: "Une file du jour qui appelle chacun sur son téléphone" },
-      { before: "Des paiements notés sur un cahier", after: "Le statut « payé » en un geste, visible par tous" },
     ],
   },
-  proof: [
-    { value: 3, label: "canaux pour joindre vos clients : e-mail, WhatsApp, SMS" },
-    { value: 0, label: "application à installer, pour vous comme pour eux" },
-    { value: 100, label: "invités offerts sur votre compte, chaque année" },
-    { value: 1, label: "lien par membre de votre équipe, sans compte" },
-  ],
+  cards: {
+    badge: "Nouveau · Carte d'invitation",
+    heading: "Partagez une carte, recevez des « oui »",
+    subheading:
+      "Pas de liste d'invités ? Publiez une carte dans vos groupes WhatsApp. Chacun répond en un geste, et chaque « oui » reçoit son billet.",
+    styles: { ELEGANT: "Élégant", MODERN: "Moderne", FESTIVE: "Festif" },
+    samples: [
+      { style: "ELEGANT", event: "Mariage d'Aïcha & Karim", organizer: "Famille Barry", when: "sam. 12 déc. · 16 h", color: "#5B3A29", photo: false },
+      { style: "MODERN", event: "Les 30 ans d'Aïssatou", organizer: "Maison Diallo", when: "sam. 14 nov. · 19 h", color: "#7C2D12", photo: true },
+      { style: "FESTIVE", event: "Soirée de fin d'année", organizer: "Association Horizon", when: "ven. 18 déc. · 20 h", color: "#9D174D", photo: false },
+    ],
+    steps: [
+      { title: "Choisissez un style", description: "Élégant, Moderne ou Festif, avec votre photo ou votre couleur." },
+      { title: "Partagez-la", description: "Dans vos groupes et vos statuts WhatsApp, ou par son lien et son QR code." },
+      { title: "Comptez les « oui »", description: "On répond sur WhatsApp ou sur la page de la carte. Chaque « oui » reçoit son billet QR." },
+    ],
+    cta: "Créer ma carte",
+  },
   events: {
     badge: "Événements",
     heading: "De l'invitation à la dernière entrée",
-    subheading:
-      "Mariage, séminaire, gala ou assemblée générale : un seul outil remplace WhatsApp, Excel et les billets papier.",
+    subheading: "Mariage, séminaire, gala ou assemblée générale.",
     items: [
       {
         title: "Invitations e-mail et WhatsApp",
-        description: "Chaque invité reçoit son lien personnel, à vos couleurs, sur le canal qu'il ouvre vraiment. Les envois échoués sont relancés.",
+        description: "Chaque invité reçoit son lien personnel, à vos couleurs, et répond en un geste. Vous voyez qui vient, en direct.",
       },
       {
-        title: "Réponses suivies en direct",
-        description: "Vos invités confirment ou déclinent en un geste. Vous voyez qui vient et à qui relancer l'invitation.",
+        title: "Billet QR, contrôlé même sans réseau",
+        description: "Un billet signé qui ne passe qu'une fois. La liste est déjà sur le téléphone du contrôleur.",
       },
       {
-        title: "Billets QR infalsifiables",
-        description: "Chaque confirmation produit un billet signé, impossible à deviner ou à réutiliser, prêt à scanner.",
-      },
-      {
-        title: "Catégories d'accès et billets payants",
-        description: "VIP, presse, standard : chaque catégorie a son prix, sa couleur et sa jauge. Vendez-les sur votre page publique : l'acheteur réserve sa place, vous paie directement et reçoit son billet dès que vous confirmez.",
-      },
-      {
-        title: "Check-in même sans réseau",
-        description: "La liste se synchronise à l'avance sur le téléphone du contrôleur. Le réseau coupe ? On continue de scanner.",
+        title: "Catégories et billets payants",
+        description: "VIP, presse, standard : chacune son prix et sa jauge. L'acheteur vous paie directement.",
       },
       {
         title: "Quorum et preuves de présence",
-        description: "Quorum compté en direct, feuille d'émargement et attestations nominatives générées sans effort.",
+        description: "Quorum compté en direct, feuille d'émargement et attestations nominatives.",
       },
     ],
     visual: {
@@ -221,32 +261,23 @@ const fr: LandingContent = {
   services: {
     badge: "Services",
     heading: "Des rendez-vous et une file du jour qui avancent seuls",
-    subheading:
-      "Clinique, salon, agence, administration : vos clients réservent, arrivent et sont appelés sans bousculade.",
+    subheading: "Clinique, salon, agence ou administration.",
     items: [
       {
         title: "Un lien de réservation à partager",
-        description: "Un lien court et un QR code à afficher : vos clients choisissent un créneau libre, sans compte ni appel. Cours ou atelier ? Plusieurs clients par créneau.",
+        description: "Un lien et un QR code : vos clients choisissent un créneau libre, sans compte ni appel.",
       },
       {
         title: "Rappels WhatsApp ou SMS",
-        description: "Un rappel avant chaque rendez-vous, sur WhatsApp, par SMS, ou par SMS quand WhatsApp échoue.",
-      },
-      {
-        title: "La file du jour sur un écran",
-        description: "Rendez-vous et sans-rendez-vous dans une seule liste. « Suivant » appelle la bonne personne, dans le bon ordre.",
+        description: "Un rappel avant chaque rendez-vous ; le SMS prend le relais si WhatsApp échoue.",
       },
       {
         title: "« C'est votre tour, guichet 4 »",
-        description: "Le client appelé reçoit le message avec son numéro de guichet : il attend dehors, pas dans le couloir.",
+        description: "Rendez-vous et sans-rendez-vous dans une seule file. Le client appelé est prévenu sur son téléphone.",
       },
       {
         title: "Le client prend son ticket lui-même",
-        description: "Il scanne le QR de l'entrée, prend son ticket et suit sa place en direct depuis son téléphone.",
-      },
-      {
-        title: "Payé avant ou après le service",
-        description: "Chaque service a son prix et sa règle. Le personnel note « payé » en un geste, espèces ou Mobile Money.",
+        description: "Il scanne le QR code de l'entrée et suit sa place en direct.",
       },
     ],
     visual: {
@@ -258,74 +289,49 @@ const fr: LandingContent = {
       notice: "« C'est votre tour, salle 2 » envoyé sur WhatsApp",
     },
   },
-  operators: {
-    badge: "Votre équipe",
-    heading: "Un lien par personne, et rien d'autre",
-    text:
-      "Portier, réceptionniste ou caissier : chacun reçoit un lien qui n'ouvre que ce que vous lui confiez, les événements et services de son périmètre, les actions permises. Vous le révoquez en un clic.",
-    points: [
-      { text: "Aucun compte à créer, aucune application à installer" },
-      { text: "Chaque action est attribuée à la bonne personne" },
-      { text: "Scan, file du jour et encaissement dans une seule console" },
+  trust: {
+    badge: "Confiance",
+    heading: "Votre équipe, votre argent, votre marque",
+    items: [
+      {
+        title: "Un lien par membre de l'équipe",
+        text: "Portier, réceptionniste ou caissier ouvre sa console depuis son téléphone, sans compte. Vous le révoquez en un clic.",
+      },
+      {
+        title: "L'argent de vos clients ne passe jamais par nous",
+        text: "Ils vous paient sur vos numéros, votre lien ou en espèces. Vous notez « payé » en un geste.",
+      },
+      {
+        title: "À vos couleurs, et vérifié",
+        text: "Votre logo et vos couleurs sur chaque invitation, billet et page, et un badge « Organisation vérifiée » après vérification par notre équipe.",
+      },
     ],
-  },
-  money: {
-    badge: "Paiements",
-    heading: "L'argent de vos clients ne passe jamais par nous",
-    subheading: "Deux circuits séparés, jamais mélangés. Vous gardez la main sur vos encaissements, Jikū ne facture que son propre service.",
-    clients: {
-      title: "Vos clients vous paient",
-      text: "Sur vos numéros Mobile Money ou votre propre lien de paiement, en espèces à l'accueil ou après le service.",
-      methods: ["Orange Money", "MTN MoMo", "Wave", "Espèces", "Votre lien"],
-    },
-    platform: {
-      title: "Vous payez Jikū",
-      text: "Seulement ce que vous utilisez, montant affiché avant de payer, en un écran.",
-      items: ["Abonnement Services", "Palier d'un événement", "3 % des billets vendus"],
-    },
-    never: "Jikū ne touche jamais l'argent de vos clients",
-    points: [
-      { text: "Aucune commission sur vos services" },
-      { text: "Le statut « payé » noté en un geste, espèces ou Mobile Money" },
-      { text: "Vos numéros et votre lien affichés sur chaque billet dû" },
-      { text: "Un badge « Organisation vérifiée » sur vos pages publiques, après vérification par notre équipe" },
-    ],
-  },
-  howItWorks: {
-    badge: "Simple, de bout en bout",
-    heading: "Prêt en quatre étapes",
-    subheading: "Si vous savez remplir un tableur, vous savez utiliser Jikū.",
-    steps: [
-      { title: "Créez votre événement ou votre service", description: "Un nom, une date ou des horaires, un prix si besoin. Le reste attend." },
-      { title: "Invitez ou partagez votre lien", description: "Importez votre liste d'invités, ouvrez la vente de billets, ou partagez votre lien de réservation et son QR code." },
-      { title: "Confiez un lien à votre équipe", description: "Chaque membre ouvre sa console depuis son téléphone : scan, file du jour, encaissement." },
-      { title: "Suivez tout en direct", description: "Confirmations, entrées, attente et paiements, sur un seul tableau de bord." },
-    ],
+    methods: ["Orange Money", "MTN MoMo", "Wave", "Espèces"],
   },
   useCases: {
     badge: "Pour qui",
-    heading: "Du mariage de 150 invités à la clinique de quartier",
-    subheading: "Le même billet sert l'événement d'un soir et le service de tous les jours.",
-    more: "Voir tous les cas d'usage",
+    heading: "Du mariage à la clinique de quartier",
+    more: "Voir les cas d'usage",
     cases: [
-      { title: "Mariages et célébrations", description: "Confirmations WhatsApp, billets QR, une entrée sans liste papier." },
-      { title: "Conférences et galas", description: "Plusieurs entrées, plusieurs contrôleurs, un seul décompte fiable, même hors ligne." },
-      { title: "Assemblées générales", description: "Quorum horodaté, émargement et attestations de présence sans les refaire à la main." },
-      { title: "Cliniques et cabinets", description: "Rendez-vous, rappels et file du jour : les patients attendent moins et savent quand venir." },
-      { title: "Salons et ateliers", description: "Un lien de réservation sur Instagram, des rappels qui réduisent les absences." },
-      { title: "Agences et administrations", description: "Tickets d'attente, appel au guichet et suivi de l'attente, sans borne coûteuse." },
+      { label: "Mariages et baptêmes", anchor: "weddings" },
+      { label: "Anniversaires et soirées", anchor: "parties" },
+      { label: "Séminaires et galas", anchor: "corporate" },
+      { label: "Assemblées générales", anchor: "assemblies" },
+      { label: "Cliniques et cabinets", anchor: "clinics" },
+      { label: "Salons et ateliers", anchor: "clinics" },
+      { label: "Agences et administrations", anchor: "offices" },
     ],
   },
   pricing: {
     badge: "Tarifs",
-    heading: "Vous payez pour ce que vous utilisez",
-    subheading: "Événements et services ont chacun leur modèle, simple et affiché. Toutes les fonctionnalités sont incluses.",
+    heading: "Des prix simples, affichés",
+    subheading: "Toutes les fonctionnalités sont incluses. Vous ne payez que ce que vous utilisez.",
     plans: [
       {
         name: "Événements",
         price: "Gratuit",
-        caption: "jusqu'à 100 invités par an, puis dès 225 000 GNF (15 000 FCFA) par événement",
-        points: ["Payé en une fois, à l'activation du palier", "Lien, billet direct ou invitation interactive WhatsApp", "Check-in hors ligne inclus"],
+        caption: "jusqu'à 100 invités par an, puis dès {price} par événement",
+        anchor: "firstEventTier",
         cta: "Estimer mon événement",
         href: "/simulator",
         highlighted: true,
@@ -333,57 +339,71 @@ const fr: LandingContent = {
       {
         name: "Services",
         price: "Solo gratuit",
-        caption: "pour toujours, puis Teams dès 150 000 GNF (10 000 FCFA) par mois pour 2 personnes",
-        points: ["Lien de réservation, rappels, file du jour", "Seules les personnes qui servent comptent", "2 mois offerts en payant à l'année"],
+        caption: "pour une personne, pour toujours ; en équipe dès {price} par mois",
+        anchor: "teams",
         cta: "Voir les offres",
         href: "/simulator",
       },
       {
-        name: "Vente de billets en ligne",
+        name: "Vente de billets",
         price: "3 %",
-        caption: "du prix de chaque billet vendu",
-        points: ["Vos acheteurs vous paient directement", "Première tranche de 50 billets offerte", "Jamais bloqué le jour de l'événement"],
+        caption: "par billet vendu, rien si rien n'est vendu ; 50 premiers billets offerts",
+        anchor: null,
         cta: "Estimer ma commission",
         href: "/simulator",
       },
     ],
     enterprise: {
-      title: "Grandes organisations",
-      text: "Volumes élevés, accompagnement dédié ou hébergement sur votre propre infrastructure : parlons-en.",
-      cta: "Contacter l'équipe commerciale",
+      text: "Grande organisation ou gros volumes ?",
+      cta: "Parlons-en",
       mailSubject: "Jikū - offre Entreprise",
     },
-    note: "Même prix partout, en francs guinéens, en francs CFA ou en dollars, taxes comprises. Le simulateur donne le montant exact selon votre besoin.",
+    note: "En francs guinéens, en francs CFA ou en dollars, taxes comprises. Le simulateur donne le montant exact.",
   },
   faq: {
     badge: "Questions fréquentes",
     heading: "Vous vous demandez sûrement…",
     subheading: "Les réponses aux questions qu'on nous pose le plus.",
+    more: "Toutes les questions",
+    page: {
+      title: "FAQ Jikū — Invitations, cartes, billets, rendez-vous : vos questions",
+      description:
+        "Faut-il une application ? Le check-in marche-t-il hors ligne ? Qui peut répondre à une carte partagée ? Combien ça coûte ? Les réponses aux questions les plus posées sur Jikū.",
+      heading: "Questions fréquentes sur Jikū",
+      intro:
+        "Jikū gère tout ce qui passe par un billet : les invitations et les cartes à partager, les billets QR et l'entrée de vos événements, les rendez-vous et la file du jour de vos services, sans application à installer. Voici les réponses aux questions qu'on nous pose le plus.",
+      home: "Accueil",
+      breadcrumb: "Fil d'Ariane",
+    },
     items: [
-      { question: "Mes invités ou mes clients doivent-ils installer une application ?", answer: "Non. Tout passe par un simple lien ouvert dans le navigateur de leur téléphone : invitation, billet, réservation ou ticket d'attente." },
-      { question: "Le check-in fonctionne-t-il sans internet ?", answer: "Oui. La liste se synchronise à l'avance sur le téléphone du contrôleur ; les scans hors ligne se synchronisent au retour du réseau, et un billet ne passe jamais deux fois." },
-      { question: "Jikū encaisse-t-il l'argent de mes clients ?", answer: "Non, jamais. Vos clients vous paient directement, sur vos numéros Mobile Money ou votre propre lien de paiement. Jikū ne facture que son propre service." },
-      { question: "Combien coûte un événement ?", answer: "C'est gratuit jusqu'à 100 invités cumulés sur l'année. Au-delà, un montant unique par événement selon le nombre d'invités : 225 000 GNF (15 000 FCFA) jusqu'à 300, 375 000 GNF (25 000 FCFA) jusqu'à 600, 600 000 GNF (40 000 FCFA) jusqu'à 1 000, puis 500 GNF (35 FCFA) par invité en plus. L'invitation interactive WhatsApp ajoute 150 GNF (10 FCFA) par invité." },
-      { question: "Et la prise de rendez-vous ?", answer: "C'est un abonnement pour votre équipe, par mois : Solo est gratuit pour toujours pour une personne, Solo Plus coûte 50 000 GNF (3 500 FCFA), Teams 150 000 GNF (10 000 FCFA) pour 2 personnes puis 50 000 GNF par personne en plus. Les administrateurs et les contrôleurs sont gratuits, et aucune commission n'est prise sur vos clients." },
-      { question: "Et si je vends mes billets ?", answer: "Jikū prend 3 % du prix de chaque billet vendu, rien si rien n'est vendu. L'argent des ventes arrive directement chez vous ; la commission se règle d'avance, par tranche de 50 billets, votre première tranche est offerte, et ce qui n'a pas servi est reporté." },
+      { featured: true, question: "Mes invités ou mes clients doivent-ils installer une application ?", answer: "Non. Tout passe par un simple lien ouvert dans le navigateur de leur téléphone : invitation, carte, billet, réservation ou ticket d'attente." },
+      { featured: true, question: "Le check-in fonctionne-t-il sans internet ?", answer: "Oui. La liste se synchronise à l'avance sur le téléphone du contrôleur ; les scans hors ligne se synchronisent au retour du réseau, et un billet ne passe jamais deux fois." },
+      { featured: true, question: "Qui peut répondre à une carte partagée ?", answer: "Toute personne qui a son lien ou son QR code, sur WhatsApp ou sur la page de la carte. Vous fixez le nombre d'accompagnants et une date limite ; quand il n'y a plus de place, la carte n'accepte plus de « oui ». Vous pouvez retirer quelqu'un à tout moment : ses places sont libérées." },
+      { featured: true, question: "Jikū encaisse-t-il l'argent de mes clients ?", answer: "Non, jamais. Vos clients vous paient directement, sur vos numéros Mobile Money ou votre propre lien de paiement. Jikū ne facture que son propre service." },
+      { featured: true, question: "Mes messages partent-ils vraiment sur WhatsApp ?", answer: "Oui, via l'API officielle WhatsApp Business, un message individuel par personne. Pour les rappels de rendez-vous, le SMS prend le relais si WhatsApp échoue." },
+      { featured: true, question: "Que deviennent les données personnelles ?", answer: "Chaque invité peut demander la suppression de ses données depuis son lien. Après la période de conservation, les données sont anonymisées automatiquement." },
+      { question: "Puis-je mettre ma propre photo sur la carte ?", answer: "Oui. Choisissez un style, Élégant, Moderne ou Festif, et ajoutez une photo de bandeau. La carte, l'aperçu du lien, la page de réponse et le billet suivent ce choix." },
+      { question: "Combien coûte un événement ?", answer: FR_PRICES.events },
+      { question: "Et la prise de rendez-vous ?", answer: FR_PRICES.services },
+      { question: "Et si je vends mes billets ?", answer: FR_PRICES.sales },
       { question: "Comment mon équipe accède-t-elle à Jikū ?", answer: "Chaque membre reçoit un lien personnel qui n'ouvre que ce que vous lui confiez. Pas de compte, pas d'application, et vous le révoquez à tout moment." },
-      { question: "Mes messages partent-ils vraiment sur WhatsApp ?", answer: "Oui, via l'API officielle WhatsApp Business, un message individuel par personne. Pour les rappels de rendez-vous, le SMS prend le relais si WhatsApp échoue." },
-      { question: "Que deviennent les données personnelles ?", answer: "Chaque invité peut demander la suppression de ses données depuis son lien. Après la période de conservation, les données sont anonymisées automatiquement." },
       { question: "Puis-je utiliser mes couleurs et mon logo ?", answer: "Oui. Invitations, billets, pages de réservation et consoles portent votre marque ; Jikū reste en coulisses." },
     ],
   },
   cta: {
     heading: "Votre prochain événement, votre prochain client : sans attente.",
-    text: "Créez votre compte, importez dix invités ou partagez votre lien de réservation : en cinq minutes, vous saurez si Jikū est fait pour vous.",
+    text: "Créez votre compte, partagez votre première carte ou votre lien de réservation : en cinq minutes, vous saurez si Jikū est fait pour vous.",
     primaryCta: "Créer mon compte gratuit",
     secondaryCta: "Se connecter",
   },
+  stickyCta: "Créer mon compte gratuit",
   footer: {
-    description: "Billets, invitations, rendez-vous et file d'attente en marque blanche, pensés pour l'Afrique francophone.",
+    description: "Invitations, billets, rendez-vous et file d'attente en marque blanche, pensés pour l'Afrique francophone.",
     groups: [
       {
         title: "Produit",
         links: [
+          { label: "Carte d'invitation", href: "/#cards" },
           { label: "Événements", href: "/#events" },
           { label: "Services", href: "/#services" },
           { label: "Tarifs", href: "/#pricing" },
@@ -417,17 +437,17 @@ const fr: LandingContent = {
 const en: LandingContent = {
   htmlLang: "en",
   meta: {
-    title: "Jikū: tickets, invitations, appointments and queues, in your colors",
+    title: "Jikū: WhatsApp invitations, QR tickets, appointments and queues",
     description:
-      "One platform for everything that runs on a ticket: invitations, ticket sales and check-in for your events, bookings and the day line for your services. Free for up to 100 guests.",
+      "Send your invitations or share a card in your WhatsApp groups, let guests in with a QR ticket, even offline. Bookings and the day line for your services. Free for up to 100 guests.",
     keywords: [
-      "event invitations",
+      "WhatsApp invitation card",
+      "birthday invitation",
+      "wedding invitation",
       "QR code tickets",
       "offline check-in",
       "appointment booking",
       "queue management",
-      "waiting ticket",
-      "WhatsApp invitations",
       "SMS reminders",
       "event platform Africa",
       "white label",
@@ -439,8 +459,6 @@ const en: LandingContent = {
       { label: "Services", href: "#services" },
       { label: "Pricing", href: "#pricing" },
       { label: "Use cases", href: "/use-cases" },
-      { label: "Simulator", href: "/simulator" },
-      { label: "FAQ", href: "#faq" },
     ],
     signIn: "Sign in",
     register: "Create an account",
@@ -450,48 +468,73 @@ const en: LandingContent = {
   },
   soonLabel: "Soon",
   hero: {
-    badge: "Events and services, in your colors",
-    headlinePrefix: "Your",
-    headlineWords: ["guests", "clients", "patients", "attendees"],
-    headlineSuffix: "get in without waiting.",
+    badge: "New: the invitation card to share",
+    headline: "Your guests and clients get in without waiting.",
     subtitle:
-      "Jikū runs everything that goes through a ticket: invitations and entry for your events, bookings and the day line for your services. No app to install, even when the network drops.",
+      "Invitations, QR tickets and entry for your events. Bookings and the day line for your services. On WhatsApp, no app to install, even when the network drops.",
     primaryCta: "Create my free account",
     secondaryCta: "Find my plan",
     ctaNote: "Free for up to 100 guests, no card required",
-    uses: { events: "Events", services: "Services" },
+    uses: { events: "I'm organizing an event", services: "I receive clients" },
+    card: {
+      invites: "invites you",
+      answers: ["I'm coming", "Maybe", "No"],
+      ticket: { guest: "Mariama Bah + 1", status: "Valid ticket" },
+      alt: "A Jikū invitation card in the Modern style, and the QR ticket of a guest who said yes.",
+    },
   },
   replace: {
     badge: "What you replace",
     heading: "No more WhatsApp group, Excel file and paper list",
-    subheading: "Everything you patch together today, in one tool that holds up on the day.",
+    subheading: "What you patch together today, in one tool that holds up on the day.",
     beforeLabel: "Today",
     afterLabel: "With Jikū",
     rows: [
-      { before: "Invitations copy-pasted one by one on WhatsApp", after: "A personal invitation per guest, sent in one click" },
+      { before: "Invitations copy-pasted one by one on WhatsApp", after: "A personal invitation, or a card to share in your groups" },
       { before: "A spreadsheet only one person keeps up to date", after: "Answers live, for the whole team" },
-      { before: "A paper list and photocopied tickets at the door", after: "A signed QR ticket, scanned even offline" },
+      { before: "A paper list and photocopied tickets at the door", after: "A QR ticket, scanned even offline" },
       { before: "A full waiting room and impatient clients", after: "A day line that calls each client on their phone" },
-      { before: "Payments written down in a notebook", after: "\"Paid\" in one tap, visible to everyone" },
     ],
   },
-  proof: [
-    { value: 3, label: "channels to reach your clients: email, WhatsApp, SMS" },
-    { value: 0, label: "apps to install, for you or for them" },
-    { value: 100, label: "free guests on your account, every year" },
-    { value: 1, label: "link per team member, no account needed" },
-  ],
+  cards: {
+    badge: "New · Invitation card",
+    heading: "Share a card, collect the yeses",
+    subheading:
+      "No guest list? Post a card in your WhatsApp groups. Everyone answers in one tap, and every yes gets a ticket.",
+    styles: { ELEGANT: "Elegant", MODERN: "Modern", FESTIVE: "Festive" },
+    samples: [
+      { style: "ELEGANT", event: "Aïcha & Karim's wedding", organizer: "The Barry family", when: "Sat, Dec 12 · 4 PM", color: "#5B3A29", photo: false },
+      { style: "MODERN", event: "Aïssatou turns 30", organizer: "Maison Diallo", when: "Sat, Nov 14 · 7 PM", color: "#7C2D12", photo: true },
+      { style: "FESTIVE", event: "Year-end party", organizer: "Horizon Association", when: "Fri, Dec 18 · 8 PM", color: "#9D174D", photo: false },
+    ],
+    steps: [
+      { title: "Pick a style", description: "Elegant, Modern or Festive, with your photo or your color." },
+      { title: "Share it", description: "In your WhatsApp groups and statuses, or through its link and QR code." },
+      { title: "Count the yeses", description: "People answer on WhatsApp or on the card's page. Every yes gets a QR ticket." },
+    ],
+    cta: "Create my card",
+  },
   events: {
     badge: "Events",
     heading: "From the invitation to the last entry",
-    subheading: "Wedding, seminar, gala or general assembly: one tool replaces WhatsApp, Excel and paper tickets.",
+    subheading: "Wedding, seminar, gala or general assembly.",
     items: [
-      { title: "Email and WhatsApp invitations", description: "Every guest gets a personal link, in your colors, on the channel they actually open. Failed sends are retried." },
-      { title: "Answers tracked live", description: "Guests confirm or decline in one tap. You see who's coming and whom to remind." },
-      { title: "Tamper-proof QR tickets", description: "Every confirmation produces a signed ticket that can't be guessed or reused, ready to scan." },
-      { title: "Access categories and paid tickets", description: "VIP, press, standard: each category has its price, color and capacity. Sell them on your public page: buyers hold their place, pay you directly and get their ticket as soon as you confirm." },
-      { title: "Check-in without a network", description: "The list syncs to the door staff's phone ahead of time. Network down? Keep scanning." },
-      { title: "Quorum and attendance proof", description: "Live quorum count, a sign-in sheet and named attendance certificates, generated for you." },
+      {
+        title: "Email and WhatsApp invitations",
+        description: "Every guest gets a personal link, in your colors, and answers in one tap. You see who's coming, live.",
+      },
+      {
+        title: "QR ticket, checked even offline",
+        description: "A signed ticket that only gets in once. The list is already on the door staff's phone.",
+      },
+      {
+        title: "Categories and paid tickets",
+        description: "VIP, press, standard: each has its price and capacity. Buyers pay you directly.",
+      },
+      {
+        title: "Quorum and attendance proof",
+        description: "Live quorum count, a sign-in sheet and named attendance certificates.",
+      },
     ],
     visual: {
       event: "Hope Gala",
@@ -505,14 +548,24 @@ const en: LandingContent = {
   services: {
     badge: "Services",
     heading: "Appointments and a day line that run themselves",
-    subheading: "Clinic, salon, agency or public office: your clients book, arrive and get called without a crowd.",
+    subheading: "Clinic, salon, agency or public office.",
     items: [
-      { title: "A booking link to share", description: "A short link and a QR code to display: clients pick a free slot, no account and no phone call. A class or a workshop? Several clients per slot." },
-      { title: "WhatsApp or SMS reminders", description: "A reminder before every appointment, on WhatsApp, by SMS, or by SMS when WhatsApp fails." },
-      { title: "The day line on one screen", description: "Appointments and walk-ins in one list. \"Next\" calls the right person, in the right order." },
-      { title: "\"It's your turn, counter 4\"", description: "The client called gets the message with their counter number: they wait outside, not in the hallway." },
-      { title: "Clients take their own ticket", description: "They scan the QR code at the entrance, take a ticket and follow their place live on their phone." },
-      { title: "Paid before or after the service", description: "Each service has its price and its rule. Staff mark \"paid\" in one tap, cash or Mobile Money." },
+      {
+        title: "A booking link to share",
+        description: "A link and a QR code: clients pick a free slot, no account and no phone call.",
+      },
+      {
+        title: "WhatsApp or SMS reminders",
+        description: "A reminder before every appointment; SMS takes over when WhatsApp fails.",
+      },
+      {
+        title: "\"It's your turn, counter 4\"",
+        description: "Appointments and walk-ins in one line. The client called is told on their phone.",
+      },
+      {
+        title: "Clients take their own ticket",
+        description: "They scan the QR code at the entrance and follow their place live.",
+      },
     ],
     visual: {
       title: "Today's line · Consultations",
@@ -523,74 +576,49 @@ const en: LandingContent = {
       notice: "\"It's your turn, room 2\" sent on WhatsApp",
     },
   },
-  operators: {
-    badge: "Your team",
-    heading: "One link per person, nothing else",
-    text:
-      "Door staff, receptionist or cashier: each gets a link that only opens what you entrust to them, the events and services in their scope, the actions allowed. You revoke it in one click.",
-    points: [
-      { text: "No account to create, no app to install" },
-      { text: "Every action is attributed to the right person" },
-      { text: "Scanning, the day line and payments in one console" },
+  trust: {
+    badge: "Trust",
+    heading: "Your team, your money, your brand",
+    items: [
+      {
+        title: "One link per team member",
+        text: "Door staff, receptionist or cashier opens their console on their phone, no account. You revoke it in one click.",
+      },
+      {
+        title: "Your clients' money never goes through us",
+        text: "They pay you on your numbers, your link or in cash. You mark \"paid\" in one tap.",
+      },
+      {
+        title: "In your colors, and verified",
+        text: "Your logo and colors on every invitation, ticket and page, and a \"Verified organization\" badge once our team has checked you.",
+      },
     ],
-  },
-  money: {
-    badge: "Payments",
-    heading: "Your clients' money never goes through us",
-    subheading: "Two separate circuits, never mixed. You stay in control of what you collect; Jikū only charges for its own service.",
-    clients: {
-      title: "Your clients pay you",
-      text: "To your Mobile Money numbers or your own payment link, in cash at the desk or after the service.",
-      methods: ["Orange Money", "MTN MoMo", "Wave", "Cash", "Your link"],
-    },
-    platform: {
-      title: "You pay Jikū",
-      text: "Only what you use, amount shown before you pay, in one screen.",
-      items: ["Services subscription", "An event's tier", "3% of tickets sold"],
-    },
-    never: "Jikū never touches your clients' money",
-    points: [
-      { text: "No commission on your services" },
-      { text: "\"Paid\" recorded in one tap, cash or Mobile Money" },
-      { text: "Your numbers and link shown on every ticket that's due" },
-      { text: "A \"Verified organization\" badge on your public pages, once our team has checked you" },
-    ],
-  },
-  howItWorks: {
-    badge: "Simple, end to end",
-    heading: "Ready in four steps",
-    subheading: "If you can fill in a spreadsheet, you can use Jikū.",
-    steps: [
-      { title: "Create your event or service", description: "A name, a date or opening hours, a price if needed. The rest can wait." },
-      { title: "Invite or share your link", description: "Import your guest list, open ticket sales, or share your booking link and its QR code." },
-      { title: "Hand your team a link", description: "Each member opens their console on their phone: scanning, the day line, payments." },
-      { title: "Follow everything live", description: "Confirmations, entries, waiting and payments, on a single dashboard." },
-    ],
+    methods: ["Orange Money", "MTN MoMo", "Wave", "Cash"],
   },
   useCases: {
     badge: "Who it's for",
-    heading: "From a 150-guest wedding to the neighborhood clinic",
-    subheading: "The same ticket serves a one-night event and an everyday service.",
-    more: "See every use case",
+    heading: "From a wedding to the neighborhood clinic",
+    more: "See the use cases",
     cases: [
-      { title: "Weddings and celebrations", description: "WhatsApp confirmations, QR tickets, an entrance without a paper list." },
-      { title: "Conferences and galas", description: "Several entrances, several door staff, one reliable count, even offline." },
-      { title: "General assemblies", description: "Timestamped quorum, sign-in sheet and attendance certificates without redoing them by hand." },
-      { title: "Clinics and practices", description: "Bookings, reminders and the day line: patients wait less and know when to come." },
-      { title: "Salons and studios", description: "A booking link on Instagram, reminders that cut no-shows." },
-      { title: "Agencies and public offices", description: "Waiting tickets, counter calls and wait tracking, without a costly kiosk." },
+      { label: "Weddings and christenings", anchor: "weddings" },
+      { label: "Birthdays and parties", anchor: "parties" },
+      { label: "Seminars and galas", anchor: "corporate" },
+      { label: "General assemblies", anchor: "assemblies" },
+      { label: "Clinics and practices", anchor: "clinics" },
+      { label: "Salons and studios", anchor: "clinics" },
+      { label: "Agencies and public offices", anchor: "offices" },
     ],
   },
   pricing: {
     badge: "Pricing",
-    heading: "You pay for what you use",
-    subheading: "Events and services each have their own simple, published model. Every feature is included.",
+    heading: "Simple prices, in plain sight",
+    subheading: "Every feature is included. You only pay for what you use.",
     plans: [
       {
         name: "Events",
         price: "Free",
-        caption: "up to 100 guests a year, then from $25 (225,000 GNF) per event",
-        points: ["Paid once, when the tier is activated", "Link, direct ticket or interactive WhatsApp invitation", "Offline check-in included"],
+        caption: "up to 100 guests a year, then from {price} per event",
+        anchor: "firstEventTier",
         cta: "Estimate my event",
         href: "/simulator",
         highlighted: true,
@@ -598,57 +626,71 @@ const en: LandingContent = {
       {
         name: "Services",
         price: "Solo free",
-        caption: "forever, then Teams from $17 (150,000 GNF) a month for 2 people",
-        points: ["Booking link, reminders, day line", "Only the people who serve count", "2 months free when paying yearly"],
+        caption: "for one person, forever; for a team from {price} a month",
+        anchor: "teams",
         cta: "See the plans",
         href: "/simulator",
       },
       {
-        name: "Online ticket sales",
+        name: "Ticket sales",
         price: "3%",
-        caption: "of each ticket sold",
-        points: ["Buyers pay you directly", "First tranche of 50 tickets free", "Never blocked on the event day"],
+        caption: "per ticket sold, nothing if nothing sells; first 50 tickets free",
+        anchor: null,
         cta: "Estimate my commission",
         href: "/simulator",
       },
     ],
     enterprise: {
-      title: "Large organizations",
-      text: "High volumes, dedicated support or hosting on your own infrastructure: let's talk.",
-      cta: "Contact the sales team",
+      text: "A large organization or high volumes?",
+      cta: "Let's talk",
       mailSubject: "Jikū - Enterprise offer",
     },
-    note: "Same price everywhere, in Guinean francs, CFA francs or dollars, taxes included. The simulator gives the exact amount for your needs.",
+    note: "In Guinean francs, CFA francs or dollars, taxes included. The simulator gives the exact amount.",
   },
   faq: {
     badge: "Frequently asked",
     heading: "You're probably wondering…",
     subheading: "Answers to the questions we hear most.",
+    more: "All questions",
+    page: {
+      title: "Jikū FAQ — Invitations, cards, tickets, appointments: your questions",
+      description:
+        "Do people need an app? Does check-in work offline? Who can answer a shared card? How much does it cost? Answers to the questions we hear most about Jikū.",
+      heading: "Frequently asked questions about Jikū",
+      intro:
+        "Jikū runs everything that goes through a ticket: invitations and cards to share, QR tickets and entry for your events, bookings and the day line for your services, with no app to install. Here are the answers to the questions we hear most.",
+      home: "Home",
+      breadcrumb: "Breadcrumb",
+    },
     items: [
-      { question: "Do my guests or clients need to install an app?", answer: "No. Everything goes through a simple link opened in their phone's browser: invitation, ticket, booking or waiting ticket." },
-      { question: "Does check-in work without internet?", answer: "Yes. The list syncs to the door staff's phone ahead of time; offline scans sync when the network returns, and a ticket never gets in twice." },
-      { question: "Does Jikū collect my clients' money?", answer: "No, never. Your clients pay you directly, on your Mobile Money numbers or your own payment link. Jikū only charges for its own service." },
-      { question: "How much does an event cost?", answer: "It's free up to 100 guests a year. Beyond that, one payment per event based on guest count: $25 (225,000 GNF) up to 300, $45 (375,000 GNF) up to 600, $70 (600,000 GNF) up to 1,000, then $0.06 (500 GNF) per extra guest. Interactive WhatsApp invitations add $0.02 (150 GNF) per guest." },
-      { question: "What about appointments?", answer: "It's a subscription for your team, per month: Solo is free forever for one person, Solo Plus costs $6 (50,000 GNF), Teams $17 (150,000 GNF) for 2 people then $6 per extra person. Administrators and door staff are free, and no commission is taken on your clients." },
-      { question: "And if I sell my tickets?", answer: "Jikū takes 3% of the price of each ticket sold, nothing if nothing sells. Sales money goes straight to you; the commission is paid ahead, by tranche of 50 tickets, your first tranche is free, and anything unused carries over." },
+      { featured: true, question: "Do my guests or clients need to install an app?", answer: "No. Everything goes through a simple link opened in their phone's browser: invitation, card, ticket, booking or waiting ticket." },
+      { featured: true, question: "Does check-in work without internet?", answer: "Yes. The list syncs to the door staff's phone ahead of time; offline scans sync when the network returns, and a ticket never gets in twice." },
+      { featured: true, question: "Who can answer a shared card?", answer: "Anyone with its link or QR code, on WhatsApp or on the card's page. You set how many companions each person may bring and a deadline; once the places are gone, the card takes no more yeses. You can remove someone at any time: their places come back." },
+      { featured: true, question: "Does Jikū collect my clients' money?", answer: "No, never. Your clients pay you directly, on your Mobile Money numbers or your own payment link. Jikū only charges for its own service." },
+      { featured: true, question: "Do my messages really go out on WhatsApp?", answer: "Yes, through the official WhatsApp Business API, one individual message per person. For appointment reminders, SMS takes over when WhatsApp fails." },
+      { featured: true, question: "What happens to personal data?", answer: "Every guest can request the deletion of their data from their link. After the retention period, data is anonymized automatically." },
+      { question: "Can I put my own photo on the card?", answer: "Yes. Pick a style, Elegant, Modern or Festive, and add a banner photo. The card, the link preview, the answer page and the ticket all follow that choice." },
+      { question: "How much does an event cost?", answer: EN_PRICES.events },
+      { question: "What about appointments?", answer: EN_PRICES.services },
+      { question: "And if I sell my tickets?", answer: EN_PRICES.sales },
       { question: "How does my team access Jikū?", answer: "Each member gets a personal link that only opens what you entrust to them. No account, no app, and you can revoke it at any time." },
-      { question: "Do my messages really go out on WhatsApp?", answer: "Yes, through the official WhatsApp Business API, one individual message per person. For appointment reminders, SMS takes over when WhatsApp fails." },
-      { question: "What happens to personal data?", answer: "Every guest can request the deletion of their data from their link. After the retention period, data is anonymized automatically." },
       { question: "Can I use my own colors and logo?", answer: "Yes. Invitations, tickets, booking pages and consoles carry your brand; Jikū stays behind the scenes." },
     ],
   },
   cta: {
     heading: "Your next event, your next client: no waiting.",
-    text: "Create your account, import ten guests or share your booking link: within five minutes, you'll know whether Jikū is for you.",
+    text: "Create your account, share your first card or your booking link: within five minutes, you'll know whether Jikū is for you.",
     primaryCta: "Create my free account",
     secondaryCta: "Sign in",
   },
+  stickyCta: "Create my free account",
   footer: {
-    description: "White-label tickets, invitations, appointments and queues, built for French-speaking Africa.",
+    description: "White-label invitations, tickets, appointments and queues, built for French-speaking Africa.",
     groups: [
       {
         title: "Product",
         links: [
+          { label: "Invitation card", href: "/#cards" },
           { label: "Events", href: "/#events" },
           { label: "Services", href: "/#services" },
           { label: "Pricing", href: "/#pricing" },
