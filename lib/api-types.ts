@@ -1348,6 +1348,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/banner": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["eventLookReplaceBanner"];
+        post?: never;
+        delete: operations["eventLookRemoveBanner"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/billing/quotes": {
         parameters: {
             query?: never;
@@ -1630,6 +1646,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["invitationSend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/look": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["eventLookGet"];
+        put: operations["eventLookUpdate"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2894,6 +2926,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["prospectLeadRegister"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/public/events/{eventId}/banner": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicEventBannerBanner"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -4347,6 +4395,15 @@ export interface components {
             checkedIn?: number;
             label?: string;
         };
+        EventLookRequest: {
+            /** @enum {string|null} */
+            cardStyle: "ELEGANT" | "MODERN" | "FESTIVE" | null;
+        };
+        EventLookView: {
+            bannerUrl?: string | null;
+            /** @enum {string} */
+            cardStyle?: "ELEGANT" | "MODERN" | "FESTIVE";
+        };
         EventOccurrenceResponse: {
             /** Format: int32 */
             capacity?: number | null;
@@ -5177,6 +5234,8 @@ export interface components {
         };
         PublicOpenInvitationView: {
             accepting?: boolean;
+            bannerUrl?: string | null;
+            cardStyle?: string;
             /** @enum {string|null} */
             closedReason?: "DISABLED" | "CLOSED" | "NOT_PUBLISHED" | "CANCELLED" | "ENDED" | "FULL" | null;
             /** Format: date-time */
@@ -5397,6 +5456,8 @@ export interface components {
             required?: boolean;
         };
         RsvpView: {
+            bannerUrl?: string | null;
+            cardStyle?: string;
             categoryName?: string | null;
             /** Format: int32 */
             companions?: number;
@@ -8100,6 +8161,57 @@ export interface operations {
             };
         };
     };
+    eventLookReplaceBanner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventLookView"];
+                };
+            };
+        };
+    };
+    eventLookRemoveBanner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventLookView"];
+                };
+            };
+        };
+    };
     eventTierQuotesQuotes: {
         parameters: {
             query?: never;
@@ -8530,6 +8642,54 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["SendInvitationsResult"];
+                };
+            };
+        };
+    };
+    eventLookGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventLookView"];
+                };
+            };
+        };
+    };
+    eventLookUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EventLookRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventLookView"];
                 };
             };
         };
@@ -10683,6 +10843,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ProspectLeadAck"];
+                };
+            };
+        };
+    };
+    publicEventBannerBanner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
                 };
             };
         };

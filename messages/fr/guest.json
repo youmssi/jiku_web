@@ -61,15 +61,15 @@
     "back": "Retour à l'invitation",
     "guest": "Invité",
     "date": "Date",
-    "time": "Heure",
     "place": "Lieu",
-    "code": "Code",
     "timezone": "Heure de {zone}",
-    "offline": "Gardez cette page ou une capture d'écran : le billet s'affiche sans connexion et se présente à l'entrée.",
+    "offline": "Une capture d'écran suffit, même hors connexion.",
+    "showCode": "Afficher le code",
+    "statusValid": "Valide",
+    "statusCancelled": "Annulé",
     "addToCalendar": "Ajouter à Google Agenda",
     "save": "Enregistrer en PDF",
-    "brightness": "Montez la luminosité de l'écran pour un scan rapide.",
-    "cancelled": "Cet événement a été annulé : ce billet n'est plus valable.",
+    "cancelled": "Événement annulé : ce billet n'est plus valable.",
     "guestWith": "{name} + {count, plural, one {# personne} other {# personnes}}"
   },
   "line": {
@@ -239,7 +239,9 @@
   },
   "openInvitation": {
     "invitedBy": "{organizer} vous invite",
-    "answerBy": "Répondez avant le {date}",
+    "via": "via Jikū",
+    "answerBy": "Jusqu'au {date}",
+    "readMore": "Voir plus",
     "question": "Vous venez ?",
     "answers": {
       "YES": "Je viens",
@@ -247,14 +249,13 @@
       "NO": "Je ne viens pas"
     },
     "companions": "Personnes qui viennent avec vous",
-    "companionsHelp": "Au plus {max}.",
     "fewer": "Une personne de moins",
     "more": "Une personne de plus",
     "name": "Votre nom",
     "phone": "Votre numéro WhatsApp",
-    "phoneHelp": "Avec l'indicatif du pays. Répondre à nouveau avec ce numéro modifie votre réponse.",
     "submit": "Envoyer ma réponse",
-    "privacy": "Votre nom et votre numéro sont transmis à l'organisateur de cet événement, et à lui seul.",
+    "continue": "Continuer",
+    "privacy": "Seul l'organisateur voit votre nom et votre numéro.",
     "answerOnWhatsApp": "Répondre sur WhatsApp",
     "orHere": "ou répondez ici",
     "whatsappMessage": "Je réponds à l'invitation {code}",
@@ -281,7 +282,7 @@
       "limit": "Les réponses sont momentanément fermées.",
       "removed": "L'organisateur n'accepte plus de réponse de ce numéro.",
       "notFound": "Cette invitation n'existe plus.",
-      "closed": "Cette invitation ne prend plus de réponse, ou il n'y a plus de place.",
+      "closed": "Réponses fermées, ou plus de place.",
       "tooMany": "Trop d'essais. Réessayez dans quelques minutes.",
       "failed": "Impossible d'envoyer votre réponse. Réessayez."
     }

@@ -2,7 +2,7 @@ import "server-only";
 
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { reportApiError } from "@/lib/action-result";
-import type { OpenInvitation, OrganizerOpenResponse, PublicOpenInvitation } from "./schema";
+import type { EventLook, OpenInvitation, OrganizerOpenResponse, PublicOpenInvitation } from "./schema";
 
 /** The page of a shared card; null for an unknown code (a 404, never a degraded page). */
 export async function fetchPublicOpenInvitation(code: string): Promise<PublicOpenInvitation | null> {
@@ -35,4 +35,14 @@ export async function loadOpenResponses(eventId: string): Promise<OrganizerOpenR
     return [];
   }
   return (await response.json()) as OrganizerOpenResponse[];
+}
+
+/** The event's style and banner; the default look when the read fails, so the tab still renders. */
+export async function loadEventLook(eventId: string): Promise<EventLook> {
+  const response = await serverFetch(`/events/${encodeURIComponent(eventId)}/look`);
+  if (!response.ok) {
+    reportApiError(response, "open-invitation");
+    return { cardStyle: "MODERN", bannerUrl: null };
+  }
+  return (await response.json()) as EventLook;
 }

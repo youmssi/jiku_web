@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, type CSSProperties, type MouseEvent } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { QRCodeSVG } from "qrcode.react";
+import { MapPin } from "lucide-react";
+import { CardHero, OrganizerMark } from "@/components/shared";
+import { CARD_STYLE_TOKENS, displayTitle, type CardStyle } from "@/lib/card-style";
 import { cn } from "@/lib/utils";
 
 interface TicketCardProps {
@@ -11,38 +14,33 @@ interface TicketCardProps {
   organizerName: string;
   primaryColor: string;
   logoUrl: string | null;
+  /** The organizer's style and banner photo (JIKU-194). */
+  style: CardStyle;
+  bannerUrl: string | null;
   guestName: string;
   categoryName: string | null;
   /** People admitted with the guest on this ticket, from an open invitation (JIKU-184). */
   companions: number;
-  /** The event day and time, already written in the viewer's language and the event's timezone. */
+  /** When the event starts, as an instant, for the `<time>` element. */
+  start: string | null;
+  /** The stub: "14", "nov.", "19 h – 23 h", in the viewer's language and the event's timezone. */
   day: string | null;
+  month: string | null;
   time: string | null;
-  /** The event's timezone city, shown under the time so no one reads it in their own zone. */
-  zone: string | null;
+  /** The date written out in full, for a tooltip and screen readers. */
+  whenFull: string | null;
+  /** The event's IANA timezone; its city is shown only to a viewer in another zone. */
+  timeZone: string | null;
+  zoneCity: string | null;
   location: string | null;
   cancelled: boolean;
 }
 
-/** Mixes a hex color toward black by `amount` (0-1), for the header's gradient depth. */
-function darken(hex: string, amount: number): string {
-  const match = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
-  if (!match) return hex;
-  const n = parseInt(match[1], 16);
-  const channel = (shift: number) => Math.round(((n >> shift) & 0xff) * (1 - amount));
-  return `rgb(${channel(16)}, ${channel(8)}, ${channel(0)})`;
-}
-
 /**
- * The guest's digital ticket. The QR is rendered client-side as an SVG from the
- * ticket code already fetched, so once this view is on screen it needs no network
- * to keep displaying — the guest can screenshot it and present it at check-in
- * (JIKU-21). The QR encodes the raw ticket code the validator scans (JIKU-22).
- *
- * Styled as a badge/boarding-pass: a perforated divider (with cutout notches)
- * separates the branded header from the scan panel, echoing a physical event
- * pass without any 3D/canvas dependency — the page still has to render
- * instantly offline and be screenshot-friendly.
+ * The guest's ticket, in the organizer's style (JIKU-194): a status seen from
+ * afar, the event over its banner, a dated stub, and the QR code the validator
+ * scans (JIKU-22). The QR is drawn from the code already fetched, so the ticket
+ * keeps showing without a connection and survives a screenshot (JIKU-21).
  */
 export function TicketCard({
   ticketCode,
@@ -50,140 +48,132 @@ export function TicketCard({
   organizerName,
   primaryColor,
   logoUrl,
+  style,
+  bannerUrl,
   guestName,
   categoryName,
   companions,
+  start,
   day,
+  month,
   time,
-  zone,
+  whenFull,
+  timeZone,
+  zoneCity,
   location,
   cancelled,
 }: TicketCardProps) {
   const t = useTranslations("guest.ticket");
-  const [glare, setGlare] = useState<{ x: number; y: number } | null>(null);
-
-  function handleMouseMove(event: MouseEvent<HTMLDivElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    setGlare({
-      x: ((event.clientX - rect.left) / rect.width) * 100,
-      y: ((event.clientY - rect.top) / rect.height) * 100,
-    });
-  }
-
-  const headerStyle: CSSProperties = {
-    backgroundImage: `linear-gradient(135deg, ${primaryColor}, ${darken(primaryColor, 0.55)})`,
-  };
-  const glareStyle: CSSProperties = glare
-    ? {
-        opacity: 1,
-        background: `radial-gradient(280px circle at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.16), transparent 65%)`,
-      }
-    : { opacity: 0 };
+  const tokens = CARD_STYLE_TOKENS[style];
+  const [codeShown, setCodeShown] = useState(false);
+  const viewerZone = useSyncExternalStore(noSubscription, viewerTimeZone, () => null);
+  const otherZone = Boolean(start && timeZone && viewerZone && wallClock(start, viewerZone) !== wallClock(start, timeZone));
+  const radius = tokens.radius;
 
   return (
-    <div className="w-full max-w-sm">
+    <div className="flex w-full max-w-sm flex-col gap-3">
+      <div className="flex items-center justify-between print:hidden">
+        <span
+          className={cn(
+            "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold",
+            cancelled ? "bg-red-100 text-red-800" : "bg-emerald-100 text-emerald-800",
+          )}
+        >
+          <span aria-hidden className={cn("size-2 rounded-full", cancelled ? "bg-red-600" : "bg-emerald-600")} />
+          {cancelled ? t("statusCancelled") : t("statusValid")}
+        </span>
+        {categoryName ? (
+          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{categoryName}</span>
+        ) : null}
+      </div>
+
       <div
-        className="group relative overflow-hidden rounded-2xl border bg-card shadow-lg shadow-black/5 print:shadow-none"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={() => setGlare(null)}
+        className="overflow-hidden shadow-lg shadow-black/10 print:shadow-none"
+        style={{ borderRadius: radius, background: tokens.panel, color: tokens.panelInk }}
       >
-        {/* Cursor-tracking glare — a no-op on touch devices, a quiet premium cue on desktop. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 z-20 transition-opacity duration-300"
-          style={glareStyle}
-        />
-        {/* One-time shine sweep on mount. */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
-          <div className="animate-ticket-shine absolute inset-y-0 -left-1/2 w-1/2 skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-        </div>
-
-        {/* Header */}
-        <div className="relative px-6 py-5 text-center text-white" style={headerStyle}>
-          {logoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={logoUrl}
-              alt={organizerName}
-              className="mx-auto mb-2 h-9 object-contain drop-shadow"
-            />
-          ) : null}
-          <p className="text-xs font-medium uppercase tracking-[0.2em] opacity-80">{organizerName}</p>
-          <h1 className="mt-1 text-balance text-xl font-bold tracking-tight">{eventName}</h1>
-          {categoryName ? (
-            <span className="mt-3 inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider ring-1 ring-white/30">
-              {categoryName}
-            </span>
-          ) : null}
-        </div>
-
-        {/* Perforated divider with side notches, matching the page background. */}
-        <div className="relative h-0">
-          <div className="absolute -left-3 top-0 size-6 -translate-y-1/2 rounded-full bg-white dark:bg-zinc-900" />
-          <div className="absolute -right-3 top-0 size-6 -translate-y-1/2 rounded-full bg-white dark:bg-zinc-900" />
-          <div className="absolute inset-x-6 top-0 -translate-y-1/2 border-t-2 border-dashed border-border" />
-        </div>
-
-        {/* Details, laid out like a pass: who, when, where. */}
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-3 px-6 pt-7 text-left">
-          <Detail
-            label={t("guest")}
-            value={companions > 0 ? t("guestWith", { name: guestName, count: companions }) : guestName}
-            wide
-          />
-          {day ? <Detail label={t("date")} value={day} wide /> : null}
-          {time ? <Detail label={t("time")} value={time} hint={zone ? t("timezone", { zone }) : null} /> : null}
-          {location ? <Detail label={t("place")} value={location} wide /> : null}
-        </dl>
-
-        {/* Scan panel */}
-        <div className="relative flex flex-col items-center px-6 pb-6 pt-6">
-          <div
-            className={cn(
-              "rounded-xl bg-white p-4 shadow-inner ring-1 ring-black/5",
-              cancelled && "opacity-30 grayscale",
-            )}
-          >
-            <QRCodeSVG
-              value={ticketCode}
-              size={216}
-              level="M"
-              marginSize={0}
-              className="h-auto w-full max-w-[216px]"
-            />
+        <CardHero style={style} color={primaryColor} bannerUrl={bannerUrl}>
+          <div className="flex min-h-32 flex-col justify-between gap-5 px-5 pb-5 pt-4">
+            <div className="flex items-center gap-2 text-xs font-semibold">
+              <OrganizerMark name={organizerName} logoUrl={logoUrl} square={style === "MODERN"} />
+              {organizerName}
+            </div>
+            <h1 className="text-balance" style={displayTitle(tokens, "1.85rem")}>
+              {eventName}
+            </h1>
           </div>
-          <p className="mt-3 flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted-foreground">
-            {t("code")}
-            <span className="select-all rounded-md bg-muted px-2 py-0.5 font-mono text-xs normal-case tracking-wider text-foreground">
-              {ticketCode}
-            </span>
-          </p>
+        </CardHero>
+
+        <div className="flex items-center gap-4 px-5 pb-3 pt-4">
+          {day ? (
+            <time dateTime={start ?? undefined} title={whenFull ?? undefined} className="flex items-end gap-2">
+              <span className="leading-[0.8]" style={{ ...displayTitle(tokens, "2.9rem"), textTransform: "none" }}>
+                {day}
+              </span>
+              <span className="flex flex-col text-[11px] font-bold uppercase leading-tight tracking-wider">
+                {month}
+                <span className="font-medium normal-case tracking-normal" style={{ color: tokens.panelMuted }}>
+                  {time}
+                </span>
+              </span>
+            </time>
+          ) : null}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-bold" title={guestName}>
+              {companions > 0 ? t("guestWith", { name: guestName, count: companions }) : guestName}
+            </p>
+            {location ? (
+              <p className="mt-0.5 flex items-center gap-1 truncate text-xs" style={{ color: tokens.panelMuted }}>
+                <MapPin aria-hidden className="size-3 shrink-0" />
+                {location}
+              </p>
+            ) : null}
+            {otherZone ? (
+              <p className="mt-0.5 text-xs" style={{ color: tokens.panelMuted }}>
+                {t("timezone", { zone: zoneCity ?? "" })}
+              </p>
+            ) : null}
+          </div>
+        </div>
+
+        <div aria-hidden className="relative h-5">
+          <div className="absolute inset-x-5 top-1/2 border-t-2 border-dashed" style={{ borderColor: `color-mix(in srgb, ${tokens.panelInk} 18%, transparent)` }} />
+          <div className="absolute -left-3 top-1/2 size-6 -translate-y-1/2 rounded-full bg-white dark:bg-zinc-900" />
+          <div className="absolute -right-3 top-1/2 size-6 -translate-y-1/2 rounded-full bg-white dark:bg-zinc-900" />
+        </div>
+
+        <div className="flex flex-col items-center gap-3 px-5 pb-5 pt-2">
+          <div className={cn("bg-white p-3", cancelled && "opacity-30 grayscale")} style={{ borderRadius: Math.max(8, radius * 0.6) }}>
+            <QRCodeSVG value={ticketCode} size={208} level="M" marginSize={0} className="h-auto w-full max-w-[208px]" />
+          </div>
+          {codeShown ? (
+            <p className="select-all rounded-md bg-white px-2 py-0.5 font-mono text-xs tracking-wider">{ticketCode}</p>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setCodeShown(true)}
+              className="text-xs underline underline-offset-4 print:hidden"
+              style={{ color: tokens.panelMuted }}
+            >
+              {t("showCode")}
+            </button>
+          )}
         </div>
       </div>
 
-      <p className="mt-4 text-center text-xs text-muted-foreground print:hidden">
-        {t("offline")}
-      </p>
+      <p className="text-center text-xs text-muted-foreground print:hidden">{t("offline")}</p>
     </div>
   );
 }
 
-function Detail({
-  label,
-  value,
-  hint,
-  wide,
-}: {
-  label: string;
-  value: string;
-  hint?: string | null;
-  wide?: boolean;
-}) {
-  return (
-    <div className={cn("min-w-0", wide && "col-span-2")}>
-      <dt className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{label}</dt>
-      <dd className="mt-0.5 text-sm font-semibold first-letter:uppercase">{value}</dd>
-      {hint ? <dd className="text-xs text-muted-foreground">{hint}</dd> : null}
-    </div>
-  );
+function noSubscription() {
+  return () => {};
+}
+
+function viewerTimeZone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+/** The date and time [instant] shows in [timeZone]: two zones that show the same need no hint. */
+function wallClock(instant: string, timeZone: string): string {
+  return new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "short", timeZone }).format(new Date(instant));
 }

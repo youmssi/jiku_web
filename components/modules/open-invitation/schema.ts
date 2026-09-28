@@ -8,6 +8,8 @@ export type OpenInvitation = Schema<"OpenInvitationView">;
 export type PublicOpenInvitation = Schema<"PublicOpenInvitationView">;
 export type OpenResponse = Schema<"OpenResponseView">;
 export type OrganizerOpenResponse = Schema<"OrganizerOpenResponseView">;
+/** The event's look on every guest surface (JIKU-194): a style and an optional banner photo. */
+export type EventLook = Schema<"EventLookView">;
 export type OpenAnswer = OpenResponse["answer"];
 export type OpenClosedReason = NonNullable<PublicOpenInvitation["closedReason"]>;
 

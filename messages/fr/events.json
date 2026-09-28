@@ -433,7 +433,7 @@
   },
   "openInvitation": {
     "title": "Invitation ouverte",
-    "text": "Partagez une carte dans vos groupes WhatsApp, sans liste d'invités : chacun répond en un geste et reçoit son billet s'il vient.",
+    "text": "Partagez une carte : chaque « oui » reçoit son billet.",
     "loadFailedTitle": "Invitation indisponible",
     "loadFailed": "Nous n'avons pas pu charger l'invitation ouverte. Réessayez dans un instant.",
     "closedTitle": "Les réponses sont fermées",
@@ -456,7 +456,6 @@
     },
     "share": {
       "title": "Votre carte",
-      "text": "Publiez-la dans vos groupes WhatsApp ou partagez son lien partout ailleurs.",
       "link": "Lien de la carte",
       "copy": "Copier le lien",
       "open": "Ouvrir la carte",
@@ -465,16 +464,16 @@
       "download": "Télécharger la carte",
       "message": "{event}\n{when}\nRépondez ici : {url}",
       "cardAnswer": "Scannez pour répondre",
-      "cardAnswerBy": "Répondez avant le {date}",
-      "cardFooter": "Invitation créée avec Jikū",
-      "fileName": "Invitation {event}.png"
+      "cardAnswerBy": "Jusqu'au {date}",
+      "fileName": "Invitation {event}.png",
+      "downloadFailed": "Impossible de télécharger la carte. Réessayez."
     },
     "stats": {
       "expected": "Personnes attendues",
       "yes": "Je viens",
       "maybe": "Peut-être",
-      "remaining": "Places restantes",
-      "unlimited": "Illimité"
+      "unlimited": "Illimité",
+      "remainingCount": "{count, plural, =0 {Complet} one {# place restante} other {# places restantes}}"
     },
     "responses": {
       "title": "Réponses",
@@ -504,24 +503,45 @@
     },
     "settings": {
       "title": "Réglages",
+      "moreInfo": "Plus d'informations",
       "enabled": "Accepter les réponses",
-      "enabledHelp": "Désactivez pour fermer la carte à tout moment.",
+      "enabledHelp": "Désactivez pour fermer la carte.",
       "welcome": "Mot d'accueil",
       "welcomePlaceholder": "Venez fêter mes 30 ans avec moi !",
       "companions": "Accompagnants par réponse",
-      "companionsHelp": "Combien de personnes chacun peut amener, au plus {max}.",
+      "companionsHelp": "Au plus {max}.",
       "closesAt": "Date limite pour répondre",
-      "closesAtHelp": "Laissez vide pour accepter les réponses jusqu'à l'événement.",
+      "closesAtHelp": "Vide : réponses ouvertes jusqu'à l'événement.",
       "notifyOnCancel": "Prévenir en cas d'annulation",
-      "notifyOnCancelHelp": "Si vous annulez l'événement, les personnes qui ont répondu « oui » ou « peut-être » reçoivent un message WhatsApp.",
-      "notifyOnCancelIncluded": "Inclus dans votre formule : les personnes qui ont répondu « oui » ou « peut-être » reçoivent un message WhatsApp si vous annulez.",
+      "notifyOnCancelHelp": "Les « oui » et « peut-être » reçoivent un message WhatsApp si vous annulez.",
+      "notifyOnCancelIncluded": "Inclus dans votre formule.",
       "save": "Enregistrer",
       "saved": "Réglages enregistrés."
     },
     "errors": {
       "invalid": "Vérifiez les réglages.",
       "saveFailed": "Impossible d'enregistrer. Réessayez.",
-      "removeFailed": "Impossible de retirer cette personne. Réessayez."
+      "removeFailed": "Impossible de retirer cette personne. Réessayez.",
+      "photoInvalid": "Cette photo ne peut pas être lue.",
+      "photoTooLarge": "Photo trop lourde, même réduite.",
+      "photoType": "Choisissez une photo JPEG ou PNG."
+    },
+    "look": {
+      "title": "Style de la carte",
+      "text": "La carte, la page de réponse et le billet suivent ce choix.",
+      "styleLabel": "Style",
+      "styles": {
+        "ELEGANT": "Élégant",
+        "MODERN": "Moderne",
+        "FESTIVE": "Festif"
+      },
+      "photo": "Photo de bandeau",
+      "photoHelp": "JPEG ou PNG, 600 × 300 px au moins. Sans photo, votre couleur.",
+      "addPhoto": "Ajouter une photo",
+      "changePhoto": "Changer",
+      "removePhoto": "Retirer",
+      "photoTooSmall": "Photo trop petite : 600 × 300 px au moins.",
+      "preview": "Aperçu de la carte"
     }
   }
 }
