@@ -15,12 +15,12 @@ export function UseCasesSection({ content }: { content: LandingContent["useCases
         <h2 className="mt-2 text-balance text-2xl font-bold tracking-tight sm:text-3xl">{content.heading}</h2>
         <ul className="mt-8 flex flex-wrap justify-center gap-2">
           {content.cases.map((useCase) => (
-            <li key={useCase}>
+            <li key={useCase.label}>
               <Link
-                href={SEO_ROUTES.USE_CASES}
+                href={`${SEO_ROUTES.USE_CASES}#${useCase.anchor}`}
                 className="inline-flex rounded-full border border-border/60 px-4 py-2 text-sm font-medium transition hover:border-primary/40"
               >
-                {useCase}
+                {useCase.label}
               </Link>
             </li>
           ))}

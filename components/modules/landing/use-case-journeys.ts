@@ -5,12 +5,15 @@
 
 import type { LandingLocale } from "./content";
 
-export type ScreenKind = "import" | "message" | "ticket" | "scan" | "list" | "slots" | "call" | "stats";
+export type ScreenKind = "import" | "message" | "card" | "ticket" | "scan" | "list" | "slots" | "call" | "stats";
 
 export interface JourneyScreen {
   kind: ScreenKind;
   title: string;
-  /** Rows, lines of a message, or "label|value" pairs for stats. */
+  /**
+   * Rows, lines of a message, or "label|value" pairs for stats. For a card:
+   * the invitation line, the date, then the three answers.
+   */
   lines: string[];
   /** The emphasised item: a status, the chosen slot, the called number. */
   highlight?: string;
@@ -88,6 +91,43 @@ const fr: JourneysContent = {
       ],
     },
     {
+      id: "birthday",
+      label: "Un anniversaire",
+      audience: "Une carte partagée, sans liste d'invités",
+      steps: [
+        {
+          actor: "Organisatrice",
+          title: "Crée sa carte",
+          text: "Un style, une photo, un nombre d'accompagnants et une date limite : la carte est prête à partager.",
+          screen: { kind: "card", title: "Les 30 ans d'Aïssatou", lines: ["Maison Diallo vous invite", "sam. 14 nov. · 19 h", "Je viens", "Peut-être", "Non"], action: "Partager la carte" },
+        },
+        {
+          actor: "Groupe WhatsApp",
+          title: "La carte circule",
+          text: "Elle est publiée dans les groupes et les statuts. Le lien et le QR code mènent tous deux à la même carte.",
+          screen: { kind: "message", title: "Cousins & cousines", lines: ["Venez fêter mes 30 ans avec moi, le samedi 14 novembre à 19 h. Tenue blanche souhaitée !"], action: "Répondre à la carte" },
+        },
+        {
+          actor: "Invitée",
+          title: "Répond en un geste",
+          text: "Sur WhatsApp ou sur la page de la carte : « Je viens », avec une personne, puis son nom et son numéro.",
+          screen: { kind: "card", title: "Les 30 ans d'Aïssatou", lines: ["Maison Diallo vous invite", "sam. 14 nov. · 19 h", "Je viens", "Peut-être", "Non"], highlight: "Je viens", action: "Continuer" },
+        },
+        {
+          actor: "Invitée",
+          title: "Reçoit son billet",
+          text: "Chaque « oui » reçoit son billet QR, contrôlé à l'entrée comme les autres.",
+          screen: { kind: "ticket", title: "Les 30 ans d'Aïssatou", lines: ["Mariama Bah + 1", "Carte partagée"], highlight: "Valide" },
+        },
+        {
+          actor: "Organisatrice",
+          title: "Compte les « oui »",
+          text: "Personnes attendues, accompagnants compris, et places restantes : en direct.",
+          screen: { kind: "stats", title: "En direct", lines: ["Attendus|64", "Je viens|41", "Peut-être|9"] },
+        },
+      ],
+    },
+    {
       id: "assembly",
       label: "Une assemblée générale",
       audience: "Quorum et émargement",
@@ -115,6 +155,37 @@ const fr: JourneysContent = {
           title: "Édite les attestations",
           text: "Feuille d'émargement et attestations nominatives sont prêtes à la sortie, sans rien retaper.",
           screen: { kind: "list", title: "Documents", lines: ["Feuille d'émargement.pdf", "Attestations · 128", "Liste des absents.csv"], action: "Télécharger" },
+        },
+      ],
+    },
+    {
+      id: "seminar",
+      label: "Un séminaire",
+      audience: "Plusieurs catégories, plusieurs entrées",
+      steps: [
+        {
+          actor: "Organisateur",
+          title: "Ouvre les catégories",
+          text: "VIP, presse, standard : chacune son prix, sa couleur et sa jauge.",
+          screen: { kind: "list", title: "Catégories", lines: ["VIP · 40 places", "Presse · 20 places", "Standard · 300 places"], highlight: "VIP", action: "Ouvrir la vente" },
+        },
+        {
+          actor: "Participant",
+          title: "Réserve et paie",
+          text: "Il réserve sa place sur la page de l'événement et vous paie directement. Son billet arrive dès que vous confirmez.",
+          screen: { kind: "ticket", title: "Forum Numérique 2026", lines: ["Ibrahima Sow", "VIP"], highlight: "Payé" },
+        },
+        {
+          actor: "Portes",
+          title: "Trois entrées, un décompte",
+          text: "Chaque contrôleur scanne depuis son téléphone, même sans réseau. Un billet ne passe qu'une fois, quelle que soit la porte.",
+          screen: { kind: "scan", title: "Entrée validée", lines: ["Ibrahima Sow", "VIP · Porte B · 08:47"], highlight: "Hors ligne" },
+        },
+        {
+          actor: "Organisateur",
+          title: "Suit la salle",
+          text: "Entrées par catégorie et par porte, en direct.",
+          screen: { kind: "stats", title: "En direct", lines: ["Entrés|286", "VIP|38", "Presse|17"] },
         },
       ],
     },
@@ -229,6 +300,43 @@ const en: JourneysContent = {
       ],
     },
     {
+      id: "birthday",
+      label: "A birthday",
+      audience: "A shared card, no guest list",
+      steps: [
+        {
+          actor: "Organizer",
+          title: "Creates her card",
+          text: "A style, a photo, how many companions and an answer deadline: the card is ready to share.",
+          screen: { kind: "card", title: "Aïssatou turns 30", lines: ["Maison Diallo invites you", "Sat, Nov 14 · 7 PM", "I'm coming", "Maybe", "No"], action: "Share the card" },
+        },
+        {
+          actor: "WhatsApp group",
+          title: "The card goes round",
+          text: "It is posted in groups and statuses. The link and the QR code both lead to the same card.",
+          screen: { kind: "message", title: "Cousins", lines: ["Come and celebrate my 30th with me, Saturday November 14 at 7 PM. White outfits, please!"], action: "Answer the card" },
+        },
+        {
+          actor: "Guest",
+          title: "Answers in one tap",
+          text: "On WhatsApp or on the card's page: \"I'm coming\", with one person, then her name and number.",
+          screen: { kind: "card", title: "Aïssatou turns 30", lines: ["Maison Diallo invites you", "Sat, Nov 14 · 7 PM", "I'm coming", "Maybe", "No"], highlight: "I'm coming", action: "Continue" },
+        },
+        {
+          actor: "Guest",
+          title: "Gets her ticket",
+          text: "Every yes gets a QR ticket, checked at the door like any other.",
+          screen: { kind: "ticket", title: "Aïssatou turns 30", lines: ["Mariama Bah + 1", "Shared card"], highlight: "Valid" },
+        },
+        {
+          actor: "Organizer",
+          title: "Counts the yeses",
+          text: "People expected, companions included, and places left: live.",
+          screen: { kind: "stats", title: "Live", lines: ["Expected|64", "I'm coming|41", "Maybe|9"] },
+        },
+      ],
+    },
+    {
       id: "assembly",
       label: "A general assembly",
       audience: "Quorum and sign-in",
@@ -256,6 +364,37 @@ const en: JourneysContent = {
           title: "Issues certificates",
           text: "The sign-in sheet and named attendance certificates are ready at the end, nothing retyped.",
           screen: { kind: "list", title: "Documents", lines: ["Sign-in sheet.pdf", "Certificates · 128", "Absentees.csv"], action: "Download" },
+        },
+      ],
+    },
+    {
+      id: "seminar",
+      label: "A seminar",
+      audience: "Several categories, several doors",
+      steps: [
+        {
+          actor: "Organizer",
+          title: "Opens the categories",
+          text: "VIP, press, standard: each has its price, color and capacity.",
+          screen: { kind: "list", title: "Categories", lines: ["VIP · 40 places", "Press · 20 places", "Standard · 300 places"], highlight: "VIP", action: "Open sales" },
+        },
+        {
+          actor: "Attendee",
+          title: "Books and pays",
+          text: "They hold a place on the event's page and pay you directly. The ticket arrives as soon as you confirm.",
+          screen: { kind: "ticket", title: "Digital Forum 2026", lines: ["Ibrahima Sow", "VIP"], highlight: "Paid" },
+        },
+        {
+          actor: "Doors",
+          title: "Three doors, one count",
+          text: "Each door staff member scans from their phone, even offline. A ticket only gets in once, whatever the door.",
+          screen: { kind: "scan", title: "Entry confirmed", lines: ["Ibrahima Sow", "VIP · Door B · 8:47 AM"], highlight: "Offline" },
+        },
+        {
+          actor: "Organizer",
+          title: "Follows the room",
+          text: "Entries by category and by door, live.",
+          screen: { kind: "stats", title: "Live", lines: ["Checked in|286", "VIP|38", "Press|17"] },
         },
       ],
     },

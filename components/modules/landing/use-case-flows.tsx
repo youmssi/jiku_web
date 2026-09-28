@@ -35,10 +35,10 @@ export function UseCaseFlows({ content }: { content: JourneysContent }) {
         <p className="mt-3 text-sm text-muted-foreground sm:text-base">{content.intro}</p>
       </div>
 
-      <Tabs value={journeyId} onValueChange={selectJourney} className="mt-8 items-center">
-        <TabsList className="h-auto flex-wrap justify-center gap-1 rounded-2xl p-1">
+      <Tabs value={journeyId} onValueChange={selectJourney} className="-mx-6 mt-8 items-start px-6 sm:mx-0 sm:items-center sm:px-0">
+        <TabsList className="h-auto max-w-full justify-start gap-1 overflow-x-auto rounded-2xl p-1 sm:flex-wrap sm:justify-center">
           {content.journeys.map((candidate) => (
-            <TabsTrigger key={candidate.id} value={candidate.id} className="rounded-xl px-4 py-2 text-sm">
+            <TabsTrigger key={candidate.id} value={candidate.id} className="shrink-0 rounded-xl px-4 py-2 text-sm">
               {candidate.label}
             </TabsTrigger>
           ))}
