@@ -84,6 +84,8 @@ export interface SimulatorContent {
       customNote: string;
       perGuestNote: string;
       surchargeLabel: string;
+      /** How a shared card counts toward the tiers (ADR 106). */
+      cardNote: string;
     };
     modes: {
       heading: string;
@@ -307,6 +309,8 @@ const fr: SimulatorContent = {
       customNote: "Au-delà de 1 000 invités : le prix Or, plus un petit montant par invité en plus.",
       perGuestNote: "{amount} par invité au-delà de 1 000.",
       surchargeLabel: "dont invitation interactive WhatsApp : {amount}",
+      cardNote:
+        "Une carte partagée dans vos groupes ? Comptez seulement les « oui » et leurs accompagnants : les « peut-être » et les « non » ne comptent pas.",
     },
     modes: {
       heading: "Comment vos invités reçoivent leur billet",
@@ -578,6 +582,8 @@ const en: SimulatorContent = {
       customNote: "Beyond 1,000 guests: the Or price, plus a small amount per extra guest.",
       perGuestNote: "{amount} per guest beyond 1,000.",
       surchargeLabel: "including interactive WhatsApp invitations: {amount}",
+      cardNote:
+        "A card shared in your groups? Count only the yeses and their companions: maybes and noes don't count.",
     },
     modes: {
       heading: "How your guests receive their ticket",

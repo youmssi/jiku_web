@@ -2,10 +2,12 @@
 // here, typed, rather than in the app's message catalogs: the structure (lists,
 // sections) is part of the content. Every claim describes what the product does
 // today; what is on its way carries `soon: true` and shows a "Bientôt" badge.
-// Amounts are not written here: pricing captions carry `{price}`, filled from
-// `lib/pricing.ts`, the same figures the simulator uses (JIKU-195).
+// Amounts are not written here: pricing captions carry `{price}` and the FAQ's
+// pricing answers are written by `pricingAnswers`, both from `lib/pricing.ts`,
+// the same figures the simulator uses (JIKU-195, JIKU-197).
 
 import type { CardStyle } from "@/lib/card-style";
+import { pricingAnswers } from "./price-anchor";
 import type { UseCaseProfileId } from "./use-cases-content";
 
 export type LandingLocale = "fr" | "en";
@@ -121,7 +123,15 @@ export interface LandingContent {
     enterprise: { text: string; cta: string; mailSubject: string };
     note: string;
   };
-  faq: { badge: string; heading: string; subheading: string; more: string; items: LandingFaqItem[] };
+  faq: {
+    badge: string;
+    heading: string;
+    subheading: string;
+    more: string;
+    items: LandingFaqItem[];
+    /** The dedicated `/faq` page, which lists every item. */
+    page: { title: string; description: string; heading: string; intro: string; home: string; breadcrumb: string };
+  };
   cta: { heading: string; text: string; primaryCta: string; secondaryCta: string };
   /** The bar that keeps the main action in reach on a phone once the hero is gone. */
   stickyCta: string;
@@ -133,6 +143,9 @@ export interface LandingContent {
     privacy: string;
   };
 }
+
+const FR_PRICES = pricingAnswers("fr");
+const EN_PRICES = pricingAnswers("en");
 
 const fr: LandingContent = {
   htmlLang: "fr",
@@ -352,6 +365,16 @@ const fr: LandingContent = {
     heading: "Vous vous demandez sûrement…",
     subheading: "Les réponses aux questions qu'on nous pose le plus.",
     more: "Toutes les questions",
+    page: {
+      title: "FAQ Jikū — Invitations, cartes, billets, rendez-vous : vos questions",
+      description:
+        "Faut-il une application ? Le check-in marche-t-il hors ligne ? Qui peut répondre à une carte partagée ? Combien ça coûte ? Les réponses aux questions les plus posées sur Jikū.",
+      heading: "Questions fréquentes sur Jikū",
+      intro:
+        "Jikū gère tout ce qui passe par un billet : les invitations et les cartes à partager, les billets QR et l'entrée de vos événements, les rendez-vous et la file du jour de vos services, sans application à installer. Voici les réponses aux questions qu'on nous pose le plus.",
+      home: "Accueil",
+      breadcrumb: "Fil d'Ariane",
+    },
     items: [
       { featured: true, question: "Mes invités ou mes clients doivent-ils installer une application ?", answer: "Non. Tout passe par un simple lien ouvert dans le navigateur de leur téléphone : invitation, carte, billet, réservation ou ticket d'attente." },
       { featured: true, question: "Le check-in fonctionne-t-il sans internet ?", answer: "Oui. La liste se synchronise à l'avance sur le téléphone du contrôleur ; les scans hors ligne se synchronisent au retour du réseau, et un billet ne passe jamais deux fois." },
@@ -360,9 +383,9 @@ const fr: LandingContent = {
       { featured: true, question: "Mes messages partent-ils vraiment sur WhatsApp ?", answer: "Oui, via l'API officielle WhatsApp Business, un message individuel par personne. Pour les rappels de rendez-vous, le SMS prend le relais si WhatsApp échoue." },
       { featured: true, question: "Que deviennent les données personnelles ?", answer: "Chaque invité peut demander la suppression de ses données depuis son lien. Après la période de conservation, les données sont anonymisées automatiquement." },
       { question: "Puis-je mettre ma propre photo sur la carte ?", answer: "Oui. Choisissez un style, Élégant, Moderne ou Festif, et ajoutez une photo de bandeau. La carte, l'aperçu du lien, la page de réponse et le billet suivent ce choix." },
-      { question: "Combien coûte un événement ?", answer: "C'est gratuit jusqu'à 100 invités cumulés sur l'année. Au-delà, un montant unique par événement selon le nombre d'invités : 225 000 GNF (15 000 FCFA) jusqu'à 300, 375 000 GNF (25 000 FCFA) jusqu'à 600, 600 000 GNF (40 000 FCFA) jusqu'à 1 000, puis 500 GNF (35 FCFA) par invité en plus. L'invitation interactive WhatsApp ajoute 150 GNF (10 FCFA) par invité." },
-      { question: "Et la prise de rendez-vous ?", answer: "C'est un abonnement pour votre équipe, par mois : Solo est gratuit pour toujours pour une personne, Solo Plus coûte 50 000 GNF (3 500 FCFA), Teams 150 000 GNF (10 000 FCFA) pour 2 personnes puis 50 000 GNF par personne en plus. Les administrateurs et les contrôleurs sont gratuits, et aucune commission n'est prise sur vos clients." },
-      { question: "Et si je vends mes billets ?", answer: "Jikū prend 3 % du prix de chaque billet vendu, rien si rien n'est vendu. L'argent des ventes arrive directement chez vous ; la commission se règle d'avance, par tranche de 50 billets, votre première tranche est offerte, et ce qui n'a pas servi est reporté." },
+      { question: "Combien coûte un événement ?", answer: FR_PRICES.events },
+      { question: "Et la prise de rendez-vous ?", answer: FR_PRICES.services },
+      { question: "Et si je vends mes billets ?", answer: FR_PRICES.sales },
       { question: "Comment mon équipe accède-t-elle à Jikū ?", answer: "Chaque membre reçoit un lien personnel qui n'ouvre que ce que vous lui confiez. Pas de compte, pas d'application, et vous le révoquez à tout moment." },
       { question: "Puis-je utiliser mes couleurs et mon logo ?", answer: "Oui. Invitations, billets, pages de réservation et consoles portent votre marque ; Jikū reste en coulisses." },
     ],
@@ -629,6 +652,16 @@ const en: LandingContent = {
     heading: "You're probably wondering…",
     subheading: "Answers to the questions we hear most.",
     more: "All questions",
+    page: {
+      title: "Jikū FAQ — Invitations, cards, tickets, appointments: your questions",
+      description:
+        "Do people need an app? Does check-in work offline? Who can answer a shared card? How much does it cost? Answers to the questions we hear most about Jikū.",
+      heading: "Frequently asked questions about Jikū",
+      intro:
+        "Jikū runs everything that goes through a ticket: invitations and cards to share, QR tickets and entry for your events, bookings and the day line for your services, with no app to install. Here are the answers to the questions we hear most.",
+      home: "Home",
+      breadcrumb: "Breadcrumb",
+    },
     items: [
       { featured: true, question: "Do my guests or clients need to install an app?", answer: "No. Everything goes through a simple link opened in their phone's browser: invitation, card, ticket, booking or waiting ticket." },
       { featured: true, question: "Does check-in work without internet?", answer: "Yes. The list syncs to the door staff's phone ahead of time; offline scans sync when the network returns, and a ticket never gets in twice." },
@@ -637,9 +670,9 @@ const en: LandingContent = {
       { featured: true, question: "Do my messages really go out on WhatsApp?", answer: "Yes, through the official WhatsApp Business API, one individual message per person. For appointment reminders, SMS takes over when WhatsApp fails." },
       { featured: true, question: "What happens to personal data?", answer: "Every guest can request the deletion of their data from their link. After the retention period, data is anonymized automatically." },
       { question: "Can I put my own photo on the card?", answer: "Yes. Pick a style, Elegant, Modern or Festive, and add a banner photo. The card, the link preview, the answer page and the ticket all follow that choice." },
-      { question: "How much does an event cost?", answer: "It's free up to 100 guests a year. Beyond that, one payment per event based on guest count: $25 (225,000 GNF) up to 300, $45 (375,000 GNF) up to 600, $70 (600,000 GNF) up to 1,000, then $0.06 (500 GNF) per extra guest. Interactive WhatsApp invitations add $0.02 (150 GNF) per guest." },
-      { question: "What about appointments?", answer: "It's a subscription for your team, per month: Solo is free forever for one person, Solo Plus costs $6 (50,000 GNF), Teams $17 (150,000 GNF) for 2 people then $6 per extra person. Administrators and door staff are free, and no commission is taken on your clients." },
-      { question: "And if I sell my tickets?", answer: "Jikū takes 3% of the price of each ticket sold, nothing if nothing sells. Sales money goes straight to you; the commission is paid ahead, by tranche of 50 tickets, your first tranche is free, and anything unused carries over." },
+      { question: "How much does an event cost?", answer: EN_PRICES.events },
+      { question: "What about appointments?", answer: EN_PRICES.services },
+      { question: "And if I sell my tickets?", answer: EN_PRICES.sales },
       { question: "How does my team access Jikū?", answer: "Each member gets a personal link that only opens what you entrust to them. No account, no app, and you can revoke it at any time." },
       { question: "Can I use my own colors and logo?", answer: "Yes. Invitations, tickets, booking pages and consoles carry your brand; Jikū stays behind the scenes." },
     ],

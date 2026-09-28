@@ -121,6 +121,7 @@ export function InvitePanel({
                   <p>{invite.result.upgradeNote}</p>
                 </>
               )}
+              <p className="text-xs">{invite.result.cardNote}</p>
             </div>
           </div>
         </div>

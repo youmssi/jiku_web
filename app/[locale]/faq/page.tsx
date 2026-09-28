@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { hasLocale } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
 import {
   Accordion,
   AccordionContent,
@@ -7,34 +9,55 @@ import {
 } from "@/components/ui/accordion";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { LANDING_CONTENT } from "@/components/modules/landing";
-import { BreadcrumbJsonLd, FaqJsonLd, LocalBusinessJsonLd, OrganizationJsonLd, buildThematicMetadata, siteUrl } from "@/components/modules/seo";
+import { BreadcrumbJsonLd, FaqJsonLd, LocalBusinessJsonLd, OrganizationJsonLd, siteUrl } from "@/components/modules/seo";
 import { Link } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
 
-const TITLE = "FAQ Jikū — Événements, rendez-vous et file d'attente : vos questions";
-const DESCRIPTION =
-  "Faut-il une application ? Le check-in marche-t-il hors ligne ? Jikū encaisse-t-il l'argent de mes clients ? Réponses aux questions les plus posées sur Jikū.";
+interface PageProps {
+  params: Promise<{ locale: string }>;
+}
 
-export const metadata: Metadata = buildThematicMetadata({
-  path: SEO_ROUTES.FAQ,
-  title: TITLE,
-  description: DESCRIPTION,
-});
+function resolveLocale(locale: string) {
+  return hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const locale = resolveLocale((await params).locale);
+  const { page } = LANDING_CONTENT[locale].faq;
+  const canonical = locale === routing.defaultLocale ? SEO_ROUTES.FAQ : `/${locale}${SEO_ROUTES.FAQ}`;
+  return {
+    title: page.title,
+    description: page.description,
+    alternates: { canonical, languages: { fr: SEO_ROUTES.FAQ, en: `/en${SEO_ROUTES.FAQ}` } },
+    openGraph: { type: "website", siteName: "Jikū", locale, title: page.title, description: page.description },
+    twitter: { card: "summary_large_image", title: page.title, description: page.description },
+  };
+}
 
 /**
- * Dedicated FAQ page (JIKU-63), reusing the same question/answer content the
- * landing page's FAQ section shows so the two surfaces never drift apart.
+ * Dedicated FAQ page (JIKU-63, JIKU-197): every question, in the visitor's
+ * language, from the same content the landing page's short FAQ shows, so the
+ * two never drift apart. Pricing answers are written from `lib/pricing.ts`.
  */
-export default function FaqPage() {
-  const { faq } = LANDING_CONTENT.fr;
+export default async function FaqPage({ params }: Readonly<PageProps>) {
+  const locale = resolveLocale((await params).locale);
+  setRequestLocale(locale);
+  const { faq } = LANDING_CONTENT[locale];
   const url = siteUrl();
+  const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
 
   return (
     <div className="flex flex-1 flex-col bg-white dark:bg-zinc-900">
       <OrganizationJsonLd siteUrl={url} />
       <LocalBusinessJsonLd siteUrl={url} />
-      <BreadcrumbJsonLd items={[{ name: "Accueil", url }, { name: "FAQ", url: `${url}${SEO_ROUTES.FAQ}` }]} />
-      <FaqJsonLd items={faq.items} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: faq.page.home, url: `${url}${prefix}` },
+          { name: "FAQ", url: `${url}${prefix}${SEO_ROUTES.FAQ}` },
+        ]}
+      />
+      <FaqJsonLd items={faq.items} locale={locale} />
 
       <header className="border-b border-border/30 px-6 py-4">
         <Link href={ROUTES.HOME} className="inline-flex items-center gap-2 text-sm font-semibold">
@@ -44,32 +67,23 @@ export default function FaqPage() {
       </header>
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-16">
-        <nav aria-label="Fil d'Ariane" className="mb-8 text-sm text-muted-foreground">
+        <nav aria-label={faq.page.breadcrumb} className="mb-8 text-sm text-muted-foreground">
           <Link href={ROUTES.HOME} className="hover:text-foreground">
-            Accueil
+            {faq.page.home}
           </Link>
           <span className="mx-2">/</span>
           <span className="text-foreground">FAQ</span>
         </nav>
 
-        <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
-          Questions fréquentes sur Jikū
-        </h1>
+        <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">{faq.page.heading}</h1>
 
-        <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Jikū gère tout ce qui passe par un billet : les invitations, les billets QR et l&apos;entrée de vos
-          événements, la prise de rendez-vous, les rappels et la file du jour de vos services, sans application à
-          installer. Voici les réponses aux questions qu&apos;on nous pose le plus souvent : fonctionnement hors
-          ligne, paiements, équipe, tarifs et protection des données.
-        </p>
+        <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">{faq.page.intro}</p>
 
         <Accordion type="single" collapsible className="mt-12">
           {faq.items.map((item, i) => (
             <AccordionItem key={item.question} value={`faq-${i}`}>
               <AccordionTrigger className="text-left text-base">{item.question}</AccordionTrigger>
-              <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-                {item.answer}
-              </AccordionContent>
+              <AccordionContent className="text-sm leading-relaxed text-muted-foreground">{item.answer}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
