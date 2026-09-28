@@ -9,10 +9,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const lastModified = new Date();
 
-  // The generic marketing pages (use-cases, simulator) are bilingual with the
+  // The marketing pages (use-cases, simulator, FAQ) are bilingual with the
   // default locale (fr) serving unprefixed — they carry explicit hreflang
-  // alternates, like the landing page. /faq renders French content regardless of
-  // locale segment, so it stays a single entry. The legal pages are bilingual.
+  // alternates, like the landing page. The legal pages are bilingual too.
   return [
     {
       url: origin,
@@ -80,12 +79,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
       },
     },
-    {
-      url: `${origin}${SEO_ROUTES.FAQ}`,
+    ...[`${origin}${SEO_ROUTES.FAQ}`, `${origin}/en${SEO_ROUTES.FAQ}`].map((url) => ({
+      url,
       lastModified,
-      changeFrequency: "monthly",
+      changeFrequency: "monthly" as const,
       priority: 0.6,
-    },
+      alternates: { languages: { fr: `${origin}${SEO_ROUTES.FAQ}`, en: `${origin}/en${SEO_ROUTES.FAQ}` } },
+    })),
     ...LEGAL_PAGES.flatMap((path) =>
       [`${origin}${path}`, `${origin}/en${path}`].map((url) => ({
         url,
