@@ -122,7 +122,8 @@ export interface SimulatorContent {
     home: string;
     signIn: string;
     createAccount: string;
-    switchLocale: { label: string; href: string; ariaLabel: string };
+    /** The other language: the link keeps this page and changes only the locale. */
+    switchLocale: { label: string; locale: "fr" | "en"; ariaLabel: string };
   };
 }
 
@@ -395,7 +396,7 @@ const fr: SimulatorContent = {
     home: "Accueil",
     signIn: "Se connecter",
     createAccount: "Créer un compte",
-    switchLocale: { label: "EN", href: "/en/simulator", ariaLabel: "Read this page in English" },
+    switchLocale: { label: "EN", locale: "en", ariaLabel: "Read this page in English" },
   },
 };
 
@@ -668,7 +669,7 @@ const en: SimulatorContent = {
     home: "Home",
     signIn: "Sign in",
     createAccount: "Create account",
-    switchLocale: { label: "FR", href: "/simulator", ariaLabel: "Lire cette page en français" },
+    switchLocale: { label: "FR", locale: "fr", ariaLabel: "Lire cette page en français" },
   },
 };
 
