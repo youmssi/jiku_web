@@ -99,7 +99,8 @@ export function UseCasesPage({
           </Link>
           <div className="flex items-center gap-4">
             <Link
-              href={content.nav.switchLocale.href}
+              href={SEO_ROUTES.USE_CASES}
+              locale={content.nav.switchLocale.locale}
               aria-label={content.nav.switchLocale.ariaLabel}
               className="text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
             >
