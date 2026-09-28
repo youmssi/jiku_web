@@ -48,7 +48,7 @@ export function LandingJsonLd({
     "@context": "https://schema.org",
     "@type": "FAQPage",
     inLanguage: locale,
-    mainEntity: content.faq.items.map((item) => ({
+    mainEntity: content.faq.items.filter((item) => item.featured).map((item) => ({
       "@type": "Question",
       name: item.question,
       acceptedAnswer: { "@type": "Answer", text: item.answer },

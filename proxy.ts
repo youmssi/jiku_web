@@ -82,7 +82,8 @@ export const config = {
   matcher: [
     // Run on everything except Next internals, static assets, and API routes.
     // The explicit icon/manifest entries stop next-intl's locale detection from
-    // rewriting those static URLs to /{locale}/... which would 404.
-    "/((?!api|_next/static|_next/image|favicon\\.ico|sw\\.js|icon-192\\.png|icon-512\\.png|icon-maskable-512\\.png|apple-icon-180\\.png|jiku-logo-mark\\.png|jiku-logo-1024\\.png|robots\\.txt|sitemap\\.xml|manifest\\.webmanifest|opengraph-image).*)",
+    // rewriting those static URLs to /{locale}/... which would 404. `landing/`
+    // holds the landing page's images.
+    "/((?!api|_next/static|_next/image|landing/|favicon\\.ico|sw\\.js|icon-192\\.png|icon-512\\.png|icon-maskable-512\\.png|apple-icon-180\\.png|jiku-logo-mark\\.png|jiku-logo-1024\\.png|robots\\.txt|sitemap\\.xml|manifest\\.webmanifest|opengraph-image).*)",
   ],
 };
