@@ -6,7 +6,7 @@ import type { LandingContent } from "./content";
 
 export function CtaSection({ content }: { content: LandingContent["cta"] }) {
   return (
-    <section className="border-t border-border/30 py-24">
+    <section className="border-t border-border/30 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="relative overflow-hidden rounded-3xl border border-border/30 bg-gradient-to-br from-primary/5 via-primary/[0.02] to-background">
           {/* Decorative lines */}
@@ -28,7 +28,7 @@ export function CtaSection({ content }: { content: LandingContent["cta"] }) {
                 {content.text}
               </p>
 
-              <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <div id="final-cta" className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button
                   asChild
                   size="lg"

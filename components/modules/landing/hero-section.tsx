@@ -1,110 +1,119 @@
-import { ArrowRight, CalendarDays, Clock3, QrCode } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, Clock3, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
-import { RotatingText } from "@/components/effects";
 import { TrackedLink } from "@/components/shared";
 import { Link } from "@/i18n/navigation";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
+import { CardSample } from "./card-sample";
 import type { LandingContent } from "./content";
 
 /**
- * The promise, both uses of the product and the one action that matters. Server
- * rendered for a fast first paint; only the rotating word ships JavaScript.
+ * The promise, the one action that matters, and the product itself: a real
+ * card in the Modern style with the ticket a "yes" receives. Server rendered,
+ * no JavaScript, so the first paint is the whole message.
  */
-export function HeroSection({ content }: { content: LandingContent["hero"] }) {
+export function HeroSection({
+  content,
+  card,
+  siteUrl,
+}: {
+  content: LandingContent["hero"];
+  card: LandingContent["cards"]["samples"][number];
+  siteUrl: string;
+}) {
   return (
-    <section className="relative overflow-hidden pt-28 sm:pt-36">
+    <section className="relative overflow-hidden pt-28 sm:pt-32">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute -left-[10%] -top-[25%] size-[50vw] max-h-[640px] max-w-[640px] rounded-full bg-primary/10 blur-[120px]" />
-        <div className="absolute -right-[10%] top-[30%] size-[40vw] max-h-[520px] max-w-[520px] rounded-full bg-primary/5 blur-[120px]" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 pb-20 text-center sm:pb-28">
-        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
-          <JikūLogo variant="mark" className="size-3.5" />
-          {content.badge}
-        </div>
+      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pb-12 sm:pb-20 lg:grid-cols-[1.15fr_0.85fr] lg:pb-28">
+        <div className="text-center lg:text-left">
+          <a
+            href="#cards"
+            className="mb-7 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-1.5 text-xs font-medium sm:text-sm text-primary transition hover:border-primary/40"
+          >
+            <JikūLogo variant="mark" className="size-3.5" />
+            {content.badge}
+            <ArrowRight className="size-3.5" aria-hidden />
+          </a>
 
-        <h1 className="mx-auto max-w-5xl text-balance text-[clamp(2.4rem,7vw,5rem)] font-bold leading-[1.02] tracking-tight">
-          {content.headlinePrefix}{" "}
-          <RotatingText texts={content.headlineWords} className="text-primary" />
-          <br />
-          {content.headlineSuffix}
-        </h1>
+          <h1 className="text-balance text-[clamp(2.3rem,6vw,4.4rem)] font-bold leading-[1.03] tracking-tight">
+            {content.headline}
+          </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-pretty text-base text-muted-foreground sm:text-lg">{content.subtitle}</p>
+          <p className="mx-auto mt-6 max-w-xl text-pretty text-base text-muted-foreground sm:text-lg lg:mx-0">{content.subtitle}</p>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button asChild size="lg" className="h-12 rounded-full px-8 text-base shadow-lg shadow-primary/25">
-            <TrackedLink
-              href={ROUTES.REGISTER}
-              eventName="cta_click"
-              eventProperties={{ location: "hero", label: content.primaryCta }}
+          <div id="hero-cta" className="mt-9 flex flex-col items-center gap-3 sm:flex-row lg:items-start">
+            <Button asChild size="lg" className="h-12 w-full rounded-full px-8 text-base shadow-lg shadow-primary/25 sm:w-auto">
+              <TrackedLink
+                href={ROUTES.REGISTER}
+                eventName="cta_click"
+                eventProperties={{ location: "hero", label: content.primaryCta }}
+              >
+                {content.primaryCta}
+                <ArrowRight className="ml-2 size-4" />
+              </TrackedLink>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="h-12 w-full rounded-full px-8 text-base sm:w-auto">
+              <Link href={SEO_ROUTES.SIMULATOR}>{content.secondaryCta}</Link>
+            </Button>
+          </div>
+          <p className="mt-4 text-sm text-muted-foreground">{content.ctaNote}</p>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-2 lg:justify-start">
+            <a
+              href="#events"
+              className="inline-flex items-center gap-2 rounded-full border border-border/60 px-4 py-2 text-sm font-medium transition hover:border-primary/40"
             >
-              {content.primaryCta}
-              <ArrowRight className="ml-2 size-4" />
-            </TrackedLink>
-          </Button>
-          <Button asChild size="lg" variant="outline" className="h-12 rounded-full px-8 text-base">
-            <Link href={SEO_ROUTES.SIMULATOR}>{content.secondaryCta}</Link>
-          </Button>
-        </div>
-        <p className="mt-4 text-sm text-muted-foreground">{content.ctaNote}</p>
-
-        <div className="mx-auto mt-16 grid max-w-4xl gap-4 text-left sm:grid-cols-2">
-          <a href="#events" className="group rounded-2xl border border-border/50 bg-card/80 p-5 backdrop-blur transition hover:border-primary/40">
-            <div className="flex items-center gap-3 text-sm font-medium text-muted-foreground">
-              <CalendarDays className="size-4 text-primary" />
+              <CalendarDays className="size-4 text-primary" aria-hidden />
               {content.uses.events}
-            </div>
-            <EventTicketPreview />
-          </a>
-          <a href="#services" className="group rounded-2xl border border-border/50 bg-card/80 p-5 backdrop-blur transition hover:border-primary/40">
-            <div className="flex items-center gap-3 text-sm font-medium text-muted-foreground">
-              <Clock3 className="size-4 text-primary" />
+            </a>
+            <a
+              href="#services"
+              className="inline-flex items-center gap-2 rounded-full border border-border/60 px-4 py-2 text-sm font-medium transition hover:border-primary/40"
+            >
+              <Clock3 className="size-4 text-primary" aria-hidden />
               {content.uses.services}
-            </div>
-            <DayLinePreview />
-          </a>
+            </a>
+          </div>
         </div>
+
+        <figure className="relative mx-auto w-full max-w-[17rem] pb-10 sm:max-w-[22rem] lg:max-w-[24rem]">
+          <figcaption className="sr-only">{content.card.alt}</figcaption>
+          <CardSample sample={card} invites={content.card.invites} url={siteUrl} size="lg" className="rotate-[-2deg]" />
+          <div aria-hidden className="absolute -right-10 top-[46%] hidden flex-col gap-1.5 sm:flex">
+            {content.card.answers.map((answer, index) => (
+              <span
+                key={answer}
+                className={
+                  index === 0
+                    ? "inline-flex items-center gap-1.5 rounded-full bg-foreground px-3 py-1.5 text-xs font-semibold text-background shadow-lg"
+                    : "rounded-full border border-border/70 bg-background px-3 py-1.5 text-xs font-medium text-muted-foreground shadow-sm"
+                }
+              >
+                {index === 0 ? <Check className="size-3.5" /> : null}
+                {answer}
+              </span>
+            ))}
+          </div>
+          <div
+            aria-hidden
+            className="absolute -left-3 bottom-0 flex items-center gap-3 rounded-2xl border border-border/60 bg-background px-4 py-3 shadow-xl sm:-left-10"
+          >
+            <span className="flex size-9 items-center justify-center rounded-lg bg-foreground text-background">
+              <QrCode className="size-5" />
+            </span>
+            <span className="text-left">
+              <span className="block text-sm font-semibold">{content.card.ticket.guest}</span>
+              <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                <span className="size-1.5 rounded-full bg-emerald-600" />
+                {content.card.ticket.status}
+              </span>
+            </span>
+          </div>
+        </figure>
       </div>
     </section>
-  );
-}
-
-/** A stylized ticket: what a guest holds at the door. Decorative, hidden from assistive technology. */
-function EventTicketPreview() {
-  return (
-    <div aria-hidden className="mt-4 flex items-center gap-4 rounded-xl border border-dashed border-border/70 p-4">
-      <QrCode className="size-14 shrink-0 text-foreground/80" />
-      <div className="flex-1 space-y-2">
-        <div className="h-2.5 w-3/4 rounded-full bg-foreground/20" />
-        <div className="h-2 w-1/2 rounded-full bg-foreground/10" />
-        <div className="inline-flex rounded-full bg-emerald-500/15 px-2 py-0.5 text-[0.65rem] font-semibold text-emerald-700 dark:text-emerald-300">
-          VIP
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/** A stylized day line: who is being served, who is next. Decorative. */
-function DayLinePreview() {
-  return (
-    <div aria-hidden className="mt-4 space-y-2">
-      {["A-12", "A-13", "A-14"].map((code, index) => (
-        <div
-          key={code}
-          className={
-            index === 0
-              ? "flex items-center justify-between rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground"
-              : "flex items-center justify-between rounded-lg border border-border/60 px-3 py-2 text-xs text-muted-foreground"
-          }
-        >
-          <span>{code}</span>
-          <span className="h-1.5 w-16 rounded-full bg-current opacity-30" />
-        </div>
-      ))}
-    </div>
   );
 }
