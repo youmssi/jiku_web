@@ -3,9 +3,7 @@ import { CARD_STYLE_TOKENS, displayTitle } from "@/lib/card-style";
 import { qrPath } from "@/lib/qr-path";
 import { cn } from "@/lib/utils";
 import type { LandingCardSample } from "./content";
-
-/** The example photo shipped with the landing page; every other sample shows the brand colour. */
-export const SAMPLE_PHOTO = "/landing/card-photo.jpg";
+import { SAMPLE_PHOTO } from "./sample-photo";
 
 /**
  * An invitation card drawn with the product's own styles (JIKU-194): the

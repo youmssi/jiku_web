@@ -1,6 +1,9 @@
 import { BellRing, Check, CheckCircle2, FileSpreadsheet, WifiOff } from "lucide-react";
+import { CardHero } from "@/components/shared";
+import { CARD_STYLE_TOKENS, displayTitle } from "@/lib/card-style";
 import { cn } from "@/lib/utils";
 import { QrPattern } from "./product-visuals";
+import { SAMPLE_PHOTO } from "./sample-photo";
 import type { JourneyScreen } from "./use-case-journeys";
 
 /**
@@ -53,6 +56,37 @@ function Screen({ screen }: { screen: JourneyScreen }) {
           </div>
         </>
       );
+    case "card": {
+      const tokens = CARD_STYLE_TOKENS.MODERN;
+      const [invites, when, ...answers] = screen.lines;
+      return (
+        <div className="-mx-4 flex flex-1 flex-col">
+          <CardHero style="MODERN" color="#7C2D12" bannerUrl={SAMPLE_PHOTO} className="flex min-h-40 flex-col justify-between p-4">
+            <p className="text-[0.65rem] font-semibold">{invites}</p>
+            <div>
+              <p style={displayTitle(tokens, "1.5rem")}>{screen.title}</p>
+              <p className="mt-2 inline-flex rounded-sm border border-white/30 bg-white/15 px-2 py-0.5 text-[0.65rem] font-semibold">{when}</p>
+            </div>
+          </CardHero>
+          <div className="grid grid-cols-3 gap-1.5 px-4 pt-4">
+            {answers.map((answer) => (
+              <span
+                key={answer}
+                className={cn(
+                  "rounded-md border px-1 py-2.5 text-center text-[0.65rem] font-semibold",
+                  answer === screen.highlight ? "border-foreground bg-foreground text-background" : "border-border/70",
+                )}
+              >
+                {answer}
+              </span>
+            ))}
+          </div>
+          <div className="flex flex-1 flex-col px-4">
+            <Action label={screen.action} />
+          </div>
+        </div>
+      );
+    }
     case "ticket":
       return (
         <div className="flex flex-1 flex-col justify-center">

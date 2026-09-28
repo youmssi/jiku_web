@@ -6,6 +6,7 @@
 // `lib/pricing.ts`, the same figures the simulator uses (JIKU-195).
 
 import type { CardStyle } from "@/lib/card-style";
+import type { UseCaseProfileId } from "./use-cases-content";
 
 export type LandingLocale = "fr" | "en";
 
@@ -111,7 +112,7 @@ export interface LandingContent {
     items: { title: string; text: string }[];
     methods: string[];
   };
-  useCases: { badge: string; heading: string; more: string; cases: string[] };
+  useCases: { badge: string; heading: string; more: string; cases: { label: string; anchor: UseCaseProfileId }[] };
   pricing: {
     badge: string;
     heading: string;
@@ -299,13 +300,13 @@ const fr: LandingContent = {
     heading: "Du mariage à la clinique de quartier",
     more: "Voir les cas d'usage",
     cases: [
-      "Mariages et baptêmes",
-      "Anniversaires et soirées",
-      "Séminaires et galas",
-      "Assemblées générales",
-      "Cliniques et cabinets",
-      "Salons et ateliers",
-      "Agences et administrations",
+      { label: "Mariages et baptêmes", anchor: "weddings" },
+      { label: "Anniversaires et soirées", anchor: "parties" },
+      { label: "Séminaires et galas", anchor: "corporate" },
+      { label: "Assemblées générales", anchor: "assemblies" },
+      { label: "Cliniques et cabinets", anchor: "clinics" },
+      { label: "Salons et ateliers", anchor: "clinics" },
+      { label: "Agences et administrations", anchor: "offices" },
     ],
   },
   pricing: {
@@ -576,13 +577,13 @@ const en: LandingContent = {
     heading: "From a wedding to the neighborhood clinic",
     more: "See the use cases",
     cases: [
-      "Weddings and christenings",
-      "Birthdays and parties",
-      "Seminars and galas",
-      "General assemblies",
-      "Clinics and practices",
-      "Salons and studios",
-      "Agencies and public offices",
+      { label: "Weddings and christenings", anchor: "weddings" },
+      { label: "Birthdays and parties", anchor: "parties" },
+      { label: "Seminars and galas", anchor: "corporate" },
+      { label: "General assemblies", anchor: "assemblies" },
+      { label: "Clinics and practices", anchor: "clinics" },
+      { label: "Salons and studios", anchor: "clinics" },
+      { label: "Agencies and public offices", anchor: "offices" },
     ],
   },
   pricing: {
