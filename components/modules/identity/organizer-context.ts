@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { cache } from "react";
 import { serverFetch } from "@/lib/api-server";
 import type { Branding, CurrentUser, Membership } from "@/components/modules/identity/schema";
@@ -43,7 +44,7 @@ export const getOrganizerContext = cache(async function getOrganizerContext(): P
     role: me.role,
     email: me.email,
     fullName: me.fullName ?? null,
-    brandName: branding?.displayName ?? active?.tenantName ?? "Your organization",
+    brandName: branding?.displayName ?? active?.tenantName ?? (await getTranslations("settings.page"))("fallbackOrganization"),
     logoUrl: branding?.logoUrl ?? null,
     memberships: me.memberships,
     activeTenantId: me.tenantId,

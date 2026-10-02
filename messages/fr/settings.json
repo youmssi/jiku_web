@@ -1,4 +1,19 @@
 {
+  "page": {
+    "title": "Réglages",
+    "description": "Votre organisation, votre équipe et votre compte.",
+    "fallbackOrganization": "Votre organisation",
+    "tabs": {
+      "organization": "Organisation",
+      "branding": "Identité visuelle",
+      "members": "Membres",
+      "messaging": "Fournisseurs d'envoi",
+      "payments": "Moyens de paiement",
+      "legal": "Facturation",
+      "personalisation": "Personnalisation",
+      "account": "Compte"
+    }
+  },
   "whatsappNumber": {
     "title": "Votre numéro WhatsApp",
     "platform": "Vos messages WhatsApp partent du numéro de Jikū. Aucune configuration nécessaire.",
