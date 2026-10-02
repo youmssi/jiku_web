@@ -57,6 +57,14 @@
       "unavailable": "Connecting through Meta is not available right now.",
       "failed": "We couldn't save your number. Please try again.",
       "sdk": "The Meta window couldn't open. Check your connection and try again."
+    },
+    "usage": {
+      "title": "Sends from the Jikū number",
+      "today": "Today: {sent} / {limit} messages",
+      "todayHint": "Your organization is not verified: verify it to send more.",
+      "month": "Last 30 days: {sent} / {limit} messages",
+      "monthHint": "Beyond that, connect your own WhatsApp number: your messages keep going out, under your name.",
+      "reached": "Limit reached: WhatsApp messages wait in the queue."
     }
   },
   "paymentMethods": {

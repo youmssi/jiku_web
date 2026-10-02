@@ -57,6 +57,14 @@
       "unavailable": "La connexion par Meta n'est pas disponible pour le moment.",
       "failed": "Impossible d'enregistrer votre numéro. Réessayez.",
       "sdk": "La fenêtre Meta n'a pas pu s'ouvrir. Vérifiez votre connexion et réessayez."
+    },
+    "usage": {
+      "title": "Envois depuis le numéro Jikū",
+      "today": "Aujourd'hui : {sent} / {limit} messages",
+      "todayHint": "Organisation non vérifiée : vérifiez-la pour envoyer davantage.",
+      "month": "30 derniers jours : {sent} / {limit} messages",
+      "monthHint": "Au-delà, connectez votre propre numéro WhatsApp : vos messages continueront de partir, à votre nom.",
+      "reached": "Plafond atteint : les messages WhatsApp attendent dans la file."
     }
   },
   "paymentMethods": {

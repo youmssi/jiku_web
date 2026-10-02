@@ -19,7 +19,7 @@ import {
   testSendAction,
 } from "./settings.service";
 import { WhatsAppNumberSection } from "./whatsapp-number-section";
-import type { EmailProviderView, EmbeddedSignupConfig, ProviderSettingsResponse } from "./schema";
+import type { EmailProviderView, EmbeddedSignupConfig, PlatformWhatsAppUsage, ProviderSettingsResponse } from "./schema";
 
 // ─── Email section ──────────────────────────────────────────────────────────
 
@@ -178,6 +178,33 @@ function EmailSection({
   );
 }
 
+// ─── Jikū number usage ──────────────────────────────────────────────────────
+
+/** How much the organization sent through the Jikū number against its limits (JIKU-212). */
+function PlatformUsage({ usage }: { usage: PlatformWhatsAppUsage }) {
+  const t = useTranslations("settings.whatsappNumber.usage");
+  const dailyReached = usage.dailyLimit !== null && usage.sentToday >= usage.dailyLimit;
+  const monthlyReached = usage.monthlyLimit !== null && usage.sentLast30Days >= usage.monthlyLimit;
+  return (
+    <div className="mt-6 space-y-2 rounded-lg border p-4 text-sm">
+      <p className="font-medium">{t("title")}</p>
+      {usage.dailyLimit !== null ? (
+        <div>
+          <p>{t("today", { sent: usage.sentToday, limit: usage.dailyLimit })}</p>
+          <p className="text-xs text-muted-foreground">{t("todayHint")}</p>
+        </div>
+      ) : null}
+      {usage.monthlyLimit !== null ? (
+        <div>
+          <p>{t("month", { sent: usage.sentLast30Days, limit: usage.monthlyLimit })}</p>
+          <p className="text-xs text-muted-foreground">{t("monthHint")}</p>
+        </div>
+      ) : null}
+      {dailyReached || monthlyReached ? <p className="text-destructive">{t("reached")}</p> : null}
+    </div>
+  );
+}
+
 // ─── Provider settings view ─────────────────────────────────────────────────
 
 interface ProviderSettingsViewProps {
@@ -201,6 +228,7 @@ export function ProviderSettingsView({ initial, embeddedSignup }: ProviderSettin
       <section>
         <h3 className="mb-4 text-base font-semibold">{t("title")}</h3>
         <WhatsAppNumberSection whatsapp={data.whatsapp} embeddedSignup={embeddedSignup} onUpdated={setData} />
+        {!data.whatsapp.configured && data.platformWhatsApp ? <PlatformUsage usage={data.platformWhatsApp} /> : null}
       </section>
     </div>
   );

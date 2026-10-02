@@ -41,7 +41,8 @@
     "tooManyFiles": "Vous avez choisi trop de fichiers.",
     "fileTooLarge": "Un fichier dépasse la taille autorisée, même compressé.",
     "fileType": "Joignez des fichiers JPEG, PNG ou PDF.",
-    "outOfRange": "Saisissez une valeur dans les limites indiquées."
+    "outOfRange": "Saisissez une valeur dans les limites indiquées.",
+    "consentRequired": "Confirmez que la personne a accepté de recevoir vos messages."
   },
   "roles": {
     "OWNER": "Propriétaire",
