@@ -676,6 +676,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/auth/me/marketing-consent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["authUpdateMarketingConsent"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/refresh": {
         parameters: {
             query?: never;
@@ -2398,6 +2414,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["resendEmailFeedbackReceive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/email-feedback/usesend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["useSendEmailFeedbackReceive"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4747,9 +4779,14 @@ export interface components {
             /** @enum {string} */
             method?: "MOBILE_MONEY" | "PAYMENT_LINK" | "CASH";
         };
+        MarketingConsentRequest: {
+            granted?: boolean;
+            textVersion?: string | null;
+        };
         MeResponse: {
             email?: string;
             fullName?: string | null;
+            marketingConsent?: boolean;
             memberships?: components["schemas"]["MembershipView"][];
             role?: string;
             tenantId?: string;
@@ -5204,6 +5241,8 @@ export interface components {
             contactName: string;
             /** Format: email */
             email?: string | null;
+            marketingConsent?: boolean;
+            marketingConsentVersion?: string | null;
             note?: string | null;
             phone: string;
             sector: string;
@@ -5221,6 +5260,7 @@ export interface components {
             email?: string | null;
             /** Format: uuid */
             id?: string;
+            marketingConsent?: boolean;
             note?: string | null;
             phone?: string;
             sector?: string;
@@ -5350,6 +5390,8 @@ export interface components {
             /** Format: email */
             email: string;
             fullName?: string | null;
+            marketingConsent?: boolean;
+            marketingConsentVersion?: string | null;
             name?: string | null;
             password: string;
         };
@@ -7157,6 +7199,28 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["MeResponse"];
                 };
+            };
+        };
+    };
+    authUpdateMarketingConsent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarketingConsentRequest"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -10005,6 +10069,31 @@ export interface operations {
                 "svix-id"?: string;
                 "svix-timestamp"?: string;
                 "svix-signature"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string;
+            };
+        };
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    useSendEmailFeedbackReceive: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-UseSend-Signature"?: string;
+                "X-UseSend-Timestamp"?: string;
             };
             path?: never;
             cookie?: never;

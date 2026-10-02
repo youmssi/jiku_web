@@ -7,6 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldDescription,
@@ -37,7 +38,7 @@ export function RegisterForm({ next }: { next?: string }) {
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
     mode: "onTouched",
-    defaultValues: { fullName: "", email: "", password: "" },
+    defaultValues: { fullName: "", email: "", password: "", marketingConsent: false },
   });
 
   async function onSubmit(values: RegisterInput) {
@@ -107,6 +108,22 @@ export function RegisterForm({ next }: { next?: string }) {
                   />
                   <FieldDescription>{t("passwordHint")}</FieldDescription>
                   <FormFieldError error={fieldState.error} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="marketingConsent"
+              render={({ field }) => (
+                <Field orientation="horizontal">
+                  <Checkbox
+                    id={field.name}
+                    checked={field.value}
+                    onCheckedChange={(checked) => field.onChange(checked === true)}
+                  />
+                  <FieldLabel htmlFor={field.name} className="font-normal text-muted-foreground">
+                    {t("marketingConsent")}
+                  </FieldLabel>
                 </Field>
               )}
             />

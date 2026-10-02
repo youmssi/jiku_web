@@ -167,5 +167,19 @@
     "failed": "Impossible d'enregistrer. Réessayez.",
     "loadFailed": "Impossible de charger vos réglages de vente.",
     "refused": "Cette durée n'est pas autorisée."
+  },
+  "account": {
+    "title": "Votre compte",
+    "description": "Comment vous apparaissez dans cette organisation.",
+    "name": "Nom",
+    "email": "E-mail",
+    "role": "Rôle dans cette organisation",
+    "notSet": "Non renseigné",
+    "news": {
+      "label": "Nouveautés et conseils de Jikū",
+      "hint": "Par e-mail ou WhatsApp, quelques fois par mois au plus.",
+      "saved": "Préférence enregistrée.",
+      "failed": "Enregistrement impossible. Réessayez."
+    }
   }
 }

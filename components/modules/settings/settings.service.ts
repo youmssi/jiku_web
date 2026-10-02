@@ -4,6 +4,7 @@ import { serverFetch } from "@/lib/api-server";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
+import { MARKETING_CONSENT_VERSION } from "@/components/modules/identity/schema";
 import type {
   CompleteEmbeddedSignupRequest,
   PaymentMethodsInfo,
@@ -21,6 +22,24 @@ import type {
   TemplatePreviewResponse,
   TemplateUpdateRequest,
 } from "./schema";
+
+// ─── Account ────────────────────────────────────────────────────────────────
+
+/** Gives or withdraws consent to Jikū's news and tips (JIKU-201). */
+export async function updateMarketingConsentAction(granted: boolean): Promise<ActionResult> {
+  const response = await serverFetch("/auth/me/marketing-consent", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ granted, textVersion: MARKETING_CONSENT_VERSION }),
+  });
+  if (!response.ok) {
+    reportApiError(response);
+    const t = await getTranslations("settings.account.news");
+    return fail(t("failed"));
+  }
+  revalidatePath("/settings");
+  return ok(null);
+}
 
 // ─── Branding ───────────────────────────────────────────────────────────────
 

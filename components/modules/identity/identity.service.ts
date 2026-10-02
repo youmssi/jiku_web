@@ -7,6 +7,7 @@ import { ROUTES } from "@/lib/constants";
 import { setAuthCookies, clearAuthCookies, type AuthTokens } from "@/lib/auth";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 import {
+  MARKETING_CONSENT_VERSION,
   createOrgSchema,
   forgotPasswordSchema,
   loginSchema,
@@ -40,7 +41,7 @@ export async function registerAction(
   const response = await publicFetch("/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(parsed.data),
+    body: JSON.stringify({ ...parsed.data, marketingConsentVersion: MARKETING_CONSENT_VERSION }),
   });
   if (!response.ok) {
     reportApiError(response);
