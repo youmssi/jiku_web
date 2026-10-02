@@ -1,4 +1,19 @@
 {
+  "page": {
+    "title": "Settings",
+    "description": "Your organization, your team and your account.",
+    "fallbackOrganization": "Your organization",
+    "tabs": {
+      "organization": "Organization",
+      "branding": "Branding",
+      "members": "Members",
+      "messaging": "Messaging providers",
+      "payments": "Payment methods",
+      "legal": "Invoicing details",
+      "personalisation": "Personalisation",
+      "account": "Account"
+    }
+  },
   "whatsappNumber": {
     "title": "Your WhatsApp number",
     "platform": "Your WhatsApp messages go out from Jikū's number. Nothing to set up.",
