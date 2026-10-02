@@ -142,6 +142,7 @@ export const ADMIN_ROUTES = {
   AUDIT: "/admin/audit",
   WHATSAPP: "/admin/whatsapp",
   PROSPECTS: "/admin/prospects",
+  FOLLOW_UPS: "/admin/follow-ups",
   FEEDBACK: "/admin/feedback",
   DIAGNOSTICS: "/admin/diagnostics",
   BILLING_INFO: "/admin/billing-info",
