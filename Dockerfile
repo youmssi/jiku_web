@@ -13,9 +13,19 @@ RUN pnpm install --frozen-lockfile
 # NEXT_PUBLIC_* values are inlined into the client bundle at build time, so they
 # must arrive as build arguments — set them per environment when building the
 # image (see .env.example for what each one does).
+ARG NEXT_PUBLIC_SITE_URL
 ARG NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_SUPPORT_EMAIL
 ARG NEXT_PUBLIC_SUPPORT_WHATSAPP
+ARG NEXT_PUBLIC_SALES_EMAIL
+ARG NEXT_PUBLIC_GOOGLE_CLIENT_ID
+ARG NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+ARG NEXT_PUBLIC_ERROR_TRACKING_DSN
+ARG NEXT_PUBLIC_ERROR_TRACKING_ENVIRONMENT
+ARG NEXT_PUBLIC_ERROR_TRACKING_RELEASE
+ARG NEXT_PUBLIC_ERROR_BEACON_URL
+ARG NEXT_PUBLIC_UMAMI_SRC
+ARG NEXT_PUBLIC_UMAMI_WEBSITE_ID
 
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -30,6 +40,8 @@ ENV NODE_ENV=production
 COPY --from=builder --chown=node:node /app/.next/standalone ./
 COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 COPY --from=builder --chown=node:node /app/public ./public
+# Fonts read from disk when a shareable card image is rendered.
+COPY --from=builder --chown=node:node /app/assets ./assets
 USER node
 
 EXPOSE 3000
