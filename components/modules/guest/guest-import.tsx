@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { CircleAlert, CircleCheck, Download, FileText, TriangleAlert, Upload, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -174,12 +176,16 @@ function ReviewDialog({
   onOpenChange,
   onConfirm,
   isPending,
+  consent,
+  onConsentChange,
 }: {
   parsed: ParsedFile;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
   isPending: boolean;
+  consent: boolean;
+  onConsentChange: (consent: boolean) => void;
 }) {
   const t = useTranslations("guests.import");
   const format = useFormatter();
@@ -239,11 +245,26 @@ function ReviewDialog({
           </p>
         ) : null}
 
+        <div className="flex items-start gap-3 rounded-lg border p-3">
+          <Checkbox
+            id="guest-import-consent"
+            checked={consent}
+            onCheckedChange={(checked) => onConsentChange(checked === true)}
+            className="mt-0.5"
+          />
+          <div className="grid gap-1">
+            <Label htmlFor="guest-import-consent" className="font-normal leading-snug">
+              {t("consent")}
+            </Label>
+            <p className="text-xs text-muted-foreground">{t("consentHint")}</p>
+          </div>
+        </div>
+
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>
             {t("back")}
           </Button>
-          <Button onClick={onConfirm} disabled={isPending || parsed.valid + parsed.warnings === 0}>
+          <Button onClick={onConfirm} disabled={isPending || !consent || parsed.valid + parsed.warnings === 0}>
             {isPending ? t("importing") : t("confirm", { count: parsed.valid + parsed.warnings })}
           </Button>
         </DialogFooter>
@@ -265,6 +286,7 @@ export function GuestImport({ eventId, onImported }: { eventId: string; onImport
   const [isParsing, setIsParsing] = useState(false);
   const [parsed, setParsed] = useState<ParsedFile | null>(null);
   const [reviewOpen, setReviewOpen] = useState(false);
+  const [consent, setConsent] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -286,6 +308,7 @@ export function GuestImport({ eventId, onImported }: { eventId: string; onImport
   function clearFile() {
     setParsed(null);
     setReviewOpen(false);
+    setConsent(false);
   }
 
   function onConfirmImport() {
@@ -293,6 +316,7 @@ export function GuestImport({ eventId, onImported }: { eventId: string; onImport
     if (!file) return;
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("consentAttested", consent ? "true" : "false");
     startTransition(async () => {
       const outcome = await importGuestsAction(eventId, formData);
       if (!outcome.ok) {
@@ -422,6 +446,8 @@ export function GuestImport({ eventId, onImported }: { eventId: string; onImport
             onOpenChange={setReviewOpen}
             onConfirm={onConfirmImport}
             isPending={isPending}
+            consent={consent}
+            onConsentChange={setConsent}
           />
         </>
       ) : null}

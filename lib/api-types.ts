@@ -532,6 +532,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/whatsapp/templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminWhatsAppTemplateList"];
+        put?: never;
+        post: operations["adminWhatsAppTemplatePublish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/appointments/{token}": {
         parameters: {
             query?: never;
@@ -1582,6 +1598,22 @@ export interface paths {
         get: operations["guestList"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/guests/consent-attestation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["guestAttestConsent"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4294,6 +4326,10 @@ export interface components {
         ConfirmPaymentRequest: {
             transactionReference: string;
         };
+        ConsentAttestationResult: {
+            /** Format: int32 */
+            attestedGuests?: number;
+        };
         CreateAgreementRequest: {
             /** Format: int64 */
             amountMinor?: number | null;
@@ -4633,6 +4669,7 @@ export interface components {
             tier: string;
         };
         GuestImportResult: {
+            consentAttested?: boolean;
             /** Format: int32 */
             failed?: number;
             failures?: components["schemas"]["RowIssue"][];
@@ -4663,6 +4700,7 @@ export interface components {
             amountDueMinor?: number | null;
             /** Format: date-time */
             checkedInAt?: string | null;
+            consentAttested?: boolean;
             email?: string | null;
             excludedFromInvitations?: boolean;
             firstName?: string;
@@ -5280,6 +5318,17 @@ export interface components {
             subscriptionPlans?: components["schemas"]["SubscriptionPlanOption"][];
             tiers?: components["schemas"]["BillingTierOption"][];
         };
+        PlatformWhatsAppUsage: {
+            /** Format: int64 */
+            dailyLimit?: number | null;
+            /** Format: int64 */
+            monthlyLimit?: number | null;
+            /** Format: int64 */
+            sentLast30Days?: number;
+            /** Format: int64 */
+            sentToday?: number;
+            verified?: boolean;
+        };
         PriceList: {
             /** Format: int64 */
             fcfa?: number;
@@ -5330,6 +5379,7 @@ export interface components {
         };
         ProviderSettingsResponse: {
             email?: components["schemas"]["EmailProviderView"];
+            platformWhatsApp?: components["schemas"]["PlatformWhatsAppUsage"] | null;
             whatsapp?: components["schemas"]["WhatsAppProviderView"];
         };
         PublicOpenInvitationView: {
@@ -5795,6 +5845,25 @@ export interface components {
         };
         TemplatePreviewResponse: {
             body?: string;
+        };
+        TemplatePublication: {
+            created?: boolean;
+            error?: string | null;
+            language?: string;
+            name?: string;
+        };
+        TemplateStateView: {
+            /** Format: date-time */
+            blockedUntil?: string | null;
+            category?: string | null;
+            language?: string;
+            name?: string;
+            quality?: string | null;
+            reason?: string | null;
+            status?: string | null;
+            /** Format: date-time */
+            updatedAt?: string;
+            wabaId?: string;
         };
         TemplateSummary: {
             channels?: string[];
@@ -7020,6 +7089,46 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["WhatsAppPricingInfo"];
+                };
+            };
+        };
+    };
+    adminWhatsAppTemplateList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TemplateStateView"][];
+                };
+            };
+        };
+    };
+    adminWhatsAppTemplatePublish: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TemplatePublication"][];
                 };
             };
         };
@@ -8640,6 +8749,28 @@ export interface operations {
             };
         };
     };
+    guestAttestConsent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ConsentAttestationResult"];
+                };
+            };
+        };
+    };
     guestExport: {
         parameters: {
             query?: never;
@@ -8662,7 +8793,9 @@ export interface operations {
     };
     guestImport: {
         parameters: {
-            query?: never;
+            query?: {
+                consentAttested?: boolean;
+            };
             header?: never;
             path: {
                 eventId: string;

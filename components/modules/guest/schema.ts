@@ -23,6 +23,8 @@ export const singleGuestSchema = z
     lastName: z.string().trim().min(1, "required").max(120, "tooLong"),
     email: z.string().trim().email("email").or(z.literal("")),
     phone: z.string().trim().max(30, "tooLong"),
+    // The organizer's statement that the person agreed to hear from it (JIKU-213).
+    consentAttested: z.boolean().refine((agreed) => agreed, "consentRequired"),
   })
   .refine((guest) => guest.email !== "" || guest.phone !== "", {
     message: "contactRequired",

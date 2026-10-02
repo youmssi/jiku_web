@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { FormFieldError } from "@/components/shared";
@@ -12,7 +13,7 @@ import { trackEvent } from "@/lib/analytics";
 import { addGuestAction } from "@/components/modules/guest/guest.service";
 import { singleGuestSchema, type SingleGuestInput } from "@/components/modules/guest/schema";
 
-const EMPTY_GUEST: SingleGuestInput = { firstName: "", lastName: "", email: "", phone: "" };
+const EMPTY_GUEST: SingleGuestInput = { firstName: "", lastName: "", email: "", phone: "", consentAttested: false };
 
 /** One guest added by hand: a one-row import that reuses the file pipeline and its checks. */
 export function AddGuest({ eventId, onAdded }: { eventId: string; onAdded?: () => void }) {
@@ -105,6 +106,26 @@ export function AddGuest({ eventId, onAdded }: { eventId: string; onAdded?: () =
           />
         </div>
         <FieldDescription>{t("contactHint")}</FieldDescription>
+        <Controller
+          control={control}
+          name="consentAttested"
+          render={({ field, fieldState }) => (
+            <Field orientation="horizontal" data-invalid={fieldState.invalid}>
+              <Checkbox
+                id="add-guest-consent"
+                checked={field.value}
+                onCheckedChange={(checked) => field.onChange(checked === true)}
+                aria-invalid={fieldState.invalid}
+              />
+              <div className="grid gap-1">
+                <FieldLabel htmlFor="add-guest-consent" className="font-normal">
+                  {t("consent")}
+                </FieldLabel>
+                <FormFieldError error={fieldState.error} />
+              </div>
+            </Field>
+          )}
+        />
         <Field orientation="horizontal" className="justify-end">
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? t("submitting") : t("submit")}

@@ -79,7 +79,8 @@
     "submitting": "Adding…",
     "added": "{name} was added.",
     "duplicate": "{name} is already on the list.",
-    "rejected": "This guest could not be added: check the email and number."
+    "rejected": "This guest could not be added: check the email and number.",
+    "consent": "This person agreed to receive my invitations and messages."
   },
   "import": {
     "trigger": "Import",
@@ -132,7 +133,9 @@
     "back": "Back",
     "importing": "Importing…",
     "confirm": "Import {count, plural, one {# guest} other {# guests}}",
-    "done": "{imported, plural, one {# guest imported} other {# guests imported}}, {duplicates} duplicates skipped, {failed} in error."
+    "done": "{imported, plural, one {# guest imported} other {# guests imported}}, {duplicates} duplicates skipped, {failed} in error.",
+    "consent": "These people agreed to receive my invitations and messages for this event.",
+    "consentHint": "Required. Meta demands it before any WhatsApp invitation, and the law for any message."
   },
   "send": {
     "trigger": "Send invitations",
@@ -171,5 +174,12 @@
     "categoryFailed": "The category could not be changed. Try again."
   },
   "noMatch": "No guest matches these filters.",
-  "showMore": "{count, plural, one {Show # more guest} other {Show # more guests}}"
+  "showMore": "{count, plural, one {Show # more guest} other {Show # more guests}}",
+  "consent": {
+    "title": "Consent to confirm",
+    "description": "{count, plural, one {# imported guest cannot receive a WhatsApp invitation} other {# imported guests cannot receive a WhatsApp invitation}}: confirm they agreed to receive your messages.",
+    "action": "I confirm their agreement",
+    "done": "{count, plural, =0 {No guest to confirm.} one {Agreement confirmed for # guest.} other {Agreement confirmed for # guests.}}",
+    "failed": "The confirmation could not be saved. Try again."
+  }
 }

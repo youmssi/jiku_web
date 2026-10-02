@@ -47,6 +47,7 @@ export async function importGuestsAction(
   }
   const body = new FormData();
   body.append("file", file);
+  body.append("consentAttested", formData.get("consentAttested") === "true" ? "true" : "false");
   return uploadCsv(eventId, body, t("importFailed"));
 }
 
@@ -64,7 +65,19 @@ export async function addGuestAction(
   const csv = ["firstName,lastName,email,phone", [firstName, lastName, email, phone].map(csvCell).join(",")].join("\n");
   const body = new FormData();
   body.append("file", new Blob([csv], { type: "text/csv" }), "guest.csv");
+  body.append("consentAttested", "true");
   return uploadCsv(eventId, body, t("addFailed"));
+}
+
+/** The organizer confirms that the event's imported guests agreed to hear from it (JIKU-213). */
+export async function attestConsentAction(eventId: string): Promise<ActionResult<{ attestedGuests: number }>> {
+  const t = await getTranslations("guests.consent");
+  const response = await serverFetch(`/events/${eventId}/guests/consent-attestation`, { method: "POST" });
+  const result = await fromResponse<{ attestedGuests: number }>(response, { default: t("failed") });
+  if (result.ok) {
+    revalidatePath(eventGuestsRoute(eventId));
+  }
+  return result;
 }
 
 export async function removeGuestAction(eventId: string, guestId: string): Promise<ActionResult<null>> {
