@@ -25,6 +25,12 @@ export type Branding = Schema<"BrandingResponse">;
 // Validation messages are `common.validation` keys, translated where they render
 // (FormFieldError), so these schemas serve the forms and the server actions alike.
 
+/**
+ * Names the wording of the marketing consent box (JIKU-201). Change it whenever
+ * the text changes, so each recorded consent points at what the person read.
+ */
+export const MARKETING_CONSENT_VERSION = "2026-10-02";
+
 /** Registration creates the account only; the organization comes at onboarding. */
 export const registerSchema = z.object({
   fullName: z
@@ -34,6 +40,7 @@ export const registerSchema = z.object({
     .max(255, "tooLong"),
   email: z.string().email("email"),
   password: z.string().min(8, "passwordMin"),
+  marketingConsent: z.boolean(),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;

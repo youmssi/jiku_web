@@ -179,7 +179,12 @@ export async function SettingsView({ tab }: { tab?: string }) {
         ) : null}
 
         <TabsContent value="account" className="mt-0">
-          <AccountView fullName={context?.fullName ?? null} email={context?.email ?? ""} role={context?.role ?? ""} />
+          <AccountView
+            fullName={context?.fullName ?? null}
+            email={context?.email ?? ""}
+            role={context?.role ?? ""}
+            marketingConsent={context?.marketingConsent ?? false}
+          />
         </TabsContent>
       </Tabs>
     </div>

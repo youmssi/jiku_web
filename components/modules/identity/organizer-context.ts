@@ -15,6 +15,8 @@ export interface OrganizerContext {
   memberships: Membership[];
   /** The organization the session is bound to; "" for a fresh, org-less account. */
   activeTenantId: string;
+  /** Whether the person agreed to receive Jikū's news and tips (JIKU-201). */
+  marketingConsent: boolean;
 }
 
 async function fetchJson<T>(path: string): Promise<T | null> {
@@ -45,5 +47,6 @@ export const getOrganizerContext = cache(async function getOrganizerContext(): P
     logoUrl: branding?.logoUrl ?? null,
     memberships: me.memberships,
     activeTenantId: me.tenantId,
+    marketingConsent: me.marketingConsent ?? false,
   };
 });
