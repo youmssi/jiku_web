@@ -142,6 +142,11 @@ export interface WhatsAppOverrideStatus {
   activatedAt: string | null;
 }
 
+/** An organization to call and why (JIKU-202), with the 30-day activation funnel. */
+export type FollowUpOverview = Schema<"FollowUpOverview">;
+export type FollowUpEntry = Schema<"FollowUpEntry">;
+export type FollowUpReason = FollowUpEntry["reason"];
+
 export interface ProspectLead {
   id: string;
   businessName: string;

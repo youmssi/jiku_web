@@ -7,6 +7,7 @@ export {
   loadAudit,
   loadBillingSettings,
   loadFeedback,
+  loadFollowUps,
   loadPayments,
   loadProspects,
   loadRatingSummary,

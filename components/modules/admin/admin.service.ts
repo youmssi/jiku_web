@@ -180,6 +180,16 @@ export async function setWhatsAppOverrideAction(
   return ok(null);
 }
 
+/** Hides a follow-up for a week once the team has called (JIKU-202). */
+export async function markFollowUpDoneAction(tenantId: string, reason: string): Promise<ActionResult> {
+  const response = await adminFetch(`/admin/follow-ups/${tenantId}/${reason}/done`, { method: "POST" });
+  if (!response.ok) {
+    return failWithReason(response, (await getTranslations("admin.errors"))("followUp"));
+  }
+  revalidatePath(ADMIN_ROUTES.FOLLOW_UPS, "layout");
+  return ok(null);
+}
+
 export async function markProspectContactedAction(id: string): Promise<ActionResult> {
   const response = await adminFetch(`/admin/prospects/${id}/contacted`, {
     method: "POST",

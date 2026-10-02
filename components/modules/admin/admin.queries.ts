@@ -14,6 +14,7 @@ import type {
   AdminVerification,
   AuditPage,
   FeedbackPage,
+  FollowUpOverview,
   ProspectLead,
   RatingSummary,
   TenantDirectoryPage,
@@ -136,6 +137,13 @@ export async function loadWhatsApp() {
     }),
   ]);
   return { pricing, override };
+}
+
+export function loadFollowUps(): Promise<FollowUpOverview> {
+  return adminRead("/admin/follow-ups", {
+    entries: [],
+    funnel: { windowDays: 30, signedUp: 0, firstEventOrService: 0, firstSend: 0, firstPayment: 0 },
+  });
 }
 
 export function loadProspects(): Promise<ProspectLead[]> {

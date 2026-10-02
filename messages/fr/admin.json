@@ -17,7 +17,8 @@
     "prospects": "Prospects",
     "feedback": "Retours",
     "diagnostics": "Diagnostic",
-    "verifications": "Vérifications"
+    "verifications": "Vérifications",
+    "followUps": "Relances"
   },
   "pages": {
     "tenants": "Organisations",
@@ -31,7 +32,8 @@
     "feedback": "Retours",
     "diagnostics": "Diagnostic",
     "billingLoadFailed": "Impossible de charger les réglages de facturation.",
-    "verifications": "Vérifications d'organisations"
+    "verifications": "Vérifications d'organisations",
+    "followUps": "Relances"
   },
   "login": {
     "metaTitle": "Jikū - Administration",
@@ -172,7 +174,8 @@
     "override": "Impossible de modifier la surcharge de contenu.",
     "prospect": "Impossible de marquer cette piste comme contactée.",
     "diagnostics": "Aucune erreur déclenchée : réponse inattendue.",
-    "billingSettings": "Les réglages n'ont pas pu être enregistrés."
+    "billingSettings": "Les réglages n'ont pas pu être enregistrés.",
+    "followUp": "Impossible de marquer cette relance comme faite."
   },
   "whatsapp": {
     "pricingTitle": "Tarifs par catégorie (USD, centimes)",
@@ -374,5 +377,35 @@
     "emptyText": "Aucune demande de vérification dans cet état.",
     "documentsFailed": "Impossible d'ouvrir les documents.",
     "storageUnavailable": "Le stockage des documents est indisponible."
+  },
+  "followUps": {
+    "intro": "Les organisations qui se sont arrêtées en chemin. Appelez-les ou écrivez-leur sur WhatsApp, puis marquez la relance comme faite : elle disparaît pendant 7 jours.",
+    "funnel": {
+      "title": "Activation sur {days} jours",
+      "signedUp": "Inscrites",
+      "firstEventOrService": "1er événement ou service",
+      "firstSend": "1er envoi",
+      "firstPayment": "1er paiement"
+    },
+    "columns": {
+      "organization": "Organisation",
+      "contact": "Contact",
+      "reason": "Motif",
+      "since": "Depuis",
+      "consent": "Accord marketing"
+    },
+    "reasons": {
+      "NO_ACTIVITY": "Aucun événement ni service",
+      "NO_GUESTS": "Événement sans invités",
+      "VERIFICATION_REJECTED": "Vérification refusée",
+      "TRIAL_ENDING": "Essai qui se termine"
+    },
+    "consentYes": "Oui",
+    "consentNo": "Non",
+    "whatsapp": "WhatsApp",
+    "done": "Fait",
+    "marked": "Relance de {name} marquée comme faite.",
+    "emptyTitle": "Personne à relancer",
+    "emptyText": "Toutes les organisations avancent. Revenez demain."
   }
 }

@@ -9,6 +9,7 @@ import {
   Settings2,
   ShieldCheck,
   Timer,
+  PhoneCall,
   UserPlus,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -89,6 +90,12 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         href: ADMIN_ROUTES.WHATSAPP,
         icon: MessageCircle,
         match: (pathname) => pathname === ADMIN_ROUTES.WHATSAPP,
+      },
+      {
+        labelKey: "followUps",
+        href: ADMIN_ROUTES.FOLLOW_UPS,
+        icon: PhoneCall,
+        match: (pathname) => pathname === ADMIN_ROUTES.FOLLOW_UPS,
       },
       {
         labelKey: "prospects",

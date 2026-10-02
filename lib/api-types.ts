@@ -196,6 +196,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/follow-ups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminFollowUpOverview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/follow-ups/{tenantId}/{reason}/done": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminFollowUpMarkDone"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/payments": {
         parameters: {
             query?: never;
@@ -3915,6 +3947,18 @@ export interface components {
         AcceptInvitationRequest: {
             token: string;
         };
+        ActivationFunnel: {
+            /** Format: int32 */
+            firstEventOrService?: number;
+            /** Format: int32 */
+            firstPayment?: number;
+            /** Format: int32 */
+            firstSend?: number;
+            /** Format: int32 */
+            signedUp?: number;
+            /** Format: int64 */
+            windowDays?: number;
+        };
         AdminAuthResponse: {
             accessToken?: string;
             refreshToken?: string;
@@ -4552,6 +4596,22 @@ export interface components {
             tenantId?: string | null;
             /** Format: date-time */
             updatedAt?: string | null;
+        };
+        FollowUpEntry: {
+            marketingConsent?: boolean;
+            organizationName?: string;
+            ownerEmail?: string | null;
+            ownerName?: string | null;
+            phone?: string | null;
+            /** @enum {string} */
+            reason?: "NO_ACTIVITY" | "NO_GUESTS" | "VERIFICATION_REJECTED" | "TRIAL_ENDING";
+            /** Format: date-time */
+            since?: string;
+            tenantId?: string;
+        };
+        FollowUpOverview: {
+            entries?: components["schemas"]["FollowUpEntry"][];
+            funnel?: components["schemas"]["ActivationFunnel"];
         };
         ForgotPasswordRequest: {
             /** Format: email */
@@ -6420,6 +6480,47 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["FeedbackView"];
                 };
+            };
+        };
+    };
+    adminFollowUpOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["FollowUpOverview"];
+                };
+            };
+        };
+    };
+    adminFollowUpMarkDone: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+                reason: "NO_ACTIVITY" | "NO_GUESTS" | "VERIFICATION_REJECTED" | "TRIAL_ENDING";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
