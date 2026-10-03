@@ -10,6 +10,7 @@ import { FooterSection } from "./footer-section";
 import { HeroSection } from "./hero-section";
 import { LandingJsonLd } from "./json-ld";
 import { Navigation } from "./navigation";
+import { NumbersSection } from "./numbers-section";
 import { PricingSection } from "./pricing-section";
 import { DayLineVisual, TicketVisual } from "./product-visuals";
 import { ReplaceSection } from "./replace-section";
@@ -29,7 +30,6 @@ const SERVICE_ICONS = [Link2, BellRing, ListOrdered, ScanLine];
  */
 export function LandingPage({ locale, siteUrl }: { locale: LandingLocale; siteUrl: string }) {
   const content = LANDING_CONTENT[locale];
-  const heroCard = content.cards.samples.find((sample) => sample.style === "MODERN") ?? content.cards.samples[0];
 
   return (
     <MotionProvider>
@@ -37,7 +37,8 @@ export function LandingPage({ locale, siteUrl }: { locale: LandingLocale; siteUr
       <LandingJsonLd content={content} locale={locale} siteUrl={siteUrl} />
       <Navigation content={content.nav} />
       <main className={cardFontVariables}>
-        <HeroSection content={content.hero} card={heroCard} siteUrl={siteUrl} />
+        <HeroSection content={content.hero} siteUrl={siteUrl} />
+        <NumbersSection content={content.numbers} />
         <ReplaceSection content={content.replace} />
         <CardsSection content={content.cards} invites={content.hero.card.invites} siteUrl={siteUrl} />
         <BentoSection

@@ -63,7 +63,13 @@ export interface LandingContent {
   soonLabel: string;
   hero: {
     badge: string;
-    headline: string;
+    /** The headline before the occasion that rotates at its end. */
+    lead: string;
+    /** The whole headline in one sentence, for search engines and screen readers. */
+    sentence: string;
+    /** Each occasion with the card drawn while it shows. */
+    occasions: { label: string; card: LandingCardSample }[];
+    pickOccasion: string;
     subtitle: string;
     primaryCta: string;
     secondaryCta: string;
@@ -74,9 +80,10 @@ export interface LandingContent {
       invites: string;
       answers: [string, string, string];
       ticket: { guest: string; status: string };
-      alt: string;
     };
   };
+  /** Product facts counted up under the hero; only numbers the product guarantees. */
+  numbers: { value: number; label: string }[];
   replace: {
     badge: string;
     heading: string;
@@ -182,7 +189,16 @@ const fr: LandingContent = {
   soonLabel: "Bientôt",
   hero: {
     badge: "Nouveau : la carte d'invitation à partager",
-    headline: "Vos invités et vos clients passent sans attendre.",
+    lead: "Une invitation à la hauteur de",
+    sentence: "Une invitation à la hauteur de votre mariage, vos 30 ans, un baptême, votre séminaire ou votre gala.",
+    occasions: [
+      { label: "votre mariage", card: { style: "ELEGANT", event: "Mariage d'Aïcha & Karim", organizer: "Famille Barry", when: "sam. 12 déc. · 16 h", color: "#5B3A29", photo: false } },
+      { label: "vos 30 ans", card: { style: "MODERN", event: "Les 30 ans d'Aïssatou", organizer: "Maison Diallo", when: "sam. 14 nov. · 19 h", color: "#7C2D12", photo: true } },
+      { label: "un baptême", card: { style: "ELEGANT", event: "Baptême de Mariam", organizer: "Famille Camara", when: "dim. 6 déc. · 11 h", color: "#3F5A73", photo: false } },
+      { label: "votre séminaire", card: { style: "MODERN", event: "Séminaire annuel", organizer: "Groupe Sahel", when: "jeu. 3 déc. · 9 h", color: "#27272A", photo: false } },
+      { label: "votre gala", card: { style: "FESTIVE", event: "Gala de fin d'année", organizer: "Association Horizon", when: "ven. 18 déc. · 20 h", color: "#9D174D", photo: false } },
+    ],
+    pickOccasion: "Voir la carte pour",
     subtitle:
       "Invitations, billets QR et entrée pour vos événements. Rendez-vous et file du jour pour vos services. Sur WhatsApp, sans application, même quand le réseau tombe.",
     primaryCta: "Créer mon compte gratuit",
@@ -193,9 +209,14 @@ const fr: LandingContent = {
       invites: "vous invite",
       answers: ["Je viens", "Peut-être", "Non"],
       ticket: { guest: "Mariama Bah + 1", status: "Billet valide" },
-      alt: "Une carte d'invitation Jikū au style Moderne, et le billet QR d'un invité qui a répondu oui.",
     },
   },
+  numbers: [
+    { value: 100, label: "invités gratuits par an" },
+    { value: 3, label: "styles de carte" },
+    { value: 1, label: "billet QR par « oui »" },
+    { value: 0, label: "application à installer" },
+  ],
   replace: {
     badge: "Ce que vous remplacez",
     heading: "Fini le groupe WhatsApp, le fichier Excel et la liste papier",
@@ -476,7 +497,16 @@ const en: LandingContent = {
   soonLabel: "Soon",
   hero: {
     badge: "New: the invitation card to share",
-    headline: "Your guests and clients get in without waiting.",
+    lead: "An invitation worthy of",
+    sentence: "An invitation worthy of your wedding, your 30th, a christening, your seminar or your gala.",
+    occasions: [
+      { label: "your wedding", card: { style: "ELEGANT", event: "Aïcha & Karim's wedding", organizer: "The Barry family", when: "Sat, Dec 12 · 4 PM", color: "#5B3A29", photo: false } },
+      { label: "your 30th", card: { style: "MODERN", event: "Aïssatou turns 30", organizer: "Maison Diallo", when: "Sat, Nov 14 · 7 PM", color: "#7C2D12", photo: true } },
+      { label: "a christening", card: { style: "ELEGANT", event: "Mariam's christening", organizer: "The Camara family", when: "Sun, Dec 6 · 11 AM", color: "#3F5A73", photo: false } },
+      { label: "your seminar", card: { style: "MODERN", event: "Annual seminar", organizer: "Sahel Group", when: "Thu, Dec 3 · 9 AM", color: "#27272A", photo: false } },
+      { label: "your gala", card: { style: "FESTIVE", event: "Year-end gala", organizer: "Horizon Association", when: "Fri, Dec 18 · 8 PM", color: "#9D174D", photo: false } },
+    ],
+    pickOccasion: "See the card for",
     subtitle:
       "Invitations, QR tickets and entry for your events. Bookings and the day line for your services. On WhatsApp, no app to install, even when the network drops.",
     primaryCta: "Create my free account",
@@ -487,9 +517,14 @@ const en: LandingContent = {
       invites: "invites you",
       answers: ["I'm coming", "Maybe", "No"],
       ticket: { guest: "Mariama Bah + 1", status: "Valid ticket" },
-      alt: "A Jikū invitation card in the Modern style, and the QR ticket of a guest who said yes.",
     },
   },
+  numbers: [
+    { value: 100, label: "guests free each year" },
+    { value: 3, label: "card styles" },
+    { value: 1, label: "QR ticket per “yes”" },
+    { value: 0, label: "apps to install" },
+  ],
   replace: {
     badge: "What you replace",
     heading: "No more WhatsApp group, Excel file and paper list",
