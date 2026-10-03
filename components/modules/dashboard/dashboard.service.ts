@@ -3,6 +3,7 @@
 import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { type ActionResult, fromResponse } from "@/lib/action-result";
+import type { LiveTicket } from "@/components/shared";
 import type { AnalyticsData, DashboardData } from "@/components/modules/dashboard/schema";
 
 /**
@@ -15,6 +16,12 @@ export async function fetchDashboardAction(
   const response = await serverFetch(`/events/${eventId}/dashboard`);
   const t = await getTranslations("events.overview.unavailable");
   return fromResponse<DashboardData>(response, { default: t("description") });
+}
+
+/** A ticket to follow the dashboard live (JIKU-214); null when the event is out of reach. */
+export async function fetchDashboardLiveTicketAction(eventId: string): Promise<LiveTicket | null> {
+  const response = await serverFetch(`/events/${eventId}/dashboard/live`, { method: "POST" });
+  return response.ok ? ((await response.json()) as LiveTicket) : null;
 }
 
 /** Fetches an event's trend data (check-in timeline, channel breakdown, guest growth). */

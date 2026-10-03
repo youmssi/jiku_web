@@ -3,6 +3,7 @@
 import { getTranslations } from "next-intl/server";
 import { publicFetch } from "@/lib/api-server";
 import { type ActionResult, fail, fromResponse, ok, reportApiError } from "@/lib/action-result";
+import type { LiveTicket } from "@/components/shared";
 import type {
   AppointmentBookingView,
   AppointmentServiceView,
@@ -105,6 +106,12 @@ export async function takeLineTicket(
 }
 
 /** The client's place in today's line; null once the ticket is no longer in it. */
+/** A ticket to follow one's place in the line live (JIKU-214); null once the ticket left today's line. */
+export async function loadLineLiveTicket(ref: AppointmentLinkRef, ticketCode: string): Promise<LiveTicket | null> {
+  const response = await publicFetch(`${basePath(ref)}/line/${encodeURIComponent(ticketCode)}/live`, { method: "POST" });
+  return response.ok ? ((await response.json()) as LiveTicket) : null;
+}
+
 export async function loadLineTicket(
   ref: AppointmentLinkRef,
   ticketCode: string,

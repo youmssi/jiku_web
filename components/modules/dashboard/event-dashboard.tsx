@@ -23,7 +23,7 @@ import {
 } from "@/components/modules/dashboard/dashboard-charts";
 import { AttendanceDocuments } from "@/components/modules/dashboard/attendance-documents";
 import { QuorumCard } from "@/components/modules/dashboard/quorum-card";
-import { Stat } from "@/components/shared";
+import { LiveBadge, Stat } from "@/components/shared";
 import { billingRoute, eventGuestsRoute } from "@/lib/constants";
 import type { AnalyticsData, DashboardData } from "@/components/modules/dashboard/schema";
 
@@ -43,12 +43,18 @@ interface EventDashboardProps {
 export function EventDashboard({ eventId, initial, analytics }: EventDashboardProps) {
   const t = useTranslations("events.overview");
   const format = useFormatter();
-  const { data } = useDashboard(eventId, initial);
+  const { data, live } = useDashboard(eventId, initial);
   const checkInPct = data.confirmed > 0 ? Math.round((data.checkedIn / data.confirmed) * 100) : 0;
   const guestsHref = eventGuestsRoute(eventId);
 
   return (
     <div className="flex flex-col gap-8">
+      {live ? (
+        <div className="-mb-4 flex justify-end">
+          <LiveBadge />
+        </div>
+      ) : null}
+
       {data.deliverability.warn ? (
         <Alert>
           <AlertTitle>{t("alerts.bounces.title")}</AlertTitle>

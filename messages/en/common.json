@@ -66,5 +66,9 @@
   "camera": {
     "unsupported": "This device or browser doesn't support camera access.",
     "unavailable": "Camera unavailable. Grant camera access or use search instead."
+  },
+  "live": {
+    "label": "Live",
+    "hint": "This screen updates as soon as something changes."
   }
 }

@@ -66,5 +66,9 @@
   "camera": {
     "unsupported": "Cet appareil ou ce navigateur n'a pas accès à la caméra.",
     "unavailable": "Caméra indisponible. Autorisez l'accès à la caméra ou utilisez la recherche."
+  },
+  "live": {
+    "label": "En direct",
+    "hint": "Cet écran se met à jour dès qu’un changement arrive."
   }
 }
