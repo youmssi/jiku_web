@@ -6,6 +6,7 @@
 
 import type { DeliveryMode, PricingCurrency, ServicePlanId } from "@/lib/pricing";
 import type { LandingLocale } from "./content";
+import type { MarketingNavContent } from "./marketing-header";
 
 export type SimulatorNeed = "serve" | "invite" | "sell";
 
@@ -118,13 +119,7 @@ export interface SimulatorContent {
     toYou: { title: string; text: string };
   };
   cta: { heading: string; text: string; primary: string; secondary: string };
-  nav: {
-    home: string;
-    signIn: string;
-    createAccount: string;
-    /** The other language: the link keeps this page and changes only the locale. */
-    switchLocale: { label: string; locale: "fr" | "en"; ariaLabel: string };
-  };
+  nav: MarketingNavContent;
 }
 
 const fr: SimulatorContent = {

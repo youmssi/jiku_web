@@ -142,3 +142,63 @@
 @utility animate-ticket-shine {
   animation: ticket-shine 1.4s 0.2s ease-out 1;
 }
+/* Marketing effects (JIKU-221 prototype). Each one stays still when the
+   visitor prefers reduced motion. */
+@keyframes blur-in {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(12px);
+  }
+}
+
+@utility animate-blur-in {
+  animation: blur-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes shine-sweep {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}
+
+@utility text-shine {
+  background-image: linear-gradient(110deg, currentColor 40%, color-mix(in oklab, currentColor 35%, white) 50%, currentColor 60%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine-sweep 3.5s linear infinite;
+}
+
+@keyframes float-soft {
+  50% {
+    transform: translateY(-10px) rotate(-1deg);
+  }
+}
+
+@utility animate-float-soft {
+  animation: float-soft 6s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-blur-in,
+  .text-shine,
+  .animate-float-soft,
+  .animate-marquee {
+    animation: none;
+  }
+}
