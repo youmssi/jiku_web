@@ -11,7 +11,8 @@ import {
  * The card every account screen renders inside the auth layout, after the
  * shadcn login-03 block: a centered title and description over the content.
  * Forms put their submit button and the link to the sibling screen at the end
- * of their `FieldGroup`, so the whole flow keeps one rhythm.
+ * of their `FieldGroup`, so the whole flow keeps one rhythm. The title is the
+ * page's single h1.
  */
 export function AuthCard({
   title,
@@ -25,7 +26,9 @@ export function AuthCard({
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-xl">{title}</CardTitle>
+        <CardTitle className="text-xl">
+          <h1>{title}</h1>
+        </CardTitle>
         {description ? <CardDescription>{description}</CardDescription> : null}
       </CardHeader>
       <CardContent>{children}</CardContent>

@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { ROUTES } from "@/lib/constants";
+
+/** Account screens stay out of search results; sign-up opts back in (JIKU-219). */
+export const metadata: Metadata = {
+  robots: { index: false, follow: true },
+};
 
 /**
  * One frame for every account screen: sign-in, sign-up, password recovery,

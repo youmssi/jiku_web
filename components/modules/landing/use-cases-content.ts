@@ -52,9 +52,9 @@ export interface UseCasesPageContent {
 
 const fr: UseCasesPageContent = {
   meta: {
-    title: "Cas d'usage Jikū — Mariages, anniversaires, séminaires, cliniques, administrations",
+    title: "Cas d'usage : mariages, séminaires, cliniques",
     description:
-      "Mariage, anniversaire avec carte WhatsApp, séminaire, assemblée générale, clinique ou agence : voyez, étape par étape, comment Jikū supprime l'attente, à la porte comme au guichet.",
+      "Mariage, anniversaire, séminaire, assemblée générale, clinique ou agence : comment Jikū supprime l'attente, à la porte comme au guichet.",
     keywords: [
       "invitation mariage guinée",
       "carte d'invitation anniversaire whatsapp",
@@ -141,9 +141,9 @@ const fr: UseCasesPageContent = {
 
 const en: UseCasesPageContent = {
   meta: {
-    title: "Jikū use cases — Weddings, birthdays, seminars, clinics, public offices",
+    title: "Use cases: weddings, seminars, clinics",
     description:
-      "Wedding, birthday with a WhatsApp card, seminar, general assembly, clinic or agency: see, step by step, how Jikū removes the wait, at the door and at the counter.",
+      "Wedding, birthday, seminar, general assembly, clinic or agency: how Jikū removes the wait, at the door and at the counter.",
     keywords: [
       "wedding invitations guinea",
       "whatsapp birthday invitation card",

@@ -82,8 +82,13 @@ export default async function FaqPage({ params }: Readonly<PageProps>) {
         <Accordion type="single" collapsible className="mt-12">
           {faq.items.map((item, i) => (
             <AccordionItem key={item.question} value={`faq-${i}`}>
-              <AccordionTrigger className="text-left text-base">{item.question}</AccordionTrigger>
-              <AccordionContent className="text-sm leading-relaxed text-muted-foreground">{item.answer}</AccordionContent>
+              <AccordionTrigger headingLevel={2} className="text-left text-base">
+                {item.question}
+              </AccordionTrigger>
+              {/* Mounted while closed so every answer is in the page for search engines. */}
+              <AccordionContent forceMount className="text-sm leading-relaxed text-muted-foreground">
+                {item.answer}
+              </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
