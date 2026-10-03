@@ -1,14 +1,13 @@
 import QRCode from "qrcode";
 
 /**
- * A QR code as one SVG path in module units, with a two-module quiet zone.
- * Pure and synchronous, so it draws in a server component and in the card
- * image renderer alike.
+ * A QR code as one SVG path in module units, with a [quiet] zone of that many
+ * modules (two by default). Pure and synchronous, so it draws in a server
+ * component, a client component and the card image renderer alike.
  */
-export function qrPath(text: string): { size: number; path: string } {
+export function qrPath(text: string, quiet = 2): { size: number; path: string } {
   const qr = QRCode.create(text, { errorCorrectionLevel: "M" });
   const count = qr.modules.size;
-  const quiet = 2;
   let path = "";
   for (let row = 0; row < count; row++) {
     for (let col = 0; col < count; col++) {

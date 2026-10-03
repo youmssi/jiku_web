@@ -2,14 +2,7 @@
 
 import { useMemo, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox";
+import { Combobox } from "@/components/ui/combobox";
 import { searchTenantEventsAction } from "@/components/modules/admin/admin.service";
 import type { AdminEventSummary } from "@/components/modules/admin/schema";
 
@@ -69,31 +62,17 @@ export function EventCombobox({
 
   return (
     <Combobox<AdminEventSummary>
-      items={items}
-      filter={null}
+      id={id}
       value={value}
       onValueChange={onChange}
-      onInputValueChange={search}
-      itemToStringLabel={(event) => event.name}
-      isItemEqualToValue={(a, b) => a.id === b.id}
+      items={items}
+      itemKey={(event) => event.id}
+      itemLabel={(event) => event.name}
+      onSearchChange={search}
+      placeholder={tenantId ? t("searchEvents") : t("pickOrganizationFirst")}
+      emptyMessage={isPending ? t("searching") : query.trim() ? t("noEvent") : t("typeToSearchEvents")}
       disabled={!tenantId}
-    >
-      <ComboboxInput
-        id={id}
-        placeholder={tenantId ? t("searchEvents") : t("pickOrganizationFirst")}
-      />
-      <ComboboxContent>
-        <ComboboxList>
-          <ComboboxEmpty>
-            {isPending ? t("searching") : query.trim() ? t("noEvent") : t("typeToSearchEvents")}
-          </ComboboxEmpty>
-          {items.map((event) => (
-            <ComboboxItem key={event.id} value={event}>
-              {event.name}
-            </ComboboxItem>
-          ))}
-        </ComboboxList>
-      </ComboboxContent>
-    </Combobox>
+      className="w-full"
+    />
   );
 }

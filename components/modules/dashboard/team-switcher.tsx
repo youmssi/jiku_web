@@ -17,8 +17,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { UnfoldMoreIcon, PlusSignIcon } from "@hugeicons/core-free-icons"
+import { ChevronsUpDown, Plus } from "lucide-react"
 import { Link } from "@/i18n/navigation"
 import { switchOrgAction, type Membership } from "@/components/modules/identity"
 import { useTranslations } from "next-intl"
@@ -83,7 +82,7 @@ export function TeamSwitcher({
                 <span className="truncate font-medium">{activeLabel}</span>
                 <span className="truncate text-xs">{activeRole}</span>
               </div>
-              <HugeiconsIcon icon={UnfoldMoreIcon} strokeWidth={2} className="ml-auto" />
+              <ChevronsUpDown strokeWidth={2} className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -115,7 +114,7 @@ export function TeamSwitcher({
             <DropdownMenuItem asChild>
               <Link href={ROUTES.ONBOARDING} className="gap-2 p-2">
                 <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                  <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} className="size-4" />
+                  <Plus strokeWidth={2} className="size-4" />
                 </div>
                 <div className="font-medium text-muted-foreground">{t("new")}</div>
               </Link>

@@ -11,13 +11,7 @@ import { toast } from "sonner";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox";
+import { Combobox } from "@/components/ui/combobox";
 import { DataTable } from "@/components/ui/data-table";
 import type { DataTableFeatures } from "@/components/ui/data-table-features";
 import {
@@ -65,6 +59,7 @@ import {
 } from "./schema";
 
 const TRIAL_STATUSES = ["ACTIVE", "CONVERTED", "ENDED", "EXPIRED"] as const;
+type TrialStatus = (typeof TRIAL_STATUSES)[number];
 
 /** Sentinel filter value the "Expiring ≤ 7d" toolbar chip sets on the Expires column. */
 const EXPIRING_SOON_FILTER = "EXPIRING_SOON";
@@ -349,33 +344,25 @@ function TrialsToolbar({
 }) {
   const t = useTranslations("admin.trials");
   const statusLabel = useTranslations("admin.trialStatus");
-  const [status, setStatus] = useState("ALL");
+  const [status, setStatus] = useState<TrialStatus | "ALL">("ALL");
   const [expiringOnly, setExpiringOnly] = useState(false);
 
   return (
     <div className="flex flex-wrap items-center gap-2 py-4">
-      <Combobox
-        value={status}
-        onValueChange={(value) => {
-          const next = typeof value === "string" ? value : "ALL";
-          setStatus(next);
-          table
-            .getColumn("status")
-            ?.setFilterValue(next === "ALL" ? "" : next);
+      <Combobox<TrialStatus>
+        value={status === "ALL" ? null : status}
+        onValueChange={(next) => {
+          setStatus(next ?? "ALL");
+          table.getColumn("status")?.setFilterValue(next ?? "");
         }}
-      >
-        <ComboboxInput className="w-44" placeholder={t("status")} />
-        <ComboboxContent>
-          <ComboboxList>
-            <ComboboxItem value="ALL">{t("allStatuses")}</ComboboxItem>
-            {TRIAL_STATUSES.map((value) => (
-              <ComboboxItem key={value} value={value}>
-                {statusLabel(value)}
-              </ComboboxItem>
-            ))}
-          </ComboboxList>
-        </ComboboxContent>
-      </Combobox>
+        items={TRIAL_STATUSES}
+        itemKey={(value) => value}
+        itemLabel={(value) => statusLabel(value)}
+        placeholder={t("allStatuses")}
+        searchPlaceholder={t("status")}
+        emptyMessage={t("noStatus")}
+        className="w-44"
+      />
       <TierFilter table={table} catalog={catalog} />
       <Button
         type="button"
@@ -405,26 +392,20 @@ function TierFilter({
   const [tier, setTier] = useState("ALL");
 
   return (
-    <Combobox
-      value={tier}
-      onValueChange={(value) => {
-        const next = typeof value === "string" ? value : "ALL";
-        setTier(next);
-        table.getColumn("tier")?.setFilterValue(next === "ALL" ? "" : next);
+    <Combobox<string>
+      value={tier === "ALL" ? null : tier}
+      onValueChange={(next) => {
+        setTier(next ?? "ALL");
+        table.getColumn("tier")?.setFilterValue(next ?? "");
       }}
-    >
-      <ComboboxInput className="w-44" placeholder={t("tier")} />
-      <ComboboxContent>
-        <ComboboxList>
-          <ComboboxItem value="ALL">{t("allTiers")}</ComboboxItem>
-          {catalog.tiers.map((option) => (
-            <ComboboxItem key={option.name} value={option.name}>
-              {option.name}
-            </ComboboxItem>
-          ))}
-        </ComboboxList>
-      </ComboboxContent>
-    </Combobox>
+      items={catalog.tiers.map((option) => option.name)}
+      itemKey={(name) => name}
+      itemLabel={(name) => name}
+      placeholder={t("allTiers")}
+      searchPlaceholder={t("tier")}
+      emptyMessage={t("noTier")}
+      className="w-44"
+    />
   );
 }
 

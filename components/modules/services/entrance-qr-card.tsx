@@ -1,17 +1,33 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { QRCodeCanvas } from "qrcode.react";
 import { toast } from "sonner";
 import { Download, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { QrCode } from "@/components/shared";
+import { qrPath } from "@/lib/qr-path";
 import { fetchBookingLinkAction } from "@/components/modules/services/services.service";
 
-/** Pixels of the downloaded image, large enough to print; the preview is smaller. */
+/** Pixels of the downloaded image, large enough to print. */
 const QR_SIZE = 640;
-const QR_PREVIEW = 160;
+
+/** The QR as a PNG data URL of [QR_SIZE] pixels, drawn from the same path as the preview. */
+function qrPng(value: string): string | null {
+  const qr = qrPath(value);
+  const canvas = document.createElement("canvas");
+  canvas.width = QR_SIZE;
+  canvas.height = QR_SIZE;
+  const context = canvas.getContext("2d");
+  if (!context) return null;
+  context.fillStyle = "#fff";
+  context.fillRect(0, 0, QR_SIZE, QR_SIZE);
+  context.scale(QR_SIZE / qr.size, QR_SIZE / qr.size);
+  context.fillStyle = "#000";
+  context.fill(new Path2D(qr.path));
+  return canvas.toDataURL("image/png");
+}
 
 /**
  * The QR a service shows at its entrance (JIKU-113): scanned with a phone, it
@@ -22,7 +38,6 @@ export function EntranceQrCard({ serviceId, serviceName }: { serviceId: string; 
   const t = useTranslations("services.entranceQr");
   const [url, setUrl] = useState<string | null>(null);
   const [isLoading, startLoading] = useTransition();
-  const canvas = useRef<HTMLCanvasElement>(null);
 
   function show() {
     startLoading(async () => {
@@ -36,7 +51,8 @@ export function EntranceQrCard({ serviceId, serviceName }: { serviceId: string; 
   }
 
   function download() {
-    const image = canvas.current?.toDataURL("image/png");
+    if (!url) return;
+    const image = qrPng(url);
     if (!image) return;
     const anchor = document.createElement("a");
     anchor.href = image;
@@ -54,7 +70,7 @@ export function EntranceQrCard({ serviceId, serviceName }: { serviceId: string; 
         {url ? (
           <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
             <div className="rounded-xl border bg-white p-3">
-              <QRCodeCanvas ref={canvas} value={url} size={QR_SIZE} marginSize={2} style={{ width: QR_PREVIEW, height: QR_PREVIEW }} />
+              <QrCode value={url} label={url} className="size-40" />
             </div>
             <div className="flex flex-col gap-2">
               <code className="max-w-full break-all rounded bg-muted px-2 py-1 font-mono text-xs">{url}</code>

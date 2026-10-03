@@ -2,9 +2,8 @@
 
 import { useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
-import { QRCodeSVG } from "qrcode.react";
 import { MapPin } from "lucide-react";
-import { CardHero, OrganizerMark } from "@/components/shared";
+import { CardHero, OrganizerMark, QrCode } from "@/components/shared";
 import { CARD_STYLE_TOKENS, displayTitle, type CardStyle } from "@/lib/card-style";
 import { cn } from "@/lib/utils";
 
@@ -143,7 +142,7 @@ export function TicketCard({
 
         <div className="flex flex-col items-center gap-3 px-5 pb-5 pt-2">
           <div className={cn("bg-white p-3", cancelled && "opacity-30 grayscale")} style={{ borderRadius: Math.max(8, radius * 0.6) }}>
-            <QRCodeSVG value={ticketCode} size={208} level="M" marginSize={0} className="h-auto w-full max-w-[208px]" />
+            <QrCode value={ticketCode} quiet={0} className="h-auto w-full max-w-[208px]" />
           </div>
           {codeShown ? (
             <p className="select-all rounded-md bg-white px-2 py-0.5 font-mono text-xs tracking-wider">{ticketCode}</p>

@@ -2,14 +2,7 @@
 
 import { useMemo, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox";
+import { Combobox } from "@/components/ui/combobox";
 import { searchTenantsAction } from "@/components/modules/admin/admin.service";
 import type { TenantDirectoryEntry } from "@/components/modules/admin/schema";
 
@@ -67,27 +60,16 @@ export function TenantCombobox({
 
   return (
     <Combobox<TenantDirectoryEntry>
-      items={items}
-      filter={null}
+      id={id}
       value={value}
       onValueChange={onChange}
-      onInputValueChange={search}
-      itemToStringLabel={(tenant) => tenant.name}
-      isItemEqualToValue={(a, b) => a.id === b.id}
-    >
-      <ComboboxInput id={id} placeholder={placeholder ?? t("searchOrganizations")} />
-      <ComboboxContent>
-        <ComboboxList>
-          <ComboboxEmpty>
-            {isPending ? t("searching") : query.trim() ? t("noOrganization") : t("typeToSearch")}
-          </ComboboxEmpty>
-          {items.map((tenant) => (
-            <ComboboxItem key={tenant.id} value={tenant}>
-              {tenant.name}
-            </ComboboxItem>
-          ))}
-        </ComboboxList>
-      </ComboboxContent>
-    </Combobox>
+      items={items}
+      itemKey={(tenant) => tenant.id}
+      itemLabel={(tenant) => tenant.name}
+      onSearchChange={search}
+      placeholder={placeholder ?? t("searchOrganizations")}
+      emptyMessage={isPending ? t("searching") : query.trim() ? t("noOrganization") : t("typeToSearch")}
+      className="w-full"
+    />
   );
 }

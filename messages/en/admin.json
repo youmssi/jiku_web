@@ -304,7 +304,9 @@
     "cancel": "Cancel",
     "granting": "Granting…",
     "grantedToast": "Trial granted: the organizer has been notified.",
-    "pickBoth": "Pick an organization and an event first."
+    "pickBoth": "Pick an organization and an event first.",
+    "noStatus": "No status",
+    "noTier": "No tier"
   },
   "billing": {
     "defaultsTitle": "Defaults from configuration",

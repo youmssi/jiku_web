@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { QRCodeSVG } from "qrcode.react";
 import { enUS, fr } from "date-fns/locale";
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { usePathname } from "@/i18n/navigation";
@@ -17,7 +16,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { FormFieldError } from "@/components/shared";
+import { FormFieldError, QrCode } from "@/components/shared";
 import { cn } from "@/lib/utils";
 import { bookAppointment, loadAppointment, type AppointmentLinkRef } from "@/components/modules/appointment/appointment.service";
 import {
@@ -107,7 +106,7 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
           </CardHeader>
           <CardContent className="flex flex-col items-center gap-4">
             <div className="rounded-xl border p-3">
-              <QRCodeSVG value={booked.bookingToken} size={180} />
+              <QrCode value={booked.bookingToken} className="size-[180px]" />
             </div>
             <div>
               <p className="font-medium">{view?.name}</p>
