@@ -131,6 +131,8 @@ export const SEO_ROUTES = {
   USE_CASES: "/use-cases",
   SIMULATOR: "/simulator",
   FAQ: "/faq",
+  BIRTHDAY_CARD: "/birthday-invitation-card",
+  BIRTHDAY_TEXTS: "/birthday-invitation-texts",
 } as const;
 
 export const ADMIN_ROUTES = {

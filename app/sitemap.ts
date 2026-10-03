@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const lastModified = new Date();
 
-  // The marketing pages (use-cases, simulator, FAQ) are bilingual with the
+  // The marketing pages (use-cases, simulator, birthday pages, FAQ) are bilingual with the
   // default locale (fr) serving unprefixed — they carry explicit hreflang
   // alternates, like the landing page. The legal pages are bilingual too.
   return [
@@ -79,6 +79,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
       },
     },
+    ...[SEO_ROUTES.BIRTHDAY_CARD, SEO_ROUTES.BIRTHDAY_TEXTS].flatMap((path) =>
+      [`${origin}${path}`, `${origin}/en${path}`].map((url) => ({
+        url,
+        lastModified,
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+        alternates: { languages: { fr: `${origin}${path}`, en: `${origin}/en${path}` } },
+      })),
+    ),
     ...[`${origin}${SEO_ROUTES.FAQ}`, `${origin}/en${SEO_ROUTES.FAQ}`].map((url) => ({
       url,
       lastModified,

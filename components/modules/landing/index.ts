@@ -10,3 +10,7 @@ export type { UseCasesPageContent } from "./use-cases-content";
 export { SimulatorPage } from "./simulator-page";
 export { SIMULATOR_CONTENT } from "./simulator-content";
 export type { SimulatorContent } from "./simulator-content";
+export { BirthdayCardPage } from "./birthday-card-page";
+export { BirthdayTextsPage } from "./birthday-texts-page";
+export { BIRTHDAY_CARD_CONTENT, BIRTHDAY_TEXTS_CONTENT } from "./birthday-content";
+export type { BirthdayCardPageContent, BirthdayTextsPageContent } from "./birthday-content";
