@@ -9,6 +9,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { AddGuestDialog, ExportGuestsButton, ImportGuestsDialog, SendInvitationsDialog } from "@/components/modules/guest/guest-actions";
+import { ConsentBanner } from "@/components/modules/guest/consent-banner";
 import { GuestsTable, type GuestRow } from "@/components/modules/guest/guests-table";
 import type { TicketTypeResponse } from "@/components/modules/event";
 import { reportApiError } from "@/lib/action-result";
@@ -67,6 +68,9 @@ export async function GuestsView({ eventId }: { eventId: string }) {
     EMAIL: guests.filter((guest) => guest.email && !guest.excludedFromInvitations).length,
     WHATSAPP: guests.filter((guest) => guest.phoneNumber && !guest.excludedFromInvitations).length,
   } satisfies Record<InvitationChannel, number>;
+  const awaitingConsent = enabledChannels.includes("WHATSAPP")
+    ? guests.filter((guest) => guest.phoneNumber && guest.consentAttested === false).length
+    : 0;
 
   return (
     <section aria-labelledby="guests-title" className="flex flex-col gap-4">
@@ -83,6 +87,7 @@ export async function GuestsView({ eventId }: { eventId: string }) {
           ) : null}
         </div>
       </div>
+      {awaitingConsent > 0 ? <ConsentBanner eventId={eventId} count={awaitingConsent} /> : null}
 
       {guests.length === 0 ? (
         <Empty className="border">

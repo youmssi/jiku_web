@@ -17,7 +17,8 @@
     "prospects": "Prospects",
     "feedback": "Feedback",
     "diagnostics": "Diagnostics",
-    "verifications": "Verifications"
+    "verifications": "Verifications",
+    "followUps": "Follow-ups"
   },
   "pages": {
     "tenants": "Tenants",
@@ -31,7 +32,8 @@
     "feedback": "Feedback",
     "diagnostics": "Diagnostics",
     "billingLoadFailed": "The billing settings couldn't be loaded.",
-    "verifications": "Organization verifications"
+    "verifications": "Organization verifications",
+    "followUps": "Follow-ups"
   },
   "login": {
     "metaTitle": "Jikū - Administration",
@@ -172,7 +174,8 @@
     "override": "The content override couldn't be changed.",
     "prospect": "This lead couldn't be marked as contacted.",
     "diagnostics": "No error was triggered: unexpected response.",
-    "billingSettings": "The settings couldn't be saved."
+    "billingSettings": "The settings couldn't be saved.",
+    "followUp": "Couldn't mark this follow-up as done."
   },
   "whatsapp": {
     "pricingTitle": "Price per category (USD, cents)",
@@ -301,7 +304,9 @@
     "cancel": "Cancel",
     "granting": "Granting…",
     "grantedToast": "Trial granted: the organizer has been notified.",
-    "pickBoth": "Pick an organization and an event first."
+    "pickBoth": "Pick an organization and an event first.",
+    "noStatus": "No status",
+    "noTier": "No tier"
   },
   "billing": {
     "defaultsTitle": "Defaults from configuration",
@@ -374,5 +379,35 @@
     "emptyText": "No verification request in this state.",
     "documentsFailed": "The documents couldn't be opened.",
     "storageUnavailable": "Document storage is unavailable."
+  },
+  "followUps": {
+    "intro": "Organizations that stopped along the way. Call them or write on WhatsApp, then mark the follow-up as done: it disappears for 7 days.",
+    "funnel": {
+      "title": "Activation over {days} days",
+      "signedUp": "Signed up",
+      "firstEventOrService": "1st event or service",
+      "firstSend": "1st message sent",
+      "firstPayment": "1st payment"
+    },
+    "columns": {
+      "organization": "Organization",
+      "contact": "Contact",
+      "reason": "Reason",
+      "since": "Since",
+      "consent": "Marketing consent"
+    },
+    "reasons": {
+      "NO_ACTIVITY": "No event or service",
+      "NO_GUESTS": "Event without guests",
+      "VERIFICATION_REJECTED": "Verification refused",
+      "TRIAL_ENDING": "Trial ending"
+    },
+    "consentYes": "Yes",
+    "consentNo": "No",
+    "whatsapp": "WhatsApp",
+    "done": "Done",
+    "marked": "Follow-up with {name} marked as done.",
+    "emptyTitle": "Nobody to follow up",
+    "emptyText": "Every organization is moving forward. Check again tomorrow."
   }
 }

@@ -150,9 +150,9 @@ const EN_PRICES = pricingAnswers("en");
 const fr: LandingContent = {
   htmlLang: "fr",
   meta: {
-    title: "Jikū : invitations WhatsApp, billets QR, rendez-vous et file d'attente",
+    title: "Jikū : invitations WhatsApp, billets QR et file d'attente",
     description:
-      "Envoyez vos invitations ou partagez une carte dans vos groupes WhatsApp, faites entrer vos invités par billet QR, même sans réseau. Rendez-vous et file du jour pour vos services. Gratuit jusqu'à 100 invités.",
+      "Invitations et cartes WhatsApp, billets QR contrôlés même sans réseau, rendez-vous et file du jour pour vos services. Gratuit jusqu'à 100 invités.",
     keywords: [
       "carte d'invitation WhatsApp",
       "invitation anniversaire",
@@ -366,9 +366,9 @@ const fr: LandingContent = {
     subheading: "Les réponses aux questions qu'on nous pose le plus.",
     more: "Toutes les questions",
     page: {
-      title: "FAQ Jikū — Invitations, cartes, billets, rendez-vous : vos questions",
+      title: "FAQ : invitations, billets et rendez-vous",
       description:
-        "Faut-il une application ? Le check-in marche-t-il hors ligne ? Qui peut répondre à une carte partagée ? Combien ça coûte ? Les réponses aux questions les plus posées sur Jikū.",
+        "Faut-il une application ? Le contrôle marche-t-il hors ligne ? Combien ça coûte ? Les réponses aux questions les plus posées sur Jikū.",
       heading: "Questions fréquentes sur Jikū",
       intro:
         "Jikū gère tout ce qui passe par un billet : les invitations et les cartes à partager, les billets QR et l'entrée de vos événements, les rendez-vous et la file du jour de vos services, sans application à installer. Voici les réponses aux questions qu'on nous pose le plus.",
@@ -413,6 +413,13 @@ const fr: LandingContent = {
         ],
       },
       {
+        title: "Ressources",
+        links: [
+          { label: "Carte d'invitation d'anniversaire", href: "/birthday-invitation-card" },
+          { label: "Textes d'invitation d'anniversaire", href: "/birthday-invitation-texts" },
+        ],
+      },
+      {
         title: "Application",
         links: [
           { label: "Se connecter", href: "/login" },
@@ -437,9 +444,9 @@ const fr: LandingContent = {
 const en: LandingContent = {
   htmlLang: "en",
   meta: {
-    title: "Jikū: WhatsApp invitations, QR tickets, appointments and queues",
+    title: "Jikū: WhatsApp invitations, QR tickets and queues",
     description:
-      "Send your invitations or share a card in your WhatsApp groups, let guests in with a QR ticket, even offline. Bookings and the day line for your services. Free for up to 100 guests.",
+      "WhatsApp invitations and cards, QR tickets checked even offline, bookings and the day line for your services. Free for up to 100 guests.",
     keywords: [
       "WhatsApp invitation card",
       "birthday invitation",
@@ -653,9 +660,9 @@ const en: LandingContent = {
     subheading: "Answers to the questions we hear most.",
     more: "All questions",
     page: {
-      title: "Jikū FAQ — Invitations, cards, tickets, appointments: your questions",
+      title: "FAQ: invitations, tickets and appointments",
       description:
-        "Do people need an app? Does check-in work offline? Who can answer a shared card? How much does it cost? Answers to the questions we hear most about Jikū.",
+        "Do people need an app? Does check-in work offline? How much does it cost? Answers to the questions we hear most about Jikū.",
       heading: "Frequently asked questions about Jikū",
       intro:
         "Jikū runs everything that goes through a ticket: invitations and cards to share, QR tickets and entry for your events, bookings and the day line for your services, with no app to install. Here are the answers to the questions we hear most.",
@@ -697,6 +704,13 @@ const en: LandingContent = {
           { label: "Use cases", href: "/use-cases" },
           { label: "Simulator", href: "/simulator" },
           { label: "FAQ", href: "/faq" },
+        ],
+      },
+      {
+        title: "Resources",
+        links: [
+          { label: "Birthday invitation card", href: "/birthday-invitation-card" },
+          { label: "Birthday invitation texts", href: "/birthday-invitation-texts" },
         ],
       },
       {

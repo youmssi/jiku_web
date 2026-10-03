@@ -45,9 +45,19 @@ export interface CompleteEmbeddedSignupRequest {
   phoneNumberId: string;
 }
 
+/** The organization's use of the Jikū WhatsApp number and its limits (JIKU-212). */
+export interface PlatformWhatsAppUsage {
+  sentToday: number;
+  dailyLimit: number | null;
+  sentLast30Days: number;
+  monthlyLimit: number | null;
+  verified: boolean;
+}
+
 export interface ProviderSettingsResponse {
   email: EmailProviderView;
   whatsapp: WhatsAppProviderView;
+  platformWhatsApp?: PlatformWhatsAppUsage | null;
 }
 
 export interface UpdateEmailProviderRequest {

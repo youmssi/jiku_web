@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 import { Inbox } from "lucide-react";
 import { toast } from "sonner";
+import { useLiveSignal } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,15 +24,20 @@ import {
 } from "@/components/ui/empty";
 import {
   acceptPendingRequestAction,
+  fetchDayLineLiveTicketAction,
   fetchPendingRequestsAction,
   rejectPendingRequestAction,
 } from "@/components/modules/dayline/dayline.service";
+import { dayLineKey } from "@/components/modules/dayline/useDayLine";
 import type {
   DayLineAuth,
   PendingAppointmentRequest,
 } from "@/components/modules/dayline/schema";
 
+/** Without the live stream, how often the requests reload. */
 const REFRESH_MS = 15_000;
+/** With it, a safety reload for changes the stream cannot see. */
+const LIVE_REFRESH_MS = 60_000;
 
 /**
  * Appointment requests waiting for a decision (on-request mode, JIKU-88). A
@@ -53,18 +59,18 @@ export function PendingRequests({
   const [requests, setRequests] = useState<PendingAppointmentRequest[]>(initial);
   const [busyId, setBusyId] = useState<string | null>(null);
 
-  useEffect(() => {
-    let active = true;
-    const timer = setInterval(async () => {
-      if (document.visibilityState === "hidden") return;
-      const result = await fetchPendingRequestsAction(auth);
-      if (active && result.ok) setRequests(result.data);
-    }, REFRESH_MS);
-    return () => {
-      active = false;
-      clearInterval(timer);
-    };
+  const reload = useCallback(async () => {
+    if (document.visibilityState === "hidden") return;
+    const result = await fetchPendingRequestsAction(auth);
+    if (result.ok) setRequests(result.data);
   }, [auth]);
+
+  const live = useLiveSignal(dayLineKey(auth), () => fetchDayLineLiveTicketAction(auth), () => void reload());
+
+  useEffect(() => {
+    const timer = setInterval(() => void reload(), live ? LIVE_REFRESH_MS : REFRESH_MS);
+    return () => clearInterval(timer);
+  }, [reload, live]);
 
   async function refresh() {
     const result = await fetchPendingRequestsAction(auth);

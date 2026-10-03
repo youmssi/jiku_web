@@ -196,6 +196,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/follow-ups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminFollowUpOverview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/follow-ups/{tenantId}/{reason}/done": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminFollowUpMarkDone"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/payments": {
         parameters: {
             query?: never;
@@ -500,6 +532,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/whatsapp/templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminWhatsAppTemplateList"];
+        put?: never;
+        post: operations["adminWhatsAppTemplatePublish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/appointments/{token}": {
         parameters: {
             query?: never;
@@ -574,6 +622,22 @@ export interface paths {
         get: operations["appointmentPublicLineTicket"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/appointments/{token}/line/{ticketCode}/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["appointmentPublicLive"];
         delete?: never;
         options?: never;
         head?: never;
@@ -669,6 +733,22 @@ export interface paths {
         };
         get: operations["authMe"];
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/marketing-consent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["authUpdateMarketingConsent"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1524,6 +1604,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/dashboard/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["dashboardLive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/guests": {
         parameters: {
             query?: never;
@@ -1534,6 +1630,22 @@ export interface paths {
         get: operations["guestList"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/guests/consent-attestation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["guestAttestConsent"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2116,6 +2228,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/line/{token}/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffLive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/line/{token}/next": {
         parameters: {
             query?: never;
@@ -2292,6 +2420,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/live/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["liveStreamStream"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/members": {
         parameters: {
             query?: never;
@@ -2398,6 +2542,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["resendEmailFeedbackReceive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/email-feedback/usesend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["useSendEmailFeedbackReceive"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2606,6 +2766,22 @@ export interface paths {
         get: operations["lineStaffView_1"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffLive_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3076,6 +3252,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/r/{code}/line/{ticketCode}/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["shortLinkPublicLive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/resources": {
         parameters: {
             query?: never;
@@ -3390,6 +3582,22 @@ export interface paths {
         get: operations["serviceDayLineView"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLineLive"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3883,6 +4091,18 @@ export interface components {
         AcceptInvitationRequest: {
             token: string;
         };
+        ActivationFunnel: {
+            /** Format: int32 */
+            firstEventOrService?: number;
+            /** Format: int32 */
+            firstPayment?: number;
+            /** Format: int32 */
+            firstSend?: number;
+            /** Format: int32 */
+            signedUp?: number;
+            /** Format: int64 */
+            windowDays?: number;
+        };
         AdminAuthResponse: {
             accessToken?: string;
             refreshToken?: string;
@@ -4218,6 +4438,10 @@ export interface components {
         ConfirmPaymentRequest: {
             transactionReference: string;
         };
+        ConsentAttestationResult: {
+            /** Format: int32 */
+            attestedGuests?: number;
+        };
         CreateAgreementRequest: {
             /** Format: int64 */
             amountMinor?: number | null;
@@ -4521,6 +4745,22 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string | null;
         };
+        FollowUpEntry: {
+            marketingConsent?: boolean;
+            organizationName?: string;
+            ownerEmail?: string | null;
+            ownerName?: string | null;
+            phone?: string | null;
+            /** @enum {string} */
+            reason?: "NO_ACTIVITY" | "NO_GUESTS" | "VERIFICATION_REJECTED" | "TRIAL_ENDING";
+            /** Format: date-time */
+            since?: string;
+            tenantId?: string;
+        };
+        FollowUpOverview: {
+            entries?: components["schemas"]["FollowUpEntry"][];
+            funnel?: components["schemas"]["ActivationFunnel"];
+        };
         ForgotPasswordRequest: {
             /** Format: email */
             email: string;
@@ -4541,6 +4781,7 @@ export interface components {
             tier: string;
         };
         GuestImportResult: {
+            consentAttested?: boolean;
             /** Format: int32 */
             failed?: number;
             failures?: components["schemas"]["RowIssue"][];
@@ -4571,6 +4812,7 @@ export interface components {
             amountDueMinor?: number | null;
             /** Format: date-time */
             checkedInAt?: string | null;
+            consentAttested?: boolean;
             email?: string | null;
             excludedFromInvitations?: boolean;
             firstName?: string;
@@ -4720,6 +4962,11 @@ export interface components {
             status?: string;
             ticketCode?: string;
         };
+        LiveTicket: {
+            /** Format: date-time */
+            expiresAt?: string;
+            ticket?: string;
+        };
         LoginRequest: {
             /** Format: email */
             email: string;
@@ -4747,9 +4994,14 @@ export interface components {
             /** @enum {string} */
             method?: "MOBILE_MONEY" | "PAYMENT_LINK" | "CASH";
         };
+        MarketingConsentRequest: {
+            granted?: boolean;
+            textVersion?: string | null;
+        };
         MeResponse: {
             email?: string;
             fullName?: string | null;
+            marketingConsent?: boolean;
             memberships?: components["schemas"]["MembershipView"][];
             role?: string;
             tenantId?: string;
@@ -5183,6 +5435,17 @@ export interface components {
             subscriptionPlans?: components["schemas"]["SubscriptionPlanOption"][];
             tiers?: components["schemas"]["BillingTierOption"][];
         };
+        PlatformWhatsAppUsage: {
+            /** Format: int64 */
+            dailyLimit?: number | null;
+            /** Format: int64 */
+            monthlyLimit?: number | null;
+            /** Format: int64 */
+            sentLast30Days?: number;
+            /** Format: int64 */
+            sentToday?: number;
+            verified?: boolean;
+        };
         PriceList: {
             /** Format: int64 */
             fcfa?: number;
@@ -5204,6 +5467,8 @@ export interface components {
             contactName: string;
             /** Format: email */
             email?: string | null;
+            marketingConsent?: boolean;
+            marketingConsentVersion?: string | null;
             note?: string | null;
             phone: string;
             sector: string;
@@ -5221,6 +5486,7 @@ export interface components {
             email?: string | null;
             /** Format: uuid */
             id?: string;
+            marketingConsent?: boolean;
             note?: string | null;
             phone?: string;
             sector?: string;
@@ -5230,6 +5496,7 @@ export interface components {
         };
         ProviderSettingsResponse: {
             email?: components["schemas"]["EmailProviderView"];
+            platformWhatsApp?: components["schemas"]["PlatformWhatsAppUsage"] | null;
             whatsapp?: components["schemas"]["WhatsAppProviderView"];
         };
         PublicOpenInvitationView: {
@@ -5350,6 +5617,8 @@ export interface components {
             /** Format: email */
             email: string;
             fullName?: string | null;
+            marketingConsent?: boolean;
+            marketingConsentVersion?: string | null;
             name?: string | null;
             password: string;
         };
@@ -5608,6 +5877,10 @@ export interface components {
             /** Format: uuid */
             ticketTypeId?: string | null;
         };
+        SseEmitter: {
+            /** Format: int64 */
+            timeout?: number;
+        };
         SubscriptionPlanOption: {
             extraPerson?: components["schemas"]["PriceList"] | null;
             /** Format: int64 */
@@ -5693,6 +5966,25 @@ export interface components {
         };
         TemplatePreviewResponse: {
             body?: string;
+        };
+        TemplatePublication: {
+            created?: boolean;
+            error?: string | null;
+            language?: string;
+            name?: string;
+        };
+        TemplateStateView: {
+            /** Format: date-time */
+            blockedUntil?: string | null;
+            category?: string | null;
+            language?: string;
+            name?: string;
+            quality?: string | null;
+            reason?: string | null;
+            status?: string | null;
+            /** Format: date-time */
+            updatedAt?: string;
+            wabaId?: string;
         };
         TemplateSummary: {
             channels?: string[];
@@ -6381,6 +6673,47 @@ export interface operations {
             };
         };
     };
+    adminFollowUpOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["FollowUpOverview"];
+                };
+            };
+        };
+    };
+    adminFollowUpMarkDone: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+                reason: "NO_ACTIVITY" | "NO_GUESTS" | "VERIFICATION_REJECTED" | "TRIAL_ENDING";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     adminPaymentList: {
         parameters: {
             query?: {
@@ -6881,6 +7214,46 @@ export interface operations {
             };
         };
     };
+    adminWhatsAppTemplateList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TemplateStateView"][];
+                };
+            };
+        };
+    };
+    adminWhatsAppTemplatePublish: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TemplatePublication"][];
+                };
+            };
+        };
+    };
     appointmentPublicView: {
         parameters: {
             query?: {
@@ -7024,6 +7397,29 @@ export interface operations {
             };
         };
     };
+    appointmentPublicLive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
+                };
+            };
+        };
+    };
     authForgotPassword: {
         parameters: {
             query?: never;
@@ -7157,6 +7553,28 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["MeResponse"];
                 };
+            };
+        };
+    };
+    authUpdateMarketingConsent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarketingConsentRequest"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -8453,6 +8871,28 @@ export interface operations {
             };
         };
     };
+    dashboardLive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
+                };
+            };
+        };
+    };
     guestList: {
         parameters: {
             query?: never;
@@ -8471,6 +8911,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["GuestResponse"][];
+                };
+            };
+        };
+    };
+    guestAttestConsent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ConsentAttestationResult"];
                 };
             };
         };
@@ -8497,7 +8959,9 @@ export interface operations {
     };
     guestImport: {
         parameters: {
-            query?: never;
+            query?: {
+                consentAttested?: boolean;
+            };
             header?: never;
             path: {
                 eventId: string;
@@ -9584,6 +10048,28 @@ export interface operations {
             };
         };
     };
+    lineStaffLive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
+                };
+            };
+        };
+    };
     lineStaffNext: {
         parameters: {
             query?: {
@@ -9844,6 +10330,28 @@ export interface operations {
             };
         };
     };
+    liveStreamStream: {
+        parameters: {
+            query: {
+                ticket: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": components["schemas"]["SseEmitter"];
+                };
+            };
+        };
+    };
     memberMembers: {
         parameters: {
             query?: never;
@@ -10005,6 +10513,31 @@ export interface operations {
                 "svix-id"?: string;
                 "svix-timestamp"?: string;
                 "svix-signature"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string;
+            };
+        };
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    useSendEmailFeedbackReceive: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-UseSend-Signature"?: string;
+                "X-UseSend-Timestamp"?: string;
             };
             path?: never;
             cookie?: never;
@@ -10340,6 +10873,29 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["DayLineView"];
+                };
+            };
+        };
+    };
+    lineStaffLive_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
                 };
             };
         };
@@ -11084,6 +11640,29 @@ export interface operations {
             };
         };
     };
+    shortLinkPublicLive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
+                };
+            };
+        };
+    };
     resourceList: {
         parameters: {
             query?: never;
@@ -11746,6 +12325,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["DayLineView"];
+                };
+            };
+        };
+    };
+    serviceDayLineLive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
                 };
             };
         };

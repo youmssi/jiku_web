@@ -1,4 +1,19 @@
 {
+  "page": {
+    "title": "Réglages",
+    "description": "Votre organisation, votre équipe et votre compte.",
+    "fallbackOrganization": "Votre organisation",
+    "tabs": {
+      "organization": "Organisation",
+      "branding": "Identité visuelle",
+      "members": "Membres",
+      "messaging": "Fournisseurs d'envoi",
+      "payments": "Moyens de paiement",
+      "legal": "Facturation",
+      "personalisation": "Personnalisation",
+      "account": "Compte"
+    }
+  },
   "whatsappNumber": {
     "title": "Votre numéro WhatsApp",
     "platform": "Vos messages WhatsApp partent du numéro de Jikū. Aucune configuration nécessaire.",
@@ -42,6 +57,14 @@
       "unavailable": "La connexion par Meta n'est pas disponible pour le moment.",
       "failed": "Impossible d'enregistrer votre numéro. Réessayez.",
       "sdk": "La fenêtre Meta n'a pas pu s'ouvrir. Vérifiez votre connexion et réessayez."
+    },
+    "usage": {
+      "title": "Envois depuis le numéro Jikū",
+      "today": "Aujourd'hui : {sent} / {limit} messages",
+      "todayHint": "Organisation non vérifiée : vérifiez-la pour envoyer davantage.",
+      "month": "30 derniers jours : {sent} / {limit} messages",
+      "monthHint": "Au-delà, connectez votre propre numéro WhatsApp : vos messages continueront de partir, à votre nom.",
+      "reached": "Plafond atteint : les messages WhatsApp attendent dans la file."
     }
   },
   "paymentMethods": {
@@ -167,5 +190,19 @@
     "failed": "Impossible d'enregistrer. Réessayez.",
     "loadFailed": "Impossible de charger vos réglages de vente.",
     "refused": "Cette durée n'est pas autorisée."
+  },
+  "account": {
+    "title": "Votre compte",
+    "description": "Comment vous apparaissez dans cette organisation.",
+    "name": "Nom",
+    "email": "E-mail",
+    "role": "Rôle dans cette organisation",
+    "notSet": "Non renseigné",
+    "news": {
+      "label": "Nouveautés et conseils de Jikū",
+      "hint": "Par e-mail ou WhatsApp, quelques fois par mois au plus.",
+      "saved": "Préférence enregistrée.",
+      "failed": "Enregistrement impossible. Réessayez."
+    }
   }
 }

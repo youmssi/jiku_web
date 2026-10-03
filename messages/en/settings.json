@@ -1,4 +1,19 @@
 {
+  "page": {
+    "title": "Settings",
+    "description": "Your organization, your team and your account.",
+    "fallbackOrganization": "Your organization",
+    "tabs": {
+      "organization": "Organization",
+      "branding": "Branding",
+      "members": "Members",
+      "messaging": "Messaging providers",
+      "payments": "Payment methods",
+      "legal": "Invoicing details",
+      "personalisation": "Personalisation",
+      "account": "Account"
+    }
+  },
   "whatsappNumber": {
     "title": "Your WhatsApp number",
     "platform": "Your WhatsApp messages go out from Jikū's number. Nothing to set up.",
@@ -42,6 +57,14 @@
       "unavailable": "Connecting through Meta is not available right now.",
       "failed": "We couldn't save your number. Please try again.",
       "sdk": "The Meta window couldn't open. Check your connection and try again."
+    },
+    "usage": {
+      "title": "Sends from the Jikū number",
+      "today": "Today: {sent} / {limit} messages",
+      "todayHint": "Your organization is not verified: verify it to send more.",
+      "month": "Last 30 days: {sent} / {limit} messages",
+      "monthHint": "Beyond that, connect your own WhatsApp number: your messages keep going out, under your name.",
+      "reached": "Limit reached: WhatsApp messages wait in the queue."
     }
   },
   "paymentMethods": {
@@ -167,5 +190,19 @@
     "failed": "We couldn't save. Try again.",
     "loadFailed": "We couldn't load your sales settings.",
     "refused": "This hold time is not allowed."
+  },
+  "account": {
+    "title": "Your account",
+    "description": "How you appear in this organization.",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role in this organization",
+    "notSet": "Not set",
+    "news": {
+      "label": "Jikū news and tips",
+      "hint": "By email or WhatsApp, a few times a month at most.",
+      "saved": "Preference saved.",
+      "failed": "Couldn't save. Please try again."
+    }
   }
 }

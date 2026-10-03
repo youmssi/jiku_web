@@ -129,9 +129,9 @@ export interface SimulatorContent {
 
 const fr: SimulatorContent = {
   meta: {
-    title: "Tarifs et simulateur Jikū : abonnement, événement ou billetterie",
+    title: "Tarifs : abonnement, événement, billetterie",
     description:
-      "Services : un abonnement pour l'équipe, Solo gratuit pour toujours. Événements : gratuit jusqu'à 100 invités, puis un prix par événement. Billets vendus : 3 %. En GNF, en FCFA ou en dollars.",
+      "Solo gratuit pour toujours, événements gratuits jusqu'à 100 invités, 3 % sur les billets vendus. Simulez votre prix en GNF, en FCFA ou en dollars.",
   },
   eyebrow: "Tarifs",
   title: "Le bon prix, pour ce que vous faites vraiment",
@@ -402,9 +402,9 @@ const fr: SimulatorContent = {
 
 const en: SimulatorContent = {
   meta: {
-    title: "Jikū pricing and simulator: subscription, event or ticket sales",
+    title: "Pricing: subscription, events, ticket sales",
     description:
-      "Services: a subscription for your team, Solo free forever. Events: free up to 100 guests, then one price per event. Tickets sold: 3%. In GNF, CFA francs or dollars.",
+      "Solo free forever, events free up to 100 guests, 3% on tickets sold. Simulate your price in GNF, CFA francs or dollars.",
   },
   eyebrow: "Pricing",
   title: "The right price, for what you actually do",

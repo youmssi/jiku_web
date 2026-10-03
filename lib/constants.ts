@@ -131,6 +131,8 @@ export const SEO_ROUTES = {
   USE_CASES: "/use-cases",
   SIMULATOR: "/simulator",
   FAQ: "/faq",
+  BIRTHDAY_CARD: "/birthday-invitation-card",
+  BIRTHDAY_TEXTS: "/birthday-invitation-texts",
 } as const;
 
 export const ADMIN_ROUTES = {
@@ -142,6 +144,7 @@ export const ADMIN_ROUTES = {
   AUDIT: "/admin/audit",
   WHATSAPP: "/admin/whatsapp",
   PROSPECTS: "/admin/prospects",
+  FOLLOW_UPS: "/admin/follow-ups",
   FEEDBACK: "/admin/feedback",
   DIAGNOSTICS: "/admin/diagnostics",
   BILLING_INFO: "/admin/billing-info",

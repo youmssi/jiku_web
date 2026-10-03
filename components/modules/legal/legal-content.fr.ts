@@ -262,7 +262,7 @@ export const LEGAL_FR: LegalDocuments = {
             "Sécurité et prévention des abus : journaux, limitation des tentatives, détection de fraude (intérêt légitime).",
             "Améliorer le service : mesures d'audience sans cookie et sans identification, avis donnés volontairement (intérêt légitime).",
             "Respecter nos obligations légales : factures, comptabilité, réponses aux autorités.",
-            "Vous informer des évolutions importantes du service (contrat) ; toute lettre d'information commerciale nécessite votre accord et se désactive en un clic.",
+            "Vous informer des évolutions importantes du service (contrat) ; les nouveautés et conseils de Jikū ne vous sont envoyés que si vous avez coché la case prévue à l'inscription ou activé l'option dans les réglages de votre compte. Nous conservons la date et le texte accepté, et vous pouvez retirer cet accord à tout moment depuis les réglages ou en un clic depuis chaque message.",
           ],
         ],
       },

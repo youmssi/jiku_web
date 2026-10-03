@@ -1,8 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { LogoutIcon } from "@hugeicons/core-free-icons";
+import { LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -62,7 +61,7 @@ export function AdminSidebar(props: React.ComponentProps<typeof Sidebar>) {
                 className="text-muted-foreground"
               >
                 <button type="submit">
-                  <HugeiconsIcon icon={LogoutIcon} strokeWidth={2} />
+                  <LogOut strokeWidth={2} />
                   <span>{t("signOut")}</span>
                 </button>
               </SidebarMenuButton>

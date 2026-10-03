@@ -33,12 +33,9 @@ import type {
 
 const MANAGER_ROLES = ["ORGANIZER_OWNER", "ORGANIZER_ADMIN"];
 
-const DEFAULT_BRANDING: BrandingResponse = {
-  displayName: "Your organization",
-  logoUrl: null,
-  bannerUrl: null,
-  primaryColor: "#2563EB",
-};
+function defaultBranding(displayName: string): BrandingResponse {
+  return { displayName, logoUrl: null, bannerUrl: null, primaryColor: "#2563EB" };
+}
 
 const UNCONFIGURED_PROVIDERS: ProviderSettingsResponse = {
   email: { configured: false, provider: null, from: null, fromName: null, apiKeyMasked: null },
@@ -70,7 +67,7 @@ const EMPTY_LEGAL_IDENTITY: LegalIdentityResponse = {
  * round. A section whose load fails opens on its empty state rather than
  * blocking the others.
  */
-async function loadManagerSettings() {
+async function loadManagerSettings(fallbackOrganization: string) {
   const [username, branding, providers, embeddedSignup, paymentMethods, legalIdentity, members, vocabulary, templates, verification, sales] =
     await Promise.all([
     loadOrgUsername(),
@@ -87,7 +84,7 @@ async function loadManagerSettings() {
   ]);
   return {
     username,
-    branding: branding ?? DEFAULT_BRANDING,
+    branding: branding ?? defaultBranding(fallbackOrganization),
     providers: providers ?? UNCONFIGURED_PROVIDERS,
     embeddedSignup: embeddedSignup ?? { enabled: false, appId: null, configId: null, graphVersion: null },
     paymentMethods,
@@ -109,33 +106,37 @@ async function loadManagerSettings() {
 export async function SettingsView({ tab }: { tab?: string }) {
   const context = await getOrganizerContext();
   const isManager = context !== null && MANAGER_ROLES.includes(context.role);
-  const settings = isManager ? await loadManagerSettings() : null;
-  const [t, tSales] = await Promise.all([getTranslations("settings.verification"), getTranslations("settings.sales")]);
+  const [tPage, t, tSales] = await Promise.all([
+    getTranslations("settings.page"),
+    getTranslations("settings.verification"),
+    getTranslations("settings.sales"),
+  ]);
+  const settings = isManager ? await loadManagerSettings(tPage("fallbackOrganization")) : null;
 
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Your organization, your team and your account.</p>
+        <h1 className="text-2xl font-bold tracking-tight">{tPage("title")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{tPage("description")}</p>
       </div>
 
       <Tabs defaultValue={tab && settings ? tab : settings ? "branding" : "organization"} className="w-full">
         <TabsList className="mb-8">
-          <TabsTrigger value="organization">Organization</TabsTrigger>
-          {settings ? <TabsTrigger value="branding">Branding</TabsTrigger> : null}
-          {settings?.team ? <TabsTrigger value="members">Members</TabsTrigger> : null}
-          {settings ? <TabsTrigger value="messaging">Messaging providers</TabsTrigger> : null}
+          <TabsTrigger value="organization">{tPage("tabs.organization")}</TabsTrigger>
+          {settings ? <TabsTrigger value="branding">{tPage("tabs.branding")}</TabsTrigger> : null}
+          {settings?.team ? <TabsTrigger value="members">{tPage("tabs.members")}</TabsTrigger> : null}
+          {settings ? <TabsTrigger value="messaging">{tPage("tabs.messaging")}</TabsTrigger> : null}
           {settings ? <TabsTrigger value="verification">{t("tab")}</TabsTrigger> : null}
-          {settings ? <TabsTrigger value="payments">Payment methods</TabsTrigger> : null}
+          {settings ? <TabsTrigger value="payments">{tPage("tabs.payments")}</TabsTrigger> : null}
           {settings ? <TabsTrigger value="sales">{tSales("tab")}</TabsTrigger> : null}
-          {settings ? <TabsTrigger value="legal">Invoicing details</TabsTrigger> : null}
-          {settings ? <TabsTrigger value="personalisation">Personalisation</TabsTrigger> : null}
-          <TabsTrigger value="account">Account</TabsTrigger>
+          {settings ? <TabsTrigger value="legal">{tPage("tabs.legal")}</TabsTrigger> : null}
+          {settings ? <TabsTrigger value="personalisation">{tPage("tabs.personalisation")}</TabsTrigger> : null}
+          <TabsTrigger value="account">{tPage("tabs.account")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="organization" className="mt-0">
           <OrganizationView
-            brandName={context?.brandName ?? DEFAULT_BRANDING.displayName}
+            brandName={context?.brandName ?? tPage("fallbackOrganization")}
             role={context?.role ?? ""}
             isManager={isManager}
             username={settings?.username ?? null}
@@ -179,7 +180,12 @@ export async function SettingsView({ tab }: { tab?: string }) {
         ) : null}
 
         <TabsContent value="account" className="mt-0">
-          <AccountView fullName={context?.fullName ?? null} email={context?.email ?? ""} role={context?.role ?? ""} />
+          <AccountView
+            fullName={context?.fullName ?? null}
+            email={context?.email ?? ""}
+            role={context?.role ?? ""}
+            marketingConsent={context?.marketingConsent ?? false}
+          />
         </TabsContent>
       </Tabs>
     </div>

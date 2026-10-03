@@ -41,7 +41,8 @@
     "tooManyFiles": "You picked too many files.",
     "fileTooLarge": "A file is over the size limit, even compressed.",
     "fileType": "Attach JPEG, PNG or PDF files.",
-    "outOfRange": "Enter a value within the limits shown."
+    "outOfRange": "Enter a value within the limits shown.",
+    "consentRequired": "Confirm that the person agreed to receive your messages."
   },
   "roles": {
     "OWNER": "Owner",
@@ -65,5 +66,9 @@
   "camera": {
     "unsupported": "This device or browser doesn't support camera access.",
     "unavailable": "Camera unavailable. Grant camera access or use search instead."
+  },
+  "live": {
+    "label": "Live",
+    "hint": "This screen updates as soon as something changes."
   }
 }

@@ -263,7 +263,7 @@ export const LEGAL_EN: LegalDocuments = {
             "Security and abuse prevention: logs, rate limiting, fraud detection (legitimate interest).",
             "Improving the service: cookieless, non-identifying audience measurement, and feedback given voluntarily (legitimate interest).",
             "Meeting our legal obligations: invoices, accounting, answers to authorities.",
-            "Informing you of significant changes to the service (contract); any commercial newsletter requires your consent and can be turned off in one click.",
+            "Informing you of significant changes to the service (contract); Jikū news and tips are only sent if you ticked the box at sign-up or turned the option on in your account settings. We keep the date and the wording you accepted, and you can withdraw this consent at any time from the settings or in one click from each message.",
           ],
         ],
       },

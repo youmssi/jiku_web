@@ -5,6 +5,7 @@
 // product at work, step by step (use-case-journeys.ts).
 
 import type { LandingLocale } from "./content";
+import type { MarketingNavContent } from "./marketing-header";
 
 /** The anchors the landing page's "Who it's for" chips link to. */
 export type UseCaseProfileId = "weddings" | "parties" | "corporate" | "assemblies" | "clinics" | "offices";
@@ -41,20 +42,14 @@ export interface UseCasesPageContent {
     primary: string;
     secondary: string;
   };
-  nav: {
-    home: string;
-    signIn: string;
-    createAccount: string;
-    /** The other language: the link keeps this page and changes only the locale. */
-    switchLocale: { label: string; locale: "fr" | "en"; ariaLabel: string };
-  };
+  nav: MarketingNavContent;
 }
 
 const fr: UseCasesPageContent = {
   meta: {
-    title: "Cas d'usage Jikū — Mariages, anniversaires, séminaires, cliniques, administrations",
+    title: "Cas d'usage : mariages, séminaires, cliniques",
     description:
-      "Mariage, anniversaire avec carte WhatsApp, séminaire, assemblée générale, clinique ou agence : voyez, étape par étape, comment Jikū supprime l'attente, à la porte comme au guichet.",
+      "Mariage, anniversaire, séminaire, assemblée générale, clinique ou agence : comment Jikū supprime l'attente, à la porte comme au guichet.",
     keywords: [
       "invitation mariage guinée",
       "carte d'invitation anniversaire whatsapp",
@@ -141,9 +136,9 @@ const fr: UseCasesPageContent = {
 
 const en: UseCasesPageContent = {
   meta: {
-    title: "Jikū use cases — Weddings, birthdays, seminars, clinics, public offices",
+    title: "Use cases: weddings, seminars, clinics",
     description:
-      "Wedding, birthday with a WhatsApp card, seminar, general assembly, clinic or agency: see, step by step, how Jikū removes the wait, at the door and at the counter.",
+      "Wedding, birthday, seminar, general assembly, clinic or agency: how Jikū removes the wait, at the door and at the counter.",
     keywords: [
       "wedding invitations guinea",
       "whatsapp birthday invitation card",

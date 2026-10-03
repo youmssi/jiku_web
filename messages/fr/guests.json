@@ -79,7 +79,8 @@
     "submitting": "Ajout…",
     "added": "{name} a été ajouté.",
     "duplicate": "{name} est déjà sur la liste.",
-    "rejected": "Cet invité n'a pas pu être ajouté : vérifiez l'e-mail et le numéro."
+    "rejected": "Cet invité n'a pas pu être ajouté : vérifiez l'e-mail et le numéro.",
+    "consent": "Cette personne a accepté de recevoir mes invitations et messages."
   },
   "import": {
     "trigger": "Importer",
@@ -132,7 +133,9 @@
     "back": "Retour",
     "importing": "Import…",
     "confirm": "Importer {count, plural, one {# invité} other {# invités}}",
-    "done": "{imported, plural, one {# invité importé} other {# invités importés}}, {duplicates} doublons ignorés, {failed} en erreur."
+    "done": "{imported, plural, one {# invité importé} other {# invités importés}}, {duplicates} doublons ignorés, {failed} en erreur.",
+    "consent": "Ces personnes ont accepté de recevoir mes invitations et messages pour cet événement.",
+    "consentHint": "Obligatoire. Meta l'exige avant toute invitation WhatsApp, et la loi pour tout message."
   },
   "send": {
     "trigger": "Envoyer les invitations",
@@ -171,5 +174,12 @@
     "categoryFailed": "La catégorie n'a pas pu être changée. Réessayez."
   },
   "noMatch": "Aucun invité ne correspond à ces filtres.",
-  "showMore": "{count, plural, one {Voir # invité de plus} other {Voir # invités de plus}}"
+  "showMore": "{count, plural, one {Voir # invité de plus} other {Voir # invités de plus}}",
+  "consent": {
+    "title": "Consentement à confirmer",
+    "description": "{count, plural, one {# invité importé ne peut pas recevoir d'invitation WhatsApp} other {# invités importés ne peuvent pas recevoir d'invitation WhatsApp}} : confirmez qu'ils ont accepté de recevoir vos messages.",
+    "action": "Je confirme leur accord",
+    "done": "{count, plural, =0 {Aucun invité à confirmer.} one {Accord confirmé pour # invité.} other {Accord confirmé pour # invités.}}",
+    "failed": "La confirmation n'a pas pu être enregistrée. Réessayez."
+  }
 }
