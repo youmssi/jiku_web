@@ -413,6 +413,13 @@ const fr: LandingContent = {
         ],
       },
       {
+        title: "Ressources",
+        links: [
+          { label: "Carte d'invitation d'anniversaire", href: "/birthday-invitation-card" },
+          { label: "Textes d'invitation d'anniversaire", href: "/birthday-invitation-texts" },
+        ],
+      },
+      {
         title: "Application",
         links: [
           { label: "Se connecter", href: "/login" },
@@ -697,6 +704,13 @@ const en: LandingContent = {
           { label: "Use cases", href: "/use-cases" },
           { label: "Simulator", href: "/simulator" },
           { label: "FAQ", href: "/faq" },
+        ],
+      },
+      {
+        title: "Resources",
+        links: [
+          { label: "Birthday invitation card", href: "/birthday-invitation-card" },
+          { label: "Birthday invitation texts", href: "/birthday-invitation-texts" },
         ],
       },
       {

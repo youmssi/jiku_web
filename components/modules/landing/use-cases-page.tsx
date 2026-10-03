@@ -15,6 +15,7 @@ import { Link } from "@/i18n/navigation";
 import { cardFontVariables } from "@/lib/card-display-fonts";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
 import { OrganizationJsonLd, LocalBusinessJsonLd, BreadcrumbJsonLd } from "@/components/modules/seo";
+import { MarketingHeader } from "./marketing-header";
 import { UseCaseFlows } from "./use-case-flows";
 import { USE_CASE_JOURNEYS } from "./use-case-journeys";
 import type { UseCaseProfile, UseCaseProfileId, UseCasesPageContent } from "./use-cases-content";
@@ -91,30 +92,7 @@ export function UseCasesPage({
         ]}
       />
 
-      <header className="sticky top-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <Link href={ROUTES.HOME} className="inline-flex items-center gap-2.5">
-            <JikūLogo variant="mark" className="size-7" />
-            <span className="font-semibold tracking-tight">Jikū</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link
-              href={SEO_ROUTES.USE_CASES}
-              locale={content.nav.switchLocale.locale}
-              aria-label={content.nav.switchLocale.ariaLabel}
-              className="text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {content.nav.switchLocale.label}
-            </Link>
-            <Button variant="ghost" size="sm" className="rounded-full" asChild>
-              <Link href={ROUTES.LOGIN}>{content.nav.signIn}</Link>
-            </Button>
-            <Button size="sm" className="rounded-full" asChild>
-              <Link href={ROUTES.REGISTER}>{content.nav.createAccount}</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <MarketingHeader nav={content.nav} path={SEO_ROUTES.USE_CASES} />
 
       <main className={`mx-auto w-full max-w-7xl flex-1 px-6 py-16 sm:py-20 ${cardFontVariables}`}>
         <div className="mx-auto max-w-3xl text-center">

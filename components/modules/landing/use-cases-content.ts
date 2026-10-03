@@ -5,6 +5,7 @@
 // product at work, step by step (use-case-journeys.ts).
 
 import type { LandingLocale } from "./content";
+import type { MarketingNavContent } from "./marketing-header";
 
 /** The anchors the landing page's "Who it's for" chips link to. */
 export type UseCaseProfileId = "weddings" | "parties" | "corporate" | "assemblies" | "clinics" | "offices";
@@ -41,13 +42,7 @@ export interface UseCasesPageContent {
     primary: string;
     secondary: string;
   };
-  nav: {
-    home: string;
-    signIn: string;
-    createAccount: string;
-    /** The other language: the link keeps this page and changes only the locale. */
-    switchLocale: { label: string; locale: "fr" | "en"; ariaLabel: string };
-  };
+  nav: MarketingNavContent;
 }
 
 const fr: UseCasesPageContent = {
