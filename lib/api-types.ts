@@ -628,6 +628,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/appointments/{token}/line/{ticketCode}/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["appointmentPublicLive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/forgot-password": {
         parameters: {
             query?: never;
@@ -1588,6 +1604,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/dashboard/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["dashboardLive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/guests": {
         parameters: {
             query?: never;
@@ -2196,6 +2228,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/line/{token}/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffLive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/line/{token}/next": {
         parameters: {
             query?: never;
@@ -2366,6 +2414,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["lineStaffWalkIn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/live/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["liveStreamStream"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2702,6 +2766,22 @@ export interface paths {
         get: operations["lineStaffView_1"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operator/{token}/services/{serviceId}/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["lineStaffLive_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3172,6 +3252,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/r/{code}/line/{ticketCode}/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["shortLinkPublicLive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/resources": {
         parameters: {
             query?: never;
@@ -3486,6 +3582,22 @@ export interface paths {
         get: operations["serviceDayLineView"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{serviceId}/day-line/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["serviceDayLineLive"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4850,6 +4962,11 @@ export interface components {
             status?: string;
             ticketCode?: string;
         };
+        LiveTicket: {
+            /** Format: date-time */
+            expiresAt?: string;
+            ticket?: string;
+        };
         LoginRequest: {
             /** Format: email */
             email: string;
@@ -5759,6 +5876,10 @@ export interface components {
         SetGuestTicketTypeRequest: {
             /** Format: uuid */
             ticketTypeId?: string | null;
+        };
+        SseEmitter: {
+            /** Format: int64 */
+            timeout?: number;
         };
         SubscriptionPlanOption: {
             extraPerson?: components["schemas"]["PriceList"] | null;
@@ -7276,6 +7397,29 @@ export interface operations {
             };
         };
     };
+    appointmentPublicLive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
+                };
+            };
+        };
+    };
     authForgotPassword: {
         parameters: {
             query?: never;
@@ -8727,6 +8871,28 @@ export interface operations {
             };
         };
     };
+    dashboardLive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
+                };
+            };
+        };
+    };
     guestList: {
         parameters: {
             query?: never;
@@ -9882,6 +10048,28 @@ export interface operations {
             };
         };
     };
+    lineStaffLive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
+                };
+            };
+        };
+    };
     lineStaffNext: {
         parameters: {
             query?: {
@@ -10138,6 +10326,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["DayLineView"];
+                };
+            };
+        };
+    };
+    liveStreamStream: {
+        parameters: {
+            query: {
+                ticket: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": components["schemas"]["SseEmitter"];
                 };
             };
         };
@@ -10663,6 +10873,29 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["DayLineView"];
+                };
+            };
+        };
+    };
+    lineStaffLive_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
                 };
             };
         };
@@ -11407,6 +11640,29 @@ export interface operations {
             };
         };
     };
+    shortLinkPublicLive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+                ticketCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
+                };
+            };
+        };
+    };
     resourceList: {
         parameters: {
             query?: never;
@@ -12069,6 +12325,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["DayLineView"];
+                };
+            };
+        };
+    };
+    serviceDayLineLive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
                 };
             };
         };

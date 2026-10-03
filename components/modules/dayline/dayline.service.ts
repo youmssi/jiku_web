@@ -3,6 +3,7 @@
 import { getTranslations } from "next-intl/server";
 import { serverFetch, publicFetch } from "@/lib/api-server";
 import { fail, ok, reportApiError, type ActionResult, fromResponse } from "@/lib/action-result";
+import type { LiveTicket } from "@/components/shared";
 import type {
   DayLineAuth,
   DayLineView,
@@ -69,6 +70,12 @@ export async function fetchDayLineAction(
     404: auth.kind === "staff" ? t("counterLinkGone") : t("serviceNotFound"),
     default: t("loadFailed"),
   });
+}
+
+/** A ticket to follow the line and its requests live (JIKU-214); null when the link or service is out of reach. */
+export async function fetchDayLineLiveTicketAction(auth: DayLineAuth): Promise<LiveTicket | null> {
+  const response = await fetchFor(auth, `${basePath(auth)}/live`, { method: "POST" });
+  return response.ok ? ((await response.json()) as LiveTicket) : null;
 }
 
 /** Calls the next person; a null ticket when nobody is waiting. */

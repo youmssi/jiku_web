@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import { FormFieldError } from "@/components/shared";
+import { FormFieldError, LiveBadge } from "@/components/shared";
 import {
   markPaidAction,
   nextAction,
@@ -106,7 +106,7 @@ interface DayLineConsoleProps {
  * QR is a second way to record an arrival. Usable one-handed on a phone.
  */
 export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
-  const { view, refresh } = useDayLine(auth, initial);
+  const { view, refresh, live } = useDayLine(auth, initial);
   const [busy, setBusy] = useState<string | null>(null);
   const [walkInOpen, setWalkInOpen] = useState(false);
   const [scannerOpen, setScannerOpen] = useState(false);
@@ -193,7 +193,10 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
     <div className="bg-zinc-50 dark:bg-zinc-950">
       <header className="mx-auto flex w-full max-w-2xl items-start justify-between gap-3 px-4 pt-6">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">{t("title")}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-semibold tracking-tight">{t("title")}</h1>
+            {live ? <LiveBadge /> : null}
+          </div>
           <p className="text-sm text-muted-foreground">{view.serviceName}</p>
           <p className="text-xs capitalize text-muted-foreground">
             {format.dateTime(new Date(`${view.date}T12:00:00Z`), {
