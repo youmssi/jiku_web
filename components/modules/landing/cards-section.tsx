@@ -1,14 +1,12 @@
 import { ArrowRight } from "lucide-react";
-import { CardStack, LazyBackground } from "@/components/effects";
+import { CardStack } from "@/components/effects";
 import { Button } from "@/components/ui/button";
 import { TrackedLink } from "@/components/shared";
 import { ROUTES } from "@/lib/constants";
+import { SilverBackdrop } from "./backdrops";
 import { CardSample } from "./card-sample";
 import type { LandingContent } from "./content";
 import { SectionHeading } from "./section-heading";
-
-/** Brand greys: a silver sheen behind the cards, which carry the colour. */
-const SILVER: [string, string, string] = ["#F4F4F5", "#E4E4E7", "#F4F4F5"];
 
 /**
  * The shareable card (JIKU-184, JIKU-194, JIKU-221): the three styles in a pile
@@ -30,7 +28,7 @@ export function CardsSection({
         <SectionHeading badge={content.badge} heading={content.heading} subheading={content.subheading} />
 
         <div className="relative mt-10 overflow-hidden rounded-[2rem] border border-border/60 bg-zinc-50 sm:mt-14">
-          <LazyBackground kind="aurora" colors={SILVER} amplitude={0.8} blend={0.8} speed={0.5} fallback="linear-gradient(180deg, #e4e4e7 0%, #fafafa 70%)" />
+          <SilverBackdrop />
           <div className="relative grid items-center gap-10 px-6 py-12 md:grid-cols-2 md:px-12 lg:py-16">
             <ul className="flex flex-wrap justify-center gap-2 md:flex-col md:items-start">
               {content.samples.map((sample) => (

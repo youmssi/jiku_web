@@ -1,17 +1,13 @@
 import { ArrowRight, CalendarDays, Check, Clock3, QrCode } from "lucide-react";
-import { LazyBackground, OccasionShowcase } from "@/components/effects";
+import { OccasionShowcase } from "@/components/effects";
 import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { TrackedLink } from "@/components/shared";
 import { Link } from "@/i18n/navigation";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
+import { PearlBackdrop } from "./backdrops";
 import { CardSample } from "./card-sample";
 import type { LandingContent } from "./content";
-
-/** Brand neutrals only: the colour on the page comes from the cards. */
-const PEARL: [string, string, string] = ["#FAFAFA", "#E4E4E7", "#F4F4F5"];
-const PEARL_FALLBACK =
-  "radial-gradient(70% 60% at 15% 10%, #f4f4f5 0%, transparent 60%), radial-gradient(60% 60% at 90% 85%, #e4e4e7 0%, transparent 55%), #fafafa";
 
 /**
  * The promise, the one action that matters, and the product itself (JIKU-221):
@@ -26,7 +22,7 @@ export function HeroSection({ content, siteUrl }: { content: LandingContent["her
 
   return (
     <section className="relative overflow-hidden pt-28 sm:pt-32">
-      <LazyBackground kind="grainient" colors={PEARL} speed={0.12} grain={0.05} contrast={1} fallback={PEARL_FALLBACK} />
+      <PearlBackdrop />
 
       <div className="relative mx-auto max-w-7xl px-6 pb-12 sm:pb-20 lg:pb-28">
         <OccasionShowcase
