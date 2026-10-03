@@ -15,8 +15,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
+import { ChevronRight } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/i18n/navigation"
 import {
@@ -89,8 +88,7 @@ export function NavMain() {
                   <SidebarMenuButton tooltip={label} isActive={item.match(pathname)}>
                     <Icon />
                     <span>{label}</span>
-                    <HugeiconsIcon
-                      icon={ArrowRight01Icon}
+                    <ChevronRight
                       strokeWidth={2}
                       className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
                     />

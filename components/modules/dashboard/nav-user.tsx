@@ -20,8 +20,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { UnfoldMoreIcon, CheckmarkBadgeIcon, CreditCardIcon, LogoutIcon, Message01Icon } from "@hugeicons/core-free-icons"
+import { BadgeCheck, ChevronsUpDown, CreditCard, LogOut, MessageSquare } from "lucide-react"
 import { useState } from "react"
 import { useTranslations } from "next-intl"
 import { FeedbackDialog } from "@/components/modules/feedback"
@@ -61,7 +60,7 @@ export function NavUser({
                 <span className="truncate font-medium">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
-              <HugeiconsIcon icon={UnfoldMoreIcon} strokeWidth={2} className="ml-auto size-4" />
+              <ChevronsUpDown strokeWidth={2} className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -86,18 +85,18 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link href={ROUTES.SETTINGS}>
-                  <HugeiconsIcon icon={CheckmarkBadgeIcon} strokeWidth={2} />
+                  <BadgeCheck strokeWidth={2} />
                   {t("account")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={ROUTES.BILLING}>
-                  <HugeiconsIcon icon={CreditCardIcon} strokeWidth={2} />
+                  <CreditCard strokeWidth={2} />
                   {t("billing")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setFeedbackOpen(true)}>
-                <HugeiconsIcon icon={Message01Icon} strokeWidth={2} />
+                <MessageSquare strokeWidth={2} />
                 {t("feedback")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -105,7 +104,7 @@ export function NavUser({
             <form action={logoutAction}>
               <DropdownMenuItem asChild>
                 <button type="submit" className="w-full">
-                  <HugeiconsIcon icon={LogoutIcon} strokeWidth={2} />
+                  <LogOut strokeWidth={2} />
                   {t("signOut")}
                 </button>
               </DropdownMenuItem>

@@ -16,8 +16,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { MoreHorizontalCircle01Icon, FolderIcon, ArrowRightIcon } from "@hugeicons/core-free-icons"
+import { ArrowRight, Ellipsis, Folder } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 import type { SidebarProject } from "./app-sidebar"
@@ -53,7 +52,7 @@ export function NavProjects({ projects }: { projects: SidebarProject[] }) {
                   showOnHover
                   className="aria-expanded:bg-muted"
                 >
-                  <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} />
+                  <Ellipsis strokeWidth={2} />
                   <span className="sr-only">{t("more")}</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
@@ -64,13 +63,13 @@ export function NavProjects({ projects }: { projects: SidebarProject[] }) {
               >
                 <DropdownMenuItem asChild>
                   <Link href={item.url}>
-                    <HugeiconsIcon icon={FolderIcon} strokeWidth={2} />
+                    <Folder strokeWidth={2} />
                     <span>{t("openOverview")}</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href={`${item.url}/guests`}>
-                    <HugeiconsIcon icon={ArrowRightIcon} strokeWidth={2} />
+                    <ArrowRight strokeWidth={2} />
                     <span>{t("openGuests")}</span>
                   </Link>
                 </DropdownMenuItem>

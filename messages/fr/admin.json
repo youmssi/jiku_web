@@ -304,7 +304,9 @@
     "cancel": "Annuler",
     "granting": "Attribution…",
     "grantedToast": "Essai accordé : l'organisateur est prévenu.",
-    "pickBoth": "Choisissez d'abord une organisation et un événement."
+    "pickBoth": "Choisissez d'abord une organisation et un événement.",
+    "noStatus": "Aucun statut",
+    "noTier": "Aucune offre"
   },
   "billing": {
     "defaultsTitle": "Valeurs de la configuration",
