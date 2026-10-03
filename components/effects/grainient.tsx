@@ -13,6 +13,7 @@ export interface GrainientProps {
   lightMode?: boolean;
   speed?: number;
   grain?: number;
+  contrast?: number;
   className?: string;
 }
 
@@ -121,7 +122,7 @@ void main(){
 }
 `;
 
-export function Grainient({ colors, lightMode = false, speed = 0.25, grain = 0.08, className }: GrainientProps) {
+export function Grainient({ colors, lightMode = false, speed = 0.25, grain = 0.08, contrast = 1.5, className }: GrainientProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [color1, color2, color3] = colors;
 
@@ -157,7 +158,7 @@ export function Grainient({ colors, lightMode = false, speed = 0.25, grain = 0.0
         uGrainAmount: { value: grain },
         uGrainScale: { value: 2 },
         uGrainAnimated: { value: 0 },
-        uContrast: { value: 1.5 },
+        uContrast: { value: contrast },
         uGamma: { value: 1 },
         uSaturation: { value: 1 },
         uCenterOffset: { value: new Float32Array([0, 0]) },
@@ -216,7 +217,7 @@ export function Grainient({ colors, lightMode = false, speed = 0.25, grain = 0.0
       canvas.remove();
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [color1, color2, color3, lightMode, speed, grain]);
+  }, [color1, color2, color3, lightMode, speed, grain, contrast]);
 
   return <div ref={containerRef} aria-hidden className={className ?? "absolute inset-0"} />;
 }
