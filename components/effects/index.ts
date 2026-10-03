@@ -4,3 +4,5 @@
 export { MotionProvider } from "./motion-provider";
 export { Reveal, RevealFallback } from "./reveal";
 export { SpotlightCard } from "./spotlight-card";
+export { LazyGrainient } from "./lazy-grainient";
+export { RotatingWords } from "./rotating-words";
