@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { Reveal } from "@/components/effects";
+import { CardStack, LazyBackground } from "@/components/effects";
 import { Button } from "@/components/ui/button";
 import { TrackedLink } from "@/components/shared";
 import { ROUTES } from "@/lib/constants";
@@ -7,10 +7,13 @@ import { CardSample } from "./card-sample";
 import type { LandingContent } from "./content";
 import { SectionHeading } from "./section-heading";
 
+/** Brand greys: a silver sheen behind the cards, which carry the colour. */
+const SILVER: [string, string, string] = ["#F4F4F5", "#E4E4E7", "#F4F4F5"];
+
 /**
- * The shareable card (JIKU-184, JIKU-194): the three styles side by side, then
- * the three steps from the style to the yeses. On a phone the cards scroll
- * sideways, so the section stays one screen tall.
+ * The shareable card (JIKU-184, JIKU-194, JIKU-221): the three styles in a pile
+ * to drag or tap through, over a silver aurora, then the three steps from the
+ * style to the yeses.
  */
 export function CardsSection({
   content,
@@ -26,13 +29,25 @@ export function CardsSection({
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading badge={content.badge} heading={content.heading} subheading={content.subheading} />
 
-        <div className="-mx-6 mt-10 sm:mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 sm:mx-auto sm:grid sm:max-w-4xl sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0">
-          {content.samples.map((sample, index) => (
-            <Reveal key={sample.style} delay={index * 0.06} className="w-[64%] shrink-0 snap-center sm:w-auto">
-              <CardSample sample={sample} invites={invites} url={siteUrl} />
-              <p className="mt-4 text-center text-sm font-semibold">{content.styles[sample.style]}</p>
-            </Reveal>
-          ))}
+        <div className="relative mt-10 overflow-hidden rounded-[2rem] border border-border/60 bg-zinc-50 sm:mt-14">
+          <LazyBackground kind="aurora" colors={SILVER} amplitude={0.8} blend={0.8} speed={0.5} fallback="linear-gradient(180deg, #e4e4e7 0%, #fafafa 70%)" />
+          <div className="relative grid items-center gap-10 px-6 py-12 md:grid-cols-2 md:px-12 lg:py-16">
+            <ul className="flex flex-wrap justify-center gap-2 md:flex-col md:items-start">
+              {content.samples.map((sample) => (
+                <li key={sample.style} className="rounded-full border border-border bg-background/70 px-4 py-2 text-sm font-semibold backdrop-blur">
+                  {content.styles[sample.style]}
+                </li>
+              ))}
+            </ul>
+            <div className="mx-auto aspect-[4/5] w-full max-w-[16rem] sm:max-w-[18rem]">
+              <CardStack
+                label={content.heading}
+                cards={content.samples.map((sample) => (
+                  <CardSample key={sample.style} sample={sample} invites={invites} url={siteUrl} size="lg" className="pointer-events-none size-full" />
+                ))}
+              />
+            </div>
+          </div>
         </div>
 
         <ol className="mx-auto mt-10 sm:mt-14 grid max-w-5xl gap-8 sm:grid-cols-3">

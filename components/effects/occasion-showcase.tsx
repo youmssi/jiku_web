@@ -4,25 +4,30 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState, type ReactNode } from "react";
 
 /**
- * The occasion that rotates in the headline and the card that goes with it,
- * in step. The heading keeps one plain sentence for search engines and
- * screen readers; the moving words are decorative. A visitor can pick an
- * occasion, which stops the rotation.
+ * The occasion that rotates at the end of the headline and the card that goes
+ * with it, in step. The heading keeps one plain sentence for search engines
+ * and screen readers; the moving words are decorative. A visitor can pick an
+ * occasion under the card, which stops the rotation. The cards arrive
+ * rendered by the server; [overlay] stays put while they change.
  */
 export function OccasionShowcase({
   lead,
+  sentence,
   occasions,
   cards,
-  sentence,
-  interval = 3200,
+  pickLabel,
+  overlay,
   children,
+  interval = 3200,
 }: {
   lead: string;
+  sentence: string;
   occasions: string[];
   cards: ReactNode[];
-  sentence: string;
-  interval?: number;
+  pickLabel: string;
+  overlay?: ReactNode;
   children?: ReactNode;
+  interval?: number;
 }) {
   const [index, setIndex] = useState(0);
   const [chosen, setChosen] = useState(false);
@@ -34,13 +39,13 @@ export function OccasionShowcase({
   }, [chosen, occasions.length, interval]);
 
   return (
-    <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+    <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
       <div className="text-center lg:text-left">
         <h1 className="animate-blur-in text-balance text-[clamp(2.3rem,6vw,4.4rem)] font-bold leading-[1.05] tracking-tight">
           <span className="sr-only">{sentence}</span>
           <span aria-hidden>
             {lead}{" "}
-            <span className="relative inline-grid overflow-hidden align-bottom text-zinc-500">
+            <span className="relative inline-grid overflow-hidden align-bottom text-muted-foreground">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.span
                   key={occasions[index]}
@@ -57,7 +62,25 @@ export function OccasionShowcase({
           </span>
         </h1>
         {children}
-        <div className="mt-8 flex flex-wrap justify-center gap-2 lg:justify-start">
+      </div>
+
+      <div className="mx-auto w-full max-w-[17rem] sm:max-w-[21rem]">
+        <div className="relative aspect-[4/5]">
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.div
+              key={index}
+              className="absolute inset-0"
+              initial={{ opacity: 0, rotate: 6, y: 30, scale: 0.94 }}
+              animate={{ opacity: 1, rotate: -3, y: 0, scale: 1 }}
+              exit={{ opacity: 0, rotate: -10, y: -20, scale: 0.94 }}
+              transition={{ type: "spring", damping: 24, stiffness: 220 }}
+            >
+              {cards[index]}
+            </motion.div>
+          </AnimatePresence>
+          {overlay}
+        </div>
+        <div role="group" aria-label={pickLabel} className="mt-8 flex flex-wrap justify-center gap-1.5">
           {occasions.map((occasion, position) => (
             <button
               key={occasion}
@@ -67,26 +90,12 @@ export function OccasionShowcase({
                 setIndex(position);
                 setChosen(true);
               }}
-              className="min-h-11 rounded-full border border-border px-4 text-sm font-medium text-muted-foreground transition hover:border-foreground/40 aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:text-background"
+              className="min-h-9 rounded-full border border-border bg-background/70 px-3 text-xs font-medium text-muted-foreground backdrop-blur transition hover:border-foreground/40 aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:text-background"
             >
               {occasion}
             </button>
           ))}
         </div>
-      </div>
-      <div className="relative mx-auto aspect-[4/5] w-full max-w-[20rem] sm:max-w-[22rem]">
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.div
-            key={index}
-            className="absolute inset-0"
-            initial={{ opacity: 0, rotate: 6, y: 30, scale: 0.94 }}
-            animate={{ opacity: 1, rotate: -3, y: 0, scale: 1 }}
-            exit={{ opacity: 0, rotate: -10, y: -20, scale: 0.94 }}
-            transition={{ type: "spring", damping: 24, stiffness: 220 }}
-          >
-            {cards[index]}
-          </motion.div>
-        </AnimatePresence>
       </div>
     </div>
   );
