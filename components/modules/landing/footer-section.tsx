@@ -25,9 +25,9 @@ export function FooterSection({ content }: { content: LandingContent["footer"] }
         <div className="grid gap-8 sm:grid-cols-3">
           {content.groups.map((group) => (
             <div key={group.title} className="space-y-4">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 {group.title}
-              </h4>
+              </h2>
               <ul className="space-y-3">
                 {group.links.map((link) => (
                   <li key={link.label}>
