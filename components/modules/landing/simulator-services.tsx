@@ -1,11 +1,11 @@
 "use client";
 
+import { TrackedLink } from "@/components/shared";
 import { useState } from "react";
 import { Check, Info, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Link } from "@/i18n/navigation";
 import { ROUTES } from "@/lib/constants";
 import { priceIn, quoteForService, servicePlan, type ServicePlanId } from "@/lib/pricing";
 import { salesMailto } from "@/lib/support";
@@ -117,7 +117,7 @@ export function ServicesPanel({
               {selected.id === "enterprise" ? (
                 <a href={salesMailto(selected.mailSubject)}>{selected.cta}</a>
               ) : (
-                <Link href={ROUTES.REGISTER}>{selected.cta}</Link>
+                <TrackedLink eventName="cta_click" eventProperties={{ location: "services_plan" }} href={ROUTES.REGISTER}>{selected.cta}</TrackedLink>
               )}
             </Button>
           </div>

@@ -1,4 +1,5 @@
 import { ArrowRight, Check } from "lucide-react";
+import { TrackedLink } from "@/components/shared";
 import { MotionProvider, Reveal } from "@/components/effects";
 import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
@@ -148,10 +149,10 @@ export function BirthdayTextsPage({
                   variant="secondary"
                   className="h-12 rounded-full px-8 text-base"
                 >
-                  <Link href={ROUTES.REGISTER}>
+                  <TrackedLink eventName="cta_click" eventProperties={{ location: "birthday_texts_closing" }} href={ROUTES.REGISTER}>
                     {content.send.primary}
                     <ArrowRight className="ml-2 size-4" />
-                  </Link>
+                  </TrackedLink>
                 </Button>
                 <Button
                   asChild

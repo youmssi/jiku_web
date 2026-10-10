@@ -6,6 +6,7 @@ import {
   Send,
   Users,
 } from "lucide-react";
+import { TrackedLink } from "@/components/shared";
 import { MotionProvider, Reveal, SpotlightCard } from "@/components/effects";
 import {
   Accordion,
@@ -84,10 +85,10 @@ export function BirthdayCardPage({
                   size="lg"
                   className="mt-8 h-12 rounded-full px-8 text-base shadow-xl shadow-black/15"
                 >
-                  <Link href={ROUTES.REGISTER}>
+                  <TrackedLink eventName="cta_click" eventProperties={{ location: "birthday_card_hero" }} href={ROUTES.REGISTER}>
                     {content.primaryCta}
                     <ArrowRight className="ml-2 size-4" />
-                  </Link>
+                  </TrackedLink>
                 </Button>
               </div>
               <div className="flex justify-center">
@@ -268,10 +269,10 @@ export function BirthdayCardPage({
                   variant="secondary"
                   className="h-12 rounded-full px-8 text-base"
                 >
-                  <Link href={ROUTES.REGISTER}>
+                  <TrackedLink eventName="cta_click" eventProperties={{ location: "birthday_card_closing" }} href={ROUTES.REGISTER}>
                     {content.cta.primary}
                     <ArrowRight className="ml-2 size-4" />
-                  </Link>
+                  </TrackedLink>
                 </Button>
                 <Button
                   asChild

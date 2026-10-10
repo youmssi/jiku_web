@@ -1,12 +1,12 @@
 "use client";
 
+import { TrackedLink } from "@/components/shared";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight, RotateCcw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 import { RadioGroup } from "@/components/ui/radio-group";
-import { Link } from "@/i18n/navigation";
 import { trackEvent } from "@/lib/analytics";
 import { ROUTES } from "@/lib/constants";
 import { FREE_TIER, quoteForGuests, quoteForSales, quoteForService, type ServicePlanId } from "@/lib/pricing";
@@ -273,7 +273,7 @@ function FinderOutcome({
           <ArrowRight data-icon="inline-end" />
         </Button>
         <Button size="lg" variant="outline" className="rounded-full" asChild>
-          <Link href={ROUTES.REGISTER}>{finder.result.create}</Link>
+          <TrackedLink eventName="cta_click" eventProperties={{ location: "plan_finder" }} href={ROUTES.REGISTER}>{finder.result.create}</TrackedLink>
         </Button>
       </div>
     </div>
