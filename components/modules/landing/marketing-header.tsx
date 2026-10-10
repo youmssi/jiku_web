@@ -34,10 +34,10 @@ export function MarketingHeader({ nav, path }: { nav: MarketingNavContent; path:
           >
             {nav.switchLocale.label}
           </Link>
-          <Button variant="ghost" size="sm" className="hidden rounded-full min-[380px]:inline-flex" asChild>
+          <Button variant="ghost" className="hidden h-9 rounded-full px-4 text-sm min-[380px]:inline-flex" asChild>
             <Link href={ROUTES.LOGIN}>{nav.signIn}</Link>
           </Button>
-          <Button size="sm" className="rounded-full" asChild>
+          <Button className="h-9 rounded-full px-4 text-sm" asChild>
             <Link href={ROUTES.REGISTER}>{nav.createAccount}</Link>
           </Button>
         </div>

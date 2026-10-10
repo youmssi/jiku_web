@@ -2,28 +2,21 @@ import type { Metadata, Viewport } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Geist, Geist_Mono, DM_Sans, Inter } from "next/font/google";
+import { Geist_Mono, Inter } from "next/font/google";
 import "../globals.css";
 import { cn } from "@/lib/utils";
 import { ServiceWorkerRegister, UmamiScript } from "@/components/shared";
-import { siteUrl } from "@/components/modules/seo";
+import { SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
-const dmSansHeading = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-heading",
-});
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
+// Only Inter is preloaded: it sets every heading and paragraph. The mono face
+// shows in a few app screens and loads when one of them first needs it.
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -56,6 +49,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
+    images: [SHARE_IMAGE],
     siteName: "Jikū",
     title: "Jikū: Event Invitations, Ticketing & Check-in Platform",
     description:
@@ -63,6 +57,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    images: [SHARE_IMAGE.url],
     title: "Jikū: Event Invitations, Ticketing & Check-in Platform",
     description:
       "White-label platform for event invitation, ticketing, RSVP, and check-in.",
@@ -126,9 +121,7 @@ export default async function RootLayout({
       className={cn(
         "h-full",
         "antialiased",
-        geistSans.variable,
         geistMono.variable,
-        dmSansHeading.variable,
         "font-sans",
         inter.variable,
       )}

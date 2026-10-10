@@ -8,7 +8,16 @@ import { cn } from "@/lib/utils";
  * SpotlightCard): CSS only, no animation library. On touch screens it simply
  * stays a card, which is what most of the audience sees.
  */
-export function SpotlightCard({ children, className }: { children: ReactNode; className?: string }) {
+export function SpotlightCard({
+  children,
+  className,
+  bodyClassName,
+}: {
+  children: ReactNode;
+  className?: string;
+  /** Lays out the content, e.g. to pin the last child to the bottom of a tall card. */
+  bodyClassName?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [lit, setLit] = useState(false);
@@ -32,7 +41,7 @@ export function SpotlightCard({ children, className }: { children: ReactNode; cl
           background: `radial-gradient(420px circle at ${position.x}px ${position.y}px, color-mix(in oklab, var(--primary) 12%, transparent), transparent 70%)`,
         }}
       />
-      <div className="relative">{children}</div>
+      <div className={cn("relative", bodyClassName)}>{children}</div>
     </div>
   );
 }

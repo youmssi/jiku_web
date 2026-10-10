@@ -5,6 +5,5 @@ export { MotionProvider } from "./motion-provider";
 export { Reveal, RevealFallback } from "./reveal";
 export { SpotlightCard } from "./spotlight-card";
 export { LazyBackground } from "./lazy-background";
-export { CountUp } from "./count-up";
 export { CardStack } from "./card-stack";
 export { OccasionShowcase } from "./occasion-showcase";

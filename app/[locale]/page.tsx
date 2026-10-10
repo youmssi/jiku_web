@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { LANDING_CONTENT, LandingPage } from "@/components/modules/landing";
-import { siteUrl } from "@/components/modules/seo";
+import { SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 
 interface PageProps {
@@ -34,6 +34,7 @@ export async function generateMetadata({
     },
     openGraph: {
       type: "website",
+      images: [SHARE_IMAGE],
       siteName: "Jikū",
       locale: resolved,
       title: content.meta.title,
@@ -41,6 +42,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
+      images: [SHARE_IMAGE.url],
       title: content.meta.title,
       description: content.meta.description,
     },

@@ -1,7 +1,6 @@
 import { ArrowRight, CalendarDays, Check, Clock3, QrCode } from "lucide-react";
 import { OccasionShowcase } from "@/components/effects";
 import { Button } from "@/components/ui/button";
-import { JikūLogo } from "@/components/ui/jiku-logo";
 import { TrackedLink } from "@/components/shared";
 import { Link } from "@/i18n/navigation";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
@@ -13,18 +12,29 @@ import type { LandingContent } from "./content";
  * The promise, the one action that matters, and the product itself (JIKU-221):
  * the headline ends on an occasion that rotates with its card, over a pearl
  * background in the brand's greys. Text, buttons and the first card are in the
- * server HTML; the grain loads afterwards on wide screens only.
+ * server HTML; the grain loads afterwards on wide screens only. On a phone the
+ * plan link turns into a text link and the two uses step aside (the menu has
+ * them), so the card shows on the first screen; the product facts close the
+ * hero (JIKU-229).
  */
-export function HeroSection({ content, siteUrl }: { content: LandingContent["hero"]; siteUrl: string }) {
+export function HeroSection({
+  content,
+  facts,
+  siteUrl,
+}: {
+  content: LandingContent["hero"];
+  facts: LandingContent["numbers"];
+  siteUrl: string;
+}) {
   const cards = content.occasions.map((occasion) => (
     <CardSample key={occasion.label} sample={occasion.card} invites={content.card.invites} url={siteUrl} size="lg" className="size-full shadow-2xl shadow-black/15" />
   ));
 
   return (
-    <section className="relative overflow-hidden pt-28 sm:pt-32">
+    <section id="hero" className="relative overflow-hidden pt-28 sm:pt-32">
       <PearlBackdrop />
 
-      <div className="relative mx-auto max-w-7xl px-6 pb-12 sm:pb-20 lg:pb-28">
+      <div className="relative mx-auto max-w-7xl px-6 pb-12 sm:pb-16">
         <OccasionShowcase
           lead={content.lead}
           sentence={content.sentence}
@@ -33,20 +43,9 @@ export function HeroSection({ content, siteUrl }: { content: LandingContent["her
           pickLabel={content.pickOccasion}
           overlay={<CardOverlay content={content} />}
         >
-          <a
-            href="#cards"
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-4 py-1.5 text-xs font-medium backdrop-blur transition hover:border-foreground/30 sm:text-sm"
-          >
-            <JikūLogo variant="mark" className="size-3.5" />
-            <span className="text-shine">{content.badge}</span>
-            <ArrowRight className="size-3.5" aria-hidden />
-          </a>
+          <p className="mx-auto mt-6 max-w-xl text-pretty text-base text-muted-foreground sm:text-lg lg:mx-0">{content.subtitle}</p>
 
-          <p className="mx-auto mt-6 max-w-xl text-pretty text-base text-muted-foreground animate-blur-in [animation-delay:150ms] sm:text-lg lg:mx-0">
-            {content.subtitle}
-          </p>
-
-          <div id="hero-cta" className="mt-9 flex flex-col items-center gap-3 sm:flex-row lg:items-start">
+          <div className="mt-8 flex flex-col items-center gap-2 sm:mt-9 sm:flex-row sm:gap-3 lg:items-start">
             <Button asChild size="lg" className="h-12 w-full rounded-full px-8 text-base shadow-xl shadow-black/15 sm:w-auto">
               <TrackedLink
                 href={ROUTES.REGISTER}
@@ -57,29 +56,44 @@ export function HeroSection({ content, siteUrl }: { content: LandingContent["her
                 <ArrowRight className="ml-2 size-4" />
               </TrackedLink>
             </Button>
-            <Button asChild size="lg" variant="outline" className="h-12 w-full rounded-full bg-background/60 px-8 text-base backdrop-blur sm:w-auto">
+            <Button asChild size="lg" variant="outline" className="hidden h-12 rounded-full bg-background/60 px-8 text-base backdrop-blur sm:inline-flex">
               <Link href={SEO_ROUTES.SIMULATOR}>{content.secondaryCta}</Link>
             </Button>
+            <Link
+              href={SEO_ROUTES.SIMULATOR}
+              className="inline-flex min-h-11 items-center text-sm font-medium underline decoration-foreground/30 underline-offset-4 sm:hidden"
+            >
+              {content.secondaryCta}
+            </Link>
           </div>
-          <p className="mt-4 text-sm text-muted-foreground">{content.ctaNote}</p>
+          <p className="mt-2 text-sm text-muted-foreground sm:mt-4">{content.ctaNote}</p>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-2 lg:justify-start">
+          <div className="mt-8 hidden flex-wrap justify-center gap-2 sm:flex lg:justify-start">
             <a
               href="#events"
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-4 py-2 text-sm font-medium backdrop-blur transition hover:border-foreground/30"
+              className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border bg-background/60 px-4 text-sm font-medium backdrop-blur transition hover:border-foreground/30"
             >
               <CalendarDays className="size-4" aria-hidden />
               {content.uses.events}
             </a>
             <a
               href="#services"
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-4 py-2 text-sm font-medium backdrop-blur transition hover:border-foreground/30"
+              className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border bg-background/60 px-4 text-sm font-medium backdrop-blur transition hover:border-foreground/30"
             >
               <Clock3 className="size-4" aria-hidden />
               {content.uses.services}
             </a>
           </div>
         </OccasionShowcase>
+
+        <dl className="mx-auto mt-16 grid max-w-5xl grid-cols-2 gap-y-6 border-t border-border/70 pt-8 sm:mt-20 md:grid-cols-4">
+          {facts.map((fact) => (
+            <div key={fact.label} className="flex flex-col-reverse items-center px-2 text-center">
+              <dt className="mt-1 text-sm text-muted-foreground">{fact.label}</dt>
+              <dd className="text-3xl font-bold tracking-tight sm:text-4xl">{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );
@@ -89,7 +103,7 @@ export function HeroSection({ content, siteUrl }: { content: LandingContent["her
 function CardOverlay({ content }: { content: LandingContent["hero"] }) {
   return (
     <>
-      <div aria-hidden className="absolute -right-10 top-[46%] hidden flex-col gap-1.5 sm:flex">
+      <div aria-hidden className="absolute -right-6 top-[46%] hidden flex-col gap-1.5 sm:flex">
         {content.card.answers.map((answer, index) => (
           <span
             key={answer}

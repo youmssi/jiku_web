@@ -41,7 +41,7 @@ export function OccasionShowcase({
   return (
     <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
       <div className="text-center lg:text-left">
-        <h1 className="animate-blur-in text-balance text-[clamp(2.3rem,6vw,4.4rem)] font-bold leading-[1.05] tracking-tight">
+        <h1 className="text-balance text-[clamp(2.3rem,6vw,4.4rem)] font-bold leading-[1.05] tracking-tight">
           <span className="sr-only">{sentence}</span>
           <span aria-hidden>
             {lead}{" "}
@@ -80,7 +80,7 @@ export function OccasionShowcase({
           </AnimatePresence>
           {overlay}
         </div>
-        <div role="group" aria-label={pickLabel} className="mt-8 flex flex-wrap justify-center gap-1.5">
+        <div role="group" aria-label={pickLabel} className="mt-12 flex flex-wrap justify-center gap-1.5">
           {occasions.map((occasion, position) => (
             <button
               key={occasion}

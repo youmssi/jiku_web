@@ -15,6 +15,14 @@ export function siteUrl(): string {
 }
 
 /**
+ * The site's share image (app/opengraph-image.tsx). A page that declares its
+ * own `openGraph` replaces the one inherited from the file, so every marketing
+ * page names it explicitly; without it, a link pasted in WhatsApp shows no
+ * picture.
+ */
+export const SHARE_IMAGE = { url: "/opengraph-image", width: 1200, height: 630, alt: "Jikū" };
+
+/**
  * Metadata of a page served in both locales at [path] (fr unprefixed, en under
  * /en): its own title and description, the canonical URL of [locale] and the
  * hreflang alternates. [index] false keeps the page out of search results
@@ -43,6 +51,7 @@ export function localizedPageMetadata({
       languages: { fr: path, en: `/en${path}` },
     },
     robots: { index, follow: true },
-    openGraph: { type: "website", siteName: "Jikū", locale, title, description },
+    openGraph: { type: "website", siteName: "Jikū", locale, title, description, images: [SHARE_IMAGE] },
+    twitter: { card: "summary_large_image", title, description, images: [SHARE_IMAGE.url] },
   };
 }
