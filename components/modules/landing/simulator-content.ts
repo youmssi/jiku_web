@@ -58,6 +58,8 @@ export interface SimulatorContent {
   services: {
     intro: string;
     serversLabel: string;
+    /** The unit after the head count in the price summary. */
+    serversUnit: string;
     serversHelper: string;
     monthly: string;
     yearly: string;
@@ -207,6 +209,7 @@ const fr: SimulatorContent = {
     intro:
       "Rendez-vous, file d'attente et réservations : un abonnement pour votre équipe, chaque mois. Solo reste gratuit pour toujours. Aucune limite de services ni de clients par jour.",
     serversLabel: "Personnes qui servent vos clients",
+    serversUnit: "personnes",
     serversHelper: "Médecin, agent de guichet, coiffeur, serveur.",
     monthly: "Mensuel",
     yearly: "Annuel",
@@ -480,6 +483,7 @@ const en: SimulatorContent = {
     intro:
       "Appointments, queues and bookings: one subscription for your team, each month. Solo stays free forever. No limit on services or clients per day.",
     serversLabel: "People who serve your clients",
+    serversUnit: "people",
     serversHelper: "Doctor, counter agent, hairdresser, waiter.",
     monthly: "Monthly",
     yearly: "Yearly",

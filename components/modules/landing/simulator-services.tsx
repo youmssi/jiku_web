@@ -60,14 +60,14 @@ export function ServicesPanel({
               value={yearly ? "yearly" : "monthly"}
               onValueChange={(value) => value && setYearly(value === "yearly")}
             >
-              <ToggleGroupItem value="monthly" className="px-4">
+              <ToggleGroupItem value="monthly" className="h-9 px-4 text-sm">
                 {services.monthly}
               </ToggleGroupItem>
-              <ToggleGroupItem value="yearly" className="px-4">
+              <ToggleGroupItem value="yearly" className="h-9 px-4 text-sm">
                 {services.yearly}
               </ToggleGroupItem>
             </ToggleGroup>
-            <Badge variant="secondary">{services.yearlyBadge}</Badge>
+            <Badge variant="secondary" className="h-6 px-2.5 text-xs">{services.yearlyBadge}</Badge>
           </div>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
@@ -84,12 +84,12 @@ export function ServicesPanel({
           </div>
         </div>
 
-        <aside className="flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start">
+        <aside className="order-first flex flex-col gap-4 lg:sticky lg:top-24 lg:order-none lg:self-start">
           <div className="rounded-3xl border border-primary/20 bg-gradient-to-b from-primary/[0.08] to-transparent p-6">
             <p className="text-sm text-muted-foreground">{selected.name}</p>
             <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
-              <Users className="size-4" />
-              {format.number(servers)}
+              <Users className="size-4" aria-hidden />
+              {format.number(servers)} {services.serversUnit}
             </p>
             {quote.monthlyTotal === null ? (
               <p className="mt-4 text-3xl font-bold tracking-tight">{content.onQuote}</p>
@@ -113,7 +113,7 @@ export function ServicesPanel({
                 {services.soloLimit}
               </p>
             ) : null}
-            <Button asChild size="lg" className="mt-6 w-full rounded-full">
+            <Button asChild size="lg" className="mt-6 h-11 w-full rounded-full text-sm">
               {selected.id === "enterprise" ? (
                 <a href={salesMailto(selected.mailSubject)}>{selected.cta}</a>
               ) : (
@@ -162,7 +162,7 @@ function PlanCard({
         <span className="text-base font-semibold">{plan.name}</span>
         {selected ? <Check className="size-4 text-primary" /> : null}
       </span>
-      <span className="mt-1 text-xs text-muted-foreground">{plan.audience}</span>
+      <span className="mt-1 text-sm text-muted-foreground">{plan.audience}</span>
       <span className="mt-4 text-xl font-bold tracking-tight">
         {base === null ? content.onQuote : format.money(base)}
       </span>
@@ -177,7 +177,7 @@ function PlanCard({
       ) : null}
       <ul className="mt-4 flex flex-col gap-1.5">
         {plan.features.map((feature) => (
-          <li key={feature} className="flex items-start gap-2 text-xs text-muted-foreground">
+          <li key={feature} className="flex items-start gap-2 text-sm text-muted-foreground">
             <Check className="mt-0.5 size-3.5 shrink-0 text-primary" />
             {feature}
           </li>
