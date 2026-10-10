@@ -34,7 +34,7 @@ export function MarketingHeader({ nav, path }: { nav: MarketingNavContent; path:
           >
             {nav.switchLocale.label}
           </Link>
-          <Button variant="ghost" className="hidden h-9 rounded-full px-4 text-sm min-[380px]:inline-flex" asChild>
+          <Button variant="ghost" className="hidden h-9 rounded-full px-4 text-sm sm:inline-flex" asChild>
             <Link href={ROUTES.LOGIN}>{nav.signIn}</Link>
           </Button>
           <Button className="h-9 rounded-full px-4 text-sm" asChild>
