@@ -22,6 +22,7 @@ import {
 } from "@/components/modules/seo";
 import { PearlBackdrop } from "./backdrops";
 import { ClosingCta, CLOSING_OUTLINE } from "./closing-cta";
+import { MarketingFooter } from "./footer-section";
 import { MarketingHeader } from "./marketing-header";
 import { UseCaseFlows } from "./use-case-flows";
 import { USE_CASE_JOURNEYS } from "./use-case-journeys";
@@ -87,7 +88,8 @@ function ProfileCard({ profile }: { profile: UseCaseProfile }) {
  * The dedicated use-cases page (JIKU-196): the journeys first, so a visitor
  * sees the product at work in their own situation, then six profiles with one
  * promise each, and the price in one line. The landing page's "Who it's for"
- * chips land on the profiles' anchors.
+ * chips land on the profiles' anchors. The hero carries the main action and
+ * the page ends on the site's footer (JIKU-230).
  */
 export function UseCasesPage({
   content,
@@ -114,81 +116,102 @@ export function UseCasesPage({
 
         <MarketingHeader nav={content.nav} path={SEO_ROUTES.USE_CASES} />
 
-        <section className="relative overflow-hidden">
-          <PearlBackdrop />
-          <div className="relative mx-auto max-w-3xl px-6 py-20 text-center sm:py-28">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-4 py-1.5 text-sm font-medium backdrop-blur">
-              <JikūLogo variant="mark" className="size-3.5" />
-              <span className="text-shine">{content.eyebrow}</span>
-            </div>
-            <h1 className="animate-blur-in text-balance text-4xl font-bold tracking-tight sm:text-6xl">
-              {content.title}
-            </h1>
-            <p className="mt-6 text-balance text-base leading-relaxed text-muted-foreground animate-blur-in [animation-delay:150ms] sm:text-lg">
-              {content.intro}
-            </p>
-          </div>
-        </section>
-
-        <main
-          className={`mx-auto w-full max-w-7xl flex-1 px-6 pb-16 sm:pb-20 ${cardFontVariables}`}
-        >
-          <UseCaseFlows content={USE_CASE_JOURNEYS[locale]} />
-
-          <section aria-labelledby="use-case-profiles" className="mt-20">
-            <h2
-              id="use-case-profiles"
-              className="text-center text-balance text-2xl font-bold tracking-tight sm:text-3xl"
-            >
-              {content.profiles.heading}
-            </h2>
-            <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {content.profiles.items.map((profile, index) => (
-                <Reveal
-                  key={profile.id}
-                  delay={(index % 3) * 0.06}
-                  className="h-full"
+        <main id="main" className={`flex flex-1 flex-col ${cardFontVariables}`}>
+          <section className="relative overflow-hidden">
+            <PearlBackdrop />
+            <div className="relative mx-auto max-w-3xl px-6 py-20 text-center sm:py-24">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-4 py-1.5 text-sm font-medium backdrop-blur">
+                <JikūLogo variant="mark" className="size-3.5" />
+                <span className="text-shine">{content.eyebrow}</span>
+              </div>
+              <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-6xl">
+                {content.title}
+              </h1>
+              <p className="mt-6 text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
+                {content.intro}
+              </p>
+              <div className="mt-9 flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-3">
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-12 w-full rounded-full px-8 text-base shadow-xl shadow-black/15 sm:w-auto"
                 >
-                  <ProfileCard profile={profile} />
-                </Reveal>
-              ))}
+                  <Link href={ROUTES.REGISTER}>
+                    {content.cta.primary}
+                    <ArrowRight className="ml-2 size-4" />
+                  </Link>
+                </Button>
+                <Link
+                  href={SEO_ROUTES.SIMULATOR}
+                  className="inline-flex min-h-11 items-center px-4 text-sm font-medium underline decoration-foreground/30 underline-offset-4 hover:decoration-foreground sm:text-base"
+                >
+                  {content.cta.secondary}
+                </Link>
+              </div>
             </div>
           </section>
 
-          <p className="mx-auto mt-14 max-w-2xl text-center text-sm text-muted-foreground sm:text-base">
-            {content.pricing.text}{" "}
-            <Link
-              href={SEO_ROUTES.SIMULATOR}
-              className="font-semibold text-foreground underline-offset-4 hover:underline"
-            >
-              {content.pricing.cta}
-            </Link>
-          </p>
+          <div className="mx-auto w-full max-w-7xl flex-1 px-6 pb-16 sm:pb-20">
+            <UseCaseFlows content={USE_CASE_JOURNEYS[locale]} />
 
-          <section className="mt-20">
-            <ClosingCta heading={content.cta.heading} text={content.cta.text}>
-              <Button
-                asChild
-                size="lg"
-                variant="secondary"
-                className="h-12 rounded-full px-8 text-base"
+            <section aria-labelledby="use-case-profiles" className="mt-20">
+              <h2
+                id="use-case-profiles"
+                className="text-center text-balance text-2xl font-bold tracking-tight sm:text-3xl"
               >
-                <Link href={ROUTES.REGISTER}>
-                  {content.cta.primary}
-                  <ArrowRight className="ml-2 size-4" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className={CLOSING_OUTLINE}
+                {content.profiles.heading}
+              </h2>
+              <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+                {content.profiles.items.map((profile, index) => (
+                  <Reveal
+                    key={profile.id}
+                    delay={(index % 3) * 0.06}
+                    className="h-full"
+                  >
+                    <ProfileCard profile={profile} />
+                  </Reveal>
+                ))}
+              </div>
+            </section>
+
+            <p className="mx-auto mt-14 max-w-2xl text-center text-sm text-muted-foreground sm:text-base">
+              {content.pricing.text}{" "}
+              <Link
+                href={SEO_ROUTES.SIMULATOR}
+                className="font-semibold text-foreground underline-offset-4 hover:underline"
               >
-                <Link href={SEO_ROUTES.SIMULATOR}>{content.cta.secondary}</Link>
-              </Button>
-            </ClosingCta>
-          </section>
+                {content.pricing.cta}
+              </Link>
+            </p>
+
+            <section className="mt-20">
+              <ClosingCta heading={content.cta.heading} text={content.cta.text}>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="secondary"
+                  className="h-12 rounded-full px-8 text-base"
+                >
+                  <Link href={ROUTES.REGISTER}>
+                    {content.cta.primary}
+                    <ArrowRight className="ml-2 size-4" />
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className={CLOSING_OUTLINE}
+                >
+                  <Link href={SEO_ROUTES.SIMULATOR}>
+                    {content.cta.secondary}
+                  </Link>
+                </Button>
+              </ClosingCta>
+            </section>
+          </div>
         </main>
+        <MarketingFooter locale={locale} path={SEO_ROUTES.USE_CASES} />
       </div>
     </MotionProvider>
   );

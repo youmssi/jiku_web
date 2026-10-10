@@ -2,15 +2,18 @@ import { Link } from "@/i18n/navigation";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { TrackedAnchor } from "@/components/shared";
 import { supportMailto, supportWhatsAppLink } from "@/lib/support";
-import type { LandingContent } from "./content";
+import { LANDING_CONTENT, type LandingContent, type LandingLocale } from "./content";
 
 /** The site map, the legal links, a human to write to and the other language. */
 export function FooterSection({
   content,
   switchLocale,
+  path = "/",
 }: {
   content: LandingContent["footer"];
   switchLocale: LandingContent["nav"]["switchLocale"];
+  /** The page the language link opens in the other locale; the home page by default. */
+  path?: string;
 }) {
   const whatsApp = supportWhatsAppLink();
   return (
@@ -67,7 +70,7 @@ export function FooterSection({
             </TrackedAnchor>
             <span className="text-border/40">·</span>
             <Link
-              href="/"
+              href={path}
               locale={switchLocale.label === "EN" ? "en" : "fr"}
               aria-label={switchLocale.ariaLabel}
               className="inline-flex min-h-6 items-center font-medium text-foreground transition-colors hover:underline"
@@ -81,4 +84,10 @@ export function FooterSection({
       </div>
     </footer>
   );
+}
+
+/** The landing page's footer, on a standalone marketing page at [path] (JIKU-230). */
+export function MarketingFooter({ locale, path }: { locale: LandingLocale; path: string }) {
+  const content = LANDING_CONTENT[locale];
+  return <FooterSection content={content.footer} switchLocale={content.nav.switchLocale} path={path} />;
 }

@@ -132,7 +132,7 @@ function StepLine({ journey, index, onSelect }: { journey: Journey; index: numbe
               onClick={() => onSelect(stepIndex)}
               className="pb-6 text-left sm:px-1 sm:pb-0 sm:text-center"
             >
-              <span className="block text-[0.65rem] font-semibold tracking-wide text-muted-foreground uppercase">{step.actor}</span>
+              <span className="block text-xs font-semibold tracking-wide text-muted-foreground uppercase">{step.actor}</span>
               <span className={cn("block text-sm", current ? "font-semibold" : "text-muted-foreground")}>{step.title}</span>
             </button>
           </li>
