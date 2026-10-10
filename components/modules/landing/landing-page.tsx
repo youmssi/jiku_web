@@ -1,6 +1,7 @@
 import { BellRing, ClipboardCheck, Layers, Link2, ListOrdered, Mail, QrCode, ScanLine } from "lucide-react";
 import { MotionProvider, RevealFallback } from "@/components/effects";
 import { cardFontVariables } from "@/lib/card-display-fonts";
+import { cn } from "@/lib/utils";
 import { BentoSection } from "./bento-section";
 import { CardsSection } from "./cards-section";
 import { LANDING_CONTENT, type LandingLocale } from "./content";
@@ -10,7 +11,6 @@ import { FooterSection } from "./footer-section";
 import { HeroSection } from "./hero-section";
 import { LandingJsonLd } from "./json-ld";
 import { Navigation } from "./navigation";
-import { NumbersSection } from "./numbers-section";
 import { PricingSection } from "./pricing-section";
 import { DayLineVisual, TicketVisual } from "./product-visuals";
 import { ReplaceSection } from "./replace-section";
@@ -35,10 +35,15 @@ export function LandingPage({ locale, siteUrl }: { locale: LandingLocale; siteUr
     <MotionProvider>
       <RevealFallback />
       <LandingJsonLd content={content} locale={locale} siteUrl={siteUrl} />
+      <a
+        href="#main"
+        className="sr-only z-[60] rounded-full bg-foreground px-4 py-2 text-sm font-semibold text-background focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+      >
+        {content.nav.skipToContent}
+      </a>
       <Navigation content={content.nav} />
-      <main className={cardFontVariables}>
-        <HeroSection content={content.hero} siteUrl={siteUrl} />
-        <NumbersSection content={content.numbers} />
+      <main id="main" tabIndex={-1} className={cn("outline-none", cardFontVariables)}>
+        <HeroSection content={content.hero} facts={content.numbers} siteUrl={siteUrl} />
         <ReplaceSection content={content.replace} />
         <CardsSection content={content.cards} invites={content.hero.card.invites} siteUrl={siteUrl} />
         <BentoSection
@@ -61,7 +66,7 @@ export function LandingPage({ locale, siteUrl }: { locale: LandingLocale; siteUr
         <FaqSection content={content.faq} />
         <CtaSection content={content.cta} />
       </main>
-      <FooterSection content={content.footer} />
+      <FooterSection content={content.footer} switchLocale={content.nav.switchLocale} />
       <StickyCta label={content.stickyCta} />
     </MotionProvider>
   );

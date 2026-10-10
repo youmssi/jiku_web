@@ -15,11 +15,11 @@ export function ReplaceSection({ content }: { content: LandingContent["replace"]
             <span className="text-foreground">{content.afterLabel}</span>
           </div>
           <ul>
-            {content.rows.map((row, index) => (
+            {content.rows.map((row) => (
               <li key={row.after} className="grid gap-2 border-b border-border/40 px-6 py-5 last:border-b-0 sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-4">
                   <span className="flex items-start gap-3 text-sm text-muted-foreground">
                     <X className="mt-0.5 size-4 shrink-0 text-muted-foreground/60" aria-label={content.beforeLabel} />
-                    <span className="line-through decoration-muted-foreground/30">{row.before}</span>
+                    <span>{row.before}</span>
                   </span>
                   <ArrowRight className="hidden size-5 text-primary/50 sm:block" aria-hidden />
                   <span className="flex items-start gap-3 text-sm font-medium sm:text-base">

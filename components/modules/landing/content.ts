@@ -24,8 +24,8 @@ export type LandingPriceAnchor = "firstEventTier" | "teams" | null;
 export interface LandingPricingPlan {
   name: string;
   price: string;
-  /** One line under the price; `{price}` is replaced by the [anchor] price. */
-  caption: string;
+  /** One short fact per line under the price; `{price}` is replaced by the [anchor] price. */
+  details: string[];
   anchor: LandingPriceAnchor;
   cta: string;
   href: string;
@@ -59,10 +59,10 @@ export interface LandingContent {
     switchLocale: { label: string; href: string; ariaLabel: string };
     menuOpen: string;
     menuClose: string;
+    skipToContent: string;
   };
   soonLabel: string;
   hero: {
-    badge: string;
     /** The headline before the occasion that rotates at its end. */
     lead: string;
     /** The whole headline in one sentence, for search engines and screen readers. */
@@ -82,7 +82,7 @@ export interface LandingContent {
       ticket: { guest: string; status: string };
     };
   };
-  /** Product facts counted up under the hero; only numbers the product guarantees. */
+  /** Product facts that close the hero; only numbers the product guarantees. */
   numbers: { value: number; label: string }[];
   replace: {
     badge: string;
@@ -97,6 +97,8 @@ export interface LandingContent {
     heading: string;
     subheading: string;
     styles: Record<CardStyle, string>;
+    /** Names the style buttons above the pile, for screen readers. */
+    pickStyle: string;
     samples: LandingCardSample[];
     steps: { title: string; description: string }[];
     cta: string;
@@ -120,6 +122,8 @@ export interface LandingContent {
     heading: string;
     items: { title: string; text: string }[];
     methods: string[];
+    /** The commitments behind the claims, linked under the cards. */
+    links: { privacy: string; terms: string };
   };
   useCases: { badge: string; heading: string; more: string; cases: { label: string; anchor: UseCaseProfileId }[] };
   pricing: {
@@ -139,7 +143,14 @@ export interface LandingContent {
     /** The dedicated `/faq` page, which lists every item. */
     page: { title: string; description: string; heading: string; intro: string; home: string; breadcrumb: string };
   };
-  cta: { heading: string; text: string; primaryCta: string; secondaryCta: string };
+  cta: {
+    heading: string;
+    text: string;
+    primaryCta: string;
+    secondaryCta: string;
+    /** A human to ask before signing up: WhatsApp when the line is configured, email otherwise. */
+    contact: { question: string; whatsApp: string; email: string };
+  };
   /** The bar that keeps the main action in reach on a phone once the hero is gone. */
   stickyCta: string;
   footer: {
@@ -147,7 +158,7 @@ export interface LandingContent {
     groups: { title: string; links: { label: string; href: string }[] }[];
     copyright: string;
     tagline: string;
-    privacy: string;
+    contact: string;
   };
 }
 
@@ -185,10 +196,10 @@ const fr: LandingContent = {
     switchLocale: { label: "EN", href: "/en", ariaLabel: "Read this page in English" },
     menuOpen: "Ouvrir le menu",
     menuClose: "Fermer le menu",
+    skipToContent: "Aller au contenu",
   },
   soonLabel: "Bientôt",
   hero: {
-    badge: "Nouveau : la carte d'invitation à partager",
     lead: "Une invitation à la hauteur de",
     sentence: "Une invitation à la hauteur de votre mariage, vos 30 ans, un baptême, votre séminaire ou votre gala.",
     occasions: [
@@ -203,7 +214,7 @@ const fr: LandingContent = {
       "Invitations, billets QR et entrée pour vos événements. Rendez-vous et file du jour pour vos services. Sur WhatsApp, sans application, même quand le réseau tombe.",
     primaryCta: "Créer mon compte gratuit",
     secondaryCta: "Trouver ma formule",
-    ctaNote: "Gratuit jusqu'à 100 invités, sans carte bancaire",
+    ctaNote: "Sans carte bancaire",
     uses: { events: "J'organise un événement", services: "Je reçois des clients" },
     card: {
       invites: "vous invite",
@@ -236,6 +247,7 @@ const fr: LandingContent = {
     subheading:
       "Pas de liste d'invités ? Publiez une carte dans vos groupes WhatsApp. Chacun répond en un geste, et chaque « oui » reçoit son billet.",
     styles: { ELEGANT: "Élégant", MODERN: "Moderne", FESTIVE: "Festif" },
+    pickStyle: "Choisir le style de la carte",
     samples: [
       { style: "ELEGANT", event: "Mariage d'Aïcha & Karim", organizer: "Famille Barry", when: "sam. 12 déc. · 16 h", color: "#5B3A29", photo: false },
       { style: "MODERN", event: "Les 30 ans d'Aïssatou", organizer: "Maison Diallo", when: "sam. 14 nov. · 19 h", color: "#7C2D12", photo: true },
@@ -328,6 +340,7 @@ const fr: LandingContent = {
       },
     ],
     methods: ["Orange Money", "MTN MoMo", "Wave", "Espèces"],
+    links: { privacy: "Comment nous protégeons vos données", terms: "Conditions d'utilisation et de vente" },
   },
   useCases: {
     badge: "Pour qui",
@@ -351,7 +364,7 @@ const fr: LandingContent = {
       {
         name: "Événements",
         price: "Gratuit",
-        caption: "jusqu'à 100 invités par an, puis dès {price} par événement",
+        details: ["Jusqu'à 100 invités par an", "Puis dès {price} par événement"],
         anchor: "firstEventTier",
         cta: "Estimer mon événement",
         href: "/simulator",
@@ -359,8 +372,8 @@ const fr: LandingContent = {
       },
       {
         name: "Services",
-        price: "Solo gratuit",
-        caption: "pour une personne, pour toujours ; en équipe dès {price} par mois",
+        price: "Gratuit en solo",
+        details: ["Pour une personne, pour toujours", "En équipe dès {price} par mois"],
         anchor: "teams",
         cta: "Voir les offres",
         href: "/simulator",
@@ -368,7 +381,7 @@ const fr: LandingContent = {
       {
         name: "Vente de billets",
         price: "3 %",
-        caption: "par billet vendu, rien si rien n'est vendu ; 50 premiers billets offerts",
+        details: ["Par billet vendu, rien si rien n'est vendu", "50 premiers billets offerts"],
         anchor: null,
         cta: "Estimer ma commission",
         href: "/simulator",
@@ -416,6 +429,7 @@ const fr: LandingContent = {
     text: "Créez votre compte, partagez votre première carte ou votre lien de réservation : en cinq minutes, vous saurez si Jikū est fait pour vous.",
     primaryCta: "Créer mon compte gratuit",
     secondaryCta: "Se connecter",
+    contact: { question: "Une question avant de vous lancer ?", whatsApp: "Écrivez-nous sur WhatsApp", email: "Écrivez-nous" },
   },
   stickyCta: "Créer mon compte gratuit",
   footer: {
@@ -458,7 +472,7 @@ const fr: LandingContent = {
     ],
     copyright: "Tous droits réservés.",
     tagline: "Pensé pour l'Afrique francophone",
-    privacy: "Confidentialité",
+    contact: "Nous écrire",
   },
 };
 
@@ -493,10 +507,10 @@ const en: LandingContent = {
     switchLocale: { label: "FR", href: "/", ariaLabel: "Lire cette page en français" },
     menuOpen: "Open menu",
     menuClose: "Close menu",
+    skipToContent: "Skip to content",
   },
   soonLabel: "Soon",
   hero: {
-    badge: "New: the invitation card to share",
     lead: "An invitation worthy of",
     sentence: "An invitation worthy of your wedding, your 30th, a christening, your seminar or your gala.",
     occasions: [
@@ -511,7 +525,7 @@ const en: LandingContent = {
       "Invitations, QR tickets and entry for your events. Bookings and the day line for your services. On WhatsApp, no app to install, even when the network drops.",
     primaryCta: "Create my free account",
     secondaryCta: "Find my plan",
-    ctaNote: "Free for up to 100 guests, no card required",
+    ctaNote: "No card required",
     uses: { events: "I'm organizing an event", services: "I receive clients" },
     card: {
       invites: "invites you",
@@ -544,6 +558,7 @@ const en: LandingContent = {
     subheading:
       "No guest list? Post a card in your WhatsApp groups. Everyone answers in one tap, and every yes gets a ticket.",
     styles: { ELEGANT: "Elegant", MODERN: "Modern", FESTIVE: "Festive" },
+    pickStyle: "Pick the card style",
     samples: [
       { style: "ELEGANT", event: "Aïcha & Karim's wedding", organizer: "The Barry family", when: "Sat, Dec 12 · 4 PM", color: "#5B3A29", photo: false },
       { style: "MODERN", event: "Aïssatou turns 30", organizer: "Maison Diallo", when: "Sat, Nov 14 · 7 PM", color: "#7C2D12", photo: true },
@@ -636,6 +651,7 @@ const en: LandingContent = {
       },
     ],
     methods: ["Orange Money", "MTN MoMo", "Wave", "Cash"],
+    links: { privacy: "How we protect your data", terms: "Terms of use and sale" },
   },
   useCases: {
     badge: "Who it's for",
@@ -659,7 +675,7 @@ const en: LandingContent = {
       {
         name: "Events",
         price: "Free",
-        caption: "up to 100 guests a year, then from {price} per event",
+        details: ["Up to 100 guests a year", "Then from {price} per event"],
         anchor: "firstEventTier",
         cta: "Estimate my event",
         href: "/simulator",
@@ -667,8 +683,8 @@ const en: LandingContent = {
       },
       {
         name: "Services",
-        price: "Solo free",
-        caption: "for one person, forever; for a team from {price} a month",
+        price: "Free for one",
+        details: ["For one person, forever", "For a team from {price} a month"],
         anchor: "teams",
         cta: "See the plans",
         href: "/simulator",
@@ -676,7 +692,7 @@ const en: LandingContent = {
       {
         name: "Ticket sales",
         price: "3%",
-        caption: "per ticket sold, nothing if nothing sells; first 50 tickets free",
+        details: ["Per ticket sold, nothing if nothing sells", "First 50 tickets free"],
         anchor: null,
         cta: "Estimate my commission",
         href: "/simulator",
@@ -724,6 +740,7 @@ const en: LandingContent = {
     text: "Create your account, share your first card or your booking link: within five minutes, you'll know whether Jikū is for you.",
     primaryCta: "Create my free account",
     secondaryCta: "Sign in",
+    contact: { question: "A question before you start?", whatsApp: "Message us on WhatsApp", email: "Write to us" },
   },
   stickyCta: "Create my free account",
   footer: {
@@ -766,7 +783,7 @@ const en: LandingContent = {
     ],
     copyright: "All rights reserved.",
     tagline: "Built for French-speaking Africa",
-    privacy: "Privacy",
+    contact: "Contact us",
   },
 };
 

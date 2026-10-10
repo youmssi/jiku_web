@@ -10,8 +10,8 @@ import { SectionHeading } from "./section-heading";
 
 /**
  * The shareable card (JIKU-184, JIKU-194, JIKU-221): the three styles in a pile
- * to drag or tap through, over a silver aurora, then the three steps from the
- * style to the yeses.
+ * to drag or tap through, or to pick by name above it (JIKU-229), over a
+ * silver aurora, then the three steps from the style to the yeses.
  */
 export function CardsSection({
   content,
@@ -29,22 +29,15 @@ export function CardsSection({
 
         <div className="relative mt-10 overflow-hidden rounded-[2rem] border border-border/60 bg-zinc-50 sm:mt-14">
           <SilverBackdrop />
-          <div className="relative grid items-center gap-10 px-6 py-12 md:grid-cols-2 md:px-12 lg:py-16">
-            <ul className="flex flex-wrap justify-center gap-2 md:flex-col md:items-start">
-              {content.samples.map((sample) => (
-                <li key={sample.style} className="rounded-full border border-border bg-background/70 px-4 py-2 text-sm font-semibold backdrop-blur">
-                  {content.styles[sample.style]}
-                </li>
+          <div className="relative px-6 py-12 md:px-12 lg:py-16">
+            <CardStack
+              label={content.heading}
+              choices={{ labels: content.samples.map((sample) => content.styles[sample.style]), groupLabel: content.pickStyle }}
+              className="mx-auto aspect-[4/5] w-full max-w-[16rem] sm:max-w-[18rem]"
+              cards={content.samples.map((sample) => (
+                <CardSample key={sample.style} sample={sample} invites={invites} url={siteUrl} size="lg" className="pointer-events-none size-full" />
               ))}
-            </ul>
-            <div className="mx-auto aspect-[4/5] w-full max-w-[16rem] sm:max-w-[18rem]">
-              <CardStack
-                label={content.heading}
-                cards={content.samples.map((sample) => (
-                  <CardSample key={sample.style} sample={sample} invites={invites} url={siteUrl} size="lg" className="pointer-events-none size-full" />
-                ))}
-              />
-            </div>
+            />
           </div>
         </div>
 
@@ -63,7 +56,7 @@ export function CardsSection({
         </ol>
 
         <div className="mt-12 text-center">
-          <Button asChild size="lg" className="h-12 rounded-full px-8">
+          <Button asChild size="lg" className="h-12 rounded-full px-8 text-base">
             <TrackedLink href={ROUTES.REGISTER} eventName="cta_click" eventProperties={{ location: "cards", label: content.cta }}>
               {content.cta}
               <ArrowRight className="ml-2 size-4" />

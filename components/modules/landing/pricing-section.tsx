@@ -1,6 +1,6 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
 import { salesMailto } from "@/lib/support";
 import { cn } from "@/lib/utils";
@@ -24,10 +24,17 @@ export function PricingSection({ content, locale }: { content: LandingContent["p
               <CardHeader className="flex-1">
                 <CardTitle className="text-base">{plan.name}</CardTitle>
                 <p className="mt-3 text-4xl font-bold tracking-tight">{plan.price}</p>
-                <CardDescription className="mt-1">{plan.caption.replace("{price}", priceAnchor(plan.anchor, locale))}</CardDescription>
+                <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
+                  {plan.details.map((detail) => (
+                    <li key={detail} className="flex gap-2">
+                      <Check className="mt-0.5 size-4 shrink-0 text-foreground" aria-hidden />
+                      {detail.replace("{price}", priceAnchor(plan.anchor, locale))}
+                    </li>
+                  ))}
+                </ul>
               </CardHeader>
               <CardFooter>
-                <Button asChild className="w-full" variant={plan.highlighted ? "default" : "outline"}>
+                <Button asChild className="h-11 w-full rounded-full text-sm" variant={plan.highlighted ? "default" : "outline"}>
                   <Link href={plan.href}>
                     {plan.cta}
                     <ArrowRight className="ml-2 size-4" />
@@ -44,7 +51,7 @@ export function PricingSection({ content, locale }: { content: LandingContent["p
             {content.enterprise.cta}
           </a>
         </p>
-        <p className="mt-2 text-center text-xs text-muted-foreground">{content.note}</p>
+        <p className="mx-auto mt-2 max-w-xl text-center text-xs text-muted-foreground">{content.note}</p>
       </div>
     </section>
   );

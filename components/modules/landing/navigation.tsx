@@ -4,57 +4,51 @@ import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants";
-import { usePathname, useRouter } from "@/i18n/navigation";
+import { usePathname } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import type { LandingContent } from "./content";
 
-// ─── Language switch ───────────────────────────────────────────────
-// Toggling swaps the /[locale] segment of the current URL via the next-intl
-// router, which also updates the locale cookie — a plain router.push("/")
-// would be bounced back to the cookie's locale by the proxy. The Switch's
-// checked position always reflects the *current* locale (checked = EN).
-function LanguageSwitch({
+// ─── Language links ────────────────────────────────────────────────
+// Two links rather than a switch: changing the language is navigation, not a
+// setting. The next-intl Link swaps the /[locale] segment of the current URL
+// and updates the locale cookie, so the proxy does not bounce the visitor back.
+function LanguageLinks({
   switchLocale,
   large = false,
+  onNavigate,
 }: {
   switchLocale: LandingContent["nav"]["switchLocale"];
   large?: boolean;
+  onNavigate?: () => void;
 }) {
-  const router = useRouter();
   const pathname = usePathname();
-  const targetLocale = switchLocale.label.toLowerCase() as Locale;
-  const isCurrentlyEn = targetLocale === "fr";
+  const target = switchLocale.label.toLowerCase() as Locale;
+  const current: Locale = target === "fr" ? "en" : "fr";
+  const base = cn("inline-flex items-center justify-center rounded-full font-semibold", large ? "min-h-11 min-w-11 text-lg" : "min-h-9 min-w-9 text-sm");
 
   return (
-    <div className="flex items-center gap-2">
-      <span
-        className={cn(
-          "font-semibold transition-colors",
-          large ? "text-lg" : "text-xs",
-          !isCurrentlyEn ? "text-foreground" : "text-muted-foreground",
-        )}
-      >
-        FR
-      </span>
-      <Switch
-        checked={isCurrentlyEn}
-        onCheckedChange={() => router.replace(pathname, { locale: targetLocale })}
-        aria-label={switchLocale.ariaLabel}
-        size={large ? "default" : "sm"}
-      />
-      <span
-        className={cn(
-          "font-semibold transition-colors",
-          large ? "text-lg" : "text-xs",
-          isCurrentlyEn ? "text-foreground" : "text-muted-foreground",
-        )}
-      >
-        EN
-      </span>
+    <div className="flex items-center">
+      {(["fr", "en"] as const).map((locale) =>
+        locale === current ? (
+          <span key={locale} aria-current="true" className={cn(base, "text-foreground")}>
+            {locale.toUpperCase()}
+          </span>
+        ) : (
+          <Link
+            key={locale}
+            href={pathname}
+            locale={locale}
+            aria-label={switchLocale.ariaLabel}
+            onClick={onNavigate}
+            className={cn(base, "text-muted-foreground transition-colors hover:text-foreground")}
+          >
+            {locale.toUpperCase()}
+          </Link>
+        ),
+      )}
     </div>
   );
 }
@@ -125,11 +119,11 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
 
         {/* Desktop CTAs */}
         <div className="hidden items-center gap-4 md:flex">
-          <LanguageSwitch switchLocale={content.switchLocale} />
-          <Button variant="ghost" size="sm" asChild className="rounded-full">
+          <LanguageLinks switchLocale={content.switchLocale} />
+          <Button variant="ghost" asChild className="h-9 rounded-full px-4 text-sm">
             <Link href={ROUTES.LOGIN}>{content.signIn}</Link>
           </Button>
-          <Button size="sm" className="rounded-full shadow-sm" asChild>
+          <Button className="h-9 rounded-full px-4 text-sm shadow-sm" asChild>
             <Link href={ROUTES.REGISTER}>{content.register}</Link>
           </Button>
         </div>
@@ -138,7 +132,7 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
         <Button
           variant="ghost"
           size="icon"
-          className="relative z-50 md:hidden"
+          className="relative z-50 size-11 md:hidden"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           aria-label={isMobileOpen ? content.menuClose : content.menuOpen}
         >
@@ -160,16 +154,14 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
                 {link.label}
               </Link>
             ))}
-            <div onClick={() => setIsMobileOpen(false)}>
-              <LanguageSwitch switchLocale={content.switchLocale} large />
-            </div>
+            <LanguageLinks switchLocale={content.switchLocale} large onNavigate={() => setIsMobileOpen(false)} />
             <hr className="my-4 border-border/50" />
-            <Button variant="outline" asChild className="w-full justify-center rounded-full">
+            <Button variant="outline" asChild className="h-12 w-full justify-center rounded-full text-base">
               <Link href={ROUTES.LOGIN} onClick={() => setIsMobileOpen(false)}>
                 {content.signIn}
               </Link>
             </Button>
-            <Button asChild className="w-full justify-center rounded-full">
+            <Button asChild className="h-12 w-full justify-center rounded-full text-base">
               <Link href={ROUTES.REGISTER} onClick={() => setIsMobileOpen(false)}>
                 {content.register}
               </Link>

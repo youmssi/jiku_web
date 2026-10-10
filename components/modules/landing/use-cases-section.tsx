@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { SEO_ROUTES } from "@/lib/constants";
 import type { LandingContent } from "./content";
+import { SectionHeading } from "./section-heading";
 
 /**
  * Who it is for, as one line of situations a visitor recognizes; the details
@@ -9,16 +10,15 @@ import type { LandingContent } from "./content";
  */
 export function UseCasesSection({ content }: { content: LandingContent["useCases"] }) {
   return (
-    <section id="use-cases" className="scroll-mt-24 border-t border-border/30 py-16">
+    <section id="use-cases" className="scroll-mt-24 border-t border-border/30 py-16 sm:py-24">
       <div className="mx-auto max-w-5xl px-6 text-center">
-        <p className="text-sm font-medium text-primary">{content.badge}</p>
-        <h2 className="mt-2 text-balance text-2xl font-bold tracking-tight sm:text-3xl">{content.heading}</h2>
-        <ul className="mt-8 flex flex-wrap justify-center gap-2">
+        <SectionHeading badge={content.badge} heading={content.heading} />
+        <ul className="mt-10 flex flex-wrap justify-center gap-2 sm:mt-14">
           {content.cases.map((useCase) => (
             <li key={useCase.label}>
               <Link
                 href={`${SEO_ROUTES.USE_CASES}#${useCase.anchor}`}
-                className="inline-flex rounded-full border border-border/60 px-4 py-2 text-sm font-medium transition hover:border-primary/40"
+                className="inline-flex min-h-10 items-center rounded-full border border-border/60 px-4 text-sm font-medium transition hover:border-primary/40"
               >
                 {useCase.label}
               </Link>
@@ -27,7 +27,7 @@ export function UseCasesSection({ content }: { content: LandingContent["useCases
         </ul>
         <Link
           href={SEO_ROUTES.USE_CASES}
-          className="mt-6 inline-flex min-h-6 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
+          className="mt-6 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
         >
           {content.more}
           <ArrowRight className="size-4" aria-hidden />

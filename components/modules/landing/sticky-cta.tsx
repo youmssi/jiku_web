@@ -8,15 +8,16 @@ import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 /**
- * On a phone, the main action stays in reach once the hero has scrolled away,
- * and steps aside when the closing call to action is on screen. Desktop keeps
- * the navigation's button instead.
+ * On a phone, the main action stays in reach once the whole hero has scrolled
+ * away (not just its button, so the bar never covers the hero's card), and
+ * steps aside when the closing call to action is on screen. Desktop keeps the
+ * navigation's button instead.
  */
 export function StickyCta({ label }: { label: string }) {
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
-    const targets = ["hero-cta", "final-cta"]
+    const targets = ["hero", "final-cta"]
       .map((id) => document.getElementById(id))
       .filter((element): element is HTMLElement => element !== null);
     if (targets.length === 0) return;

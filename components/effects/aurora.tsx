@@ -117,7 +117,9 @@ void main() {
   float midPoint = 0.20;
   float auroraAlpha = smoothstep(midPoint - uBlend * 0.5, midPoint + uBlend * 0.5, intensity);
   
-  vec3 auroraColor = intensity * rampColor;
+  // Scaled within 88-100% of the ramp, so pale greys stay pale greys instead of
+  // sinking to a dark smoke where the band is thin (JIKU-229).
+  vec3 auroraColor = rampColor * (0.88 + 0.12 * clamp(intensity, 0.0, 1.0));
   
   if (uLightMode > 0.5) {
     float energy = clamp(max(intensity, 0.0), 0.0, 1.0);

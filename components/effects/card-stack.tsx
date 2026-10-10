@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useTransform, type PanInfo } from "motion/react";
 import { useEffect, useState, type ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 // Stack adapted from React Bits (reactbits.dev, MIT + Commons Clause): a pile
 // of cards to drag or tap through. The cards arrive already rendered by the
@@ -35,24 +36,48 @@ function Draggable({ children, onSendToBack }: { children: ReactNode; onSendToBa
   );
 }
 
-export function CardStack({ cards, label, autoplay = 3500 }: { cards: ReactNode[]; label: string; autoplay?: number }) {
+/**
+ * [choices] adds one toggle per card above the pile: pressing one brings that
+ * card to the front and stops the autoplay, so the buttons always do what they
+ * look like they do. [className] sizes the pile itself.
+ */
+export function CardStack({
+  cards,
+  label,
+  choices,
+  className,
+  autoplay = 3500,
+}: {
+  cards: ReactNode[];
+  label: string;
+  choices?: { labels: string[]; groupLabel: string };
+  className?: string;
+  autoplay?: number;
+}) {
   const [order, setOrder] = useState(() => cards.map((_, index) => index));
   const [paused, setPaused] = useState(false);
+  const [chosen, setChosen] = useState(false);
+  const front = order[order.length - 1];
 
   const sendToBack = (position: number) =>
     setOrder((current) => [current[position], ...current.filter((_, index) => index !== position)]);
 
+  const bringToFront = (cardIndex: number) => {
+    setChosen(true);
+    setOrder((current) => [...current.filter((index) => index !== cardIndex), cardIndex]);
+  };
+
   useEffect(() => {
-    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (paused || chosen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = setInterval(() => setOrder((current) => [current[current.length - 1], ...current.slice(0, -1)]), autoplay);
     return () => clearInterval(timer);
-  }, [paused, autoplay]);
+  }, [paused, chosen, autoplay]);
 
-  return (
+  const pile = (
     <div
       role="group"
       aria-label={label}
-      className="relative size-full [perspective:700px]"
+      className={cn("relative [perspective:700px]", className)}
       onPointerEnter={() => setPaused(true)}
       onPointerLeave={() => setPaused(false)}
     >
@@ -73,6 +98,27 @@ export function CardStack({ cards, label, autoplay = 3500 }: { cards: ReactNode[
           </motion.div>
         </Draggable>
       ))}
+    </div>
+  );
+
+  if (!choices) return pile;
+
+  return (
+    <div className="flex w-full flex-col items-center gap-10">
+      <div role="group" aria-label={choices.groupLabel} className="flex flex-wrap justify-center gap-2">
+        {choices.labels.map((choice, cardIndex) => (
+          <button
+            key={choice}
+            type="button"
+            aria-pressed={front === cardIndex}
+            onClick={() => bringToFront(cardIndex)}
+            className="min-h-10 rounded-full border border-border bg-background/80 px-4 text-sm font-semibold backdrop-blur transition hover:border-foreground/40 aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:text-background"
+          >
+            {choice}
+          </button>
+        ))}
+      </div>
+      {pile}
     </div>
   );
 }
