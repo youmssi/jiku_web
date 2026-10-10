@@ -143,7 +143,16 @@ export interface LandingContent {
     more: string;
     items: LandingFaqItem[];
     /** The dedicated `/faq` page, which lists every item. */
-    page: { title: string; description: string; heading: string; intro: string; home: string; breadcrumb: string };
+    page: {
+      title: string;
+      description: string;
+      heading: string;
+      intro: string;
+      home: string;
+      breadcrumb: string;
+      /** The FAQ page's own closing band, so it never repeats the landing's word for word. */
+      cta: { heading: string; text: string };
+    };
   };
   cta: {
     heading: string;
@@ -155,6 +164,8 @@ export interface LandingContent {
   };
   /** The bar that keeps the main action in reach on a phone once the hero is gone. */
   stickyCta: string;
+  /** The page shown for an address that leads nowhere (JIKU-236). */
+  notFound: { title: string; text: string; home: string; guides: string; faq: string };
   footer: {
     description: string;
     groups: { title: string; links: { label: string; href: string }[] }[];
@@ -411,6 +422,10 @@ const fr: LandingContent = {
         "Jikū gère tout ce qui passe par un billet : les invitations et les cartes à partager, les billets QR et l'entrée de vos événements, les rendez-vous et la file du jour de vos services, sans application à installer. Voici les réponses aux questions qu'on nous pose le plus.",
       home: "Accueil",
       breadcrumb: "Fil d'Ariane",
+      cta: {
+        heading: "Vous avez vos réponses ? Lancez-vous.",
+        text: "Gratuit jusqu'à 100 invités par an et sans carte bancaire : votre première carte ou votre lien de réservation est prêt en quelques minutes.",
+      },
     },
     items: [
       { featured: true, question: "Mes invités ou mes clients doivent-ils installer une application ?", answer: "Non. Tout passe par un simple lien ouvert dans le navigateur de leur téléphone : invitation, carte, billet, réservation ou ticket d'attente." },
@@ -435,6 +450,13 @@ const fr: LandingContent = {
     contact: { question: "Une question avant de vous lancer ?", whatsApp: "Écrivez-nous sur WhatsApp", email: "Écrivez-nous" },
   },
   stickyCta: "Créer mon compte gratuit",
+  notFound: {
+    title: "Cette page n'existe pas",
+    text: "Le lien est peut-être incomplet, ou la page a changé d'adresse. Voici où reprendre.",
+    home: "Retour à l'accueil",
+    guides: "Parcourir les guides",
+    faq: "Questions fréquentes",
+  },
   footer: {
     description: "Invitations, billets, rendez-vous et file d'attente en marque blanche, pensés pour l'Afrique francophone.",
     groups: [
@@ -724,6 +746,10 @@ const en: LandingContent = {
         "Jikū runs everything that goes through a ticket: invitations and cards to share, QR tickets and entry for your events, bookings and the day line for your services, with no app to install. Here are the answers to the questions we hear most.",
       home: "Home",
       breadcrumb: "Breadcrumb",
+      cta: {
+        heading: "Got your answers? Get started.",
+        text: "Free for up to 100 guests a year, no card required: your first card or booking link is ready in minutes.",
+      },
     },
     items: [
       { featured: true, question: "Do my guests or clients need to install an app?", answer: "No. Everything goes through a simple link opened in their phone's browser: invitation, card, ticket, booking or waiting ticket." },
@@ -748,6 +774,13 @@ const en: LandingContent = {
     contact: { question: "A question before you start?", whatsApp: "Message us on WhatsApp", email: "Write to us" },
   },
   stickyCta: "Create my free account",
+  notFound: {
+    title: "This page doesn't exist",
+    text: "The link may be incomplete, or the page has moved. Here is where to pick up.",
+    home: "Back to home",
+    guides: "Browse the guides",
+    faq: "Frequently asked questions",
+  },
   footer: {
     description: "White-label invitations, tickets, appointments and queues, built for French-speaking Africa.",
     groups: [

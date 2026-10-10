@@ -15,3 +15,5 @@ export { BirthdayTextsPage } from "./birthday-texts-page";
 export { BIRTHDAY_CARD_CONTENT, BIRTHDAY_TEXTS_CONTENT } from "./birthday-content";
 export type { BirthdayCardPageContent, BirthdayTextsPageContent } from "./birthday-content";
 export { FaqPage } from "./faq-page";
+export { MarketingFooter } from "./footer-section";
+export { NotFoundPage } from "./not-found-page";

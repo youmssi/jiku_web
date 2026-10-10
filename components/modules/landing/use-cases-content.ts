@@ -126,7 +126,7 @@ const fr: UseCasesPageContent = {
     heading: "Vos invités et vos clients méritent de ne plus attendre.",
     text: "Votre situation est dans la liste ? Créez votre compte et suivez le même parcours, avec vos invités ou vos clients à la place des nôtres.",
     primary: "Créer mon compte gratuit",
-    secondary: "Simuler mon prix",
+    secondary: "Trouver ma formule",
   },
   nav: {
     home: "Accueil",
@@ -216,12 +216,12 @@ const en: UseCasesPageContent = {
     heading: "Your guests and clients deserve to stop waiting.",
     text: "Found your situation? Create your account and follow the same journey, with your own guests or clients in place of ours.",
     primary: "Create my free account",
-    secondary: "Estimate my price",
+    secondary: "Find my plan",
   },
   nav: {
     home: "Home",
     signIn: "Sign in",
-    createAccount: "Create account",
+    createAccount: "Create an account",
     switchLocale: { label: "FR", locale: "fr", ariaLabel: "Lire cette page en français" },
   },
 };

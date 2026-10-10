@@ -10,16 +10,19 @@ import { cn } from "@/lib/utils";
 /**
  * On a phone, the main action stays in reach once the whole hero has scrolled
  * away (not just its button, so the bar never covers the hero's card), and
- * steps aside when the closing call to action is on screen. Desktop keeps the
+ * steps aside when the closing call to action or the footer is on screen, so
+ * it never covers the footer's links (JIKU-236). Desktop keeps the
  * navigation's button instead.
  */
 export function StickyCta({ label }: { label: string }) {
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
-    const targets = ["hero", "final-cta"]
-      .map((id) => document.getElementById(id))
-      .filter((element): element is HTMLElement => element !== null);
+    const targets = [
+      document.getElementById("hero"),
+      document.getElementById("final-cta"),
+      document.querySelector("footer"),
+    ].filter((element): element is HTMLElement => element !== null);
     if (targets.length === 0) return;
     const visible = new Map<Element, boolean>();
     const observer = new IntersectionObserver((entries) => {

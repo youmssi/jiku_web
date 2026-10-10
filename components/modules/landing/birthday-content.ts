@@ -57,7 +57,7 @@ const frNav: MarketingNavContent = {
 const enNav: MarketingNavContent = {
   home: "Home",
   signIn: "Sign in",
-  createAccount: "Create account",
+  createAccount: "Create an account",
   switchLocale: { label: "FR", locale: "fr", ariaLabel: "Lire cette page en français" },
 };
 
@@ -163,7 +163,7 @@ const frCard: BirthdayCardPageContent = {
     heading: "Créez la carte de votre anniversaire",
     text: "Gratuit jusqu'à 100 invités par an, sans application à installer.",
     primary: "Créer ma carte",
-    secondary: "Voir les tarifs",
+    secondary: "Trouver ma formule",
   },
   breadcrumb: "Carte d'invitation d'anniversaire",
   nav: frNav,
@@ -264,7 +264,7 @@ const enCard: BirthdayCardPageContent = {
     heading: "Create your birthday card",
     text: "Free for up to 100 guests a year, no app to install.",
     primary: "Create my card",
-    secondary: "See pricing",
+    secondary: "Find my plan",
   },
   breadcrumb: "Birthday invitation card",
   nav: enNav,

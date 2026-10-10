@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -56,6 +56,8 @@ function LanguageLinks({
 export function Navigation({ content }: { content: LandingContent["nav"] }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 20);
@@ -63,14 +65,30 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // The open menu behaves as a modal dialog (JIKU-236): the page behind is
+  // inert so the keyboard stays in the menu, Escape closes it, and focus goes
+  // to its first link, then back to the toggle when it closes.
   useEffect(() => {
-    if (isMobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+    if (!isMobileOpen) return;
+    const toggle = toggleRef.current;
+    const header = toggle?.closest("header");
+    const outside: Element[] = [];
+    for (let node: Element | null = header ?? null; node && node !== document.body; node = node.parentElement) {
+      const parent = node.parentElement;
+      if (parent) outside.push(...[...parent.children].filter((sibling) => sibling !== node));
     }
+    document.body.style.overflow = "hidden";
+    outside.forEach((element) => element.setAttribute("inert", ""));
+    menuRef.current?.querySelector<HTMLElement>("a, button")?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsMobileOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = "";
+      outside.forEach((element) => element.removeAttribute("inert"));
+      document.removeEventListener("keydown", onKeyDown);
+      toggle?.focus();
     };
   }, [isMobileOpen]);
 
@@ -133,9 +151,12 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
         <Button
           variant="ghost"
           size="icon"
+          ref={toggleRef}
           className="relative z-50 size-11 md:hidden"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           aria-label={isMobileOpen ? content.menuClose : content.menuOpen}
+          aria-expanded={isMobileOpen}
+          aria-controls="mobile-menu"
         >
           {isMobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </Button>
@@ -143,7 +164,14 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
 
       {/* Mobile menu overlay */}
       {isMobileOpen && (
-        <div className="fixed inset-0 z-40 flex flex-col bg-background pt-24 md:hidden">
+        <div
+          id="mobile-menu"
+          ref={menuRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={content.label}
+          className="fixed inset-0 z-40 flex flex-col bg-background pt-24 md:hidden"
+        >
           <nav className="flex flex-col gap-6 px-8 pb-8">
             {content.links.map((link) => (
               <Link
