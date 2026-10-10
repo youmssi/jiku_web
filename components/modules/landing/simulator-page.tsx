@@ -96,7 +96,7 @@ export function SimulatorPage({
                         <li key={method.name}>
                           <Badge
                             variant={method.soon ? "outline" : "secondary"}
-                            className="h-6 px-2.5 text-xs"
+                           
                           >
                             {method.name}
                             {method.soon

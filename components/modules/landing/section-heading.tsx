@@ -8,7 +8,10 @@ export function SectionHeading({
   heading,
   subheading,
   align = "center",
+  id,
 }: {
+  /** The heading's id, for a section labelled by it. */
+  id?: string;
   badge: string;
   heading: string;
   subheading?: string;
@@ -20,7 +23,7 @@ export function SectionHeading({
         <JikūLogo variant="mark" className="size-3.5" />
         {badge}
       </div>
-      <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">{heading}</h2>
+      <h2 id={id} className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">{heading}</h2>
       {subheading ? <p className="mt-4 text-base text-muted-foreground sm:text-lg">{subheading}</p> : null}
     </div>
   );

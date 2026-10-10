@@ -81,6 +81,7 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
       }`}
     >
       <nav
+        aria-label={content.label}
         className={`mx-auto flex items-center justify-between transition-all duration-500 ${
           isScrolled || isMobileOpen
             ? "h-14 max-w-6xl rounded-2xl border border-border/30 bg-background/80 px-6 shadow-lg shadow-black/5 backdrop-blur-xl"

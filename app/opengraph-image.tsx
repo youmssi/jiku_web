@@ -3,7 +3,7 @@ import { OgBrand } from "@/components/modules/seo";
 
 export const contentType = "image/png";
 export const size = { width: 1200, height: 630 };
-export const alt = "Jikū: White-label event invitations, ticketing, RSVP and check-in";
+export const alt = "Jikū : invitations WhatsApp, billets QR et file d'attente";
 
 export default function OpenGraphImage() {
   return new ImageResponse(
@@ -16,7 +16,7 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%)",
+          background: "linear-gradient(135deg, #0A0A0A 0%, #262626 50%, #0A0A0A 100%)",
           fontFamily: "Inter, sans-serif",
           padding: "80px",
         }}
@@ -45,7 +45,7 @@ export default function OpenGraphImage() {
             width: "500px",
             height: "500px",
             borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
           }}
         />
         <div
@@ -56,7 +56,7 @@ export default function OpenGraphImage() {
             width: "400px",
             height: "400px",
             borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%)",
           }}
         />
 
@@ -73,31 +73,31 @@ export default function OpenGraphImage() {
             fontSize: "64px",
             fontWeight: 800,
             letterSpacing: "-0.03em",
-            color: "#F8FAFC",
+            color: "#FAFAFA",
             textAlign: "center",
             lineHeight: 1.1,
             maxWidth: "900px",
           }}
         >
           <div style={{ display: "flex" }}>
-            Invitations, QR tickets{" "}
-            <span style={{ color: "#60A5FA", marginLeft: "0.3em" }}>& check-in</span>
+            Invitations, billets QR{" "}
+            <span style={{ color: "#A3A3A3", marginLeft: "0.3em" }}>et entrée</span>
           </div>
-          <div style={{ display: "flex" }}>under your own brand</div>
+          <div style={{ display: "flex" }}>à votre marque, sur WhatsApp</div>
         </div>
 
         {/* Subtitle */}
         <div
           style={{
             fontSize: "22px",
-            color: "#94A3B8",
+            color: "#A3A3A3",
             textAlign: "center",
             marginTop: "20px",
             maxWidth: "700px",
             lineHeight: 1.4,
           }}
         >
-          Send invitations by email and WhatsApp, issue signed QR tickets, and check guests in online or offline. Free for up to 100 guests.
+          Cartes et invitations WhatsApp, billets QR contrôlés même sans réseau, rendez-vous et file du jour. Gratuit jusqu&apos;à 100 invités par an.
         </div>
 
         {/* Feature badges */}
@@ -108,7 +108,7 @@ export default function OpenGraphImage() {
             marginTop: "36px",
           }}
         >
-          {["Email + WhatsApp", "QR tickets", "Offline check-in", "White-label"].map(
+          {["WhatsApp et e-mail", "Billets QR", "Entrée sans réseau", "À votre marque"].map(
             (feature) => (
               <div
                 key={feature}
@@ -118,9 +118,9 @@ export default function OpenGraphImage() {
                   gap: "6px",
                   padding: "8px 16px",
                   borderRadius: "9999px",
-                  border: "1px solid rgba(148,163,184,0.2)",
+                  border: "1px solid rgba(255,255,255,0.15)",
                   fontSize: "15px",
-                  color: "#CBD5E1",
+                  color: "#D4D4D4",
                 }}
               >
                 <svg
@@ -128,7 +128,7 @@ export default function OpenGraphImage() {
                   height="14"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#60A5FA"
+                  stroke="#A3A3A3"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
