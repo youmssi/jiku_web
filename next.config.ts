@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 import createNextIntlPlugin from "next-intl/plugin";
+import { createMDX } from "fumadocs-mdx/next";
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -67,7 +68,10 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 // builds with Turbopack. The cost is that the SDK's debug logging is not tree
 // shaken out of the client bundle — worth revisiting only if that shows up in a
 // bundle measurement.
-export default withSentryConfig(withNextIntl(nextConfig), {
+// The guides (JIKU-235) are MDX files under content/docs, compiled by Fumadocs.
+const withMDX = createMDX();
+
+export default withSentryConfig(withMDX(withNextIntl(nextConfig)), {
   silent: !process.env.CI,
   telemetry: false,
 });

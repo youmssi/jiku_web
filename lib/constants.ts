@@ -127,6 +127,9 @@ export const COOKIES = {
 
 // Public marketing pages, deliberately generic: no location-targeted slugs, so
 // the site stays valid as the product expands beyond a single market.
+/** The step-by-step guides (JIKU-235), served by Fumadocs under each locale. */
+export const DOCS_ROUTE = "/docs";
+
 export const SEO_ROUTES = {
   USE_CASES: "/use-cases",
   SIMULATOR: "/simulator",
