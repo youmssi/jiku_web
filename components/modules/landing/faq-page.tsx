@@ -47,7 +47,7 @@ export function FaqPage({ locale, siteUrl }: { locale: LandingLocale; siteUrl: s
         <PearlBackdrop />
         <div className="relative mx-auto max-w-3xl px-6 py-20 text-center sm:py-24">
           <nav aria-label={faq.page.breadcrumb} className="mb-6 text-sm text-muted-foreground">
-            <Link href={ROUTES.HOME} className="hover:text-foreground">
+            <Link href={ROUTES.HOME} className="inline-block py-1 hover:text-foreground">
               {faq.page.home}
             </Link>
             <span className="mx-2">/</span>

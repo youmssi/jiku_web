@@ -27,7 +27,7 @@ export function UseCasesSection({ content }: { content: LandingContent["useCases
         </ul>
         <Link
           href={SEO_ROUTES.USE_CASES}
-          className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
+          className="mt-6 inline-flex min-h-6 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
         >
           {content.more}
           <ArrowRight className="size-4" aria-hidden />

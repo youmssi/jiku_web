@@ -73,7 +73,7 @@ function ProfileCard({ profile }: { profile: UseCaseProfile }) {
         </ul>
         <Link
           href={ROUTES.REGISTER}
-          className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
+          className="mt-6 inline-flex min-h-6 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
         >
           {profile.cta}
           <ArrowRight className="size-4" aria-hidden />

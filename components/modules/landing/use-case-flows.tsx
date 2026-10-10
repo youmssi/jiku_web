@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { fill } from "./simulator-format";
 import { JourneyPhone } from "./journey-screens";
@@ -35,15 +34,23 @@ export function UseCaseFlows({ content }: { content: JourneysContent }) {
         <p className="mt-3 text-sm text-muted-foreground sm:text-base">{content.intro}</p>
       </div>
 
-      <Tabs value={journeyId} onValueChange={selectJourney} className="-mx-6 mt-8 items-start px-6 sm:mx-0 sm:items-center sm:px-0">
-        <TabsList className="h-auto max-w-full justify-start gap-1 overflow-x-auto rounded-2xl p-1 sm:flex-wrap sm:justify-center">
-          {content.journeys.map((candidate) => (
-            <TabsTrigger key={candidate.id} value={candidate.id} className="shrink-0 rounded-xl px-4 py-2 text-sm">
-              {candidate.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+      <div
+        role="group"
+        aria-label={content.heading}
+        className="-mx-6 mt-8 flex max-w-full justify-start gap-1 overflow-x-auto px-6 sm:mx-auto sm:w-fit sm:flex-wrap sm:justify-center sm:rounded-2xl sm:bg-muted sm:p-1 sm:px-1"
+      >
+        {content.journeys.map((candidate) => (
+          <button
+            key={candidate.id}
+            type="button"
+            aria-pressed={candidate.id === journeyId}
+            onClick={() => selectJourney(candidate.id)}
+            className="min-h-11 shrink-0 rounded-xl px-4 text-sm font-medium text-foreground/75 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-sm"
+          >
+            {candidate.label}
+          </button>
+        ))}
+      </div>
 
       <div className="mt-10 grid items-center gap-10 rounded-[2rem] border border-border/50 bg-gradient-to-br from-primary/[0.05] via-card to-card p-6 sm:p-10 lg:grid-cols-[1fr_20rem]">
         <div>
