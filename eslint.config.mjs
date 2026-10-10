@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // shadcn/ui generated components — not meant to be edited
     "components/ui/**",
+    // Vendored agent skills (ux-expert, ui-ux-pro-max), updated from upstream releases
+    ".claude/**",
   ]),
 ]);
 
