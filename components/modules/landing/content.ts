@@ -455,6 +455,7 @@ const fr: LandingContent = {
         links: [
           { label: "Carte d'invitation d'anniversaire", href: "/birthday-invitation-card" },
           { label: "Textes d'invitation d'anniversaire", href: "/birthday-invitation-texts" },
+          { label: "Guides", href: "/docs" },
         ],
       },
       {
@@ -767,6 +768,7 @@ const en: LandingContent = {
         links: [
           { label: "Birthday invitation card", href: "/birthday-invitation-card" },
           { label: "Birthday invitation texts", href: "/birthday-invitation-texts" },
+          { label: "Guides", href: "/docs" },
         ],
       },
       {

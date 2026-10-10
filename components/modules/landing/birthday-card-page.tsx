@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { Link } from "@/i18n/navigation";
 import { cardFontVariables } from "@/lib/card-display-fonts";
-import { ROUTES, SEO_ROUTES } from "@/lib/constants";
+import { DOCS_ROUTE, ROUTES, SEO_ROUTES } from "@/lib/constants";
 import {
   BreadcrumbJsonLd,
   FaqJsonLd,
@@ -134,6 +134,15 @@ export function BirthdayCardPage({
                   </li>
                 ))}
               </ol>
+              <p className="mt-8 text-center">
+                <Link
+                  href={`${DOCS_ROUTE}/invitation-card`}
+                  className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold underline decoration-foreground/30 underline-offset-4 hover:decoration-foreground"
+                >
+                  {content.steps.guide}
+                  <ArrowRight className="size-4" aria-hidden />
+                </Link>
+              </p>
             </section>
 
             <section aria-labelledby="birthday-why" className="mt-24">

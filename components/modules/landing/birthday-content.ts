@@ -17,7 +17,8 @@ export interface BirthdayCardPageContent {
   /** The card drawn next to the intro. */
   sample: LandingCardSample;
   invites: string;
-  steps: { heading: string; items: { title: string; text: string }[] };
+  /** [guide] links the three steps to the full guide in the docs (JIKU-235). */
+  steps: { heading: string; items: { title: string; text: string }[]; guide: string };
   why: { heading: string; items: { title: string; text: string }[] };
   occasions: { heading: string; items: string[] };
   texts: { heading: string; text: string; cta: string };
@@ -90,6 +91,7 @@ const frCard: BirthdayCardPageContent = {
   invites: "vous invite",
   steps: {
     heading: "Votre invitation en trois gestes",
+    guide: "Le guide pas à pas, avec chaque réglage",
     items: [
       {
         title: "Créez votre carte",
@@ -196,6 +198,7 @@ const enCard: BirthdayCardPageContent = {
   invites: "invites you",
   steps: {
     heading: "Your invitation in three steps",
+    guide: "The step-by-step guide, with every setting",
     items: [
       {
         title: "Create your card",
