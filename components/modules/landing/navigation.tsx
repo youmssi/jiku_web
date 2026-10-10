@@ -1,5 +1,6 @@
 "use client";
 
+import { TrackedLink } from "@/components/shared";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { Menu, X } from "lucide-react";
@@ -143,7 +144,7 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
             <Link href={ROUTES.LOGIN}>{content.signIn}</Link>
           </Button>
           <Button className="h-9 rounded-full px-4 text-sm shadow-sm" asChild>
-            <Link href={ROUTES.REGISTER}>{content.register}</Link>
+            <TrackedLink eventName="cta_click" eventProperties={{ location: "nav" }} href={ROUTES.REGISTER}>{content.register}</TrackedLink>
           </Button>
         </div>
 
@@ -191,9 +192,9 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
               </Link>
             </Button>
             <Button asChild className="h-12 w-full justify-center rounded-full text-base">
-              <Link href={ROUTES.REGISTER} onClick={() => setIsMobileOpen(false)}>
+              <TrackedLink eventName="cta_click" eventProperties={{ location: "nav_mobile" }} href={ROUTES.REGISTER} onClick={() => setIsMobileOpen(false)}>
                 {content.register}
-              </Link>
+              </TrackedLink>
             </Button>
           </nav>
         </div>

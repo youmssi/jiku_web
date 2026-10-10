@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { LocaleSwitch } from "@/components/shared";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { ROUTES } from "@/lib/constants";
 
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
  * One frame for every account screen: sign-in, sign-up, password recovery,
  * email verification, first organization and team invitations. A slim brand
  * header leads back to the landing page, and each page drops a single
- * `AuthCard` into the centered column, so all of them read the same way.
+ * `AuthCard` into the centered column, so all of them read the same way. The
+ * other language sits next to the way home, on the same screen.
  */
 export default async function AuthLayout({
   children,
@@ -28,13 +30,16 @@ export default async function AuthLayout({
         <Link href={ROUTES.HOME} className="text-lg" aria-label={t("backToHome")}>
           <JikūLogo />
         </Link>
-        <Link
-          href={ROUTES.HOME}
-          className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <ArrowLeft className="size-4" aria-hidden />
-          {t("backToHome")}
-        </Link>
+        <div className="flex items-center gap-4">
+          <LocaleSwitch className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-full text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground" />
+          <Link
+            href={ROUTES.HOME}
+            className="flex min-h-9 items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ArrowLeft className="size-4" aria-hidden />
+            {t("backToHome")}
+          </Link>
+        </div>
       </header>
       <main className="flex flex-1 flex-col items-center justify-center p-6 md:p-10">
         <div className="flex w-full max-w-sm flex-col gap-6">{children}</div>

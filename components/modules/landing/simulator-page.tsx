@@ -1,4 +1,5 @@
 import { ArrowRight, CreditCard, HandCoins, Layers } from "lucide-react";
+import { TrackedLink } from "@/components/shared";
 import { MotionProvider, SpotlightCard } from "@/components/effects";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -137,10 +138,10 @@ export function SimulatorPage({
                   variant="secondary"
                   className="h-12 rounded-full px-8 text-base"
                 >
-                  <Link href={ROUTES.REGISTER}>
+                  <TrackedLink eventName="cta_click" eventProperties={{ location: "simulator_closing" }} href={ROUTES.REGISTER}>
                     {content.cta.primary}
                     <ArrowRight className="ml-2 size-4" />
-                  </Link>
+                  </TrackedLink>
                 </Button>
                 <Button
                   asChild

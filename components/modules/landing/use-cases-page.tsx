@@ -9,6 +9,7 @@ import {
   Stethoscope,
   type LucideIcon,
 } from "lucide-react";
+import { TrackedLink } from "@/components/shared";
 import { MotionProvider, Reveal, SpotlightCard } from "@/components/effects";
 import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
@@ -73,13 +74,13 @@ function ProfileCard({ profile }: { profile: UseCaseProfile }) {
             </li>
           ))}
         </ul>
-        <Link
+        <TrackedLink eventName="cta_click" eventProperties={{ location: "use_cases_profile" }}
           href={ROUTES.REGISTER}
           className="mt-6 inline-flex min-h-6 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
         >
           {profile.cta}
           <ArrowRight className="size-4" aria-hidden />
-        </Link>
+        </TrackedLink>
       </article>
     </SpotlightCard>
   );
@@ -137,10 +138,10 @@ export function UseCasesPage({
                   size="lg"
                   className="h-12 w-full rounded-full px-8 text-base shadow-xl shadow-black/15 sm:w-auto"
                 >
-                  <Link href={ROUTES.REGISTER}>
+                  <TrackedLink eventName="cta_click" eventProperties={{ location: "use_cases_hero" }} href={ROUTES.REGISTER}>
                     {content.cta.primary}
                     <ArrowRight className="ml-2 size-4" />
-                  </Link>
+                  </TrackedLink>
                 </Button>
                 <Link
                   href={SEO_ROUTES.SIMULATOR}
@@ -188,10 +189,10 @@ export function UseCasesPage({
                   variant="secondary"
                   className="h-12 rounded-full px-8 text-base"
                 >
-                  <Link href={ROUTES.REGISTER}>
+                  <TrackedLink eventName="cta_click" eventProperties={{ location: "use_cases_closing" }} href={ROUTES.REGISTER}>
                     {content.cta.primary}
                     <ArrowRight className="ml-2 size-4" />
-                  </Link>
+                  </TrackedLink>
                 </Button>
                 <Button
                   asChild

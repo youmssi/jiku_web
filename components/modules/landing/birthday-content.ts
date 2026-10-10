@@ -202,7 +202,7 @@ const enCard: BirthdayCardPageContent = {
     items: [
       {
         title: "Create your card",
-        text: "The title, date and place, then a style: Elegant, Modern or Festive, with your photo or your colour.",
+        text: "The title, date and place, then a style: Elegant, Modern or Festive, with your photo or your color.",
       },
       {
         title: "Share it on WhatsApp",

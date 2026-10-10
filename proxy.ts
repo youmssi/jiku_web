@@ -36,6 +36,33 @@ function stripLocale(pathname: string): string {
   return pathname;
 }
 
+/**
+ * Only a page load may move the locale cookie. The router's own fetches
+ * (prefetches and soft navigations) carry `Sec-Fetch-Dest: empty`: right after a
+ * switch to French, the router still prefetches the /en links of the page it is
+ * leaving, and if next-intl synced the cookie on those responses it would flip
+ * back to "en" and the next visit to "/" would redirect to /en. A click on a
+ * language link writes the cookie in the browser itself, so nothing is lost.
+ * Next strips its internal prefetch headers before the proxy runs, which is why
+ * the fetch destination is the signal.
+ */
+function isRouterFetch(request: NextRequest): boolean {
+  const destination = request.headers.get("sec-fetch-dest");
+  return destination !== null && destination !== "document";
+}
+
+/**
+ * Drops the locale cookie next-intl attaches to a router fetch. Deleting the
+ * header is not enough, because Next re-serialises the response's cookie jar,
+ * so the response is rebuilt from its headers without the cookie.
+ */
+function withoutRouterFetchCookie(request: NextRequest, response: NextResponse): NextResponse {
+  if (!isRouterFetch(request) || !response.headers.has("set-cookie")) return response;
+  const headers = new Headers(response.headers);
+  headers.delete("set-cookie");
+  return new NextResponse(null, { status: response.status, headers });
+}
+
 export function proxy(request: NextRequest): NextResponse {
   const { pathname } = request.nextUrl;
 
@@ -43,7 +70,7 @@ export function proxy(request: NextRequest): NextResponse {
   if (pathname.startsWith("/api/")) return NextResponse.next();
 
   // Let next-intl decide the locale (it may redirect — return that immediately).
-  const intlResponse = intlMiddleware(request);
+  const intlResponse = withoutRouterFetchCookie(request, intlMiddleware(request));
   if (intlResponse.headers.get("location")) return intlResponse;
 
   const bareRoute = stripLocale(pathname);

@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { TrackedLink } from "@/components/shared";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { BreadcrumbJsonLd, FaqJsonLd, LocalBusinessJsonLd, OrganizationJsonLd } from "@/components/modules/seo";
@@ -92,10 +93,10 @@ export function FaqPage({ locale, siteUrl }: { locale: LandingLocale; siteUrl: s
           <section className="mt-20">
             <ClosingCta heading={faq.page.cta.heading} text={faq.page.cta.text}>
               <Button asChild size="lg" variant="secondary" className="h-12 rounded-full px-8 text-base">
-                <Link href={ROUTES.REGISTER}>
+                <TrackedLink eventName="cta_click" eventProperties={{ location: "faq_closing" }} href={ROUTES.REGISTER}>
                   {cta.primaryCta}
                   <ArrowRight className="ml-2 size-4" />
-                </Link>
+                </TrackedLink>
               </Button>
               <Button asChild size="lg" variant="outline" className={CLOSING_OUTLINE}>
                 <Link href={ROUTES.LOGIN}>{cta.secondaryCta}</Link>

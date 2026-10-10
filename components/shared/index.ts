@@ -7,6 +7,7 @@ export {ClampedText} from "./clamped-text";
 export {FormFieldError} from "./form-field-error";
 export {InfoHint} from "./info-hint";
 export {LiveBadge} from "./live-badge";
+export {LocaleSwitch} from "./locale-switch";
 export {ServiceWorkerRegister} from "./service-worker-register";
 export {useRoleLabel} from "./use-role-label";
 export {type LiveTicket, useLiveSignal} from "./use-live-signal";

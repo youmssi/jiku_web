@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { TrackedLink } from "@/components/shared";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { Link } from "@/i18n/navigation";
 import { ROUTES } from "@/lib/constants";
@@ -58,7 +59,7 @@ export function MarketingHeader({ nav, path }: { nav: MarketingNavContent; path:
             <Link href={ROUTES.LOGIN}>{nav.signIn}</Link>
           </Button>
           <Button className="h-9 rounded-full px-4 text-sm" asChild>
-            <Link href={ROUTES.REGISTER}>{nav.createAccount}</Link>
+            <TrackedLink eventName="cta_click" eventProperties={{ location: "header" }} href={ROUTES.REGISTER}>{nav.createAccount}</TrackedLink>
           </Button>
         </div>
       </div>

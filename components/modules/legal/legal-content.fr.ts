@@ -33,7 +33,7 @@ export const LEGAL_FR: LegalDocuments = {
           [
             "Site web : Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis.",
             "Serveur applicatif : Render Services, Inc., San Francisco, Californie, États-Unis.",
-            "Base de données : Neon (PostgreSQL managé), infrastructure cloud aux États-Unis ou dans l'Union européenne selon la région retenue.",
+            "Base de données : Neon (PostgreSQL géré), infrastructure cloud aux États-Unis ou dans l'Union européenne selon la région retenue.",
           ],
           "La liste complète des prestataires qui traitent des données personnelles figure dans la politique de confidentialité.",
         ],
