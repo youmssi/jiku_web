@@ -24,6 +24,7 @@ import { PearlBackdrop } from "./backdrops";
 import { ClosingCta, CLOSING_OUTLINE } from "./closing-cta";
 import { MarketingFooter } from "./footer-section";
 import { MarketingHeader } from "./marketing-header";
+import { SectionHeading } from "./section-heading";
 import { UseCaseFlows } from "./use-case-flows";
 import { USE_CASE_JOURNEYS } from "./use-case-journeys";
 import type {
@@ -154,14 +155,9 @@ export function UseCasesPage({
           <div className="mx-auto w-full max-w-7xl flex-1 px-6 pb-16 sm:pb-20">
             <UseCaseFlows content={USE_CASE_JOURNEYS[locale]} />
 
-            <section aria-labelledby="use-case-profiles" className="mt-20">
-              <h2
-                id="use-case-profiles"
-                className="text-center text-balance text-2xl font-bold tracking-tight sm:text-3xl"
-              >
-                {content.profiles.heading}
-              </h2>
-              <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <section aria-labelledby="use-case-profiles" className="mt-20 sm:mt-24">
+              <SectionHeading id="use-case-profiles" badge={content.profiles.badge} heading={content.profiles.heading} />
+              <div className="mt-10 grid gap-5 sm:mt-14 md:grid-cols-2 lg:grid-cols-3">
                 {content.profiles.items.map((profile, index) => (
                   <Reveal
                     key={profile.id}

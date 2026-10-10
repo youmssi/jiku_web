@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { fill } from "./simulator-format";
 import { JourneyPhone } from "./journey-screens";
 import type { Journey, JourneysContent } from "./use-case-journeys";
+import { SectionHeading } from "./section-heading";
 
 /**
  * The journeys explorer: pick a situation, then walk its steps along a line of
@@ -25,14 +26,8 @@ export function UseCaseFlows({ content }: { content: JourneysContent }) {
   }
 
   return (
-    <section aria-labelledby="use-case-flows" className="mt-16">
-      <div className="mx-auto max-w-2xl text-center">
-        <p className="text-xs font-semibold tracking-[0.16em] text-primary uppercase">{content.eyebrow}</p>
-        <h2 id="use-case-flows" className="mt-3 text-balance text-2xl font-bold tracking-tight sm:text-3xl">
-          {content.heading}
-        </h2>
-        <p className="mt-3 text-sm text-muted-foreground sm:text-base">{content.intro}</p>
-      </div>
+    <section aria-labelledby="use-case-flows" className="mt-20 sm:mt-24">
+      <SectionHeading id="use-case-flows" badge={content.eyebrow} heading={content.heading} subheading={content.intro} />
 
       <div
         role="group"

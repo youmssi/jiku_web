@@ -128,7 +128,7 @@ const fr: SimulatorContent = {
   meta: {
     title: "Tarifs : abonnement, événement, billetterie",
     description:
-      "Solo gratuit pour toujours, événements gratuits jusqu'à 100 invités, 3 % sur les billets vendus. Simulez votre prix en GNF, en FCFA ou en dollars.",
+      "Offre Solo gratuite pour toujours, événements gratuits jusqu'à 100 invités par an, 3 % sur les billets vendus. Simulez votre prix en GNF, en FCFA ou en dollars.",
   },
   eyebrow: "Tarifs",
   title: "Le bon prix, pour ce que vous faites vraiment",
@@ -175,7 +175,7 @@ const fr: SimulatorContent = {
     guests: {
       question: "Combien d'invités attendez-vous ?",
       options: [
-        { value: "100", title: "Jusqu'à 100", description: "Couvert par vos 100 invités gratuits de l'année." },
+        { value: "100", title: "Jusqu'à 100", description: "Couvert par vos 100 invités gratuits par an." },
         { value: "300", title: "De 101 à 300", description: "Un mariage, un séminaire d'entreprise." },
         { value: "600", title: "De 301 à 600", description: "Une conférence, un grand mariage." },
         { value: "1000", title: "De 601 à 1 000", description: "Un gala, une assemblée générale." },
@@ -402,7 +402,7 @@ const en: SimulatorContent = {
   meta: {
     title: "Pricing: subscription, events, ticket sales",
     description:
-      "Solo free forever, events free up to 100 guests, 3% on tickets sold. Simulate your price in GNF, CFA francs or dollars.",
+      "Solo plan free forever, events free for up to 100 guests a year, 3% on tickets sold. Simulate your price in GNF, CFA francs or dollars.",
   },
   eyebrow: "Pricing",
   title: "The right price, for what you actually do",

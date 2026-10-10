@@ -53,6 +53,8 @@ export interface LandingContent {
   htmlLang: string;
   meta: { title: string; description: string; keywords: string[] };
   nav: {
+    /** Names the main navigation for screen readers. */
+    label: string;
     links: { label: string; href: string }[];
     signIn: string;
     register: string;
@@ -170,7 +172,7 @@ const fr: LandingContent = {
   meta: {
     title: "Jikū : invitations WhatsApp, billets QR et file d'attente",
     description:
-      "Invitations et cartes WhatsApp, billets QR contrôlés même sans réseau, rendez-vous et file du jour pour vos services. Gratuit jusqu'à 100 invités.",
+      "Invitations et cartes WhatsApp, billets QR contrôlés même sans réseau, rendez-vous et file du jour pour vos services. Gratuit jusqu'à 100 invités par an.",
     keywords: [
       "carte d'invitation WhatsApp",
       "invitation anniversaire",
@@ -185,6 +187,7 @@ const fr: LandingContent = {
     ],
   },
   nav: {
+    label: "Navigation principale",
     links: [
       { label: "Événements", href: "#events" },
       { label: "Services", href: "#services" },
@@ -481,7 +484,7 @@ const en: LandingContent = {
   meta: {
     title: "Jikū: WhatsApp invitations, QR tickets and queues",
     description:
-      "WhatsApp invitations and cards, QR tickets checked even offline, bookings and the day line for your services. Free for up to 100 guests.",
+      "WhatsApp invitations and cards, QR tickets checked even offline, bookings and the day line for your services. Free for up to 100 guests a year.",
     keywords: [
       "WhatsApp invitation card",
       "birthday invitation",
@@ -496,6 +499,7 @@ const en: LandingContent = {
     ],
   },
   nav: {
+    label: "Main navigation",
     links: [
       { label: "Events", href: "#events" },
       { label: "Services", href: "#services" },

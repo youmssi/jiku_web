@@ -67,7 +67,7 @@ export function ServicesPanel({
                 {services.yearly}
               </ToggleGroupItem>
             </ToggleGroup>
-            <Badge variant="secondary" className="h-6 px-2.5 text-xs">{services.yearlyBadge}</Badge>
+            <Badge variant="secondary">{services.yearlyBadge}</Badge>
           </div>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
