@@ -4,7 +4,14 @@ import { TrackedAnchor } from "@/components/shared";
 import { supportMailto, supportWhatsAppLink } from "@/lib/support";
 import type { LandingContent } from "./content";
 
-export function FooterSection({ content }: { content: LandingContent["footer"] }) {
+/** The site map, the legal links, a human to write to and the other language. */
+export function FooterSection({
+  content,
+  switchLocale,
+}: {
+  content: LandingContent["footer"];
+  switchLocale: LandingContent["nav"]["switchLocale"];
+}) {
   const whatsApp = supportWhatsAppLink();
   return (
     <footer className="border-t border-border/30">
@@ -58,6 +65,15 @@ export function FooterSection({ content }: { content: LandingContent["footer"] }
             >
               {content.contact}
             </TrackedAnchor>
+            <span className="text-border/40">·</span>
+            <Link
+              href="/"
+              locale={switchLocale.label === "EN" ? "en" : "fr"}
+              aria-label={switchLocale.ariaLabel}
+              className="inline-flex min-h-6 items-center font-medium text-foreground transition-colors hover:underline"
+            >
+              {switchLocale.label}
+            </Link>
             <span className="text-border/40">·</span>
             <span>{content.tagline}</span>
           </div>

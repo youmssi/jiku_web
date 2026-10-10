@@ -120,7 +120,7 @@ function CardOverlay({ content }: { content: LandingContent["hero"] }) {
       </div>
       <div
         aria-hidden
-        className="absolute -bottom-6 -left-3 flex items-center gap-3 rounded-2xl border border-border/60 bg-background px-4 py-3 shadow-xl sm:-left-10"
+        className="absolute -bottom-6 -left-3 flex items-center gap-3 rounded-2xl border border-border/60 bg-background px-4 py-3 shadow-xl sm:-left-6"
       >
         <span className="flex size-9 items-center justify-center rounded-lg bg-foreground text-background">
           <QrCode className="size-5" />

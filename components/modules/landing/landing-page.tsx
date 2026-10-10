@@ -66,7 +66,7 @@ export function LandingPage({ locale, siteUrl }: { locale: LandingLocale; siteUr
         <FaqSection content={content.faq} />
         <CtaSection content={content.cta} />
       </main>
-      <FooterSection content={content.footer} />
+      <FooterSection content={content.footer} switchLocale={content.nav.switchLocale} />
       <StickyCta label={content.stickyCta} />
     </MotionProvider>
   );
