@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button";
 
 const RESET_AFTER_MS = 2000;
 
-/** Copies one invitation text to the clipboard and confirms it for a moment. */
+/**
+ * Copies one invitation text to the clipboard and confirms it for a moment,
+ * on the button and through a live region screen readers announce.
+ */
 export function CopyTextButton({ text, label, done }: { text: string; label: string; done: string }) {
   const [copied, setCopied] = useState(false);
 
@@ -26,9 +29,14 @@ export function CopyTextButton({ text, label, done }: { text: string; label: str
   }
 
   return (
-    <Button type="button" variant="outline" size="sm" className="rounded-full" onClick={copy} aria-live="polite">
-      {copied ? <Check className="size-3.5" aria-hidden /> : <Copy className="size-3.5" aria-hidden />}
-      {copied ? done : label}
-    </Button>
+    <>
+      <Button type="button" variant="outline" className="h-9 gap-1.5 rounded-full px-4 text-sm" onClick={copy}>
+        {copied ? <Check className="size-4" aria-hidden /> : <Copy className="size-4" aria-hidden />}
+        {copied ? done : label}
+      </Button>
+      <span aria-live="polite" className="sr-only">
+        {copied ? done : ""}
+      </span>
+    </>
   );
 }
