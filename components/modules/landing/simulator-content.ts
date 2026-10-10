@@ -667,7 +667,7 @@ const en: SimulatorContent = {
   nav: {
     home: "Home",
     signIn: "Sign in",
-    createAccount: "Create account",
+    createAccount: "Create an account",
     switchLocale: { label: "FR", locale: "fr", ariaLabel: "Lire cette page en français" },
   },
 };

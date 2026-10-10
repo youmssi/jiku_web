@@ -90,7 +90,7 @@ export function FaqPage({ locale, siteUrl }: { locale: LandingLocale; siteUrl: s
           </p>
 
           <section className="mt-20">
-            <ClosingCta heading={cta.heading} text={cta.text}>
+            <ClosingCta heading={faq.page.cta.heading} text={faq.page.cta.text}>
               <Button asChild size="lg" variant="secondary" className="h-12 rounded-full px-8 text-base">
                 <Link href={ROUTES.REGISTER}>
                   {cta.primaryCta}
