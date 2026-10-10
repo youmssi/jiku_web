@@ -154,7 +154,7 @@ function PlanCard({
       className={cn(
         "relative flex flex-col rounded-2xl border p-5 text-left transition-all",
         selected
-          ? "border-primary bg-primary/[0.06] shadow-lg shadow-primary/10"
+          ? "border-primary bg-background shadow-lg shadow-primary/10"
           : "border-border/50 hover:border-primary/40 hover:bg-muted/30",
       )}
     >

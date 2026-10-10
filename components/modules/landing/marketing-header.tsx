@@ -25,16 +25,16 @@ export function MarketingHeader({ nav, path }: { nav: MarketingNavContent; path:
           <JikūLogo variant="mark" className="size-7" />
           <span className="font-semibold tracking-tight">Jikū</span>
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Link
             href={path}
             locale={nav.switchLocale.locale}
             aria-label={nav.switchLocale.ariaLabel}
-            className="text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-full text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
           >
             {nav.switchLocale.label}
           </Link>
-          <Button variant="ghost" size="sm" className="rounded-full" asChild>
+          <Button variant="ghost" size="sm" className="hidden rounded-full min-[380px]:inline-flex" asChild>
             <Link href={ROUTES.LOGIN}>{nav.signIn}</Link>
           </Button>
           <Button size="sm" className="rounded-full" asChild>

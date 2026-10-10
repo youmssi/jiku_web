@@ -138,7 +138,11 @@ export function PlanFinder({
             <p className="shrink-0 text-xs font-medium text-muted-foreground">
               {fill(finder.progress, { current: index + 1, total: steps.length })}
             </p>
-            <Progress value={((index + 1) / steps.length) * 100} className="h-1.5" />
+            <Progress
+              value={((index + 1) / steps.length) * 100}
+              aria-label={fill(finder.progress, { current: index + 1, total: steps.length })}
+              className="h-1.5"
+            />
           </div>
           <FinderStep
             key={steps[index]}

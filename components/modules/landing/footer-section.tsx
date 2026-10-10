@@ -50,7 +50,7 @@ export function FooterSection({ content }: { content: LandingContent["footer"] }
             &copy; {new Date().getFullYear()} Jikū. {content.copyright}
           </p>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <Link href={PRIVACY_ROUTE} className="hover:text-foreground transition-colors">
+            <Link href={PRIVACY_ROUTE} className="inline-block py-1 transition-colors hover:text-foreground">
               {content.privacy}
             </Link>
             {whatsApp ? (
@@ -62,7 +62,7 @@ export function FooterSection({ content }: { content: LandingContent["footer"] }
                   rel="noopener noreferrer"
                   eventName="whatsapp_click"
                   eventProperties={{ location: "footer" }}
-                  className="hover:text-foreground transition-colors"
+                  className="inline-block py-1 transition-colors hover:text-foreground"
                 >
                   WhatsApp
                 </TrackedAnchor>

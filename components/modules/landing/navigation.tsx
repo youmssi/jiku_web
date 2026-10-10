@@ -116,7 +116,7 @@ export function Navigation({ content }: { content: LandingContent["nav"] }) {
             <Link
               key={link.href}
               href={link.href}
-              className="relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="relative py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {link.label}
             </Link>

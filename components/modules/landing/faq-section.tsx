@@ -24,7 +24,7 @@ export function FaqSection({ content }: { content: LandingContent["faq"] }) {
         <div className="mt-8 text-center">
           <Link
             href={SEO_ROUTES.FAQ}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
+            className="inline-flex min-h-6 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
           >
             {content.more}
             <ArrowRight className="size-4" aria-hidden />
