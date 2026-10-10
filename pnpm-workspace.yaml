@@ -6,6 +6,10 @@ allowBuilds:
   # alongside SENTRY_AUTH_TOKEN.
   '@sentry/cli': false
   '@swc/core': false
+  # fumadocs-mdx bundles source.config.ts with esbuild; its platform binary
+  # comes from the @esbuild/* optional dependency, so the install script (a
+  # binary check) is not needed.
+  esbuild: false
   sharp: false
   unrs-resolver: false
 ignoredBuiltDependencies:
@@ -21,4 +25,5 @@ overrides:
   brace-expansion@>=4.0.0 <5.0.9: ^5.0.9
   browserslist@<4.28.7: ^4.28.7
   fast-uri@>=3.0.0 <3.1.6: ^3.1.6
-  sharp@<0.35.4: ^0.35.4
+  sharp@<0.35.5: ^0.35.5
+  source-map-js@>=1.0.0 <1.2.2: ^1.2.2

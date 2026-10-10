@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
+import { docsSource } from "@/components/modules/docs";
 import { siteUrl } from "@/components/modules/seo";
+import { routing } from "@/i18n/routing";
 import { LEGAL_NOTICE_ROUTE, PRIVACY_ROUTE, SEO_ROUTES, TERMS_ROUTE } from "@/lib/constants";
 
 const LEGAL_PAGES = [LEGAL_NOTICE_ROUTE, TERMS_ROUTE, PRIVACY_ROUTE];
@@ -102,6 +104,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
         changeFrequency: "yearly" as const,
         priority: 0.3,
         alternates: { languages: { fr: `${origin}${path}`, en: `${origin}/en${path}` } },
+      })),
+    ),
+    // The guides (JIKU-235): every French page and its English twin.
+    ...docsSource.getPages(routing.defaultLocale).flatMap((page) =>
+      [`${origin}${page.url}`, `${origin}/en${page.url}`].map((url) => ({
+        url,
+        lastModified,
+        changeFrequency: "monthly" as const,
+        priority: 0.5,
+        alternates: { languages: { fr: `${origin}${page.url}`, en: `${origin}/en${page.url}` } },
       })),
     ),
   ];

@@ -44,7 +44,7 @@ export const LEGAL_EN: LegalDocuments = {
         heading: "Intellectual property",
         body: [
           `The Jikū brand, its logo, texts, visuals and code belong to ${C.legalName} or its licensors. Any reproduction or reuse without written permission is prohibited.`,
-          "Logos, colours and content an organization adds to its space remain its property. It allows us to display them only to run the service it uses.",
+          "Logos, colors and content an organization adds to its space remain its property. It allows us to display them only to run the service it uses.",
         ],
       },
       {
@@ -247,7 +247,7 @@ export const LEGAL_EN: LegalDocuments = {
         body: [
           [
             "Account: name, email, phone, password (stored as an irreversible hash), role, language.",
-            "Organization: name, logo, colours, country, payment methods shown to its clients, settings.",
+            "Organization: name, logo, colors, country, payment methods shown to its clients, settings.",
             "Guests and clients (on the organization's behalf): name, email and/or phone, answer, ticket category, answers to questions, attendance, declared payment status.",
             "Payments to Jikū: amount, reference, status. Card and Mobile Money details stay with the payment provider.",
             "Usage: technical logs (IP address, browser, errors), feedback and messages sent to support.",

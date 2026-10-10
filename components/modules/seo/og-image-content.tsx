@@ -20,7 +20,7 @@ export function OgBrand({ size = 44 }: { size?: number }) {
         <g transform="translate(1, 2)">
           <path
             d="M 13 16 C 13 22 18 24 22 22 C 26 20 26 14 22 10 C 18 6 10 6 6 10 C 2 14 2 20 6 24"
-            stroke="#F8FAFC"
+            stroke="#FAFAFA"
             strokeWidth="2.2"
             strokeLinecap="round"
             fill="none"
@@ -28,16 +28,16 @@ export function OgBrand({ size = 44 }: { size?: number }) {
           />
           <path
             d="M 13 4 L 13 16 C 13 20 11 22 8 22 C 5 22 3 20 3 17"
-            stroke="#F8FAFC"
+            stroke="#FAFAFA"
             strokeWidth="2.4"
             strokeLinecap="round"
             strokeLinejoin="round"
             fill="none"
           />
-          <circle cx="13" cy="4" r="1.8" fill="#F8FAFC" />
+          <circle cx="13" cy="4" r="1.8" fill="#FAFAFA" />
         </g>
       </svg>
-      <div style={{ display: "flex", color: "#F8FAFC", fontSize: `${Math.round(size * 0.62)}px`, fontWeight: 700, letterSpacing: "-0.02em" }}>
+      <div style={{ display: "flex", color: "#FAFAFA", fontSize: `${Math.round(size * 0.62)}px`, fontWeight: 700, letterSpacing: "-0.02em" }}>
         Jikū
       </div>
     </div>
@@ -65,7 +65,7 @@ export function buildOgImage({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%)",
+        background: "linear-gradient(135deg, #0A0A0A 0%, #262626 50%, #0A0A0A 100%)",
         fontFamily: "Inter, sans-serif",
         padding: "80px",
       }}
@@ -78,7 +78,7 @@ export function buildOgImage({
           width: "500px",
           height: "500px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
         }}
       />
       <div
@@ -89,7 +89,7 @@ export function buildOgImage({
           width: "400px",
           height: "400px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%)",
         }}
       />
 
@@ -100,9 +100,9 @@ export function buildOgImage({
           gap: "10px",
           padding: "8px 20px",
           borderRadius: "9999px",
-          border: "1px solid rgba(96,165,250,0.3)",
-          background: "rgba(37,99,235,0.1)",
-          color: "#60A5FA",
+          border: "1px solid rgba(255,255,255,0.2)",
+          background: "rgba(255,255,255,0.05)",
+          color: "#A3A3A3",
           fontSize: "20px",
           fontWeight: 600,
           marginBottom: "28px",
@@ -119,7 +119,7 @@ export function buildOgImage({
           fontSize: "56px",
           fontWeight: 800,
           letterSpacing: "-0.03em",
-          color: "#F8FAFC",
+          color: "#FAFAFA",
           textAlign: "center",
           lineHeight: 1.15,
           maxWidth: "980px",
@@ -131,7 +131,7 @@ export function buildOgImage({
       <div
         style={{
           fontSize: "22px",
-          color: "#94A3B8",
+          color: "#A3A3A3",
           textAlign: "center",
           marginTop: "22px",
           maxWidth: "760px",
@@ -151,9 +151,9 @@ export function buildOgImage({
               gap: "6px",
               padding: "8px 16px",
               borderRadius: "9999px",
-              border: "1px solid rgba(148,163,184,0.2)",
+              border: "1px solid rgba(255,255,255,0.15)",
               fontSize: "15px",
-              color: "#CBD5E1",
+              color: "#D4D4D4",
             }}
           >
             <svg
@@ -161,7 +161,7 @@ export function buildOgImage({
               height="14"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#60A5FA"
+              stroke="#A3A3A3"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"

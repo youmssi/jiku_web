@@ -1,3 +1,4 @@
+import { MarketingFooter } from "@/components/modules/landing";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -94,6 +95,9 @@ export function LegalPage({ id, locale }: { id: LegalDocumentId; locale: Locale 
           </div>
         </article>
       </main>
+      <div className="print:hidden">
+        <MarketingFooter locale={locale} path={LEGAL_PATHS[id]} />
+      </div>
     </div>
   );
 }

@@ -1,11 +1,14 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TrackedLink } from "@/components/shared";
+import { TrackedAnchor, TrackedLink } from "@/components/shared";
 import { ROUTES } from "@/lib/constants";
+import { supportMailto, supportWhatsAppLink } from "@/lib/support";
 import { ClosingCta, CLOSING_OUTLINE } from "./closing-cta";
 import type { LandingContent } from "./content";
 
+/** The closing action, and a human to ask for whoever is not ready yet (JIKU-229). */
 export function CtaSection({ content }: { content: LandingContent["cta"] }) {
+  const whatsApp = supportWhatsAppLink();
   return (
     <section id="final-cta" className="border-t border-border/30 px-6 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl">
@@ -22,6 +25,18 @@ export function CtaSection({ content }: { content: LandingContent["cta"] }) {
             </TrackedLink>
           </Button>
         </ClosingCta>
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          {content.contact.question}{" "}
+          <TrackedAnchor
+            href={whatsApp ?? supportMailto()}
+            {...(whatsApp ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            eventName={whatsApp ? "whatsapp_click" : "cta_click"}
+            eventProperties={{ location: "cta_section", label: "contact" }}
+            className="inline-flex min-h-11 items-center font-semibold text-foreground underline decoration-foreground/30 underline-offset-4 hover:decoration-foreground"
+          >
+            {whatsApp ? content.contact.whatsApp : content.contact.email}
+          </TrackedAnchor>
+        </p>
       </div>
     </section>
   );

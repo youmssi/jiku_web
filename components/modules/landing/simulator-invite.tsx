@@ -1,10 +1,10 @@
 "use client";
 
+import { TrackedLink } from "@/components/shared";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 import { Button } from "@/components/ui/button";
 import { RadioGroup } from "@/components/ui/radio-group";
-import { Link } from "@/i18n/navigation";
 import { ROUTES } from "@/lib/constants";
 import {
   EVENT_PRICING,
@@ -159,10 +159,10 @@ export function InvitePanel({
             </div>
           </div>
           <Button asChild size="lg" className="w-full rounded-full">
-            <Link href={ROUTES.REGISTER}>
+            <TrackedLink eventName="cta_click" eventProperties={{ location: "simulator_invite" }} href={ROUTES.REGISTER}>
               {content.cta.primary}
               <ArrowRight data-icon="inline-end" />
-            </Link>
+            </TrackedLink>
           </Button>
           <div className="rounded-3xl border border-primary/20 bg-gradient-to-b from-primary/[0.08] to-transparent p-6">
             <p className="flex items-center gap-2 text-sm font-semibold">

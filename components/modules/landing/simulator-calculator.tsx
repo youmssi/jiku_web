@@ -58,12 +58,12 @@ export function SimulatorCalculator({ content, locale }: { content: SimulatorCon
           onValueChange={(value) => value && changeCurrency(value as PricingCurrency)}
         >
           {PRICING_CURRENCIES.map((code) => (
-            <ToggleGroupItem key={code} value={code} className="px-4" title={content.currency.names[code]}>
+            <ToggleGroupItem key={code} value={code} className="h-9 px-4 text-sm" title={content.currency.names[code]}>
               {PRICING_CURRENCY_LABELS[code]}
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
-        <p className="max-w-xl text-xs text-muted-foreground">{content.currency.note}</p>
+        <p className="max-w-xl text-sm text-muted-foreground">{content.currency.note}</p>
       </div>
 
       <PlanFinder content={content} format={format} onApply={apply} />
@@ -75,7 +75,7 @@ export function SimulatorCalculator({ content, locale }: { content: SimulatorCon
               <TabsTrigger
                 key={value}
                 value={value}
-                className="h-full rounded-xl px-2 py-2 text-xs leading-tight whitespace-normal sm:rounded-full sm:px-4 sm:text-sm"
+                className="h-full min-h-11 rounded-xl px-2 py-2 text-sm leading-tight whitespace-normal sm:rounded-full sm:px-4"
               >
                 {content.tabs[value]}
               </TabsTrigger>

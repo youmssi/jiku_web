@@ -58,6 +58,8 @@ export interface SimulatorContent {
   services: {
     intro: string;
     serversLabel: string;
+    /** The unit after the head count in the price summary. */
+    serversUnit: string;
     serversHelper: string;
     monthly: string;
     yearly: string;
@@ -126,7 +128,7 @@ const fr: SimulatorContent = {
   meta: {
     title: "Tarifs : abonnement, événement, billetterie",
     description:
-      "Solo gratuit pour toujours, événements gratuits jusqu'à 100 invités, 3 % sur les billets vendus. Simulez votre prix en GNF, en FCFA ou en dollars.",
+      "Offre Solo gratuite pour toujours, événements gratuits jusqu'à 100 invités par an, 3 % sur les billets vendus. Simulez votre prix en GNF, en FCFA ou en dollars.",
   },
   eyebrow: "Tarifs",
   title: "Le bon prix, pour ce que vous faites vraiment",
@@ -173,7 +175,7 @@ const fr: SimulatorContent = {
     guests: {
       question: "Combien d'invités attendez-vous ?",
       options: [
-        { value: "100", title: "Jusqu'à 100", description: "Couvert par vos 100 invités gratuits de l'année." },
+        { value: "100", title: "Jusqu'à 100", description: "Couvert par vos 100 invités gratuits par an." },
         { value: "300", title: "De 101 à 300", description: "Un mariage, un séminaire d'entreprise." },
         { value: "600", title: "De 301 à 600", description: "Une conférence, un grand mariage." },
         { value: "1000", title: "De 601 à 1 000", description: "Un gala, une assemblée générale." },
@@ -207,6 +209,7 @@ const fr: SimulatorContent = {
     intro:
       "Rendez-vous, file d'attente et réservations : un abonnement pour votre équipe, chaque mois. Solo reste gratuit pour toujours. Aucune limite de services ni de clients par jour.",
     serversLabel: "Personnes qui servent vos clients",
+    serversUnit: "personnes",
     serversHelper: "Médecin, agent de guichet, coiffeur, serveur.",
     monthly: "Mensuel",
     yearly: "Annuel",
@@ -399,7 +402,7 @@ const en: SimulatorContent = {
   meta: {
     title: "Pricing: subscription, events, ticket sales",
     description:
-      "Solo free forever, events free up to 100 guests, 3% on tickets sold. Simulate your price in GNF, CFA francs or dollars.",
+      "Solo plan free forever, events free for up to 100 guests a year, 3% on tickets sold. Simulate your price in GNF, CFA francs or dollars.",
   },
   eyebrow: "Pricing",
   title: "The right price, for what you actually do",
@@ -480,6 +483,7 @@ const en: SimulatorContent = {
     intro:
       "Appointments, queues and bookings: one subscription for your team, each month. Solo stays free forever. No limit on services or clients per day.",
     serversLabel: "People who serve your clients",
+    serversUnit: "people",
     serversHelper: "Doctor, counter agent, hairdresser, waiter.",
     monthly: "Monthly",
     yearly: "Yearly",
@@ -663,7 +667,7 @@ const en: SimulatorContent = {
   nav: {
     home: "Home",
     signIn: "Sign in",
-    createAccount: "Create account",
+    createAccount: "Create an account",
     switchLocale: { label: "FR", locale: "fr", ariaLabel: "Lire cette page en français" },
   },
 };

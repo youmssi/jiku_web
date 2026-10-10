@@ -17,7 +17,8 @@ export interface BirthdayCardPageContent {
   /** The card drawn next to the intro. */
   sample: LandingCardSample;
   invites: string;
-  steps: { heading: string; items: { title: string; text: string }[] };
+  /** [guide] links the three steps to the full guide in the docs (JIKU-235). */
+  steps: { heading: string; items: { title: string; text: string }[]; guide: string };
   why: { heading: string; items: { title: string; text: string }[] };
   occasions: { heading: string; items: string[] };
   texts: { heading: string; text: string; cta: string };
@@ -56,7 +57,7 @@ const frNav: MarketingNavContent = {
 const enNav: MarketingNavContent = {
   home: "Home",
   signIn: "Sign in",
-  createAccount: "Create account",
+  createAccount: "Create an account",
   switchLocale: { label: "FR", locale: "fr", ariaLabel: "Lire cette page en français" },
 };
 
@@ -64,7 +65,7 @@ const frCard: BirthdayCardPageContent = {
   meta: {
     title: "Carte d'invitation anniversaire en ligne",
     description:
-      "Créez une carte d'invitation d'anniversaire en ligne, partagez-la sur WhatsApp et voyez qui vient. Un billet QR pour chaque « oui ». Gratuit jusqu'à 100 invités.",
+      "Créez une carte d'invitation d'anniversaire en ligne, partagez-la sur WhatsApp et voyez qui vient. Un billet QR pour chaque « oui ». Gratuit jusqu'à 100 invités par an.",
     keywords: [
       "carte d'invitation anniversaire",
       "invitation anniversaire",
@@ -90,6 +91,7 @@ const frCard: BirthdayCardPageContent = {
   invites: "vous invite",
   steps: {
     heading: "Votre invitation en trois gestes",
+    guide: "Le guide pas à pas, avec chaque réglage",
     items: [
       {
         title: "Créez votre carte",
@@ -135,7 +137,7 @@ const frCard: BirthdayCardPageContent = {
       {
         question: "La carte d'invitation est-elle gratuite ?",
         answer:
-          "Oui, jusqu'à 100 invités. Au-delà, vous payez une fois pour l'événement : le simulateur de tarifs vous donne le prix exact.",
+          "Oui, jusqu'à 100 invités par an. Au-delà, vous payez une fois pour l'événement : le simulateur de tarifs vous donne le prix exact.",
       },
       {
         question: "Mes invités doivent-ils installer une application ?",
@@ -159,9 +161,9 @@ const frCard: BirthdayCardPageContent = {
   },
   cta: {
     heading: "Créez la carte de votre anniversaire",
-    text: "Gratuit jusqu'à 100 invités, sans application à installer.",
+    text: "Gratuit jusqu'à 100 invités par an, sans application à installer.",
     primary: "Créer ma carte",
-    secondary: "Voir les tarifs",
+    secondary: "Trouver ma formule",
   },
   breadcrumb: "Carte d'invitation d'anniversaire",
   nav: frNav,
@@ -171,7 +173,7 @@ const enCard: BirthdayCardPageContent = {
   meta: {
     title: "Online birthday invitation card",
     description:
-      "Create an online birthday invitation card, share it on WhatsApp and see who's coming. A QR ticket for every “yes”. Free for up to 100 guests.",
+      "Create an online birthday invitation card, share it on WhatsApp and see who's coming. A QR ticket for every “yes”. Free for up to 100 guests a year.",
     keywords: [
       "birthday invitation card",
       "online birthday invitation",
@@ -196,10 +198,11 @@ const enCard: BirthdayCardPageContent = {
   invites: "invites you",
   steps: {
     heading: "Your invitation in three steps",
+    guide: "The step-by-step guide, with every setting",
     items: [
       {
         title: "Create your card",
-        text: "The title, date and place, then a style: Elegant, Modern or Festive, with your photo or your colour.",
+        text: "The title, date and place, then a style: Elegant, Modern or Festive, with your photo or your color.",
       },
       {
         title: "Share it on WhatsApp",
@@ -235,7 +238,7 @@ const enCard: BirthdayCardPageContent = {
       {
         question: "Is the invitation card free?",
         answer:
-          "Yes, for up to 100 guests. Beyond that you pay once for the event: the pricing simulator gives you the exact price.",
+          "Yes, for up to 100 guests a year. Beyond that you pay once for the event: the pricing simulator gives you the exact price.",
       },
       {
         question: "Do my guests need to install an app?",
@@ -259,9 +262,9 @@ const enCard: BirthdayCardPageContent = {
   },
   cta: {
     heading: "Create your birthday card",
-    text: "Free for up to 100 guests, no app to install.",
+    text: "Free for up to 100 guests a year, no app to install.",
     primary: "Create my card",
-    secondary: "See pricing",
+    secondary: "Find my plan",
   },
   breadcrumb: "Birthday invitation card",
   nav: enNav,
@@ -346,7 +349,7 @@ const frTexts: BirthdayTextsPageContent = {
   copy: { label: "Copier", done: "Copié" },
   send: {
     heading: "Envoyez votre texte sur une vraie carte",
-    text: "Collez votre texte sur une carte d'invitation en ligne, partagez-la sur WhatsApp et voyez qui vient. Chaque « oui » reçoit son billet QR. Gratuit jusqu'à 100 invités.",
+    text: "Collez votre texte sur une carte d'invitation en ligne, partagez-la sur WhatsApp et voyez qui vient. Chaque « oui » reçoit son billet QR. Gratuit jusqu'à 100 invités par an.",
     primary: "Créer ma carte",
     secondary: "Comment marche la carte",
   },
@@ -432,7 +435,7 @@ const enTexts: BirthdayTextsPageContent = {
   copy: { label: "Copy", done: "Copied" },
   send: {
     heading: "Send your wording on a real card",
-    text: "Paste your text on an online invitation card, share it on WhatsApp and see who's coming. Every “yes” gets a QR ticket. Free for up to 100 guests.",
+    text: "Paste your text on an online invitation card, share it on WhatsApp and see who's coming. Every “yes” gets a QR ticket. Free for up to 100 guests a year.",
     primary: "Create my card",
     secondary: "How the card works",
   },

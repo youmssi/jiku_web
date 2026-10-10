@@ -30,9 +30,9 @@ export function BentoSection({
     <section id={id} className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading badge={content.badge} heading={content.heading} subheading={content.subheading} />
-        <div className="mt-10 sm:mt-14 grid gap-4 sm:grid-cols-2 lg:auto-rows-fr lg:grid-cols-3">
+        <div className="mt-10 sm:mt-14 grid gap-4 sm:grid-cols-2 lg:auto-rows-fr lg:grid-cols-3 [&>*]:min-w-0">
           <Reveal className="sm:col-span-2 lg:row-span-3">
-            <SpotlightCard className="flex h-full flex-col gap-6 bg-gradient-to-br from-primary/[0.07] via-card to-card p-8">
+            <SpotlightCard className="h-full bg-gradient-to-br from-primary/[0.07] via-card to-card p-8" bodyClassName="flex h-full flex-col">
               <div>
                 <div className="flex items-start justify-between gap-3">
                   {LeadIcon ? <TileIcon icon={LeadIcon} /> : null}
@@ -41,7 +41,7 @@ export function BentoSection({
                 <h3 className="mt-5 text-2xl font-semibold tracking-tight">{lead.title}</h3>
                 <p className="mt-2 max-w-md text-base leading-relaxed text-muted-foreground">{lead.description}</p>
               </div>
-              <div className="flex flex-1 items-end pt-4">{visual}</div>
+              <div className="mt-8 flex flex-1 items-end">{visual}</div>
             </SpotlightCard>
           </Reveal>
           {rest.map((item, index) => {

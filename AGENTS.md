@@ -9,7 +9,7 @@ Jikū is a white-label SaaS platform for event invitation, ticketing, RSVP, and 
 
 | Technology | Version | Notes |
 |---|---|---|
-| **Next.js** | 16.3.6 | App Router with route groups |
+| **Next.js** | 16.3.8 | App Router with route groups |
 | **React** | 19.2.4 | Server Components by default |
 | **TypeScript** | ^5 | Strict mode enabled |
 | **Tailwind CSS** | ^4 | PostCSS configuration |
@@ -136,6 +136,37 @@ Routing (app/) → Component (<feature>.tsx) → Cache (use<Domain>.ts) → Serv
 - `docs/jiku-mvp-backlog.md` — Full backlog (single source of truth)
 - `docs/jiku-project-framing.md` — Architecture decisions and reasoning
 - `app/` — Backend service repository (Kotlin/Spring Boot)
+## Guides (/docs)
+
+Step-by-step guides are MDX files in `content/docs/<locale>/` (same file name in
+`fr/` and `en/`, ordered by `meta.json`), rendered by Fumadocs through the
+`components/modules/docs` module at `/docs` and `/en/docs`. Name screens and
+buttons exactly as the app's message catalogs do, and update the guide in the
+same PR as a flow it describes.
+
+## UX (ux-expert skill)
+
+The `ux-expert` skill (v1.1.0, `.claude/skills/ux-expert/`) is the UX reference for this
+service. `ui-ux-pro-max` only helps with visual direction, and the brand tokens in
+`app/globals.css` always win over it.
+
+- **Before writing stories** for a feature: use the ux-expert skill in Design mode on the
+  brief or draft stories. Paste its "UX acceptance criteria" block into each story and
+  turn its [INTERACTIVE STEP]s into product-owner decisions.
+- **Every pull request that changes UI**: run a ux-expert change review on the diff.
+  P0 findings block the merge; P1 findings are fixed in the PR or get a follow-up story.
+- **Before each release**: run the ux-expert pre-launch gate. Release only on Go, or on
+  Conditional Go with every condition owned and dated.
+- **Large UX debt**: run a full audit, then Refactor mode, and add the planned stories to
+  the backlog in their order.
+- Cite criterion IDs (e.g. FORM-09) in stories, PRs and reports.
+- **Measure, don't guess**: with the app running (`pnpm build && pnpm start`), run
+  `node .claude/skills/ux-expert/scripts/ux_check.mjs <url> --widths 320,768,1440` for
+  screenshots, axe, target size, focus and reflow at 320 px (set `UX_CHECK_CHROMIUM` to a
+  local Chromium if Playwright's own browser is not installed), and
+  `python3 .claude/skills/ux-expert/scripts/contrast.py` for exact contrast ratios. The
+  stack packs for Next.js, shadcn/ui, Radix and Playwright load automatically.
+
 <!-- END:jiku-project-context -->
 
 <!-- BEGIN:nextjs-agent-rules -->

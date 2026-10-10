@@ -1,12 +1,12 @@
 "use client";
 
+import { TrackedLink } from "@/components/shared";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight, RotateCcw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 import { RadioGroup } from "@/components/ui/radio-group";
-import { Link } from "@/i18n/navigation";
 import { trackEvent } from "@/lib/analytics";
 import { ROUTES } from "@/lib/constants";
 import { FREE_TIER, quoteForGuests, quoteForSales, quoteForService, type ServicePlanId } from "@/lib/pricing";
@@ -138,7 +138,11 @@ export function PlanFinder({
             <p className="shrink-0 text-xs font-medium text-muted-foreground">
               {fill(finder.progress, { current: index + 1, total: steps.length })}
             </p>
-            <Progress value={((index + 1) / steps.length) * 100} className="h-1.5" />
+            <Progress
+              value={((index + 1) / steps.length) * 100}
+              aria-label={fill(finder.progress, { current: index + 1, total: steps.length })}
+              className="h-1.5"
+            />
           </div>
           <FinderStep
             key={steps[index]}
@@ -269,7 +273,7 @@ function FinderOutcome({
           <ArrowRight data-icon="inline-end" />
         </Button>
         <Button size="lg" variant="outline" className="rounded-full" asChild>
-          <Link href={ROUTES.REGISTER}>{finder.result.create}</Link>
+          <TrackedLink eventName="cta_click" eventProperties={{ location: "plan_finder" }} href={ROUTES.REGISTER}>{finder.result.create}</TrackedLink>
         </Button>
       </div>
     </div>

@@ -1,11 +1,20 @@
 import { Link } from "@/i18n/navigation";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { TrackedAnchor } from "@/components/shared";
-import { PRIVACY_ROUTE } from "@/lib/constants";
-import { supportWhatsAppLink } from "@/lib/support";
-import type { LandingContent } from "./content";
+import { supportMailto, supportWhatsAppLink } from "@/lib/support";
+import { LANDING_CONTENT, type LandingContent, type LandingLocale } from "./content";
 
-export function FooterSection({ content }: { content: LandingContent["footer"] }) {
+/** The site map, the legal links, a human to write to and the other language. */
+export function FooterSection({
+  content,
+  switchLocale,
+  path = "/",
+}: {
+  content: LandingContent["footer"];
+  switchLocale: LandingContent["nav"]["switchLocale"];
+  /** The page the language link opens in the other locale; the home page by default. */
+  path?: string;
+}) {
   const whatsApp = supportWhatsAppLink();
   return (
     <footer className="border-t border-border/30">
@@ -50,24 +59,24 @@ export function FooterSection({ content }: { content: LandingContent["footer"] }
             &copy; {new Date().getFullYear()} Jikū. {content.copyright}
           </p>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <Link href={PRIVACY_ROUTE} className="hover:text-foreground transition-colors">
-              {content.privacy}
+            <TrackedAnchor
+              href={whatsApp ?? supportMailto()}
+              {...(whatsApp ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              eventName={whatsApp ? "whatsapp_click" : "cta_click"}
+              eventProperties={{ location: "footer", label: "contact" }}
+              className="inline-flex min-h-6 items-center font-medium text-foreground transition-colors hover:underline"
+            >
+              {content.contact}
+            </TrackedAnchor>
+            <span className="text-border/40">·</span>
+            <Link
+              href={path}
+              locale={switchLocale.label === "EN" ? "en" : "fr"}
+              aria-label={switchLocale.ariaLabel}
+              className="inline-flex min-h-6 items-center font-medium text-foreground transition-colors hover:underline"
+            >
+              {switchLocale.label}
             </Link>
-            {whatsApp ? (
-              <>
-                <span className="text-border/40">·</span>
-                <TrackedAnchor
-                  href={whatsApp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  eventName="whatsapp_click"
-                  eventProperties={{ location: "footer" }}
-                  className="hover:text-foreground transition-colors"
-                >
-                  WhatsApp
-                </TrackedAnchor>
-              </>
-            ) : null}
             <span className="text-border/40">·</span>
             <span>{content.tagline}</span>
           </div>
@@ -75,4 +84,10 @@ export function FooterSection({ content }: { content: LandingContent["footer"] }
       </div>
     </footer>
   );
+}
+
+/** The landing page's footer, on a standalone marketing page at [path] (JIKU-230). */
+export function MarketingFooter({ locale, path }: { locale: LandingLocale; path: string }) {
+  const content = LANDING_CONTENT[locale];
+  return <FooterSection content={content.footer} switchLocale={content.nav.switchLocale} path={path} />;
 }

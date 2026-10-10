@@ -32,6 +32,7 @@ export interface UseCasesPageContent {
   title: string;
   intro: string;
   profiles: {
+    badge: string;
     heading: string;
     items: UseCaseProfile[];
   };
@@ -60,10 +61,11 @@ const fr: UseCasesPageContent = {
       "gestion file d'attente agence",
     ],
   },
-  eyebrow: "Un outil, tous vos billets",
+  eyebrow: "Cas d'usage",
   title: "Fini l'attente, à la porte comme au guichet.",
   intro: "Mariage, anniversaire, séminaire, clinique ou agence : un même outil, de la première invitation au dernier client servi.",
   profiles: {
+    badge: "Par situation",
     heading: "Trouvez votre situation",
     items: [
       {
@@ -100,7 +102,7 @@ const fr: UseCasesPageContent = {
       },
       {
         id: "clinics",
-        label: "Cliniques, cabinets et salons",
+        label: "Cliniques, cabinets, salons et ateliers",
         promise: "Des clients qui savent quand venir",
         text: "Un lien de réservation sur vos réseaux, un rappel avant chaque rendez-vous, et une file du jour qui appelle chacun dans l'ordre.",
         features: ["Lien de réservation", "Rappels WhatsApp ou SMS", "File du jour"],
@@ -122,9 +124,9 @@ const fr: UseCasesPageContent = {
   },
   cta: {
     heading: "Vos invités et vos clients méritent de ne plus attendre.",
-    text: "Créez votre compte, partagez votre première carte ou votre lien de réservation : en cinq minutes, vous saurez si Jikū est fait pour vous.",
+    text: "Votre situation est dans la liste ? Créez votre compte et suivez le même parcours, avec vos invités ou vos clients à la place des nôtres.",
     primary: "Créer mon compte gratuit",
-    secondary: "Simuler mon prix",
+    secondary: "Trouver ma formule",
   },
   nav: {
     home: "Accueil",
@@ -149,10 +151,11 @@ const en: UseCasesPageContent = {
       "agency queue management",
     ],
   },
-  eyebrow: "One tool, every ticket",
+  eyebrow: "Use cases",
   title: "No more waiting, at the door or at the counter.",
   intro: "Wedding, birthday, seminar, clinic or agency: one tool, from the first invitation to the last client served.",
   profiles: {
+    badge: "By situation",
     heading: "Find your situation",
     items: [
       {
@@ -189,7 +192,7 @@ const en: UseCasesPageContent = {
       },
       {
         id: "clinics",
-        label: "Clinics, practices and salons",
+        label: "Clinics, practices, salons and studios",
         promise: "Clients who know when to come",
         text: "A booking link on your social pages, a reminder before every appointment, and a day line that calls each person in order.",
         features: ["Booking link", "WhatsApp or SMS reminders", "Day line"],
@@ -211,14 +214,14 @@ const en: UseCasesPageContent = {
   },
   cta: {
     heading: "Your guests and clients deserve to stop waiting.",
-    text: "Create your account, share your first card or your booking link: within five minutes, you'll know whether Jikū is for you.",
+    text: "Found your situation? Create your account and follow the same journey, with your own guests or clients in place of ours.",
     primary: "Create my free account",
-    secondary: "Estimate my price",
+    secondary: "Find my plan",
   },
   nav: {
     home: "Home",
     signIn: "Sign in",
-    createAccount: "Create account",
+    createAccount: "Create an account",
     switchLocale: { label: "FR", locale: "fr", ariaLabel: "Lire cette page en français" },
   },
 };

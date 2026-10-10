@@ -41,7 +41,7 @@ export function CardSample({
       >
         <div className={cn("flex items-center gap-2 font-semibold", large ? "p-5 text-xs" : "p-4 text-[11px]")}>
           <OrganizerMark name={sample.organizer} logoUrl={null} square={sample.style === "MODERN"} />
-          <span className="truncate">
+          <span className="line-clamp-2">
             {sample.organizer} {invites}
           </span>
         </div>
