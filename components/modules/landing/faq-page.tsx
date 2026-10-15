@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { TrackedLink } from "@/components/shared";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { BreadcrumbJsonLd, FaqJsonLd, LocalBusinessJsonLd, OrganizationJsonLd } from "@/components/modules/seo";
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/modules/seo";
 import { Link } from "@/i18n/navigation";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
 import { supportMailto, supportWhatsAppLink } from "@/lib/support";
@@ -27,8 +27,6 @@ export function FaqPage({ locale, siteUrl }: { locale: LandingLocale; siteUrl: s
 
   return (
     <div className="flex flex-1 flex-col bg-background">
-      <OrganizationJsonLd siteUrl={siteUrl} />
-      <LocalBusinessJsonLd siteUrl={siteUrl} />
       <BreadcrumbJsonLd
         items={[
           { name: faq.page.home, url: `${siteUrl}${prefix}` },

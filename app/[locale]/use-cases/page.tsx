@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { USE_CASES_CONTENT, UseCasesPage } from "@/components/modules/landing";
-import { SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
+import { languageAlternates, SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
+import { SEO_ROUTES } from "@/lib/constants";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: content.meta.keywords,
     alternates: {
       canonical,
-      languages: { fr: "/use-cases", en: "/en/use-cases" },
+      languages: languageAlternates(SEO_ROUTES.USE_CASES),
     },
     openGraph: {
       type: "website",

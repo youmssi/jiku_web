@@ -7,6 +7,22 @@ import { LEGAL_NOTICE_ROUTE, PRIVACY_ROUTE, SEO_ROUTES, TERMS_ROUTE } from "@/li
 const LEGAL_PAGES = [LEGAL_NOTICE_ROUTE, TERMS_ROUTE, PRIVACY_ROUTE];
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  return withDefaultLanguage(entries());
+}
+
+/**
+ * Adds the `x-default` alternate to every bilingual entry: the unprefixed
+ * French page, the one shown to a visitor whose language matches neither.
+ */
+function withDefaultLanguage(sitemap: MetadataRoute.Sitemap): MetadataRoute.Sitemap {
+  return sitemap.map((entry) => {
+    const languages = entry.alternates?.languages;
+    if (!languages?.fr) return entry;
+    return { ...entry, alternates: { languages: { ...languages, "x-default": languages.fr } } };
+  });
+}
+
+function entries(): MetadataRoute.Sitemap {
   const origin = siteUrl();
 
   const lastModified = new Date();

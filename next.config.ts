@@ -25,6 +25,19 @@ const nextConfig: NextConfig = {
   // ships only the compiled app and its runtime dependencies, not node_modules.
   // Vercel ignores this setting; it only affects self-hosted/container builds.
   output: "standalone",
+  compiler: {
+    // Turbopack ignores Sentry's `bundleSizeOptimizations` (webpack only), so
+    // the same build flags are set here. The app reports errors only: it never
+    // turns on the SDK's debug mode, tracing (no sample rate is set) nor Session
+    // Replay, so that code is dead weight on every page.
+    define: {
+      __SENTRY_DEBUG__: false,
+      __SENTRY_TRACING__: false,
+      __RRWEB_EXCLUDE_IFRAME__: true,
+      __RRWEB_EXCLUDE_SHADOW_DOM__: true,
+      __SENTRY_EXCLUDE_REPLAY_WORKER__: true,
+    },
+  },
   experimental: {
     serverActions: {
       // Verification documents are uploaded through a Server Action; the
@@ -65,9 +78,7 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 // — local, CI or preview — neither needs credentials nor contacts the provider.
 // `disableLogger` is deliberately absent: it is deprecated, and its replacement
 // (`webpack.treeshake.removeDebugLogging`) does not apply to this project, which
-// builds with Turbopack. The cost is that the SDK's debug logging is not tree
-// shaken out of the client bundle — worth revisiting only if that shows up in a
-// bundle measurement.
+// builds with Turbopack; `compiler.define` above strips the debug code instead.
 // The guides (JIKU-235) are MDX files under content/docs, compiled by Fumadocs.
 const withMDX = createMDX();
 

@@ -17,8 +17,6 @@ import { Link } from "@/i18n/navigation";
 import { cardFontVariables } from "@/lib/card-display-fonts";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
 import {
-  OrganizationJsonLd,
-  LocalBusinessJsonLd,
   BreadcrumbJsonLd,
 } from "@/components/modules/seo";
 import { PearlBackdrop } from "./backdrops";
@@ -107,8 +105,6 @@ export function UseCasesPage({
   return (
     <MotionProvider>
       <div className="flex flex-1 flex-col bg-background">
-        <OrganizationJsonLd siteUrl={siteUrl} />
-        <LocalBusinessJsonLd siteUrl={siteUrl} />
         <BreadcrumbJsonLd
           items={[
             { name: content.nav.home, url: siteUrl },

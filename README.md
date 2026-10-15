@@ -219,7 +219,9 @@ read it:
 The app deploys to Vercel. Every pull request gets a preview deployment;
 `develop` is the integration branch and merging `develop` into `main` releases
 to production. The embeddable booking widget is documented in
-[`docs/widget-integration.md`](docs/widget-integration.md).
+[`docs/widget-integration.md`](docs/widget-integration.md), and search engine
+set-up (Search Console, Bing, IndexNow, brand profiles) in
+[`docs/seo-launch.md`](docs/seo-launch.md).
 
 ## Contributing
 

@@ -22,7 +22,6 @@ import { DOCS_ROUTE, ROUTES, SEO_ROUTES } from "@/lib/constants";
 import {
   BreadcrumbJsonLd,
   FaqJsonLd,
-  OrganizationJsonLd,
 } from "@/components/modules/seo";
 import { PearlBackdrop } from "./backdrops";
 import { CardSample } from "./card-sample";
@@ -54,7 +53,6 @@ export function BirthdayCardPage({
   return (
     <MotionProvider>
       <div className="flex flex-1 flex-col bg-background">
-        <OrganizationJsonLd siteUrl={siteUrl} />
         <BreadcrumbJsonLd
           items={[
             { name: content.nav.home, url: siteUrl },

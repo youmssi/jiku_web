@@ -1,11 +1,12 @@
+import { organizationId } from "@/components/modules/seo";
 import { EVENT_PRICING } from "@/lib/pricing";
 import type { LandingContent, LandingLocale } from "./content";
 
 /**
- * Structured data for the landing page: Organization, SoftwareApplication (with
- * the published event tier range in GNF), and FAQPage built from the same FAQ
- * content the visitor sees — the markup can never say something the page does
- * not.
+ * Structured data for the landing page: SoftwareApplication (with the
+ * published event tier range in GNF), published by the site-wide Organization
+ * (SiteJsonLd in the root layout), and FAQPage built from the same FAQ content
+ * the visitor sees — the markup can never say something the page does not.
  */
 export function LandingJsonLd({
   content,
@@ -18,14 +19,6 @@ export function LandingJsonLd({
 }) {
   const pageUrl = locale === "fr" ? siteUrl : `${siteUrl}/en`;
 
-  const organization = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Jikū",
-    url: siteUrl,
-    logo: `${siteUrl}/icon-512.png`,
-  };
-
   const application = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -35,6 +28,7 @@ export function LandingJsonLd({
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     inLanguage: locale,
+    publisher: { "@id": organizationId(siteUrl) },
     offers: {
       "@type": "AggregateOffer",
       priceCurrency: "GNF",
@@ -57,7 +51,7 @@ export function LandingJsonLd({
 
   return (
     <>
-      {[organization, application, faq].map((schema, i) => (
+      {[application, faq].map((schema, i) => (
         <script
           key={i}
           type="application/ld+json"

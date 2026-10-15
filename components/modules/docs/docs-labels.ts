@@ -2,10 +2,13 @@ import type { Locale } from "@/i18n/routing";
 
 export const DOCS_HOME_LABEL: Record<Locale, string> = { fr: "Retour au site", en: "Back to the site" };
 export const DOCS_REGISTER_LABEL: Record<Locale, string> = { fr: "Créer un compte", en: "Create an account" };
-export const DOCS_OTHER_LANGUAGE: Record<Locale, { label: string; ariaLabel: string }> = {
-  fr: { label: "Read in English", ariaLabel: "Read this guide in English" },
-  en: { label: "Lire en français", ariaLabel: "Lire ce guide en français" },
+export const DOCS_OTHER_LANGUAGE: Record<Locale, { label: string }> = {
+  fr: { label: "Read this guide in English" },
+  en: { label: "Lire ce guide en français" },
 };
+/** The site's home page, first step of a guide's breadcrumb. */
+export const DOCS_BREADCRUMB_HOME: Record<Locale, string> = { fr: "Accueil", en: "Home" };
+
 export const DOCS_META: Record<Locale, { title: string; description: string }> = {
   fr: {
     title: "Guides",
