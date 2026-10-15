@@ -40,7 +40,8 @@
     "empty": "No event or service is assigned to you yet. Ask the organizer.",
     "back": "My stations",
     "invalidTitle": "Link unavailable",
-    "invalidText": "This link was revoked or is no longer valid. Ask the organizer for a new one."
+    "invalidText": "This link was revoked or is no longer valid. Ask the organizer for a new one.",
+    "canDo": "You can: {actions}"
   },
   "team": {
     "title": "Operators",

@@ -60,7 +60,7 @@ export default async function OrganizerAppLayout({
               <NavCommandPalette variant="organizer" />
             </div>
           </header>
-          <div className="flex flex-1 flex-col">{children}</div>
+          <div className="flex flex-1 flex-col pb-24 md:pb-16">{children}</div>
         </SidebarInset>
         <RatingPrompt />
       </SidebarProvider>

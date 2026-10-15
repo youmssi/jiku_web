@@ -310,7 +310,12 @@
       "failed": "Failed",
       "noInvitations": "No invitations sent yet.",
       "guests": "Guests",
-      "noGuests": "No guests added yet."
+      "noGuests": "No guests added yet.",
+      "channels": {
+        "EMAIL": "Email",
+        "WHATSAPP": "WhatsApp",
+        "SMS": "SMS"
+      }
     },
     "attendance": {
       "title": "Proof of attendance",
