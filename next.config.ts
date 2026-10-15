@@ -27,12 +27,11 @@ const nextConfig: NextConfig = {
   output: "standalone",
   compiler: {
     // Turbopack ignores Sentry's `bundleSizeOptimizations` (webpack only), so
-    // the same build flags are set here. The app reports errors only: it never
-    // turns on the SDK's debug mode, tracing (no sample rate is set) nor Session
-    // Replay, so that code is dead weight on every page.
+    // the same build flags are set here. The app reports errors and samples
+    // traces; it never turns on the SDK's debug mode nor Session Replay, so that
+    // code is dead weight on every page.
     define: {
       __SENTRY_DEBUG__: false,
-      __SENTRY_TRACING__: false,
       __RRWEB_EXCLUDE_IFRAME__: true,
       __RRWEB_EXCLUDE_SHADOW_DOM__: true,
       __SENTRY_EXCLUDE_REPLAY_WORKER__: true,
