@@ -1,4 +1,5 @@
 import { Building2, InfoIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Card,
@@ -31,18 +32,15 @@ export function OrganizationView({
   username: string | null;
   memberships: Membership[];
 }) {
+  const t = useTranslations("settings.organization");
   const roleLabel = useRoleLabel();
   return (
     <div className="flex flex-col gap-4">
       {!isManager ? (
         <Alert>
           <InfoIcon />
-          <AlertTitle>Your role is {roleLabel(role)}</AlertTitle>
-          <AlertDescription>
-            Organization settings like branding and messaging providers are
-            managed by an admin or the owner. Ask them for access if you need to
-            change something here.
-          </AlertDescription>
+          <AlertTitle>{t("memberRoleTitle", { role: roleLabel(role) })}</AlertTitle>
+          <AlertDescription>{t("memberRoleText")}</AlertDescription>
         </Alert>
       ) : null}
       <Card>
@@ -51,13 +49,11 @@ export function OrganizationView({
             <Building2 className="size-4" />
             {brandName}
           </CardTitle>
-          <CardDescription>
-            The organization your session is currently bound to.
-          </CardDescription>
+          <CardDescription>{t("current")}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-1 text-sm">
           <div className="flex justify-between gap-4 py-1">
-            <span className="text-muted-foreground">Your role here</span>
+            <span className="text-muted-foreground">{t("yourRole")}</span>
             <span className="font-medium">{roleLabel(role)}</span>
           </div>
         </CardContent>
@@ -65,11 +61,8 @@ export function OrganizationView({
 
       <Card>
         <CardHeader>
-          <CardTitle>Your organizations</CardTitle>
-          <CardDescription>
-            Every organization your account belongs to. Switch from the
-            organization menu in the sidebar.
-          </CardDescription>
+          <CardTitle>{t("listTitle")}</CardTitle>
+          <CardDescription>{t("listText")}</CardDescription>
         </CardHeader>
         <CardContent>
           <ul className="flex flex-col divide-y text-sm">
@@ -82,9 +75,7 @@ export function OrganizationView({
               </li>
             ))}
             {memberships.length === 0 ? (
-              <li className="py-2 text-muted-foreground">
-                No organization yet. Contact the person who invited you.
-              </li>
+              <li className="py-2 text-muted-foreground">{t("listEmpty")}</li>
             ) : null}
           </ul>
         </CardContent>

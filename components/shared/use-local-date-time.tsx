@@ -13,7 +13,7 @@ const noSubscription = () => () => {};
  * organizer's own records (payments, invoices, audit) only: anything a guest or
  * door staff sees uses the event's timezone instead.
  */
-export function useLocalDateTime(): (utcInstant: string | null) => string {
+export function useLocalDateTime(dateOnly = false): (utcInstant: string | null) => string {
   const locale = useLocale();
   const hydrated = useSyncExternalStore(noSubscription, () => true, () => false);
   return useCallback(
@@ -21,11 +21,11 @@ export function useLocalDateTime(): (utcInstant: string | null) => string {
       if (!utcInstant) return "";
       return new Intl.DateTimeFormat(locale, {
         dateStyle: "medium",
-        timeStyle: "short",
+        ...(dateOnly ? {} : { timeStyle: "short" as const }),
         ...(hydrated ? {} : { timeZone: "UTC" }),
       }).format(new Date(utcInstant));
     },
-    [locale, hydrated],
+    [locale, hydrated, dateOnly],
   );
 }
 

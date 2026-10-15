@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,6 +46,7 @@ export function PersonalisationView({
   initialVocabulary: VocabularyEntry[];
   templateSummaries: TemplateSummary[];
 }) {
+  const t = useTranslations("settings.personalisation");
   const [terms, setTerms] = useState<{ key: string; label: string; original: string; value: string }[]>(
     initialVocabulary.map((entry) => ({ key: entry.key, label: entry.label, original: entry.value, value: entry.value })),
   );
@@ -96,7 +98,7 @@ export function PersonalisationView({
         .filter((term) => term.value.trim() !== term.original)
         .map((term) => ({ key: term.key, value: term.value.trim() || null }));
       if (changes.length === 0) {
-        toast.success("Terms are up to date.");
+        toast.success(t("termsUpToDate"));
         return;
       }
       const result = await updateVocabularyAction(changes);
@@ -105,7 +107,7 @@ export function PersonalisationView({
         return;
       }
       setTerms((current) => current.map((term) => ({ ...term, original: term.value.trim() })));
-      toast.success("Terms saved.");
+      toast.success(t("termsSaved"));
     });
   }
 
@@ -133,17 +135,15 @@ export function PersonalisationView({
       setBody(updated?.body ?? body);
       setActive(updated?.active ?? active);
       setPreview(null);
-      toast.success("Template saved.");
+      toast.success(t("saved"));
     });
   }
 
   return (
     <div className="flex flex-col gap-10">
       <section className="flex flex-col gap-3">
-        <h3 className="text-base font-semibold">Terms</h3>
-        <p className="text-sm text-muted-foreground">
-          Rename the words your clients and team see. Leave a field empty to use the default word.
-        </p>
+        <h3 className="text-base font-semibold">{t("termsTitle")}</h3>
+        <p className="text-sm text-muted-foreground">{t("termsText")}</p>
         <div className="flex flex-col gap-3">
           {terms.map((term) => (
             <div key={term.key} className="flex flex-col gap-1">
@@ -163,25 +163,22 @@ export function PersonalisationView({
         </div>
         <div className="mt-1">
           <Button onClick={saveTerms} disabled={isSavingTerms}>
-            {isSavingTerms ? "Saving…" : "Save terms"}
+            {isSavingTerms ? t("saving") : t("saveTerms")}
           </Button>
         </div>
       </section>
 
       <section className="flex flex-col gap-4">
-        <h3 className="text-base font-semibold">Client messages</h3>
-        <p className="text-sm text-muted-foreground">
-          The emails and WhatsApp messages sent to your clients. Until you edit one, the platform
-          default is used. Unusual or unknown variables fall back to the default so a message is never lost.
-        </p>
+        <h3 className="text-base font-semibold">{t("messagesTitle")}</h3>
+        <p className="text-sm text-muted-foreground">{t("messagesText")}</p>
 
         {templateSummaries.length === 0 ? null : (
           <div className="flex flex-col gap-3">
             <div className="max-w-xs">
-              <Label>Message</Label>
+              <Label htmlFor="template-name">{t("message")}</Label>
               <div className="mt-1">
                 <Select value={templateName} onValueChange={setTemplateName}>
-                  <SelectTrigger>
+                  <SelectTrigger id="template-name">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -199,16 +196,16 @@ export function PersonalisationView({
               <>
                 {detail.channels.length > 1 ? (
                   <div className="max-w-xs">
-                    <Label>Channel</Label>
+                    <Label htmlFor="template-channel">{t("channel")}</Label>
                     <div className="mt-1">
                       <Select value={channel} onValueChange={selectChannel}>
-                        <SelectTrigger>
+                        <SelectTrigger id="template-channel">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           {detail.channels.map((entry) => (
                             <SelectItem key={entry.channel} value={entry.channel}>
-                              {entry.channel.toLowerCase() === "email" ? "Email" : "WhatsApp"}
+                              {entry.channel.toLowerCase() === "email" ? t("email") : t("whatsapp")}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -226,12 +223,13 @@ export function PersonalisationView({
                       setPreview(null);
                     }}
                   />
-                  <Label htmlFor="template-active">Send this custom version</Label>
+                  <Label htmlFor="template-active">{t("active")}</Label>
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <Label>Message body</Label>
+                  <Label htmlFor="template-body">{t("body")}</Label>
                   <Textarea
+                    id="template-body"
                     rows={12}
                     className="font-mono text-xs"
                     value={body}
@@ -243,7 +241,7 @@ export function PersonalisationView({
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <Label>Available variables</Label>
+                  <p className="text-sm font-medium">{t("variables")}</p>
                   <div className="flex flex-wrap gap-2">
                     {detail.variables.map((variable) => (
                       <Button
@@ -272,13 +270,13 @@ export function PersonalisationView({
                     }}
                     disabled={!currentChannel}
                   >
-                    Restore default wording
+                    {t("restore")}
                   </Button>
                   <Button variant="outline" onClick={previewBody} disabled={!channel || isBusy}>
-                    {isBusy ? "Rendering…" : "Preview"}
+                    {isBusy ? t("rendering") : t("preview")}
                   </Button>
                   <Button onClick={saveTemplate} disabled={!channel || isBusy}>
-                    Save template
+                    {t("save")}
                   </Button>
                 </div>
 

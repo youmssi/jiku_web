@@ -42,7 +42,10 @@
     "fileTooLarge": "Un fichier dépasse la taille autorisée, même compressé.",
     "fileType": "Joignez des fichiers JPEG, PNG ou PDF.",
     "outOfRange": "Saisissez une valeur dans les limites indiquées.",
-    "consentRequired": "Confirmez que la personne a accepté de recevoir vos messages."
+    "consentRequired": "Confirmez que la personne a accepté de recevoir vos messages.",
+    "usernameCharacters": "Utilisez uniquement des lettres minuscules, des chiffres et des tirets.",
+    "usernameTooShort": "Utilisez au moins 3 caractères.",
+    "usernameTooLong": "Utilisez au plus 32 caractères."
   },
   "roles": {
     "OWNER": "Propriétaire",

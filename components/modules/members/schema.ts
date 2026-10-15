@@ -25,7 +25,7 @@ export const INVITABLE_ROLES = ["ADMIN", "MEMBER"] as const;
 export const ASSIGNABLE_ROLES = ["OWNER", "ADMIN", "MEMBER"] as const;
 
 export const inviteMemberSchema = z.object({
-  email: z.string().email("Enter a valid email address"),
+  email: z.string().email("email"),
   role: z.enum(INVITABLE_ROLES),
 });
 

@@ -35,6 +35,7 @@ export function MembersView({ members, invitations, currentUserId }: MembersView
     [members, invitations],
   );
 
+  const t = useTranslations("settings.members");
   const tRoles = useTranslations("common.roles");
   const columns = useMemo(
     () =>
@@ -49,7 +50,7 @@ export function MembersView({ members, invitations, currentUserId }: MembersView
     <div className="flex flex-col gap-4">
       {error ? (
         <Alert variant="destructive">
-          <AlertTitle>That didn&apos;t work</AlertTitle>
+          <AlertTitle>{t("failedTitle")}</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       ) : null}
@@ -59,10 +60,7 @@ export function MembersView({ members, invitations, currentUserId }: MembersView
         </Alert>
       ) : null}
 
-      <p className="text-xs text-muted-foreground">
-        Owners manage everything; admins run operations and the team; members operate
-        events. Pending invitations are listed here too, until accepted or revoked.
-      </p>
+      <p className="text-xs text-muted-foreground">{t("intro")}</p>
 
       <DataTable
         columns={columns}
@@ -71,7 +69,8 @@ export function MembersView({ members, invitations, currentUserId }: MembersView
           <div className="flex items-center justify-between gap-2">
             <div className="relative max-w-xs flex-1">
               <Input
-                placeholder="Search by email…"
+                placeholder={t("search")}
+                aria-label={t("search")}
                 value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
                 onChange={(event) => table.getColumn("email")?.setFilterValue(event.target.value)}
                 className="pr-8"
@@ -81,7 +80,7 @@ export function MembersView({ members, invitations, currentUserId }: MembersView
             <InviteMemberDialog
               onInvited={() => {
                 setError(null);
-                setNotice("Invitation sent.");
+                setNotice(t("invited"));
               }}
               onError={(message) => {
                 setNotice(null);

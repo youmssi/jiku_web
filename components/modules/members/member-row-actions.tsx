@@ -3,6 +3,7 @@
 import { useRouter } from "@/i18n/navigation";
 import { useState, useTransition } from "react";
 import { MoreHorizontal } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -45,6 +46,8 @@ export function MemberRowActions({
   row: MemberRow;
   currentUserId: string;
 }) {
+  const t = useTranslations("settings.members.actions");
+  const tRoles = useTranslations("common.roles");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [removeOpen, setRemoveOpen] = useState(false);
@@ -53,7 +56,7 @@ export function MemberRowActions({
     startTransition(async () => {
       const result = await action();
       if (!result.ok) {
-        toast.error(result.error ?? "Something went wrong.");
+        toast.error(result.error ?? t("failed"));
         return;
       }
       toast.success(done);
@@ -65,7 +68,7 @@ export function MemberRowActions({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" aria-label={`Actions for ${row.email}`}>
+          <Button variant="ghost" size="icon" aria-label={t("label", { email: row.email })}>
             <MoreHorizontal className="size-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -73,9 +76,9 @@ export function MemberRowActions({
           <DropdownMenuItem
             variant="destructive"
             disabled={pending}
-            onSelect={() => run(() => revokeInvitationAction(row.id), "Invitation revoked.")}
+            onSelect={() => run(() => revokeInvitationAction(row.id), t("revoked"))}
           >
-            Revoke invitation
+            {t("revoke")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -88,24 +91,24 @@ export function MemberRowActions({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" aria-label={`Actions for ${row.email}`} disabled={isSelf}>
+          <Button variant="ghost" size="icon" aria-label={t("label", { email: row.email })} disabled={isSelf}>
             <MoreHorizontal className="size-4" />
           </Button>
         </DropdownMenuTrigger>
         {!isSelf ? (
           <DropdownMenuContent align="end">
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Change role</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger>{t("changeRole")}</DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 <DropdownMenuRadioGroup
                   value={row.role}
                   onValueChange={(role) =>
-                    run(() => changeMemberRoleAction(row.userId, role), "Role updated.")
+                    run(() => changeMemberRoleAction(row.userId, role), t("roleUpdated"))
                   }
                 >
                   {ASSIGNABLE_ROLES.map((role) => (
                     <DropdownMenuRadioItem key={role} value={role} disabled={pending}>
-                      <span className="capitalize">{role.toLowerCase()}</span>
+                      {tRoles(role)}
                     </DropdownMenuRadioItem>
                   ))}
                 </DropdownMenuRadioGroup>
@@ -113,7 +116,7 @@ export function MemberRowActions({
             </DropdownMenuSub>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive" onSelect={() => setRemoveOpen(true)}>
-              Remove member
+              {t("remove")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         ) : null}
@@ -122,23 +125,20 @@ export function MemberRowActions({
       <AlertDialog open={removeOpen} onOpenChange={setRemoveOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Remove {row.email}?</AlertDialogTitle>
-            <AlertDialogDescription>
-              They&apos;ll immediately lose access to this organization. You can invite them
-              again later.
-            </AlertDialogDescription>
+            <AlertDialogTitle>{t("removeTitle", { email: row.email })}</AlertDialogTitle>
+            <AlertDialogDescription>{t("removeDescription")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={pending}>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               variant="destructive"
               disabled={pending}
               onClick={() => {
-                run(() => removeMemberAction(row.userId), "Member removed.");
+                run(() => removeMemberAction(row.userId), t("removed"));
                 setRemoveOpen(false);
               }}
             >
-              Remove member
+              {t("remove")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
