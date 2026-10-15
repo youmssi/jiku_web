@@ -109,8 +109,14 @@ export function ServiceManagePanel({
     }
   }
 
+  // The path renders on the server too (the list of existing links); only a
+  // copy, made after a click, needs the absolute URL and so the window.
+  function staffLinkPath(code: string): string {
+    return `/line/${code}`;
+  }
+
   function staffLinkUrl(code: string): string {
-    return `${window.location.origin}/line/${code}`;
+    return `${window.location.origin}${staffLinkPath(code)}`;
   }
 
   async function copyStaffLink(staffId: string, code: string) {
@@ -231,7 +237,7 @@ export function ServiceManagePanel({
                   <span className="sr-only">{t("copy")}</span>
                 </Button>
                 <Button size="icon-sm" variant="outline" asChild>
-                  <a href={staffLinkUrl(link.code)} target="_blank" rel="noreferrer">
+                  <a href={staffLinkPath(link.code)} target="_blank" rel="noreferrer">
                     <ExternalLink className="size-3.5" />
                     <span className="sr-only">{t("open")}</span>
                   </a>
@@ -372,7 +378,7 @@ export function ServiceManagePanel({
                     <span className="sr-only">{t("copy")}</span>
                   </Button>
                   <Button size="icon-sm" variant="outline" asChild>
-                    <a href={staffLinkUrl(freshStaff.code)} target="_blank" rel="noreferrer">
+                    <a href={staffLinkPath(freshStaff.code)} target="_blank" rel="noreferrer">
                       <ExternalLink className="size-3.5" />
                       <span className="sr-only">{t("open")}</span>
                     </a>

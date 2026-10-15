@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useLocalDateTime } from "@/components/shared";
 import { useRouter } from "@/i18n/navigation";
 import { ArrowUpDown, Plus, Timer } from "lucide-react";
 import { Controller, useForm, useWatch } from "react-hook-form";
@@ -43,7 +44,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { FormFieldError, Stat } from "@/components/shared";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { formatLocalDateTime } from "@/lib/datetime";
 import { ActionDialog } from "./action-dialog";
 import { endTrialAction, grantTrialAction } from "./admin.service";
 import { formatAmount, IdentityCell, TrialStatusBadge } from "./admin-ui";
@@ -96,6 +96,7 @@ function urgencyTone(days: number): "urgent" | "warn" | null {
 
 function useColumns(): ColumnDef<DataTableFeatures, AdminTrial>[] {
   const t = useTranslations("admin.trials");
+  const formatDate = useLocalDateTime();
   const common = useTranslations("admin.common");
   return [
   {
@@ -110,7 +111,7 @@ function useColumns(): ColumnDef<DataTableFeatures, AdminTrial>[] {
         <ArrowUpDown className="size-3.5" />
       </Button>
     ),
-    cell: ({ row }) => formatLocalDateTime(row.original.createdAt),
+    cell: ({ row }) => formatDate(row.original.createdAt),
   },
   {
     id: "tenant",
@@ -150,7 +151,7 @@ function useColumns(): ColumnDef<DataTableFeatures, AdminTrial>[] {
     cell: ({ row }) => {
       const trial = row.original;
       if (trial.status !== "ACTIVE") {
-        return <span className="text-muted-foreground">{formatLocalDateTime(trial.expiresAt)}</span>;
+        return <span className="text-muted-foreground">{formatDate(trial.expiresAt)}</span>;
       }
       const days = daysUntil(trial.expiresAt);
       const tone = urgencyTone(days);
@@ -177,7 +178,7 @@ function useColumns(): ColumnDef<DataTableFeatures, AdminTrial>[] {
               />
             </div>
           </TooltipTrigger>
-          <TooltipContent>{t("expiresOn", { date: formatLocalDateTime(trial.expiresAt) })}</TooltipContent>
+          <TooltipContent>{t("expiresOn", { date: formatDate(trial.expiresAt) })}</TooltipContent>
         </Tooltip>
       );
     },

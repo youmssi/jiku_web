@@ -44,12 +44,12 @@ export async function registerAction(
     body: JSON.stringify({ ...parsed.data, marketingConsentVersion: MARKETING_CONSENT_VERSION }),
   });
   if (!response.ok) {
+    // A taken address and a burst of attempts are the visitor's to fix, with
+    // their own message; anything else is ours to look at.
+    if (response.status === 409) return fail(t("auth.register.emailTaken"));
+    if (response.status === 429) return fail(t("common.errors.tooManyAttempts"));
     reportApiError(response);
-    return fail(
-      response.status === 409
-        ? t("auth.register.emailTaken")
-        : t("auth.register.failedRetry"),
-    );
+    return fail(t("auth.register.failedRetry"));
   }
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);

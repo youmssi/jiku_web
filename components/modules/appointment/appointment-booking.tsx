@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { upperFirst } from "@/lib/text";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { enUS, fr } from "date-fns/locale";
@@ -165,9 +166,9 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
               </Button>
               <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                 <PopoverTrigger asChild>
-                  <Button type="button" variant="outline" size="sm" className="gap-2 font-normal capitalize">
+                  <Button type="button" variant="outline" size="sm" className="gap-2 font-normal">
                     <CalendarIcon className="size-3.5" />
-                    {format.dateTime(selectedDate, { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" })}
+                    {upperFirst(format.dateTime(selectedDate, { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" }), locale)}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="center">
