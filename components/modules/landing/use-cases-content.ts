@@ -105,7 +105,7 @@ const fr: UseCasesPageContent = {
         label: "Cliniques, cabinets, salons et ateliers",
         promise: "Des clients qui savent quand venir",
         text: "Un lien de réservation sur vos réseaux, un rappel avant chaque rendez-vous, et une file du jour qui appelle chacun dans l'ordre.",
-        features: ["Lien de réservation", "Rappels WhatsApp ou SMS", "File du jour"],
+        features: ["Lien de réservation", "Rappels WhatsApp", "File du jour"],
         cta: "Ouvrir mes rendez-vous",
       },
       {
@@ -195,7 +195,7 @@ const en: UseCasesPageContent = {
         label: "Clinics, practices, salons and studios",
         promise: "Clients who know when to come",
         text: "A booking link on your social pages, a reminder before every appointment, and a day line that calls each person in order.",
-        features: ["Booking link", "WhatsApp or SMS reminders", "Day line"],
+        features: ["Booking link", "WhatsApp reminders", "Day line"],
         cta: "Open my bookings",
       },
       {

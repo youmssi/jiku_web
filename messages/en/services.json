@@ -140,7 +140,9 @@
     "saving": "Saving…",
     "save": "Save",
     "saved": "Reminders saved.",
-    "settingsTitle": "Service settings"
+    "settingsTitle": "Service settings",
+    "smsFallback": "If WhatsApp can't deliver, send an SMS",
+    "smsFallbackHint": "For clients without WhatsApp or a data connection: an SMS only goes out when WhatsApp could not deliver the reminder or the \"your turn\" call."
   },
   "errors": {
     "notFound": "This service doesn't exist.",
