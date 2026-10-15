@@ -7,7 +7,13 @@ export interface ServiceSummary {
 }
 
 /** Canal de rappel d'un service (JIKU-89) : seul WhatsApp est livrable aujourd'hui. */
-export type ReminderChannel = "WHATSAPP" | "NONE";
+/**
+ * WhatsApp, optionally with an SMS when WhatsApp cannot deliver (a paid
+ * fallback for clients without WhatsApp or mobile data), or no reminders.
+ * The API may still answer a legacy "SMS" for a service saved before SMS
+ * became a fallback; the screen reads it as WhatsApp with the SMS fallback.
+ */
+export type ReminderChannel = "WHATSAPP" | "WHATSAPP_OR_SMS" | "NONE";
 
 export type ConfirmationMode = "INSTANTANEOUS" | "ON_REQUEST";
 

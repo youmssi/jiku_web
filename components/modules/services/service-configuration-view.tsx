@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -41,7 +42,8 @@ function offsetLabel(
 /**
  * Rappels de rendez-vous (JIKU-89) : le canal et les décalages d'envoi d'un
  * service. La réservation ne capture que le téléphone, le canal proposé est donc
- * WhatsApp (désactivé par défaut). L'enregistrement est une mise à jour partielle.
+ * WhatsApp (désactivé par défaut), avec un SMS payant en secours quand WhatsApp
+ * ne peut pas délivrer (JIKU-244). L'enregistrement est une mise à jour partielle.
  */
 export function ServiceConfigurationPanel({
   serviceId,
@@ -51,15 +53,17 @@ export function ServiceConfigurationPanel({
   initial: ServiceConfiguration;
 }) {
   const t = useTranslations("services.reminders");
-  const [channel, setChannel] = useState<ReminderChannel>(
-    initial.reminderChannel,
+  const [enabled, setEnabled] = useState(initial.reminderChannel !== "NONE");
+  const [smsFallback, setSmsFallback] = useState(
+    initial.reminderChannel === "WHATSAPP_OR_SMS" || (initial.reminderChannel as string) === "SMS",
   );
+  const channel: ReminderChannel = !enabled ? "NONE" : smsFallback ? "WHATSAPP_OR_SMS" : "WHATSAPP";
   const [offsets, setOffsets] = useState<number[]>(
     initial.reminderOffsetsMinutes,
   );
   const [isSaving, startSave] = useTransition();
 
-  const remindersActive = channel === "WHATSAPP";
+  const remindersActive = enabled;
 
   function save() {
     startSave(async () => {
@@ -99,8 +103,8 @@ export function ServiceConfigurationPanel({
             <Label>{t("enable")}</Label>
             <div className="max-w-xs">
               <Select
-                value={channel}
-                onValueChange={(value: ReminderChannel) => setChannel(value)}
+                value={enabled ? "WHATSAPP" : "NONE"}
+                onValueChange={(value) => setEnabled(value === "WHATSAPP")}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -112,6 +116,21 @@ export function ServiceConfigurationPanel({
               </Select>
             </div>
           </div>
+
+          {remindersActive && (
+            <div className="flex items-start gap-3">
+              <Checkbox
+                id="reminder-sms-fallback"
+                checked={smsFallback}
+                onCheckedChange={(checked) => setSmsFallback(checked === true)}
+                className="mt-0.5"
+              />
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="reminder-sms-fallback">{t("smsFallback")}</Label>
+                <p className="text-sm text-muted-foreground">{t("smsFallbackHint")}</p>
+              </div>
+            </div>
+          )}
 
           {remindersActive && (
             <div className="flex flex-col gap-3">

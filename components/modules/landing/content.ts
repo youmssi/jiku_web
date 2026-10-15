@@ -192,7 +192,7 @@ const fr: LandingContent = {
       "check-in hors ligne",
       "prise de rendez-vous",
       "gestion de file d'attente",
-      "rappel SMS",
+      "rappel WhatsApp",
       "plateforme événementielle Afrique",
       "marque blanche",
     ],
@@ -315,8 +315,8 @@ const fr: LandingContent = {
         description: "Un lien et un QR code : vos clients choisissent un créneau libre, sans compte ni appel.",
       },
       {
-        title: "Rappels WhatsApp ou SMS",
-        description: "Un rappel avant chaque rendez-vous ; le SMS prend le relais si WhatsApp échoue.",
+        title: "Rappels sur WhatsApp",
+        description: "Un rappel avant chaque rendez-vous, et un SMS de secours, si vous l'activez, quand WhatsApp n'arrive pas.",
       },
       {
         title: "« C'est votre tour, guichet 4 »",
@@ -432,7 +432,7 @@ const fr: LandingContent = {
       { featured: true, question: "Le check-in fonctionne-t-il sans internet ?", answer: "Oui. La liste se synchronise à l'avance sur le téléphone du contrôleur ; les scans hors ligne se synchronisent au retour du réseau, et un billet ne passe jamais deux fois." },
       { featured: true, question: "Qui peut répondre à une carte partagée ?", answer: "Toute personne qui a son lien ou son QR code, sur WhatsApp ou sur la page de la carte. Vous fixez le nombre d'accompagnants et une date limite ; quand il n'y a plus de place, la carte n'accepte plus de « oui ». Vous pouvez retirer quelqu'un à tout moment : ses places sont libérées." },
       { featured: true, question: "Jikū encaisse-t-il l'argent de mes clients ?", answer: "Non, jamais. Vos clients vous paient directement, sur vos numéros Mobile Money ou votre propre lien de paiement. Jikū ne facture que son propre service." },
-      { featured: true, question: "Mes messages partent-ils vraiment sur WhatsApp ?", answer: "Oui, via l'API officielle WhatsApp Business, un message individuel par personne. Pour les rappels de rendez-vous, le SMS prend le relais si WhatsApp échoue." },
+      { featured: true, question: "Mes messages partent-ils vraiment sur WhatsApp ?", answer: "Oui, via l'API officielle WhatsApp Business, un message individuel par personne. Pour les rappels de rendez-vous, vous pouvez activer un SMS de secours quand WhatsApp n'arrive pas." },
       { featured: true, question: "Que deviennent les données personnelles ?", answer: "Chaque invité peut demander la suppression de ses données depuis son lien. Après la période de conservation, les données sont anonymisées automatiquement." },
       { question: "Puis-je mettre ma propre photo sur la carte ?", answer: "Oui. Choisissez un style, Élégant, Moderne ou Festif, et ajoutez une photo de bandeau. La carte, l'aperçu du lien, la page de réponse et le billet suivent ce choix." },
       { question: "Combien coûte un événement ?", answer: FR_PRICES.events },
@@ -516,7 +516,7 @@ const en: LandingContent = {
       "offline check-in",
       "appointment booking",
       "queue management",
-      "SMS reminders",
+      "WhatsApp reminders",
       "event platform Africa",
       "white label",
     ],
@@ -639,8 +639,8 @@ const en: LandingContent = {
         description: "A link and a QR code: clients pick a free slot, no account and no phone call.",
       },
       {
-        title: "WhatsApp or SMS reminders",
-        description: "A reminder before every appointment; SMS takes over when WhatsApp fails.",
+        title: "WhatsApp reminders",
+        description: "A reminder before every appointment, and a backup SMS, if you turn it on, when WhatsApp can't deliver.",
       },
       {
         title: "\"It's your turn, counter 4\"",

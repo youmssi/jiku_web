@@ -365,7 +365,7 @@ const fr: SimulatorContent = {
     verification:
       "Avant votre première vente, vous vérifiez votre organisation, en tant que particulier ou entreprise, et notre équipe valide vos documents. Vos acheteurs voient alors le badge « Organisation vérifiée ».",
   },
-  sms: "SMS en option : le prix exact s'affiche avant chaque envoi. L'e-mail et WhatsApp sont inclus.",
+  sms: "L'e-mail et WhatsApp sont inclus. Le SMS ne sert qu'en secours, pour un rappel que WhatsApp n'a pas pu délivrer.",
   both: {
     heading: "Et si vous faites les deux ?",
     text:
@@ -639,7 +639,7 @@ const en: SimulatorContent = {
     verification:
       "Before your first sale, you verify your organization, as an individual or a company, and our team checks your documents. Buyers then see the “Verified organization” badge.",
   },
-  sms: "SMS as an option: the exact price shows before each send. Email and WhatsApp are included.",
+  sms: "Email and WhatsApp are included. SMS is only a backup, for a reminder WhatsApp could not deliver.",
   both: {
     heading: "What if you do both?",
     text:
