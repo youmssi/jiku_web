@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "i18n:check": "node scripts/check-messages.mjs",
+    "seo:indexnow": "node scripts/indexnow.mjs",
     "test": "node --test --experimental-strip-types \"lib/**/*.test.ts\""
   },
   "dependencies": {

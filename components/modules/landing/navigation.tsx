@@ -42,11 +42,11 @@ function LanguageLinks({
             key={locale}
             href={pathname}
             locale={locale}
-            aria-label={switchLocale.ariaLabel}
             onClick={onNavigate}
             className={cn(base, "text-muted-foreground transition-colors hover:text-foreground")}
           >
             {locale.toUpperCase()}
+            <span className="sr-only">, {switchLocale.ariaLabel}</span>
           </Link>
         ),
       )}

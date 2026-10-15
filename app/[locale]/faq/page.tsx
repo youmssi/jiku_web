@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { FaqPage, LANDING_CONTENT } from "@/components/modules/landing";
-import { SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
+import { languageAlternates, SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 import { SEO_ROUTES } from "@/lib/constants";
 
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: page.title,
     description: page.description,
-    alternates: { canonical, languages: { fr: SEO_ROUTES.FAQ, en: `/en${SEO_ROUTES.FAQ}` } },
+    alternates: { canonical, languages: languageAlternates(SEO_ROUTES.FAQ) },
     openGraph: { type: "website", siteName: "Jikū", locale, title: page.title, description: page.description, images: [SHARE_IMAGE] },
     twitter: { card: "summary_large_image", title: page.title, description: page.description, images: [SHARE_IMAGE.url] },
   };

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/i18n/routing";
 import { routing } from "@/i18n/routing";
+import { languageAlternates } from "@/components/modules/seo";
 import { LEGAL_DOCUMENTS, LEGAL_PATHS } from "./legal-content";
 import type { LegalDocumentId } from "./legal-types";
 
@@ -13,7 +14,7 @@ export function legalMetadata(id: LegalDocumentId, locale: Locale): Metadata {
     description: document.description,
     alternates: {
       canonical: locale === routing.defaultLocale ? path : `/${locale}${path}`,
-      languages: { fr: path, en: `/en${path}` },
+      languages: languageAlternates(path),
     },
   };
 }

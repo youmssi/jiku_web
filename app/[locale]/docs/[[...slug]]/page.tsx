@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { DOCS_META, DocsArticle, docsPageMeta, docsStaticParams } from "@/components/modules/docs";
-import { SHARE_IMAGE } from "@/components/modules/seo";
+import { languageAlternates, SHARE_IMAGE } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 
 interface PageProps {
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: { canonical: meta.url, languages: { fr: path, en: `/en${path}` } },
+    alternates: { canonical: meta.url, languages: languageAlternates(path) },
     openGraph: { type: "article", siteName: "Jikū", locale, title, description, images: [SHARE_IMAGE] },
     twitter: { card: "summary_large_image", title, description, images: [SHARE_IMAGE.url] },
   };

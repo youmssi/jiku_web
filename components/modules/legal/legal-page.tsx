@@ -29,10 +29,10 @@ export function LegalPage({ id, locale }: { id: LegalDocumentId; locale: Locale 
           <Link
             href={LEGAL_PATHS[id]}
             locale={otherLocale}
-            aria-label={labels.switchLabel}
             className="text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
           >
             {labels.switchLocale}
+            <span className="sr-only">, {labels.switchLabel}</span>
           </Link>
         </div>
       </header>

@@ -5,6 +5,7 @@ import {
   SIMULATOR_CONTENT,
   USE_CASES_CONTENT,
 } from "@/components/modules/landing";
+import { docsSource } from "@/components/modules/docs";
 import { siteUrl } from "@/components/modules/seo";
 import { LEGAL_NOTICE_ROUTE, PRIVACY_ROUTE, SEO_ROUTES, TERMS_ROUTE } from "@/lib/constants";
 
@@ -13,6 +14,8 @@ import { LEGAL_NOTICE_ROUTE, PRIVACY_ROUTE, SEO_ROUTES, TERMS_ROUTE } from "@/li
  * for AI assistants that answer questions about it (JIKU-219). Written from
  * the same content as the site, in French then English, so it never drifts.
  */
+export const dynamic = "force-static";
+
 export function GET(): Response {
   const origin = siteUrl();
   const fr = LANDING_CONTENT.fr;
@@ -43,6 +46,11 @@ export function GET(): Response {
     link(BIRTHDAY_CARD_CONTENT.en.meta.title, `/en${SEO_ROUTES.BIRTHDAY_CARD}`, BIRTHDAY_CARD_CONTENT.en.meta.description),
     link(BIRTHDAY_TEXTS_CONTENT.en.meta.title, `/en${SEO_ROUTES.BIRTHDAY_TEXTS}`, BIRTHDAY_TEXTS_CONTENT.en.meta.description),
     link(en.faq.page.title, `/en${SEO_ROUTES.FAQ}`, en.faq.page.description),
+    "",
+    "## Guides",
+    "",
+    ...docsSource.getPages("fr").map((page) => link(page.data.title, page.url, page.data.description ?? "")),
+    ...docsSource.getPages("en").map((page) => link(page.data.title, page.url, page.data.description ?? "")),
     "",
     "## FAQ",
     "",

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { Link } from "@/i18n/navigation";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
-import { BreadcrumbJsonLd, OrganizationJsonLd } from "@/components/modules/seo";
+import { BreadcrumbJsonLd } from "@/components/modules/seo";
 import { PearlBackdrop } from "./backdrops";
 import { ClosingCta, CLOSING_OUTLINE } from "./closing-cta";
 import { CopyTextButton } from "./copy-text-button";
@@ -34,7 +34,6 @@ export function BirthdayTextsPage({
   return (
     <MotionProvider>
       <div className="flex flex-1 flex-col bg-background">
-        <OrganizationJsonLd siteUrl={siteUrl} />
         <BreadcrumbJsonLd
           items={[
             { name: content.nav.home, url: siteUrl },
