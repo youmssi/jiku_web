@@ -4,6 +4,7 @@ import { serverFetch } from "@/lib/api-server";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
+import type { Messages } from "@/i18n/messages";
 import { MARKETING_CONSENT_VERSION } from "@/components/modules/identity/schema";
 import type {
   CompleteEmbeddedSignupRequest,
@@ -41,6 +42,12 @@ export async function updateMarketingConsentAction(granted: boolean): Promise<Ac
   return ok(null);
 }
 
+type SettingsErrorKey = keyof Messages["settings"]["errors"];
+
+async function settingsError(key: SettingsErrorKey): Promise<string> {
+  return (await getTranslations("settings.errors"))(key);
+}
+
 // ─── Branding ───────────────────────────────────────────────────────────────
 
 export async function updateBrandingAction(
@@ -53,7 +60,7 @@ export async function updateBrandingAction(
   });
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't save your branding. Please try again.");
+    return fail(await settingsError("branding"));
   }
   return ok(null);
 }
@@ -70,7 +77,7 @@ export async function updateEmailProviderAction(
   });
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't save your email settings. Please try again.");
+    return fail(await settingsError("emailProvider"));
   }
   return ok((await response.json()) as ProviderSettingsResponse);
 }
@@ -119,7 +126,7 @@ export async function removeProviderAction(
   });
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't remove the provider configuration.");
+    return fail(await settingsError("removeProvider"));
   }
   return ok((await response.json()) as ProviderSettingsResponse);
 }
@@ -134,7 +141,7 @@ export async function testSendAction(
     body: JSON.stringify({ recipient }),
   });
   if (!response.ok) {
-    return fail("The test message could not be sent.");
+    return fail(await settingsError("testSend"));
   }
   return ok((await response.json()) as TestSendResponse);
 }
@@ -170,11 +177,11 @@ export async function updateLegalIdentityAction(
     body: JSON.stringify(input),
   });
   if (response.status === 400) {
-    return fail("Check the details — the country must be a two-letter code such as GN.");
+    return fail(await settingsError("legalCountry"));
   }
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't save your legal details. Please try again.");
+    return fail(await settingsError("legal"));
   }
   return ok((await response.json()) as LegalIdentityResponse);
 }
@@ -191,7 +198,7 @@ export async function updateVocabularyAction(
   });
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't save the terms. Please try again.");
+    return fail(await settingsError("terms"));
   }
   return ok(null);
 }
@@ -202,7 +209,7 @@ export async function fetchTemplateAction(
   const response = await serverFetch(`/settings/templates/${encodeURIComponent(name)}`);
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't load this template.");
+    return fail(await settingsError("templateLoad"));
   }
   return ok((await response.json()) as TemplateDetail);
 }
@@ -218,7 +225,7 @@ export async function saveTemplateAction(
   });
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't save this template.");
+    return fail(await settingsError("templateSave"));
   }
   return ok((await response.json()) as TemplateDetail);
 }
@@ -234,7 +241,7 @@ export async function previewTemplateAction(
   });
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't preview this template.");
+    return fail(await settingsError("templatePreview"));
   }
   return ok((await response.json()) as TemplatePreviewResponse);
 }
@@ -255,13 +262,13 @@ export async function updateOrgUsernameAction(
   });
   if (!response.ok) {
     if (response.status === 409) {
-      return fail("This username is already taken. Pick another.");
+      return fail(await settingsError("usernameTaken"));
     }
     if (response.status === 400) {
-      return fail("Use 3 to 32 lowercase letters, numbers and hyphens.");
+      return fail(await settingsError("usernameInvalid"));
     }
     reportApiError(response);
-    return fail("We couldn't save the username. Please try again.");
+    return fail(await settingsError("username"));
   }
   revalidatePath("/", "layout");
   return ok(null);
