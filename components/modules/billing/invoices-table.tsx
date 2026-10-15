@@ -17,7 +17,7 @@ import {
 import { billingInvoiceDocumentRoute } from "@/lib/constants";
 import { useLocale, useTranslations } from "next-intl";
 import { formatAmount } from "@/lib/currency";
-import { formatLocalDateTime } from "@/lib/datetime";
+import { LocalDateTime } from "@/components/shared";
 import { CreditNoteButton } from "@/components/modules/billing/invoice-actions";
 import type { InvoiceSummary } from "./schema";
 
@@ -69,7 +69,7 @@ export function InvoicesTable({ invoices }: { invoices: InvoiceSummary[] }) {
               <TableCell>
                 {invoice.documentType === "CREDIT_NOTE" ? t("creditNote") : t("invoice")}
               </TableCell>
-              <TableCell>{formatLocalDateTime(invoice.issuedAt)}</TableCell>
+              <TableCell><LocalDateTime value={invoice.issuedAt} /></TableCell>
               <TableCell>{formatAmount(invoice.totalMinor, invoice.currency, locale)}</TableCell>
               <TableCell>
                 <a

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useLocalDateTime } from "@/components/shared";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -19,7 +20,6 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { FormFieldError } from "@/components/shared";
-import { formatLocalDateTime } from "@/lib/datetime";
 import { transferTicketAction } from "@/components/modules/invitation/invitation.service";
 import {
   transferTicketSchema,
@@ -36,6 +36,7 @@ export function TransferTicketDialog({
   deadline: string | null;
 }) {
   const t = useTranslations("guest.transfer");
+  const formatDate = useLocalDateTime();
   const [open, setOpen] = useState(false);
   const {
     control,
@@ -70,7 +71,7 @@ export function TransferTicketDialog({
             <DialogTitle>{t("title")}</DialogTitle>
             <DialogDescription>
               {t("description")}
-              {deadline ? ` ${t("deadline", { date: formatLocalDateTime(deadline) })}` : null}
+              {deadline ? ` ${t("deadline", { date: formatDate(deadline) })}` : null}
             </DialogDescription>
           </DialogHeader>
           <FieldGroup className="py-4">

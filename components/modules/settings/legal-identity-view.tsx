@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +23,7 @@ interface LegalIdentityViewProps {
  * organizer discover the refusal at the moment they need one.
  */
 export function LegalIdentityView({ identity }: LegalIdentityViewProps) {
+  const t = useTranslations("settings.legal");
   const [legalName, setLegalName] = useState(identity.legalName ?? "");
   const [registrationNumber, setRegistrationNumber] = useState(identity.registrationNumber ?? "");
   const [taxIdentifier, setTaxIdentifier] = useState(identity.taxIdentifier ?? "");
@@ -43,7 +45,7 @@ export function LegalIdentityView({ identity }: LegalIdentityViewProps) {
       });
       if (result.ok) {
         setComplete(result.data.completeForInvoicing);
-        toast.success("Legal details saved.");
+        toast.success(t("saved"));
       } else {
         toast.error(result.error);
       }
@@ -60,10 +62,7 @@ export function LegalIdentityView({ identity }: LegalIdentityViewProps) {
 
   return (
     <div className="space-y-6">
-      <p className="text-sm text-muted-foreground">
-        Only needed if you invoice a company or an institution. Leave it blank if you never
-        need an invoice.
-      </p>
+      <p className="text-sm text-muted-foreground">{t("intro")}</p>
 
       <div
         className={`rounded-lg border px-4 py-3 text-sm ${
@@ -72,24 +71,22 @@ export function LegalIdentityView({ identity }: LegalIdentityViewProps) {
             : "border-amber-500/30 bg-amber-500/5 text-amber-700 dark:text-amber-400"
         }`}
       >
-        {complete
-          ? "Complete — invoices can be issued for your organization."
-          : "Incomplete — an invoice needs a legal name, address, city and country."}
+        {complete ? t("complete") : t("incomplete")}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="legalName">Registered company name</Label>
+        <Label htmlFor="legalName">{t("legalName")}</Label>
         <Input
           id="legalName"
           value={legalName}
           onChange={(event) => setLegalName(event.target.value)}
-          placeholder="Societe Exemple SARL"
+          placeholder={t("legalNamePlaceholder")}
         />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="registrationNumber">Registration number</Label>
+          <Label htmlFor="registrationNumber">{t("registrationNumber")}</Label>
           <Input
             id="registrationNumber"
             value={registrationNumber}
@@ -98,7 +95,7 @@ export function LegalIdentityView({ identity }: LegalIdentityViewProps) {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="taxIdentifier">Tax identifier</Label>
+          <Label htmlFor="taxIdentifier">{t("taxIdentifier")}</Label>
           <Input
             id="taxIdentifier"
             value={taxIdentifier}
@@ -109,22 +106,22 @@ export function LegalIdentityView({ identity }: LegalIdentityViewProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="addressLine">Address</Label>
+        <Label htmlFor="addressLine">{t("address")}</Label>
         <Input
           id="addressLine"
           value={addressLine}
           onChange={(event) => setAddressLine(event.target.value)}
-          placeholder="12 rue du Commerce"
+          placeholder={t("addressPlaceholder")}
         />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="city">City</Label>
+          <Label htmlFor="city">{t("city")}</Label>
           <Input id="city" value={city} onChange={(event) => setCity(event.target.value)} placeholder="Conakry" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="country">Country code</Label>
+          <Label htmlFor="country">{t("country")}</Label>
           <Input
             id="country"
             value={country}
@@ -136,7 +133,7 @@ export function LegalIdentityView({ identity }: LegalIdentityViewProps) {
       </div>
 
       <Button onClick={handleSave} disabled={isPending || !hasChanges}>
-        {isPending ? "Saving…" : "Save legal details"}
+        {isPending ? t("saving") : t("save")}
       </Button>
     </div>
   );

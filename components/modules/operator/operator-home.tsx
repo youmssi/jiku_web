@@ -19,13 +19,15 @@ export async function OperatorHome({ code, view }: { code: string; view: Operato
     <div className="mx-auto w-full max-w-md px-4 py-8 text-zinc-100">
       <p className="text-sm text-zinc-400">{t("hello")}</p>
       <h1 className="text-2xl font-semibold">{view.label}</h1>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {view.actions.map((action) => (
-          <Badge key={action} variant="secondary">
-            {t(`actions.${action}`)}
-          </Badge>
-        ))}
-      </div>
+      {view.actions.length > 0 ? (
+        <p className="mt-2 text-sm text-zinc-400">
+          {t("canDo", {
+            actions: new Intl.ListFormat(locale, { type: "conjunction" }).format(
+              view.actions.map((action) => t(`actions.${action}`).toLowerCase()),
+            ),
+          })}
+        </p>
+      ) : null}
 
       {empty ? <p className="mt-8 text-sm text-zinc-400">{t("empty")}</p> : null}
 

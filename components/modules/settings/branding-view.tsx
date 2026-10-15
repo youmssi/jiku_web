@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { AlertTriangle, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,18 +23,25 @@ import type { BrandingResponse } from "./schema";
 const ACCEPTED_FORMATS = [".jpg", ".jpeg", ".png"];
 
 /** Recommended pixel size for each image: crisp everywhere it's reused (sidebar, public avatar, email header) without being cropped. */
-const LOGO_RECOMMENDED = { width: 512, height: 512, label: "avatar circle" };
-const BANNER_RECOMMENDED = { width: 1200, height: 300, label: "banner" };
+const LOGO_RECOMMENDED = { width: 512, height: 512, shape: "logo" } as const;
+const BANNER_RECOMMENDED = { width: 1200, height: 300, shape: "banner" } as const;
+
+type Recommended = typeof LOGO_RECOMMENDED | typeof BANNER_RECOMMENDED;
+
+/** What is off about an image, worded at render time in the viewer's language. */
+type ImageWarning =
+  | { kind: "format" }
+  | { kind: "cropped" | "small"; width: number; height: number; recommended: Recommended };
 
 type ImageCheck =
   | { status: "idle" }
   | { status: "checking" }
-  | { status: "ok"; width: number; height: number; warnings: string[] }
+  | { status: "ok"; width: number; height: number; warnings: ImageWarning[] }
   | { status: "error" };
 
 /** The outcome of the most recently *completed* check, tagged with the url it was for. */
 type ImageResult =
-  | { url: string; status: "ok"; width: number; height: number; warnings: string[] }
+  | { url: string; status: "ok"; width: number; height: number; warnings: ImageWarning[] }
   | { url: string; status: "error" };
 
 /**
@@ -45,7 +53,7 @@ type ImageResult =
  */
 function useImageCheck(
   url: string,
-  recommended: { width: number; height: number; label: string },
+  recommended: Recommended,
 ): ImageCheck {
   const trimmed = url.trim();
   const [result, setResult] = useState<ImageResult | null>(null);
@@ -59,24 +67,20 @@ function useImageCheck(
     image.onload = () => {
       if (cancelled) return;
       const { naturalWidth: width, naturalHeight: height } = image;
-      const warnings: string[] = [];
+      const warnings: ImageWarning[] = [];
       const hasAcceptedExtension = ACCEPTED_FORMATS.some((ext) =>
         trimmed.toLowerCase().split("?")[0].endsWith(ext),
       );
       if (!hasAcceptedExtension) {
-        warnings.push("Use a JPG or PNG file — other formats may not display for every guest.");
+        warnings.push({ kind: "format" });
       }
       const expectedRatio = recommended.width / recommended.height;
       const actualRatio = width / height;
       const ratioOffBy = Math.abs(actualRatio - expectedRatio) / expectedRatio;
       if (ratioOffBy > 0.05) {
-        warnings.push(
-          `This image is ${width}×${height}, not the ${recommended.width}×${recommended.height} shape — it will be cropped to fit the ${recommended.label}.`,
-        );
+        warnings.push({ kind: "cropped", width, height, recommended });
       } else if (width < recommended.width) {
-        warnings.push(
-          `This image is ${width}×${height}px, smaller than the recommended ${recommended.width}×${recommended.height}px — it may look blurry when scaled up.`,
-        );
+        warnings.push({ kind: "small", width, height, recommended });
       }
       setResult({ url: trimmed, status: "ok", width, height, warnings });
     };
@@ -94,11 +98,45 @@ function useImageCheck(
   return result;
 }
 
+function ImageWarnings({ warnings, className }: { warnings: ImageWarning[]; className: string }) {
+  const t = useTranslations("settings.branding");
+  if (warnings.length === 0) return null;
+  return (
+    <ul className={className}>
+      {warnings.map((warning) => {
+        const text =
+          warning.kind === "format"
+            ? t("warnFormat")
+            : t(
+                warning.kind === "small"
+                  ? "warnSmall"
+                  : warning.recommended.shape === "logo"
+                    ? "warnCroppedLogo"
+                    : "warnCroppedBanner",
+                {
+                  width: warning.width,
+                  height: warning.height,
+                  expectedWidth: warning.recommended.width,
+                  expectedHeight: warning.recommended.height,
+                },
+              );
+        return (
+          <li key={warning.kind} className="flex items-start gap-1.5 text-xs text-amber-600 dark:text-amber-500">
+            <AlertTriangle className="mt-0.5 size-3 shrink-0" aria-hidden />
+            {text}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 interface BrandingViewProps {
   branding: BrandingResponse;
 }
 
 export function BrandingView({ branding }: BrandingViewProps) {
+  const t = useTranslations("settings.branding");
   const [displayName, setDisplayName] = useState(branding.displayName);
   const [logoUrl, setLogoUrl] = useState(branding.logoUrl ?? "");
   const [bannerUrl, setBannerUrl] = useState(branding.bannerUrl ?? "");
@@ -118,9 +156,9 @@ export function BrandingView({ branding }: BrandingViewProps) {
       });
       if (result.ok) {
         setPreviewColor(primaryColor);
-        toast.success("Branding saved.");
+        toast.success(t("saved"));
       } else {
-        toast.error(result.error ?? "Could not save branding.");
+        toast.error(result.error);
       }
     });
   }
@@ -145,35 +183,33 @@ export function BrandingView({ branding }: BrandingViewProps) {
             </div>
           )}
           <div className="leading-tight">
-            <p className="text-sm font-semibold">{displayName || "Your organization"}</p>
+            <p className="text-sm font-semibold">{displayName || t("previewFallback")}</p>
             <p className="text-xs opacity-80">Jikū</p>
           </div>
         </div>
         <div className="bg-card px-5 py-4">
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Preview: how your branding looks in the sidebar
+            {t("previewCaption")}
           </p>
         </div>
       </div>
 
       {/* Display name */}
       <div className="space-y-2">
-        <Label htmlFor="displayName">Organization name</Label>
+        <Label htmlFor="displayName">{t("displayName")}</Label>
         <Input
           id="displayName"
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
-          placeholder="Your organization"
+          placeholder={t("previewFallback")}
           maxLength={255}
         />
-        <p className="text-xs text-muted-foreground">
-          Shown to guests on invitations, tickets, and the guest page.
-        </p>
+        <p className="text-xs text-muted-foreground">{t("displayNameHint")}</p>
       </div>
 
       {/* Logo URL */}
       <div className="space-y-2">
-        <Label htmlFor="logoUrl">Logo URL</Label>
+        <Label htmlFor="logoUrl">{t("logoUrl")}</Label>
         <Input
           id="logoUrl"
           value={logoUrl}
@@ -183,48 +219,38 @@ export function BrandingView({ branding }: BrandingViewProps) {
           aria-invalid={logoCheck.status === "error"}
         />
         <p className="text-xs text-muted-foreground">
-          JPG or PNG, {LOGO_RECOMMENDED.width}×{LOGO_RECOMMENDED.height}px square recommended. Host it yourself, or
-          use a service like ImgBB, Cloudinary, or your own CDN. Used as the avatar on your public booking page and,
-          when your provider supports it, on client emails — left empty, guests see your organization&apos;s initial
-          and name only.
+          {t("logoHint", { width: LOGO_RECOMMENDED.width, height: LOGO_RECOMMENDED.height })}
         </p>
         {logoUrl.trim() ? (
           <div className="pt-2">
             <Attachment state={logoCheck.status === "error" ? "error" : logoCheck.status === "checking" ? "processing" : "done"}>
               <AttachmentMedia variant="image">
                 {/* eslint-disable-next-line @next/next/no-img-element -- user-provided remote logo URL */}
-                <img src={logoUrl} alt="Organization logo" />
+                <img src={logoUrl} alt={t("logoAlt")} />
               </AttachmentMedia>
               <AttachmentContent>
-                <AttachmentTitle>Logo</AttachmentTitle>
+                <AttachmentTitle>{t("logo")}</AttachmentTitle>
                 <AttachmentDescription>
                   {logoCheck.status === "error"
-                    ? "Couldn't load this image — check the URL is correct and publicly reachable."
+                    ? t("loadFailed")
                     : logoCheck.status === "checking"
-                      ? "Checking image…"
+                      ? t("checking")
                       : logoCheck.status === "ok" && logoCheck.warnings.length === 0
-                        ? `${logoCheck.width}×${logoCheck.height}px · looks great`
-                        : "Shown in the sidebar and on guest pages."}
+                        ? t("looksGood", { width: logoCheck.width, height: logoCheck.height })
+                        : t("logoDefault")}
                 </AttachmentDescription>
               </AttachmentContent>
               <AttachmentActions>
                 <AttachmentAction
-                  aria-label="Remove logo"
+                  aria-label={t("removeLogo")}
                   onClick={() => setLogoUrl("")}
                 >
                   <X className="size-3.5" />
                 </AttachmentAction>
               </AttachmentActions>
             </Attachment>
-            {logoCheck.status === "ok" && logoCheck.warnings.length > 0 ? (
-              <ul className="mt-2 flex flex-col gap-1">
-                {logoCheck.warnings.map((warning) => (
-                  <li key={warning} className="flex items-start gap-1.5 text-xs text-amber-600 dark:text-amber-500">
-                    <AlertTriangle className="mt-0.5 size-3 shrink-0" aria-hidden />
-                    {warning}
-                  </li>
-                ))}
-              </ul>
+            {logoCheck.status === "ok" ? (
+              <ImageWarnings warnings={logoCheck.warnings} className="mt-2 flex flex-col gap-1" />
             ) : null}
           </div>
         ) : null}
@@ -232,7 +258,7 @@ export function BrandingView({ branding }: BrandingViewProps) {
 
       {/* Banner URL */}
       <div className="space-y-2">
-        <Label htmlFor="bannerUrl">Banner URL</Label>
+        <Label htmlFor="bannerUrl">{t("bannerUrl")}</Label>
         <Input
           id="bannerUrl"
           value={bannerUrl}
@@ -242,8 +268,7 @@ export function BrandingView({ branding }: BrandingViewProps) {
           aria-invalid={bannerCheck.status === "error"}
         />
         <p className="text-xs text-muted-foreground">
-          JPG or PNG, {BANNER_RECOMMENDED.width}×{BANNER_RECOMMENDED.height}px (4:1) recommended. Shown above your
-          logo at the top of your public booking page — left empty, visitors see a plain color gradient instead.
+          {t("bannerHint", { width: BANNER_RECOMMENDED.width, height: BANNER_RECOMMENDED.height })}
         </p>
         {bannerUrl.trim() ? (
           <div className="space-y-2 pt-2">
@@ -251,39 +276,32 @@ export function BrandingView({ branding }: BrandingViewProps) {
               <AspectRatio ratio={BANNER_RECOMMENDED.width / BANNER_RECOMMENDED.height}>
                 {bannerCheck.status === "error" ? (
                   <div className="flex size-full items-center justify-center bg-muted text-xs text-muted-foreground">
-                    Couldn&apos;t load this image
+                    {t("loadFailedShort")}
                   </div>
 
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element -- user-provided remote banner URL
-                  <img src={bannerUrl} alt="Organization banner" className="size-full object-cover" />
+                  <img src={bannerUrl} alt={t("bannerAlt")} className="size-full object-cover" />
                 )}
               </AspectRatio>
             </div>
             <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
               <span>
                 {bannerCheck.status === "checking"
-                  ? "Checking image…"
+                  ? t("checking")
                   : bannerCheck.status === "ok" && bannerCheck.warnings.length === 0
-                    ? `${bannerCheck.width}×${bannerCheck.height}px · looks great`
+                    ? t("looksGood", { width: bannerCheck.width, height: bannerCheck.height })
                     : bannerCheck.status === "error"
-                      ? "Check the URL is correct and publicly reachable."
+                      ? t("checkUrl")
                       : null}
               </span>
               <Button variant="ghost" size="sm" onClick={() => setBannerUrl("")}>
                 <X className="size-3.5" data-icon="inline-start" />
-                Remove
+                {t("remove")}
               </Button>
             </div>
-            {bannerCheck.status === "ok" && bannerCheck.warnings.length > 0 ? (
-              <ul className="flex flex-col gap-1">
-                {bannerCheck.warnings.map((warning) => (
-                  <li key={warning} className="flex items-start gap-1.5 text-xs text-amber-600 dark:text-amber-500">
-                    <AlertTriangle className="mt-0.5 size-3 shrink-0" aria-hidden />
-                    {warning}
-                  </li>
-                ))}
-              </ul>
+            {bannerCheck.status === "ok" ? (
+              <ImageWarnings warnings={bannerCheck.warnings} className="flex flex-col gap-1" />
             ) : null}
           </div>
         ) : null}
@@ -291,7 +309,7 @@ export function BrandingView({ branding }: BrandingViewProps) {
 
       {/* Primary color */}
       <div className="space-y-2">
-        <Label htmlFor="primaryColor">Primary brand color</Label>
+        <Label htmlFor="primaryColor">{t("color")}</Label>
         <div className="flex items-center gap-3">
           <div className="relative">
             <input
@@ -311,21 +329,20 @@ export function BrandingView({ branding }: BrandingViewProps) {
             }}
             placeholder="#1E293B"
             maxLength={7}
+            aria-label={t("color")}
             className="w-32 font-mono"
           />
         </div>
-        <p className="text-xs text-muted-foreground">
-          Used for buttons and accents on guest-facing pages. Enter a 6-digit hex value (e.g. #2563EB).
-        </p>
+        <p className="text-xs text-muted-foreground">{t("colorHint")}</p>
       </div>
 
       {/* Save */}
       <div className="flex items-center gap-3 pt-2">
         <Button onClick={handleSave} disabled={isPending || !hasChanges}>
-          {isPending ? "Saving…" : "Save branding"}
+          {isPending ? t("saving") : t("save")}
         </Button>
         {!hasChanges && (
-          <span className="text-xs text-muted-foreground">No changes to save.</span>
+          <span className="text-xs text-muted-foreground">{t("noChanges")}</span>
         )}
       </div>
     </div>

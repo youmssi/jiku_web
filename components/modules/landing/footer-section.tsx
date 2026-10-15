@@ -72,10 +72,10 @@ export function FooterSection({
             <Link
               href={path}
               locale={switchLocale.label === "EN" ? "en" : "fr"}
-              aria-label={switchLocale.ariaLabel}
               className="inline-flex min-h-6 items-center font-medium text-foreground transition-colors hover:underline"
             >
               {switchLocale.label}
+              <span className="sr-only">, {switchLocale.ariaLabel}</span>
             </Link>
             <span className="text-border/40">·</span>
             <span>{content.tagline}</span>

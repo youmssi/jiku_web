@@ -6,7 +6,7 @@ import { Geist_Mono, Inter } from "next/font/google";
 import "../globals.css";
 import { cn } from "@/lib/utils";
 import { ServiceWorkerRegister, UmamiScript } from "@/components/shared";
-import { SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
+import { SHARE_IMAGE, SiteJsonLd, siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -80,8 +80,14 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  // Ownership proofs for each search engine's webmaster console. Bing's also
+  // covers Yahoo, DuckDuckGo and Ecosia, which use its index.
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    yandex: process.env.NEXT_PUBLIC_YANDEX_SITE_VERIFICATION,
+    ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION && {
+      other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION },
+    }),
   },
 };
 
@@ -126,6 +132,7 @@ export default async function RootLayout({
       )}
     >
       <body className="flex min-h-full flex-col">
+        <SiteJsonLd siteUrl={siteUrl()} />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
         <ServiceWorkerRegister />
         <UmamiScript />

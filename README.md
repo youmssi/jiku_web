@@ -200,12 +200,28 @@ Commit both files together. See [`openapi/README.md`](openapi/README.md).
 `NEXT_PUBLIC_*` values are inlined at build time and public; everything else is
 server-only.
 
+### Developer tools (MCP)
+
+[`.mcp.json`](.mcp.json) declares two MCP servers for editors and agents that
+read it:
+
+- `shadcn`: browse and add UI components;
+- `whatsapp_business_tools`: Meta's WhatsApp Business Tools server
+  (`https://mcp.facebook.com/whatsapp_business_tools`, OAuth with the Meta
+  developer account, no secret in the repository). Use it to check the
+  WhatsApp side of the settings screen, such as an organization's own number
+  after Embedded Signup, its status and its templates. The test steps are in
+  the backend runbook `docs/runbooks/whatsapp-mcp.md` in the `jiku_app`
+  repository.
+
 ## Deployment
 
 The app deploys to Vercel. Every pull request gets a preview deployment;
 `develop` is the integration branch and merging `develop` into `main` releases
 to production. The embeddable booking widget is documented in
-[`docs/widget-integration.md`](docs/widget-integration.md).
+[`docs/widget-integration.md`](docs/widget-integration.md), and search engine
+set-up (Search Console, Bing, IndexNow, brand profiles) in
+[`docs/seo-launch.md`](docs/seo-launch.md).
 
 ## Contributing
 

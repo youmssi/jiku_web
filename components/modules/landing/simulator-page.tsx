@@ -7,8 +7,6 @@ import { JikūLogo } from "@/components/ui/jiku-logo";
 import { Link } from "@/i18n/navigation";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
 import {
-  OrganizationJsonLd,
-  LocalBusinessJsonLd,
   BreadcrumbJsonLd,
 } from "@/components/modules/seo";
 import { PearlBackdrop } from "./backdrops";
@@ -38,8 +36,6 @@ export function SimulatorPage({
   return (
     <MotionProvider>
       <div className="flex flex-1 flex-col bg-background">
-        <OrganizationJsonLd siteUrl={siteUrl} />
-        <LocalBusinessJsonLd siteUrl={siteUrl} />
         <PricingJsonLd content={content} url={`${siteUrl}${path}`} />
         <BreadcrumbJsonLd
           items={[

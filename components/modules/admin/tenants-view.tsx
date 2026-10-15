@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useLocalDateTime } from "@/components/shared";
 import { ArrowUpDown, Building2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,6 @@ import {
 } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import { ADMIN_ROUTES } from "@/lib/constants";
-import { formatLocalDateTime } from "@/lib/datetime";
 import { ActionDialog } from "./action-dialog";
 import { reactivateTenantAction, suspendTenantAction } from "./admin.service";
 import { StatusBadge } from "./admin-ui";
@@ -26,6 +26,7 @@ import type { TenantDirectoryEntry, TenantDirectoryPage } from "./schema";
 
 function useColumns(): ColumnDef<DataTableFeatures, TenantDirectoryEntry>[] {
   const t = useTranslations("admin.tenants");
+  const formatDate = useLocalDateTime();
   const common = useTranslations("admin.common");
   return [
     {
@@ -60,7 +61,7 @@ function useColumns(): ColumnDef<DataTableFeatures, TenantDirectoryEntry>[] {
     {
       accessorKey: "createdAt",
       header: t("created"),
-      cell: ({ row }) => formatLocalDateTime(row.original.createdAt),
+      cell: ({ row }) => formatDate(row.original.createdAt),
     },
     {
       accessorKey: "status",

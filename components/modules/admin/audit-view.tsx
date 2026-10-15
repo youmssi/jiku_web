@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useLocalDateTime } from "@/components/shared";
 import { ScrollText } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -18,18 +19,18 @@ import {
 } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import { ADMIN_ROUTES } from "@/lib/constants";
-import { formatLocalDateTime } from "@/lib/datetime";
 import type { AuditEntry, AuditPage } from "./schema";
 
 function useColumns(): ColumnDef<DataTableFeatures, AuditEntry>[] {
   const t = useTranslations("admin.audit");
+  const formatDate = useLocalDateTime();
   return [
   {
     accessorKey: "createdAt",
     header: t("when"),
     cell: ({ row }) => (
       <span className="whitespace-nowrap">
-        {formatLocalDateTime(row.original.createdAt)}
+        {formatDate(row.original.createdAt)}
       </span>
     ),
   },

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 import { ROUTES } from "@/lib/constants";
@@ -31,9 +32,10 @@ export async function fetchMembersAction(): Promise<
 }
 
 export async function inviteMemberAction(input: InviteMemberInput): Promise<ActionResult> {
+  const t = await getTranslations("settings.members.errors");
   const parsed = inviteMemberSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Please check the form and try again.");
+    return fail(t("invalid"));
   }
   const response = await serverFetch("/members/invitations", {
     method: "POST",
@@ -45,23 +47,25 @@ export async function inviteMemberAction(input: InviteMemberInput): Promise<Acti
       reportApiError(response);
     }
     // The backend's reasons are user-ready (verify email first, already a member).
-    return fail((await problemDetail(response)) ?? "We couldn't send the invitation. Please try again.");
+    return fail((await problemDetail(response)) ?? t("invite"));
   }
   revalidatePath(ROUTES.SETTINGS);
   return ok(null);
 }
 
 export async function revokeInvitationAction(invitationId: string): Promise<ActionResult> {
+  const t = await getTranslations("settings.members.errors");
   const response = await serverFetch(`/members/invitations/${invitationId}`, { method: "DELETE" });
   if (!response.ok) {
     reportApiError(response);
-    return fail("We couldn't revoke the invitation. Please try again.");
+    return fail(t("revoke"));
   }
   revalidatePath(ROUTES.SETTINGS);
   return ok(null);
 }
 
 export async function changeMemberRoleAction(userId: string, role: string): Promise<ActionResult> {
+  const t = await getTranslations("settings.members.errors");
   const response = await serverFetch(`/members/${userId}/role`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -71,19 +75,20 @@ export async function changeMemberRoleAction(userId: string, role: string): Prom
     if (response.status !== 403 && response.status !== 409) {
       reportApiError(response);
     }
-    return fail((await problemDetail(response)) ?? "We couldn't change the role. Please try again.");
+    return fail((await problemDetail(response)) ?? t("role"));
   }
   revalidatePath(ROUTES.SETTINGS);
   return ok(null);
 }
 
 export async function removeMemberAction(userId: string): Promise<ActionResult> {
+  const t = await getTranslations("settings.members.errors");
   const response = await serverFetch(`/members/${userId}`, { method: "DELETE" });
   if (!response.ok) {
     if (response.status !== 403 && response.status !== 409) {
       reportApiError(response);
     }
-    return fail((await problemDetail(response)) ?? "We couldn't remove this member. Please try again.");
+    return fail((await problemDetail(response)) ?? t("remove"));
   }
   revalidatePath(ROUTES.SETTINGS);
   return ok(null);

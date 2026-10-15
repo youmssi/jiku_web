@@ -203,7 +203,7 @@ const fr: JourneysContent = {
         {
           actor: "Patient",
           title: "Reçoit un rappel",
-          text: "La veille, un rappel WhatsApp. Si WhatsApp échoue, un SMS prend le relais.",
+          text: "La veille, un rappel WhatsApp. Si WhatsApp n'arrive pas, un SMS de secours peut prendre le relais.",
           screen: { kind: "message", title: "Clinique Espoir", lines: ["Bonjour Fatoumata, petit rappel de votre rendez-vous avec le Dr Camara le mardi 3 novembre à 10:00."] },
         },
         {
@@ -412,7 +412,7 @@ const en: JourneysContent = {
         {
           actor: "Patient",
           title: "Gets a reminder",
-          text: "The day before, a WhatsApp reminder. If WhatsApp fails, an SMS takes over.",
+          text: "The day before, a WhatsApp reminder. If WhatsApp can't deliver, a backup SMS can take over.",
           screen: { kind: "message", title: "Hope Clinic", lines: ["Hello Fatoumata, a reminder of your appointment with Dr Camara on Tuesday 3 November at 10:00 am."] },
         },
         {

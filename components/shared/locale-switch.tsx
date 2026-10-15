@@ -45,10 +45,10 @@ function SwitchLink({ className, query }: LocaleSwitchProps & { query: string })
             href={query ? `${pathname}?${query}` : pathname}
             locale={target}
             lang={target}
-            aria-label={SWITCH_LABELS[target]}
             className={className}
         >
             {target.toUpperCase()}
+            <span className="sr-only">, {SWITCH_LABELS[target]}</span>
         </Link>
     );
 }

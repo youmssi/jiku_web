@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { UserPlus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { FormFieldError } from "@/components/shared";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -37,6 +39,8 @@ export function InviteMemberDialog({
   onInvited: () => void;
   onError: (message: string) => void;
 }) {
+  const t = useTranslations("settings.members.invite");
+  const tRoles = useTranslations("common.roles");
   const [open, setOpen] = useState(false);
   const {
     control,
@@ -71,13 +75,13 @@ export function InviteMemberDialog({
       <DialogTrigger asChild>
         <Button>
           <UserPlus className="size-3.5" data-icon="inline-start" />
-          Invite member
+          {t("trigger")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Invite someone</DialogTitle>
-          <DialogDescription>They&apos;ll receive an email link to join this organization.</DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
         <form id="invite-member-form" onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
           <Controller
@@ -85,7 +89,7 @@ export function InviteMemberDialog({
             name="email"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="invite-email">Email</FieldLabel>
+                <FieldLabel htmlFor="invite-email">{t("email")}</FieldLabel>
                 <Input
                   {...field}
                   id="invite-email"
@@ -94,7 +98,7 @@ export function InviteMemberDialog({
                   autoFocus
                   aria-invalid={fieldState.invalid}
                 />
-                {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+                <FormFieldError error={fieldState.error} />
               </Field>
             )}
           />
@@ -103,15 +107,15 @@ export function InviteMemberDialog({
             name="role"
             render={({ field }) => (
               <Field>
-                <FieldLabel htmlFor="invite-role">Role</FieldLabel>
+                <FieldLabel htmlFor="invite-role">{t("role")}</FieldLabel>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger id="invite-role" aria-label="Role">
+                  <SelectTrigger id="invite-role">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {INVITABLE_ROLES.map((role) => (
                       <SelectItem key={role} value={role}>
-                        <span className="capitalize">{role.toLowerCase()}</span>
+                        {tRoles(role)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -122,10 +126,10 @@ export function InviteMemberDialog({
         </form>
         <DialogFooter>
           <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button type="submit" form="invite-member-form" disabled={isSubmitting}>
-            {isSubmitting ? "Sending…" : "Send invitation"}
+            {isSubmitting ? t("submitting") : t("submit")}
           </Button>
         </DialogFooter>
       </DialogContent>

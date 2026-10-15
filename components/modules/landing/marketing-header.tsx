@@ -50,10 +50,10 @@ export function MarketingHeader({ nav, path }: { nav: MarketingNavContent; path:
           <Link
             href={path}
             locale={nav.switchLocale.locale}
-            aria-label={nav.switchLocale.ariaLabel}
             className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-full text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
           >
             {nav.switchLocale.label}
+            <span className="sr-only">, {nav.switchLocale.ariaLabel}</span>
           </Link>
           <Button variant="ghost" className="hidden h-9 rounded-full px-4 text-sm sm:inline-flex" asChild>
             <Link href={ROUTES.LOGIN}>{nav.signIn}</Link>

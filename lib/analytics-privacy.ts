@@ -1,6 +1,7 @@
 /**
- * Rewrites a URL before it reaches the analytics server: guest, operator and
- * booking links carry the secret that opens a ticket or a console, so those
+ * Rewrites a URL before it reaches the analytics server or the error tracker:
+ * guest, operator, order and booking links, in the app and in the API they
+ * call, carry the secret that opens a ticket or a console, so those
  * segments become `:token`, record ids become `:id`, and the query string and
  * hash (password-reset and verification tokens live there) are dropped.
  *
@@ -8,7 +9,10 @@
  * `before-send` hook, so it must not reference anything outside itself.
  */
 export function maskAnalyticsUrl(url: string): string {
-  const SECRET_AFTER = ["invitation", "checkin", "line", "appointments", "r", "widget", "bookings", "operator"];
+  const SECRET_AFTER = [
+    "invitation", "invitations", "rsvp", "orders", "checkin", "line", "line-codes", "appointments", "r", "widget",
+    "booking", "bookings", "operator", "operator-codes", "tickets",
+  ];
   const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   let origin = "";
   let path = url;

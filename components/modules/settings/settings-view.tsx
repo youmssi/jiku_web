@@ -120,8 +120,8 @@ export async function SettingsView({ tab }: { tab?: string }) {
         <p className="mt-1 text-sm text-muted-foreground">{tPage("description")}</p>
       </div>
 
-      <Tabs defaultValue={tab && settings ? tab : settings ? "branding" : "organization"} className="w-full">
-        <TabsList className="mb-8">
+      <Tabs defaultValue={tab && settings ? tab : "organization"} className="w-full">
+        <TabsList className="mb-8 max-w-full justify-start overflow-x-auto">
           <TabsTrigger value="organization">{tPage("tabs.organization")}</TabsTrigger>
           {settings ? <TabsTrigger value="branding">{tPage("tabs.branding")}</TabsTrigger> : null}
           {settings?.team ? <TabsTrigger value="members">{tPage("tabs.members")}</TabsTrigger> : null}

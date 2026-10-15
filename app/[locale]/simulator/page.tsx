@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { SIMULATOR_CONTENT, SimulatorPage } from "@/components/modules/landing";
-import { SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
+import { languageAlternates, SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
+import { SEO_ROUTES } from "@/lib/constants";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: content.meta.description,
     alternates: {
       canonical,
-      languages: { fr: "/simulator", en: "/en/simulator" },
+      languages: languageAlternates(SEO_ROUTES.SIMULATOR),
     },
     openGraph: {
       type: "website",

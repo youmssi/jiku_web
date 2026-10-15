@@ -30,6 +30,7 @@ function EmailSection({
   email: EmailProviderView;
   onUpdated: (data: ProviderSettingsResponse) => void;
 }) {
+  const t = useTranslations("settings.email");
   const [mode, setMode] = useState<"platform" | "resend">(
     email.configured ? "resend" : "platform",
   );
@@ -56,7 +57,7 @@ function EmailSection({
       if (!result.ok) { toast.error(result.error); return; }
       onUpdated(result.data);
       setApiKey("");
-      toast.success("Email provider saved.");
+      toast.success(t("saved"));
     });
   }
 
@@ -67,8 +68,8 @@ function EmailSection({
       if (result.ok) {
         toast.success(
           result.data.delivered
-            ? "Test message sent successfully."
-            : `Test failed: ${result.data.error ?? "unknown error"}`,
+            ? t("testSent")
+            : t("testFailed", { error: result.data.error ?? t("unknownError") }),
         );
       } else {
         toast.error(result.error);
@@ -79,27 +80,25 @@ function EmailSection({
   return (
     <div className="space-y-5">
       <div>
-        <Label className="mb-2 block">Email provider</Label>
+        <Label htmlFor="email-provider" className="mb-2 block">{t("provider")}</Label>
         <Select value={mode} onValueChange={(v) => setMode(v as "platform" | "resend")}>
-          <SelectTrigger className="w-full sm:w-72">
+          <SelectTrigger id="email-provider" className="w-full sm:w-72">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="platform">Platform default (Jikū)</SelectItem>
-            <SelectItem value="resend">Resend (my own key)</SelectItem>
+            <SelectItem value="platform">{t("platform")}</SelectItem>
+            <SelectItem value="resend">{t("resend")}</SelectItem>
           </SelectContent>
         </Select>
         <p className="mt-1.5 text-xs text-muted-foreground">
-          {mode === "platform"
-            ? "Emails are sent through Jikū's own sending infrastructure. No configuration needed."
-            : "Bring your own Resend API key. Emails are sent from your verified domain."}
+          {mode === "platform" ? t("platformHint") : t("resendHint")}
         </p>
       </div>
 
       {mode === "resend" && (
         <>
           <div className="space-y-2">
-            <Label htmlFor="email-apiKey">Resend API key</Label>
+            <Label htmlFor="email-apiKey">{t("apiKey")}</Label>
             <Input
               id="email-apiKey"
               type="password"
@@ -110,13 +109,13 @@ function EmailSection({
             />
             {email.configured && (
               <p className="text-xs text-muted-foreground">
-                Current key: {email.apiKeyMasked ?? "••••"}. Enter a new value to replace it.
+                {t("currentKey", { key: email.apiKeyMasked ?? "••••" })}
               </p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email-from">From email</Label>
+            <Label htmlFor="email-from">{t("from")}</Label>
             <Input
               id="email-from"
               type="email"
@@ -127,12 +126,12 @@ function EmailSection({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email-fromName">From name (optional)</Label>
+            <Label htmlFor="email-fromName">{t("fromName")}</Label>
             <Input
               id="email-fromName"
               value={fromName}
               onChange={(e) => setFromName(e.target.value)}
-              placeholder="My Organization"
+              placeholder={t("fromNamePlaceholder")}
             />
           </div>
         </>
@@ -143,17 +142,17 @@ function EmailSection({
           onClick={handleSave}
           disabled={isSaving || (mode === "resend" && !apiKey && !email.configured)}
         >
-          {isSaving ? "Saving…" : "Save"}
+          {isSaving ? t("saving") : t("save")}
         </Button>
         {email.configured && mode === "platform" && (
-          <span className="text-xs text-muted-foreground">Your custom provider will be removed.</span>
+          <span className="text-xs text-muted-foreground">{t("willRemove")}</span>
         )}
       </div>
 
       {email.configured && (
         <div className="rounded-lg border border-border/40 p-4">
           <Label htmlFor="email-test" className="mb-2 block text-sm font-medium">
-            Send a test message
+            {t("test")}
           </Label>
           <div className="flex items-center gap-2">
             <Input
@@ -161,7 +160,7 @@ function EmailSection({
               type="email"
               value={testRecipient}
               onChange={(e) => setTestRecipient(e.target.value)}
-              placeholder="you@example.com"
+              placeholder={t("testPlaceholder")}
               className="flex-1"
             />
             <Button
@@ -169,7 +168,7 @@ function EmailSection({
               onClick={handleTest}
               disabled={isTesting || !testRecipient.trim()}
             >
-              {isTesting ? "Sending…" : "Send"}
+              {isTesting ? t("sending") : t("send")}
             </Button>
           </div>
         </div>
@@ -214,12 +213,13 @@ interface ProviderSettingsViewProps {
 
 export function ProviderSettingsView({ initial, embeddedSignup }: ProviderSettingsViewProps) {
   const t = useTranslations("settings.whatsappNumber");
+  const tEmail = useTranslations("settings.email");
   const [data, setData] = useState<ProviderSettingsResponse>(initial);
 
   return (
     <div className="space-y-10">
       <section>
-        <h3 className="mb-4 text-base font-semibold">Email</h3>
+        <h3 className="mb-4 text-base font-semibold">{tEmail("title")}</h3>
         <EmailSection email={data.email} onUpdated={setData} />
       </section>
 

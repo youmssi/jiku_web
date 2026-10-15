@@ -3,6 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { upperFirst } from "@/lib/text";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -198,13 +199,16 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
             {live ? <LiveBadge /> : null}
           </div>
           <p className="text-sm text-muted-foreground">{view.serviceName}</p>
-          <p className="text-xs capitalize text-muted-foreground">
-            {format.dateTime(new Date(`${view.date}T12:00:00Z`), {
-              timeZone: "UTC",
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-            })}
+          <p className="text-xs text-muted-foreground">
+            {upperFirst(
+              format.dateTime(new Date(`${view.date}T12:00:00Z`), {
+                timeZone: "UTC",
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+              }),
+              locale,
+            )}
           </p>
         </div>
         <div className="flex shrink-0 gap-2">

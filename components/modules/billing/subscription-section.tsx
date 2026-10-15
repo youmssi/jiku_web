@@ -117,7 +117,7 @@ export function SubscriptionSection({
             variant={outgrown || remindersOut ? "default" : "outline"}
             onClick={() => setOpen((value) => !value)}
           >
-            {open ? t("cancel") : outgrown || remindersOut ? t("choose") : t("change")}
+            {open ? t("cancel") : outgrown || remindersOut || isFree ? t("choose") : t("change")}
           </Button>
         </div>
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">

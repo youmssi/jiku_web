@@ -7,6 +7,7 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Check, Copy, ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -17,12 +18,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from "@/components/ui/field";
+import { FormFieldError } from "@/components/shared";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { updateOrgUsernameAction } from "./settings.service";
 
@@ -31,9 +28,9 @@ const usernameSchema = z.object({
     .string()
     .trim()
     .transform((value) => value.toLowerCase())
-    .refine((value) => /^[a-z0-9-]+$/.test(value), "Use only lowercase letters, numbers and hyphens.")
-    .refine((value) => value.length >= 3, "Use at least 3 characters.")
-    .refine((value) => value.length <= 32, "Use at most 32 characters."),
+    .refine((value) => /^[a-z0-9-]+$/.test(value), "usernameCharacters")
+    .refine((value) => value.length >= 3, "usernameTooShort")
+    .refine((value) => value.length <= 32, "usernameTooLong"),
 });
 
 type UsernameFormValues = z.infer<typeof usernameSchema>;
@@ -44,6 +41,7 @@ type UsernameFormValues = z.infer<typeof usernameSchema>;
  * peut être changé, jamais partagé.
  */
 export function UsernameForm({ initial }: { initial: string | null }) {
+  const t = useTranslations("settings.username");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [copied, setCopied] = useState(false);
@@ -68,7 +66,7 @@ export function UsernameForm({ initial }: { initial: string | null }) {
         toast.error(result.error);
         return;
       }
-      toast.success("Your public page is live.");
+      toast.success(t("saved"));
       router.refresh();
     });
   }
@@ -80,18 +78,15 @@ export function UsernameForm({ initial }: { initial: string | null }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error("Impossible de copier.");
+      toast.error(t("copyFailed"));
     }
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Public page</CardTitle>
-        <CardDescription>
-          Your discoverable profile. Clients open it to see every bookable service
-          and reserve without an account.
-        </CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -101,7 +96,7 @@ export function UsernameForm({ initial }: { initial: string | null }) {
               name="username"
               render={({ field, fieldState }) => (
                 <Field className="min-w-56 grow basis-56" data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Public username</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{t("label")}</FieldLabel>
                   <div className="flex items-center gap-0 overflow-hidden rounded-md border border-input">
                     <span className="border-r border-input bg-muted/50 px-2.5 py-1.5 text-xs text-muted-foreground">
                       jiku.app/o/
@@ -111,21 +106,18 @@ export function UsernameForm({ initial }: { initial: string | null }) {
                       id={field.name}
                       aria-invalid={fieldState.invalid}
                       className="rounded-none border-0"
-                      placeholder="mon-salon"
+                      placeholder={t("placeholder")}
                     />
                   </div>
                   <FieldDescription>
-                    3 to 32 lowercase letters, numbers and hyphens. Shown as
-                    jiku.app/o/{field.value || "username"}.
+                    {t("hint", { username: field.value || t("fallback") })}
                   </FieldDescription>
-                  {fieldState.invalid ? (
-                    <FieldError errors={[fieldState.error]} />
-                  ) : null}
+                  <FormFieldError error={fieldState.error} />
                 </Field>
               )}
             />
             <Button type="submit" disabled={isPending || isSubmitting}>
-              {(isPending || isSubmitting) ? "Saving…" : "Save"}
+              {(isPending || isSubmitting) ? t("saving") : t("save")}
             </Button>
           </div>
         </form>
@@ -137,12 +129,12 @@ export function UsernameForm({ initial }: { initial: string | null }) {
             <ButtonGroup>
               <Button size="icon-sm" variant="outline" onClick={copyUrl}>
                 {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-                <span className="sr-only">Copy public page link</span>
+                <span className="sr-only">{t("copy")}</span>
               </Button>
               <Button size="icon-sm" variant="outline" asChild>
                 <a href={profileUrl} target="_blank" rel="noreferrer">
                   <ExternalLink className="size-3.5" />
-                  <span className="sr-only">Open public page in a new tab</span>
+                  <span className="sr-only">{t("open")}</span>
                 </a>
               </Button>
             </ButtonGroup>
