@@ -237,7 +237,7 @@ export const LEGAL_FR: LegalDocuments = {
         heading: "Qui est responsable",
         body: [
           `Pour les comptes des organisations et de leurs utilisateurs, et pour le site public : ${C.legalName}, ${C.address}. Contact dédié : ${C.privacyEmail}.`,
-          `Déclaration auprès de l'autorité de protection des données : ${C.dpaDeclaration}.`,
+          ...(C.dpaDeclaration ? [`Déclaration auprès de l'autorité de protection des données : ${C.dpaDeclaration}.`] : []),
         ],
       },
       {
