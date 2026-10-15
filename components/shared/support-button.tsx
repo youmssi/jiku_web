@@ -1,5 +1,6 @@
 "use client";
 
+import { CircleHelp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,11 +23,12 @@ export function SupportButton() {
   const t = useTranslations("common.support");
 
   return (
-    <div className="fixed bottom-20 right-4 z-40 md:bottom-4">
+    <div className="fixed right-4 bottom-4 z-40">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="sm" variant="secondary" className="shadow-md">
-            {t("open")}
+          <Button size="sm" variant="secondary" aria-label={t("open")} className="shadow-md max-md:size-11 max-md:rounded-full max-md:p-0">
+            <CircleHelp className="md:hidden" aria-hidden />
+            <span className="max-md:sr-only">{t("open")}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" side="top" className="w-60">
