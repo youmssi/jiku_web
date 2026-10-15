@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useLocalDateTime } from "@/components/shared";
 import { useRouter } from "@/i18n/navigation";
 import { FileSignature, Plus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
@@ -38,7 +39,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formatLocalDateTime } from "@/lib/datetime";
 import { ActionDialog } from "./action-dialog";
 import {
   createAgreementAction,
@@ -55,6 +55,7 @@ import {
 
 function useColumns(): ColumnDef<DataTableFeatures, AdminAgreement>[] {
   const t = useTranslations("admin.agreements");
+  const formatDate = useLocalDateTime();
   const common = useTranslations("admin.common");
   return [
   {
@@ -77,15 +78,15 @@ function useColumns(): ColumnDef<DataTableFeatures, AdminAgreement>[] {
     enableSorting: false,
     cell: ({ row }) => (
       <span className="whitespace-nowrap">
-        {formatLocalDateTime(row.original.periodStart)} →{" "}
-        {formatLocalDateTime(row.original.periodEnd)}
+        {formatDate(row.original.periodStart)} →{" "}
+        {formatDate(row.original.periodEnd)}
       </span>
     ),
   },
   {
     accessorKey: "renewalAt",
     header: t("renewal"),
-    cell: ({ row }) => formatLocalDateTime(row.original.renewalAt),
+    cell: ({ row }) => formatDate(row.original.renewalAt),
   },
   {
     id: "amount",
