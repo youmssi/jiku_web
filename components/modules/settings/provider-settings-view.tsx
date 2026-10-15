@@ -213,12 +213,13 @@ interface ProviderSettingsViewProps {
 
 export function ProviderSettingsView({ initial, embeddedSignup }: ProviderSettingsViewProps) {
   const t = useTranslations("settings.whatsappNumber");
+  const tEmail = useTranslations("settings.email");
   const [data, setData] = useState<ProviderSettingsResponse>(initial);
 
   return (
     <div className="space-y-10">
       <section>
-        <h3 className="mb-4 text-base font-semibold">Email</h3>
+        <h3 className="mb-4 text-base font-semibold">{tEmail("title")}</h3>
         <EmailSection email={data.email} onUpdated={setData} />
       </section>
 

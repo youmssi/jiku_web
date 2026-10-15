@@ -343,6 +343,7 @@
     "saved": "Message enregistré."
   },
   "email": {
+    "title": "E-mail",
     "provider": "Fournisseur d'e-mail",
     "platform": "Par défaut (Jikū)",
     "resend": "Resend (ma propre clé)",
