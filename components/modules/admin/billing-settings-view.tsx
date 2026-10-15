@@ -185,7 +185,7 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
         <CardContent className="flex flex-col gap-4">
           {tiers.fields.map((tier, index) => (
             <div key={tier.id} className="flex flex-col gap-2 rounded-lg border p-3">
-              <div className="grid grid-cols-[1fr_8rem_auto] items-end gap-2">
+              <div className="grid grid-cols-[1fr_auto] items-end gap-2 sm:grid-cols-[1fr_8rem_auto]">
                 <NumberField control={control} name={`tiers.${index}.name`} label={t("tierName")} text />
                 <NumberField control={control} name={`tiers.${index}.maxGuests`} label={t("maxGuests")} />
                 <Button
@@ -224,7 +224,7 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
         <CardContent className="flex flex-col gap-4">
           {plans.fields.map((plan, index) => (
             <div key={plan.id} className="flex flex-col gap-2 rounded-lg border p-3">
-              <div className="grid grid-cols-[1fr_8rem_8rem_auto] items-end gap-2">
+              <div className="grid grid-cols-2 items-end gap-2 sm:grid-cols-[1fr_8rem_8rem_auto]">
                 <NumberField control={control} name={`subscriptionPlans.${index}.name`} label={t("planName")} text />
                 <NumberField control={control} name={`subscriptionPlans.${index}.includedPeople`} label={t("includedPeople")} />
                 <NumberField control={control} name={`subscriptionPlans.${index}.maxPeople`} label={t("peopleCap")} text />
