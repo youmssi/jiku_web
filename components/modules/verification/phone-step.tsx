@@ -16,7 +16,8 @@ import { codeSchema, phoneSchema, type CodeInput, type PhoneInput, type PhoneSta
 
 /**
  * Confirms the number the organization is reached on, by a six-digit code sent
- * by SMS. A personal verification needs it; a confirmed number can be changed,
+ * on WhatsApp, or by SMS when the number has no WhatsApp. A personal
+ * verification needs it; a confirmed number can be changed,
  * which asks for a new code.
  */
 export function PhoneStep({ phone }: { phone: PhoneStatus }) {

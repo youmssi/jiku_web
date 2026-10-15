@@ -140,7 +140,9 @@
     "saving": "Enregistrement…",
     "save": "Enregistrer",
     "saved": "Rappels enregistrés.",
-    "settingsTitle": "Réglages du service"
+    "settingsTitle": "Réglages du service",
+    "smsFallback": "Si WhatsApp n'arrive pas, envoyer un SMS",
+    "smsFallbackHint": "Pour les clients sans WhatsApp ou sans connexion : un SMS ne part que si WhatsApp n'a pas pu délivrer le rappel ou l'appel « C'est votre tour »."
   },
   "errors": {
     "notFound": "Ce service est introuvable.",
