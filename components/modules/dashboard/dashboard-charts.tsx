@@ -47,6 +47,12 @@ export function CheckInTimelineChart({ buckets }: { buckets: TimeBucket[] }) {
 
 // ─── Channel breakdown ──────────────────────────────────────────────
 
+const KNOWN_CHANNELS = ["EMAIL", "WHATSAPP", "SMS"] as const;
+
+function isKnownChannel(channel: string): channel is (typeof KNOWN_CHANNELS)[number] {
+  return (KNOWN_CHANNELS as readonly string[]).includes(channel);
+}
+
 export function ChannelBreakdownChart({ channels }: { channels: ChannelBreakdown[] }) {
   const t = useTranslations("events.overview.charts");
   const channelConfig = {
@@ -62,7 +68,13 @@ export function ChannelBreakdownChart({ channels }: { channels: ChannelBreakdown
     <ChartContainer config={channelConfig} className="aspect-auto h-[220px] w-full">
       <BarChart data={channels} margin={{ left: 12, right: 12 }}>
         <CartesianGrid vertical={false} />
-        <XAxis dataKey="channel" tickLine={false} axisLine={false} tickMargin={8} />
+        <XAxis
+          dataKey="channel"
+          tickLine={false}
+          axisLine={false}
+          tickMargin={8}
+          tickFormatter={(channel: string) => (isKnownChannel(channel) ? t(`channels.${channel}`) : channel)}
+        />
         <ChartTooltip content={<ChartTooltipContent />} />
         <ChartLegend content={<ChartLegendContent />} />
         <Bar dataKey="sent" fill="var(--color-sent)" radius={4} />
