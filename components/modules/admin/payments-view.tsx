@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { ArrowUpDown, CreditCard } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useLocalDateTime } from "@/components/shared";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -16,7 +17,6 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { ADMIN_ROUTES } from "@/lib/constants";
-import { formatLocalDateTime } from "@/lib/datetime";
 import { ActionDialog } from "./action-dialog";
 import { confirmPaymentAction, rejectPaymentAction } from "./admin.service";
 import { formatAmount, StatusBadge } from "./admin-ui";
@@ -26,6 +26,7 @@ const STATUS_FILTERS = ["PENDING", "SUCCEEDED", "FAILED"] as const;
 
 function useColumns(): ColumnDef<DataTableFeatures, AdminPayment>[] {
   const t = useTranslations("admin.payments");
+  const formatDate = useLocalDateTime();
   const common = useTranslations("admin.common");
   return [
   {
@@ -40,7 +41,7 @@ function useColumns(): ColumnDef<DataTableFeatures, AdminPayment>[] {
         <ArrowUpDown className="size-3.5" />
       </Button>
     ),
-    cell: ({ row }) => formatLocalDateTime(row.original.createdAt),
+    cell: ({ row }) => formatDate(row.original.createdAt),
   },
   {
     accessorKey: "reference",

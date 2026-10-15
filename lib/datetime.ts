@@ -4,39 +4,6 @@ function pad(value: number): string {
   return String(value).padStart(2, "0");
 }
 
-/**
- * Formats a UTC ISO instant for display in the given event timezone (never the
- * viewer's). Returns an empty string for null input.
- */
-export function formatDateTimeInZone(utcInstant: string | null, timeZone: string): string {
-  if (!utcInstant) {
-    return "";
-  }
-  return new Intl.DateTimeFormat("en-GB", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone,
-  }).format(new Date(utcInstant));
-}
-
-/**
- * Formats a UTC ISO instant in the viewer's own locale and timezone. Only for
- * organizer-facing convenience data (their own payments, send timestamps) —
- * anything a guest or validator sees must use the event-timezone formatters.
- */
-export function formatLocalDateTime(utcInstant: string | null): string {
-  if (!utcInstant) {
-    return "";
-  }
-  return new Intl.DateTimeFormat(undefined, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(utcInstant));
-}
-
 /** Formats just the time-of-day of a UTC instant in the given event timezone. */
 export function formatTimeInZone(utcInstant: string | null, timeZone: string): string {
   if (!utcInstant) {

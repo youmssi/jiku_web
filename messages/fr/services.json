@@ -22,7 +22,7 @@
   "list": {
     "title": "Services",
     "emptyTitle": "Aucun service",
-    "emptyText": "Créez un service pour ouvrir sa ligne du jour et partager son lien de réservation.",
+    "emptyText": "Créez un service pour ouvrir sa file du jour et partager son lien de réservation.",
     "filter": "Filtrer par nom…",
     "visibleColumns": "Colonnes affichées"
   },
@@ -34,12 +34,12 @@
     "more": "Ouvrir le menu",
     "title": "Actions",
     "manage": "Gérer",
-    "configuration": "Réglages",
-    "line": "Ligne du jour",
+    "configuration": "Paramètres",
+    "line": "File du jour",
     "rename": "Renommer",
     "delete": "Supprimer le service",
     "renameTitle": "Renommer le service",
-    "renameDescription": "Le nom du service apparaît sur le lien de réservation et la ligne du jour.",
+    "renameDescription": "Le nom du service apparaît sur le lien de réservation et la file du jour.",
     "name": "Nom",
     "cancel": "Annuler",
     "save": "Enregistrer",
@@ -140,7 +140,7 @@
     "saving": "Enregistrement…",
     "save": "Enregistrer",
     "saved": "Rappels enregistrés.",
-    "settingsTitle": "Réglages du service"
+    "settingsTitle": "Paramètres du service"
   },
   "errors": {
     "notFound": "Ce service est introuvable.",

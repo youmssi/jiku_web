@@ -17,7 +17,7 @@ import {
 import { billingReceiptRoute } from "@/lib/constants";
 import { useLocale, useTranslations } from "next-intl";
 import { formatAmount } from "@/lib/currency";
-import { formatLocalDateTime } from "@/lib/datetime";
+import { LocalDateTime } from "@/components/shared";
 import { IssueInvoiceButton } from "@/components/modules/billing/invoice-actions";
 import type { PaymentHistoryItem } from "./schema";
 
@@ -61,7 +61,7 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
         <TableBody>
           {payments.map((payment) => (
             <TableRow key={payment.paymentId}>
-              <TableCell>{formatLocalDateTime(payment.createdAt)}</TableCell>
+              <TableCell><LocalDateTime value={payment.createdAt} /></TableCell>
               <TableCell>{payment.eventId ? payment.eventName : t("subscription")}</TableCell>
               <TableCell>{payment.tier}</TableCell>
               <TableCell>{formatAmount(payment.amountMinor, payment.currency, locale)}</TableCell>

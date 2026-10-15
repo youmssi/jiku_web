@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 import { ticketRoute } from "@/lib/constants";
 import {
@@ -28,6 +29,12 @@ interface RsvpActionsProps {
   /** Who now holds the place, once it has been handed over. */
   transferredTo: string | null;
 }
+
+/**
+ * The guest's answer is the page's one job, mostly on a phone: full-width,
+ * 48 px tall buttons, the same weight as the choices on a shared card.
+ */
+const ACTION = "h-12 w-full rounded-full px-6 text-base sm:w-auto";
 
 export function RsvpActions({
   token,
@@ -73,19 +80,19 @@ export function RsvpActions({
 
   if (current === "CONFIRMED") {
     return (
-      <div className="flex flex-col items-center gap-3">
+      <div className="flex w-full flex-col items-center gap-3">
         <p className="text-green-700 dark:text-green-400">
           {t("confirmed")}
         </p>
         {ticketCode ? (
-          <Button asChild style={{ backgroundColor: primaryColor }} className="text-white">
+          <Button asChild style={{ backgroundColor: primaryColor }} className={cn(ACTION, "text-white")}>
             <Link href={ticketRoute(token)}>{t("viewTicket")}</Link>
           </Button>
         ) : null}
         {transferAllowed ? (
           <TransferTicketDialog token={token} deadline={transferDeadline} />
         ) : null}
-        <Button variant="outline" onClick={() => act("decline")} disabled={isPending}>
+        <Button variant="outline" className={ACTION} onClick={() => act("decline")} disabled={isPending}>
           {isPending ? t("updating") : t("cantMakeIt")}
         </Button>
       </div>
@@ -94,11 +101,11 @@ export function RsvpActions({
 
   if (current === "DECLINED") {
     return (
-      <div className="flex flex-col items-center gap-3">
+      <div className="flex w-full flex-col items-center gap-3">
         <p className="text-muted-foreground">{t("declined")}</p>
         <Button
           style={{ backgroundColor: primaryColor }}
-          className="text-white"
+          className={cn(ACTION, "text-white")}
           onClick={() => act("confirm")}
           disabled={isPending}
         >
@@ -109,16 +116,16 @@ export function RsvpActions({
   }
 
   return (
-    <div className="flex flex-wrap justify-center gap-3">
+    <div className="flex w-full flex-col items-center justify-center gap-3 sm:flex-row">
       <Button
         style={{ backgroundColor: primaryColor }}
-        className="text-white"
+        className={cn(ACTION, "text-white")}
         onClick={() => act("confirm")}
         disabled={isPending}
       >
         {isPending ? t("confirming") : t("confirm")}
       </Button>
-      <Button variant="outline" onClick={() => act("decline")} disabled={isPending}>
+      <Button variant="outline" className={ACTION} onClick={() => act("decline")} disabled={isPending}>
         {t("decline")}
       </Button>
     </div>

@@ -86,7 +86,7 @@
     }
   },
   "line": {
-    "title": "Ligne du jour",
+    "title": "File du jour",
     "scan": "Scanner",
     "walkIn": "+ Sans RDV",
     "empty": "Personne sur la ligne pour l'instant.",
@@ -136,9 +136,9 @@
       "close": "Fermer"
     },
     "unavailable": {
-      "title": "Ligne du jour indisponible",
+      "title": "File du jour indisponible",
       "notFound": "Ce service est introuvable ou ne vous appartient pas.",
-      "failed": "Impossible de charger la ligne du jour. Réessayez dans un instant.",
+      "failed": "Impossible de charger la file du jour. Réessayez dans un instant.",
       "staffTitle": "Lien de comptoir indisponible",
       "staffNotFound": "Ce lien a été révoqué ou n'est plus valide. Demandez-en un nouveau à l'organisateur."
     },
@@ -160,7 +160,7 @@
       "linkGone": "Ce lien n'est plus valide.",
       "notFound": "Cette entrée n'existe pas ou n'appartient pas à ce service.",
       "failed": "L'action a échoué. Réessayez.",
-      "loadFailed": "Impossible de charger la ligne du jour.",
+      "loadFailed": "Impossible de charger la file du jour.",
       "serviceNotFound": "Ce service est introuvable.",
       "counterLinkGone": "Ce lien de comptoir n'est plus valide.",
       "walkInClosed": "Ce service n'accueille pas de sans-rendez-vous.",

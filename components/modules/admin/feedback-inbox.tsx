@@ -89,6 +89,7 @@ export function FeedbackInbox({
           variant="outline"
           value={kind ?? "ALL"}
           onValueChange={(value) => value && filter({ kind: value })}
+          className="max-w-full overflow-x-auto"
         >
           {KINDS.map((value) => (
             <ToggleGroupItem key={value} value={value} className="px-3 text-xs">
