@@ -11,6 +11,7 @@ import { SalesSettingsForm } from "@/components/modules/sale";
 import { loadSalesSettings } from "@/components/modules/sale/server";
 import { VerificationView } from "@/components/modules/verification";
 import { loadVerification } from "@/components/modules/verification/server";
+import { loadSmsAvailable } from "@/lib/sms-available";
 import { AccountView } from "@/components/modules/settings/account-view";
 import { BrandingView } from "@/components/modules/settings/branding-view";
 import { LegalIdentityView } from "@/components/modules/settings/legal-identity-view";
@@ -71,7 +72,7 @@ const EMPTY_LEGAL_IDENTITY: LegalIdentityResponse = {
  * blocking the others.
  */
 async function loadManagerSettings(fallbackOrganization: string) {
-  const [username, branding, providers, embeddedSignup, paymentMethods, legalIdentity, members, vocabulary, templates, verification, sales] =
+  const [username, branding, providers, embeddedSignup, paymentMethods, legalIdentity, members, vocabulary, templates, verification, sales, smsAvailable] =
     await Promise.all([
     loadOrgUsername(),
     loadBranding(),
@@ -84,6 +85,7 @@ async function loadManagerSettings(fallbackOrganization: string) {
     loadTemplates(),
     loadVerification(),
     loadSalesSettings(),
+    loadSmsAvailable(),
   ]);
   return {
     username,
@@ -97,6 +99,7 @@ async function loadManagerSettings(fallbackOrganization: string) {
     templates,
     verification,
     sales,
+    smsAvailable,
   };
 }
 
@@ -228,7 +231,7 @@ export async function SettingsView({ tab }: { tab?: string }) {
       case "messaging":
         return <ProviderSettingsView initial={settings.providers} embeddedSignup={settings.embeddedSignup} />;
       case "verification":
-        return <VerificationView overview={settings.verification} />;
+        return <VerificationView overview={settings.verification} smsAvailable={settings.smsAvailable} />;
       case "payments":
         return <PaymentMethodsForm initial={settings.paymentMethods} />;
       case "sales":

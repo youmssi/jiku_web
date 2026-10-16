@@ -16,11 +16,12 @@ import { codeSchema, phoneSchema, type CodeInput, type PhoneInput, type PhoneSta
 
 /**
  * Confirms the number the organization is reached on, by a six-digit code sent
- * on WhatsApp, or by SMS when the number has no WhatsApp. A personal
+ * on WhatsApp, or by SMS when the number has no WhatsApp and the platform
+ * sends SMS (JIKU-261). A personal
  * verification needs it; a confirmed number can be changed,
  * which asks for a new code.
  */
-export function PhoneStep({ phone }: { phone: PhoneStatus }) {
+export function PhoneStep({ phone, smsAvailable }: { phone: PhoneStatus; smsAvailable: boolean }) {
   const t = useTranslations("settings.verification.phone");
   const router = useRouter();
   const [sentTo, setSentTo] = useState<string | null>(null);
@@ -41,7 +42,7 @@ export function PhoneStep({ phone }: { phone: PhoneStatus }) {
     }
     setSentTo(values.phone.replace(/\s+/g, ""));
     codeForm.reset({ code: "" });
-    toast.success(t("sent"));
+    toast.success(t(smsAvailable ? "sent" : "sentWhatsApp"));
   }
 
   async function confirm(values: CodeInput) {

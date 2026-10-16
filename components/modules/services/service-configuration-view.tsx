@@ -51,10 +51,13 @@ export function ServiceConfigurationPanel({
   service,
   currency,
   initial,
+  smsAvailable,
 }: {
   service: ServiceSummary;
   currency: string | null;
   initial: ServiceConfiguration;
+  /** False when the platform sends no SMS (JIKU-261): the SMS fallback is neither offered nor saved. */
+  smsAvailable: boolean;
 }) {
   const serviceId = service.id;
   const t = useTranslations("services.reminders");
@@ -62,7 +65,7 @@ export function ServiceConfigurationPanel({
   const [smsFallback, setSmsFallback] = useState(
     initial.reminderChannel === "WHATSAPP_OR_SMS" || (initial.reminderChannel as string) === "SMS",
   );
-  const channel: ReminderChannel = !enabled ? "NONE" : smsFallback ? "WHATSAPP_OR_SMS" : "WHATSAPP";
+  const channel: ReminderChannel = !enabled ? "NONE" : smsFallback && smsAvailable ? "WHATSAPP_OR_SMS" : "WHATSAPP";
   const [offsets, setOffsets] = useState<number[]>(
     initial.reminderOffsetsMinutes,
   );
@@ -123,7 +126,7 @@ export function ServiceConfigurationPanel({
             </div>
           </div>
 
-          {remindersActive && (
+          {remindersActive && smsAvailable && (
             <div className="flex items-start gap-3">
               <Checkbox
                 id="reminder-sms-fallback"

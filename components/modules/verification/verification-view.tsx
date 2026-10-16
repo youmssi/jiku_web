@@ -26,7 +26,13 @@ const STATUS_CLASSES = {
  * papers) is enough, so the organizer first says which one fits them and only
  * that path is shown; a request already sent opens on its own path.
  */
-export function VerificationView({ overview }: { overview: VerificationOverview | null }) {
+export function VerificationView({
+  overview,
+  smsAvailable,
+}: {
+  overview: VerificationOverview | null;
+  smsAvailable: boolean;
+}) {
   const t = useTranslations("settings.verification");
   const [chosen, setChosen] = useState<VerificationKind | null>(null);
   if (!overview) {
@@ -78,10 +84,10 @@ export function VerificationView({ overview }: { overview: VerificationOverview 
             <Card>
               <CardHeader>
                 <CardTitle>{t("phone.title")}</CardTitle>
-                <CardDescription>{t("phone.text")}</CardDescription>
+                <CardDescription>{t(smsAvailable ? "phone.text" : "phone.textWhatsApp")}</CardDescription>
               </CardHeader>
               <CardContent>
-                <PhoneStep phone={overview.phone} />
+                <PhoneStep phone={overview.phone} smsAvailable={smsAvailable} />
               </CardContent>
             </Card>
           ) : null}
