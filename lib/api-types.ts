@@ -4236,7 +4236,9 @@ export interface components {
             /** Format: int32 */
             clientsPerSlot?: number;
             confirmationMode?: string;
+            logoUrl?: string | null;
             name?: string;
+            organizerName?: string | null;
             organizerVerification?: string | null;
             professionals?: string[];
             /** Format: uuid */
