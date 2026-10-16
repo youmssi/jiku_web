@@ -60,3 +60,15 @@ export async function failWithReason(response: Response, fallback: string): Prom
     .catch(() => undefined);
   return fail(reason ?? fallback);
 }
+
+/**
+ * The stable code a refusal carries (JIKU-254), e.g. `billing.guest-allowance`,
+ * so a service tells apart causes that share a status. Null when absent.
+ */
+export async function problemCode(response: Response): Promise<string | null> {
+  const body = (await response
+    .clone()
+    .json()
+    .catch(() => null)) as { code?: unknown } | null;
+  return typeof body?.code === "string" ? body.code : null;
+}

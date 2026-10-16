@@ -28,6 +28,7 @@ export type {
   TierOption,
   UsageAllowance,
   PackView,
+  BillingStatus,
   OwnWhatsAppNumberView,
   SubscriptionView,
   SubscriptionPlanOption,

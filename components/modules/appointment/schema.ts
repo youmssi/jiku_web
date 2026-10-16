@@ -22,6 +22,8 @@ export interface AppointmentServiceView {
   /** Who the client books with (JIKU-249). */
   organizerName?: string | null;
   logoUrl?: string | null;
+  /** New bookings wait for the organization's renewal (JIKU-254); no times are offered. */
+  bookingPaused?: boolean;
 }
 
 export interface AppointmentBookingView {

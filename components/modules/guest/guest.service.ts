@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { eventGuestsRoute } from "@/lib/constants";
-import { type ActionResult, fail, fromResponse, ok, reportApiError } from "@/lib/action-result";
+import { type ActionResult, fail, fromResponse, ok, problemCode, reportApiError } from "@/lib/action-result";
 import {
   PAYMENT_METHODS,
   singleGuestSchema,
@@ -169,10 +169,11 @@ export async function sendInvitationsAction(
     revalidatePath(eventGuestsRoute(eventId));
     return { ok: true, data };
   }
-  if (response.status === 402) {
+  const code = await problemCode(response);
+  if (code === "billing.guest-allowance") {
     return { ok: false, reason: "paywall", error: t("allowanceReached") };
   }
-  if (response.status === 403) {
+  if (code === "account.email-unverified") {
     return { ok: false, reason: "unverified", error: t("confirmEmailFirst") };
   }
   reportApiError(response);

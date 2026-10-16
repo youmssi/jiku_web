@@ -5,7 +5,7 @@ import { localeRedirect } from "@/i18n/redirect";
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 import { setAuthCookies, clearAuthCookies, type AuthTokens } from "@/lib/auth";
-import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
+import { type ActionResult, fail, ok, problemCode, reportApiError } from "@/lib/action-result";
 import {
   MARKETING_CONSENT_VERSION,
   createOrgSchema,
@@ -76,8 +76,11 @@ export async function loginAction(input: LoginInput, next?: string): Promise<Act
     body: JSON.stringify(parsed.data),
   });
   if (!response.ok) {
-    if (response.status !== 401 && response.status !== 429) {
+    if (response.status !== 401 && response.status !== 403 && response.status !== 429) {
       reportApiError(response);
+    }
+    if (response.status === 403 && (await problemCode(response)) === "account.suspended") {
+      return fail(t("auth.login.suspended"));
     }
     if (response.status === 401) {
       // Google-only accounts get the backend's pointer to the right door
