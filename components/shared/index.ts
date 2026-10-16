@@ -2,6 +2,7 @@ export {
   NavCommandPalette,
   type NavCommandPaletteVariant,
 } from "./nav-command-palette";
+export {AdvancedOnly, AdvancedSettings, AdvancedToggle} from "./advanced-section";
 export {CardHero, OrganizerMark} from "./card-hero";
 export {ClampedText} from "./clamped-text";
 export {CopyValue} from "./copy-value";

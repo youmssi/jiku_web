@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Check, Copy, ExternalLink } from "lucide-react";
+import { Check, Copy, ExternalLink, Share2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -27,18 +28,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import { AdvancedOnly, AdvancedSettings, AdvancedToggle } from "@/components/shared";
+import { askRating } from "@/components/modules/feedback";
+import { zoneCity } from "@/lib/datetime";
 import { EntranceQrCard } from "@/components/modules/services/entrance-qr-card";
 import { ResourceScheduleEditor } from "@/components/modules/services/resource-schedule-editor";
+import { WeeklyHours } from "@/components/modules/services/weekly-hours";
 import {
   addRequirementAction,
   createResourceAction,
   createStaffLinkAction,
-  fetchBookingLinkAction,
   removeRequirementAction,
   revokeStaffLinkAction,
   setResourceActiveAction,
 } from "@/components/modules/services/services.service";
 import type {
+  ResourceAvailability,
   ResourceType,
   ServiceRequirement,
   ServiceResource,
@@ -48,17 +53,26 @@ import type {
 import { RESOURCE_TYPES, SERVICE_TIMEZONES } from "@/components/modules/services/schema";
 
 /**
- * Gestion complète d'un service (JIKU-84/86) : lien public de réservation à
- * partager, liens de comptoir révocables, ressources (personnes/lieux/équipements)
- * et exigences (ce qu'un créneau consomme de chaque type).
+ * A service's link and hours (JIKU-252): the booking link comes first, ready
+ * to copy or share, then the week of whoever receives clients. The rarer
+ * settings (several people or rooms, what a slot needs, counter links, the
+ * walk-in QR) fold under "Advanced options". A service nobody can book yet
+ * says why and offers the fix.
  */
 export function ServiceManagePanel({
   service,
+  bookingUrl,
+  durationMinutes,
+  weeks,
   initialResources,
   initialRequirements,
   initialStaffLinks,
 }: {
   service: ServiceSummary;
+  bookingUrl: string | null;
+  durationMinutes: number | null;
+  /** Each active person's week, by resource id. */
+  weeks: Record<string, ResourceAvailability[]>;
   initialResources: ServiceResource[];
   initialRequirements: ServiceRequirement[];
   initialStaffLinks: StaffLink[];
@@ -70,8 +84,8 @@ export function ServiceManagePanel({
   const [staff, setStaff] = useState<StaffLink[]>(initialStaffLinks);
   const [busy, setBusy] = useState(false);
   const [scheduleFor, setScheduleFor] = useState<ServiceResource | null>(null);
-  const [bookingLink, setBookingLink] = useState<string | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
+  const hoursT = useTranslations("services.hours");
 
   // Staff: création, et l'état "copié" du lien le plus récemment copié dans la table.
   const [staffLabel, setStaffLabel] = useState("");
@@ -87,26 +101,37 @@ export function ServiceManagePanel({
   const [reqType, setReqType] = useState<ResourceType>("PERSON");
   const [reqQuantity, setReqQuantity] = useState("1");
 
-  async function showBookingLink() {
-    const result = await fetchBookingLinkAction(service.id);
-    if (!result.ok) {
-      toast.error(result.error);
-      return;
-    }
-    // Le lien partagé est le lien court (/r/<code>) : il tient sur une ligne
-    // et reste lisible, le jeton signé reste disponible pour l'intégration widget.
-    setBookingLink(`${window.location.origin}/r/${result.data.shortCode}`);
+  // Asked once the link is out, the moment the setup has paid off.
+  function linkShared() {
+    askRating("service_created");
   }
 
   async function copyLink() {
-    if (!bookingLink) return;
+    if (!bookingUrl) return;
     try {
-      await navigator.clipboard.writeText(bookingLink);
+      await navigator.clipboard.writeText(bookingUrl);
       setLinkCopied(true);
       setTimeout(() => setLinkCopied(false), 2000);
+      linkShared();
     } catch {
       toast.error(t("copyFailed"));
     }
+  }
+
+  async function shareLink() {
+    if (!bookingUrl) return;
+    const text = t("bookingLink.shareText", { service: service.name });
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title: service.name, text, url: bookingUrl });
+        linkShared();
+      } catch {
+        // The person closed the share sheet: nothing to report.
+      }
+      return;
+    }
+    window.open(`https://wa.me/?text=${encodeURIComponent(`${text} ${bookingUrl}`)}`, "_blank", "noopener,noreferrer");
+    linkShared();
   }
 
   // The path renders on the server too (the list of existing links); only a
@@ -193,6 +218,18 @@ export function ServiceManagePanel({
       return;
     }
     setRequirements((current) => [...current.filter((r) => r.id !== result.data.id), result.data]);
+  }
+
+  /** The fix offered when a service asks for nothing: one person per appointment. */
+  async function addPersonRequirement() {
+    setBusy(true);
+    const result = await addRequirementAction(service.id, "PERSON", 1);
+    setBusy(false);
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+    setRequirements((current) => [...current, result.data]);
   }
 
   async function removeRequirement(requirementId: string) {
@@ -313,12 +350,42 @@ export function ServiceManagePanel({
     },
   ];
 
+  const people = resources.filter((resource) => resource.type === "PERSON" && resource.active);
+  const needsPerson = requirements.some((requirement) => requirement.type === "PERSON");
+  const missing =
+    requirements.length === 0
+      ? "requirement"
+      : needsPerson && people.length === 0
+        ? "person"
+        : needsPerson && people.every((person) => (weeks[person.id]?.length ?? 0) === 0)
+          ? "hours"
+          : null;
+
   return (
-    <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-10">
-      <div>
+    <AdvancedSettings initialOpen={people.length !== 1 || requirements.length !== 1 || staff.length > 0}>
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-6">
+      <header>
         <h1 className="text-2xl font-semibold">{service.name}</h1>
-        <p className="text-sm text-muted-foreground">{service.timezone}</p>
-      </div>
+        <p className="text-sm text-muted-foreground">
+          {[durationMinutes ? t("duration", { count: durationMinutes }) : null, t("zone", { zone: zoneCity(service.timezone) })]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
+      </header>
+
+      {missing ? (
+        <Alert>
+          <AlertTitle>{t("notBookable.title")}</AlertTitle>
+          <AlertDescription className="flex flex-col gap-3">
+            <span>{t(`notBookable.${missing}`)}</span>
+            {missing === "requirement" ? (
+              <Button className="w-fit" onClick={() => void addPersonRequirement()} disabled={busy}>
+                {t("notBookable.addRequirement")}
+              </Button>
+            ) : null}
+          </AlertDescription>
+        </Alert>
+      ) : null}
 
       <Card>
         <CardHeader>
@@ -326,174 +393,211 @@ export function ServiceManagePanel({
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           <p className="text-sm text-muted-foreground">{t("bookingLink.text")}</p>
-          <div className="flex flex-wrap items-center gap-2">
-            {bookingLink ? (
-              <>
-                <code className="max-w-full break-all rounded bg-muted px-2 py-1 font-mono text-xs">
-                  {bookingLink}
-                </code>
-                <ButtonGroup>
-                  <Button size="icon-sm" variant="outline" onClick={copyLink}>
-                    {linkCopied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-                    <span className="sr-only">{t("copy")}</span>
-                  </Button>
-                  <Button size="icon-sm" variant="outline" asChild>
-                    <a href={bookingLink} target="_blank" rel="noreferrer">
-                      <ExternalLink className="size-3.5" />
-                      <span className="sr-only">{t("open")}</span>
-                    </a>
-                  </Button>
-                </ButtonGroup>
-              </>
-            ) : (
-              <Button size="sm" variant="outline" onClick={showBookingLink}>
-                {t("bookingLink.show")}
-              </Button>
-            )}
-          </div>
+          {bookingUrl ? (
+            <>
+              <a
+                href={bookingUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-11 items-center gap-2 break-all font-mono text-sm underline-offset-4 hover:underline"
+              >
+                {bookingUrl.replace(/^https?:\/\//, "")}
+                <ExternalLink aria-hidden className="size-4 shrink-0" />
+                <span className="sr-only">{t("open")}</span>
+              </a>
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={() => void copyLink()}>
+                  {linkCopied ? <Check data-icon="inline-start" /> : <Copy data-icon="inline-start" />}
+                  {linkCopied ? t("bookingLink.copied") : t("bookingLink.copy")}
+                </Button>
+                <Button variant="outline" onClick={() => void shareLink()}>
+                  <Share2 data-icon="inline-start" />
+                  {t("bookingLink.share")}
+                </Button>
+              </div>
+              <span aria-live="polite" className="sr-only">
+                {linkCopied ? t("bookingLink.copied") : ""}
+              </span>
+            </>
+          ) : (
+            <p className="text-sm text-destructive">{t("bookingLink.unavailable")}</p>
+          )}
         </CardContent>
       </Card>
 
-      <EntranceQrCard serviceId={service.id} serviceName={service.name} />
-
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("staff.title")}</CardTitle>
+          <CardTitle className="text-base">
+            {people.length === 1 ? hoursT("titleOf", { name: people[0].name }) : hoursT("title")}
+          </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
-          <p className="text-sm text-muted-foreground">{t("staff.text")}</p>
-          {staff.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("staff.empty")}</p>
+          <p className="text-sm text-muted-foreground">{hoursT("text")}</p>
+          {people.length === 1 ? (
+            <WeeklyHours resourceId={people[0].id} initial={weeks[people[0].id] ?? []} />
+          ) : people.length > 1 ? (
+            <>
+              <p className="text-sm">{hoursT("several")}</p>
+              <ul className="flex flex-col gap-2">
+                {people.map((person) => (
+                  <li key={person.id} className="flex items-center justify-between gap-3">
+                    <span className="font-medium">{person.name}</span>
+                    <Button variant="outline" onClick={() => setScheduleFor(person)}>
+                      {hoursT("edit")}
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </>
           ) : (
-            <DataTable columns={staffColumns} data={staff} />
+            <p className="text-sm text-muted-foreground">{t("notBookable.person")}</p>
           )}
-          {freshStaff ? (
-            <div className="rounded-lg border border-green-600/30 bg-green-50 p-3 text-sm dark:bg-green-950/30 dark:text-green-200">
-              <p className="font-medium">{t("staff.fresh", { label: freshStaff.label })}</p>
-              <div className="mt-1 flex flex-wrap items-center gap-2">
-                <p className="break-all font-mono text-xs">{staffLinkUrl(freshStaff.code)}</p>
-                <ButtonGroup>
-                  <Button size="icon-sm" variant="outline" onClick={() => copyStaffLink(freshStaff.code, freshStaff.code)}>
-                    {copiedStaffId === freshStaff.code ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-                    <span className="sr-only">{t("copy")}</span>
-                  </Button>
-                  <Button size="icon-sm" variant="outline" asChild>
-                    <a href={staffLinkPath(freshStaff.code)} target="_blank" rel="noreferrer">
-                      <ExternalLink className="size-3.5" />
-                      <span className="sr-only">{t("open")}</span>
-                    </a>
-                  </Button>
-                </ButtonGroup>
+        </CardContent>
+      </Card>
+
+      <AdvancedToggle label={t("advanced")} />
+      <AdvancedOnly first>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">{t("resources.title")}</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3">
+            <p className="text-sm text-muted-foreground">{t("resources.text")}</p>
+            {resources.length === 0 ? (
+              <p className="text-sm text-muted-foreground">{t("resources.empty")}</p>
+            ) : (
+              <DataTable columns={resourceColumns} data={resources} />
+            )}
+            <div className="mt-2 grid gap-3 sm:grid-cols-2">
+              <Field>
+                <FieldLabel htmlFor="res-name">{t("resources.name")}</FieldLabel>
+                <Input id="res-name" value={resName} onChange={(e) => setResName(e.target.value)} placeholder={t("resources.namePlaceholder")} />
+              </Field>
+              <div className="grid grid-cols-2 gap-2">
+                <Field>
+                  <FieldLabel htmlFor="res-type">{t("resources.type")}</FieldLabel>
+                  <Select value={resType} onValueChange={(v) => setResType(v as ResourceType)}>
+                    <SelectTrigger id="res-type">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {RESOURCE_TYPES.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {types(type)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="res-zone">{t("resources.timezone")}</FieldLabel>
+                  <Select value={resTimezone} onValueChange={setResTimezone}>
+                    <SelectTrigger id="res-zone">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SERVICE_TIMEZONES.map((zone) => (
+                        <SelectItem key={zone} value={zone}>
+                          {zone}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
               </div>
             </div>
-          ) : null}
-          <div className="mt-2 flex flex-wrap items-end gap-2">
-            <Field>
-              <FieldLabel htmlFor="staff-label">{t("staff.name")}</FieldLabel>
-              <Input id="staff-label" value={staffLabel} onChange={(e) => setStaffLabel(e.target.value)} placeholder={t("staff.namePlaceholder")} />
-            </Field>
-            <Button onClick={addStaff} disabled={busy || !staffLabel.trim()}>
-              {t("staff.create")}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("resources.title")}</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
-          <p className="text-sm text-muted-foreground">{t("resources.text")}</p>
-          {resources.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("resources.empty")}</p>
-          ) : (
-            <DataTable columns={resourceColumns} data={resources} />
-          )}
-          <div className="mt-2 grid gap-3 sm:grid-cols-2">
-            <Field>
-              <FieldLabel htmlFor="res-name">{t("resources.name")}</FieldLabel>
-              <Input id="res-name" value={resName} onChange={(e) => setResName(e.target.value)} placeholder={t("resources.namePlaceholder")} />
-            </Field>
-            <div className="grid grid-cols-2 gap-2">
-              <Field>
-                <FieldLabel htmlFor="res-type">{t("resources.type")}</FieldLabel>
-                <Select value={resType} onValueChange={(v) => setResType(v as ResourceType)}>
-                  <SelectTrigger id="res-type">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {RESOURCE_TYPES.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {types(type)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="res-zone">{t("resources.timezone")}</FieldLabel>
-                <Select value={resTimezone} onValueChange={setResTimezone}>
-                  <SelectTrigger id="res-zone">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SERVICE_TIMEZONES.map((zone) => (
-                      <SelectItem key={zone} value={zone}>
-                        {zone}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Field>
+            <div>
+              <Button onClick={addResource} disabled={busy || !resName.trim()}>
+                {t("resources.add")}
+              </Button>
             </div>
-          </div>
-          <div>
-            <Button onClick={addResource} disabled={busy || !resName.trim()}>
-              {t("resources.add")}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("requirements.title")}</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
-          <p className="text-sm text-muted-foreground">{t("requirements.text")}</p>
-          {requirements.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("requirements.empty")}</p>
-          ) : (
-            <DataTable columns={requirementColumns} data={requirements} />
-          )}
-          <div className="mt-2 flex flex-wrap items-end gap-2">
-            <Select value={reqType} onValueChange={(v) => setReqType(v as ResourceType)}>
-              <SelectTrigger className="w-40" aria-label={t("requirements.type")}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {RESOURCE_TYPES.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {types(type)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Input
-              className="w-24"
-              type="number"
-              min={1}
-              value={reqQuantity}
-              onChange={(e) => setReqQuantity(e.target.value)}
-              aria-label={t("requirements.quantity")}
-            />
-            <Button onClick={addRequirement} disabled={busy}>
-              {t("requirements.add")}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">{t("requirements.title")}</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3">
+            <p className="text-sm text-muted-foreground">{t("requirements.text")}</p>
+            {requirements.length === 0 ? (
+              <p className="text-sm text-muted-foreground">{t("requirements.empty")}</p>
+            ) : (
+              <DataTable columns={requirementColumns} data={requirements} />
+            )}
+            <div className="mt-2 flex flex-wrap items-end gap-2">
+              <Select value={reqType} onValueChange={(v) => setReqType(v as ResourceType)}>
+                <SelectTrigger className="w-40" aria-label={t("requirements.type")}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {RESOURCE_TYPES.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {types(type)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Input
+                className="w-24"
+                type="number"
+                min={1}
+                value={reqQuantity}
+                onChange={(e) => setReqQuantity(e.target.value)}
+                aria-label={t("requirements.quantity")}
+              />
+              <Button onClick={addRequirement} disabled={busy}>
+                {t("requirements.add")}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">{t("staff.title")}</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3">
+            <p className="text-sm text-muted-foreground">{t("staff.text")}</p>
+            {staff.length === 0 ? (
+              <p className="text-sm text-muted-foreground">{t("staff.empty")}</p>
+            ) : (
+              <DataTable columns={staffColumns} data={staff} />
+            )}
+            {freshStaff ? (
+              <div className="rounded-lg border border-green-600/30 bg-green-50 p-3 text-sm dark:bg-green-950/30 dark:text-green-200">
+                <p className="font-medium">{t("staff.fresh", { label: freshStaff.label })}</p>
+                <div className="mt-1 flex flex-wrap items-center gap-2">
+                  <p className="break-all font-mono text-xs">{staffLinkUrl(freshStaff.code)}</p>
+                  <ButtonGroup>
+                    <Button size="icon-sm" variant="outline" onClick={() => copyStaffLink(freshStaff.code, freshStaff.code)}>
+                      {copiedStaffId === freshStaff.code ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                      <span className="sr-only">{t("copy")}</span>
+                    </Button>
+                    <Button size="icon-sm" variant="outline" asChild>
+                      <a href={staffLinkPath(freshStaff.code)} target="_blank" rel="noreferrer">
+                        <ExternalLink className="size-3.5" />
+                        <span className="sr-only">{t("open")}</span>
+                      </a>
+                    </Button>
+                  </ButtonGroup>
+                </div>
+              </div>
+            ) : null}
+            <div className="mt-2 flex flex-wrap items-end gap-2">
+              <Field>
+                <FieldLabel htmlFor="staff-label">{t("staff.name")}</FieldLabel>
+                <Input id="staff-label" value={staffLabel} onChange={(e) => setStaffLabel(e.target.value)} placeholder={t("staff.namePlaceholder")} />
+              </Field>
+              <Button onClick={addStaff} disabled={busy || !staffLabel.trim()}>
+                {t("staff.create")}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <EntranceQrCard serviceId={service.id} serviceName={service.name} />
+      </AdvancedOnly>
 
       {busy ? (
         <div className="flex justify-center py-2">
@@ -506,9 +610,14 @@ export function ServiceManagePanel({
           <DialogHeader>
             <DialogTitle>{t("resources.scheduleTitle", { name: scheduleFor?.name ?? "" })}</DialogTitle>
           </DialogHeader>
-          {scheduleFor ? <ResourceScheduleEditor resource={scheduleFor} /> : null}
+          {scheduleFor ? scheduleFor.type === "PERSON" ? (
+            <WeeklyHours resourceId={scheduleFor.id} initial={weeks[scheduleFor.id] ?? []} />
+          ) : (
+            <ResourceScheduleEditor resource={scheduleFor} />
+          ) : null}
         </DialogContent>
       </Dialog>
     </div>
+    </AdvancedSettings>
   );
 }

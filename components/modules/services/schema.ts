@@ -1,9 +1,18 @@
 import { z } from "zod";
 
+/** When a client pays for a service: free, before the appointment, or once served. */
+export type ServicePaymentRule = "FREE" | "BEFORE" | "AFTER_SERVICE";
+
+export const SERVICE_PAYMENT_RULES: readonly ServicePaymentRule[] = ["FREE", "BEFORE", "AFTER_SERVICE"];
+
 export interface ServiceSummary {
   id: string;
   name: string;
   timezone: string;
+  paymentRule: ServicePaymentRule;
+  /** Null for a free service. */
+  priceMinor: number | null;
+  currency: string | null;
 }
 
 /** Canal de rappel d'un service (JIKU-89) : seul WhatsApp est livrable aujourd'hui. */
@@ -100,10 +109,21 @@ export interface ResourceUnavailability {
 export { TIMEZONES as SERVICE_TIMEZONES } from "@/lib/timezones";
 
 // Validation messages are `common.validation` keys, translated where they render.
+/** Appointment lengths offered as one-tap choices; anything else is set later in the service's settings. */
+export const DURATION_CHOICES = [15, 30, 45, 60, 90] as const;
+
 export const createServiceSchema = z.object({
   name: z.string().trim().min(1, "required").max(120, "tooLong"),
   timezone: z.string().min(1, "required"),
+  durationMinutes: z.number().int().min(5).max(480),
 });
+
+/** One opening range of a week day (ISO day, 1 = Monday), in "HH:mm". */
+export interface WeeklyRange {
+  dayOfWeek: number;
+  start: string;
+  end: string;
+}
 
 export type CreateServiceInput = z.infer<typeof createServiceSchema>;
 

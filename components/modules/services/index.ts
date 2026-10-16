@@ -3,6 +3,7 @@ export { ServicesListView } from "./services-list-view";
 export { ServiceConfigurationView } from "./service-configuration-views";
 export { CreateServiceButton } from "./create-service-button";
 export { ServiceManageView } from "./service-manage-view";
+export { ServiceTabs } from "./service-tabs";
 export { getServiceNameAction } from "./services.service";
 export type {
   ServiceSummary,

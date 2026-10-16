@@ -1,7 +1,7 @@
+import { AdvancedOnly, AdvancedSettings } from "@/components/shared";
 import { EventSettingsForm } from "./event-settings-form";
 import { loadEvent, toEventFormValues } from "./event.queries";
 import { QuorumSettings } from "./quorum-settings";
-import { AdvancedOnly, AdvancedSettings } from "./advanced-settings";
 
 /** The event's Settings tab: the event itself, then its rarer options (branding, ticket rules, quorum) folded away. */
 export async function EventSettingsView({ eventId }: { eventId: string }) {

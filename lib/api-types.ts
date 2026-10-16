@@ -3308,7 +3308,7 @@ export interface paths {
             cookie?: never;
         };
         get: operations["resourceAvailability"];
-        put?: never;
+        put: operations["resourceReplaceAvailability"];
         post: operations["resourceAddAvailability"];
         delete?: never;
         options?: never;
@@ -5807,7 +5807,13 @@ export interface components {
             paymentRule?: "FREE" | "BEFORE" | "AFTER_SERVICE";
             /** Format: int64 */
             priceMinor?: number | null;
+            quickSetup?: components["schemas"]["ServiceQuickSetup"] | null;
             timezone: string;
+        };
+        ServiceQuickSetup: {
+            /** Format: int32 */
+            durationMinutes?: number;
+            hostName: string;
         };
         ServiceRequirementRequest: {
             /** Format: int32 */
@@ -10609,7 +10615,9 @@ export interface operations {
     };
     operatorConsoleResolve: {
         parameters: {
-            query?: never;
+            query?: {
+                door?: boolean;
+            };
             header?: never;
             path: {
                 code: string;
@@ -11767,6 +11775,32 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ResourceAvailabilityView"][];
+                };
+            };
+        };
+    };
+    resourceReplaceAvailability: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AvailabilityRequest"][];
+            };
+        };
         responses: {
             /** @description OK */
             200: {
