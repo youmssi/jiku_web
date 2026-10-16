@@ -16,15 +16,15 @@ export const LEGAL_EN: LegalDocuments = {
         id: "editeur",
         heading: "Publisher",
         body: [
-          `The Jikū website and application are published by ${C.legalName}, ${C.legalForm} with a share capital of ${C.shareCapital}, registered with the Conakry Trade and Personal Property Credit Register (RCCM) under number ${C.rccm}, tax identification number ${C.nif}.`,
+          `The Jikū website and application are published by ${C.legalName}, ${C.legalForm} with a share capital of ${C.shareCapital}, registered with the Conakry Trade and Personal Property Credit Register (RCCM) under number ${C.rccm}.`,
           `Registered office: ${C.address}.`,
-          [`Email: ${C.email}`, `Phone and WhatsApp: ${C.phone}`],
+          `Contact: ${C.email}, or the "Help & support" button on every page.`,
         ],
       },
       {
         id: "publication",
-        heading: "Publication director",
-        body: [`${C.director}, as legal representative of ${C.legalName}.`],
+        heading: "Responsible for publication",
+        body: [`${C.legalName}, represented by its manager.`],
       },
       {
         id: "hebergement",
@@ -174,7 +174,7 @@ export const LEGAL_EN: LegalDocuments = {
         heading: "9. Availability and support",
         body: [
           "We do our best to keep the service available at all times but cannot guarantee it: maintenance, or outages at telecom operators or providers, may interrupt it. Tickets already displayed and entrance checks keep working offline.",
-          `Support is available by email (${C.email}) and WhatsApp (${C.phone}) on working days.`,
+          `Support is available by email (${C.email}) and through the service's "Help & support" button on working days.`,
         ],
       },
       {

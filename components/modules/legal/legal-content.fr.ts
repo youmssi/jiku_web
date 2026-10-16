@@ -15,15 +15,15 @@ export const LEGAL_FR: LegalDocuments = {
         id: "editeur",
         heading: "Éditeur du service",
         body: [
-          `Le site et l'application Jikū sont édités par ${C.legalName}, ${C.legalForm} au capital de ${C.shareCapital}, immatriculée au Registre du commerce et du crédit mobilier de Conakry sous le numéro ${C.rccm}, numéro d'identification fiscale ${C.nif}.`,
+          `Le site et l'application Jikū sont édités par ${C.legalName}, ${C.legalForm} au capital de ${C.shareCapital}, immatriculée au Registre du commerce et du crédit mobilier de Conakry sous le numéro ${C.rccm}.`,
           `Siège social : ${C.address}.`,
-          [`E-mail : ${C.email}`, `Téléphone et WhatsApp : ${C.phone}`],
+          `Contact : ${C.email}, ou le bouton « Aide et assistance » présent sur chaque page.`,
         ],
       },
       {
         id: "publication",
-        heading: "Directeur de la publication",
-        body: [`${C.director}, en qualité de représentant légal de ${C.legalName}.`],
+        heading: "Responsable de la publication",
+        body: [`${C.legalName}, représentée par son gérant.`],
       },
       {
         id: "hebergement",
@@ -173,7 +173,7 @@ export const LEGAL_FR: LegalDocuments = {
         heading: "9. Disponibilité et assistance",
         body: [
           "Nous mettons tout en œuvre pour que le service soit disponible en continu, sans pouvoir le garantir : maintenances, pannes des opérateurs télécom ou des prestataires peuvent l'interrompre. Les billets déjà affichés et le contrôle d'entrée continuent de fonctionner sans connexion.",
-          `L'assistance est joignable par e-mail (${C.email}) et WhatsApp (${C.phone}), les jours ouvrés.`,
+          `L'assistance est joignable par e-mail (${C.email}) et par le bouton « Aide et assistance » du service, les jours ouvrés.`,
         ],
       },
       {
