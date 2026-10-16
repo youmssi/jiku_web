@@ -31,9 +31,8 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { FormFieldError, useUnsavedChangesGuard } from "@/components/shared";
+import { AdvancedOnly, AdvancedToggle, FormFieldError, useUnsavedChangesGuard } from "@/components/shared";
 import { updateDraftAction } from "./event.service";
-import { AdvancedOnly, AdvancedToggle } from "./advanced-settings";
 import {
   DELIVERY_MODES,
   eventFormSchema,
@@ -250,7 +249,7 @@ export function EventSettingsForm({
           </CardContent>
         </Card>
 
-        {editable ? <AdvancedToggle /> : null}
+        {editable ? <AdvancedToggle label={t("advanced")} /> : null}
 
         <AdvancedOnly first>
           <Card id="client" className="scroll-mt-20">

@@ -2,14 +2,16 @@
   "create": {
     "trigger": "Nouveau service",
     "title": "Nouveau service",
-    "description": "Un service, c'est ce que vous proposez (une consultation, une coupe, un dépôt de dossier). Vous ajouterez ensuite ses horaires et ses ressources.",
+    "description": "Ce que vous proposez : une coupe, une consultation, un dépôt de dossier. Le lien de réservation est prêt dès la création.",
     "name": "Nom du service",
     "namePlaceholder": "Consultation",
     "timezone": "Fuseau horaire",
     "submit": "Créer le service",
     "submitting": "Création…",
-    "created": "Service créé.",
-    "failed": "Impossible de créer le service."
+    "failed": "Impossible de créer le service.",
+    "duration": "Durée d’un rendez-vous",
+    "minutes": "{count} min",
+    "timezoneSummary": "Heure de {zone} · changer"
   },
   "entranceQr": {
     "title": "QR d'entrée de la file du jour",
@@ -60,9 +62,13 @@
     "actions": "Actions",
     "remove": "Retirer",
     "bookingLink": {
-      "title": "Lien public de réservation",
-      "text": "Partagez ce lien (WhatsApp, bio, message) : toute personne qui l'a peut choisir un créneau sans compte.",
-      "show": "Afficher le lien"
+      "title": "Votre lien de réservation",
+      "text": "Partagez-le (WhatsApp, bio, message) : vos clients choisissent un créneau sans compte.",
+      "copy": "Copier le lien",
+      "copied": "Lien copié",
+      "share": "Partager",
+      "shareText": "Réservez votre rendez-vous « {service} » :",
+      "unavailable": "Le lien n'a pas pu être chargé. Rechargez la page."
     },
     "staff": {
       "title": "Personnel de comptoir",
@@ -79,8 +85,8 @@
       "create": "Créer le lien"
     },
     "resources": {
-      "title": "Ressources",
-      "text": "Personnes, lieux et équipements nécessaires pour un créneau. Une ressource désactivée cesse d'être proposée sans déranger les créneaux existants.",
+      "title": "Qui reçoit, et où",
+      "text": "Les personnes, salles et équipements qu'un rendez-vous peut occuper. Désactiver l'un d'eux le retire des créneaux sans toucher aux rendez-vous déjà pris.",
       "empty": "Aucune ressource pour le moment.",
       "name": "Nom",
       "type": "Type",
@@ -96,12 +102,22 @@
       "scheduleTitle": "Horaires — {name}"
     },
     "requirements": {
-      "title": "Exigences du service",
-      "text": "Ce qu'un créneau consomme : un créneau n'est proposé que si chaque exigence est satisfaite (ex. 1 personne + 1 lieu pour une coloration).",
+      "title": "Ce qu'il faut pour un rendez-vous",
+      "text": "Ce qu'un rendez-vous occupe : un créneau n'est proposé que si tout est libre (ex. 1 personne + 1 salle pour une coloration).",
       "empty": "Aucune exigence : ajoutez-en au moins une pour ouvrir des créneaux.",
       "type": "Type",
       "quantity": "Quantité",
       "add": "Ajouter l'exigence"
+    },
+    "duration": "{count} min par rendez-vous",
+    "zone": "Heure de {zone}",
+    "advanced": "Options avancées",
+    "notBookable": {
+      "title": "Personne ne peut encore réserver ce service",
+      "requirement": "Il ne dit pas encore ce qu'un rendez-vous demande.",
+      "person": "Ajoutez la personne qui reçoit les clients, dans les options avancées.",
+      "hours": "Ouvrez au moins un jour dans les horaires ci-dessous.",
+      "addRequirement": "Un rendez-vous = une personne"
     }
   },
   "resourceTypes": {
@@ -166,7 +182,11 @@
     "closuresLoad": "Impossible de charger les fermetures.",
     "closureAdd": "Impossible d'ajouter la fermeture.",
     "closureRemove": "Impossible de retirer la fermeture.",
-    "groupTooLarge": "Votre offre ne permet pas autant de clients par créneau."
+    "groupTooLarge": "Votre offre ne permet pas autant de clients par créneau.",
+    "weekSave": "Les horaires n'ont pas pu être enregistrés.",
+    "priceInvalid": "Indiquez un prix supérieur à zéro.",
+    "priceUnverified": "Faites d'abord vérifier votre organisation : un service payant fait payer vos clients.",
+    "priceSave": "Le prix n'a pas pu être enregistré."
   },
   "group": {
     "title": "Séances collectives",
@@ -177,5 +197,42 @@
     "save": "Enregistrer",
     "saving": "Enregistrement…",
     "saved": "Séances enregistrées."
+  },
+  "hours": {
+    "title": "Horaires",
+    "titleOf": "Horaires de {name}",
+    "text": "Les clients réservent seulement pendant ces heures.",
+    "closed": "Fermé",
+    "opens": "Ouverture le {day}",
+    "closes": "Fermeture le {day}",
+    "addRange": "Ajouter une plage",
+    "removeRange": "Retirer cette plage du {day}",
+    "copyToOpenDays": "Mêmes horaires tous les jours ouverts",
+    "save": "Enregistrer les horaires",
+    "saving": "Enregistrement…",
+    "saved": "Horaires enregistrés.",
+    "invalid": "Chaque plage doit finir après son début.",
+    "leaveUnsaved": "Vos horaires ne sont pas enregistrés. Quitter quand même ?",
+    "several": "Plusieurs personnes reçoivent : réglez les horaires de chacune.",
+    "edit": "Horaires",
+    "change": "Modifier les horaires",
+    "cancel": "Annuler"
+  },
+  "basics": {
+    "title": "Durée et prix",
+    "duration": "Durée d'un rendez-vous",
+    "minutes": "{count} min",
+    "durationSaved": "Durée enregistrée.",
+    "price": "Prix",
+    "rule": "Paiement",
+    "rules": {
+      "FREE": "Gratuit",
+      "BEFORE": "Payé à la réservation",
+      "AFTER_SERVICE": "Payé après le rendez-vous"
+    },
+    "amount": "Montant ({currency})",
+    "save": "Enregistrer le prix",
+    "saving": "Enregistrement…",
+    "saved": "Prix enregistré."
   }
 }

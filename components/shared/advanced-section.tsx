@@ -1,20 +1,18 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
-import { useTranslations } from "next-intl";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const ADVANCED_ID = "event-advanced-settings";
+const ADVANCED_ID = "advanced-section";
 
 const AdvancedContext = createContext<{ open: boolean; toggle: () => void }>({ open: true, toggle: () => {} });
 
 /**
- * The rarely used event settings (a client's branding, ticket rules, quorum)
- * stay folded under one "Advanced options" disclosure (JIKU-251), so a first
- * event shows only what every event needs. They open by themselves when one
- * of them is already in use.
+ * Rarely used settings folded under one "Advanced options" disclosure
+ * (JIKU-251, JIKU-252), so a first event or service shows only what every one
+ * needs. The section opens by itself when one of its settings is in use.
  */
 export function AdvancedSettings({ initialOpen, children }: { initialOpen: boolean; children: ReactNode }) {
   const [open, setOpen] = useState(initialOpen);
@@ -22,12 +20,11 @@ export function AdvancedSettings({ initialOpen, children }: { initialOpen: boole
   return <AdvancedContext.Provider value={{ open, toggle: () => setOpen((value) => !value) }}>{children}</AdvancedContext.Provider>;
 }
 
-export function AdvancedToggle() {
-  const t = useTranslations("events.settings");
+export function AdvancedToggle({ label }: { label: string }) {
   const { open, toggle } = useContext(AdvancedContext);
   return (
     <Button type="button" variant="ghost" className="self-start" aria-expanded={open} aria-controls={ADVANCED_ID} onClick={toggle}>
-      {t("advanced")}
+      {label}
       <ChevronDown aria-hidden className={cn("transition-transform motion-reduce:transition-none", open && "rotate-180")} />
     </Button>
   );

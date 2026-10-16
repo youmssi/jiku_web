@@ -126,22 +126,22 @@ export const EVENT_TABS: EventSubNavItem[] = [
 ];
 
 /**
- * Sub-navigation for one selected service, shown as a SidebarMenuSub under
- * "Services" in the app sidebar, mirroring the per-event sub-navigation so a
- * service's day line, management and configuration stay one click apart.
+ * Sub-navigation for one selected service, shown under "Services" in the app
+ * sidebar and as the service's section bar (JIKU-252): its link and hours
+ * first, then its day line and its settings, one tap apart.
  */
 export const SERVICE_SUB_NAV_ITEMS: EventSubNavItem[] = [
-  {
-    labelKey: "dayLine",
-    href: serviceLineRoute,
-    icon: ListOrdered,
-    match: (pathname, serviceId) => pathname === serviceLineRoute(serviceId),
-  },
   {
     labelKey: "manage",
     href: serviceManageRoute,
     icon: ClipboardList,
     match: (pathname, serviceId) => pathname === serviceManageRoute(serviceId),
+  },
+  {
+    labelKey: "dayLine",
+    href: serviceLineRoute,
+    icon: ListOrdered,
+    match: (pathname, serviceId) => pathname === serviceLineRoute(serviceId),
   },
   {
     labelKey: "configuration",
