@@ -83,7 +83,7 @@ export interface GuestRow {
   invitations: Record<string, string | null>;
 }
 
-type ResponseFilter = "ALL" | "CONFIRMED" | "PENDING" | "DECLINED" | "PAYMENT_DUE";
+export type ResponseFilter = "ALL" | "CONFIRMED" | "PENDING" | "DECLINED" | "PAYMENT_DUE";
 
 const ALL_CATEGORIES = "ALL";
 
@@ -110,14 +110,17 @@ export function GuestsTable({
   eventId,
   rows,
   ticketTypes,
+  initialResponse = "ALL",
 }: {
   eventId: string;
   rows: GuestRow[];
   ticketTypes: TicketTypeResponse[];
+  /** Opens on one answer, when the overview links to it. */
+  initialResponse?: ResponseFilter;
 }) {
   const t = useTranslations("guests");
   const format = useFormatter();
-  const [response, setResponse] = useState<ResponseFilter>("ALL");
+  const [response, setResponse] = useState<ResponseFilter>(initialResponse);
   const [category, setCategory] = useState(ALL_CATEGORIES);
   const [query, setQuery] = useState("");
   const sellsTickets = rows.some((row) => row.paymentStatus && row.paymentStatus !== "NOT_REQUIRED");

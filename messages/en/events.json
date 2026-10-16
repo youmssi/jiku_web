@@ -132,7 +132,6 @@
   "settings": {
     "saved": "Changes saved.",
     "locked": {
-      "title": "Read-only event",
       "description": "A published or cancelled event can no longer change: your guests already have these details."
     },
     "details": {
@@ -195,7 +194,13 @@
       "preview": "What your guests see"
     },
     "advanced": "Advanced options",
-    "leaveUnsaved": "Your changes are not saved. Leave anyway?"
+    "leaveUnsaved": "Your changes are not saved. Leave anyway?",
+    "summary": {
+      "title": "What your guests received",
+      "yes": "Allowed",
+      "until": "Allowed until {date}",
+      "extra": "{count, plural, one {Up to # extra confirmation} other {Up to # extra confirmations}}"
+    }
   },
   "quorum": {
     "title": "Quorum",
@@ -259,7 +264,6 @@
       "title": "Dashboard unavailable",
       "description": "The event's figures could not be loaded. Try again."
     },
-    "exportGuests": "Export the list",
     "doorLinks": {
       "trigger": "Door links",
       "title": "Door links",
@@ -280,10 +284,7 @@
         "cta": "See plans"
       }
     },
-    "before": "Before the event",
     "stats": {
-      "total": "Guests",
-      "invited": "Invited",
       "confirmed": "Confirmed",
       "declined": "Declined",
       "pending": "No answer"
@@ -311,7 +312,6 @@
       "title": "Arrivals",
       "description": "Check-ins by hour, in the event's timezone."
     },
-    "live": "Updated live.",
     "charts": {
       "checkIns": "Check-ins",
       "noCheckIns": "No check-ins yet: this fills in as guests arrive.",
@@ -340,21 +340,31 @@
       "missing": "{count, plural, one {# attendee missing} other {# attendees missing}}",
       "reachedAt": "Reached on {date}",
       "fellBack": "(some attendees have left since)"
-    }
+    },
+    "responses": {
+      "title": "Answers",
+      "ofGuests": "{count, plural, one {out of # guest} other {out of # guests}}"
+    },
+    "next": {
+      "pending": "{count, plural, one {# guest hasn't answered yet} other {# guests haven't answered yet}}",
+      "pendingHint": "See who to remind"
+    },
+    "trends": "Statistics"
   },
   "list": {
     "title": "Events",
     "emptyTitle": "No events yet",
     "emptyDescription": "Create your first event to invite your guests and check them in at the door.",
-    "search": "Search events",
-    "allStatuses": "All statuses",
+    "search": "Search",
+    "allStatuses": "All",
     "columns": {
       "name": "Name",
       "status": "Status",
       "date": "Date",
       "location": "Location",
       "undated": "Date to be set"
-    }
+    },
+    "noMatch": "No event matches."
   },
   "orders": {
     "title": "Orders",
@@ -517,7 +527,6 @@
       "removed": "{name} was removed."
     },
     "settings": {
-      "title": "Settings",
       "moreInfo": "More information",
       "enabled": "Take answers",
       "enabledHelp": "Turn off to close the card.",
@@ -557,6 +566,7 @@
       "removePhoto": "Remove",
       "photoTooSmall": "Photo too small: at least 600 × 300 px.",
       "preview": "Card preview"
-    }
+    },
+    "customize": "Customize the card"
   }
 }

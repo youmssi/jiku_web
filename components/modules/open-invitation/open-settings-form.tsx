@@ -1,10 +1,11 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useTransition, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -23,9 +24,10 @@ function toLocalInput(instant: string | null): string {
 }
 
 /**
- * The settings of an open invitation (JIKU-184): on or off, the host's word,
- * companions, when answers close, and whether the people who answered are told
- * by WhatsApp if the event is cancelled (JIKU-187), which a paid tier includes.
+ * The settings of an open invitation (JIKU-184): the host's word, companions,
+ * when answers close, and whether the people who answered are told by WhatsApp
+ * if the event is cancelled (JIKU-187), which a paid tier includes. Turning
+ * answers on or off is its own switch, always in view (AcceptingSwitch).
  */
 export function OpenSettingsForm({ eventId, invitation }: { eventId: string; invitation: OpenInvitation }) {
   const t = useTranslations("events.openInvitation.settings");
@@ -58,20 +60,7 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4 rounded-xl border p-4">
-      <p className="text-sm font-medium">{t("title")}</p>
       <FieldGroup>
-        <Controller
-          control={control}
-          name="enabled"
-          render={({ field }) => (
-            <Field orientation="horizontal">
-              <Label htmlFor="open-enabled" help={t("enabledHelp")} more={t("moreInfo")}>
-                {t("enabled")}
-              </Label>
-              <Switch id="open-enabled" checked={field.value} onCheckedChange={field.onChange} />
-            </Field>
-          )}
-        />
         <Controller
           control={control}
           name="welcomeMessage"
@@ -154,5 +143,41 @@ function Label({ htmlFor, help, more, children }: { htmlFor: string; help: strin
       <FieldLabel htmlFor={htmlFor}>{children}</FieldLabel>
       <InfoHint label={more}>{help}</InfoHint>
     </div>
+  );
+}
+
+/**
+ * Answers on or off, saved on tap (JIKU-255): the one setting an organizer
+ * reaches for in a hurry, so it stays out of the folded customisation.
+ */
+export function AcceptingSwitch({ eventId, invitation }: { eventId: string; invitation: OpenInvitation }) {
+  const t = useTranslations("events.openInvitation.settings");
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+
+  function toggle(enabled: boolean) {
+    startTransition(async () => {
+      const result = await saveOpenInvitationAction(eventId, {
+        enabled,
+        welcomeMessage: invitation.welcomeMessage ?? "",
+        maxCompanions: invitation.maxCompanions,
+        closesAt: toLocalInput(invitation.closesAt),
+        notifyOnCancel: invitation.notifyOnCancel,
+      });
+      if (!result.ok) {
+        toast.error(result.error);
+        return;
+      }
+      router.refresh();
+    });
+  }
+
+  return (
+    <Field orientation="horizontal" className="rounded-xl border p-4">
+      <Label htmlFor="open-enabled" help={t("enabledHelp")} more={t("moreInfo")}>
+        {t("enabled")}
+      </Label>
+      <Switch id="open-enabled" checked={invitation.enabled} disabled={pending} onCheckedChange={toggle} />
+    </Field>
   );
 }

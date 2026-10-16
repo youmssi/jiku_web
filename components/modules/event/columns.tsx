@@ -29,7 +29,6 @@ export function useEventColumns() {
               <ArrowUpDown data-icon="inline-end" />
             </Button>
           ),
-          filterFn: "includesString",
           cell: ({ row }) => (
             <Link href={eventRoute(row.original.id ?? "")} className="font-medium hover:underline">
               {row.original.name}
@@ -38,7 +37,6 @@ export function useEventColumns() {
         }),
         columnHelper.accessor("status", {
           header: t("status"),
-          filterFn: "includesString",
           cell: ({ row }) => <EventStatusBadge status={row.original.status ?? ""} />,
         }),
         columnHelper.accessor("startDateTime", {

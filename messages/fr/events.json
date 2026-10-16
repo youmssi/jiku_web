@@ -132,7 +132,6 @@
   "settings": {
     "saved": "Modifications enregistrées.",
     "locked": {
-      "title": "Événement en lecture seule",
       "description": "Un événement publié ou annulé ne se modifie plus : vos invités ont déjà reçu ces informations."
     },
     "details": {
@@ -195,7 +194,13 @@
       "preview": "Aperçu pour vos invités"
     },
     "advanced": "Options avancées",
-    "leaveUnsaved": "Vos modifications ne sont pas enregistrées. Quitter quand même ?"
+    "leaveUnsaved": "Vos modifications ne sont pas enregistrées. Quitter quand même ?",
+    "summary": {
+      "title": "Ce que vos invités ont reçu",
+      "yes": "Autorisé",
+      "until": "Autorisé jusqu'au {date}",
+      "extra": "{count, plural, one {Jusqu'à # confirmation en plus} other {Jusqu'à # confirmations en plus}}"
+    }
   },
   "quorum": {
     "title": "Quorum",
@@ -259,7 +264,6 @@
       "title": "Tableau de bord indisponible",
       "description": "Les chiffres de l'événement n'ont pas pu être chargés. Réessayez."
     },
-    "exportGuests": "Exporter la liste",
     "doorLinks": {
       "trigger": "Liens d'entrée",
       "title": "Liens d'entrée",
@@ -280,10 +284,7 @@
         "cta": "Voir les offres"
       }
     },
-    "before": "Avant l'événement",
     "stats": {
-      "total": "Invités",
-      "invited": "Invités contactés",
       "confirmed": "Confirmés",
       "declined": "Déclinés",
       "pending": "Sans réponse"
@@ -311,7 +312,6 @@
       "title": "Arrivées",
       "description": "Entrées par heure, dans le fuseau de l'événement."
     },
-    "live": "Mis à jour en direct.",
     "charts": {
       "checkIns": "Entrées",
       "noCheckIns": "Aucune entrée pour l'instant : le graphique se remplit à l'arrivée des invités.",
@@ -340,21 +340,31 @@
       "missing": "{count, plural, one {Il manque # présent} other {Il manque # présents}}",
       "reachedAt": "Atteint le {date}",
       "fellBack": "(des participants sont repartis depuis)"
-    }
+    },
+    "responses": {
+      "title": "Réponses",
+      "ofGuests": "{count, plural, one {sur # invité} other {sur # invités}}"
+    },
+    "next": {
+      "pending": "{count, plural, one {# invité n'a pas encore répondu} other {# invités n'ont pas encore répondu}}",
+      "pendingHint": "Voir qui relancer"
+    },
+    "trends": "Statistiques"
   },
   "list": {
     "title": "Événements",
     "emptyTitle": "Aucun événement pour l'instant",
     "emptyDescription": "Créez votre premier événement pour inviter vos invités et contrôler l'entrée.",
-    "search": "Rechercher un événement",
-    "allStatuses": "Tous les statuts",
+    "search": "Rechercher",
+    "allStatuses": "Tous",
     "columns": {
       "name": "Nom",
       "status": "Statut",
       "date": "Date",
       "location": "Lieu",
       "undated": "Date à définir"
-    }
+    },
+    "noMatch": "Aucun événement ne correspond."
   },
   "orders": {
     "title": "Commandes",
@@ -517,7 +527,6 @@
       "removed": "{name} a été retiré(e)."
     },
     "settings": {
-      "title": "Réglages",
       "moreInfo": "Plus d'informations",
       "enabled": "Accepter les réponses",
       "enabledHelp": "Désactivez pour fermer la carte.",
@@ -557,6 +566,7 @@
       "removePhoto": "Retirer",
       "photoTooSmall": "Photo trop petite : 600 × 300 px au moins.",
       "preview": "Aperçu de la carte"
-    }
+    },
+    "customize": "Personnaliser la carte"
   }
 }
