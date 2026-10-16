@@ -12,7 +12,7 @@ interface RouteContext {
  */
 export async function GET(_request: Request, { params }: RouteContext): Promise<Response> {
   const { id } = await params;
-  const response = await serverFetch(`/events/${id}/attendance/register`);
+  const response = await serverFetch(`/events/${encodeURIComponent(id)}/attendance/register`);
 
   if (!response.ok || !response.body) {
     return new Response("Impossible de générer la feuille d'émargement.", {
@@ -24,7 +24,7 @@ export async function GET(_request: Request, { params }: RouteContext): Promise<
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition":
-        response.headers.get("content-disposition") ?? `attachment; filename="emargement-${id}.pdf"`,
+        response.headers.get("content-disposition") ?? `attachment; filename="emargement-${encodeURIComponent(id)}.pdf"`,
     },
   });
 }

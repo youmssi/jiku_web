@@ -20,15 +20,7 @@ import {
   type RegisterInput,
   type ResetPasswordInput,
 } from "@/components/modules/identity/schema";
-
-/**
- * Only same-origin paths may be used as a post-auth destination — anything else
- * (absolute URLs, protocol-relative `//`) falls back to the dashboard, so a
- * crafted link can never bounce a fresh session to another site.
- */
-function safeNext(next: string | undefined, fallback: string): string {
-  return next && next.startsWith("/") && !next.startsWith("//") ? next : fallback;
-}
+import { safeNext } from "@/lib/safe-next";
 
 export async function registerAction(
   input: RegisterInput,

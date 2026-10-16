@@ -11,7 +11,7 @@ interface RouteContext {
  */
 export async function GET(_request: Request, { params }: RouteContext): Promise<Response> {
   const { id } = await params;
-  const response = await serverFetch(`/billing/payments/${id}/receipt`);
+  const response = await serverFetch(`/billing/payments/${encodeURIComponent(id)}/receipt`);
 
   if (!response.ok || !response.body) {
     return new Response("Unable to download the receipt.", { status: response.status || 502 });
@@ -20,7 +20,7 @@ export async function GET(_request: Request, { params }: RouteContext): Promise<
   return new Response(response.body, {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
-      "Content-Disposition": `attachment; filename="receipt-${id}.txt"`,
+      "Content-Disposition": `attachment; filename="receipt-${encodeURIComponent(id)}.txt"`,
     },
   });
 }

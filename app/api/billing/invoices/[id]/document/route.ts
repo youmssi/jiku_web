@@ -15,7 +15,7 @@ interface RouteContext {
  */
 export async function GET(_request: Request, { params }: RouteContext): Promise<Response> {
   const { id } = await params;
-  const response = await serverFetch(`/billing/invoices/${id}/document`);
+  const response = await serverFetch(`/billing/invoices/${encodeURIComponent(id)}/document`);
 
   if (!response.ok || !response.body) {
     return new Response("Unable to download the invoice.", { status: response.status || 502 });
@@ -25,7 +25,7 @@ export async function GET(_request: Request, { params }: RouteContext): Promise<
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition":
-        response.headers.get("Content-Disposition") ?? `attachment; filename="invoice-${id}.pdf"`,
+        response.headers.get("Content-Disposition") ?? `attachment; filename="invoice-${encodeURIComponent(id)}.pdf"`,
     },
   });
 }
