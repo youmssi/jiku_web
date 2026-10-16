@@ -32,9 +32,8 @@ export const LEGAL_EN: LegalDocuments = {
         body: [
           "The service is hosted by providers located outside Guinea, which process data only on our instructions:",
           [
-            "Website: Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, United States.",
-            "Application server: Render Services, Inc., San Francisco, California, United States.",
-            "Database: Neon (managed PostgreSQL), cloud infrastructure in the United States or the European Union depending on the selected region.",
+            "Servers and database: Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Germany; data centers in the European Union.",
+            "Website delivery and network protection: Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, United States.",
           ],
           "The full list of providers that process personal data is in the privacy policy.",
         ],
@@ -273,13 +272,15 @@ export const LEGAL_EN: LegalDocuments = {
         body: [
           "Only authorized people at the organization concerned and at Jikū can access it. Our technical providers process it on our instructions:",
           [
-            "Hosting: Vercel (website), Render (application server), Neon (database).",
-            "Email: Resend or Brevo, depending on the organization's configuration.",
+            "Hosting: Hetzner Online (servers and database, European Union).",
+            "Website delivery, network protection and encrypted backup storage: Cloudflare.",
+            "Email: useSend, which delivers through Amazon Web Services (Amazon SES), or the email provider the organization configured.",
             "WhatsApp: Meta Platforms (WhatsApp Business Platform).",
-            "SMS: Nimba SMS (Guinea).",
+            "SMS: Nimba SMS (Guinea), only when SMS sending is turned on.",
             "Payments to Jikū: CinetPay.",
             "Error tracking: Sentry.",
             "Audience measurement: Umami, cookieless, on an instance we operate.",
+            "Conversations with the Jikū team (sales and support): Chatwoot and n8n, on instances we operate; Anthropic (Claude), for an automated assistant that answers first messages and hands over to a person on the team; Cal.com, to book a meeting with us. These tools only receive messages sent to Jikū, never the data of the organizations' guests and clients.",
           ],
           "We disclose data to an authority only on a lawful request.",
         ],
