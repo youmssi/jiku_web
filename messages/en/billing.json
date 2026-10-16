@@ -12,6 +12,7 @@
     "title": "{plan} subscription",
     "free": "Free forever",
     "renews": "Paid until {date}",
+    "ended": "Ended on {date}",
     "status": {
       "ACTIVE": "Active",
       "GRACE": "In grace period",
@@ -20,9 +21,6 @@
     "monthly": "{amount} a month for your team",
     "people": "{active, plural, one {# person serves your clients} other {# people serve your clients}}",
     "included": "{count} included",
-    "outgrown": "Your team has grown beyond {plan}. Choose a plan before {date} to keep going without interruption.",
-    "grace": "Your subscription is in its grace period. Renew it: your workspace will be suspended on {date}.",
-    "expiring": "{days, plural, one {Your subscription ends in # day.} other {Your subscription ends in # days.}} Renew it to keep going without interruption.",
     "change": "Renew or change",
     "cancel": "Cancel",
     "choose": "Choose a plan",
@@ -246,5 +244,29 @@
         "COMMISSION": "Commission on tickets sold"
       }
     }
+  },
+  "attention": {
+    "SERVICES_PAUSED": {
+      "title": "Your services are paused",
+      "description": "Your {plan} subscription has ended: clients can no longer book or take a line ticket. Appointments already booked and your events carry on.",
+      "action": "Renew"
+    },
+    "GRACE": {
+      "title": "Subscription to renew",
+      "description": "Your {plan} subscription has ended. Without a renewal, new bookings pause on {date}.",
+      "action": "Renew"
+    },
+    "OVER_LIMIT": {
+      "title": "Your team has grown",
+      "description": "{plan} no longer covers your whole team. Choose a plan before {date} so clients keep booking.",
+      "descriptionNoDate": "{plan} no longer covers your whole team. Choose a plan that fits.",
+      "action": "Choose a plan"
+    },
+    "EXPIRING_SOON": {
+      "title": "Subscription ending soon",
+      "description": "Your {plan} subscription ends on {date}. Renew it so clients keep booking.",
+      "action": "Renew"
+    },
+    "askManager": "Let the person who manages your organization's billing know."
   }
 }

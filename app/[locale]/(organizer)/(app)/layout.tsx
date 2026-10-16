@@ -9,10 +9,14 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { BillingAttentionBanner, loadBillingStatus } from "@/components/modules/billing/server";
 import { ConfirmEmailBanner } from "@/components/modules/identity";
 import { getOrganizerContext } from "@/components/modules/identity/server";
 import { serverFetch } from "@/lib/api-server";
 import { eventRoute, ROUTES } from "@/lib/constants";
+
+/** Roles that manage billing and so get the way to act on its reminder. */
+const BILLING_ROLES = ["ORGANIZER_OWNER", "ORGANIZER_ADMIN"];
 
 /**
  * Authenticated organizer app shell, mirroring the shadcn sidebar-07 dashboard
@@ -32,7 +36,7 @@ export default async function OrganizerAppLayout({
     return localeRedirect(ROUTES.ONBOARDING);
   }
 
-  const projects = await loadRecentEvents();
+  const [projects, billing] = await Promise.all([loadRecentEvents(), loadBillingStatus()]);
 
   return (
     <TooltipProvider>
@@ -61,6 +65,11 @@ export default async function OrganizerAppLayout({
               <NavCommandPalette variant="organizer" />
             </div>
           </header>
+          {billing && billing.attention !== "NONE" ? (
+            <div className="px-4 pb-2">
+              <BillingAttentionBanner status={billing} canManage={BILLING_ROLES.includes(context.role)} />
+            </div>
+          ) : null}
           {context.emailVerified ? null : (
             <div className="px-4 pb-2">
               <ConfirmEmailBanner email={context.email} />

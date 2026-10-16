@@ -142,85 +142,98 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
         </div>
       </header>
 
-      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1" role="listbox" aria-label={t("booking.day")}>
-        {strip.map((day) => {
-          const d = parseDateOnly(day);
-          const selected = day === date;
-          return (
-            <button
-              key={day}
-              type="button"
-              role="option"
-              aria-selected={selected}
-              onClick={() => setDate(day)}
-              className={cn(
-                "flex min-h-14 min-w-14 shrink-0 flex-col items-center justify-center rounded-xl border px-2 text-sm transition-colors",
-                selected ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary/40",
-              )}
-            >
-              <span className="text-xs">{format.dateTime(d, { timeZone: "UTC", weekday: "short" })}</span>
-              <span className="font-semibold">{format.dateTime(d, { timeZone: "UTC", day: "numeric" })}</span>
-            </button>
-          );
-        })}
-        <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-          <PopoverTrigger asChild>
-            <button
-              type="button"
-              aria-label={t("booking.otherDay")}
-              className="flex min-h-14 min-w-14 shrink-0 items-center justify-center rounded-xl border border-dashed"
-            >
-              <CalendarIcon className="size-4" aria-hidden />
-            </button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="end">
-            <Calendar
-              mode="single"
-              locale={locale === "en" ? enUS : fr}
-              selected={selectedDate}
-              defaultMonth={selectedDate}
-              disabled={{ before: today }}
-              onSelect={(day) => {
-                if (!day) return;
-                setDate(toDateOnly(day));
-                setCalendarOpen(false);
-              }}
-              autoFocus
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
-
-      <p className="text-sm font-medium">
-        {upperFirst(format.dateTime(selectedDate, { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" }), locale)}
-      </p>
-
-      {view && view.slots.length === 0 ? (
-        <p className="rounded-xl border border-dashed px-4 py-8 text-center text-sm text-muted-foreground">{t("booking.noSlots")}</p>
-      ) : null}
-
-      {periods.map(([period, slots]) => (
-        <section key={period} className="flex flex-col gap-2">
-          <h2 className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">{t(`booking.periods.${period}`)}</h2>
-          <div className="grid grid-cols-4 gap-2">
-            {slots.map((slot) => (
+      {view?.bookingPaused ? (
+        <Alert>
+          <AlertTitle>{t("booking.pausedTitle")}</AlertTitle>
+          <AlertDescription>
+            {view.organizerName ? t("booking.pausedWithName", { organizer: view.organizerName }) : t("booking.paused")}
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <>
+        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
+          <div className="flex gap-2" role="listbox" aria-label={t("booking.day")}>
+          {strip.map((day) => {
+            const d = parseDateOnly(day);
+            const selected = day === date;
+            return (
               <button
-                key={slot.startsAt}
+                key={day}
                 type="button"
-                onClick={() => pick(slot)}
-                className="flex min-h-11 flex-col items-center justify-center rounded-xl border px-1 text-sm font-medium transition-colors hover:border-primary/40"
+                role="option"
+                aria-selected={selected}
+                onClick={() => setDate(day)}
+                className={cn(
+                  "flex min-h-14 min-w-14 shrink-0 flex-col items-center justify-center rounded-xl border px-2 text-sm transition-colors",
+                  selected ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary/40",
+                )}
               >
-                {time(slot)}
-                {groupSessions && slot.placesLeft !== undefined ? (
-                  <span className="text-[11px] font-normal text-muted-foreground">
-                    {t("booking.placesLeft", { count: slot.placesLeft })}
-                  </span>
-                ) : null}
+                <span className="text-xs">{format.dateTime(d, { timeZone: "UTC", weekday: "short" })}</span>
+                <span className="font-semibold">{format.dateTime(d, { timeZone: "UTC", day: "numeric" })}</span>
               </button>
-            ))}
+            );
+          })}
           </div>
-        </section>
-      ))}
+          <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                aria-label={t("booking.otherDay")}
+                className="flex min-h-14 min-w-14 shrink-0 items-center justify-center rounded-xl border border-dashed"
+              >
+                <CalendarIcon className="size-4" aria-hidden />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <Calendar
+                mode="single"
+                locale={locale === "en" ? enUS : fr}
+                selected={selectedDate}
+                defaultMonth={selectedDate}
+                disabled={{ before: today }}
+                onSelect={(day) => {
+                  if (!day) return;
+                  setDate(toDateOnly(day));
+                  setCalendarOpen(false);
+                }}
+                autoFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        <p className="text-sm font-medium">
+          {upperFirst(format.dateTime(selectedDate, { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" }), locale)}
+        </p>
+
+        {view && view.slots.length === 0 ? (
+          <p className="rounded-xl border border-dashed px-4 py-8 text-center text-sm text-muted-foreground">{t("booking.noSlots")}</p>
+        ) : null}
+
+        {periods.map(([period, slots]) => (
+          <section key={period} className="flex flex-col gap-2">
+            <h2 className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">{t(`booking.periods.${period}`)}</h2>
+            <div className="grid grid-cols-4 gap-2">
+              {slots.map((slot) => (
+                <button
+                  key={slot.startsAt}
+                  type="button"
+                  onClick={() => pick(slot)}
+                  className="flex min-h-11 flex-col items-center justify-center rounded-xl border px-1 text-sm font-medium transition-colors hover:border-primary/40"
+                >
+                  {time(slot)}
+                  {groupSessions && slot.placesLeft !== undefined ? (
+                    <span className="text-[11px] font-normal text-muted-foreground">
+                      {t("booking.placesLeft", { count: slot.placesLeft })}
+                    </span>
+                  ) : null}
+                </button>
+              ))}
+            </div>
+          </section>
+        ))}
+        </>
+      )}
 
       <Drawer open={picked !== null} onOpenChange={(open) => !open && setPicked(null)}>
         <DrawerContent>

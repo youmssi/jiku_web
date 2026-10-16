@@ -1092,6 +1092,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/billing/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["billingStatusStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/billing/subscription": {
         parameters: {
             query?: never;
@@ -4233,6 +4249,7 @@ export interface components {
             status?: string;
         };
         AppointmentServiceView: {
+            bookingPaused?: boolean;
             /** Format: int32 */
             clientsPerSlot?: number;
             confirmationMode?: string;
@@ -4314,6 +4331,18 @@ export interface components {
             remaining?: number;
             tier?: string;
             withinAllowance?: boolean;
+        };
+        BillingStatusView: {
+            /** @enum {string} */
+            attention?: "SERVICES_PAUSED" | "GRACE" | "OVER_LIMIT" | "EXPIRING_SOON" | "NONE";
+            ownWhatsAppNumber?: boolean;
+            /** Format: date-time */
+            ownWhatsAppNumberAddonExpiresAt?: string | null;
+            packActive?: boolean;
+            /** Format: date-time */
+            packExpiresAt?: string | null;
+            subscription?: components["schemas"]["SubscriptionStatusSummary"] | null;
+            whatsAppReminders?: components["schemas"]["ReminderAllowance"] | null;
         };
         BillingTierOption: {
             /** Format: int64 */
@@ -5915,6 +5944,18 @@ export interface components {
             /** Format: int32 */
             months?: number;
             plan: string;
+        };
+        SubscriptionStatusSummary: {
+            /** @enum {string} */
+            attention?: "SERVICES_PAUSED" | "GRACE" | "OVER_LIMIT" | "EXPIRING_SOON" | "NONE";
+            /** Format: date-time */
+            expiresAt?: string | null;
+            overLimit?: boolean;
+            /** Format: date-time */
+            pausesAt?: string | null;
+            plan?: string;
+            servicesPaused?: boolean;
+            status?: string;
         };
         SubscriptionView: {
             currency?: string;
@@ -8055,6 +8096,26 @@ export interface operations {
                 };
                 content: {
                     "text/plain": string;
+                };
+            };
+        };
+    };
+    billingStatusStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BillingStatusView"];
                 };
             };
         };

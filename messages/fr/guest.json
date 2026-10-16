@@ -74,7 +74,9 @@
       "phone": "Votre numéro de téléphone",
       "submit": "Prendre mon ticket",
       "submitting": "Un instant…",
-      "notice": "Nous vous prévenons sur WhatsApp quand c'est votre tour."
+      "notice": "Nous vous prévenons sur WhatsApp quand c'est votre tour.",
+      "pausedTitle": "Tickets momentanément indisponibles",
+      "paused": "La file ne prend pas de nouveaux tickets pour l'instant. Adressez-vous à l'accueil."
     },
     "status": {
       "number": "N° {rank}",
@@ -100,7 +102,8 @@
     "errors": {
       "invalid": "Vérifiez votre nom et votre numéro.",
       "closed": "La file de ce service n'est pas ouverte pour le moment.",
-      "failed": "Impossible de prendre un ticket. Réessayez."
+      "failed": "Impossible de prendre un ticket. Réessayez.",
+      "paused": "La file ne prend pas de nouveaux tickets pour l'instant."
     }
   },
   "payment": {
@@ -139,7 +142,10 @@
         "morning": "Matin",
         "afternoon": "Après-midi",
         "evening": "Soir"
-      }
+      },
+      "pausedTitle": "Réservation momentanément indisponible",
+      "paused": "La prise de rendez-vous est en pause pour l'instant. Si vous avez déjà un rendez-vous, il est maintenu.",
+      "pausedWithName": "{organizer} ne prend pas de nouveaux rendez-vous pour l'instant. Si vous avez déjà un rendez-vous, il est maintenu."
     },
     "status": {
       "PENDING": "Le professionnel doit encore le confirmer : vous serez prévenu.",
@@ -165,7 +171,8 @@
       "failed": "La réservation a échoué. Réessayez.",
       "notFound": "Cette réservation est introuvable.",
       "notCancellable": "Ce rendez-vous ne peut plus être annulé.",
-      "cancelFailed": "L'annulation a échoué. Réessayez."
+      "cancelFailed": "L'annulation a échoué. Réessayez.",
+      "paused": "La prise de rendez-vous est en pause pour l'instant."
     }
   },
   "verification": {

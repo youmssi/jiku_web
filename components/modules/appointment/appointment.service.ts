@@ -51,6 +51,7 @@ export async function bookAppointment(
   const t = await getTranslations("guest.appointment.errors");
   return fromResponse<AppointmentBookingView>(response, {
     409: t("taken"),
+    423: t("paused"),
     default: t("failed"),
   });
 }
@@ -101,6 +102,7 @@ export async function takeLineTicket(
     400: t("invalid"),
     404: t("closed"),
     409: t("closed"),
+    423: t("paused"),
     default: t("failed"),
   });
 }

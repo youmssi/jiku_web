@@ -74,7 +74,9 @@
       "phone": "Your phone number",
       "submit": "Take my ticket",
       "submitting": "One moment…",
-      "notice": "We tell you on WhatsApp when it's your turn."
+      "notice": "We tell you on WhatsApp when it's your turn.",
+      "pausedTitle": "Tickets unavailable for now",
+      "paused": "The line is not taking new tickets for now. Please ask at the front desk."
     },
     "status": {
       "number": "Ticket no. {rank}",
@@ -100,7 +102,8 @@
     "errors": {
       "invalid": "Check your name and number.",
       "closed": "This service's line isn't open right now.",
-      "failed": "We couldn't give you a ticket. Please try again."
+      "failed": "We couldn't give you a ticket. Please try again.",
+      "paused": "The line is not taking new tickets for now."
     }
   },
   "payment": {
@@ -139,7 +142,10 @@
         "morning": "Morning",
         "afternoon": "Afternoon",
         "evening": "Evening"
-      }
+      },
+      "pausedTitle": "Booking unavailable for now",
+      "paused": "Booking is paused for now. If you already have an appointment, it stands.",
+      "pausedWithName": "{organizer} is not taking new appointments for now. If you already have one, it stands."
     },
     "status": {
       "PENDING": "The professional still has to confirm it: you will be told.",
@@ -165,7 +171,8 @@
       "failed": "The booking failed. Try again.",
       "notFound": "This booking cannot be found.",
       "notCancellable": "This appointment can no longer be cancelled.",
-      "cancelFailed": "The cancellation failed. Try again."
+      "cancelFailed": "The cancellation failed. Try again.",
+      "paused": "Booking is paused for now."
     }
   },
   "verification": {
