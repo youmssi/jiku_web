@@ -2,7 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Ticket } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import { PaymentDue, VerifiedBadge } from "@/components/shared";
+import { CopyValue, PaymentDue, VerifiedBadge } from "@/components/shared";
 import { formatAmount } from "@/lib/currency";
 import { ticketRoute } from "@/lib/constants";
 import { formatEventDay, formatEventTime } from "@/lib/datetime";
@@ -63,7 +63,13 @@ export async function OrderView({ order, token }: { order: Order; token: string 
               methods={order.paymentMethods}
               organizerVerification={order.organizerVerification}
             />
-            <p className="text-sm text-muted-foreground">{t("quoteReference", { reference: order.reference })}</p>
+            <div className="flex items-center justify-between gap-3 rounded-lg border px-4 py-2 text-sm">
+              <span>
+                <span className="block font-medium">{t("quoteLabel")}</span>
+                <span className="block text-xs text-muted-foreground">{t("quoteHint")}</span>
+              </span>
+              <CopyValue value={order.reference} label={t("copyReference")} copiedLabel={t("copied")} />
+            </div>
             <DeclarePaymentForm token={token} />
           </>
         ) : null}
