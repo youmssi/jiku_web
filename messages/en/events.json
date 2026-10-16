@@ -98,7 +98,9 @@
     "publishedAndSent": "{count, plural, =0 {Event published. No guest to reach on these channels.} one {Event published. # invitation is on its way.} other {Event published. # invitations are on their way.}}",
     "publishedNotSent": "Event published, but the invitations were not sent.",
     "openBilling": "Open billing",
-    "openGuests": "Open guests"
+    "openGuests": "Open guests",
+    "confirmEmailTitle": "Invitations wait for your address",
+    "confirmEmailDescription": "Publish now; confirm your email address, then send the invitations from the Guests tab."
   },
   "setup": {
     "title": "Get your event ready",

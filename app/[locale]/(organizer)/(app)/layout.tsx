@@ -9,6 +9,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ConfirmEmailBanner } from "@/components/modules/identity";
 import { getOrganizerContext } from "@/components/modules/identity/server";
 import { serverFetch } from "@/lib/api-server";
 import { eventRoute, ROUTES } from "@/lib/constants";
@@ -60,6 +61,11 @@ export default async function OrganizerAppLayout({
               <NavCommandPalette variant="organizer" />
             </div>
           </header>
+          {context.emailVerified ? null : (
+            <div className="px-4 pb-2">
+              <ConfirmEmailBanner email={context.email} />
+            </div>
+          )}
           <div className="flex flex-1 flex-col pb-24 md:pb-16">{children}</div>
         </SidebarInset>
         <RatingPrompt />

@@ -10,19 +10,15 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { AuthCard } from "@/components/modules/identity/auth-card";
-import {
-  createOrgAction,
-  logoutAction,
-  resendVerificationAction,
-} from "@/components/modules/identity/identity.service";
+import { createOrgAction, logoutAction } from "@/components/modules/identity/identity.service";
 import { createOrgSchema, type CreateOrgInput } from "@/components/modules/identity/schema";
 import { FormFieldError } from "@/components/shared";
 import { ROUTES } from "@/lib/constants";
 
 /**
- * First-run onboarding (JIKU-52): the account exists, the organization doesn't.
- * A 403 from org creation means the email isn't verified yet — the resend
- * affordance lives right next to the error it fixes.
+ * Names an organization for an account that has none: a Google sign-up, or
+ * the account menu's "New organization" entry. Email sign-ups name theirs on
+ * the registration form and never see this screen (JIKU-253).
  *
  * `canCancel` is true when the account already runs at least one organization
  * (reached via the account menu's "New organization" entry) — those visitors
@@ -31,8 +27,8 @@ import { ROUTES } from "@/lib/constants";
 export function OnboardingForm({ email, canCancel }: { email: string; canCancel: boolean }) {
   const t = useTranslations("auth.onboarding");
   const tCommon = useTranslations("common.actions");
+  const tRegister = useTranslations("auth.register");
   const [formError, setFormError] = useState<string | null>(null);
-  const [resent, setResent] = useState(false);
   const {
     control,
     handleSubmit,
@@ -51,35 +47,14 @@ export function OnboardingForm({ email, canCancel }: { email: string; canCancel:
     }
   }
 
-  async function resend() {
-    setResent(false);
-    const result = await resendVerificationAction();
-    if (result.ok) {
-      setResent(true);
-    } else {
-      setFormError(result.error);
-    }
-  }
-
   return (
     <AuthCard title={t("title")} description={t("description", { email })}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <FieldGroup>
           {formError ? (
             <Alert variant="destructive">
-              <AlertTitle>{t("notYet")}</AlertTitle>
-              <AlertDescription className="flex flex-col gap-2">
-                {formError}
-                <Button type="button" variant="outline" size="sm" onClick={resend}>
-                  {t("resend")}
-                </Button>
-              </AlertDescription>
-            </Alert>
-          ) : null}
-          {resent ? (
-            <Alert>
-              <AlertTitle>{t("sentTitle")}</AlertTitle>
-              <AlertDescription>{t("sentDescription")}</AlertDescription>
+              <AlertTitle>{t("failedTitle")}</AlertTitle>
+              <AlertDescription>{formError}</AlertDescription>
             </Alert>
           ) : null}
           <Controller
@@ -94,6 +69,7 @@ export function OnboardingForm({ email, canCancel }: { email: string; canCancel:
                   autoComplete="organization"
                   aria-invalid={fieldState.invalid}
                 />
+                <FieldDescription>{tRegister("organizationNameHint")}</FieldDescription>
                 <FormFieldError error={fieldState.error} />
               </Field>
             )}

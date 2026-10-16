@@ -98,7 +98,9 @@
     "publishedAndSent": "{count, plural, =0 {Événement publié. Aucun invité à joindre sur ces canaux.} one {Événement publié. # invitation part.} other {Événement publié. # invitations partent.}}",
     "publishedNotSent": "Événement publié, mais les invitations ne sont pas parties.",
     "openBilling": "Voir la facturation",
-    "openGuests": "Voir les invités"
+    "openGuests": "Voir les invités",
+    "confirmEmailTitle": "Les invitations attendent votre adresse",
+    "confirmEmailDescription": "Publiez maintenant ; confirmez votre adresse e-mail, puis envoyez les invitations depuis l'onglet Invités."
   },
   "setup": {
     "title": "Préparez votre événement",

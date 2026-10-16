@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSet, FieldLegend } from "@/components/ui/field";
 import { askRating } from "@/components/modules/feedback";
+import { ResendVerificationButton } from "@/components/modules/identity";
 import { trackEvent } from "@/lib/analytics";
 import { INVITATION_CHANNEL_LABELS, type InvitationChannel } from "@/lib/channels";
 import { billingRoute, eventSettingsRoute } from "@/lib/constants";
@@ -33,7 +34,8 @@ export function SendInvitations({
 }) {
   const t = useTranslations("guests.send");
   const [channels, setChannels] = useState<InvitationChannel[]>(enabledChannels);
-  const [paywallMessage, setPaywallMessage] = useState<string | null>(null);
+  // A refusal the organizer can fix right here gets an inline way out.
+  const [refusal, setRefusal] = useState<{ reason: "paywall" | "unverified"; message: string } | null>(null);
   const [isPending, startTransition] = useTransition();
 
   if (enabledChannels.length === 0) {
@@ -55,12 +57,12 @@ export function SendInvitations({
   }
 
   function onSend() {
-    setPaywallMessage(null);
+    setRefusal(null);
     startTransition(async () => {
       const outcome = await sendInvitationsAction(eventId, channels);
       if (!outcome.ok) {
-        if (outcome.paywall) {
-          setPaywallMessage(outcome.error);
+        if (outcome.reason) {
+          setRefusal({ reason: outcome.reason, message: outcome.error });
         } else {
           toast.error(outcome.error);
         }
@@ -94,14 +96,23 @@ export function SendInvitations({
         </FieldGroup>
         <FieldDescription>{t("once")}</FieldDescription>
       </FieldSet>
-      {paywallMessage ? (
+      {refusal?.reason === "paywall" ? (
         <Alert>
           <AlertTitle>{t("allowanceTitle")}</AlertTitle>
           <AlertDescription>
-            {paywallMessage}
+            {refusal.message}
             <Button asChild variant="outline" size="sm" className="mt-2 w-fit">
               <Link href={billingRoute(eventId)}>{t("allowanceCta")}</Link>
             </Button>
+          </AlertDescription>
+        </Alert>
+      ) : null}
+      {refusal?.reason === "unverified" ? (
+        <Alert>
+          <AlertTitle>{t("confirmEmailTitle")}</AlertTitle>
+          <AlertDescription className="flex flex-col gap-2">
+            {refusal.message}
+            <ResendVerificationButton />
           </AlertDescription>
         </Alert>
       ) : null}

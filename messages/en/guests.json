@@ -154,7 +154,8 @@
     "noChannelDescription": "Choose email, WhatsApp or both in the event's settings.",
     "openSettings": "Open settings",
     "allowanceTitle": "Guest allowance reached",
-    "allowanceCta": "See plans"
+    "allowanceCta": "See plans",
+    "confirmEmailTitle": "Email address to confirm"
   },
   "errors": {
     "invalid": "Check the details and try again.",
@@ -171,7 +172,8 @@
     "allowanceReached": "This event's guest allowance is reached. Move to the next tier to invite more guests.",
     "sendFailed": "The invitations could not be sent. Try again.",
     "categoryFull": "This category is full. Raise its capacity or choose another one.",
-    "categoryFailed": "The category could not be changed. Try again."
+    "categoryFailed": "The category could not be changed. Try again.",
+    "confirmEmailFirst": "Confirm your email address first: the link is waiting in your inbox."
   },
   "noMatch": "No guest matches these filters.",
   "showMore": "{count, plural, one {Show # more guest} other {Show # more guests}}",
