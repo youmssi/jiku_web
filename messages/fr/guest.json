@@ -70,16 +70,14 @@
     "take": {
       "title": "Prendre un ticket",
       "subtitle": "File du jour · {service}",
-      "text": "Indiquez votre nom et votre numéro : vous suivez votre rang sur votre téléphone et nous vous prévenons quand c'est votre tour.",
       "name": "Votre nom",
       "phone": "Votre numéro de téléphone",
-      "phoneHelp": "Au format international, par exemple +224620000000.",
       "submit": "Prendre mon ticket",
-      "submitting": "Un instant…"
+      "submitting": "Un instant…",
+      "notice": "Nous vous prévenons sur WhatsApp quand c'est votre tour."
     },
     "status": {
-      "title": "Votre ticket",
-      "number": "Ticket n° {rank}",
+      "number": "N° {rank}",
       "code": "Code {code}",
       "ahead": "{count, plural, =0 {Vous êtes le prochain.} one {# personne avant vous.} other {# personnes avant vous.}}",
       "wait": "{minutes, plural, =0 {Attente estimée : quelques instants} one {Attente estimée : environ # minute} other {Attente estimée : environ # minutes}}",
@@ -123,37 +121,42 @@
     "booking": {
       "title": "Rendez-vous",
       "loading": "Chargement…",
-      "withNames": "Avec {names} — sans compte, en trois gestes.",
+      "withNames": "Avec {names}, sans compte.",
       "noAccount": "Choisissez un créneau, sans compte.",
       "failed": "Réservation impossible",
-      "previousDay": "Jour précédent",
-      "nextDay": "Jour suivant",
       "noSlots": "Aucun créneau ouvert ce jour-là.",
       "name": "Votre nom",
       "phone": "Votre téléphone",
       "submit": "Réserver ce créneau",
       "submitting": "Réservation…",
-      "placesLeft": "{count, plural, one {# place} other {# places}}"
-    },
-    "booked": {
-      "title": "Votre rendez-vous est enregistré",
-      "PENDING": "En attente de confirmation : vous recevrez la confirmation du professionnel.",
-      "CONFIRMED": "Votre rendez-vous est confirmé.",
-      "withNames": "Avec {names}",
-      "number": "N° de réservation : {number}",
-      "manage": "Voir ou annuler mon rendez-vous"
+      "placesLeft": "{count, plural, one {# place} other {# places}}",
+      "day": "Jour",
+      "otherDay": "Choisir une autre date",
+      "withNamesShort": "avec {names}",
+      "periods": {
+        "morning": "Matin",
+        "afternoon": "Après-midi",
+        "evening": "Soir"
+      }
     },
     "status": {
-      "title": "Votre rendez-vous",
-      "PENDING": "En attente de confirmation.",
-      "CONFIRMED": "Confirmé.",
+      "PENDING": "Le professionnel doit encore le confirmer : vous serez prévenu.",
+      "CONFIRMED": "Présentez ce code à votre arrivée.",
       "notFound": "Réservation introuvable",
       "notFoundText": "Vérifiez le lien ou votre numéro de réservation.",
       "cancel": "Annuler ce rendez-vous",
       "cancelling": "Annulation…",
       "cancelFailed": "Annulation impossible",
       "cancelledTitle": "Rendez-vous annulé",
-      "cancelledText": "Votre rendez-vous a été annulé et le créneau libéré."
+      "cancelledText": "Votre rendez-vous a été annulé et le créneau libéré.",
+      "pendingTitle": "Rendez-vous demandé",
+      "confirmedTitle": "Rendez-vous confirmé",
+      "withNames": "Avec {names}",
+      "number": "N° de réservation : {number}",
+      "cancelTitle": "Annuler ce rendez-vous ?",
+      "cancelDescription": "Le créneau sera libéré pour un autre client.",
+      "keep": "Garder mon rendez-vous",
+      "cancelConfirm": "Annuler le rendez-vous"
     },
     "errors": {
       "taken": "Ce créneau vient d'être pris. Choisissez-en un autre.",

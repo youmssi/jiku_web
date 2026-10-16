@@ -19,6 +19,9 @@ export interface AppointmentServiceView {
   clientsPerSlot?: number;
   /** The organizer's approved verification (`COMPANY`, `PERSONAL`), or null. */
   organizerVerification?: string | null;
+  /** Who the client books with (JIKU-249). */
+  organizerName?: string | null;
+  logoUrl?: string | null;
 }
 
 export interface AppointmentBookingView {

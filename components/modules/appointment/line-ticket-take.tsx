@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "@/i18n/navigation";
 import { takeLineTicket, type AppointmentLinkRef } from "@/components/modules/appointment/appointment.service";
@@ -46,7 +46,6 @@ export function LineTicketTake({ link, serviceName }: { link: AppointmentLinkRef
         </CardHeader>
         <CardContent>
           <form onSubmit={submit} className="flex flex-col gap-5">
-            <p className="text-sm text-muted-foreground">{t("text")}</p>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="line-name">{t("name")}</FieldLabel>
@@ -64,12 +63,14 @@ export function LineTicketTake({ link, serviceName }: { link: AppointmentLinkRef
                   placeholder="+224 6XX XX XX XX"
                   required
                 />
-                <FieldDescription>{t("phoneHelp")}</FieldDescription>
               </Field>
             </FieldGroup>
-            <Button type="submit" className="w-full rounded-full" disabled={isPending || !ready}>
-              {isPending ? t("submitting") : t("submit")}
-            </Button>
+            <div className="flex flex-col gap-2">
+              <Button type="submit" size="lg" className="w-full rounded-full" disabled={isPending || !ready}>
+                {isPending ? t("submitting") : t("submit")}
+              </Button>
+              <p className="text-center text-xs text-muted-foreground">{t("notice")}</p>
+            </div>
           </form>
         </CardContent>
       </Card>

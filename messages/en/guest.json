@@ -70,15 +70,13 @@
     "take": {
       "title": "Take a ticket",
       "subtitle": "Today's line · {service}",
-      "text": "Enter your name and number: you follow your place on your phone and we tell you when it's your turn.",
       "name": "Your name",
       "phone": "Your phone number",
-      "phoneHelp": "In international format, for example +224620000000.",
       "submit": "Take my ticket",
-      "submitting": "One moment…"
+      "submitting": "One moment…",
+      "notice": "We tell you on WhatsApp when it's your turn."
     },
     "status": {
-      "title": "Your ticket",
       "number": "Ticket no. {rank}",
       "code": "Code {code}",
       "ahead": "{count, plural, =0 {You're next.} one {# person ahead of you.} other {# people ahead of you.}}",
@@ -123,37 +121,42 @@
     "booking": {
       "title": "Appointment",
       "loading": "Loading…",
-      "withNames": "With {names} — no account, three steps.",
+      "withNames": "With {names}, no account needed.",
       "noAccount": "Pick a time, no account needed.",
       "failed": "Booking not possible",
-      "previousDay": "Previous day",
-      "nextDay": "Next day",
       "noSlots": "No times open on this day.",
       "name": "Your name",
       "phone": "Your phone",
       "submit": "Book this time",
       "submitting": "Booking…",
-      "placesLeft": "{count, plural, one {# place left} other {# places left}}"
-    },
-    "booked": {
-      "title": "Your appointment is booked",
-      "PENDING": "Awaiting confirmation: the professional will confirm it.",
-      "CONFIRMED": "Your appointment is confirmed.",
-      "withNames": "With {names}",
-      "number": "Booking number: {number}",
-      "manage": "View or cancel my appointment"
+      "placesLeft": "{count, plural, one {# place left} other {# places left}}",
+      "day": "Day",
+      "otherDay": "Pick another date",
+      "withNamesShort": "with {names}",
+      "periods": {
+        "morning": "Morning",
+        "afternoon": "Afternoon",
+        "evening": "Evening"
+      }
     },
     "status": {
-      "title": "Your appointment",
-      "PENDING": "Awaiting confirmation.",
-      "CONFIRMED": "Confirmed.",
+      "PENDING": "The professional still has to confirm it: you will be told.",
+      "CONFIRMED": "Show this code when you arrive.",
       "notFound": "Booking not found",
       "notFoundText": "Check the link or your booking number.",
       "cancel": "Cancel this appointment",
       "cancelling": "Cancelling…",
       "cancelFailed": "Cancellation not possible",
       "cancelledTitle": "Appointment cancelled",
-      "cancelledText": "Your appointment is cancelled and the time is free again."
+      "cancelledText": "Your appointment is cancelled and the time is free again.",
+      "pendingTitle": "Appointment requested",
+      "confirmedTitle": "Appointment confirmed",
+      "withNames": "With {names}",
+      "number": "Booking no. {number}",
+      "cancelTitle": "Cancel this appointment?",
+      "cancelDescription": "The time will be freed for another client.",
+      "keep": "Keep my appointment",
+      "cancelConfirm": "Cancel the appointment"
     },
     "errors": {
       "taken": "This time was just taken. Pick another one.",
