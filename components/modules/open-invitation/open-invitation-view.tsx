@@ -101,7 +101,7 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
               color={card?.primaryColor ?? FALLBACK_BRAND_COLOR}
             />
           </div>
-          <OpenSettingsForm key={String(invitation.enabled)} eventId={eventId} invitation={invitation} />
+          <OpenSettingsForm eventId={eventId} invitation={invitation} />
         </CollapsibleContent>
       </Collapsible>
     </div>

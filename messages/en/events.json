@@ -346,6 +346,8 @@
       "ofGuests": "{count, plural, one {out of # guest} other {out of # guests}}"
     },
     "next": {
+      "unsent": "{count, plural, one {# guest hasn't received an invitation yet} other {# guests haven't received an invitation yet}}",
+      "unsentHint": "Send invitations",
       "pending": "{count, plural, one {# guest hasn't answered yet} other {# guests haven't answered yet}}",
       "pendingHint": "See who to remind"
     },
@@ -364,7 +366,8 @@
       "location": "Location",
       "undated": "Date to be set"
     },
-    "noMatch": "No event matches."
+    "noMatch": "No event matches.",
+    "clearFilters": "Clear filters"
   },
   "orders": {
     "title": "Orders",
