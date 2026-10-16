@@ -113,7 +113,9 @@
     "wave": "Wave",
     "payOnline": "Pay online",
     "askOrganizer": "The organizer will tell you how to pay.",
-    "unverified": "This organizer's identity has not been verified by Jikū yet. Only pay if you know them."
+    "unverified": "This organizer's identity has not been verified by Jikū yet. Only pay if you know them.",
+    "copyNumber": "Copy the {method} number",
+    "copied": "Copied"
   },
   "appointment": {
     "metaTitle": "Book an appointment",
@@ -179,9 +181,8 @@
     "more": "Add a {label} ticket",
     "ticketCount": "{count, plural, =0 {No ticket chosen} one {# ticket} other {# tickets}}",
     "buyerName": "Your name",
-    "buyerNameHelp": "It is printed on the tickets. You can transfer a ticket to someone else later.",
     "buyerPhone": "Your phone",
-    "buyerEmail": "Your email (optional)",
+    "buyerEmail": "Your email",
     "order": "Order",
     "ordering": "Ordering…",
     "holdNotice": "Your places are held for {minutes} minutes while you pay the organizer.",
@@ -203,7 +204,8 @@
       "cannotDeclare": "This payment can no longer be declared: the order has expired or was already handled.",
       "failed": "We couldn't process your request. Try again."
     },
-    "pausedLabel": "Available again soon"
+    "pausedLabel": "Available again soon",
+    "addEmail": "Add an email (optional)"
   },
   "order": {
     "orderOf": "Your order · {organizer}",
@@ -218,7 +220,6 @@
     "total": "Total",
     "buyer": "In the name of {name}",
     "holdLeft": "Your places are held for another <time></time>.",
-    "quoteReference": "Quote the reference {reference} in your payment's note, then declare it below.",
     "referenceHelp": "The transaction number you received by SMS after your Mobile Money payment.",
     "declare": "I have paid",
     "declaring": "Sending…",
@@ -232,7 +233,11 @@
     "keepLink": "Keep this link: it is the only way back to your order.",
     "unavailableTitle": "Order not found",
     "unavailableText": "This order link is not valid.",
-    "orderReference": "Reference {reference}"
+    "orderReference": "Reference {reference}",
+    "quoteLabel": "Payment note",
+    "quoteHint": "Add it to your payment, then declare it below.",
+    "copyReference": "Copy the note",
+    "copied": "Copied"
   },
   "openInvitation": {
     "invitedBy": "{organizer} invites you",

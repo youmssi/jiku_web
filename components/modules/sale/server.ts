@@ -3,5 +3,6 @@
 import "server-only";
 
 export { fetchOrder, fetchPublicSale } from "./sale.queries";
+export { OrderScreen } from "./order-screen";
 export { OrdersView } from "./orders-view";
 export { loadSalesSettings } from "./sale.queries";

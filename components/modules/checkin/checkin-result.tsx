@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { readableTextColor } from "@/lib/color-contrast";
@@ -9,6 +9,9 @@ import { formatTimeInZone } from "@/lib/datetime";
 import type { CheckInOutcome, CheckInResponse } from "@/components/modules/checkin/schema";
 
 type CollectMethod = "MOBILE_MONEY" | "CASH";
+
+/** How long a valid entry stays on screen before the scanner comes back by itself. */
+const AUTO_NEXT_MS = 1500;
 
 interface CheckInResultProps {
   result: CheckInResponse;
@@ -35,7 +38,8 @@ interface Style {
  *
  * A ticket not paid yet (JIKU-110) stops at the door: the screen shows what is
  * owed and lets the validator record how the guest paid, which checks them in.
- * Any other verdict dismisses with a tap anywhere.
+ * A valid entry returns to the scanner on its own (JIKU-250); any other
+ * verdict dismisses with a tap anywhere.
  */
 export function CheckInResult({ result, timezone, onDismiss, onCollect }: CheckInResultProps) {
   const t = useTranslations("operator.checkin");
@@ -44,6 +48,15 @@ export function CheckInResult({ result, timezone, onDismiss, onCollect }: CheckI
   const [collecting, setCollecting] = useState(false);
   const style = STYLES[result.outcome];
   const due = result.outcome === "PAYMENT_DUE";
+  const valid = result.outcome === "CHECKED_IN";
+
+  // A valid entry needs no decision: the next guest is scanned without a tap.
+  // Every other verdict stays until the validator has read it.
+  useEffect(() => {
+    if (!valid) return;
+    const timer = window.setTimeout(onDismiss, AUTO_NEXT_MS);
+    return () => window.clearTimeout(timer);
+  }, [valid, onDismiss]);
 
   async function collect(method: CollectMethod) {
     setCollecting(true);

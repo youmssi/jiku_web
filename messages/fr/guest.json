@@ -113,7 +113,9 @@
     "wave": "Wave",
     "payOnline": "Payer en ligne",
     "askOrganizer": "L'organisateur vous indiquera comment régler.",
-    "unverified": "L'identité de cet organisateur n'a pas encore été vérifiée par Jikū. Payez seulement si vous le connaissez."
+    "unverified": "L'identité de cet organisateur n'a pas encore été vérifiée par Jikū. Payez seulement si vous le connaissez.",
+    "copyNumber": "Copier le numéro {method}",
+    "copied": "Copié"
   },
   "appointment": {
     "metaTitle": "Réserver un rendez-vous",
@@ -179,9 +181,8 @@
     "more": "Ajouter un billet {label}",
     "ticketCount": "{count, plural, =0 {Aucun billet choisi} one {# billet} other {# billets}}",
     "buyerName": "Votre nom",
-    "buyerNameHelp": "Il figure sur les billets. Vous pourrez transférer un billet à quelqu'un d'autre ensuite.",
     "buyerPhone": "Votre téléphone",
-    "buyerEmail": "Votre e-mail (facultatif)",
+    "buyerEmail": "Votre e-mail",
     "order": "Commander",
     "ordering": "Commande en cours…",
     "holdNotice": "Vos places sont gardées {minutes} minutes, le temps de payer l'organisateur.",
@@ -203,7 +204,8 @@
       "cannotDeclare": "Ce paiement ne peut plus être déclaré : la commande a expiré ou a déjà été traitée.",
       "failed": "Impossible de traiter votre demande. Réessayez."
     },
-    "pausedLabel": "Bientôt disponible"
+    "pausedLabel": "Bientôt disponible",
+    "addEmail": "Ajouter un e-mail (facultatif)"
   },
   "order": {
     "orderOf": "Votre commande · {organizer}",
@@ -218,7 +220,6 @@
     "total": "Total",
     "buyer": "Au nom de {name}",
     "holdLeft": "Vos places sont gardées encore <time></time>.",
-    "quoteReference": "Indiquez la référence {reference} dans le motif de votre paiement, puis déclarez-le ci-dessous.",
     "referenceHelp": "Le numéro de transaction reçu par SMS après votre paiement Mobile Money.",
     "declare": "J'ai payé",
     "declaring": "Envoi…",
@@ -232,7 +233,11 @@
     "keepLink": "Gardez ce lien : c'est le seul moyen de revenir à votre commande.",
     "unavailableTitle": "Commande introuvable",
     "unavailableText": "Ce lien de commande n'est pas valide.",
-    "orderReference": "Référence {reference}"
+    "orderReference": "Référence {reference}",
+    "quoteLabel": "Motif du paiement",
+    "quoteHint": "Indiquez-le dans votre paiement, puis déclarez-le ci-dessous.",
+    "copyReference": "Copier le motif",
+    "copied": "Copié"
   },
   "openInvitation": {
     "invitedBy": "{organizer} vous invite",

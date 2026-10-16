@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { ExternalLink } from "lucide-react";
 import { formatAmount } from "@/lib/currency";
+import { CopyValue } from "./copy-value";
 import type { Schema } from "@/lib/api-contract";
 
 type PaymentMethods = Schema<"TenantPaymentMethodsInfo">;
@@ -48,9 +49,9 @@ export async function PaymentDue({ status, amountMinor, currency, methods, organ
           {methods?.payeeName ? <p className="text-muted-foreground">{t("payee", { name: methods.payeeName })}</p> : null}
           <ul className="space-y-0.5">
             {numbers.map((entry) => (
-              <li key={entry.label} className="flex justify-between gap-3">
+              <li key={entry.label} className="flex items-center justify-between gap-3">
                 <span className="text-muted-foreground">{entry.label}</span>
-                <span className="font-mono">{entry.value}</span>
+                <CopyValue value={entry.value} label={t("copyNumber", { method: entry.label })} copiedLabel={t("copied")} />
               </li>
             ))}
           </ul>

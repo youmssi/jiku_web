@@ -176,9 +176,6 @@
     "online": "En ligne",
     "offline": "Hors ligne",
     "queued": "{count} en attente",
-    "syncing": "Synchronisation…",
-    "synced": "Synchronisé à {time} · resynchroniser",
-    "sync": "Préparer le mode hors ligne",
     "scan": "Scanner le QR",
     "search": "Rechercher",
     "startingCamera": "Démarrage de la caméra…",
@@ -201,7 +198,8 @@
       "linkInvalid": "Ce lien de contrôle n'est plus valable.",
       "network": "Erreur réseau. Vérifiez la connexion et réessayez.",
       "generic": "Une erreur est survenue. Réessayez."
-    }
+    },
+    "offlineReady": "prêt hors ligne"
   },
   "doorLinks": {
     "new": "Nouveau lien",

@@ -117,9 +117,9 @@ export function openInvitationRoute(code: string): string {
   return `/i/${code}`;
 }
 
-/** The buyer's order, reached by its link token (JIKU-177). */
-export function orderRoute(token: string): string {
-  return `/orders/${token}`;
+/** The buyer's order: `/c/K7M2QX9PAB` for a short code (JIKU-250), the long form for a link handed out before. */
+export function orderRoute(key: string): string {
+  return INVITE_CODE.test(key) ? `/c/${key}` : `/orders/${key}`;
 }
 
 export const COOKIES = {

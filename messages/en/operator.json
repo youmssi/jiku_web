@@ -176,9 +176,6 @@
     "online": "Online",
     "offline": "Offline",
     "queued": "{count} queued",
-    "syncing": "Syncing…",
-    "synced": "Synced {time} · re-sync",
-    "sync": "Sync for offline use",
     "scan": "Scan QR",
     "search": "Search",
     "startingCamera": "Starting camera…",
@@ -201,7 +198,8 @@
       "linkInvalid": "This check-in link is no longer valid.",
       "network": "Network error. Check your connection and try again.",
       "generic": "Something went wrong. Please try again."
-    }
+    },
+    "offlineReady": "ready offline"
   },
   "doorLinks": {
     "new": "New link",

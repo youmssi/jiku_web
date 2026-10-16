@@ -4,6 +4,7 @@ export {
 } from "./nav-command-palette";
 export {CardHero, OrganizerMark} from "./card-hero";
 export {ClampedText} from "./clamped-text";
+export {CopyValue} from "./copy-value";
 export {FormFieldError} from "./form-field-error";
 export {InfoHint} from "./info-hint";
 export {LiveBadge} from "./live-badge";
