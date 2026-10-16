@@ -95,12 +95,16 @@ export const PRIVACY_ROUTE = "/privacy";
 export const TERMS_ROUTE = "/terms";
 export const LEGAL_NOTICE_ROUTE = "/legal";
 
-export function invitationRoute(token: string): string {
-  return `/invitation/${token}`;
+/** A guest's short invitation code (JIKU-248): ten letters and digits, unlike a dotted signed token. */
+const INVITE_CODE = /^[A-Za-z0-9]{10}$/;
+
+/** A guest's invitation page: `/v/K7M2QX9PAB` for a short code, the long form for a link sent before codes. */
+export function invitationRoute(key: string): string {
+  return INVITE_CODE.test(key) ? `/v/${key}` : `/invitation/${key}`;
 }
 
-export function ticketRoute(token: string): string {
-  return `/invitation/${token}/ticket`;
+export function ticketRoute(key: string): string {
+  return `${invitationRoute(key)}/ticket`;
 }
 
 /** The public sale page of an event (JIKU-177), under its organization's username. */

@@ -2,28 +2,27 @@
   "invitation": {
     "unavailableTitle": "Invitation indisponible",
     "unavailableDescription": "Ce lien d'invitation n'est pas valide ou a expiré.",
-    "invites": "{organizer} vous invite à",
     "greeting": "Bonjour {name},",
     "cancelled": "Cet événement a été annulé par l'organisateur.",
-    "privacy": "Comment vos données sont utilisées"
+    "invitedBy": "{organizer} vous invite"
   },
   "rsvp": {
-    "confirm": "Je confirme ma présence",
-    "confirming": "Confirmation…",
-    "decline": "Je ne pourrai pas venir",
+    "confirm": "Je viens",
+    "decline": "Je ne viens pas",
     "updating": "Mise à jour…",
-    "confirmed": "Votre présence est confirmée. À bientôt !",
-    "confirmedToast": "C'est confirmé, à bientôt !",
     "declined": "Vous avez décliné cette invitation.",
-    "declinedToast": "Vous avez décliné l'invitation.",
     "changeMind": "Finalement, je viens",
     "cantMakeIt": "Je ne peux plus venir",
-    "viewTicket": "Voir mon billet",
     "transferredTo": "Vous avez cédé cette invitation à {name}.",
     "transferredSomeone": "Vous avez cédé cette invitation à quelqu'un d'autre.",
     "transferredHint": "Sa propre invitation est en route, et ce billet n'est plus valable à l'entrée.",
     "full": "Cet événement est complet.",
-    "failed": "Un problème est survenu. Réessayez."
+    "failed": "Un problème est survenu. Réessayez.",
+    "question": "Vous venez ?",
+    "cancelTitle": "Annuler votre venue ?",
+    "cancelDescription": "Votre billet ne sera plus valable à l'entrée. Vous pourrez encore changer d'avis depuis ce lien.",
+    "cancelKeep": "Je viens toujours",
+    "cancelConfirm": "Je ne viens plus"
   },
   "transfer": {
     "open": "Céder ma place",
@@ -43,22 +42,17 @@
     "contactRequired": "Indiquez un e-mail ou un numéro de téléphone pour la personne."
   },
   "erasure": {
-    "open": "Demander la suppression de mes données",
-    "title": "Supprimer vos données personnelles ?",
-    "description": "Votre nom, votre e-mail et votre numéro sont définitivement retirés de cet événement. C'est irréversible. L'organisateur ne garde qu'une trace anonyme qu'un invité a été convié.",
+    "open": "Vos données",
+    "title": "Vos données personnelles",
+    "description": "Vous pouvez supprimer votre nom, votre e-mail et votre numéro de cet événement. C'est irréversible : l'organisateur ne garde qu'une trace anonyme qu'un invité a été convié.",
     "keep": "Garder mes données",
     "confirm": "Supprimer mes données",
     "deleting": "Suppression…",
     "done": "Vos données personnelles ont été supprimées de cet événement. C'est irréversible.",
-    "doneToast": "Vos données personnelles ont été supprimées.",
-    "failed": "Impossible de supprimer vos données pour le moment. Réessayez."
+    "failed": "Impossible de supprimer vos données pour le moment. Réessayez.",
+    "policy": "Comment vos données sont utilisées"
   },
   "ticket": {
-    "unavailableTitle": "Billet indisponible",
-    "unavailableDescription": "Ce lien n'est pas valide ou a expiré.",
-    "noneTitle": "Pas encore de billet",
-    "noneDescription": "Confirmez votre présence pour recevoir votre billet.",
-    "back": "Retour à l'invitation",
     "guest": "Invité",
     "date": "Date",
     "place": "Lieu",

@@ -63,7 +63,7 @@ export function TransferTicketDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{t("open")}</Button>
+        <Button variant="link" className="text-muted-foreground">{t("open")}</Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>

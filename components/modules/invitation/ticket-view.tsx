@@ -1,51 +1,26 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
-import { publicFetch } from "@/lib/api-server";
-import { invitationRoute, PRIVACY_ROUTE, ticketRoute } from "@/lib/constants";
+import { ticketRoute } from "@/lib/constants";
 import { zoneCity } from "@/lib/datetime";
 import { datePart, fullWhen, shortTime } from "@/lib/short-dates";
 import { cardStyleOf } from "@/lib/card-style";
 import { routing } from "@/i18n/routing";
 import { TicketCard } from "@/components/modules/invitation/ticket-card";
 import { TicketActions } from "@/components/modules/invitation/ticket-actions";
+import { TicketSecondaryActions } from "@/components/modules/invitation/ticket-secondary-actions";
 import { DataDeletion } from "@/components/modules/invitation/data-deletion";
 import { googleCalendarLink } from "@/components/modules/invitation/calendar-link";
 import type { RsvpView } from "@/components/modules/invitation/schema";
-import { PaymentDue, StateMessage, VerifiedBadge } from "@/components/shared";
+import { PaymentDue, VerifiedBadge } from "@/components/shared";
 import { siteUrl } from "@/components/modules/seo";
 
-/** Guest-facing ticket screen, shown once the guest has confirmed. */
-export async function TicketView({ params }: { params: Promise<{ token: string }> }) {
-  const { token } = await params;
-  const [response, t, locale] = await Promise.all([
-    publicFetch(`/rsvp/${token}`),
-    getTranslations("guest.ticket"),
-    getLocale(),
-  ]);
-
-  if (!response.ok) {
-    return <StateMessage title={t("unavailableTitle")} description={t("unavailableDescription")} />;
-  }
-
-  const rsvp = (await response.json()) as RsvpView;
-
-  if (rsvp.status !== "CONFIRMED" || !rsvp.ticketCode) {
-    return (
-      <StateMessage
-        title={t("noneTitle")}
-        description={t("noneDescription")}
-        action={
-          <Link
-            href={invitationRoute(token)}
-            className="text-sm font-medium underline underline-offset-4"
-          >
-            {t("back")}
-          </Link>
-        }
-      />
-    );
-  }
-
+/**
+ * A confirmed guest's ticket (JIKU-248): what the invitation link shows once
+ * the guest said yes, so the QR code is one tap away from the message. Giving
+ * the place away or cancelling stays reachable, as quiet links below.
+ */
+export async function TicketScreen({ rsvp, token }: { rsvp: RsvpView; token: string }) {
+  const [t, locale] = await Promise.all([getTranslations("guest.ticket"), getLocale()]);
+  const ticketCode = rsvp.ticketCode ?? "";
   const start = rsvp.eventStart;
   const zone = rsvp.eventTimezone;
   const cancelled = rsvp.eventStatus === "CANCELLED";
@@ -75,7 +50,7 @@ export async function TicketView({ params }: { params: Promise<{ token: string }
         </p>
       ) : null}
       <TicketCard
-        ticketCode={rsvp.ticketCode}
+        ticketCode={ticketCode}
         eventName={rsvp.eventName}
         organizerName={rsvp.organizerName}
         primaryColor={rsvp.primaryColor}
@@ -109,13 +84,15 @@ export async function TicketView({ params }: { params: Promise<{ token: string }
       ) : null}
       <VerifiedBadge kind={rsvp.organizerVerification} className="mt-4 print:hidden" />
       <TicketActions calendarUrl={calendarUrl} />
-      <div className="w-full max-w-sm print:hidden">
+      <div className="mt-6 flex w-full max-w-sm flex-col items-center gap-1 print:hidden">
+        {cancelled ? null : (
+          <TicketSecondaryActions
+            token={token}
+            transferAllowed={rsvp.transferAllowed}
+            transferDeadline={rsvp.transferDeadline}
+          />
+        )}
         <DataDeletion token={token} erased={rsvp.erased} />
-        <p className="mt-4 text-xs text-muted-foreground">
-          <Link href={PRIVACY_ROUTE} className="underline underline-offset-4">
-            {(await getTranslations("guest.invitation"))("privacy")}
-          </Link>
-        </p>
       </div>
     </div>
   );

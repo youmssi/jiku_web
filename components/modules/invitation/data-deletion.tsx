@@ -3,6 +3,8 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { Link } from "@/i18n/navigation";
+import { PRIVACY_ROUTE } from "@/lib/constants";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,8 +19,9 @@ import {
 import { requestErasureAction } from "@/components/modules/invitation/invitation.service";
 
 /**
- * Guest self-service data deletion (JIKU-36). Behind an explicit, irreversible
- * confirmation so it cannot be triggered by a single accidental tap.
+ * The guest's data, behind one quiet link (JIKU-36, JIKU-248): how it is used,
+ * and self-service deletion. Deleting stays an explicit, irreversible choice in
+ * the dialog, never a single accidental tap.
  */
 export function DataDeletion({ token, erased }: { token: string; erased: boolean }) {
   const t = useTranslations("guest.erasure");
@@ -26,11 +29,7 @@ export function DataDeletion({ token, erased }: { token: string; erased: boolean
   const [isPending, startTransition] = useTransition();
 
   if (done) {
-    return (
-      <p className="mt-6 text-xs text-muted-foreground">
-        {t("done")}
-      </p>
-    );
+    return <p className="text-center text-xs text-muted-foreground">{t("done")}</p>;
   }
 
   function onConfirm() {
@@ -41,36 +40,34 @@ export function DataDeletion({ token, erased }: { token: string; erased: boolean
         return;
       }
       setDone(true);
-      toast.success(t("doneToast"));
     });
   }
 
   return (
-    <div className="mt-6 border-t pt-4">
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <button
-            type="button"
-            className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
-          >
-            {t("open")}
-          </button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("title")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("description")}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t("keep")}</AlertDialogCancel>
-            <AlertDialogAction onClick={onConfirm} disabled={isPending}>
-              {isPending ? t("deleting") : t("confirm")}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex min-h-11 items-center text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
+        >
+          {t("open")}
+        </button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{t("title")}</AlertDialogTitle>
+          <AlertDialogDescription>{t("description")}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <Link href={PRIVACY_ROUTE} className="text-sm underline underline-offset-4">
+          {t("policy")}
+        </Link>
+        <AlertDialogFooter>
+          <AlertDialogCancel>{t("keep")}</AlertDialogCancel>
+          <AlertDialogAction variant="destructive" onClick={onConfirm} disabled={isPending}>
+            {isPending ? t("deleting") : t("confirm")}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

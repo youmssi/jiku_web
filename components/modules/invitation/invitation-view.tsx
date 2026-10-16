@@ -1,15 +1,19 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { CalendarDays, MapPin } from "lucide-react";
-import { Link } from "@/i18n/navigation";
 import { publicFetch } from "@/lib/api-server";
-import { PRIVACY_ROUTE } from "@/lib/constants";
-import { formatEventDay, formatEventTime } from "@/lib/datetime";
-import { PaymentDue, StateMessage, VerifiedBadge } from "@/components/shared";
+import { CARD_STYLE_TOKENS, cardStyleOf, displayTitle, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
+import { fullWhen, liveWhen } from "@/lib/short-dates";
+import { CardHero, OrganizerMark, PaymentDue, StateMessage, VerifiedBadge } from "@/components/shared";
 import { RsvpActions } from "@/components/modules/invitation/rsvp-actions";
 import { DataDeletion } from "@/components/modules/invitation/data-deletion";
+import { TicketScreen } from "@/components/modules/invitation/ticket-view";
 import type { RsvpView } from "@/components/modules/invitation/schema";
 
-/** Guest-facing invitation screen: event details and RSVP actions. */
+/**
+ * A guest's personal link (JIKU-248), short or signed. Before answering, the
+ * invitation in the organizer's style with a one-tap answer, like a shared
+ * card; once confirmed, the ticket itself, so the QR code is the first thing
+ * the guest sees when opening the message again.
+ */
 export async function InvitationView({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   const [response, t, locale] = await Promise.all([
@@ -23,71 +27,63 @@ export async function InvitationView({ params }: { params: Promise<{ token: stri
   }
 
   const rsvp = (await response.json()) as RsvpView;
+  if (rsvp.status === "CONFIRMED" && rsvp.ticketCode) {
+    return <TicketScreen rsvp={rsvp} token={token} />;
+  }
+
+  const style = cardStyleOf(rsvp.cardStyle);
+  const tokens = CARD_STYLE_TOKENS[style];
+  const pill = style === "MODERN" ? "rounded-sm" : "rounded-full";
   const start = rsvp.eventStart;
   const zone = rsvp.eventTimezone;
-  const when =
-    start && zone ? `${formatEventDay(start, zone, locale)} · ${formatEventTime(start, zone, locale)}` : null;
   const cancelled = rsvp.eventStatus === "CANCELLED";
 
   return (
-    <div className="flex flex-1 items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md rounded-2xl border bg-card p-8 text-center shadow-sm">
-        {rsvp.logoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={rsvp.logoUrl}
-            alt={rsvp.organizerName}
-            className="mx-auto mb-4 h-12 object-contain"
-          />
-        ) : null}
-        <p className="text-sm text-muted-foreground">
-          {t("invites", { organizer: rsvp.organizerName })}
-        </p>
-        <VerifiedBadge kind={rsvp.organizerVerification} className="mt-2" />
-        <h1 className="mt-1 text-balance text-2xl font-semibold">{rsvp.eventName}</h1>
-        <div className="mt-3 space-y-1.5 text-sm text-muted-foreground">
-          {when ? (
-            <p className="flex items-center justify-center gap-1.5 first-letter:uppercase">
-              <CalendarDays aria-hidden className="size-4 shrink-0" />
-              <span className="first-letter:uppercase">{when}</span>
-            </p>
-          ) : null}
-          {rsvp.eventLocation ? (
-            <p className="flex items-center justify-center gap-1.5">
-              <MapPin aria-hidden className="size-4 shrink-0" />
-              {rsvp.eventLocation}
-            </p>
-          ) : null}
-        </div>
-        <p className="mt-4 text-sm">{t("greeting", { name: rsvp.guestName })}</p>
-        {rsvp.payment && !cancelled ? (
-          <div className="mt-4">
-            <PaymentDue {...rsvp.payment} organizerVerification={rsvp.organizerVerification} />
+    <div className="flex flex-1 flex-col" style={{ background: tokens.panel, color: tokens.panelInk }}>
+      <CardHero style={style} color={rsvp.primaryColor ?? FALLBACK_BRAND_COLOR} bannerUrl={rsvp.bannerUrl}>
+        <div className="mx-auto flex min-h-64 w-full max-w-lg flex-col justify-between gap-8 px-5 pb-6 pt-8">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
+            <OrganizerMark name={rsvp.organizerName} logoUrl={rsvp.logoUrl} square={style === "MODERN"} />
+            <span>{t("invitedBy", { organizer: rsvp.organizerName })}</span>
+            <VerifiedBadge kind={rsvp.organizerVerification} />
           </div>
+          <div className="flex flex-col gap-3">
+            <h1 className="text-balance" style={displayTitle(tokens, "clamp(2.2rem, 10vw, 3.2rem)")}>
+              {rsvp.eventName}
+            </h1>
+            <div className="flex flex-wrap gap-2 text-xs font-semibold">
+              {start && zone ? (
+                <time
+                  dateTime={start}
+                  title={fullWhen(start, zone, locale)}
+                  className={`border border-white/30 bg-white/15 px-3 py-1 first-letter:uppercase ${pill}`}
+                >
+                  {liveWhen(start, zone, locale)}
+                </time>
+              ) : null}
+              {rsvp.eventLocation ? (
+                <span className={`border border-white/30 bg-white/15 px-3 py-1 ${pill}`}>{rsvp.eventLocation}</span>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </CardHero>
+
+      <div className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-5 px-5 pb-10 pt-6">
+        <p className="text-[15px]">{t("greeting", { name: rsvp.guestName })}</p>
+        {rsvp.payment && !cancelled ? (
+          <PaymentDue {...rsvp.payment} organizerVerification={rsvp.organizerVerification} />
         ) : null}
         {cancelled ? (
-          <p className="mt-6 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+          <p className="rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
             {t("cancelled")}
           </p>
         ) : (
-        <div className="mt-6">
-          <RsvpActions
-            token={token}
-            status={rsvp.status}
-            primaryColor={rsvp.primaryColor}
-            ticketCode={rsvp.ticketCode}
-            transferAllowed={rsvp.transferAllowed}
-            transferDeadline={rsvp.transferDeadline}
-            transferredTo={rsvp.transferredTo}
-          />
-        </div>
+          <RsvpActions token={token} status={rsvp.status} style={style} transferredTo={rsvp.transferredTo} />
         )}
-        <DataDeletion token={token} erased={rsvp.erased} />
-        <p className="mt-4 text-xs text-muted-foreground">
-          <Link href={PRIVACY_ROUTE} className="underline underline-offset-4">
-            {t("privacy")}
-          </Link>
-        </p>
+        <div className="mt-auto flex justify-center pt-4">
+          <DataDeletion token={token} erased={rsvp.erased} />
+        </div>
       </div>
     </div>
   );

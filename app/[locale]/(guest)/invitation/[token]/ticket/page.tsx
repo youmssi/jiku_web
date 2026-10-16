@@ -1,8 +1,9 @@
-import { TicketView } from "@/components/modules/invitation";
+import { InvitationView } from "@/components/modules/invitation";
 
 // The QR ticket itself must never be indexed (JIKU-58).
 export const metadata = { robots: { index: false, follow: false, nocache: true } };
 
+/** Kept for links sent before short codes: a confirmed guest sees the ticket, anyone else the invitation. */
 export default function TicketPage({ params }: Readonly<{ params: Promise<{ token: string }> }>) {
-  return <TicketView params={params} />;
+  return <InvitationView params={params} />;
 }
