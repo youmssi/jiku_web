@@ -12,5 +12,5 @@ export default async function AppointmentStatusPage({
 }: Readonly<{ params: Promise<{ locale: string; token: string; bookingToken: string }> }>) {
   const { token, bookingToken } = await params;
   const view = await loadAppointment({ token });
-  return <AppointmentStatus link={{ token }} bookingToken={bookingToken} timezone={view?.timezone ?? "UTC"} />;
+  return <AppointmentStatus link={{ token }} bookingToken={bookingToken} service={view} />;
 }

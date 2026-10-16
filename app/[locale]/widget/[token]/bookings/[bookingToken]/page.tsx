@@ -15,7 +15,7 @@ export default async function WidgetBookingStatusPage({
   const view = await loadAppointment({ token });
   return (
     <div className="min-h-screen bg-background">
-      <AppointmentStatus link={{ token }} bookingToken={bookingToken} timezone={view?.timezone ?? "UTC"} />
+      <AppointmentStatus link={{ token }} bookingToken={bookingToken} service={view} />
       <WidgetResizer />
     </div>
   );
