@@ -5,7 +5,7 @@
     "services": "Services",
     "billing": "Facturation",
     "settings": "Paramètres",
-    "overview": "Vue d'ensemble",
+    "overview": "Aperçu",
     "tickets": "Billets",
     "guests": "Invités",
     "dayLine": "File du jour",
@@ -19,7 +19,7 @@
     "platform": "Plateforme",
     "recentEvents": "Événements récents",
     "more": "Plus",
-    "openOverview": "Ouvrir la vue d'ensemble",
+    "openOverview": "Ouvrir l'aperçu",
     "openGuests": "Ouvrir les invités"
   },
   "breadcrumb": {

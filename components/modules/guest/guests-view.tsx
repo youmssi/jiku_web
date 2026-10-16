@@ -30,7 +30,8 @@ async function readList<T>(path: string): Promise<T[]> {
 /**
  * An event's Guests tab: who is on the list, what they answered, whether they
  * were reached on each channel, and what a sold ticket still owes. Adding,
- * importing and inviting open in dialogs from the toolbar.
+ * importing and inviting open in dialogs from the toolbar; an empty list
+ * offers adding and importing once, in its empty state.
  */
 export async function GuestsView({ eventId }: { eventId: string }) {
   const [guests, invitations, ticketTypes, eventResponse, t] = await Promise.all([
@@ -40,9 +41,12 @@ export async function GuestsView({ eventId }: { eventId: string }) {
     serverFetch(`/events/${eventId}`),
     getTranslations("guests"),
   ]);
-  const enabledChannels: InvitationChannel[] = eventResponse.ok
-    ? ((await eventResponse.json()) as { invitationChannels: InvitationChannel[] }).invitationChannels
-    : [];
+  const event = eventResponse.ok
+    ? ((await eventResponse.json()) as { invitationChannels: InvitationChannel[]; status: string })
+    : null;
+  const enabledChannels: InvitationChannel[] = event?.invitationChannels ?? [];
+  // A draft is sent from the header's "Publish and send"; here sending appears once it is live.
+  const canSend = guests.length > 0 && event?.status === "PUBLISHED";
 
   const invitationStatus = new Map(
     invitations.map((invitation) => [`${invitation.guestId}:${invitation.channel}`, invitation.status]),
@@ -78,14 +82,14 @@ export async function GuestsView({ eventId }: { eventId: string }) {
         <h2 id="guests-title" className="text-lg font-medium">
           {t("title", { count: guests.length })}
         </h2>
-        <div className="flex flex-wrap items-center gap-2">
-          {guests.length > 0 ? <ExportGuestsButton href={eventGuestsExportRoute(eventId)} /> : null}
-          <ImportGuestsDialog eventId={eventId} />
-          <AddGuestDialog eventId={eventId} />
-          {guests.length > 0 ? (
-            <SendInvitationsDialog eventId={eventId} enabledChannels={enabledChannels} reach={reach} />
-          ) : null}
-        </div>
+        {guests.length > 0 ? (
+          <div className="flex flex-wrap items-center gap-2">
+            {canSend ? <SendInvitationsDialog eventId={eventId} enabledChannels={enabledChannels} reach={reach} /> : null}
+            <AddGuestDialog eventId={eventId} />
+            <ImportGuestsDialog eventId={eventId} />
+            <ExportGuestsButton href={eventGuestsExportRoute(eventId)} />
+          </div>
+        ) : null}
       </div>
       {awaitingConsent > 0 ? <ConsentBanner eventId={eventId} count={awaitingConsent} /> : null}
 

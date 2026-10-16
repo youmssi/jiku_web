@@ -5,12 +5,14 @@ import { serverFetch } from "@/lib/api-server";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 import { toMinorUnits } from "@/lib/currency";
 import { localInputToUtc } from "@/lib/datetime";
+import { loadEvent, toEventFormValues } from "@/components/modules/event/event.queries";
 import {
   eventFormSchema,
   QUORUM_FRACTIONS,
   quorumFormSchema,
   ticketTypeFormSchema,
   type EventFormValues,
+  type InvitationChannel,
   type QuorumFormValues,
   type TicketTypeFormValues,
 } from "@/components/modules/event/schema";
@@ -86,6 +88,20 @@ export async function updateDraftAction(
     return fail(t("saveFailed"));
   }
   return ok(null);
+}
+
+/**
+ * Changes only the channels a draft invites on (JIKU-251), from the setup
+ * checklist: the rest of the event is written back as it is.
+ */
+export async function setInvitationChannelsAction(
+  id: string,
+  channels: InvitationChannel[],
+): Promise<ActionResult> {
+  const t = await errors();
+  const load = await loadEvent(id);
+  if (load.kind !== "ok") return fail(t("saveFailed"));
+  return updateDraftAction(id, { ...toEventFormValues(load.event), invitationChannels: channels });
 }
 
 export async function publishEventAction(id: string): Promise<ActionResult> {

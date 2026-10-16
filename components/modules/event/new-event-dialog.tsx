@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { Plus } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,7 @@ import {
 import { FormFieldError } from "@/components/shared";
 import { trackEvent } from "@/lib/analytics";
 import { eventRoute } from "@/lib/constants";
+import { zoneCity } from "@/lib/datetime";
 import { createDraftAction } from "./event.service";
 import {
   emptyEventValues,
@@ -45,9 +46,11 @@ import {
  */
 export function NewEventDialog({ variant = "default" }: { variant?: "default" | "outline" }) {
   const t = useTranslations("events.create");
-  const tCommon = useTranslations("common.actions");
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  // The organization's timezone is right for nearly every event: it shows as
+  // a line, and becomes a choice only when the organizer asks to change it.
+  const [zoneOpen, setZoneOpen] = useState(false);
   const {
     control,
     handleSubmit,
@@ -63,17 +66,19 @@ export function NewEventDialog({ variant = "default" }: { variant?: "default" | 
     },
   });
 
+  const zoneValue = useWatch({ control, name: "timezone" });
+
   async function onSubmit(values: QuickCreateEventValues) {
     const result = await createDraftAction({ ...emptyEventValues, ...values });
     if (!result.ok) {
       toast.error(result.error);
       return;
     }
-    toast.success(t("created"));
     // Every new event starts on the free tier (JIKU-32); it is the only
     // value known at creation time, before any usage/paid unlock exists.
     trackEvent("event_created", { tier: "FREE" });
     reset();
+    setZoneOpen(false);
     setOpen(false);
     router.push(eventRoute(result.data.id));
   }
@@ -112,28 +117,6 @@ export function NewEventDialog({ variant = "default" }: { variant?: "default" | 
             />
             <Controller
               control={control}
-              name="timezone"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>{t("timezone")}</FieldLabel>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
-                      <SelectValue placeholder={t("timezonePlaceholder")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {TIMEZONES.map((zone) => (
-                        <SelectItem key={zone} value={zone}>
-                          {zone}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormFieldError error={fieldState.error} />
-                </Field>
-              )}
-            />
-            <Controller
-              control={control}
               name="startLocal"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -143,12 +126,37 @@ export function NewEventDialog({ variant = "default" }: { variant?: "default" | 
                 </Field>
               )}
             />
+            {zoneOpen ? (
+              <Controller
+                control={control}
+                name="timezone"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>{t("timezone")}</FieldLabel>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
+                        <SelectValue placeholder={t("timezonePlaceholder")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {TIMEZONES.map((zone) => (
+                          <SelectItem key={zone} value={zone}>
+                            {zone}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
+              />
+            ) : (
+              <Button type="button" variant="link" className="self-start px-0 max-md:px-0" onClick={() => setZoneOpen(true)}>
+                {t("timezoneSummary", { zone: zoneCity(zoneValue) })}
+              </Button>
+            )}
           </FieldGroup>
         </form>
         <DialogFooter>
-          <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-            {tCommon("cancel")}
-          </Button>
           <Button type="submit" form="new-event-form" disabled={isSubmitting}>
             {isSubmitting ? t("submitting") : t("submit")}
           </Button>

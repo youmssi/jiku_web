@@ -15,6 +15,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { loadEvent, loadPublishChecklist } from "./event.queries";
 import { publishCheckHref } from "./publish-checks";
+import { ChannelPicker } from "./channel-picker";
 
 /**
  * A draft's overview: the steps between "created" and "live", in the order an
@@ -37,7 +38,7 @@ export async function EventSetup({ eventId }: { eventId: string }) {
         </p>
         <div className="flex items-center gap-3">
           <Progress value={(done / total) * 100} className="max-w-xs" aria-label={t("setup.progress", { done, total })} />
-          <span className="text-sm text-muted-foreground">{t("setup.progress", { done, total })}</span>
+          <span className="shrink-0 text-sm whitespace-nowrap text-muted-foreground">{t("setup.progress", { done, total })}</span>
         </div>
       </div>
       <ItemGroup className="gap-2">
@@ -56,14 +57,21 @@ export async function EventSetup({ eventId }: { eventId: string }) {
                 {check.required ? null : <Badge variant="outline">{t("publish.recommended")}</Badge>}
               </ItemTitle>
               <ItemDescription>{t(`publish.checks.${check.key}.description`)}</ItemDescription>
+              {check.key === "channels" ? (
+                <div className="pt-2">
+                  <ChannelPicker eventId={eventId} initial={load.event.invitationChannels} />
+                </div>
+              ) : null}
             </ItemContent>
-            <ItemActions>
-              <Button asChild size="sm" variant={check.done ? "ghost" : "outline"}>
-                <Link href={publishCheckHref(check.key, eventId)}>
-                  {check.done ? t("setup.review") : t(`publish.checks.${check.key}.cta`)}
-                </Link>
-              </Button>
-            </ItemActions>
+            {check.key === "channels" ? null : (
+              <ItemActions>
+                <Button asChild variant={check.done ? "ghost" : "outline"}>
+                  <Link href={publishCheckHref(check.key, eventId)}>
+                    {check.done ? t("setup.review") : t(`publish.checks.${check.key}.cta`)}
+                  </Link>
+                </Button>
+              </ItemActions>
+            )}
           </Item>
         ))}
       </ItemGroup>

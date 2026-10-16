@@ -5,7 +5,9 @@ import { Slot } from "radix-ui"
 import { cn } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
 
-function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
+// A group is announced as a list, so each item placed directly in it is
+// announced as a list item. No context: groups also render on the server.
+function ItemGroup({ className, children, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       role="list"
@@ -15,7 +17,13 @@ function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
         className
       )}
       {...props}
-    />
+    >
+      {React.Children.map(children, (child) =>
+        React.isValidElement<{ role?: string }>(child) && child.type === Item && !child.props.role
+          ? React.cloneElement(child, { role: "listitem" })
+          : child
+      )}
+    </div>
   )
 }
 

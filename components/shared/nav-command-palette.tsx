@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Search } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -68,11 +69,14 @@ export function NavCommandPalette({ variant }: { variant: NavCommandPaletteVaria
         type="button"
         variant="outline"
         size="sm"
-        className="ml-auto gap-2 text-muted-foreground"
+        className="ml-auto gap-2 text-muted-foreground max-md:size-11 max-md:p-0"
+        aria-label={t("palette.open")}
         onClick={() => setOpen(true)}
       >
-        <span className="hidden sm:inline">{t("palette.open")}</span>
-        <Kbd>⌘K</Kbd>
+        {/* A phone has no ⌘K: it gets a search icon, a keyboard gets the hint. */}
+        <Search aria-hidden className="md:hidden" />
+        <span className="hidden md:inline">{t("palette.open")}</span>
+        <Kbd className="max-md:hidden">⌘K</Kbd>
       </Button>
       <CommandDialog
         open={open}

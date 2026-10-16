@@ -12,6 +12,7 @@ export {LocalDateTime, useLocalDateTime} from "./use-local-date-time";
 export {LocaleSwitch} from "./locale-switch";
 export {ServiceWorkerRegister} from "./service-worker-register";
 export {useRoleLabel} from "./use-role-label";
+export {useUnsavedChangesGuard} from "./use-unsaved-changes-guard";
 export {type LiveTicket, useLiveSignal} from "./use-live-signal";
 export {PaymentDue} from "./payment-due";
 export {QrCode} from "./qr-code";
