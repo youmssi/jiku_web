@@ -81,7 +81,8 @@
     "surchargeOnly": "Réponses dans WhatsApp pour vos invités déjà couverts",
     "coveredTitle": "Couvert par votre Pack Organisateur",
     "coveredText": "Cet événement puise dans les invités du mois de votre Pack : aucun palier à acheter. Suivez et complétez votre Pack depuis la page Facturation.",
-    "packTier": "Pack Organisateur"
+    "packTier": "Pack Organisateur",
+    "activateTier": "Demander l'activation du palier {tier}"
   },
   "instructions": {
     "title": "Activation demandée : {tier}, {amount}",

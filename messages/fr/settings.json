@@ -11,7 +11,14 @@
       "payments": "Moyens de paiement",
       "legal": "Facturation",
       "personalisation": "Personnalisation",
-      "account": "Compte"
+      "account": "Compte",
+      "verification": "Vérification"
+    },
+    "groups": {
+      "organization": "Votre organisation",
+      "payments": "Paiements",
+      "messages": "Messages",
+      "account": "Vous"
     }
   },
   "whatsappNumber": {
@@ -86,15 +93,12 @@
     }
   },
   "verification": {
-    "tab": "Vérification",
     "title": "Vérifier votre organisation",
-    "text": "La vérification est obligatoire pour demander un paiement à vos clients : billets payants, services payants ou moyens de paiement. Elle reste recommandée à toutes les organisations, car vos invités voient qu'elle est vérifiée. Une vérification personnelle ou une vérification d'entreprise suffit.",
+    "text": "Obligatoire pour encaisser vos clients : billets ou services payants, moyens de paiement. Vos invités voient aussi le badge de vérification.",
     "status": {
       "verifiedCompany": "Organisation vérifiée",
       "verifiedPersonal": "Identité vérifiée",
-      "verifiedText": "Vous pouvez encaisser vos clients, et vos invités voient le badge de vérification sur vos pages.",
-      "notVerified": "Organisation non vérifiée",
-      "notVerifiedText": "Tant qu'aucune vérification n'est approuvée, vous ne pouvez ni fixer un prix, ni rendre un service payant, ni enregistrer des moyens de paiement."
+      "verifiedText": "Vous pouvez encaisser vos clients, et vos invités voient le badge de vérification sur vos pages."
     },
     "phone": {
       "title": "Numéro de téléphone",
@@ -117,11 +121,13 @@
     "personal": {
       "title": "Vérification personnelle",
       "text": "Pour une personne qui organise en son nom : une pièce d'identité et un numéro de téléphone confirmé.",
-      "needsPhone": "Confirmez d'abord votre numéro de téléphone ci-dessus."
+      "needsPhone": "Confirmez d'abord votre numéro de téléphone ci-dessus.",
+      "choice": "J'organise en mon nom"
     },
     "company": {
       "title": "Vérification d'entreprise",
-      "text": "Pour une société, une association ou un établissement : ses documents d'immatriculation."
+      "text": "Pour une société, une association ou un établissement : ses documents d'immatriculation.",
+      "choice": "J'organise pour une entreprise ou une association"
     },
     "request": {
       "status": {
@@ -173,7 +179,8 @@
       "fileType": "Joignez des fichiers JPEG, PNG ou PDF.",
       "storageUnavailable": "L'envoi de documents est momentanément indisponible. Réessayez plus tard.",
       "failed": "Impossible d'envoyer votre demande. Réessayez."
-    }
+    },
+    "changePath": "Changer de type de vérification"
   },
   "sales": {
     "tab": "Ventes",
@@ -206,7 +213,6 @@
     }
   },
   "members": {
-    "intro": "Les propriétaires gèrent tout ; les administrateurs gèrent l'activité et l'équipe ; les membres font tourner les évènements. Les invitations en attente restent ici jusqu'à leur acceptation ou leur révocation.",
     "search": "Rechercher par e-mail…",
     "failedTitle": "L'action n'a pas abouti",
     "invited": "Invitation envoyée.",
@@ -227,7 +233,8 @@
       "role": "Rôle",
       "cancel": "Annuler",
       "submit": "Envoyer l'invitation",
-      "submitting": "Envoi…"
+      "submitting": "Envoi…",
+      "roleHint": "Administrateur : gère l'activité et l'équipe. Membre : fait tourner les événements. Le propriétaire garde la main sur tout."
     },
     "actions": {
       "label": "Actions pour {email}",
@@ -337,10 +344,29 @@
     "body": "Texte du message",
     "variables": "Variables disponibles",
     "restore": "Rétablir le texte par défaut",
-    "preview": "Aperçu",
     "rendering": "Préparation…",
     "save": "Enregistrer le message",
-    "saved": "Message enregistré."
+    "saved": "Message enregistré.",
+    "previewTitle": "Aperçu",
+    "previewStale": "Le texte a changé : mettez à jour l'aperçu.",
+    "refreshPreview": "Mettre à jour l'aperçu",
+    "edit": "Modifier le texte",
+    "editHtml": "Modifier le code HTML (avancé)",
+    "termLabels": {
+      "ticket": "Ticket ou numéro de passage",
+      "appointment": "Rendez-vous réservé",
+      "walkIn": "Sans rendez-vous",
+      "person": "Personne",
+      "professional": "Professionnel",
+      "action": "Action"
+    },
+    "templateLabels": {
+      "invitation": "Invitation",
+      "ticket": "Billet envoyé directement (WhatsApp)",
+      "event-cancelled": "Annulation de l'événement",
+      "appointment-reminder": "Rappel de rendez-vous (WhatsApp)",
+      "client-called": "C'est votre tour (WhatsApp ou SMS)"
+    }
   },
   "email": {
     "title": "E-mail",

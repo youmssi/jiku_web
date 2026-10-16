@@ -81,7 +81,8 @@
     "surchargeOnly": "Answers in WhatsApp for the guests you already have",
     "coveredTitle": "Covered by your Organizer Pack",
     "coveredText": "This event uses your Pack's guests for the month: no tier to buy. Follow and top up your Pack from the Billing page.",
-    "packTier": "Organizer Pack"
+    "packTier": "Organizer Pack",
+    "activateTier": "Request activation of the {tier} tier"
   },
   "instructions": {
     "title": "Activation requested: {tier}, {amount}",

@@ -420,7 +420,8 @@
     "errors": {
       "alreadyDecided": "This order was already handled or has expired.",
       "failed": "We couldn't process this order. Try again."
-    }
+    },
+    "noneYet": "They show up here as soon as a client buys a ticket on your sale page."
   },
   "commission": {
     "title": "Jikū commission ({rate}%)",

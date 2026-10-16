@@ -1,8 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
+import { Building2, ChevronRight, UserRound } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PhoneStep } from "./phone-step";
 import { RequestForm } from "./request-form";
@@ -19,10 +23,12 @@ const STATUS_CLASSES = {
  * before clients can be asked to pay, and recommended to every organization: a
  * verified one is shown as such to its guests. Either a personal verification
  * (identity document and confirmed phone) or a company one (registration
- * papers) is enough.
+ * papers) is enough, so the organizer first says which one fits them and only
+ * that path is shown; a request already sent opens on its own path.
  */
 export function VerificationView({ overview }: { overview: VerificationOverview | null }) {
   const t = useTranslations("settings.verification");
+  const [chosen, setChosen] = useState<VerificationKind | null>(null);
   if (!overview) {
     return (
       <Alert variant="destructive">
@@ -32,6 +38,8 @@ export function VerificationView({ overview }: { overview: VerificationOverview 
   }
   const approvedKind =
     overview.company?.status === "APPROVED" ? "company" : overview.personal?.status === "APPROVED" ? "personal" : null;
+  const requested: VerificationKind | null = overview.company ? "company" : overview.personal ? "personal" : null;
+  const path = chosen ?? requested;
 
   return (
     <div className="flex flex-col gap-6">
@@ -45,25 +53,51 @@ export function VerificationView({ overview }: { overview: VerificationOverview 
           <AlertTitle>{t(approvedKind === "company" ? "status.verifiedCompany" : "status.verifiedPersonal")}</AlertTitle>
           <AlertDescription>{t("status.verifiedText")}</AlertDescription>
         </Alert>
+      ) : null}
+
+      {path === null ? (
+        <ItemGroup className="gap-2">
+          {(["personal", "company"] as const).map((kind) => (
+            <Item key={kind} variant="outline" asChild>
+              <button type="button" onClick={() => setChosen(kind)} className="text-left">
+                <ItemMedia variant="icon">{kind === "personal" ? <UserRound /> : <Building2 />}</ItemMedia>
+                <ItemContent>
+                  <ItemTitle>{t(`${kind}.choice`)}</ItemTitle>
+                  <ItemDescription className="line-clamp-none">{t(`${kind}.text`)}</ItemDescription>
+                </ItemContent>
+                <ItemActions>
+                  <ChevronRight className="size-4" aria-hidden />
+                </ItemActions>
+              </button>
+            </Item>
+          ))}
+        </ItemGroup>
       ) : (
-        <Alert>
-          <AlertTitle>{t("status.notVerified")}</AlertTitle>
-          <AlertDescription>{t("status.notVerifiedText")}</AlertDescription>
-        </Alert>
+        <>
+          {path === "personal" && !approvedKind ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("phone.title")}</CardTitle>
+                <CardDescription>{t("phone.text")}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <PhoneStep phone={overview.phone} />
+              </CardContent>
+            </Card>
+          ) : null}
+          <RequestCard
+            kind={path}
+            request={path === "company" ? overview.company : overview.personal}
+            limits={overview.limits}
+            ready={path === "company" || overview.phone.verified}
+          />
+          {chosen !== null && requested === null ? (
+            <Button variant="ghost" className="self-start" onClick={() => setChosen(null)}>
+              {t("changePath")}
+            </Button>
+          ) : null}
+        </>
       )}
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("phone.title")}</CardTitle>
-          <CardDescription>{t("phone.text")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <PhoneStep phone={overview.phone} />
-        </CardContent>
-      </Card>
-
-      <RequestCard kind="personal" request={overview.personal} limits={overview.limits} ready={overview.phone.verified} />
-      <RequestCard kind="company" request={overview.company} limits={overview.limits} ready />
     </div>
   );
 }

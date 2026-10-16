@@ -145,15 +145,15 @@ export function BillingView({
                   </div>
                   <div className="flex flex-wrap justify-end gap-2">
                     <Button
-                      size="sm"
                       variant={online ? "outline" : "default"}
+                      aria-label={t("activateTier", { tier: quote.tier })}
                       onClick={() => requestTier(quote.tier)}
                       disabled={pendingTier !== null}
                     >
                       {pendingTier === quote.tier ? t("requesting") : t("activate")}
                     </Button>
                     {online ? (
-                      <PayOnlineButton size="sm" target={{ kind: "tier", eventId, tier: quote.tier }} />
+                      <PayOnlineButton target={{ kind: "tier", eventId, tier: quote.tier }} />
                     ) : null}
                   </div>
                 </div>
