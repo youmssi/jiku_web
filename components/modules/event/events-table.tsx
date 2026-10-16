@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 import { ChevronRight, Search } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemTitle } from "@/components/ui/item";
@@ -97,12 +98,26 @@ export function EventsTable({ events }: { events: EventListItem[] }) {
             </Link>
           </Item>
         ))}
-        {shown.length === 0 ? <p className="py-6 text-center text-sm text-muted-foreground">{t("list.noMatch")}</p> : null}
       </ItemGroup>
 
-      <div className="hidden md:block">
-        <DataTable columns={columns} data={shown} />
-      </div>
+      {shown.length === 0 ? (
+        <div className="flex flex-col items-center gap-2 py-6 text-center">
+          <p className="text-sm text-muted-foreground">{t("list.noMatch")}</p>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setQuery("");
+              setStatus(ALL);
+            }}
+          >
+            {t("list.clearFilters")}
+          </Button>
+        </div>
+      ) : (
+        <div className="hidden md:block">
+          <DataTable columns={columns} data={shown} />
+        </div>
+      )}
     </div>
   );
 }

@@ -59,6 +59,15 @@ export function EventDashboard({ eventId, initial, analytics, dayOf, toolbar }: 
   const answeredPct = data.totalGuests > 0 ? Math.round((data.confirmed / data.totalGuests) * 100) : 0;
   const guestsHref = eventGuestsRoute(eventId);
   const answerHref = (answer: string) => `${guestsHref}?answer=${answer}`;
+  const unsent = data.totalGuests - data.invited;
+  // Guests who never got their link come first: no answer can arrive before it does.
+  const nextStep = dayOf
+    ? null
+    : unsent > 0
+      ? { href: guestsHref, title: t("next.unsent", { count: unsent }), hint: t("next.unsentHint") }
+      : data.pending > 0 && data.invited > 0
+        ? { href: answerHref("PENDING"), title: t("next.pending", { count: data.pending }), hint: t("next.pendingHint") }
+        : null;
   const hasTrends =
     analytics !== null &&
     (analytics.guestGrowth.length >= 2 ||
@@ -209,12 +218,12 @@ export function EventDashboard({ eventId, initial, analytics, dayOf, toolbar }: 
         responses
       )}
 
-      {!dayOf && data.pending > 0 && data.invited > 0 ? (
+      {nextStep ? (
         <Item variant="outline" asChild>
-          <Link href={answerHref("PENDING")}>
+          <Link href={nextStep.href}>
             <ItemContent>
-              <ItemTitle>{t("next.pending", { count: data.pending })}</ItemTitle>
-              <ItemDescription>{t("next.pendingHint")}</ItemDescription>
+              <ItemTitle>{nextStep.title}</ItemTitle>
+              <ItemDescription>{nextStep.hint}</ItemDescription>
             </ItemContent>
             <ItemActions>
               <ChevronRight className="size-4" aria-hidden />

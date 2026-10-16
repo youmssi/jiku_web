@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition, type ReactNode } from "react";
+import { useOptimistic, useTransition, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,7 +49,7 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
   });
 
   async function onSubmit(values: SettingsInput) {
-    const result = await saveOpenInvitationAction(eventId, values);
+    const result = await saveOpenInvitationAction(eventId, { ...values, enabled: invitation.enabled });
     if (!result.ok) {
       toast.error(result.error);
       return;
@@ -154,9 +154,11 @@ export function AcceptingSwitch({ eventId, invitation }: { eventId: string; invi
   const t = useTranslations("events.openInvitation.settings");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const [checked, setChecked] = useOptimistic(invitation.enabled);
 
   function toggle(enabled: boolean) {
     startTransition(async () => {
+      setChecked(enabled);
       const result = await saveOpenInvitationAction(eventId, {
         enabled,
         welcomeMessage: invitation.welcomeMessage ?? "",
@@ -177,7 +179,7 @@ export function AcceptingSwitch({ eventId, invitation }: { eventId: string; invi
       <Label htmlFor="open-enabled" help={t("enabledHelp")} more={t("moreInfo")}>
         {t("enabled")}
       </Label>
-      <Switch id="open-enabled" checked={invitation.enabled} disabled={pending} onCheckedChange={toggle} />
+      <Switch id="open-enabled" checked={checked} disabled={pending} onCheckedChange={toggle} />
     </Field>
   );
 }

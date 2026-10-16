@@ -346,6 +346,8 @@
       "ofGuests": "{count, plural, one {sur # invité} other {sur # invités}}"
     },
     "next": {
+      "unsent": "{count, plural, one {# invité n'a pas encore reçu son invitation} other {# invités n'ont pas encore reçu leur invitation}}",
+      "unsentHint": "Envoyer les invitations",
       "pending": "{count, plural, one {# invité n'a pas encore répondu} other {# invités n'ont pas encore répondu}}",
       "pendingHint": "Voir qui relancer"
     },
@@ -364,7 +366,8 @@
       "location": "Lieu",
       "undated": "Date à définir"
     },
-    "noMatch": "Aucun événement ne correspond."
+    "noMatch": "Aucun événement ne correspond.",
+    "clearFilters": "Effacer les filtres"
   },
   "orders": {
     "title": "Commandes",
