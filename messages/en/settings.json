@@ -103,11 +103,13 @@
     "phone": {
       "title": "Phone number",
       "text": "We send you a code on WhatsApp, or by SMS if your number has no WhatsApp, to confirm the number you can be reached on. A personal verification needs it.",
+      "textWhatsApp": "We send you a code on WhatsApp to confirm the number you can be reached on. A personal verification needs it.",
       "label": "Phone number",
       "help": "In the international format, e.g. +224 620 00 00 00.",
       "send": "Get a code",
       "sending": "Sending…",
       "sent": "Code sent on WhatsApp, or by SMS.",
+      "sentWhatsApp": "Code sent on WhatsApp.",
       "codeLabel": "Code received",
       "codeHelp": "Enter the 6 digits sent to {phone}.",
       "confirm": "Confirm",

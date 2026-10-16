@@ -1,4 +1,5 @@
 import { serverFetch } from "@/lib/api-server";
+import { loadSmsAvailable } from "@/lib/sms-available";
 import { fetchServiceConfigurationAction } from "@/components/modules/services/services.service";
 import type { ServiceSummary } from "@/components/modules/services/schema";
 import { ServiceConfigurationPanel } from "@/components/modules/services/service-configuration-view";
@@ -8,10 +9,11 @@ import { ServiceConfigurationPanel } from "@/components/modules/services/service
  * sessions and reminders, loaded on the server and edited on the client.
  */
 export async function ServiceConfigurationView({ serviceId }: { serviceId: string }) {
-  const [result, serviceRes, profileRes] = await Promise.all([
+  const [result, serviceRes, profileRes, smsAvailable] = await Promise.all([
     fetchServiceConfigurationAction(serviceId),
     serverFetch(`/services/${serviceId}`),
     serverFetch("/orgs/profile"),
+    loadSmsAvailable(),
   ]);
 
   if (!result.ok || !serviceRes.ok) {
@@ -24,5 +26,5 @@ export async function ServiceConfigurationView({ serviceId }: { serviceId: strin
 
   const service = (await serviceRes.json()) as ServiceSummary;
   const currency = profileRes.ok ? (((await profileRes.json()) as { currency?: string | null }).currency ?? null) : null;
-  return <ServiceConfigurationPanel service={service} currency={currency} initial={result.data} />;
+  return <ServiceConfigurationPanel service={service} currency={currency} initial={result.data} smsAvailable={smsAvailable} />;
 }
