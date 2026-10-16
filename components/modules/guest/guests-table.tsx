@@ -245,10 +245,10 @@ export function GuestsTable({
         value={response}
         onValueChange={(value) => value && setResponse(value as ResponseFilter)}
         aria-label={t("filters.label")}
-        className="flex-wrap"
+        className="flex-wrap max-md:-mx-4 max-md:w-[calc(100%+2rem)] max-md:flex-nowrap max-md:justify-start max-md:overflow-x-auto max-md:px-4"
       >
         {filters.map((filter) => (
-          <ToggleGroupItem key={filter} value={filter}>
+          <ToggleGroupItem key={filter} value={filter} className="shrink-0 max-md:h-11">
             {t(`filters.${filter}`)}
             <span className="text-muted-foreground tabular-nums">{counts[filter]}</span>
           </ToggleGroupItem>

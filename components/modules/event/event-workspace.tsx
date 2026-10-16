@@ -46,7 +46,7 @@ export async function EventWorkspace({ eventId, children }: { eventId: string; c
             </div>
             <EventWhenWhere event={event} />
           </div>
-          <EventActions eventId={event.id} status={event.status} checklist={checklist} />
+          <EventActions eventId={event.id} status={event.status} checklist={checklist} channels={event.invitationChannels} />
         </div>
         <EventTabs eventId={event.id} />
       </header>

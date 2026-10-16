@@ -2,15 +2,15 @@
   "create": {
     "trigger": "Nouvel événement",
     "title": "Créer un événement",
-    "description": "Donnez-lui un nom et un fuseau horaire : le reste se complète sur la page de l'événement.",
+    "description": "Un nom suffit pour commencer : le reste se complète sur la page de l'événement.",
     "name": "Nom de l'événement",
     "timezone": "Fuseau horaire",
     "timezonePlaceholder": "Choisissez un fuseau",
     "start": "Début (facultatif)",
     "submit": "Créer le brouillon",
     "submitting": "Création…",
-    "created": "Brouillon créé.",
-    "failed": "Impossible de créer l'événement."
+    "failed": "Impossible de créer l'événement.",
+    "timezoneSummary": "Heure de {zone} · changer"
   },
   "status": {
     "DRAFT": "Brouillon",
@@ -71,7 +71,6 @@
     "recommended": "Recommandé",
     "fix": "Compléter",
     "consequence": "Une fois publié, les informations de l'événement ne se modifient plus : vérifiez la date et le lieu.",
-    "later": "Plus tard",
     "checks": {
       "details": {
         "title": "Nom et date",
@@ -93,14 +92,21 @@
         "description": "Importez un fichier ou ajoutez vos invités un par un.",
         "cta": "Ajouter"
       }
-    }
+    },
+    "andSend": "Publier et envoyer les invitations",
+    "withoutSending": "Publier sans envoyer",
+    "publishedAndSent": "{count, plural, =0 {Événement publié. Aucun invité à joindre sur ces canaux.} one {Événement publié. # invitation part.} other {Événement publié. # invitations partent.}}",
+    "publishedNotSent": "Événement publié, mais les invitations ne sont pas parties.",
+    "openBilling": "Voir la facturation",
+    "openGuests": "Voir les invités"
   },
   "setup": {
     "title": "Préparez votre événement",
     "description": "Quelques étapes, dans l'ordre qui vous convient. Publiez depuis l'en-tête quand l'essentiel est prêt.",
     "ready": "L'essentiel est prêt : vous pouvez publier depuis l'en-tête.",
     "progress": "{done} sur {total}",
-    "review": "Revoir"
+    "review": "Revoir",
+    "channelsLabel": "Canaux d'invitation"
   },
   "errors": {
     "invalid": "Vérifiez le formulaire et réessayez.",
@@ -185,7 +191,9 @@
       "logoHint": "Une image en ligne, en https://",
       "color": "Couleur",
       "preview": "Aperçu pour vos invités"
-    }
+    },
+    "advanced": "Options avancées",
+    "leaveUnsaved": "Vos modifications ne sont pas enregistrées. Quitter quand même ?"
   },
   "quorum": {
     "title": "Quorum",

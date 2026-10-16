@@ -2,15 +2,15 @@
   "create": {
     "trigger": "New event",
     "title": "Create an event",
-    "description": "Give it a name and a timezone: everything else is filled in on the event's own page.",
+    "description": "A name is enough to start: everything else is filled in on the event's own page.",
     "name": "Event name",
     "timezone": "Timezone",
     "timezonePlaceholder": "Select a timezone",
     "start": "Starts (optional)",
     "submit": "Create draft",
     "submitting": "Creating…",
-    "created": "Draft created.",
-    "failed": "The event could not be created."
+    "failed": "The event could not be created.",
+    "timezoneSummary": "{zone} time · change"
   },
   "status": {
     "DRAFT": "Draft",
@@ -71,7 +71,6 @@
     "recommended": "Recommended",
     "fix": "Complete",
     "consequence": "Once published, the event's details can no longer change: double-check the date and place.",
-    "later": "Later",
     "checks": {
       "details": {
         "title": "Name and date",
@@ -93,14 +92,21 @@
         "description": "Import a file or add your guests one by one.",
         "cta": "Add"
       }
-    }
+    },
+    "andSend": "Publish and send invitations",
+    "withoutSending": "Publish without sending",
+    "publishedAndSent": "{count, plural, =0 {Event published. No guest to reach on these channels.} one {Event published. # invitation is on its way.} other {Event published. # invitations are on their way.}}",
+    "publishedNotSent": "Event published, but the invitations were not sent.",
+    "openBilling": "Open billing",
+    "openGuests": "Open guests"
   },
   "setup": {
     "title": "Get your event ready",
     "description": "A few steps, in whatever order suits you. Publish from the header once the essentials are ready.",
     "ready": "The essentials are ready: you can publish from the header.",
     "progress": "{done} of {total}",
-    "review": "Review"
+    "review": "Review",
+    "channelsLabel": "Invitation channels"
   },
   "errors": {
     "invalid": "Check the form and try again.",
@@ -185,7 +191,9 @@
       "logoHint": "An online image, starting with https://",
       "color": "Color",
       "preview": "What your guests see"
-    }
+    },
+    "advanced": "Advanced options",
+    "leaveUnsaved": "Your changes are not saved. Leave anyway?"
   },
   "quorum": {
     "title": "Quorum",
