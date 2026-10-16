@@ -10,14 +10,14 @@ export function TicketActions({ calendarUrl }: { calendarUrl: string | null }) {
   return (
     <div className="mt-5 flex w-full max-w-sm flex-col gap-2 sm:flex-row print:hidden">
       {calendarUrl ? (
-        <Button asChild variant="outline" className="h-11 flex-1">
+        <Button asChild variant="outline" className="h-11 w-full sm:w-auto sm:flex-1">
           <a href={calendarUrl} target="_blank" rel="noopener noreferrer">
             <CalendarPlus />
             {t("addToCalendar")}
           </a>
         </Button>
       ) : null}
-      <Button variant="outline" className="h-11 flex-1" onClick={() => window.print()}>
+      <Button variant="outline" className="h-11 w-full sm:w-auto sm:flex-1" onClick={() => window.print()}>
         <Download />
         {t("save")}
       </Button>

@@ -150,7 +150,7 @@ export function TicketCard({
             <button
               type="button"
               onClick={() => setCodeShown(true)}
-              className="text-xs underline underline-offset-4 print:hidden"
+              className="inline-flex min-h-11 items-center text-xs underline underline-offset-4 print:hidden"
               style={{ color: tokens.panelMuted }}
             >
               {t("showCode")}
