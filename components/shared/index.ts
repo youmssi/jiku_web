@@ -17,6 +17,7 @@ export {useUnsavedChangesGuard} from "./use-unsaved-changes-guard";
 export {type LiveTicket, useLiveSignal} from "./use-live-signal";
 export {PaymentDue} from "./payment-due";
 export {QrCode} from "./qr-code";
+export {resizeImage, type ResizeRules} from "./resize-image";
 export {StateMessage} from "./state-message";
 export {Stat} from "./stat";
 export {SupportButton} from "./support-button";
