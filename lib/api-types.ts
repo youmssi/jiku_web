@@ -5002,6 +5002,7 @@ export interface components {
         };
         MeResponse: {
             email?: string;
+            emailVerified?: boolean;
             fullName?: string | null;
             marketingConsent?: boolean;
             memberships?: components["schemas"]["MembershipView"][];

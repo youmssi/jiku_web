@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { CheckCircle2, Circle, MoreHorizontal, Rocket } from "lucide-react";
 import { toast } from "sonner";
 import { Link, useRouter } from "@/i18n/navigation";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +34,7 @@ import {
 } from "@/components/ui/item";
 import { askRating } from "@/components/modules/feedback";
 import { sendInvitationsAction } from "@/components/modules/guest";
+import { ResendVerificationButton } from "@/components/modules/identity";
 import { trackEvent } from "@/lib/analytics";
 import { billingRoute, eventGuestsRoute } from "@/lib/constants";
 import { publishEventAction } from "./event.service";
@@ -53,18 +55,21 @@ export function EventActions({
   status,
   checklist,
   channels,
+  canSend,
 }: {
   eventId: string;
   status: string;
   checklist: PublishChecklist | null;
   channels: InvitationChannel[];
+  /** False until the organizer confirms their email: invitations wait for it (JIKU-253). */
+  canSend: boolean;
 }) {
   const t = useTranslations("events");
   const [action, setAction] = useState<EventLifecycleAction | null>(null);
 
   return (
     <div className="flex items-center gap-2">
-      {status === "DRAFT" && checklist ? <PublishDialog eventId={eventId} checklist={checklist} channels={channels} /> : null}
+      {status === "DRAFT" && checklist ? <PublishDialog eventId={eventId} checklist={checklist} channels={channels} canSend={canSend} /> : null}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon" aria-label={t("actions.more")}>
@@ -92,10 +97,12 @@ function PublishDialog({
   eventId,
   checklist,
   channels,
+  canSend,
 }: {
   eventId: string;
   checklist: PublishChecklist;
   channels: InvitationChannel[];
+  canSend: boolean;
 }) {
   const t = useTranslations("events");
   const router = useRouter();
@@ -104,6 +111,9 @@ function PublishDialog({
   // Publishing is done to invite: with guests on the list, both happen in one
   // confirmation, and publishing alone stays one quieter button away.
   const hasGuests = checklist.checks.some((check) => check.key === "guests" && check.done);
+  // Before the address is confirmed, the event still goes live; the
+  // invitations follow from the guests tab once it is.
+  const sendNow = hasGuests && canSend;
 
   function publish(andSend: boolean) {
     startTransition(async () => {
@@ -121,11 +131,14 @@ function PublishDialog({
       }
       const sent = await sendInvitationsAction(eventId, channels);
       if (!sent.ok) {
+        // The guests tab carries the fix for every refusal but the paywall:
+        // its send panel offers to resend the confirmation link in place.
+        const paywall = sent.reason === "paywall";
         toast.error(t("publish.publishedNotSent"), {
           description: sent.error,
           action: {
-            label: sent.paywall ? t("publish.openBilling") : t("publish.openGuests"),
-            onClick: () => router.push(sent.paywall ? billingRoute(eventId) : eventGuestsRoute(eventId)),
+            label: paywall ? t("publish.openBilling") : t("publish.openGuests"),
+            onClick: () => router.push(paywall ? billingRoute(eventId) : eventGuestsRoute(eventId)),
           },
         });
         router.refresh();
@@ -186,9 +199,18 @@ function PublishDialog({
             </Item>
           ))}
         </ItemGroup>
+        {hasGuests && !canSend ? (
+          <Alert>
+            <AlertTitle>{t("publish.confirmEmailTitle")}</AlertTitle>
+            <AlertDescription className="flex flex-col gap-2">
+              {t("publish.confirmEmailDescription")}
+              <ResendVerificationButton />
+            </AlertDescription>
+          </Alert>
+        ) : null}
         <p className="text-sm text-muted-foreground">{t("publish.consequence")}</p>
         <DialogFooter>
-          {hasGuests ? (
+          {sendNow ? (
             <>
               <Button variant="ghost" onClick={() => publish(false)} disabled={!checklist.ready || pending}>
                 {t("publish.withoutSending")}

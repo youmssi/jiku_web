@@ -154,7 +154,8 @@
     "noChannelDescription": "Choisissez l'e-mail, WhatsApp ou les deux dans les paramètres de l'événement.",
     "openSettings": "Ouvrir les paramètres",
     "allowanceTitle": "Quota d'invités atteint",
-    "allowanceCta": "Voir les offres"
+    "allowanceCta": "Voir les offres",
+    "confirmEmailTitle": "Adresse e-mail à confirmer"
   },
   "errors": {
     "invalid": "Vérifiez les informations et réessayez.",
@@ -171,7 +172,8 @@
     "allowanceReached": "Le quota d'invités de cet événement est atteint. Passez au palier supérieur pour inviter davantage.",
     "sendFailed": "Les invitations n'ont pas pu être envoyées. Réessayez.",
     "categoryFull": "Cette catégorie est complète. Augmentez sa jauge ou choisissez-en une autre.",
-    "categoryFailed": "La catégorie n'a pas pu être changée. Réessayez."
+    "categoryFailed": "La catégorie n'a pas pu être changée. Réessayez.",
+    "confirmEmailFirst": "Confirmez d'abord votre adresse e-mail : le lien vous attend dans votre boîte de réception."
   },
   "noMatch": "Aucun invité ne correspond à ces filtres.",
   "showMore": "{count, plural, one {Voir # invité de plus} other {Voir # invités de plus}}",

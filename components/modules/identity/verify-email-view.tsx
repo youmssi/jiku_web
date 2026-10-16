@@ -14,10 +14,13 @@ import { verifyEmailAction } from "@/components/modules/identity/identity.servic
 
 type State = { status: "verifying" } | { status: "done" } | { status: "failed"; error: string | null };
 
-/** Consumes the emailed verification token as soon as the page opens (JIKU-49). */
+/**
+ * Consumes the emailed verification token as soon as the page opens (JIKU-49).
+ * The organizer already has their space, so the page hands them back to it;
+ * opened in another browser, the session check routes through sign-in first.
+ */
 export function VerifyEmailView({ token }: { token: string | null }) {
   const t = useTranslations("auth.verify");
-  const tCommon = useTranslations("common.actions");
   const [state, setState] = useState<State>(
     token ? { status: "verifying" } : { status: "failed", error: null },
   );
@@ -46,7 +49,7 @@ export function VerifyEmailView({ token }: { token: string | null }) {
             <AlertDescription>{t("doneDescription")}</AlertDescription>
           </Alert>
           <Button asChild className="w-full">
-            <Link href={ROUTES.ONBOARDING}>{tCommon("continue")}</Link>
+            <Link href={ROUTES.DASHBOARD}>{t("continue")}</Link>
           </Button>
         </FieldGroup>
       ) : (

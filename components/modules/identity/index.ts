@@ -7,6 +7,7 @@ export { ForgotPasswordForm } from "./forgot-password-form";
 export { ResetPasswordForm } from "./reset-password-form";
 export { VerifyEmailView } from "./verify-email-view";
 export { OnboardingForm } from "./onboarding-form";
+export { ConfirmEmailBanner, ResendVerificationButton } from "./confirm-email";
 export { AcceptInvitationView, InvalidInvitationView } from "./accept-invitation-view";
 
 export { logoutAction, switchOrgAction } from "./identity.service";
