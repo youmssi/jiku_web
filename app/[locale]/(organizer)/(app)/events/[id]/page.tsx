@@ -6,5 +6,9 @@ export default async function EventOverviewPage({ params }: Readonly<{ params: P
   const { id } = await params;
   const load = await loadEvent(id);
   if (load.kind !== "ok") return null;
-  return load.event.status === "DRAFT" ? <EventSetup eventId={id} /> : <DashboardView eventId={id} />;
+  return load.event.status === "DRAFT" ? (
+    <EventSetup eventId={id} />
+  ) : (
+    <DashboardView eventId={id} startDateTime={load.event.startDateTime ?? null} timezone={load.event.timezone} />
+  );
 }

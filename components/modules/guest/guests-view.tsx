@@ -10,7 +10,14 @@ import {
 } from "@/components/ui/empty";
 import { AddGuestDialog, ExportGuestsButton, ImportGuestsDialog, SendInvitationsDialog } from "@/components/modules/guest/guest-actions";
 import { ConsentBanner } from "@/components/modules/guest/consent-banner";
-import { GuestsTable, type GuestRow } from "@/components/modules/guest/guests-table";
+import { GuestsTable, type GuestRow, type ResponseFilter } from "@/components/modules/guest/guests-table";
+
+const RESPONSE_FILTERS: ResponseFilter[] = ["ALL", "CONFIRMED", "PENDING", "DECLINED", "PAYMENT_DUE"];
+
+/** The answer filter a link asks for (`?answer=PENDING`), or every guest. */
+function responseFilterOf(value: string | undefined): ResponseFilter {
+  return RESPONSE_FILTERS.find((filter) => filter === value) ?? "ALL";
+}
 import type { TicketTypeResponse } from "@/components/modules/event";
 import { reportApiError } from "@/lib/action-result";
 import { serverFetch } from "@/lib/api-server";
@@ -33,7 +40,7 @@ async function readList<T>(path: string): Promise<T[]> {
  * importing and inviting open in dialogs from the toolbar; an empty list
  * offers adding and importing once, in its empty state.
  */
-export async function GuestsView({ eventId }: { eventId: string }) {
+export async function GuestsView({ eventId, answer }: { eventId: string; answer?: string }) {
   const [guests, invitations, ticketTypes, eventResponse, t] = await Promise.all([
     readList<Guest>(`/events/${eventId}/guests`),
     readList<Invitation>(`/events/${eventId}/invitations`),
@@ -108,7 +115,7 @@ export async function GuestsView({ eventId }: { eventId: string }) {
           </EmptyContent>
         </Empty>
       ) : (
-        <GuestsTable eventId={eventId} rows={rows} ticketTypes={ticketTypes} />
+        <GuestsTable eventId={eventId} rows={rows} ticketTypes={ticketTypes} initialResponse={responseFilterOf(answer)} />
       )}
     </section>
   );

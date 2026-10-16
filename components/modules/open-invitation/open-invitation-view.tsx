@@ -1,4 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { StateMessage } from "@/components/shared";
 import { cardFontVariables } from "@/lib/card-display-fonts";
 import { FALLBACK_BRAND_COLOR } from "@/lib/card-style";
@@ -8,7 +11,7 @@ import { shortDay, shortTime, shortWhen } from "@/lib/short-dates";
 import { fetchPublicOpenInvitation, loadEventLook, loadOpenInvitation, loadOpenResponses } from "./open-invitation.queries";
 import { OpenInvitationStart } from "./open-invitation-start";
 import { OpenResponses } from "./open-responses";
-import { OpenSettingsForm } from "./open-settings-form";
+import { AcceptingSwitch, OpenSettingsForm } from "./open-settings-form";
 import { SharePanel } from "./share-panel";
 
 /**
@@ -80,16 +83,27 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
         }}
       />
       <SharePanel code={invitation.code} card={{ eventName: event.name, when, answerBy }} />
-      <div className={cardFontVariables}>
-        <CardLook
-          eventId={eventId}
-          code={invitation.code}
-          look={look}
-          color={card?.primaryColor ?? FALLBACK_BRAND_COLOR}
-        />
-      </div>
+      <AcceptingSwitch eventId={eventId} invitation={invitation} />
       <OpenResponses eventId={eventId} responses={responses} />
-      <OpenSettingsForm eventId={eventId} invitation={invitation} />
+      <Collapsible>
+        <CollapsibleTrigger asChild>
+          <Button variant="ghost" className="group self-start">
+            {t("customize")}
+            <ChevronDown aria-hidden className="transition-transform group-data-[state=open]:rotate-180 motion-reduce:transition-none" />
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="mt-3 flex flex-col gap-6">
+          <div className={cardFontVariables}>
+            <CardLook
+              eventId={eventId}
+              code={invitation.code}
+              look={look}
+              color={card?.primaryColor ?? FALLBACK_BRAND_COLOR}
+            />
+          </div>
+          <OpenSettingsForm key={String(invitation.enabled)} eventId={eventId} invitation={invitation} />
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }

@@ -7,7 +7,6 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -52,18 +51,15 @@ const HTTPS = /^https:\/\/\S+$/;
  * Everything about an event on one page, in sections an organizer can
  * jump to from the publish checklist (#details, #invitations); the rarer ones
  * fold under "Advanced options". A draft is edited freely and saved from the
- * bar that appears on the first change, and leaving it unsaved asks first; a
- * published or cancelled event shows the same page read-only, because its
- * guests already hold what it says.
+ * bar that appears on the first change, and leaving it unsaved asks first.
+ * Once published, the event shows a summary instead (EventSummary).
  */
 export function EventSettingsForm({
   eventId,
   initialValues,
-  editable,
 }: {
   eventId: string;
   initialValues: EventFormValues;
-  editable: boolean;
 }) {
   const t = useTranslations("events.settings");
   const router = useRouter();
@@ -80,7 +76,7 @@ export function EventSettingsForm({
   const transferAllowed = useWatch({ control, name: "transferAllowed" });
   const overbookingAllowed = useWatch({ control, name: "overbookingAllowed" });
   const [brandName, brandLogoUrl, brandColor] = useWatch({ control, name: ["brandName", "brandLogoUrl", "brandColor"] });
-  useUnsavedChangesGuard(editable && isDirty, t("leaveUnsaved"));
+  useUnsavedChangesGuard(isDirty, t("leaveUnsaved"));
 
   async function onSubmit(values: EventFormValues) {
     const result = await updateDraftAction(eventId, values);
@@ -95,13 +91,7 @@ export function EventSettingsForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-6">
-      {editable ? null : (
-        <Alert>
-          <AlertTitle>{t("locked.title")}</AlertTitle>
-          <AlertDescription>{t("locked.description")}</AlertDescription>
-        </Alert>
-      )}
-      <fieldset disabled={!editable} className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6">
         <Card id="details" className="scroll-mt-20">
           <CardHeader>
             <CardTitle>{t("details.title")}</CardTitle>
@@ -162,7 +152,7 @@ export function EventSettingsForm({
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor={field.name}>{t("timezone")}</FieldLabel>
-                    <Select value={field.value} onValueChange={field.onChange} disabled={!editable}>
+                    <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
                         <SelectValue />
                       </SelectTrigger>
@@ -210,7 +200,6 @@ export function EventSettingsForm({
                     <RadioGroup
                       value={field.value}
                       onValueChange={(value) => field.onChange(value as DeliveryMode)}
-                      disabled={!editable}
                       className="grid gap-3 sm:grid-cols-3"
                     >
                       {DELIVERY_MODES.map((mode) => (
@@ -232,7 +221,6 @@ export function EventSettingsForm({
                       variant="outline"
                       value={field.value}
                       onValueChange={(value) => field.onChange(value as InvitationChannel[])}
-                      disabled={!editable}
                     >
                       {INVITATION_CHANNELS.map((channel) => (
                         <ToggleGroupItem key={channel} value={channel} className="gap-1.5 max-md:h-11">
@@ -249,7 +237,7 @@ export function EventSettingsForm({
           </CardContent>
         </Card>
 
-        {editable ? <AdvancedToggle label={t("advanced")} /> : null}
+        <AdvancedToggle label={t("advanced")} />
 
         <AdvancedOnly first>
           <Card id="client" className="scroll-mt-20">
@@ -306,7 +294,6 @@ export function EventSettingsForm({
                           aria-label={t("client.color")}
                           value={field.value || DEFAULT_BRAND_COLOR}
                           onChange={(event) => field.onChange(event.target.value.toUpperCase())}
-                          disabled={!editable}
                           className="h-9 w-12 cursor-pointer rounded-md border bg-transparent p-1 disabled:cursor-not-allowed max-md:h-11"
                         />
                         <Input
@@ -417,9 +404,9 @@ export function EventSettingsForm({
             </CardContent>
           </Card>
         </AdvancedOnly>
-      </fieldset>
+      </div>
 
-      {editable && isDirty ? (
+      {isDirty ? (
         <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-lg border bg-background/95 p-3 shadow-lg backdrop-blur">
           <p className="text-sm text-muted-foreground">{t("unsaved")}</p>
           <div className="flex gap-2">

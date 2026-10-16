@@ -69,10 +69,10 @@ export function SharePanel({ code, card }: { code: string; card: CardDetails }) 
       <p className="text-sm font-medium">{t("title")}</p>
       <div className="flex gap-2">
         <Input readOnly value={url} aria-label={t("link")} className="font-mono text-xs" />
-        <Button type="button" variant="outline" size="icon" onClick={copy} aria-label={t("copy")}>
+        <Button type="button" variant="outline" size="icon" className="max-md:size-11" onClick={copy} aria-label={t("copy")}>
           {copied ? <Check aria-hidden /> : <Copy aria-hidden />}
         </Button>
-        <Button asChild variant="outline" size="icon" aria-label={t("open")}>
+        <Button asChild variant="outline" size="icon" className="max-md:size-11" aria-label={t("open")}>
           <a href={url} target="_blank" rel="noopener noreferrer">
             <ExternalLink aria-hidden />
           </a>

@@ -15,7 +15,7 @@ export function InfoHint({ label, children }: { label: string; children: ReactNo
       <PopoverTrigger
         type="button"
         aria-label={label}
-        className="inline-flex size-5 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="-m-3 inline-flex size-11 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <Info aria-hidden className="size-3.5" />
       </PopoverTrigger>

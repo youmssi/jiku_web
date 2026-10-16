@@ -110,10 +110,6 @@ export async function TodayView() {
           </div>
         </>
       )}
-
-      <p className="text-sm text-muted-foreground">
-        {t.rich("help", { strong: (chunks) => <strong>{chunks}</strong> })}
-      </p>
     </div>
   );
 }
@@ -221,7 +217,7 @@ function SectionTitle({
     <div>
       <div className="flex items-center justify-between gap-4">
         <h2 id={id} className="text-lg font-medium">{title}</h2>
-        <Button asChild variant="ghost" size="sm" className="-mr-2 shrink-0">
+        <Button asChild variant="ghost" size="sm" className="-mr-2 shrink-0 max-md:h-11">
           <Link href={href}>
             {linkLabel}
             <ArrowRight data-icon="inline-end" />
@@ -363,7 +359,7 @@ function UpcomingEventItem({ event, t, format }: { event: TodayEvent; t: Transla
     format.dateTime(date, { year: "numeric", month: "2-digit", day: "2-digit", timeZone: event.timezone });
   const isToday = dayOf(start) === dayOf(new Date());
   return (
-    <Item asChild variant="outline">
+    <Item asChild variant="outline" role="listitem">
       <Link href={eventRoute(event.id)}>
         <ItemContent>
           <ItemTitle>

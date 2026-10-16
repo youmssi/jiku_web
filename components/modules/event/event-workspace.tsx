@@ -42,10 +42,10 @@ export async function EventWorkspace({ eventId, children }: { eventId: string; c
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8">
       <header className="flex flex-col gap-4">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="flex min-w-0 flex-col gap-1">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="truncate text-2xl font-semibold tracking-tight">{event.name}</h1>
+              <h1 className="text-2xl font-semibold tracking-tight break-words">{event.name}</h1>
               <EventStatusBadge status={event.status} />
             </div>
             <EventWhenWhere event={event} />
