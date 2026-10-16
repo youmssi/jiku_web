@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { FormFieldError } from "@/components/shared";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -120,6 +120,7 @@ export function InviteMemberDialog({
                     ))}
                   </SelectContent>
                 </Select>
+                <FieldDescription>{t("roleHint")}</FieldDescription>
               </Field>
             )}
           />

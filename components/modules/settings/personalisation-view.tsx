@@ -3,7 +3,9 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -28,6 +30,13 @@ import type {
   VocabularyEntry,
 } from "./schema";
 
+const TERM_KEYS = ["ticket", "appointment", "walkIn", "person", "professional", "action"] as const;
+const TEMPLATE_NAMES = ["invitation", "ticket", "event-cancelled", "appointment-reminder", "client-called"] as const;
+
+function isOneOf<T extends string>(list: readonly T[], value: string): value is T {
+  return (list as readonly string[]).includes(value);
+}
+
 function insertVariable(body: string, name: string): string {
   const token = `{{${name}}}`;
   return body.endsWith("\n") ? body + token : body === "" ? token : `${body}\n${token}`;
@@ -48,7 +57,12 @@ export function PersonalisationView({
 }) {
   const t = useTranslations("settings.personalisation");
   const [terms, setTerms] = useState<{ key: string; label: string; original: string; value: string }[]>(
-    initialVocabulary.map((entry) => ({ key: entry.key, label: entry.label, original: entry.value, value: entry.value })),
+    initialVocabulary.map((entry) => ({
+      key: entry.key,
+      label: isOneOf(TERM_KEYS, entry.key) ? t(`termLabels.${entry.key}`) : entry.label,
+      original: entry.value,
+      value: entry.value,
+    })),
   );
   const [isSavingTerms, startSavingTerms] = useTransition();
 
@@ -76,9 +90,13 @@ export function PersonalisationView({
       setBody(firstChannel?.body ?? "");
       setActive(firstChannel?.active ?? true);
       setPreview(null);
+      if (firstChannel) await renderPreview(firstChannel.channel, firstChannel.body);
     });
+    // renderPreview only reads its arguments and stable setters.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [templateName]);
 
+  const isEmail = channel.toLowerCase() === "email";
   const currentChannel: TemplateChannelView | undefined = useMemo(
     () => detail?.channels.find((entry) => entry.channel === channel),
     [detail, channel],
@@ -90,6 +108,16 @@ export function PersonalisationView({
     setBody(entry?.body ?? "");
     setActive(entry?.active ?? true);
     setPreview(null);
+    if (entry) startBusy(() => renderPreview(entry.channel, entry.body));
+  }
+
+  async function renderPreview(forChannel: string, forBody: string) {
+    const result = await previewTemplateAction(templateName, { channel: forChannel, body: forBody });
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+    setPreview(result.data.body);
   }
 
   function saveTerms() {
@@ -113,14 +141,7 @@ export function PersonalisationView({
 
   function previewBody() {
     if (!templateName || !channel) return;
-    startBusy(async () => {
-      const result = await previewTemplateAction(templateName, { channel, body });
-      if (!result.ok) {
-        toast.error(result.error);
-        return;
-      }
-      setPreview(result.data.body);
-    });
+    startBusy(() => renderPreview(channel, body));
   }
 
   function saveTemplate() {
@@ -134,8 +155,8 @@ export function PersonalisationView({
       const updated = result.data.channels.find((entry) => entry.channel === channel);
       setBody(updated?.body ?? body);
       setActive(updated?.active ?? active);
-      setPreview(null);
       toast.success(t("saved"));
+      await renderPreview(channel, updated?.body ?? body);
     });
   }
 
@@ -184,7 +205,7 @@ export function PersonalisationView({
                   <SelectContent>
                     {templateSummaries.map((summary) => (
                       <SelectItem key={summary.name} value={summary.name}>
-                        {summary.label}
+                        {isOneOf(TEMPLATE_NAMES, summary.name) ? t(`templateLabels.${summary.name}`) : summary.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -226,63 +247,88 @@ export function PersonalisationView({
                   <Label htmlFor="template-active">{t("active")}</Label>
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  <Label htmlFor="template-body">{t("body")}</Label>
-                  <Textarea
-                    id="template-body"
-                    rows={12}
-                    className="font-mono text-xs"
-                    value={body}
-                    onChange={(event) => {
-                      setBody(event.target.value);
-                      setPreview(null);
-                    }}
-                  />
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm font-medium">{t("previewTitle")}</p>
+                  {preview === null ? (
+                    <p className="text-sm text-muted-foreground">{isBusy ? t("rendering") : t("previewStale")}</p>
+                  ) : isEmail ? (
+                    <iframe
+                      title={t("previewTitle")}
+                      sandbox=""
+                      srcDoc={preview}
+                      className="h-[28rem] w-full rounded-xl border bg-white"
+                    />
+                  ) : (
+                    <pre className="whitespace-pre-wrap break-words rounded-xl border bg-muted/30 p-4 text-sm">{preview}</pre>
+                  )}
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-medium">{t("variables")}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {detail.variables.map((variable) => (
-                      <Button
-                        key={variable.name}
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setBody((current) => insertVariable(current, variable.name));
+                <Collapsible>
+                  <CollapsibleTrigger asChild>
+                    <Button variant="outline" className="group self-start">
+                      {isEmail ? t("editHtml") : t("edit")}
+                      <ChevronDown
+                        className="transition-transform group-data-[state=open]:rotate-180 motion-reduce:transition-none"
+                        aria-hidden
+                      />
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-4 flex flex-col gap-4">
+                    <div className="flex flex-col gap-1">
+                      <Label htmlFor="template-body">{t("body")}</Label>
+                      <Textarea
+                        id="template-body"
+                        rows={12}
+                        className="font-mono text-xs"
+                        value={body}
+                        onChange={(event) => {
+                          setBody(event.target.value);
                           setPreview(null);
                         }}
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <p className="text-sm font-medium">{t("variables")}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {detail.variables.map((variable) => (
+                          <Button
+                            key={variable.name}
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setBody((current) => insertVariable(current, variable.name));
+                              setPreview(null);
+                            }}
+                          >
+                            {`{{${variable.name}}}`}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          if (!currentChannel) return;
+                          setBody(currentChannel.defaultBody);
+                          setPreview(null);
+                        }}
+                        disabled={!currentChannel}
                       >
-                        {`{{${variable.name}}}`}
+                        {t("restore")}
                       </Button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      if (!currentChannel) return;
-                      setBody(currentChannel.defaultBody);
-                      setPreview(null);
-                    }}
-                    disabled={!currentChannel}
-                  >
-                    {t("restore")}
-                  </Button>
-                  <Button variant="outline" onClick={previewBody} disabled={!channel || isBusy}>
-                    {isBusy ? t("rendering") : t("preview")}
-                  </Button>
-                  <Button onClick={saveTemplate} disabled={!channel || isBusy}>
-                    {t("save")}
-                  </Button>
-                </div>
-
-                {preview !== null ? (
-                  <pre className="whitespace-pre-wrap rounded-xl border bg-muted/30 p-4 text-sm">{preview}</pre>
-                ) : null}
+                      <Button variant="outline" onClick={previewBody} disabled={!channel || isBusy}>
+                        {isBusy ? t("rendering") : t("refreshPreview")}
+                      </Button>
+                      <Button onClick={saveTemplate} disabled={!channel || isBusy}>
+                        {t("save")}
+                      </Button>
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
               </>
             ) : null}
           </div>

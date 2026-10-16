@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Copy, Pencil, Plus } from "lucide-react";
+import { Copy, MoreHorizontal, Pencil, Plus, XCircle } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +15,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemTitle } from "@/components/ui/item";
 import { FormFieldError } from "@/components/shared";
 import {
   createOperatorAction,
@@ -57,6 +62,7 @@ export function OperatorTeam({
   const a = useTranslations("operator.console.actions");
   const [operators, setOperators] = useState<OperatorView[]>(initial.operators);
   const [editing, setEditing] = useState<OperatorView | "new" | null>(null);
+  const [revoking, setRevoking] = useState<OperatorView | null>(null);
   const seats = operators.filter((operator) => operator.billable).length;
 
   function upsert(saved: OperatorView) {
@@ -88,7 +94,7 @@ export function OperatorTeam({
         <div className="max-w-xl">
           <h1 className="text-2xl font-semibold">{t("title")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{t("subtitle")}</p>
-          <p className="mt-2 text-sm">{t("seats", { count: seats })}</p>
+          {seats > 0 ? <p className="mt-2 text-sm">{t("seats", { count: seats })}</p> : null}
         </div>
         <Button onClick={() => setEditing("new")}>
           <Plus className="size-4" />
@@ -99,79 +105,67 @@ export function OperatorTeam({
       {operators.length === 0 ? (
         <p className="rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground">{t("empty")}</p>
       ) : (
-        <div className="rounded-xl border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("columns.name")}</TableHead>
-                <TableHead>{t("columns.scope")}</TableHead>
-                <TableHead>{t("columns.actions")}</TableHead>
-                <TableHead className="text-right">{t("columns.link")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {operators.map((operator) => (
-                <TableRow key={operator.id} className={operator.revoked ? "opacity-60" : undefined}>
-                  <TableCell>
-                    <div className="font-medium">{operator.label}</div>
-                    <div className="mt-1 flex flex-wrap gap-1">
-                      {operator.revoked ? <Badge variant="outline">{t("revoked")}</Badge> : null}
-                      {operator.billable ? <Badge variant="secondary">{t("billable")}</Badge> : null}
-                    </div>
-                  </TableCell>
-                  <TableCell className="max-w-56 whitespace-normal text-sm">
-                    {operator.events.length + operator.services.length === 0
-                      ? t("nothingAssigned")
-                      : [...operator.events, ...operator.services].map((item) => item.name).join(", ")}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {operator.actions.map((action) => (
-                        <Badge key={action} variant="outline">
-                          {a(action)}
-                        </Badge>
-                      ))}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {operator.revoked ? null : (
-                      <div className="flex justify-end gap-1">
-                        {operator.link ? (
-                          <Button size="icon-sm" variant="outline" onClick={() => void copy(operator.link ?? "")}>
-                            <Copy className="size-3.5" />
-                            <span className="sr-only">{t("copy")}</span>
-                          </Button>
-                        ) : null}
-                        <Button size="icon-sm" variant="outline" onClick={() => setEditing(operator)}>
-                          <Pencil className="size-3.5" />
-                          <span className="sr-only">{t("edit")}</span>
-                        </Button>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button size="sm" variant="outline">
-                              {t("revoke")}
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>{t("revoke")}</AlertDialogTitle>
-                              <AlertDialogDescription>{t("revokeConfirm", { name: operator.label })}</AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>{t("form.cancel")}</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => void revoke(operator)}>{t("revoke")}</AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <ItemGroup className="gap-2">
+          {operators.map((operator) => (
+            <Item key={operator.id} variant="outline" role="listitem" className={operator.revoked ? "opacity-60" : undefined}>
+              <ItemContent className="min-w-0">
+                <ItemTitle className="flex flex-wrap items-center gap-2">
+                  {operator.label}
+                  {operator.revoked ? <Badge variant="outline">{t("revoked")}</Badge> : null}
+                  {operator.billable ? <Badge variant="secondary">{t("billable")}</Badge> : null}
+                </ItemTitle>
+                <ItemDescription className="line-clamp-none">
+                  {operator.events.length + operator.services.length === 0
+                    ? t("nothingAssigned")
+                    : [...operator.events, ...operator.services].map((item) => item.name).join(", ")}
+                  {" · "}
+                  {operator.actions.map((action) => a(action)).join(", ")}
+                </ItemDescription>
+              </ItemContent>
+              {operator.revoked ? null : (
+                <ItemActions className="max-sm:basis-full max-sm:justify-end">
+                  {operator.link ? (
+                    <Button variant="outline" onClick={() => void copy(operator.link ?? "")}>
+                      <Copy aria-hidden />
+                      {t("copy")}
+                    </Button>
+                  ) : null}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" aria-label={t("more", { name: operator.label })}>
+                        <MoreHorizontal />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onSelect={() => setEditing(operator)}>
+                        <Pencil aria-hidden />
+                        {t("edit")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem variant="destructive" onSelect={() => setRevoking(operator)}>
+                        <XCircle aria-hidden />
+                        {t("revoke")}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </ItemActions>
+              )}
+            </Item>
+          ))}
+        </ItemGroup>
       )}
+
+      <AlertDialog open={revoking !== null} onOpenChange={(open) => (open ? null : setRevoking(null))}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("revoke")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("revokeConfirm", { name: revoking?.label ?? "" })}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("form.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={() => (revoking ? void revoke(revoking) : undefined)}>{t("revoke")}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <OperatorDialog
         key={editing === null ? "closed" : editing === "new" ? "new" : editing.id}

@@ -22,7 +22,7 @@ export function SaleLinkCard({ username, eventId }: { username: string | null; e
       <div className="rounded-xl border p-4 text-sm">
         <p className="font-medium">{t("title")}</p>
         <p className="mt-1 text-muted-foreground">{t("noUsername")}</p>
-        <Button asChild variant="outline" size="sm" className="mt-3">
+        <Button asChild variant="outline" className="mt-3">
           <Link href={`${ROUTES.SETTINGS}?tab=organization`}>{t("setUsername")}</Link>
         </Button>
       </div>

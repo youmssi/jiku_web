@@ -61,6 +61,20 @@ export function OrdersBoard({ eventId, orders }: { eventId: string; orders: Orga
   const currency = orders[0]?.currency ?? "";
   const shown = filter === "ALL" ? orders : orders.filter((order) => order.status === filter);
 
+  if (orders.length === 0) {
+    return (
+      <Empty className="mt-2">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <ShoppingBag />
+          </EmptyMedia>
+          <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+          <EmptyDescription>{t("noneYet")}</EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <dl className="grid grid-cols-3 gap-3">
@@ -74,7 +88,12 @@ export function OrdersBoard({ eventId, orders }: { eventId: string; orders: Orga
 
       <div className="flex flex-wrap gap-2" role="group" aria-label={t("filterLabel")}>
         {FILTERS.map((value) => (
-          <Button key={value} size="sm" variant={filter === value ? "default" : "outline"} onClick={() => setFilter(value)}>
+          <Button
+            key={value}
+            variant={filter === value ? "default" : "outline"}
+            aria-pressed={filter === value}
+            onClick={() => setFilter(value)}
+          >
             {t(`filters.${value}`)}
           </Button>
         ))}

@@ -420,7 +420,8 @@
     "errors": {
       "alreadyDecided": "Cette commande a déjà été traitée ou a expiré.",
       "failed": "Impossible de traiter cette commande. Réessayez."
-    }
+    },
+    "noneYet": "Elles apparaissent ici dès qu'un client achète un billet sur votre page de vente."
   },
   "commission": {
     "title": "Commission Jikū ({rate} %)",

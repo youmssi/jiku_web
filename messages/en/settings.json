@@ -11,7 +11,14 @@
       "payments": "Payment methods",
       "legal": "Invoicing details",
       "personalisation": "Personalisation",
-      "account": "Account"
+      "account": "Account",
+      "verification": "Verification"
+    },
+    "groups": {
+      "organization": "Your organization",
+      "payments": "Payments",
+      "messages": "Messages",
+      "account": "You"
     }
   },
   "whatsappNumber": {
@@ -86,15 +93,12 @@
     }
   },
   "verification": {
-    "tab": "Verification",
     "title": "Verify your organization",
-    "text": "Verification is required before you ask clients to pay: paid tickets, paid services or payment methods. It is recommended to every organization, because your guests see that it is verified. A personal or a company verification is enough.",
+    "text": "Required to take payments from your clients: paid tickets or services, payment methods. Your guests also see the verified badge.",
     "status": {
       "verifiedCompany": "Verified organization",
       "verifiedPersonal": "Verified identity",
-      "verifiedText": "You can take payments from your clients, and your guests see the verification badge on your pages.",
-      "notVerified": "Organization not verified",
-      "notVerifiedText": "Until a verification is approved, you cannot set a price, make a service paid or save payment methods."
+      "verifiedText": "You can take payments from your clients, and your guests see the verification badge on your pages."
     },
     "phone": {
       "title": "Phone number",
@@ -117,11 +121,13 @@
     "personal": {
       "title": "Personal verification",
       "text": "For a person organizing in their own name: an identity document and a confirmed phone number.",
-      "needsPhone": "Confirm your phone number above first."
+      "needsPhone": "Confirm your phone number above first.",
+      "choice": "I organize in my own name"
     },
     "company": {
       "title": "Company verification",
-      "text": "For a company, an association or a venue: its registration papers."
+      "text": "For a company, an association or a venue: its registration papers.",
+      "choice": "I organize for a company or an association"
     },
     "request": {
       "status": {
@@ -173,7 +179,8 @@
       "fileType": "Attach JPEG, PNG or PDF files.",
       "storageUnavailable": "Document upload is unavailable for now. Try again later.",
       "failed": "We couldn't send your request. Try again."
-    }
+    },
+    "changePath": "Change the type of verification"
   },
   "sales": {
     "tab": "Sales",
@@ -206,7 +213,6 @@
     }
   },
   "members": {
-    "intro": "Owners manage everything; admins run operations and the team; members run events. Pending invitations stay listed here until accepted or revoked.",
     "search": "Search by email…",
     "failedTitle": "That didn't work",
     "invited": "Invitation sent.",
@@ -227,7 +233,8 @@
       "role": "Role",
       "cancel": "Cancel",
       "submit": "Send invitation",
-      "submitting": "Sending…"
+      "submitting": "Sending…",
+      "roleHint": "Admin: runs operations and the team. Member: runs events. The owner keeps control of everything."
     },
     "actions": {
       "label": "Actions for {email}",
@@ -337,10 +344,29 @@
     "body": "Message body",
     "variables": "Available variables",
     "restore": "Restore default wording",
-    "preview": "Preview",
     "rendering": "Rendering…",
     "save": "Save message",
-    "saved": "Message saved."
+    "saved": "Message saved.",
+    "previewTitle": "Preview",
+    "previewStale": "The text changed: refresh the preview.",
+    "refreshPreview": "Refresh the preview",
+    "edit": "Edit the text",
+    "editHtml": "Edit the HTML (advanced)",
+    "termLabels": {
+      "ticket": "Ticket or queue number",
+      "appointment": "Booked appointment",
+      "walkIn": "Walk-in (no appointment)",
+      "person": "Person",
+      "professional": "Professional",
+      "action": "Action"
+    },
+    "templateLabels": {
+      "invitation": "Guest invitation",
+      "ticket": "Ticket sent directly (WhatsApp)",
+      "event-cancelled": "Event cancellation",
+      "appointment-reminder": "Appointment reminder (WhatsApp)",
+      "client-called": "Your turn in the line (WhatsApp or SMS)"
+    }
   },
   "email": {
     "title": "Email",

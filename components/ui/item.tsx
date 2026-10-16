@@ -18,11 +18,13 @@ function ItemGroup({ className, children, ...props }: React.ComponentProps<"div"
       )}
       {...props}
     >
-      {React.Children.map(children, (child) =>
-        React.isValidElement<{ role?: string }>(child) && child.type === Item && !child.props.role
-          ? React.cloneElement(child, { role: "listitem" })
-          : child
-      )}
+      {React.Children.map(children, (child) => {
+        if (!React.isValidElement<{ role?: string; asChild?: boolean }>(child) || child.type !== Item || child.props.role) {
+          return child
+        }
+        // A link or button keeps its own role, so its list item wraps it.
+        return child.props.asChild ? <div role="listitem">{child}</div> : React.cloneElement(child, { role: "listitem" })
+      })}
     </div>
   )
 }

@@ -49,12 +49,6 @@
     "add": "Add an operator",
     "seats": "{count, plural, =0 {No operator counts toward your subscription.} one {# operator counts toward your subscription (they work on a service).} other {# operators count toward your subscription (they work on a service).}}",
     "empty": "No operators yet. Add the person who runs the door or the counter.",
-    "columns": {
-      "name": "Name",
-      "scope": "Works on",
-      "actions": "Can",
-      "link": "Link"
-    },
     "nothingAssigned": "Nothing assigned",
     "billable": "Counts toward the subscription",
     "revoked": "Revoked",
@@ -84,7 +78,8 @@
       "forbidden": "Only an organization administrator can manage operators.",
       "invalid": "Check the name and choose at least one action.",
       "failed": "We couldn't save the operator. Please try again."
-    }
+    },
+    "more": "More actions for {name}"
   },
   "line": {
     "title": "Today's line",

@@ -317,7 +317,7 @@ export function BrandingView({ branding }: BrandingViewProps) {
               id="primaryColor"
               value={primaryColor}
               onChange={(e) => setPrimaryColor(e.target.value)}
-              className="size-10 cursor-pointer rounded-lg border p-0.5"
+              className="size-11 cursor-pointer rounded-lg border p-0.5"
               style={{ backgroundColor: primaryColor }}
             />
           </div>
@@ -337,7 +337,7 @@ export function BrandingView({ branding }: BrandingViewProps) {
       </div>
 
       {/* Save */}
-      <div className="flex items-center gap-3 pt-2">
+      <div className="flex flex-wrap items-center gap-3 pt-2">
         <Button onClick={handleSave} disabled={isPending || !hasChanges}>
           {isPending ? t("saving") : t("save")}
         </Button>
