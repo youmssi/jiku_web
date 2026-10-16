@@ -5,16 +5,14 @@ import { useLocale, useTranslations } from "next-intl";
 import { Check, ImagePlus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { resizeImage, type ResizeRules } from "@/components/shared";
 import { brandBackground, CARD_STYLE_TOKENS, CARD_STYLES, cardStyleOf, displayTitle, type CardStyle } from "@/lib/card-style";
 import { cn } from "@/lib/utils";
 import { removeBannerAction, saveCardStyleAction, uploadBannerAction } from "./open-invitation.service";
 import type { EventLook } from "./schema";
 
 /** The banner is sent resized: wide enough for a retina phone, light enough for a slow network. */
-const BANNER_MAX_WIDTH = 1600;
-const BANNER_QUALITY = 0.82;
-const BANNER_MIN_WIDTH = 600;
-const BANNER_MIN_HEIGHT = 300;
+const BANNER_RULES: ResizeRules = { maxWidth: 1600, minWidth: 600, minHeight: 300, type: "image/jpeg", quality: 0.82 };
 
 /**
  * How the event looks to guests (JIKU-194): one of three styles and an optional
@@ -64,7 +62,7 @@ export function CardLook({
   function upload(file: File | undefined) {
     if (!file) return;
     startTransition(async () => {
-      const resized = await resize(file);
+      const resized = await resizeImage(file, BANNER_RULES);
       if (!resized) {
         toast.error(t("photoTooSmall"));
         return;
@@ -170,20 +168,4 @@ export function CardLook({
       </figure>
     </section>
   );
-}
-
-/** The photo as a JPEG at most BANNER_MAX_WIDTH wide; null when it is too small to fill a banner. */
-async function resize(file: File): Promise<Blob | null> {
-  const bitmap = await createImageBitmap(file).catch(() => null);
-  if (!bitmap) return null;
-  if (bitmap.width < BANNER_MIN_WIDTH || bitmap.height < BANNER_MIN_HEIGHT) return null;
-  const scale = Math.min(1, BANNER_MAX_WIDTH / bitmap.width);
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.round(bitmap.width * scale);
-  canvas.height = Math.round(bitmap.height * scale);
-  const context = canvas.getContext("2d");
-  if (!context) return null;
-  context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-  bitmap.close();
-  return new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", BANNER_QUALITY));
 }

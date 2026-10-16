@@ -1252,6 +1252,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/branding/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["brandingReplaceImage"];
+        post?: never;
+        delete: operations["brandingRemoveImage"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/checkin/{token}": {
         parameters: {
             query?: never;
@@ -3132,6 +3148,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["publicEventBannerBanner"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/public/orgs/{tenantId}/images/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicTenantImageImage"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8343,6 +8375,57 @@ export interface operations {
             };
         };
     };
+    brandingReplaceImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kind: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BrandingResponse"];
+                };
+            };
+        };
+    };
+    brandingRemoveImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kind: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BrandingResponse"];
+                };
+            };
+        };
+    };
     operatorCheckInContext: {
         parameters: {
             query?: never;
@@ -11481,6 +11564,29 @@ export interface operations {
             header?: never;
             path: {
                 eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
+                };
+            };
+        };
+    };
+    publicTenantImageImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+                kind: string;
             };
             cookie?: never;
         };
