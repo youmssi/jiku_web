@@ -1,6 +1,7 @@
 import { headers as requestHeaders } from "next/headers";
 import { apiBaseUrl } from "@/lib/api";
 import { getAccessToken, getAdminAccessToken } from "@/lib/auth";
+import { assertApiPath } from "./api-path";
 
 /**
  * Abort a backend call that hangs, so a slow upstream can't stall a render.
@@ -66,7 +67,7 @@ async function request(path: string, init: RequestInit, authHeaders?: Headers): 
     headers.set(CLIENT_IP_HEADER, ip);
     headers.set(CLIENT_IP_SECRET_HEADER, secret);
   }
-  const url = `${apiBaseUrl()}${path}`;
+  const url = `${apiBaseUrl()}${assertApiPath(path)}`;
   const attempts = method === "GET" && !init.signal ? GET_ATTEMPTS : 1;
 
   let lastError: unknown;

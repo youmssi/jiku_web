@@ -4,6 +4,7 @@
  * specific organizer's event, and no `Event` schema is ever rendered on the
  * private per-event pages either (see JIKU-58's de-indexing work).
  */
+import { jsonLd } from "@/lib/json-ld";
 
 interface BreadcrumbEntry {
   name: string;
@@ -67,7 +68,7 @@ export function SiteJsonLd({ siteUrl }: { siteUrl: string }) {
   };
 
   const schema = { "@context": "https://schema.org", "@graph": [organization, website] };
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(schema) }} />;
 }
 
 export function BreadcrumbJsonLd({ items }: { items: BreadcrumbEntry[] }) {
@@ -81,7 +82,7 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbEntry[] }) {
       item: item.url,
     })),
   };
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(schema) }} />;
 }
 
 export function FaqJsonLd({ items, locale = "fr" }: { items: { question: string; answer: string }[]; locale?: string }) {
@@ -95,5 +96,5 @@ export function FaqJsonLd({ items, locale = "fr" }: { items: { question: string;
       acceptedAnswer: { "@type": "Answer", text: item.answer },
     })),
   };
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(schema) }} />;
 }

@@ -7,6 +7,17 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  // Browsers ignore it over plain HTTP, so local runs are unaffected.
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
+  // The camera serves the door's QR scanner; nothing asks for anything else.
+  { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(), payment=(), usb=()" },
+  // Directives that cannot break a page: no framing, no plugins, and no <base>
+  // or form post that points away from this site. Scripts and styles are left
+  // to the defaults until a nonce-based policy covers Next, Sentry and Umami.
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+  },
 ];
 
 // Private, tokenized or session-gated routes (JIKU-58): guest lists and other
@@ -25,6 +36,7 @@ const nextConfig: NextConfig = {
   // ships only the compiled app and its runtime dependencies, not node_modules.
   // Vercel ignores this setting; it only affects self-hosted/container builds.
   output: "standalone",
+  poweredByHeader: false,
   compiler: {
     // Turbopack ignores Sentry's `bundleSizeOptimizations` (webpack only), so
     // the same build flags are set here. The app reports errors and samples
