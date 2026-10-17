@@ -13,7 +13,7 @@ The web app of Jikū: Next.js 16, React 19, TypeScript and Tailwind CSS, in Fren
 [Getting started](#getting-started) ·
 [Contributing](CONTRIBUTING.md)
 
-![Next.js](https://img.shields.io/badge/Next.js-16.2-000000?logo=nextdotjs&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16.3-000000?logo=nextdotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
@@ -31,7 +31,7 @@ Jikū replaces the WhatsApp groups, spreadsheets and printed cards organizations
 use to receive people. Wedding planners, hotels, clinics, banks and
 administrations use it for two jobs:
 
-- **Events.** Invite guests by WhatsApp, e-mail or SMS, collect RSVPs, send QR
+- **Events.** Invite guests by WhatsApp or e-mail (SMS when turned on), collect RSVPs, send QR
   tickets and check people in at the door, even when the network drops.
 - **Services.** Clients book an appointment or take a ticket for today's line
   from a QR code at the entrance, follow their place on their phone, and are
@@ -49,8 +49,10 @@ No app to install: guests, clients and staff use the web on any phone.
 - Events with ticket categories, prices and payment rules, publish checklist, live dashboard and analytics
 - Guest lists by CSV import, three delivery modes, reminders
 - Services, resources, weekly schedules, booking links, short codes and an embeddable widget
+- An open invitation card anyone can answer, by link or on WhatsApp
+- Public ticket sales with orders, held seats and payment confirmation
 - Operators with a scope and a personal link
-- Branding, members and roles, legal identity for invoices
+- Settings grouped by job: branding with uploaded logo and banner, members and roles, personal or company verification, payment methods, legal identity for invoices, message personalisation
 - Billing in GNF, FCFA or USD: plans, the Organizer Pack, event tiers, online payment with Mobile Money or card, invoices
 
 </td>
@@ -96,6 +98,8 @@ app/
 │   ├── (admin)/              /admin/...
 │   ├── r/[code]              booking link, today's line, a client's ticket
 │   ├── widget/[token]        embeddable booking widget
+│   ├── docs/                 step-by-step guides (Fumadocs, content in content/docs/<locale>/)
+│   ├── legal, privacy, terms legal notice, privacy policy, terms
 │   └── page.tsx              landing page, simulator, use cases, FAQ, legal pages
 └── api/                      route handlers for file downloads (receipts, exports, certificates)
 ```
@@ -148,6 +152,8 @@ Other modules import a module only through its barrel. Shared code lives in
 | i18n | next-intl, French and English |
 | Data | Server-side `fetch` to the API with typed contracts from openapi-typescript |
 | Offline | Service worker and IndexedDB for the door console |
+| Live updates | A server-sent "something changed" stream per screen, with polling as the fallback |
+| Guides | Fumadocs, MDX in French and English |
 | Observability | Sentry, Umami (cookie-free analytics) |
 
 ## Getting started
@@ -175,6 +181,7 @@ pnpm dev                     # http://localhost:3000
 | `pnpm start` | Serve the production build |
 | `pnpm lint` | ESLint |
 | `pnpm i18n:check` | Checks the English catalogs match the French reference |
+| `pnpm test` | Unit tests for `lib/` (redirect and API path guards, JSON-LD, dates, text) |
 
 ### Regenerate API types
 
@@ -200,6 +207,14 @@ Commit both files together. See [`openapi/README.md`](openapi/README.md).
 `NEXT_PUBLIC_*` values are inlined at build time and public; everything else is
 server-only.
 
+Security defaults live in `next.config.ts` and `lib/`: HSTS, a Permissions-Policy
+that allows only the camera, a content security policy for frames, objects,
+base URIs and form targets, a redirect guard after sign-in (`safe-next.ts`) and a
+guard that refuses `.` and `..` segments in API paths (`api-path.ts`).
+
+Screens offer SMS only when the API says the platform sends it
+(`GET /messaging/channels`, read by `lib/sms-available.ts`).
+
 ### Developer tools (MCP)
 
 [`.mcp.json`](.mcp.json) declares two MCP servers for editors and agents that
@@ -216,9 +231,13 @@ read it:
 
 ## Deployment
 
-The app deploys to Vercel. Every pull request gets a preview deployment;
-`develop` is the integration branch and merging `develop` into `main` releases
-to production. The embeddable booking widget is documented in
+Production runs as a container on the Jikū server (Hetzner, driven by Dokploy,
+behind Cloudflare; ADR 107 and 108 in the API repository). GitHub Actions builds
+the image from the [`Dockerfile`](Dockerfile) and publishes it on GHCR
+([`images.yml`](.github/workflows/images.yml)). Vercel still builds a preview of
+every pull request, and stays the way back for two weeks after the switch.
+`develop` is the integration branch; merging `develop` into `main` releases to
+production. The embeddable booking widget is documented in
 [`docs/widget-integration.md`](docs/widget-integration.md), and search engine
 set-up (Search Console, Bing, IndexNow, brand profiles) in
 [`docs/seo-launch.md`](docs/seo-launch.md).
