@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useFormatter, useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -24,6 +24,9 @@ const QrScanner = dynamic(
 
 type Mode = "scan" | "search";
 
+/** How often the door refreshes its offline copy of the guest list while online. */
+const ROSTER_REFRESH_MS = 5 * 60 * 1000;
+
 interface ValidatorConsoleProps {
   door: string;
   context: ValidatorContext;
@@ -32,15 +35,14 @@ interface ValidatorConsoleProps {
 /**
  * Validator check-in console: a camera QR scanner as the primary action with a
  * one-tap search fallback, a live attendance counter, and large glanceable
- * feedback after each check-in. Pre-sync the roster to keep checking guests in
- * offline (JIKU-25); queued check-ins flush automatically on reconnection.
+ * feedback after each check-in. The roster is kept for offline use by itself
+ * (JIKU-25, JIKU-250); queued check-ins flush automatically on reconnection.
  */
 export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
   const t = useTranslations("operator.door");
   const format = useFormatter();
   const [mode, setMode] = useState<Mode>("scan");
   const eventCancelled = context.eventStatus === "CANCELLED";
-  const [isSyncing, setIsSyncing] = useState(false);
   const {
     result,
     attendance,
@@ -96,14 +98,14 @@ export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
     clearResult();
   }, [clearResult]);
 
-  const onSync = useCallback(async () => {
-    setIsSyncing(true);
-    try {
-      await syncForOffline();
-    } finally {
-      setIsSyncing(false);
-    }
-  }, [syncForOffline]);
+  // The door keeps its own offline copy of the guest list: fetched on opening,
+  // refreshed while online, so a dropped connection never finds it unprepared.
+  useEffect(() => {
+    if (!isOnline) return;
+    void syncForOffline();
+    const timer = window.setInterval(() => void syncForOffline(), ROSTER_REFRESH_MS);
+    return () => window.clearInterval(timer);
+  }, [isOnline, syncForOffline]);
 
   const eventWhen = context.startDateTime
     ? format.dateTime(new Date(context.startDateTime), {
@@ -140,36 +142,13 @@ export function ValidatorConsole({ door, context }: ValidatorConsoleProps) {
         </p>
       </header>
 
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 px-5 py-2 text-xs">
-        <span className="flex items-center gap-2">
-          <span
-            className={`inline-block h-2 w-2 rounded-full ${
-              isOnline ? "bg-green-500" : "bg-amber-500"
-            }`}
-          />
-          <span className="text-zinc-400">
-            {isOnline ? t("online") : t("offline")}
-            {pendingCount > 0 ? ` · ${t("queued", { count: pendingCount })}` : ""}
-          </span>
+      <div className="flex items-center gap-2 border-b border-zinc-800 px-5 py-2 text-xs text-zinc-400">
+        <span className={`inline-block h-2 w-2 rounded-full ${isOnline ? "bg-green-500" : "bg-amber-500"}`} />
+        <span>
+          {isOnline ? t("online") : t("offline")}
+          {lastSyncedAt ? ` · ${t("offlineReady")}` : ""}
+          {pendingCount > 0 ? ` · ${t("queued", { count: pendingCount })}` : ""}
         </span>
-        <button
-          type="button"
-          onClick={onSync}
-          disabled={isSyncing || !isOnline}
-          className="rounded-md bg-zinc-800 px-3 py-1.5 font-medium text-zinc-200 disabled:opacity-50"
-        >
-          {isSyncing
-            ? t("syncing")
-            : lastSyncedAt
-              ? t("synced", {
-                  time: format.dateTime(new Date(lastSyncedAt), {
-                    timeZone: context.timezone,
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                })
-              : t("sync")}
-        </button>
       </div>
 
       <div className="grid grid-cols-2 gap-1 px-5 pt-4">

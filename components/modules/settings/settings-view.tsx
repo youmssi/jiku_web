@@ -1,13 +1,17 @@
 import "server-only";
 
 import { getTranslations } from "next-intl/server";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { ROUTES } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import { getOrganizerContext } from "@/components/modules/identity/server";
 import { MembersView, fetchMembersAction } from "@/components/modules/members";
 import { SalesSettingsForm } from "@/components/modules/sale";
 import { loadSalesSettings } from "@/components/modules/sale/server";
 import { VerificationView } from "@/components/modules/verification";
 import { loadVerification } from "@/components/modules/verification/server";
+import { loadSmsAvailable } from "@/lib/sms-available";
 import { AccountView } from "@/components/modules/settings/account-view";
 import { BrandingView } from "@/components/modules/settings/branding-view";
 import { LegalIdentityView } from "@/components/modules/settings/legal-identity-view";
@@ -68,7 +72,7 @@ const EMPTY_LEGAL_IDENTITY: LegalIdentityResponse = {
  * blocking the others.
  */
 async function loadManagerSettings(fallbackOrganization: string) {
-  const [username, branding, providers, embeddedSignup, paymentMethods, legalIdentity, members, vocabulary, templates, verification, sales] =
+  const [username, branding, providers, embeddedSignup, paymentMethods, legalIdentity, members, vocabulary, templates, verification, sales, smsAvailable] =
     await Promise.all([
     loadOrgUsername(),
     loadBranding(),
@@ -81,6 +85,7 @@ async function loadManagerSettings(fallbackOrganization: string) {
     loadTemplates(),
     loadVerification(),
     loadSalesSettings(),
+    loadSmsAvailable(),
   ]);
   return {
     username,
@@ -94,47 +99,105 @@ async function loadManagerSettings(fallbackOrganization: string) {
     templates,
     verification,
     sales,
+    smsAvailable,
   };
 }
 
+/** The settings sections in the order and groups the index lists them. */
+const SECTION_GROUPS = [
+  { id: "organization", sections: ["organization", "branding", "members"] },
+  { id: "payments", sections: ["verification", "payments", "sales", "legal"] },
+  { id: "messages", sections: ["messaging", "personalisation"] },
+  { id: "account", sections: ["account"] },
+] as const;
+
+type Section = (typeof SECTION_GROUPS)[number]["sections"][number];
+
+const MEMBER_SECTIONS: readonly Section[] = ["organization", "account"];
+
 /**
- * The organizer's settings: organization, branding, team, messaging, invoicing
- * details, personalisation and account. Organization-scoped sections need the
- * ADMIN or OWNER role; a member only sees their organization and account, and
- * nothing a member cannot read is fetched for them.
+ * The organizer's settings: organization, branding, team, payments, messaging
+ * and account. A grouped index replaces a strip of ten tabs: on a phone it is
+ * the first screen and each section opens on its own with a way back; from a
+ * tablet up it stays beside the open section. `?tab=` names the open section.
+ * Organization-scoped sections need the ADMIN or OWNER role; a member only sees
+ * their organization and account, and nothing a member cannot read is fetched.
  */
 export async function SettingsView({ tab }: { tab?: string }) {
   const context = await getOrganizerContext();
   const isManager = context !== null && MANAGER_ROLES.includes(context.role);
-  const [tPage, t, tSales] = await Promise.all([
-    getTranslations("settings.page"),
-    getTranslations("settings.verification"),
-    getTranslations("settings.sales"),
-  ]);
+  const [tPage, tSales] = await Promise.all([getTranslations("settings.page"), getTranslations("settings.sales")]);
   const settings = isManager ? await loadManagerSettings(tPage("fallbackOrganization")) : null;
 
+  const available = (section: Section) =>
+    settings ? section !== "members" || settings.team !== null : MEMBER_SECTIONS.includes(section);
+  const groups = SECTION_GROUPS.map((group) => ({ id: group.id, sections: group.sections.filter(available) })).filter(
+    (group) => group.sections.length > 0,
+  );
+  const opened = groups.some((group) => group.sections.some((section) => section === tab)) ? (tab as Section) : null;
+  const shown: Section = opened ?? "organization";
+  const label = (section: Section) =>
+    section === "verification" ? tPage("tabs.verification") : section === "sales" ? tSales("tab") : tPage(`tabs.${section}`);
+
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-8">
-      <div className="mb-8">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 md:px-6 md:py-8">
+      <div className={cn("mb-6 md:mb-8", opened && "max-md:hidden")}>
         <h1 className="text-2xl font-bold tracking-tight">{tPage("title")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">{tPage("description")}</p>
       </div>
 
-      <Tabs defaultValue={tab && settings ? tab : "organization"} className="w-full">
-        <TabsList className="mb-8 max-w-full justify-start overflow-x-auto">
-          <TabsTrigger value="organization">{tPage("tabs.organization")}</TabsTrigger>
-          {settings ? <TabsTrigger value="branding">{tPage("tabs.branding")}</TabsTrigger> : null}
-          {settings?.team ? <TabsTrigger value="members">{tPage("tabs.members")}</TabsTrigger> : null}
-          {settings ? <TabsTrigger value="messaging">{tPage("tabs.messaging")}</TabsTrigger> : null}
-          {settings ? <TabsTrigger value="verification">{t("tab")}</TabsTrigger> : null}
-          {settings ? <TabsTrigger value="payments">{tPage("tabs.payments")}</TabsTrigger> : null}
-          {settings ? <TabsTrigger value="sales">{tSales("tab")}</TabsTrigger> : null}
-          {settings ? <TabsTrigger value="legal">{tPage("tabs.legal")}</TabsTrigger> : null}
-          {settings ? <TabsTrigger value="personalisation">{tPage("tabs.personalisation")}</TabsTrigger> : null}
-          <TabsTrigger value="account">{tPage("tabs.account")}</TabsTrigger>
-        </TabsList>
+      <div className="md:grid md:grid-cols-[13rem_minmax(0,1fr)] md:gap-10">
+        <nav aria-label={tPage("title")} className={cn("flex flex-col gap-6 md:gap-4", opened && "max-md:hidden")}>
+          {groups.map((group) => (
+            <div key={group.id} className="flex flex-col gap-1">
+              <h2 className="px-3 text-xs font-medium text-muted-foreground">{tPage(`groups.${group.id}`)}</h2>
+              <ul className="flex flex-col overflow-hidden rounded-xl border md:rounded-none md:border-0">
+                {group.sections.map((section) => {
+                  const current = section === shown;
+                  return (
+                    <li key={section} className="border-b last:border-b-0 md:border-0">
+                      <Link
+                        href={`${ROUTES.SETTINGS}?tab=${section}`}
+                        aria-current={current ? "page" : undefined}
+                        className={cn(
+                          "flex min-h-12 items-center justify-between gap-3 px-3 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring md:min-h-9 md:rounded-md",
+                          current && "md:bg-muted",
+                        )}
+                      >
+                        {label(section)}
+                        <ChevronRight className="size-4 text-muted-foreground md:hidden" aria-hidden />
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </nav>
 
-        <TabsContent value="organization" className="mt-0">
+        <section className={cn("min-w-0", !opened && "max-md:hidden")}>
+          {opened ? (
+            <div className="mb-6 md:hidden">
+              <Link
+                href={ROUTES.SETTINGS}
+                className="-ml-3 inline-flex min-h-11 items-center gap-1 rounded-md px-3 text-sm text-muted-foreground hover:text-foreground"
+              >
+                <ChevronLeft className="size-4" aria-hidden />
+                {tPage("title")}
+              </Link>
+              <h1 className="mt-1 text-2xl font-bold tracking-tight">{label(opened)}</h1>
+            </div>
+          ) : null}
+          {renderSection(shown)}
+        </section>
+      </div>
+    </div>
+  );
+
+  function renderSection(section: Section) {
+    switch (section) {
+      case "organization":
+        return (
           <OrganizationView
             brandName={context?.brandName ?? tPage("fallbackOrganization")}
             role={context?.role ?? ""}
@@ -142,52 +205,41 @@ export async function SettingsView({ tab }: { tab?: string }) {
             username={settings?.username ?? null}
             memberships={context?.memberships ?? []}
           />
-        </TabsContent>
-
-        {settings ? (
-          <>
-            <TabsContent value="branding" className="mt-0">
-              <BrandingView branding={settings.branding} />
-            </TabsContent>
-            {settings.team ? (
-              <TabsContent value="members" className="mt-0">
-                <MembersView
-                  members={settings.team.members}
-                  invitations={settings.team.invitations}
-                  currentUserId={context?.userId ?? ""}
-                />
-              </TabsContent>
-            ) : null}
-            <TabsContent value="messaging" className="mt-0">
-              <ProviderSettingsView initial={settings.providers} embeddedSignup={settings.embeddedSignup} />
-            </TabsContent>
-            <TabsContent value="verification" className="mt-0">
-              <VerificationView overview={settings.verification} />
-            </TabsContent>
-            <TabsContent value="payments" className="mt-0">
-              <PaymentMethodsForm initial={settings.paymentMethods} />
-            </TabsContent>
-            <TabsContent value="sales" className="mt-0">
-              <SalesSettingsForm initial={settings.sales} />
-            </TabsContent>
-            <TabsContent value="legal" className="mt-0">
-              <LegalIdentityView identity={settings.legalIdentity} />
-            </TabsContent>
-            <TabsContent value="personalisation" className="mt-0">
-              <PersonalisationView initialVocabulary={settings.vocabulary} templateSummaries={settings.templates} />
-            </TabsContent>
-          </>
-        ) : null}
-
-        <TabsContent value="account" className="mt-0">
+        );
+      case "account":
+        return (
           <AccountView
             fullName={context?.fullName ?? null}
             email={context?.email ?? ""}
             role={context?.role ?? ""}
             marketingConsent={context?.marketingConsent ?? false}
           />
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
+        );
+    }
+    if (!settings) return null;
+    switch (section) {
+      case "branding":
+        return <BrandingView branding={settings.branding} />;
+      case "members":
+        return settings.team ? (
+          <MembersView
+            members={settings.team.members}
+            invitations={settings.team.invitations}
+            currentUserId={context?.userId ?? ""}
+          />
+        ) : null;
+      case "messaging":
+        return <ProviderSettingsView initial={settings.providers} embeddedSignup={settings.embeddedSignup} />;
+      case "verification":
+        return <VerificationView overview={settings.verification} smsAvailable={settings.smsAvailable} />;
+      case "payments":
+        return <PaymentMethodsForm initial={settings.paymentMethods} />;
+      case "sales":
+        return <SalesSettingsForm initial={settings.sales} />;
+      case "legal":
+        return <LegalIdentityView identity={settings.legalIdentity} />;
+      case "personalisation":
+        return <PersonalisationView initialVocabulary={settings.vocabulary} templateSummaries={settings.templates} />;
+    }
+  }
 }

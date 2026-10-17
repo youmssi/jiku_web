@@ -2,28 +2,27 @@
   "invitation": {
     "unavailableTitle": "Invitation unavailable",
     "unavailableDescription": "This invitation link is invalid or has expired.",
-    "invites": "{organizer} invites you to",
     "greeting": "Hi {name},",
     "cancelled": "This event has been cancelled by the organizer.",
-    "privacy": "How your data is used"
+    "invitedBy": "{organizer} invites you"
   },
   "rsvp": {
-    "confirm": "Confirm attendance",
-    "confirming": "Confirming…",
-    "decline": "I can't make it",
+    "confirm": "I'm coming",
+    "decline": "I can't come",
     "updating": "Updating…",
-    "confirmed": "You're confirmed. See you there!",
-    "confirmedToast": "You're confirmed, see you there!",
     "declined": "You've declined this invitation.",
-    "declinedToast": "You've declined.",
     "changeMind": "Actually, I'll come",
     "cantMakeIt": "I can't make it anymore",
-    "viewTicket": "View your ticket",
     "transferredTo": "You handed this invitation to {name}.",
     "transferredSomeone": "You handed this invitation to someone else.",
     "transferredHint": "Their own invitation is on its way, and this ticket is no longer valid at the entrance.",
     "full": "This event is full.",
-    "failed": "Something went wrong. Please try again."
+    "failed": "Something went wrong. Please try again.",
+    "question": "Will you come?",
+    "cancelTitle": "Cancel your attendance?",
+    "cancelDescription": "Your ticket will no longer work at the entrance. You can still change your mind from this link.",
+    "cancelKeep": "I'm still coming",
+    "cancelConfirm": "Cancel"
   },
   "transfer": {
     "open": "Transfer to someone else",
@@ -43,22 +42,17 @@
     "contactRequired": "Give the recipient an email address or a phone number."
   },
   "erasure": {
-    "open": "Request deletion of my data",
-    "title": "Delete your personal data?",
-    "description": "This permanently removes your name, email and phone number from this event. It cannot be undone. The organizer keeps only an anonymous record that a guest was invited.",
+    "open": "Your data",
+    "title": "Your personal data",
+    "description": "You can delete your name, email and phone number from this event. It cannot be undone: the organizer keeps only an anonymous record that a guest was invited.",
     "keep": "Keep my data",
     "confirm": "Delete my data",
     "deleting": "Deleting…",
     "done": "Your personal data has been deleted from this event. This cannot be undone.",
-    "doneToast": "Your personal data has been deleted.",
-    "failed": "We couldn't delete your data just now. Please try again."
+    "failed": "We couldn't delete your data just now. Please try again.",
+    "policy": "How your data is used"
   },
   "ticket": {
-    "unavailableTitle": "Ticket unavailable",
-    "unavailableDescription": "This link is invalid or has expired.",
-    "noneTitle": "No ticket yet",
-    "noneDescription": "Confirm your attendance to get your ticket.",
-    "back": "Back to your invitation",
     "guest": "Guest",
     "date": "Date",
     "place": "Place",
@@ -76,15 +70,15 @@
     "take": {
       "title": "Take a ticket",
       "subtitle": "Today's line · {service}",
-      "text": "Enter your name and number: you follow your place on your phone and we tell you when it's your turn.",
       "name": "Your name",
       "phone": "Your phone number",
-      "phoneHelp": "In international format, for example +224620000000.",
       "submit": "Take my ticket",
-      "submitting": "One moment…"
+      "submitting": "One moment…",
+      "notice": "We tell you on WhatsApp when it's your turn.",
+      "pausedTitle": "Tickets unavailable for now",
+      "paused": "The line is not taking new tickets for now. Please ask at the front desk."
     },
     "status": {
-      "title": "Your ticket",
       "number": "Ticket no. {rank}",
       "code": "Code {code}",
       "ahead": "{count, plural, =0 {You're next.} one {# person ahead of you.} other {# people ahead of you.}}",
@@ -108,7 +102,8 @@
     "errors": {
       "invalid": "Check your name and number.",
       "closed": "This service's line isn't open right now.",
-      "failed": "We couldn't give you a ticket. Please try again."
+      "failed": "We couldn't give you a ticket. Please try again.",
+      "paused": "The line is not taking new tickets for now."
     }
   },
   "payment": {
@@ -121,7 +116,9 @@
     "wave": "Wave",
     "payOnline": "Pay online",
     "askOrganizer": "The organizer will tell you how to pay.",
-    "unverified": "This organizer's identity has not been verified by Jikū yet. Only pay if you know them."
+    "unverified": "This organizer's identity has not been verified by Jikū yet. Only pay if you know them.",
+    "copyNumber": "Copy the {method} number",
+    "copied": "Copied"
   },
   "appointment": {
     "metaTitle": "Book an appointment",
@@ -129,44 +126,53 @@
     "booking": {
       "title": "Appointment",
       "loading": "Loading…",
-      "withNames": "With {names} — no account, three steps.",
+      "withNames": "With {names}, no account needed.",
       "noAccount": "Pick a time, no account needed.",
       "failed": "Booking not possible",
-      "previousDay": "Previous day",
-      "nextDay": "Next day",
       "noSlots": "No times open on this day.",
       "name": "Your name",
       "phone": "Your phone",
       "submit": "Book this time",
       "submitting": "Booking…",
-      "placesLeft": "{count, plural, one {# place left} other {# places left}}"
-    },
-    "booked": {
-      "title": "Your appointment is booked",
-      "PENDING": "Awaiting confirmation: the professional will confirm it.",
-      "CONFIRMED": "Your appointment is confirmed.",
-      "withNames": "With {names}",
-      "number": "Booking number: {number}",
-      "manage": "View or cancel my appointment"
+      "placesLeft": "{count, plural, one {# place left} other {# places left}}",
+      "day": "Day",
+      "otherDay": "Pick another date",
+      "withNamesShort": "with {names}",
+      "periods": {
+        "morning": "Morning",
+        "afternoon": "Afternoon",
+        "evening": "Evening"
+      },
+      "pausedTitle": "Booking unavailable for now",
+      "paused": "Booking is paused for now. If you already have an appointment, it stands.",
+      "pausedWithName": "{organizer} is not taking new appointments for now. If you already have one, it stands."
     },
     "status": {
-      "title": "Your appointment",
-      "PENDING": "Awaiting confirmation.",
-      "CONFIRMED": "Confirmed.",
+      "PENDING": "The professional still has to confirm it: you will be told.",
+      "CONFIRMED": "Show this code when you arrive.",
       "notFound": "Booking not found",
       "notFoundText": "Check the link or your booking number.",
       "cancel": "Cancel this appointment",
       "cancelling": "Cancelling…",
       "cancelFailed": "Cancellation not possible",
       "cancelledTitle": "Appointment cancelled",
-      "cancelledText": "Your appointment is cancelled and the time is free again."
+      "cancelledText": "Your appointment is cancelled and the time is free again.",
+      "pendingTitle": "Appointment requested",
+      "confirmedTitle": "Appointment confirmed",
+      "withNames": "With {names}",
+      "number": "Booking no. {number}",
+      "cancelTitle": "Cancel this appointment?",
+      "cancelDescription": "The time will be freed for another client.",
+      "keep": "Keep my appointment",
+      "cancelConfirm": "Cancel the appointment"
     },
     "errors": {
       "taken": "This time was just taken. Pick another one.",
       "failed": "The booking failed. Try again.",
       "notFound": "This booking cannot be found.",
       "notCancellable": "This appointment can no longer be cancelled.",
-      "cancelFailed": "The cancellation failed. Try again."
+      "cancelFailed": "The cancellation failed. Try again.",
+      "paused": "Booking is paused for now."
     }
   },
   "verification": {
@@ -182,9 +188,8 @@
     "more": "Add a {label} ticket",
     "ticketCount": "{count, plural, =0 {No ticket chosen} one {# ticket} other {# tickets}}",
     "buyerName": "Your name",
-    "buyerNameHelp": "It is printed on the tickets. You can transfer a ticket to someone else later.",
     "buyerPhone": "Your phone",
-    "buyerEmail": "Your email (optional)",
+    "buyerEmail": "Your email",
     "order": "Order",
     "ordering": "Ordering…",
     "holdNotice": "Your places are held for {minutes} minutes while you pay the organizer.",
@@ -206,7 +211,8 @@
       "cannotDeclare": "This payment can no longer be declared: the order has expired or was already handled.",
       "failed": "We couldn't process your request. Try again."
     },
-    "pausedLabel": "Available again soon"
+    "pausedLabel": "Available again soon",
+    "addEmail": "Add an email (optional)"
   },
   "order": {
     "orderOf": "Your order · {organizer}",
@@ -221,7 +227,6 @@
     "total": "Total",
     "buyer": "In the name of {name}",
     "holdLeft": "Your places are held for another <time></time>.",
-    "quoteReference": "Quote the reference {reference} in your payment's note, then declare it below.",
     "referenceHelp": "The transaction number you received by SMS after your Mobile Money payment.",
     "declare": "I have paid",
     "declaring": "Sending…",
@@ -235,7 +240,11 @@
     "keepLink": "Keep this link: it is the only way back to your order.",
     "unavailableTitle": "Order not found",
     "unavailableText": "This order link is not valid.",
-    "orderReference": "Reference {reference}"
+    "orderReference": "Reference {reference}",
+    "quoteLabel": "Payment note",
+    "quoteHint": "Add it to your payment, then declare it below.",
+    "copyReference": "Copy the note",
+    "copied": "Copied"
   },
   "openInvitation": {
     "invitedBy": "{organizer} invites you",

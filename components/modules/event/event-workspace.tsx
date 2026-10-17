@@ -4,6 +4,7 @@ import { CalendarDays, MapPin } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { StateMessage } from "@/components/shared/state-message";
+import { getOrganizerContext } from "@/components/modules/identity/server";
 import { ROUTES } from "@/lib/constants";
 import { EventActions } from "./event-actions";
 import { EventStatusBadge } from "./event-status-badge";
@@ -33,20 +34,29 @@ export async function EventWorkspace({ eventId, children }: { eventId: string; c
     );
   }
   const { event } = load;
-  const checklist = event.status === "DRAFT" ? await loadPublishChecklist(event) : null;
+  const [checklist, organizer] = await Promise.all([
+    event.status === "DRAFT" ? loadPublishChecklist(event) : null,
+    getOrganizerContext(),
+  ]);
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8">
       <header className="flex flex-col gap-4">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="flex min-w-0 flex-col gap-1">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="truncate text-2xl font-semibold tracking-tight">{event.name}</h1>
+              <h1 className="text-2xl font-semibold tracking-tight break-words">{event.name}</h1>
               <EventStatusBadge status={event.status} />
             </div>
             <EventWhenWhere event={event} />
           </div>
-          <EventActions eventId={event.id} status={event.status} checklist={checklist} />
+          <EventActions
+            eventId={event.id}
+            status={event.status}
+            checklist={checklist}
+            channels={event.invitationChannels}
+            canSend={organizer?.emailVerified ?? false}
+          />
         </div>
         <EventTabs eventId={event.id} />
       </header>

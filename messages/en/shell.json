@@ -9,7 +9,7 @@
     "tickets": "Tickets",
     "guests": "Guests",
     "dayLine": "Day line",
-    "manage": "Manage",
+    "manage": "Link and hours",
     "configuration": "Settings",
     "operators": "Operators",
     "orders": "Orders",
@@ -88,7 +88,6 @@
       "eventsDescription": "Wedding, conference, general assembly: invitations, tickets and door check-in.",
       "servicesTitle": "A service",
       "servicesDescription": "Clinic, salon, agency: booking link, reminders and the daily line."
-    },
-    "help": "Need help? The <strong>Help and support</strong> button at the bottom right puts you in touch with us."
+    }
   }
 }

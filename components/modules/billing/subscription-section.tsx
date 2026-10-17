@@ -22,24 +22,19 @@ import type {
   SubscriptionView,
 } from "@/components/modules/billing/schema";
 
-const DAY_MS = 86_400_000;
-const NOTICE_DAYS = 7;
 const REMINDERS_LOW_SHARE = 0.8;
 
 /**
  * The organizer's services subscription (JIKU-90, priced per team since ADR 105):
- * the plan and what it costs for this team, a banner when a paid period ends
- * soon, is in grace, or when the team outgrew a free plan, and a request for a
+ * the plan and what it costs for this team, and a request for a
  * prepayment of one month or a year (two months free), paid online when offered
  * or through the manual Mobile Money flow.
  */
 export function SubscriptionSection({
   initial,
-  nowIso,
   online,
 }: {
   initial: SubscriptionView;
-  nowIso: string;
   /** Online payment is offered next to the manual transfer (JIKU-165). */
   online: boolean;
 }) {
@@ -61,13 +56,8 @@ export function SubscriptionSection({
   const [instructions, setInstructions] = useState<ManualPaymentInstructions | null>(null);
   const [isSaving, startSave] = useTransition();
 
-  const daysLeft = subscription.expiresAt
-    ? Math.ceil((Date.parse(subscription.expiresAt) - Date.parse(nowIso)) / DAY_MS)
-    : null;
   const status = subscription.status as SubscriptionStatus;
-  const inGrace = status === "GRACE";
   const outgrown = subscription.overLimit && isFree;
-  const nearExpiry = !inGrace && !isFree && daysLeft !== null && daysLeft <= NOTICE_DAYS;
   const reminders = subscription.whatsAppReminders;
   const remindersLeft = reminders ? Math.max(reminders.limit - reminders.sent, 0) : null;
   const remindersOut = remindersLeft === 0;
@@ -94,11 +84,6 @@ export function SubscriptionSection({
 
   return (
     <div className="flex flex-col gap-4">
-      {outgrown ? (
-        <Banner>{t("outgrown", { plan: subscription.plan, date: day(subscription.expiresAt) })}</Banner>
-      ) : null}
-      {inGrace ? <Banner>{t("grace", { date: day(subscription.suspensionAt) })}</Banner> : null}
-      {nearExpiry ? <Banner>{t("expiring", { days: Math.max(daysLeft ?? 0, 0) })}</Banner> : null}
       {reminders && remindersOut ? <Banner>{t("remindersOut", { limit: reminders.limit })}</Banner> : null}
       {remindersLow ? <Banner>{t("remindersLow", { left: remindersLeft ?? 0 })}</Banner> : null}
 
@@ -110,7 +95,9 @@ export function SubscriptionSection({
               <Badge variant={status === "ACTIVE" ? "secondary" : "destructive"}>{t(`status.${status}`)}</Badge>
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              {isFree ? t("free") : t("renews", { date: day(subscription.expiresAt) })}
+              {isFree
+                ? t("free")
+                : t(status === "ACTIVE" ? "renews" : "ended", { date: day(subscription.expiresAt) })}
             </p>
           </div>
           <Button

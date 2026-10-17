@@ -15,15 +15,15 @@ export const LEGAL_FR: LegalDocuments = {
         id: "editeur",
         heading: "Éditeur du service",
         body: [
-          `Le site et l'application Jikū sont édités par ${C.legalName}, ${C.legalForm} au capital de ${C.shareCapital}, immatriculée au Registre du commerce et du crédit mobilier de Conakry sous le numéro ${C.rccm}, numéro d'identification fiscale ${C.nif}.`,
+          `Le site et l'application Jikū sont édités par ${C.legalName}, ${C.legalForm} au capital de ${C.shareCapital}, immatriculée au Registre du commerce et du crédit mobilier de Conakry sous le numéro ${C.rccm}.`,
           `Siège social : ${C.address}.`,
-          [`E-mail : ${C.email}`, `Téléphone et WhatsApp : ${C.phone}`],
+          `Contact : ${C.email}, ou le bouton « Aide et assistance » présent sur chaque page.`,
         ],
       },
       {
         id: "publication",
-        heading: "Directeur de la publication",
-        body: [`${C.director}, en qualité de représentant légal de ${C.legalName}.`],
+        heading: "Responsable de la publication",
+        body: [`${C.legalName}, représentée par son gérant.`],
       },
       {
         id: "hebergement",
@@ -31,9 +31,8 @@ export const LEGAL_FR: LegalDocuments = {
         body: [
           "Le service est hébergé par des prestataires situés hors de Guinée, qui ne traitent les données que sur nos instructions :",
           [
-            "Site web : Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis.",
-            "Serveur applicatif : Render Services, Inc., San Francisco, Californie, États-Unis.",
-            "Base de données : Neon (PostgreSQL géré), infrastructure cloud aux États-Unis ou dans l'Union européenne selon la région retenue.",
+            "Serveurs et base de données : Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Allemagne ; centres de données dans l'Union européenne.",
+            "Diffusion du site et protection du réseau : Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, États-Unis.",
           ],
           "La liste complète des prestataires qui traitent des données personnelles figure dans la politique de confidentialité.",
         ],
@@ -173,7 +172,7 @@ export const LEGAL_FR: LegalDocuments = {
         heading: "9. Disponibilité et assistance",
         body: [
           "Nous mettons tout en œuvre pour que le service soit disponible en continu, sans pouvoir le garantir : maintenances, pannes des opérateurs télécom ou des prestataires peuvent l'interrompre. Les billets déjà affichés et le contrôle d'entrée continuent de fonctionner sans connexion.",
-          `L'assistance est joignable par e-mail (${C.email}) et WhatsApp (${C.phone}), les jours ouvrés.`,
+          `L'assistance est joignable par e-mail (${C.email}) et par le bouton « Aide et assistance » du service, les jours ouvrés.`,
         ],
       },
       {
@@ -272,13 +271,15 @@ export const LEGAL_FR: LegalDocuments = {
         body: [
           "Seules les personnes habilitées de l'organisation concernée et de Jikū y accèdent. Nos prestataires techniques les traitent sur nos instructions :",
           [
-            "Hébergement : Vercel (site web), Render (serveur applicatif), Neon (base de données).",
-            "E-mails : Resend ou Brevo, selon la configuration de l'organisation.",
+            "Hébergement : Hetzner Online (serveurs et base de données, Union européenne).",
+            "Diffusion du site, protection du réseau et stockage des sauvegardes chiffrées : Cloudflare.",
+            "E-mails : useSend, qui les achemine par Amazon Web Services (Amazon SES), ou le fournisseur d'e-mail configuré par l'organisation.",
             "WhatsApp : Meta Platforms (WhatsApp Business Platform).",
-            "SMS : Nimba SMS (Guinée).",
+            "SMS : Nimba SMS (Guinée), seulement quand l'envoi de SMS est activé.",
             "Paiements à Jikū : CinetPay.",
             "Suivi des erreurs : Sentry.",
             "Mesure d'audience : Umami, sans cookie, sur une instance que nous administrons.",
+            "Échanges avec l'équipe Jikū (ventes et assistance) : Chatwoot et n8n, sur des instances que nous administrons ; Anthropic (Claude), pour un assistant automatique qui répond aux premiers messages et passe la main à une personne de l'équipe ; Cal.com, pour réserver un rendez-vous avec nous. Ces outils ne reçoivent que les messages envoyés à Jikū, jamais les données des invités et clients des organisations.",
           ],
           "Nous ne communiquons de données à une autorité que sur demande légale.",
         ],

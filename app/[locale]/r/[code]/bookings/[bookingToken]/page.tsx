@@ -12,5 +12,5 @@ export default async function ShortLinkStatusPage({
 }: Readonly<{ params: Promise<{ locale: string; code: string; bookingToken: string }> }>) {
   const { code, bookingToken } = await params;
   const view = await loadAppointment({ code });
-  return <AppointmentStatus link={{ code }} bookingToken={bookingToken} timezone={view?.timezone ?? "UTC"} />;
+  return <AppointmentStatus link={{ code }} bookingToken={bookingToken} service={view} />;
 }

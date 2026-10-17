@@ -3,9 +3,10 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "@/i18n/navigation";
 import { takeLineTicket, type AppointmentLinkRef } from "@/components/modules/appointment/appointment.service";
@@ -16,7 +17,16 @@ import { lineTicketPath } from "@/components/modules/appointment/line-paths";
  * (JIKU-113), without an account: a name and a phone number, then their own
  * ticket page where they follow their place.
  */
-export function LineTicketTake({ link, serviceName }: { link: AppointmentLinkRef; serviceName: string }) {
+export function LineTicketTake({
+  link,
+  serviceName,
+  paused = false,
+}: {
+  link: AppointmentLinkRef;
+  serviceName: string;
+  /** New tickets wait for the organization's renewal (JIKU-254). */
+  paused?: boolean;
+}) {
   const t = useTranslations("guest.line.take");
   const router = useRouter();
   const [name, setName] = useState("");
@@ -45,32 +55,40 @@ export function LineTicketTake({ link, serviceName }: { link: AppointmentLinkRef
           <CardDescription>{t("subtitle", { service: serviceName })}</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={submit} className="flex flex-col gap-5">
-            <p className="text-sm text-muted-foreground">{t("text")}</p>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="line-name">{t("name")}</FieldLabel>
-                <Input id="line-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="line-phone">{t("phone")}</FieldLabel>
-                <Input
-                  id="line-phone"
-                  type="tel"
-                  inputMode="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  autoComplete="tel"
-                  placeholder="+224 6XX XX XX XX"
-                  required
-                />
-                <FieldDescription>{t("phoneHelp")}</FieldDescription>
-              </Field>
-            </FieldGroup>
-            <Button type="submit" className="w-full rounded-full" disabled={isPending || !ready}>
-              {isPending ? t("submitting") : t("submit")}
-            </Button>
-          </form>
+          {paused ? (
+            <Alert>
+              <AlertTitle>{t("pausedTitle")}</AlertTitle>
+              <AlertDescription>{t("paused")}</AlertDescription>
+            </Alert>
+          ) : (
+            <form onSubmit={submit} className="flex flex-col gap-5">
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor="line-name">{t("name")}</FieldLabel>
+                  <Input id="line-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="line-phone">{t("phone")}</FieldLabel>
+                  <Input
+                    id="line-phone"
+                    type="tel"
+                    inputMode="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    autoComplete="tel"
+                    placeholder="+224 6XX XX XX XX"
+                    required
+                  />
+                </Field>
+              </FieldGroup>
+              <div className="flex flex-col gap-2">
+                <Button type="submit" size="lg" className="w-full rounded-full" disabled={isPending || !ready}>
+                  {isPending ? t("submitting") : t("submit")}
+                </Button>
+                <p className="text-center text-xs text-muted-foreground">{t("notice")}</p>
+              </div>
+            </form>
+          )}
         </CardContent>
       </Card>
     </div>

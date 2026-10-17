@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { eventGuestsRoute } from "@/lib/constants";
-import { type ActionResult, fail, fromResponse, ok, reportApiError } from "@/lib/action-result";
+import { type ActionResult, fail, fromResponse, ok, problemCode, reportApiError } from "@/lib/action-result";
 import {
   PAYMENT_METHODS,
   singleGuestSchema,
@@ -145,8 +145,11 @@ export async function markGuestPaidAction(
 export interface SendInvitationsFailure {
   ok: false;
   error: string;
-  /** True when the failure is the guest-allowance paywall (JIKU-34), not a generic error. */
-  paywall: boolean;
+  /**
+   * Why the send was refused when the organizer can fix it: the guest-allowance
+   * paywall (JIKU-34), or an email address not confirmed yet (JIKU-253).
+   */
+  reason: "paywall" | "unverified" | null;
 }
 
 export async function sendInvitationsAction(
@@ -155,7 +158,7 @@ export async function sendInvitationsAction(
 ): Promise<{ ok: true; data: { queued: number } } | SendInvitationsFailure> {
   const t = await errors();
   if (channels.length === 0) {
-    return { ok: false, error: t("noChannel"), paywall: false };
+    return { ok: false, error: t("noChannel"), reason: null };
   }
   const params = new URLSearchParams({ channels: channels.join(",") });
   const response = await serverFetch(`/events/${eventId}/invitations/send?${params.toString()}`, {
@@ -166,11 +169,15 @@ export async function sendInvitationsAction(
     revalidatePath(eventGuestsRoute(eventId));
     return { ok: true, data };
   }
-  reportApiError(response);
-  if (response.status === 402) {
-    return { ok: false, paywall: true, error: t("allowanceReached") };
+  const code = await problemCode(response);
+  if (code === "billing.guest-allowance") {
+    return { ok: false, reason: "paywall", error: t("allowanceReached") };
   }
-  return { ok: false, paywall: false, error: t("sendFailed") };
+  if (code === "account.email-unverified") {
+    return { ok: false, reason: "unverified", error: t("confirmEmailFirst") };
+  }
+  reportApiError(response);
+  return { ok: false, reason: null, error: t("sendFailed") };
 }
 
 /**

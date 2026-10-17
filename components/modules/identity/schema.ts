@@ -31,19 +31,29 @@ export type Branding = Schema<"BrandingResponse">;
  */
 export const MARKETING_CONSENT_VERSION = "2026-10-02";
 
-/** Registration creates the account only; the organization comes at onboarding. */
+/**
+ * Registration creates the account and its first organization in one step
+ * (JIKU-253), so a new organizer lands straight on their dashboard.
+ */
 export const registerSchema = z.object({
   fullName: z
     .string()
     .trim()
     .min(1, "required")
     .max(255, "tooLong"),
+  organizationName: z.string().trim().min(1, "required").max(255, "tooLong"),
   email: z.string().email("email"),
   password: z.string().min(8, "passwordMin"),
   marketingConsent: z.boolean(),
 });
 
-export type RegisterInput = z.infer<typeof registerSchema>;
+/**
+ * Sign-up from a team invitation: the person joins an existing organization,
+ * so there is none to name.
+ */
+export const registerToJoinSchema = registerSchema.omit({ organizationName: true });
+
+export type RegisterInput = z.input<typeof registerToJoinSchema> & { organizationName?: string };
 
 export const loginSchema = z.object({
   email: z.string().email("email"),

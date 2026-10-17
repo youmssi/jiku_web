@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,11 +8,12 @@ import { Minus, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { FormFieldError } from "@/components/shared";
 import { formatAmount } from "@/lib/currency";
 import { orderRoute } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import { placeOrderAction } from "./sale.service";
 import { checkoutSchema, type CheckoutInput, type PublicSale } from "./schema";
 
@@ -40,6 +42,7 @@ export function CheckoutForm({ sale, username }: { sale: PublicSale; username: s
       buyerEmail: "",
     },
   });
+  const [withEmail, setWithEmail] = useState(false);
   const quantities = useWatch({ control, name: "quantities" });
   const count = Object.values(quantities).reduce((sum, value) => sum + value, 0);
   const currency = sale.categories[0]?.currency ?? "";
@@ -117,11 +120,6 @@ export function CheckoutForm({ sale, username }: { sale: PublicSale; username: s
         })}
       </ul>
 
-      <div className="flex items-baseline justify-between">
-        <span className="text-sm text-muted-foreground">{t("ticketCount", { count })}</span>
-        <span className="text-lg font-semibold">{formatAmount(total, currency, locale)}</span>
-      </div>
-
       <FieldGroup>
         <Controller
           control={control}
@@ -130,7 +128,6 @@ export function CheckoutForm({ sale, username }: { sale: PublicSale; username: s
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="buyer-name">{t("buyerName")}</FieldLabel>
               <Input {...field} id="buyer-name" autoComplete="name" aria-invalid={fieldState.invalid} />
-              <FieldDescription>{t("buyerNameHelp")}</FieldDescription>
               <FormFieldError error={fieldState.error} />
             </Field>
           )}
@@ -154,20 +151,36 @@ export function CheckoutForm({ sale, username }: { sale: PublicSale; username: s
             </Field>
           )}
         />
-        <Controller
-          control={control}
-          name="buyerEmail"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="buyer-email">{t("buyerEmail")}</FieldLabel>
-              <Input {...field} id="buyer-email" type="email" autoComplete="email" aria-invalid={fieldState.invalid} />
-              <FormFieldError error={fieldState.error} />
-            </Field>
-          )}
-        />
+        {withEmail ? (
+          <Controller
+            control={control}
+            name="buyerEmail"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="buyer-email">{t("buyerEmail")}</FieldLabel>
+                <Input {...field} id="buyer-email" type="email" autoComplete="email" autoFocus aria-invalid={fieldState.invalid} />
+                <FormFieldError error={fieldState.error} />
+              </Field>
+            )}
+          />
+        ) : (
+          <Button type="button" variant="link" className="self-start px-0 max-md:px-0" onClick={() => setWithEmail(true)}>
+            {t("addEmail")}
+          </Button>
+        )}
       </FieldGroup>
 
-      <div className="flex flex-col gap-2">
+      {/* Once a ticket is chosen, the total and the order button stay in reach while the buyer fills the form. */}
+      <div
+        className={cn(
+          "flex flex-col gap-2 bg-background",
+          count > 0 && "sticky bottom-0 -mx-4 border-t px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]",
+        )}
+      >
+        <div className="flex items-baseline justify-between">
+          <span className="text-sm text-muted-foreground">{t("ticketCount", { count })}</span>
+          <span className="text-lg font-semibold">{formatAmount(total, currency, locale)}</span>
+        </div>
         <Button type="submit" size="lg" disabled={isSubmitting || count === 0}>
           {isSubmitting ? t("ordering") : t("order")}
         </Button>

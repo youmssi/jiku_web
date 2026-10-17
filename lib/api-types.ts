@@ -1092,6 +1092,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/billing/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["billingStatusStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/billing/subscription": {
         parameters: {
             query?: never;
@@ -1231,6 +1247,22 @@ export interface paths {
         put: operations["brandingUpdate"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/branding/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["brandingReplaceImage"];
+        post?: never;
+        delete: operations["brandingRemoveImage"];
         options?: never;
         head?: never;
         patch?: never;
@@ -2516,6 +2548,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/messaging/channels": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["messagingChannelsChannels"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/notifications/email-feedback": {
         parameters: {
             query?: never;
@@ -3124,6 +3172,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/public/orgs/{tenantId}/images/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicTenantImageImage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/public/orgs/{username}": {
         parameters: {
             query?: never;
@@ -3308,7 +3372,7 @@ export interface paths {
             cookie?: never;
         };
         get: operations["resourceAvailability"];
-        put?: never;
+        put: operations["resourceReplaceAvailability"];
         post: operations["resourceAddAvailability"];
         delete?: never;
         options?: never;
@@ -4233,10 +4297,13 @@ export interface components {
             status?: string;
         };
         AppointmentServiceView: {
+            bookingPaused?: boolean;
             /** Format: int32 */
             clientsPerSlot?: number;
             confirmationMode?: string;
+            logoUrl?: string | null;
             name?: string;
+            organizerName?: string | null;
             organizerVerification?: string | null;
             professionals?: string[];
             /** Format: uuid */
@@ -4312,6 +4379,18 @@ export interface components {
             remaining?: number;
             tier?: string;
             withinAllowance?: boolean;
+        };
+        BillingStatusView: {
+            /** @enum {string} */
+            attention?: "SERVICES_PAUSED" | "GRACE" | "OVER_LIMIT" | "EXPIRING_SOON" | "NONE";
+            ownWhatsAppNumber?: boolean;
+            /** Format: date-time */
+            ownWhatsAppNumberAddonExpiresAt?: string | null;
+            packActive?: boolean;
+            /** Format: date-time */
+            packExpiresAt?: string | null;
+            subscription?: components["schemas"]["SubscriptionStatusSummary"] | null;
+            whatsAppReminders?: components["schemas"]["ReminderAllowance"] | null;
         };
         BillingTierOption: {
             /** Format: int64 */
@@ -5000,6 +5079,7 @@ export interface components {
         };
         MeResponse: {
             email?: string;
+            emailVerified?: boolean;
             fullName?: string | null;
             marketingConsent?: boolean;
             memberships?: components["schemas"]["MembershipView"][];
@@ -5019,6 +5099,9 @@ export interface components {
             role?: string;
             tenantId?: string;
             tenantName?: string;
+        };
+        MessagingChannelsResponse: {
+            sms?: boolean;
         };
         MonthOption: {
             /** Format: int32 */
@@ -5805,7 +5888,13 @@ export interface components {
             paymentRule?: "FREE" | "BEFORE" | "AFTER_SERVICE";
             /** Format: int64 */
             priceMinor?: number | null;
+            quickSetup?: components["schemas"]["ServiceQuickSetup"] | null;
             timezone: string;
+        };
+        ServiceQuickSetup: {
+            /** Format: int32 */
+            durationMinutes?: number;
+            hostName: string;
         };
         ServiceRequirementRequest: {
             /** Format: int32 */
@@ -5906,6 +5995,18 @@ export interface components {
             /** Format: int32 */
             months?: number;
             plan: string;
+        };
+        SubscriptionStatusSummary: {
+            /** @enum {string} */
+            attention?: "SERVICES_PAUSED" | "GRACE" | "OVER_LIMIT" | "EXPIRING_SOON" | "NONE";
+            /** Format: date-time */
+            expiresAt?: string | null;
+            overLimit?: boolean;
+            /** Format: date-time */
+            pausesAt?: string | null;
+            plan?: string;
+            servicesPaused?: boolean;
+            status?: string;
         };
         SubscriptionView: {
             currency?: string;
@@ -8050,6 +8151,26 @@ export interface operations {
             };
         };
     };
+    billingStatusStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BillingStatusView"];
+                };
+            };
+        };
+    };
     subscriptionView: {
         parameters: {
             query?: never;
@@ -8261,6 +8382,57 @@ export interface operations {
                 "application/json": components["schemas"]["UpdateBrandingRequest"];
             };
         };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BrandingResponse"];
+                };
+            };
+        };
+    };
+    brandingReplaceImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kind: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BrandingResponse"];
+                };
+            };
+        };
+    };
+    brandingRemoveImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kind: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -10482,6 +10654,26 @@ export interface operations {
             };
         };
     };
+    messagingChannelsChannels: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MessagingChannelsResponse"];
+                };
+            };
+        };
+    };
     emailFeedbackReceive: {
         parameters: {
             query?: never;
@@ -10607,7 +10799,9 @@ export interface operations {
     };
     operatorConsoleResolve: {
         parameters: {
-            query?: never;
+            query?: {
+                door?: boolean;
+            };
             header?: never;
             path: {
                 code: string;
@@ -11425,6 +11619,29 @@ export interface operations {
             };
         };
     };
+    publicTenantImageImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+                kind: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
+                };
+            };
+        };
+    };
     publicOrgProfile: {
         parameters: {
             query?: never;
@@ -11765,6 +11982,32 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ResourceAvailabilityView"][];
+                };
+            };
+        };
+    };
+    resourceReplaceAvailability: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AvailabilityRequest"][];
+            };
+        };
         responses: {
             /** @description OK */
             200: {

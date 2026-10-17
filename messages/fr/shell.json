@@ -5,11 +5,11 @@
     "services": "Services",
     "billing": "Facturation",
     "settings": "Paramètres",
-    "overview": "Vue d'ensemble",
+    "overview": "Aperçu",
     "tickets": "Billets",
     "guests": "Invités",
     "dayLine": "File du jour",
-    "manage": "Gérer",
+    "manage": "Lien et horaires",
     "configuration": "Paramètres",
     "operators": "Opérateurs",
     "orders": "Commandes",
@@ -19,7 +19,7 @@
     "platform": "Plateforme",
     "recentEvents": "Événements récents",
     "more": "Plus",
-    "openOverview": "Ouvrir la vue d'ensemble",
+    "openOverview": "Ouvrir l'aperçu",
     "openGuests": "Ouvrir les invités"
   },
   "breadcrumb": {
@@ -88,7 +88,6 @@
       "eventsDescription": "Mariage, conférence, assemblée : invitations, billets et contrôle à l'entrée.",
       "servicesTitle": "Un service",
       "servicesDescription": "Clinique, salon, agence : lien de réservation, rappels et file du jour."
-    },
-    "help": "Besoin d'aide ? Le bouton <strong>Aide et assistance</strong> en bas à droite vous met en relation avec nous."
+    }
   }
 }

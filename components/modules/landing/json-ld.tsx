@@ -1,6 +1,7 @@
 import { organizationId } from "@/components/modules/seo";
 import { EVENT_PRICING } from "@/lib/pricing";
 import type { LandingContent, LandingLocale } from "./content";
+import { jsonLd } from "@/lib/json-ld";
 
 /**
  * Structured data for the landing page: SoftwareApplication (with the
@@ -55,7 +56,7 @@ export function LandingJsonLd({
         <script
           key={i}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(schema) }}
         />
       ))}
     </>

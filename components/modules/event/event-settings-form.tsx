@@ -7,7 +7,6 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -31,7 +30,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { FormFieldError } from "@/components/shared";
+import { AdvancedOnly, AdvancedToggle, FormFieldError, useUnsavedChangesGuard } from "@/components/shared";
 import { updateDraftAction } from "./event.service";
 import {
   DELIVERY_MODES,
@@ -50,19 +49,17 @@ const HTTPS = /^https:\/\/\S+$/;
 
 /**
  * Everything about an event on one page, in sections an organizer can
- * jump to from the publish checklist (#details, #invitations, #client, #rules). A draft
- * is edited freely and saved from the bar that appears on the first change; a
- * published or cancelled event shows the same page read-only, because its
- * guests already hold what it says.
+ * jump to from the publish checklist (#details, #invitations); the rarer ones
+ * fold under "Advanced options". A draft is edited freely and saved from the
+ * bar that appears on the first change, and leaving it unsaved asks first.
+ * Once published, the event shows a summary instead (EventSummary).
  */
 export function EventSettingsForm({
   eventId,
   initialValues,
-  editable,
 }: {
   eventId: string;
   initialValues: EventFormValues;
-  editable: boolean;
 }) {
   const t = useTranslations("events.settings");
   const router = useRouter();
@@ -79,6 +76,7 @@ export function EventSettingsForm({
   const transferAllowed = useWatch({ control, name: "transferAllowed" });
   const overbookingAllowed = useWatch({ control, name: "overbookingAllowed" });
   const [brandName, brandLogoUrl, brandColor] = useWatch({ control, name: ["brandName", "brandLogoUrl", "brandColor"] });
+  useUnsavedChangesGuard(isDirty, t("leaveUnsaved"));
 
   async function onSubmit(values: EventFormValues) {
     const result = await updateDraftAction(eventId, values);
@@ -93,13 +91,7 @@ export function EventSettingsForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-6">
-      {editable ? null : (
-        <Alert>
-          <AlertTitle>{t("locked.title")}</AlertTitle>
-          <AlertDescription>{t("locked.description")}</AlertDescription>
-        </Alert>
-      )}
-      <fieldset disabled={!editable} className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6">
         <Card id="details" className="scroll-mt-20">
           <CardHeader>
             <CardTitle>{t("details.title")}</CardTitle>
@@ -160,7 +152,7 @@ export function EventSettingsForm({
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor={field.name}>{t("timezone")}</FieldLabel>
-                    <Select value={field.value} onValueChange={field.onChange} disabled={!editable}>
+                    <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
                         <SelectValue />
                       </SelectTrigger>
@@ -208,7 +200,6 @@ export function EventSettingsForm({
                     <RadioGroup
                       value={field.value}
                       onValueChange={(value) => field.onChange(value as DeliveryMode)}
-                      disabled={!editable}
                       className="grid gap-3 sm:grid-cols-3"
                     >
                       {DELIVERY_MODES.map((mode) => (
@@ -230,10 +221,10 @@ export function EventSettingsForm({
                       variant="outline"
                       value={field.value}
                       onValueChange={(value) => field.onChange(value as InvitationChannel[])}
-                      disabled={!editable}
                     >
                       {INVITATION_CHANNELS.map((channel) => (
-                        <ToggleGroupItem key={channel} value={channel}>
+                        <ToggleGroupItem key={channel} value={channel} className="gap-1.5 max-md:h-11">
+                          {field.value.includes(channel) ? <Check aria-hidden /> : null}
                           {INVITATION_CHANNEL_LABELS[channel]}
                         </ToggleGroupItem>
                       ))}
@@ -246,173 +237,176 @@ export function EventSettingsForm({
           </CardContent>
         </Card>
 
-        <Card id="client" className="scroll-mt-20">
-          <CardHeader>
-            <CardTitle>{t("client.title")}</CardTitle>
-            <CardDescription>{t("client.description")}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <FieldGroup>
-              <Controller
-                control={control}
-                name="brandName"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>{t("client.name")}</FieldLabel>
-                    <Input
-                      {...field}
-                      id={field.name}
-                      placeholder={t("client.namePlaceholder")}
-                      aria-invalid={fieldState.invalid}
-                    />
-                    <FormFieldError error={fieldState.error} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="brandLogoUrl"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>{t("client.logo")}</FieldLabel>
-                    <Input
-                      {...field}
-                      id={field.name}
-                      type="url"
-                      inputMode="url"
-                      placeholder="https://"
-                      aria-invalid={fieldState.invalid}
-                    />
-                    <FieldDescription>{t("client.logoHint")}</FieldDescription>
-                    <FormFieldError error={fieldState.error} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="brandColor"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>{t("client.color")}</FieldLabel>
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="color"
-                        aria-label={t("client.color")}
-                        value={field.value || DEFAULT_BRAND_COLOR}
-                        onChange={(event) => field.onChange(event.target.value.toUpperCase())}
-                        disabled={!editable}
-                        className="h-9 w-12 cursor-pointer rounded-md border bg-transparent p-1 disabled:cursor-not-allowed"
-                      />
+        <AdvancedToggle label={t("advanced")} />
+
+        <AdvancedOnly first>
+          <Card id="client" className="scroll-mt-20">
+            <CardHeader>
+              <CardTitle>{t("client.title")}</CardTitle>
+              <CardDescription>{t("client.description")}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FieldGroup>
+                <Controller
+                  control={control}
+                  name="brandName"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>{t("client.name")}</FieldLabel>
                       <Input
                         {...field}
                         id={field.name}
-                        placeholder={DEFAULT_BRAND_COLOR}
-                        maxLength={7}
+                        placeholder={t("client.namePlaceholder")}
                         aria-invalid={fieldState.invalid}
-                        className="max-w-32 font-mono uppercase"
                       />
-                    </div>
-                    <FormFieldError error={fieldState.error} />
-                  </Field>
-                )}
-              />
-              {brandName.trim() ? (
-                <Field>
-                  <FieldLabel>{t("client.preview")}</FieldLabel>
-                  <div
-                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-white"
-                    style={{ backgroundColor: HEX.test(brandColor) ? brandColor : DEFAULT_BRAND_COLOR }}
-                  >
-                    {HTTPS.test(brandLogoUrl) ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- an organizer-supplied external logo, not a local asset
-                      <img src={brandLogoUrl} alt="" className="size-8 rounded-full bg-white object-contain" />
-                    ) : null}
-                    <span className="font-semibold">{brandName}</span>
-                  </div>
-                </Field>
-              ) : null}
-            </FieldGroup>
-          </CardContent>
-        </Card>
-
-        <Card id="rules" className="scroll-mt-20">
-          <CardHeader>
-            <CardTitle>{t("rules.title")}</CardTitle>
-            <CardDescription>{t("rules.description")}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <FieldGroup>
-              <Controller
-                control={control}
-                name="transferAllowed"
-                render={({ field }) => (
-                  <Field orientation="horizontal">
-                    <FieldContent>
-                      <FieldLabel htmlFor={field.name}>{t("rules.transfer")}</FieldLabel>
-                      <FieldDescription>{t("rules.transferHint")}</FieldDescription>
-                    </FieldContent>
-                    <Switch id={field.name} checked={field.value} onCheckedChange={field.onChange} />
-                  </Field>
-                )}
-              />
-              {transferAllowed ? (
-                <Controller
-                  control={control}
-                  name="transferDeadlineLocal"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>{t("rules.transferDeadline")}</FieldLabel>
-                      <Input {...field} id={field.name} type="datetime-local" aria-invalid={fieldState.invalid} />
-                      <FieldDescription>{t("rules.transferDeadlineHint")}</FieldDescription>
                       <FormFieldError error={fieldState.error} />
                     </Field>
                   )}
                 />
-              ) : null}
-              <Controller
-                control={control}
-                name="overbookingAllowed"
-                render={({ field }) => (
-                  <Field orientation="horizontal">
-                    <FieldContent>
-                      <FieldLabel htmlFor={field.name}>{t("rules.overbooking")}</FieldLabel>
-                      <FieldDescription>{t("rules.overbookingHint")}</FieldDescription>
-                    </FieldContent>
-                    <Switch id={field.name} checked={field.value} onCheckedChange={field.onChange} />
-                  </Field>
-                )}
-              />
-              {overbookingAllowed ? (
                 <Controller
                   control={control}
-                  name="maxOverbookingCount"
+                  name="brandLogoUrl"
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>{t("rules.maxOverbooking")}</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>{t("client.logo")}</FieldLabel>
                       <Input
+                        {...field}
                         id={field.name}
-                        type="number"
-                        inputMode="numeric"
-                        min={0}
-                        value={field.value ?? ""}
-                        onBlur={field.onBlur}
-                        onChange={(event) =>
-                          field.onChange(event.target.value === "" ? null : Number(event.target.value))
-                        }
+                        type="url"
+                        inputMode="url"
+                        placeholder="https://"
                         aria-invalid={fieldState.invalid}
-                        className="max-w-40"
                       />
+                      <FieldDescription>{t("client.logoHint")}</FieldDescription>
                       <FormFieldError error={fieldState.error} />
                     </Field>
                   )}
                 />
-              ) : null}
-            </FieldGroup>
-          </CardContent>
-        </Card>
-      </fieldset>
+                <Controller
+                  control={control}
+                  name="brandColor"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>{t("client.color")}</FieldLabel>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="color"
+                          aria-label={t("client.color")}
+                          value={field.value || DEFAULT_BRAND_COLOR}
+                          onChange={(event) => field.onChange(event.target.value.toUpperCase())}
+                          className="h-9 w-12 cursor-pointer rounded-md border bg-transparent p-1 disabled:cursor-not-allowed max-md:h-11"
+                        />
+                        <Input
+                          {...field}
+                          id={field.name}
+                          placeholder={DEFAULT_BRAND_COLOR}
+                          maxLength={7}
+                          aria-invalid={fieldState.invalid}
+                          className="max-w-32 font-mono uppercase"
+                        />
+                      </div>
+                      <FormFieldError error={fieldState.error} />
+                    </Field>
+                  )}
+                />
+                {brandName.trim() ? (
+                  <Field>
+                    <FieldLabel>{t("client.preview")}</FieldLabel>
+                    <div
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-white"
+                      style={{ backgroundColor: HEX.test(brandColor) ? brandColor : DEFAULT_BRAND_COLOR }}
+                    >
+                      {HTTPS.test(brandLogoUrl) ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- an organizer-supplied external logo, not a local asset
+                        <img src={brandLogoUrl} alt="" className="size-8 rounded-full bg-white object-contain" />
+                      ) : null}
+                      <span className="font-semibold">{brandName}</span>
+                    </div>
+                  </Field>
+                ) : null}
+              </FieldGroup>
+            </CardContent>
+          </Card>
 
-      {editable && isDirty ? (
+          <Card id="rules" className="scroll-mt-20">
+            <CardHeader>
+              <CardTitle>{t("rules.title")}</CardTitle>
+              <CardDescription>{t("rules.description")}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FieldGroup>
+                <Controller
+                  control={control}
+                  name="transferAllowed"
+                  render={({ field }) => (
+                    <Field orientation="horizontal">
+                      <FieldContent>
+                        <FieldLabel htmlFor={field.name}>{t("rules.transfer")}</FieldLabel>
+                        <FieldDescription>{t("rules.transferHint")}</FieldDescription>
+                      </FieldContent>
+                      <Switch id={field.name} checked={field.value} onCheckedChange={field.onChange} />
+                    </Field>
+                  )}
+                />
+                {transferAllowed ? (
+                  <Controller
+                    control={control}
+                    name="transferDeadlineLocal"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>{t("rules.transferDeadline")}</FieldLabel>
+                        <Input {...field} id={field.name} type="datetime-local" aria-invalid={fieldState.invalid} />
+                        <FieldDescription>{t("rules.transferDeadlineHint")}</FieldDescription>
+                        <FormFieldError error={fieldState.error} />
+                      </Field>
+                    )}
+                  />
+                ) : null}
+                <Controller
+                  control={control}
+                  name="overbookingAllowed"
+                  render={({ field }) => (
+                    <Field orientation="horizontal">
+                      <FieldContent>
+                        <FieldLabel htmlFor={field.name}>{t("rules.overbooking")}</FieldLabel>
+                        <FieldDescription>{t("rules.overbookingHint")}</FieldDescription>
+                      </FieldContent>
+                      <Switch id={field.name} checked={field.value} onCheckedChange={field.onChange} />
+                    </Field>
+                  )}
+                />
+                {overbookingAllowed ? (
+                  <Controller
+                    control={control}
+                    name="maxOverbookingCount"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>{t("rules.maxOverbooking")}</FieldLabel>
+                        <Input
+                          id={field.name}
+                          type="number"
+                          inputMode="numeric"
+                          min={0}
+                          value={field.value ?? ""}
+                          onBlur={field.onBlur}
+                          onChange={(event) =>
+                            field.onChange(event.target.value === "" ? null : Number(event.target.value))
+                          }
+                          aria-invalid={fieldState.invalid}
+                          className="max-w-40"
+                        />
+                        <FormFieldError error={fieldState.error} />
+                      </Field>
+                    )}
+                  />
+                ) : null}
+              </FieldGroup>
+            </CardContent>
+          </Card>
+        </AdvancedOnly>
+      </div>
+
+      {isDirty ? (
         <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-lg border bg-background/95 p-3 shadow-lg backdrop-blur">
           <p className="text-sm text-muted-foreground">{t("unsaved")}</p>
           <div className="flex gap-2">

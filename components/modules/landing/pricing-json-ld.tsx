@@ -1,5 +1,6 @@
 import { EVENT_PRICING, SERVICE_PLANS } from "@/lib/pricing";
 import type { SimulatorContent } from "./simulator-content";
+import { jsonLd } from "@/lib/json-ld";
 
 /**
  * Offers for the pricing page, built from the same figures the calculator
@@ -35,5 +36,5 @@ export function PricingJsonLd({ content, url }: { content: SimulatorContent; url
     operatingSystem: "Web",
     offers: [...plans, ...tiers],
   };
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(schema) }} />;
 }

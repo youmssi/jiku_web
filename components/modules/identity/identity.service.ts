@@ -5,13 +5,14 @@ import { localeRedirect } from "@/i18n/redirect";
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 import { setAuthCookies, clearAuthCookies, type AuthTokens } from "@/lib/auth";
-import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
+import { type ActionResult, fail, ok, problemCode, reportApiError } from "@/lib/action-result";
 import {
   MARKETING_CONSENT_VERSION,
   createOrgSchema,
   forgotPasswordSchema,
   loginSchema,
   registerSchema,
+  registerToJoinSchema,
   resetPasswordSchema,
   type CreateOrgInput,
   type ForgotPasswordInput,
@@ -19,29 +20,26 @@ import {
   type RegisterInput,
   type ResetPasswordInput,
 } from "@/components/modules/identity/schema";
-
-/**
- * Only same-origin paths may be used as a post-auth destination — anything else
- * (absolute URLs, protocol-relative `//`) falls back to the dashboard, so a
- * crafted link can never bounce a fresh session to another site.
- */
-function safeNext(next: string | undefined, fallback: string): string {
-  return next && next.startsWith("/") && !next.startsWith("//") ? next : fallback;
-}
+import { safeNext } from "@/lib/safe-next";
 
 export async function registerAction(
   input: RegisterInput,
   next?: string,
 ): Promise<ActionResult> {
   const t = await getTranslations();
-  const parsed = registerSchema.safeParse(input);
+  // Joining a team (a `next` back to the invitation) names no organization;
+  // every other sign-up creates its own in the same request.
+  const joining = Boolean(next);
+  const parsed = (joining ? registerToJoinSchema : registerSchema).safeParse(input);
   if (!parsed.success) {
     return fail(t("common.errors.checkForm"));
   }
+  const { fullName, email, password, marketingConsent } = parsed.data;
+  const name = "organizationName" in parsed.data ? parsed.data.organizationName : undefined;
   const response = await publicFetch("/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...parsed.data, marketingConsentVersion: MARKETING_CONSENT_VERSION }),
+    body: JSON.stringify({ name, fullName, email, password, marketingConsent, marketingConsentVersion: MARKETING_CONSENT_VERSION }),
   });
   if (!response.ok) {
     // A taken address and a burst of attempts are the visitor's to fix, with
@@ -53,8 +51,9 @@ export async function registerAction(
   }
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
-  // A fresh account has no organization yet: onboarding creates the first one.
-  return localeRedirect(safeNext(next, ROUTES.ONBOARDING));
+  // The organization exists already; the address is confirmed later, before
+  // the first invitation leaves (JIKU-253).
+  return localeRedirect(safeNext(next, ROUTES.DASHBOARD));
 }
 
 export async function loginAction(input: LoginInput, next?: string): Promise<ActionResult> {
@@ -69,8 +68,11 @@ export async function loginAction(input: LoginInput, next?: string): Promise<Act
     body: JSON.stringify(parsed.data),
   });
   if (!response.ok) {
-    if (response.status !== 401 && response.status !== 429) {
+    if (response.status !== 401 && response.status !== 403 && response.status !== 429) {
       reportApiError(response);
+    }
+    if (response.status === 403 && (await problemCode(response)) === "account.suspended") {
+      return fail(t("auth.login.suspended"));
     }
     if (response.status === 401) {
       // Google-only accounts get the backend's pointer to the right door
@@ -179,14 +181,10 @@ export async function verifyEmailAction(token: string): Promise<ActionResult> {
     body: JSON.stringify({ token }),
   });
   if (!response.ok) {
-    if (response.status !== 400) {
-      reportApiError(response);
-    }
-    return fail(
-      response.status === 400
-        ? t("auth.verify.invalidLink")
-        : t("common.errors.generic"),
-    );
+    if (response.status === 400) return fail(t("auth.verify.invalidLink"));
+    if (response.status === 429) return fail(t("common.errors.tooManyAttempts"));
+    reportApiError(response);
+    return fail(t("common.errors.generic"));
   }
   return ok(null);
 }
@@ -214,14 +212,8 @@ export async function createOrgAction(input: CreateOrgInput): Promise<ActionResu
     body: JSON.stringify(parsed.data),
   });
   if (!response.ok) {
-    if (response.status !== 403) {
-      reportApiError(response);
-    }
-    return fail(
-      response.status === 403
-        ? t("auth.onboarding.verifyFirst")
-        : t("auth.onboarding.failed"),
-    );
+    reportApiError(response);
+    return fail(t("auth.onboarding.failed"));
   }
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);

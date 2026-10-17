@@ -12,6 +12,7 @@
     "title": "Abonnement {plan}",
     "free": "Gratuit pour toujours",
     "renews": "Payé jusqu'au {date}",
+    "ended": "Terminé le {date}",
     "status": {
       "ACTIVE": "Actif",
       "GRACE": "En période de grâce",
@@ -20,9 +21,6 @@
     "monthly": "{amount} par mois pour votre équipe",
     "people": "{active, plural, one {# personne sert vos clients} other {# personnes servent vos clients}}",
     "included": "{count, plural, one {# incluse} other {# incluses}}",
-    "outgrown": "Votre équipe a grandi au-delà de {plan}. Choisissez une formule avant le {date} pour continuer sans interruption.",
-    "grace": "Votre abonnement est en période de grâce. Renouvelez-le : votre espace sera suspendu le {date}.",
-    "expiring": "{days, plural, one {Votre abonnement se termine dans # jour.} other {Votre abonnement se termine dans # jours.}} Renouvelez-le pour continuer sans interruption.",
     "change": "Renouveler ou changer",
     "cancel": "Annuler",
     "choose": "Choisir une formule",
@@ -83,7 +81,8 @@
     "surchargeOnly": "Réponses dans WhatsApp pour vos invités déjà couverts",
     "coveredTitle": "Couvert par votre Pack Organisateur",
     "coveredText": "Cet événement puise dans les invités du mois de votre Pack : aucun palier à acheter. Suivez et complétez votre Pack depuis la page Facturation.",
-    "packTier": "Pack Organisateur"
+    "packTier": "Pack Organisateur",
+    "activateTier": "Demander l'activation du palier {tier}"
   },
   "instructions": {
     "title": "Activation demandée : {tier}, {amount}",
@@ -246,5 +245,29 @@
         "COMMISSION": "Commission sur les billets vendus"
       }
     }
+  },
+  "attention": {
+    "SERVICES_PAUSED": {
+      "title": "Vos services sont en pause",
+      "description": "Votre abonnement {plan} est terminé : vos clients ne peuvent plus réserver ni prendre de ticket. Les rendez-vous déjà pris et vos événements continuent.",
+      "action": "Renouveler"
+    },
+    "GRACE": {
+      "title": "Abonnement à renouveler",
+      "description": "Votre abonnement {plan} est terminé. Sans renouvellement, les nouvelles réservations se mettront en pause le {date}.",
+      "action": "Renouveler"
+    },
+    "OVER_LIMIT": {
+      "title": "Votre équipe a grandi",
+      "description": "{plan} ne couvre plus toute votre équipe. Choisissez une formule avant le {date} pour que vos clients continuent de réserver.",
+      "descriptionNoDate": "{plan} ne couvre plus toute votre équipe. Choisissez une formule adaptée.",
+      "action": "Choisir une formule"
+    },
+    "EXPIRING_SOON": {
+      "title": "Abonnement bientôt à renouveler",
+      "description": "Votre abonnement {plan} se termine le {date}. Renouvelez-le pour que vos clients continuent de réserver.",
+      "action": "Renouveler"
+    },
+    "askManager": "Prévenez la personne qui gère la facturation de votre organisation."
   }
 }

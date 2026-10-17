@@ -86,7 +86,7 @@ Routing (app/) → Component (<feature>.tsx) → Cache (use<Domain>.ts) → Serv
 
 | Route Group | Strategy | Rationale |
 |---|---|---|
-| `(organizer)` | Server Components + client-side polling | Initial SSR render, TanStack Query for dashboard updates |
+| `(organizer)` | Server Components + client-side polling | Initial SSR render, then the live stream (SSE) with polling as the fallback for dashboard updates |
 | `(guest)` | Dynamic Server Components + Server Actions | Fast-loading, mobile-first pages for invitation links |
 | `(validator)` | Client-Component-dominant | Camera access, IndexedDB, offline sync needs |
 | SSG / ISR | Not used anywhere in current scope | All data is dynamic and tenant-specific |
@@ -101,10 +101,10 @@ Routing (app/) → Component (<feature>.tsx) → Cache (use<Domain>.ts) → Serv
 
 ## API Conventions
 
-- Backend API is served from the Spring Boot backend (hosted on Render)
+- Backend API is served from the Spring Boot backend (on the Jikū server, ADR 107 and 108)
 - All endpoints are versioned under `/api/v1/...`
 - Authentication uses httpOnly cookies (JWT), not localStorage
-- API calls go through service layers using `ky`, never `fetch` directly
+- API calls go through service layers with `serverFetch` / `publicFetch` from `lib/api-server.ts` (bearer token from the httpOnly session cookie, API path guard), never a raw `fetch` in a component
 
 ## Engineering Rules (Hard Requirements)
 
@@ -124,9 +124,10 @@ Routing (app/) → Component (<feature>.tsx) → Cache (use<Domain>.ts) → Serv
 
 | Service | Provider |
 |---|---|
-| Frontend | **Vercel** (native Next.js deployment) |
-| Backend | **Render** (Spring Boot service) |
-| Database | **Neon** (PostgreSQL) |
+| Frontend | **Hetzner server** with Dokploy, image built by GitHub Actions on GHCR; Vercel for pull request previews |
+| Backend | **Hetzner server** (Spring Boot container) |
+| Database | **PostgreSQL 18** on the same server, WAL-G backups to Cloudflare R2 |
+| Network | **Cloudflare** (DNS, cache, web firewall) |
 
 ## Key Reference Files
 

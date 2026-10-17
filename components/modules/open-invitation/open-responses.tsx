@@ -56,7 +56,7 @@ export function OpenResponses({ eventId, responses }: { eventId: string; respons
           aria-label={t("filterLabel")}
         >
           {[...OPEN_ANSWERS, "ALL" as const].map((option) => (
-            <ToggleGroupItem key={option} value={option}>
+            <ToggleGroupItem key={option} value={option} className="max-md:h-11">
               {t(`filters.${option}`)}
             </ToggleGroupItem>
           ))}
@@ -95,6 +95,7 @@ export function OpenResponses({ eventId, responses }: { eventId: string; respons
                 type="button"
                 variant="ghost"
                 size="icon"
+                className="max-md:size-11"
                 aria-label={t("remove", { name: response.name })}
                 onClick={() => setRemoving(response)}
               >

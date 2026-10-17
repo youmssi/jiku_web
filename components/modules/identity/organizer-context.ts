@@ -10,6 +10,8 @@ export interface OrganizerContext {
   email: string;
   /** The person's display name; falls back to the email when never provided. */
   fullName: string | null;
+  /** Whether the address is confirmed; sending invitations waits for it (JIKU-253). */
+  emailVerified: boolean;
   brandName: string;
   logoUrl: string | null;
   /** All organizations the user belongs to; empty until onboarding (JIKU-48). */
@@ -44,6 +46,7 @@ export const getOrganizerContext = cache(async function getOrganizerContext(): P
     role: me.role,
     email: me.email,
     fullName: me.fullName ?? null,
+    emailVerified: me.emailVerified ?? false,
     brandName: branding?.displayName ?? active?.tenantName ?? (await getTranslations("settings.page"))("fallbackOrganization"),
     logoUrl: branding?.logoUrl ?? null,
     memberships: me.memberships,

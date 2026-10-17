@@ -11,5 +11,5 @@ export default async function LineTakePage({ params }: Readonly<{ params: Promis
   const { code } = await params;
   const view = await loadAppointment({ code });
   if (!view) notFound();
-  return <LineTicketTake link={{ code }} serviceName={view.name} />;
+  return <LineTicketTake link={{ code }} serviceName={view.name} paused={view.bookingPaused ?? false} />;
 }

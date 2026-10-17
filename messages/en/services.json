@@ -2,14 +2,16 @@
   "create": {
     "trigger": "New service",
     "title": "New service",
-    "description": "A service is what you offer (a consultation, a haircut, a file drop-off). You then add its opening hours and resources.",
+    "description": "What you offer: a haircut, a consultation, a document drop-off. The booking link is ready as soon as it is created.",
     "name": "Service name",
     "namePlaceholder": "Consultation",
     "timezone": "Timezone",
     "submit": "Create service",
     "submitting": "Creating…",
-    "created": "Service created.",
-    "failed": "The service could not be created."
+    "failed": "The service could not be created.",
+    "duration": "Length of one appointment",
+    "minutes": "{count} min",
+    "timezoneSummary": "{zone} time · change"
   },
   "entranceQr": {
     "title": "Entrance QR for today's line",
@@ -60,9 +62,13 @@
     "actions": "Actions",
     "remove": "Remove",
     "bookingLink": {
-      "title": "Public booking link",
-      "text": "Share this link (WhatsApp, bio, message): anyone who has it can pick a time without an account.",
-      "show": "Show the link"
+      "title": "Your booking link",
+      "text": "Share it (WhatsApp, bio, message): your clients pick a slot without an account.",
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "share": "Share",
+      "shareText": "Book your \"{service}\" appointment:",
+      "unavailable": "The link could not be loaded. Reload the page."
     },
     "staff": {
       "title": "Counter staff",
@@ -79,8 +85,8 @@
       "create": "Create the link"
     },
     "resources": {
-      "title": "Resources",
-      "text": "The people, places and equipment a slot needs. A deactivated resource stops being offered without disturbing existing bookings.",
+      "title": "Who receives, and where",
+      "text": "The people, rooms and equipment an appointment can take. Turning one off removes it from the slots without touching appointments already booked.",
       "empty": "No resources yet.",
       "name": "Name",
       "type": "Type",
@@ -96,12 +102,22 @@
       "scheduleTitle": "Hours — {name}"
     },
     "requirements": {
-      "title": "Service requirements",
-      "text": "What a slot uses: a slot is offered only when every requirement is met (e.g. 1 person + 1 place for a colouring).",
+      "title": "What an appointment needs",
+      "text": "What an appointment takes: a slot is offered only when all of it is free (e.g. 1 person + 1 room for a colouring).",
       "empty": "No requirements: add at least one to open slots.",
       "type": "Type",
       "quantity": "Quantity",
       "add": "Add the requirement"
+    },
+    "duration": "{count} min per appointment",
+    "zone": "{zone} time",
+    "advanced": "Advanced options",
+    "notBookable": {
+      "title": "Nobody can book this service yet",
+      "requirement": "It does not say yet what an appointment needs.",
+      "person": "Add the person who receives clients, in the advanced options.",
+      "hours": "Open at least one day in the hours below.",
+      "addRequirement": "One appointment = one person"
     }
   },
   "resourceTypes": {
@@ -166,7 +182,11 @@
     "closuresLoad": "The closures couldn't be loaded.",
     "closureAdd": "The closure couldn't be added.",
     "closureRemove": "The closure couldn't be removed.",
-    "groupTooLarge": "Your plan doesn't allow that many clients per slot."
+    "groupTooLarge": "Your plan doesn't allow that many clients per slot.",
+    "weekSave": "The opening hours could not be saved.",
+    "priceInvalid": "Enter a price above zero.",
+    "priceUnverified": "Get your organization verified first: a paid service makes your clients pay.",
+    "priceSave": "The price could not be saved."
   },
   "group": {
     "title": "Group sessions",
@@ -177,5 +197,42 @@
     "save": "Save",
     "saving": "Saving…",
     "saved": "Group sessions saved."
+  },
+  "hours": {
+    "title": "Opening hours",
+    "titleOf": "{name}'s hours",
+    "text": "Clients can only book during these hours.",
+    "closed": "Closed",
+    "opens": "Opens on {day}",
+    "closes": "Closes on {day}",
+    "addRange": "Add a range",
+    "removeRange": "Remove this range on {day}",
+    "copyToOpenDays": "Same hours on every open day",
+    "save": "Save hours",
+    "saving": "Saving…",
+    "saved": "Hours saved.",
+    "invalid": "Each range must end after it starts.",
+    "leaveUnsaved": "Your hours are not saved. Leave anyway?",
+    "several": "Several people receive clients: set each one's hours.",
+    "edit": "Hours",
+    "change": "Change hours",
+    "cancel": "Cancel"
+  },
+  "basics": {
+    "title": "Length and price",
+    "duration": "Length of one appointment",
+    "minutes": "{count} min",
+    "durationSaved": "Length saved.",
+    "price": "Price",
+    "rule": "Payment",
+    "rules": {
+      "FREE": "Free",
+      "BEFORE": "Paid when booking",
+      "AFTER_SERVICE": "Paid after the appointment"
+    },
+    "amount": "Amount ({currency})",
+    "save": "Save price",
+    "saving": "Saving…",
+    "saved": "Price saved."
   }
 }

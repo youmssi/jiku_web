@@ -3,10 +3,12 @@
 import { serverFetch } from "@/lib/api-server";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
+import { ROUTES } from "@/lib/constants";
 import { getTranslations } from "next-intl/server";
 import type { Messages } from "@/i18n/messages";
 import { MARKETING_CONSENT_VERSION } from "@/components/modules/identity/schema";
 import type {
+  BrandingResponse,
   CompleteEmbeddedSignupRequest,
   PaymentMethodsInfo,
   PaymentMethodsInput,
@@ -63,6 +65,45 @@ export async function updateBrandingAction(
     return fail(await settingsError("branding"));
   }
   return ok(null);
+}
+
+/** Which of the organization's photos an upload replaces. */
+export type BrandImageKind = "logo" | "banner";
+
+/** Uploads the logo or the banner (JIKU-259); the form carries one `file`, already resized in the browser. */
+export async function uploadBrandImageAction(
+  kind: BrandImageKind,
+  form: FormData,
+): Promise<ActionResult<BrandingResponse>> {
+  const t = await getTranslations("settings.branding.errors");
+  if (!(form.get("file") instanceof Blob)) return fail(t("photoInvalid"));
+  const response = await serverFetch(`/branding/${kind}`, { method: "PUT", body: form });
+  if (response.ok) {
+    revalidatePath(ROUTES.SETTINGS);
+    return ok((await response.json()) as BrandingResponse);
+  }
+  switch (response.status) {
+    case 400:
+      return fail(t("photoInvalid"));
+    case 413:
+      return fail(t("photoTooLarge"));
+    case 415:
+      return fail(t("photoType"));
+    default:
+      reportApiError(response);
+      return fail(await settingsError("branding"));
+  }
+}
+
+/** Takes the logo or the banner off: guests see the organization's initial or a color band again. */
+export async function removeBrandImageAction(kind: BrandImageKind): Promise<ActionResult<BrandingResponse>> {
+  const response = await serverFetch(`/branding/${kind}`, { method: "DELETE" });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail(await settingsError("branding"));
+  }
+  revalidatePath(ROUTES.SETTINGS);
+  return ok((await response.json()) as BrandingResponse);
 }
 
 // ─── Provider settings ──────────────────────────────────────────────────────

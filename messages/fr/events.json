@@ -2,15 +2,15 @@
   "create": {
     "trigger": "Nouvel événement",
     "title": "Créer un événement",
-    "description": "Donnez-lui un nom et un fuseau horaire : le reste se complète sur la page de l'événement.",
+    "description": "Un nom suffit pour commencer : le reste se complète sur la page de l'événement.",
     "name": "Nom de l'événement",
     "timezone": "Fuseau horaire",
     "timezonePlaceholder": "Choisissez un fuseau",
     "start": "Début (facultatif)",
     "submit": "Créer le brouillon",
     "submitting": "Création…",
-    "created": "Brouillon créé.",
-    "failed": "Impossible de créer l'événement."
+    "failed": "Impossible de créer l'événement.",
+    "timezoneSummary": "Heure de {zone} · changer"
   },
   "status": {
     "DRAFT": "Brouillon",
@@ -71,7 +71,6 @@
     "recommended": "Recommandé",
     "fix": "Compléter",
     "consequence": "Une fois publié, les informations de l'événement ne se modifient plus : vérifiez la date et le lieu.",
-    "later": "Plus tard",
     "checks": {
       "details": {
         "title": "Nom et date",
@@ -93,14 +92,23 @@
         "description": "Importez un fichier ou ajoutez vos invités un par un.",
         "cta": "Ajouter"
       }
-    }
+    },
+    "andSend": "Publier et envoyer les invitations",
+    "withoutSending": "Publier sans envoyer",
+    "publishedAndSent": "{count, plural, =0 {Événement publié. Aucun invité à joindre sur ces canaux.} one {Événement publié. # invitation part.} other {Événement publié. # invitations partent.}}",
+    "publishedNotSent": "Événement publié, mais les invitations ne sont pas parties.",
+    "openBilling": "Voir la facturation",
+    "openGuests": "Voir les invités",
+    "confirmEmailTitle": "Les invitations attendent votre adresse",
+    "confirmEmailDescription": "Publiez maintenant ; confirmez votre adresse e-mail, puis envoyez les invitations depuis l'onglet Invités."
   },
   "setup": {
     "title": "Préparez votre événement",
     "description": "Quelques étapes, dans l'ordre qui vous convient. Publiez depuis l'en-tête quand l'essentiel est prêt.",
     "ready": "L'essentiel est prêt : vous pouvez publier depuis l'en-tête.",
     "progress": "{done} sur {total}",
-    "review": "Revoir"
+    "review": "Revoir",
+    "channelsLabel": "Canaux d'invitation"
   },
   "errors": {
     "invalid": "Vérifiez le formulaire et réessayez.",
@@ -124,7 +132,6 @@
   "settings": {
     "saved": "Modifications enregistrées.",
     "locked": {
-      "title": "Événement en lecture seule",
       "description": "Un événement publié ou annulé ne se modifie plus : vos invités ont déjà reçu ces informations."
     },
     "details": {
@@ -185,6 +192,14 @@
       "logoHint": "Une image en ligne, en https://",
       "color": "Couleur",
       "preview": "Aperçu pour vos invités"
+    },
+    "advanced": "Options avancées",
+    "leaveUnsaved": "Vos modifications ne sont pas enregistrées. Quitter quand même ?",
+    "summary": {
+      "title": "Ce que vos invités ont reçu",
+      "yes": "Autorisé",
+      "until": "Autorisé jusqu'au {date}",
+      "extra": "{count, plural, one {Jusqu'à # confirmation en plus} other {Jusqu'à # confirmations en plus}}"
     }
   },
   "quorum": {
@@ -249,7 +264,6 @@
       "title": "Tableau de bord indisponible",
       "description": "Les chiffres de l'événement n'ont pas pu être chargés. Réessayez."
     },
-    "exportGuests": "Exporter la liste",
     "doorLinks": {
       "trigger": "Liens d'entrée",
       "title": "Liens d'entrée",
@@ -270,10 +284,7 @@
         "cta": "Voir les offres"
       }
     },
-    "before": "Avant l'événement",
     "stats": {
-      "total": "Invités",
-      "invited": "Invités contactés",
       "confirmed": "Confirmés",
       "declined": "Déclinés",
       "pending": "Sans réponse"
@@ -301,7 +312,6 @@
       "title": "Arrivées",
       "description": "Entrées par heure, dans le fuseau de l'événement."
     },
-    "live": "Mis à jour en direct.",
     "charts": {
       "checkIns": "Entrées",
       "noCheckIns": "Aucune entrée pour l'instant : le graphique se remplit à l'arrivée des invités.",
@@ -330,21 +340,34 @@
       "missing": "{count, plural, one {Il manque # présent} other {Il manque # présents}}",
       "reachedAt": "Atteint le {date}",
       "fellBack": "(des participants sont repartis depuis)"
-    }
+    },
+    "responses": {
+      "title": "Réponses",
+      "ofGuests": "{count, plural, one {sur # invité} other {sur # invités}}"
+    },
+    "next": {
+      "unsent": "{count, plural, one {# invité n'a pas encore reçu son invitation} other {# invités n'ont pas encore reçu leur invitation}}",
+      "unsentHint": "Envoyer les invitations",
+      "pending": "{count, plural, one {# invité n'a pas encore répondu} other {# invités n'ont pas encore répondu}}",
+      "pendingHint": "Voir qui relancer"
+    },
+    "trends": "Statistiques"
   },
   "list": {
     "title": "Événements",
     "emptyTitle": "Aucun événement pour l'instant",
     "emptyDescription": "Créez votre premier événement pour inviter vos invités et contrôler l'entrée.",
-    "search": "Rechercher un événement",
-    "allStatuses": "Tous les statuts",
+    "search": "Rechercher",
+    "allStatuses": "Tous",
     "columns": {
       "name": "Nom",
       "status": "Statut",
       "date": "Date",
       "location": "Lieu",
       "undated": "Date à définir"
-    }
+    },
+    "noMatch": "Aucun événement ne correspond.",
+    "clearFilters": "Effacer les filtres"
   },
   "orders": {
     "title": "Commandes",
@@ -397,7 +420,8 @@
     "errors": {
       "alreadyDecided": "Cette commande a déjà été traitée ou a expiré.",
       "failed": "Impossible de traiter cette commande. Réessayez."
-    }
+    },
+    "noneYet": "Elles apparaissent ici dès qu'un client achète un billet sur votre page de vente."
   },
   "commission": {
     "title": "Commission Jikū ({rate} %)",
@@ -507,7 +531,6 @@
       "removed": "{name} a été retiré(e)."
     },
     "settings": {
-      "title": "Réglages",
       "moreInfo": "Plus d'informations",
       "enabled": "Accepter les réponses",
       "enabledHelp": "Désactivez pour fermer la carte.",
@@ -547,6 +570,7 @@
       "removePhoto": "Retirer",
       "photoTooSmall": "Photo trop petite : 600 × 300 px au moins.",
       "preview": "Aperçu de la carte"
-    }
+    },
+    "customize": "Personnaliser la carte"
   }
 }

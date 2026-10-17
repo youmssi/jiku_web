@@ -18,9 +18,11 @@ import {
   updateClientsPerSlotAction,
   updateReminderPolicyAction,
 } from "@/components/modules/services/services.service";
+import { ServiceBasics } from "@/components/modules/services/service-basics";
 import type {
   ReminderChannel,
   ServiceConfiguration,
+  ServiceSummary,
 } from "@/components/modules/services/schema";
 
 const DEFAULT_OFFSETS = [1440, 120];
@@ -46,18 +48,24 @@ function offsetLabel(
  * ne peut pas délivrer (JIKU-244). L'enregistrement est une mise à jour partielle.
  */
 export function ServiceConfigurationPanel({
-  serviceId,
+  service,
+  currency,
   initial,
+  smsAvailable,
 }: {
-  serviceId: string;
+  service: ServiceSummary;
+  currency: string | null;
   initial: ServiceConfiguration;
+  /** False when the platform sends no SMS (JIKU-261): the SMS fallback is neither offered nor saved. */
+  smsAvailable: boolean;
 }) {
+  const serviceId = service.id;
   const t = useTranslations("services.reminders");
   const [enabled, setEnabled] = useState(initial.reminderChannel !== "NONE");
   const [smsFallback, setSmsFallback] = useState(
     initial.reminderChannel === "WHATSAPP_OR_SMS" || (initial.reminderChannel as string) === "SMS",
   );
-  const channel: ReminderChannel = !enabled ? "NONE" : smsFallback ? "WHATSAPP_OR_SMS" : "WHATSAPP";
+  const channel: ReminderChannel = !enabled ? "NONE" : smsFallback && smsAvailable ? "WHATSAPP_OR_SMS" : "WHATSAPP";
   const [offsets, setOffsets] = useState<number[]>(
     initial.reminderOffsetsMinutes,
   );
@@ -93,6 +101,7 @@ export function ServiceConfigurationPanel({
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-10 px-4 py-10">
       <h1 className="text-2xl font-semibold">{t("settingsTitle")}</h1>
+      <ServiceBasics service={service} durationMinutes={initial.durationMinutes} currency={currency} />
       <GroupSessionSettings serviceId={serviceId} initial={initial} />
       <section>
         <h2 className="text-lg font-semibold">{t("title")}</h2>
@@ -100,13 +109,13 @@ export function ServiceConfigurationPanel({
 
         <div className="mt-6 flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <Label>{t("enable")}</Label>
+            <Label htmlFor="reminder-channel">{t("enable")}</Label>
             <div className="max-w-xs">
               <Select
                 value={enabled ? "WHATSAPP" : "NONE"}
                 onValueChange={(value) => setEnabled(value === "WHATSAPP")}
               >
-                <SelectTrigger>
+                <SelectTrigger id="reminder-channel">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -117,7 +126,7 @@ export function ServiceConfigurationPanel({
             </div>
           </div>
 
-          {remindersActive && (
+          {remindersActive && smsAvailable && (
             <div className="flex items-start gap-3">
               <Checkbox
                 id="reminder-sms-fallback"

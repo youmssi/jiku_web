@@ -8,10 +8,11 @@ import type { OperatorConsoleView, OperatorTeamView, ScopeChoice } from "@/compo
  * Reads for an operator's console (JIKU-116), for Server Components only. The
  * operator's link carries a short code; it is exchanged here, server-side, for
  * the signed token the API works with, so the token never shows in the URL.
- * A revoked or unknown code resolves to null.
+ * A revoked or unknown code resolves to null. A door link (JIKU-250) asks for
+ * a token pinned to the operator's single event.
  */
-export async function resolveOperatorCode(code: string): Promise<string | null> {
-  const response = await publicFetch(`/operator-codes/${encodeURIComponent(code)}`);
+export async function resolveOperatorCode(code: string, { door = false }: { door?: boolean } = {}): Promise<string | null> {
+  const response = await publicFetch(`/operator-codes/${encodeURIComponent(code)}${door ? "?door=true" : ""}`);
   if (!response.ok) return null;
   const { token } = (await response.json()) as { token: string };
   return token;

@@ -14,7 +14,7 @@ interface RouteContext {
  */
 export async function GET(_request: Request, { params }: RouteContext): Promise<Response> {
   const { id, guestId } = await params;
-  const response = await serverFetch(`/events/${id}/attendance/certificate/${guestId}`);
+  const response = await serverFetch(`/events/${encodeURIComponent(id)}/attendance/certificate/${encodeURIComponent(guestId)}`);
 
   if (response.status === 409) {
     return new Response("Ce participant n'a pas été enregistré à l'entrée.", { status: 409 });
@@ -28,7 +28,7 @@ export async function GET(_request: Request, { params }: RouteContext): Promise<
       "Content-Type": "application/pdf",
       "Content-Disposition":
         response.headers.get("content-disposition") ??
-        `attachment; filename="attestation-${guestId}.pdf"`,
+        `attachment; filename="attestation-${encodeURIComponent(guestId)}.pdf"`,
     },
   });
 }

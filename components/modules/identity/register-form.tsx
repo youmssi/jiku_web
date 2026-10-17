@@ -24,21 +24,27 @@ import { GoogleButton } from "@/components/modules/identity/google-button";
 import { registerAction } from "@/components/modules/identity/identity.service";
 import {
   registerSchema,
+  registerToJoinSchema,
   type RegisterInput,
 } from "@/components/modules/identity/schema";
 
-/** Sign-up, laid out like sign-in so moving between the two feels like one screen. */
+/**
+ * Sign-up, laid out like sign-in so moving between the two feels like one
+ * screen. It also names the organization, so the new organizer lands on their
+ * dashboard; someone joining a team from an invitation (`next`) names none.
+ */
 export function RegisterForm({ next }: { next?: string }) {
   const t = useTranslations("auth.register");
+  const joining = Boolean(next);
   const [formError, setFormError] = useState<string | null>(null);
   const {
     control,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<RegisterInput>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(joining ? registerToJoinSchema : registerSchema),
     mode: "onTouched",
-    defaultValues: { fullName: "", email: "", password: "", marketingConsent: false },
+    defaultValues: { fullName: "", organizationName: "", email: "", password: "", marketingConsent: false },
   });
 
   async function onSubmit(values: RegisterInput) {
@@ -77,6 +83,26 @@ export function RegisterForm({ next }: { next?: string }) {
                 </Field>
               )}
             />
+            {joining ? null : (
+              <Controller
+                control={control}
+                name="organizationName"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>{t("organizationName")}</FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      type="text"
+                      autoComplete="organization"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    <FieldDescription>{t("organizationNameHint")}</FieldDescription>
+                    <FormFieldError error={fieldState.error} />
+                  </Field>
+                )}
+              />
+            )}
             <Controller
               control={control}
               name="email"

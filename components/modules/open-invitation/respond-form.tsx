@@ -11,7 +11,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { FormFieldError } from "@/components/shared";
 import { CARD_STYLE_TOKENS, type CardStyle } from "@/lib/card-style";
-import { ticketRoute } from "@/lib/constants";
+import { invitationRoute } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { respondAction } from "./open-invitation.service";
 import { OPEN_ANSWERS, respondSchema, type OpenAnswer, type OpenResponse, type PublicOpenInvitation, type RespondInput } from "./schema";
@@ -64,7 +64,7 @@ export function RespondForm({ invitation, style }: { invitation: PublicOpenInvit
         </span>
         <p className="text-balance text-lg font-semibold">{t(`answered.${answered.answer}`, { count: answered.companions })}</p>
         {answered.ticketToken ? (
-          <Link href={ticketRoute(answered.ticketToken)} className="flex h-12 w-full items-center justify-center text-[15px] font-semibold" style={primary}>
+          <Link href={invitationRoute(answered.ticketToken)} className="flex h-12 w-full items-center justify-center text-[15px] font-semibold" style={primary}>
             {t("seeTicket")}
           </Link>
         ) : null}
@@ -160,7 +160,8 @@ export function RespondForm({ invitation, style }: { invitation: PublicOpenInvit
             </div>
           ) : null}
 
-          <div className="sticky bottom-0 -mx-5 px-5 pb-5 pt-3" style={{ background: `linear-gradient(transparent, ${tokens.panel} 35%)` }}>
+          {/* Its own key: reusing the submit button's element would turn this click into a submit and flag the empty fields. */}
+          <div key="continue" className="sticky bottom-0 -mx-5 px-5 pb-5 pt-3" style={{ background: `linear-gradient(transparent, ${tokens.panel} 35%)` }}>
             <button type="button" onClick={() => setStep("who")} className="flex h-12 w-full items-center justify-center text-[15px] font-semibold" style={primary}>
               {t("continue")}
             </button>
@@ -206,7 +207,7 @@ export function RespondForm({ invitation, style }: { invitation: PublicOpenInvit
               )}
             />
           </FieldGroup>
-          <div className="sticky bottom-0 -mx-5 flex flex-col gap-2 px-5 pb-5 pt-3" style={{ background: `linear-gradient(transparent, ${tokens.panel} 35%)` }}>
+          <div key="submit" className="sticky bottom-0 -mx-5 flex flex-col gap-2 px-5 pb-5 pt-3" style={{ background: `linear-gradient(transparent, ${tokens.panel} 35%)` }}>
             <button type="submit" disabled={isSubmitting} className="flex h-12 w-full items-center justify-center text-[15px] font-semibold disabled:opacity-60" style={primary}>
               {t("submit")}
             </button>

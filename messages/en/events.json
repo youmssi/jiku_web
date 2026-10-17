@@ -2,15 +2,15 @@
   "create": {
     "trigger": "New event",
     "title": "Create an event",
-    "description": "Give it a name and a timezone: everything else is filled in on the event's own page.",
+    "description": "A name is enough to start: everything else is filled in on the event's own page.",
     "name": "Event name",
     "timezone": "Timezone",
     "timezonePlaceholder": "Select a timezone",
     "start": "Starts (optional)",
     "submit": "Create draft",
     "submitting": "Creating…",
-    "created": "Draft created.",
-    "failed": "The event could not be created."
+    "failed": "The event could not be created.",
+    "timezoneSummary": "{zone} time · change"
   },
   "status": {
     "DRAFT": "Draft",
@@ -71,7 +71,6 @@
     "recommended": "Recommended",
     "fix": "Complete",
     "consequence": "Once published, the event's details can no longer change: double-check the date and place.",
-    "later": "Later",
     "checks": {
       "details": {
         "title": "Name and date",
@@ -93,14 +92,23 @@
         "description": "Import a file or add your guests one by one.",
         "cta": "Add"
       }
-    }
+    },
+    "andSend": "Publish and send invitations",
+    "withoutSending": "Publish without sending",
+    "publishedAndSent": "{count, plural, =0 {Event published. No guest to reach on these channels.} one {Event published. # invitation is on its way.} other {Event published. # invitations are on their way.}}",
+    "publishedNotSent": "Event published, but the invitations were not sent.",
+    "openBilling": "Open billing",
+    "openGuests": "Open guests",
+    "confirmEmailTitle": "Invitations wait for your address",
+    "confirmEmailDescription": "Publish now; confirm your email address, then send the invitations from the Guests tab."
   },
   "setup": {
     "title": "Get your event ready",
     "description": "A few steps, in whatever order suits you. Publish from the header once the essentials are ready.",
     "ready": "The essentials are ready: you can publish from the header.",
     "progress": "{done} of {total}",
-    "review": "Review"
+    "review": "Review",
+    "channelsLabel": "Invitation channels"
   },
   "errors": {
     "invalid": "Check the form and try again.",
@@ -124,7 +132,6 @@
   "settings": {
     "saved": "Changes saved.",
     "locked": {
-      "title": "Read-only event",
       "description": "A published or cancelled event can no longer change: your guests already have these details."
     },
     "details": {
@@ -185,6 +192,14 @@
       "logoHint": "An online image, starting with https://",
       "color": "Color",
       "preview": "What your guests see"
+    },
+    "advanced": "Advanced options",
+    "leaveUnsaved": "Your changes are not saved. Leave anyway?",
+    "summary": {
+      "title": "What your guests received",
+      "yes": "Allowed",
+      "until": "Allowed until {date}",
+      "extra": "{count, plural, one {Up to # extra confirmation} other {Up to # extra confirmations}}"
     }
   },
   "quorum": {
@@ -249,7 +264,6 @@
       "title": "Dashboard unavailable",
       "description": "The event's figures could not be loaded. Try again."
     },
-    "exportGuests": "Export the list",
     "doorLinks": {
       "trigger": "Door links",
       "title": "Door links",
@@ -270,10 +284,7 @@
         "cta": "See plans"
       }
     },
-    "before": "Before the event",
     "stats": {
-      "total": "Guests",
-      "invited": "Invited",
       "confirmed": "Confirmed",
       "declined": "Declined",
       "pending": "No answer"
@@ -301,7 +312,6 @@
       "title": "Arrivals",
       "description": "Check-ins by hour, in the event's timezone."
     },
-    "live": "Updated live.",
     "charts": {
       "checkIns": "Check-ins",
       "noCheckIns": "No check-ins yet: this fills in as guests arrive.",
@@ -330,21 +340,34 @@
       "missing": "{count, plural, one {# attendee missing} other {# attendees missing}}",
       "reachedAt": "Reached on {date}",
       "fellBack": "(some attendees have left since)"
-    }
+    },
+    "responses": {
+      "title": "Answers",
+      "ofGuests": "{count, plural, one {out of # guest} other {out of # guests}}"
+    },
+    "next": {
+      "unsent": "{count, plural, one {# guest hasn't received an invitation yet} other {# guests haven't received an invitation yet}}",
+      "unsentHint": "Send invitations",
+      "pending": "{count, plural, one {# guest hasn't answered yet} other {# guests haven't answered yet}}",
+      "pendingHint": "See who to remind"
+    },
+    "trends": "Statistics"
   },
   "list": {
     "title": "Events",
     "emptyTitle": "No events yet",
     "emptyDescription": "Create your first event to invite your guests and check them in at the door.",
-    "search": "Search events",
-    "allStatuses": "All statuses",
+    "search": "Search",
+    "allStatuses": "All",
     "columns": {
       "name": "Name",
       "status": "Status",
       "date": "Date",
       "location": "Location",
       "undated": "Date to be set"
-    }
+    },
+    "noMatch": "No event matches.",
+    "clearFilters": "Clear filters"
   },
   "orders": {
     "title": "Orders",
@@ -397,7 +420,8 @@
     "errors": {
       "alreadyDecided": "This order was already handled or has expired.",
       "failed": "We couldn't process this order. Try again."
-    }
+    },
+    "noneYet": "They show up here as soon as a client buys a ticket on your sale page."
   },
   "commission": {
     "title": "Jikū commission ({rate}%)",
@@ -507,7 +531,6 @@
       "removed": "{name} was removed."
     },
     "settings": {
-      "title": "Settings",
       "moreInfo": "More information",
       "enabled": "Take answers",
       "enabledHelp": "Turn off to close the card.",
@@ -547,6 +570,7 @@
       "removePhoto": "Remove",
       "photoTooSmall": "Photo too small: at least 600 × 300 px.",
       "preview": "Card preview"
-    }
+    },
+    "customize": "Customize the card"
   }
 }

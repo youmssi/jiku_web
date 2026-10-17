@@ -50,9 +50,8 @@ export function LineTicketStatus({
   return (
     <Shell>
       <div className="text-center">
-        <p className="text-sm text-muted-foreground">{t("title")}</p>
         {ticket.dayRank != null ? (
-          <p className="mt-1 text-5xl font-bold tabular-nums">{t("number", { rank: ticket.dayRank })}</p>
+          <p className="text-6xl font-bold tabular-nums">{t("number", { rank: ticket.dayRank })}</p>
         ) : (
           <p className="mt-1 font-mono text-sm">{t("code", { code: ticket.ticketCode })}</p>
         )}

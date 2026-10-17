@@ -192,7 +192,7 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
 
   return (
     <div className="bg-zinc-50 dark:bg-zinc-950">
-      <header className="mx-auto flex w-full max-w-2xl items-start justify-between gap-3 px-4 pt-6">
+      <header className="mx-auto flex w-full max-w-2xl flex-wrap items-start justify-between gap-3 px-4 pt-6">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-semibold tracking-tight">{t("title")}</h1>
@@ -212,10 +212,10 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
           </p>
         </div>
         <div className="flex shrink-0 gap-2">
-          <Button variant="outline" size="sm" onClick={() => setScannerOpen(true)}>
+          <Button variant="outline" onClick={() => setScannerOpen(true)}>
             {t("scan")}
           </Button>
-          <Button variant="secondary" size="sm" onClick={() => setWalkInOpen(true)}>
+          <Button variant="secondary" onClick={() => setWalkInOpen(true)}>
             {t("walkIn")}
           </Button>
         </div>

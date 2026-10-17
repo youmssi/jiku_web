@@ -2,28 +2,27 @@
   "invitation": {
     "unavailableTitle": "Invitation indisponible",
     "unavailableDescription": "Ce lien d'invitation n'est pas valide ou a expiré.",
-    "invites": "{organizer} vous invite à",
     "greeting": "Bonjour {name},",
     "cancelled": "Cet événement a été annulé par l'organisateur.",
-    "privacy": "Comment vos données sont utilisées"
+    "invitedBy": "{organizer} vous invite"
   },
   "rsvp": {
-    "confirm": "Je confirme ma présence",
-    "confirming": "Confirmation…",
-    "decline": "Je ne pourrai pas venir",
+    "confirm": "Je viens",
+    "decline": "Je ne viens pas",
     "updating": "Mise à jour…",
-    "confirmed": "Votre présence est confirmée. À bientôt !",
-    "confirmedToast": "C'est confirmé, à bientôt !",
     "declined": "Vous avez décliné cette invitation.",
-    "declinedToast": "Vous avez décliné l'invitation.",
     "changeMind": "Finalement, je viens",
     "cantMakeIt": "Je ne peux plus venir",
-    "viewTicket": "Voir mon billet",
     "transferredTo": "Vous avez cédé cette invitation à {name}.",
     "transferredSomeone": "Vous avez cédé cette invitation à quelqu'un d'autre.",
     "transferredHint": "Sa propre invitation est en route, et ce billet n'est plus valable à l'entrée.",
     "full": "Cet événement est complet.",
-    "failed": "Un problème est survenu. Réessayez."
+    "failed": "Un problème est survenu. Réessayez.",
+    "question": "Vous venez ?",
+    "cancelTitle": "Annuler votre venue ?",
+    "cancelDescription": "Votre billet ne sera plus valable à l'entrée. Vous pourrez encore changer d'avis depuis ce lien.",
+    "cancelKeep": "Je viens toujours",
+    "cancelConfirm": "Je ne viens plus"
   },
   "transfer": {
     "open": "Céder ma place",
@@ -43,22 +42,17 @@
     "contactRequired": "Indiquez un e-mail ou un numéro de téléphone pour la personne."
   },
   "erasure": {
-    "open": "Demander la suppression de mes données",
-    "title": "Supprimer vos données personnelles ?",
-    "description": "Votre nom, votre e-mail et votre numéro sont définitivement retirés de cet événement. C'est irréversible. L'organisateur ne garde qu'une trace anonyme qu'un invité a été convié.",
+    "open": "Vos données",
+    "title": "Vos données personnelles",
+    "description": "Vous pouvez supprimer votre nom, votre e-mail et votre numéro de cet événement. C'est irréversible : l'organisateur ne garde qu'une trace anonyme qu'un invité a été convié.",
     "keep": "Garder mes données",
     "confirm": "Supprimer mes données",
     "deleting": "Suppression…",
     "done": "Vos données personnelles ont été supprimées de cet événement. C'est irréversible.",
-    "doneToast": "Vos données personnelles ont été supprimées.",
-    "failed": "Impossible de supprimer vos données pour le moment. Réessayez."
+    "failed": "Impossible de supprimer vos données pour le moment. Réessayez.",
+    "policy": "Comment vos données sont utilisées"
   },
   "ticket": {
-    "unavailableTitle": "Billet indisponible",
-    "unavailableDescription": "Ce lien n'est pas valide ou a expiré.",
-    "noneTitle": "Pas encore de billet",
-    "noneDescription": "Confirmez votre présence pour recevoir votre billet.",
-    "back": "Retour à l'invitation",
     "guest": "Invité",
     "date": "Date",
     "place": "Lieu",
@@ -76,16 +70,16 @@
     "take": {
       "title": "Prendre un ticket",
       "subtitle": "File du jour · {service}",
-      "text": "Indiquez votre nom et votre numéro : vous suivez votre rang sur votre téléphone et nous vous prévenons quand c'est votre tour.",
       "name": "Votre nom",
       "phone": "Votre numéro de téléphone",
-      "phoneHelp": "Au format international, par exemple +224620000000.",
       "submit": "Prendre mon ticket",
-      "submitting": "Un instant…"
+      "submitting": "Un instant…",
+      "notice": "Nous vous prévenons sur WhatsApp quand c'est votre tour.",
+      "pausedTitle": "Tickets momentanément indisponibles",
+      "paused": "La file ne prend pas de nouveaux tickets pour l'instant. Adressez-vous à l'accueil."
     },
     "status": {
-      "title": "Votre ticket",
-      "number": "Ticket n° {rank}",
+      "number": "N° {rank}",
       "code": "Code {code}",
       "ahead": "{count, plural, =0 {Vous êtes le prochain.} one {# personne avant vous.} other {# personnes avant vous.}}",
       "wait": "{minutes, plural, =0 {Attente estimée : quelques instants} one {Attente estimée : environ # minute} other {Attente estimée : environ # minutes}}",
@@ -108,7 +102,8 @@
     "errors": {
       "invalid": "Vérifiez votre nom et votre numéro.",
       "closed": "La file de ce service n'est pas ouverte pour le moment.",
-      "failed": "Impossible de prendre un ticket. Réessayez."
+      "failed": "Impossible de prendre un ticket. Réessayez.",
+      "paused": "La file ne prend pas de nouveaux tickets pour l'instant."
     }
   },
   "payment": {
@@ -121,7 +116,9 @@
     "wave": "Wave",
     "payOnline": "Payer en ligne",
     "askOrganizer": "L'organisateur vous indiquera comment régler.",
-    "unverified": "L'identité de cet organisateur n'a pas encore été vérifiée par Jikū. Payez seulement si vous le connaissez."
+    "unverified": "L'identité de cet organisateur n'a pas encore été vérifiée par Jikū. Payez seulement si vous le connaissez.",
+    "copyNumber": "Copier le numéro {method}",
+    "copied": "Copié"
   },
   "appointment": {
     "metaTitle": "Réserver un rendez-vous",
@@ -129,44 +126,53 @@
     "booking": {
       "title": "Rendez-vous",
       "loading": "Chargement…",
-      "withNames": "Avec {names} — sans compte, en trois gestes.",
+      "withNames": "Avec {names}, sans compte.",
       "noAccount": "Choisissez un créneau, sans compte.",
       "failed": "Réservation impossible",
-      "previousDay": "Jour précédent",
-      "nextDay": "Jour suivant",
       "noSlots": "Aucun créneau ouvert ce jour-là.",
       "name": "Votre nom",
       "phone": "Votre téléphone",
       "submit": "Réserver ce créneau",
       "submitting": "Réservation…",
-      "placesLeft": "{count, plural, one {# place} other {# places}}"
-    },
-    "booked": {
-      "title": "Votre rendez-vous est enregistré",
-      "PENDING": "En attente de confirmation : vous recevrez la confirmation du professionnel.",
-      "CONFIRMED": "Votre rendez-vous est confirmé.",
-      "withNames": "Avec {names}",
-      "number": "N° de réservation : {number}",
-      "manage": "Voir ou annuler mon rendez-vous"
+      "placesLeft": "{count, plural, one {# place} other {# places}}",
+      "day": "Jour",
+      "otherDay": "Choisir une autre date",
+      "withNamesShort": "avec {names}",
+      "periods": {
+        "morning": "Matin",
+        "afternoon": "Après-midi",
+        "evening": "Soir"
+      },
+      "pausedTitle": "Réservation momentanément indisponible",
+      "paused": "La prise de rendez-vous est en pause pour l'instant. Si vous avez déjà un rendez-vous, il est maintenu.",
+      "pausedWithName": "{organizer} ne prend pas de nouveaux rendez-vous pour l'instant. Si vous avez déjà un rendez-vous, il est maintenu."
     },
     "status": {
-      "title": "Votre rendez-vous",
-      "PENDING": "En attente de confirmation.",
-      "CONFIRMED": "Confirmé.",
+      "PENDING": "Le professionnel doit encore le confirmer : vous serez prévenu.",
+      "CONFIRMED": "Présentez ce code à votre arrivée.",
       "notFound": "Réservation introuvable",
       "notFoundText": "Vérifiez le lien ou votre numéro de réservation.",
       "cancel": "Annuler ce rendez-vous",
       "cancelling": "Annulation…",
       "cancelFailed": "Annulation impossible",
       "cancelledTitle": "Rendez-vous annulé",
-      "cancelledText": "Votre rendez-vous a été annulé et le créneau libéré."
+      "cancelledText": "Votre rendez-vous a été annulé et le créneau libéré.",
+      "pendingTitle": "Rendez-vous demandé",
+      "confirmedTitle": "Rendez-vous confirmé",
+      "withNames": "Avec {names}",
+      "number": "N° de réservation : {number}",
+      "cancelTitle": "Annuler ce rendez-vous ?",
+      "cancelDescription": "Le créneau sera libéré pour un autre client.",
+      "keep": "Garder mon rendez-vous",
+      "cancelConfirm": "Annuler le rendez-vous"
     },
     "errors": {
       "taken": "Ce créneau vient d'être pris. Choisissez-en un autre.",
       "failed": "La réservation a échoué. Réessayez.",
       "notFound": "Cette réservation est introuvable.",
       "notCancellable": "Ce rendez-vous ne peut plus être annulé.",
-      "cancelFailed": "L'annulation a échoué. Réessayez."
+      "cancelFailed": "L'annulation a échoué. Réessayez.",
+      "paused": "La prise de rendez-vous est en pause pour l'instant."
     }
   },
   "verification": {
@@ -182,9 +188,8 @@
     "more": "Ajouter un billet {label}",
     "ticketCount": "{count, plural, =0 {Aucun billet choisi} one {# billet} other {# billets}}",
     "buyerName": "Votre nom",
-    "buyerNameHelp": "Il figure sur les billets. Vous pourrez transférer un billet à quelqu'un d'autre ensuite.",
     "buyerPhone": "Votre téléphone",
-    "buyerEmail": "Votre e-mail (facultatif)",
+    "buyerEmail": "Votre e-mail",
     "order": "Commander",
     "ordering": "Commande en cours…",
     "holdNotice": "Vos places sont gardées {minutes} minutes, le temps de payer l'organisateur.",
@@ -206,7 +211,8 @@
       "cannotDeclare": "Ce paiement ne peut plus être déclaré : la commande a expiré ou a déjà été traitée.",
       "failed": "Impossible de traiter votre demande. Réessayez."
     },
-    "pausedLabel": "Bientôt disponible"
+    "pausedLabel": "Bientôt disponible",
+    "addEmail": "Ajouter un e-mail (facultatif)"
   },
   "order": {
     "orderOf": "Votre commande · {organizer}",
@@ -221,7 +227,6 @@
     "total": "Total",
     "buyer": "Au nom de {name}",
     "holdLeft": "Vos places sont gardées encore <time></time>.",
-    "quoteReference": "Indiquez la référence {reference} dans le motif de votre paiement, puis déclarez-le ci-dessous.",
     "referenceHelp": "Le numéro de transaction reçu par SMS après votre paiement Mobile Money.",
     "declare": "J'ai payé",
     "declaring": "Envoi…",
@@ -235,7 +240,11 @@
     "keepLink": "Gardez ce lien : c'est le seul moyen de revenir à votre commande.",
     "unavailableTitle": "Commande introuvable",
     "unavailableText": "Ce lien de commande n'est pas valide.",
-    "orderReference": "Référence {reference}"
+    "orderReference": "Référence {reference}",
+    "quoteLabel": "Motif du paiement",
+    "quoteHint": "Indiquez-le dans votre paiement, puis déclarez-le ci-dessous.",
+    "copyReference": "Copier le motif",
+    "copied": "Copié"
   },
   "openInvitation": {
     "invitedBy": "{organizer} vous invite",

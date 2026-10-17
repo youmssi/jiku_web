@@ -11,7 +11,14 @@
       "payments": "Moyens de paiement",
       "legal": "Facturation",
       "personalisation": "Personnalisation",
-      "account": "Compte"
+      "account": "Compte",
+      "verification": "Vérification"
+    },
+    "groups": {
+      "organization": "Votre organisation",
+      "payments": "Paiements",
+      "messages": "Messages",
+      "account": "Vous"
     }
   },
   "whatsappNumber": {
@@ -86,24 +93,23 @@
     }
   },
   "verification": {
-    "tab": "Vérification",
     "title": "Vérifier votre organisation",
-    "text": "La vérification est obligatoire pour demander un paiement à vos clients : billets payants, services payants ou moyens de paiement. Elle reste recommandée à toutes les organisations, car vos invités voient qu'elle est vérifiée. Une vérification personnelle ou une vérification d'entreprise suffit.",
+    "text": "Obligatoire pour encaisser vos clients : billets ou services payants, moyens de paiement. Vos invités voient aussi le badge de vérification.",
     "status": {
       "verifiedCompany": "Organisation vérifiée",
       "verifiedPersonal": "Identité vérifiée",
-      "verifiedText": "Vous pouvez encaisser vos clients, et vos invités voient le badge de vérification sur vos pages.",
-      "notVerified": "Organisation non vérifiée",
-      "notVerifiedText": "Tant qu'aucune vérification n'est approuvée, vous ne pouvez ni fixer un prix, ni rendre un service payant, ni enregistrer des moyens de paiement."
+      "verifiedText": "Vous pouvez encaisser vos clients, et vos invités voient le badge de vérification sur vos pages."
     },
     "phone": {
       "title": "Numéro de téléphone",
       "text": "Nous vous envoyons un code sur WhatsApp, ou par SMS si votre numéro n'a pas WhatsApp, pour confirmer le numéro sur lequel vous joindre. Il est nécessaire pour la vérification personnelle.",
+      "textWhatsApp": "Nous vous envoyons un code sur WhatsApp pour confirmer le numéro sur lequel vous joindre. Il est nécessaire pour la vérification personnelle.",
       "label": "Numéro de téléphone",
       "help": "Au format international, par ex. +224 620 00 00 00.",
       "send": "Recevoir un code",
       "sending": "Envoi…",
       "sent": "Code envoyé sur WhatsApp, ou par SMS.",
+      "sentWhatsApp": "Code envoyé sur WhatsApp.",
       "codeLabel": "Code reçu",
       "codeHelp": "Saisissez les 6 chiffres envoyés au {phone}.",
       "confirm": "Confirmer",
@@ -117,11 +123,13 @@
     "personal": {
       "title": "Vérification personnelle",
       "text": "Pour une personne qui organise en son nom : une pièce d'identité et un numéro de téléphone confirmé.",
-      "needsPhone": "Confirmez d'abord votre numéro de téléphone ci-dessus."
+      "needsPhone": "Confirmez d'abord votre numéro de téléphone ci-dessus.",
+      "choice": "J'organise en mon nom"
     },
     "company": {
       "title": "Vérification d'entreprise",
-      "text": "Pour une société, une association ou un établissement : ses documents d'immatriculation."
+      "text": "Pour une société, une association ou un établissement : ses documents d'immatriculation.",
+      "choice": "J'organise pour une entreprise ou une association"
     },
     "request": {
       "status": {
@@ -173,7 +181,8 @@
       "fileType": "Joignez des fichiers JPEG, PNG ou PDF.",
       "storageUnavailable": "L'envoi de documents est momentanément indisponible. Réessayez plus tard.",
       "failed": "Impossible d'envoyer votre demande. Réessayez."
-    }
+    },
+    "changePath": "Changer de type de vérification"
   },
   "sales": {
     "tab": "Ventes",
@@ -206,7 +215,6 @@
     }
   },
   "members": {
-    "intro": "Les propriétaires gèrent tout ; les administrateurs gèrent l'activité et l'équipe ; les membres font tourner les évènements. Les invitations en attente restent ici jusqu'à leur acceptation ou leur révocation.",
     "search": "Rechercher par e-mail…",
     "failedTitle": "L'action n'a pas abouti",
     "invited": "Invitation envoyée.",
@@ -227,7 +235,8 @@
       "role": "Rôle",
       "cancel": "Annuler",
       "submit": "Envoyer l'invitation",
-      "submitting": "Envoi…"
+      "submitting": "Envoi…",
+      "roleHint": "Administrateur : gère l'activité et l'équipe. Membre : fait tourner les événements. Le propriétaire garde la main sur tout."
     },
     "actions": {
       "label": "Actions pour {email}",
@@ -291,34 +300,35 @@
   },
   "branding": {
     "previewFallback": "Votre organisation",
-    "previewCaption": "Aperçu : votre identité visuelle dans la barre latérale",
+    "previewCaption": "Aperçu : ce que voient vos invités en haut de vos pages",
+    "logo": "Logo",
+    "logoHint": "JPG ou PNG, carré, au moins 128 px. Il apparaît sur vos pages publiques, vos invitations et vos e-mails. Sans logo, vos invités voient l'initiale de votre organisation.",
+    "logoAlt": "Logo de l'organisation",
+    "removeLogo": "Retirer le logo",
+    "banner": "Bannière",
+    "bannerHint": "JPG ou PNG, au format large (4:1), au moins 600 px de large. Affichée en haut de votre page publique. Sans bannière, votre couleur principale la remplace.",
+    "bannerAlt": "Bannière de l'organisation",
+    "removeBanner": "Retirer la bannière",
+    "choose": "Choisir une image",
+    "replace": "Remplacer",
+    "remove": "Retirer",
+    "uploading": "Envoi…",
+    "uploaded": "Image enregistrée.",
+    "removed": "Image retirée.",
     "displayName": "Nom de l'organisation",
     "displayNameHint": "Affiché à vos invités sur les invitations, les billets et la page invité.",
-    "logoUrl": "URL du logo",
-    "logoHint": "JPG ou PNG, carré de {width}×{height} px conseillé. Hébergez-le vous-même ou utilisez un service comme ImgBB, Cloudinary ou votre propre CDN. Il sert d'avatar sur votre page de réservation publique et, si votre fournisseur le permet, dans les e-mails clients. Sans logo, vos invités voient l'initiale et le nom de votre organisation.",
-    "logo": "Logo",
-    "logoAlt": "Logo de l'organisation",
-    "logoDefault": "Affiché dans la barre latérale et sur les pages invités.",
-    "removeLogo": "Retirer le logo",
-    "bannerUrl": "URL de la bannière",
-    "bannerHint": "JPG ou PNG, {width}×{height} px (4:1) conseillé. Affichée au-dessus de votre logo en haut de votre page de réservation publique. Sans bannière, les visiteurs voient un dégradé de couleur.",
-    "bannerAlt": "Bannière de l'organisation",
-    "loadFailed": "Impossible de charger cette image : vérifiez que l'URL est correcte et accessible publiquement.",
-    "loadFailedShort": "Impossible de charger cette image",
-    "checkUrl": "Vérifiez que l'URL est correcte et accessible publiquement.",
-    "checking": "Vérification de l'image…",
-    "looksGood": "{width}×{height} px · parfait",
-    "remove": "Retirer",
-    "warnFormat": "Utilisez un fichier JPG ou PNG : les autres formats ne s'affichent pas chez tous les invités.",
-    "warnCroppedLogo": "Cette image fait {width}×{height}, pas le format {expectedWidth}×{expectedHeight} : elle sera recadrée pour tenir dans le cercle de l'avatar.",
-    "warnCroppedBanner": "Cette image fait {width}×{height}, pas le format {expectedWidth}×{expectedHeight} : elle sera recadrée pour tenir dans la bannière.",
-    "warnSmall": "Cette image fait {width}×{height} px, moins que les {expectedWidth}×{expectedHeight} px conseillés : elle risque d'être floue une fois agrandie.",
     "color": "Couleur principale",
     "colorHint": "Utilisée pour les boutons et les accents des pages vues par vos invités. Saisissez une valeur hexadécimale à 6 chiffres (ex. #2563EB).",
-    "save": "Enregistrer l'identité visuelle",
+    "save": "Enregistrer le nom et la couleur",
     "saving": "Enregistrement…",
     "saved": "Identité visuelle enregistrée.",
-    "noChanges": "Aucune modification à enregistrer."
+    "errors": {
+      "photoInvalid": "Cette image est illisible ou trop petite. Choisissez un fichier JPG ou PNG.",
+      "photoTooLarge": "Cette image est trop lourde, même réduite. Choisissez-en une plus légère.",
+      "photoType": "Choisissez un fichier JPG ou PNG.",
+      "logoTooSmall": "Ce logo est trop petit : il faut au moins 128 × 128 px.",
+      "bannerTooSmall": "Cette bannière est trop petite : il faut au moins 600 × 150 px."
+    }
   },
   "personalisation": {
     "termsTitle": "Termes",
@@ -337,10 +347,29 @@
     "body": "Texte du message",
     "variables": "Variables disponibles",
     "restore": "Rétablir le texte par défaut",
-    "preview": "Aperçu",
     "rendering": "Préparation…",
     "save": "Enregistrer le message",
-    "saved": "Message enregistré."
+    "saved": "Message enregistré.",
+    "previewTitle": "Aperçu",
+    "previewStale": "Le texte a changé : mettez à jour l'aperçu.",
+    "refreshPreview": "Mettre à jour l'aperçu",
+    "edit": "Modifier le texte",
+    "editHtml": "Modifier le code HTML (avancé)",
+    "termLabels": {
+      "ticket": "Ticket ou numéro de passage",
+      "appointment": "Rendez-vous réservé",
+      "walkIn": "Sans rendez-vous",
+      "person": "Personne",
+      "professional": "Professionnel",
+      "action": "Action"
+    },
+    "templateLabels": {
+      "invitation": "Invitation",
+      "ticket": "Billet envoyé directement (WhatsApp)",
+      "event-cancelled": "Annulation de l'événement",
+      "appointment-reminder": "Rappel de rendez-vous (WhatsApp)",
+      "client-called": "C'est votre tour (WhatsApp ou SMS)"
+    }
   },
   "email": {
     "title": "E-mail",

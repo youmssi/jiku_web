@@ -49,12 +49,6 @@
     "add": "Ajouter un opérateur",
     "seats": "{count, plural, =0 {Aucun opérateur ne compte dans votre abonnement.} one {# opérateur compte dans votre abonnement (il travaille sur un service).} other {# opérateurs comptent dans votre abonnement (ils travaillent sur un service).}}",
     "empty": "Aucun opérateur pour le moment. Ajoutez la personne qui tient la porte ou le comptoir.",
-    "columns": {
-      "name": "Nom",
-      "scope": "Travaille sur",
-      "actions": "Peut",
-      "link": "Lien"
-    },
     "nothingAssigned": "Rien d'assigné",
     "billable": "Compte dans l'abonnement",
     "revoked": "Révoqué",
@@ -84,7 +78,8 @@
       "forbidden": "Seul un administrateur de l'organisation peut gérer les opérateurs.",
       "invalid": "Vérifiez le nom et choisissez au moins une action.",
       "failed": "Impossible d'enregistrer l'opérateur. Réessayez."
-    }
+    },
+    "more": "Plus d'actions pour {name}"
   },
   "line": {
     "title": "File du jour",
@@ -176,9 +171,6 @@
     "online": "En ligne",
     "offline": "Hors ligne",
     "queued": "{count} en attente",
-    "syncing": "Synchronisation…",
-    "synced": "Synchronisé à {time} · resynchroniser",
-    "sync": "Préparer le mode hors ligne",
     "scan": "Scanner le QR",
     "search": "Rechercher",
     "startingCamera": "Démarrage de la caméra…",
@@ -201,7 +193,8 @@
       "linkInvalid": "Ce lien de contrôle n'est plus valable.",
       "network": "Erreur réseau. Vérifiez la connexion et réessayez.",
       "generic": "Une erreur est survenue. Réessayez."
-    }
+    },
+    "offlineReady": "prêt hors ligne"
   },
   "doorLinks": {
     "new": "Nouveau lien",

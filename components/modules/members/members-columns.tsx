@@ -17,7 +17,7 @@ function ColumnLabel({ name }: { name: "member" | "role" | "status" }) {
   return t(name);
 }
 
-function MemberCell({ member }: { member: MemberRow }) {
+export function MemberCell({ member }: { member: MemberRow }) {
   const t = useTranslations("settings.members.columns");
   const formatDate = useLocalDateTime(true);
   return (
@@ -32,7 +32,7 @@ function MemberCell({ member }: { member: MemberRow }) {
   );
 }
 
-function StatusBadge({ kind }: { kind: MemberRow["kind"] }) {
+export function StatusBadge({ kind }: { kind: MemberRow["kind"] }) {
   const t = useTranslations("settings.members.columns");
   return kind === "member" ? (
     <Badge variant="secondary">{t("active")}</Badge>

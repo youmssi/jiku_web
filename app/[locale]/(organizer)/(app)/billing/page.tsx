@@ -56,7 +56,7 @@ export default async function BillingPage() {
 
       {subscription ? (
         <section className="mb-10 flex flex-col gap-4">
-          <SubscriptionSection initial={subscription} nowIso={new Date().toISOString()} online={online} />
+          <SubscriptionSection initial={subscription} online={online} />
         </section>
       ) : null}
 

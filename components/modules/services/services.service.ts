@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { fail, fromResponse } from "@/lib/action-result";
 import type { ActionResult } from "@/lib/action-result";
+import { getOrganizerContext } from "@/components/modules/identity/server";
 import { createServiceSchema, type CreateServiceInput } from "./schema";
 import type {
   ReminderPolicyUpdate,
@@ -11,11 +12,13 @@ import type {
   ResourceType,
   ResourceUnavailability,
   ServiceConfiguration,
+  ServicePaymentRule,
   ServiceRequirement,
   ServiceResource,
   ServiceSummary,
   StaffLink,
   StaffLinkCreated,
+  WeeklyRange,
 } from "./schema";
 
 export async function fetchServiceConfigurationAction(
@@ -80,12 +83,53 @@ export async function createServiceAction(
   const parsed = createServiceSchema.safeParse(input);
   const t = await getTranslations("services.create");
   if (!parsed.success) return fail(t("failed"));
+  // The service takes bookings at once (JIKU-252): it requires one person,
+  // the organizer, named as clients will see them on the booking page.
+  const context = await getOrganizerContext();
+  const { durationMinutes, ...service } = parsed.data;
   const response = await serverFetch(`/services`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(parsed.data),
+    body: JSON.stringify({
+      ...service,
+      quickSetup: { durationMinutes, hostName: context?.fullName || context?.brandName || service.name },
+    }),
   });
   return fromResponse<ServiceSummary>(response, { default: t("failed") });
+}
+
+/** Sets what a client pays for the service, and when (JIKU-252). */
+export async function updateServicePriceAction(
+  serviceId: string,
+  paymentRule: ServicePaymentRule,
+  priceMinor: number | null,
+): Promise<ActionResult<ServiceSummary>> {
+  const t = await getTranslations("services.errors");
+  const response = await serverFetch(`/services/${serviceId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ paymentRule, priceMinor: paymentRule === "FREE" ? null : priceMinor }),
+  });
+  return fromResponse<ServiceSummary>(response, {
+    400: t("priceInvalid"),
+    403: t("priceUnverified"),
+    404: t("notFound"),
+    default: t("priceSave"),
+  });
+}
+
+/** Sets how long one appointment of the service lasts (JIKU-252). */
+export async function updateDurationAction(
+  serviceId: string,
+  durationMinutes: number,
+): Promise<ActionResult<ServiceConfiguration>> {
+  const t = await getTranslations("services.errors");
+  const response = await serverFetch(`/services/${serviceId}/configuration`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ durationMinutes }),
+  });
+  return fromResponse<ServiceConfiguration>(response, { default: t("saveConfig") });
 }
 
 /** Renomme un service (JIKU-84+). */
@@ -252,6 +296,20 @@ export async function addAvailabilityAction(
     body: JSON.stringify({ dayOfWeek, start, end }),
   });
   return fromResponse<ResourceAvailability>(response, { default: t("availabilityAdd") });
+}
+
+/** Saves a person's whole week at once (JIKU-252); the server swaps it atomically. */
+export async function replaceWeekAction(
+  resourceId: string,
+  week: WeeklyRange[],
+): Promise<ActionResult<ResourceAvailability[]>> {
+  const t = await getTranslations("services.errors");
+  const response = await serverFetch(`/resources/${resourceId}/availability`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(week),
+  });
+  return fromResponse<ResourceAvailability[]>(response, { default: t("weekSave") });
 }
 
 export async function removeAvailabilityAction(resourceId: string, availabilityId: string): Promise<ActionResult<null>> {

@@ -11,7 +11,14 @@
       "payments": "Payment methods",
       "legal": "Invoicing details",
       "personalisation": "Personalisation",
-      "account": "Account"
+      "account": "Account",
+      "verification": "Verification"
+    },
+    "groups": {
+      "organization": "Your organization",
+      "payments": "Payments",
+      "messages": "Messages",
+      "account": "You"
     }
   },
   "whatsappNumber": {
@@ -86,24 +93,23 @@
     }
   },
   "verification": {
-    "tab": "Verification",
     "title": "Verify your organization",
-    "text": "Verification is required before you ask clients to pay: paid tickets, paid services or payment methods. It is recommended to every organization, because your guests see that it is verified. A personal or a company verification is enough.",
+    "text": "Required to take payments from your clients: paid tickets or services, payment methods. Your guests also see the verified badge.",
     "status": {
       "verifiedCompany": "Verified organization",
       "verifiedPersonal": "Verified identity",
-      "verifiedText": "You can take payments from your clients, and your guests see the verification badge on your pages.",
-      "notVerified": "Organization not verified",
-      "notVerifiedText": "Until a verification is approved, you cannot set a price, make a service paid or save payment methods."
+      "verifiedText": "You can take payments from your clients, and your guests see the verification badge on your pages."
     },
     "phone": {
       "title": "Phone number",
       "text": "We send you a code on WhatsApp, or by SMS if your number has no WhatsApp, to confirm the number you can be reached on. A personal verification needs it.",
+      "textWhatsApp": "We send you a code on WhatsApp to confirm the number you can be reached on. A personal verification needs it.",
       "label": "Phone number",
       "help": "In the international format, e.g. +224 620 00 00 00.",
       "send": "Get a code",
       "sending": "Sending…",
       "sent": "Code sent on WhatsApp, or by SMS.",
+      "sentWhatsApp": "Code sent on WhatsApp.",
       "codeLabel": "Code received",
       "codeHelp": "Enter the 6 digits sent to {phone}.",
       "confirm": "Confirm",
@@ -117,11 +123,13 @@
     "personal": {
       "title": "Personal verification",
       "text": "For a person organizing in their own name: an identity document and a confirmed phone number.",
-      "needsPhone": "Confirm your phone number above first."
+      "needsPhone": "Confirm your phone number above first.",
+      "choice": "I organize in my own name"
     },
     "company": {
       "title": "Company verification",
-      "text": "For a company, an association or a venue: its registration papers."
+      "text": "For a company, an association or a venue: its registration papers.",
+      "choice": "I organize for a company or an association"
     },
     "request": {
       "status": {
@@ -173,7 +181,8 @@
       "fileType": "Attach JPEG, PNG or PDF files.",
       "storageUnavailable": "Document upload is unavailable for now. Try again later.",
       "failed": "We couldn't send your request. Try again."
-    }
+    },
+    "changePath": "Change the type of verification"
   },
   "sales": {
     "tab": "Sales",
@@ -206,7 +215,6 @@
     }
   },
   "members": {
-    "intro": "Owners manage everything; admins run operations and the team; members run events. Pending invitations stay listed here until accepted or revoked.",
     "search": "Search by email…",
     "failedTitle": "That didn't work",
     "invited": "Invitation sent.",
@@ -227,7 +235,8 @@
       "role": "Role",
       "cancel": "Cancel",
       "submit": "Send invitation",
-      "submitting": "Sending…"
+      "submitting": "Sending…",
+      "roleHint": "Admin: runs operations and the team. Member: runs events. The owner keeps control of everything."
     },
     "actions": {
       "label": "Actions for {email}",
@@ -291,34 +300,35 @@
   },
   "branding": {
     "previewFallback": "Your organization",
-    "previewCaption": "Preview: how your branding looks in the sidebar",
-    "displayName": "Organization name",
-    "displayNameHint": "Shown to guests on invitations, tickets and the guest page.",
-    "logoUrl": "Logo URL",
-    "logoHint": "JPG or PNG, {width}×{height}px square recommended. Host it yourself, or use a service like ImgBB, Cloudinary or your own CDN. Used as the avatar on your public booking page and, when your provider supports it, on client emails. Left empty, guests see your organization's initial and name only.",
+    "previewCaption": "Preview: what your guests see at the top of your pages",
     "logo": "Logo",
+    "logoHint": "JPG or PNG, square, at least 128 px. It shows on your public pages, invitations and emails. Without a logo, guests see your organization's initial.",
     "logoAlt": "Organization logo",
-    "logoDefault": "Shown in the sidebar and on guest pages.",
-    "removeLogo": "Remove logo",
-    "bannerUrl": "Banner URL",
-    "bannerHint": "JPG or PNG, {width}×{height}px (4:1) recommended. Shown above your logo at the top of your public booking page. Left empty, visitors see a plain color gradient instead.",
+    "removeLogo": "Remove the logo",
+    "banner": "Banner",
+    "bannerHint": "JPG or PNG, wide (4:1), at least 600 px wide. Shown at the top of your public page. Without a banner, your main color takes its place.",
     "bannerAlt": "Organization banner",
-    "loadFailed": "Couldn't load this image. Check the URL is correct and publicly reachable.",
-    "loadFailedShort": "Couldn't load this image",
-    "checkUrl": "Check the URL is correct and publicly reachable.",
-    "checking": "Checking image…",
-    "looksGood": "{width}×{height}px · looks great",
+    "removeBanner": "Remove the banner",
+    "choose": "Choose an image",
+    "replace": "Replace",
     "remove": "Remove",
-    "warnFormat": "Use a JPG or PNG file: other formats may not display for every guest.",
-    "warnCroppedLogo": "This image is {width}×{height}, not the {expectedWidth}×{expectedHeight} shape: it will be cropped to fit the avatar circle.",
-    "warnCroppedBanner": "This image is {width}×{height}, not the {expectedWidth}×{expectedHeight} shape: it will be cropped to fit the banner.",
-    "warnSmall": "This image is {width}×{height}px, smaller than the recommended {expectedWidth}×{expectedHeight}px: it may look blurry when scaled up.",
-    "color": "Primary brand color",
-    "colorHint": "Used for buttons and accents on guest-facing pages. Enter a 6-digit hex value (e.g. #2563EB).",
-    "save": "Save branding",
+    "uploading": "Uploading…",
+    "uploaded": "Image saved.",
+    "removed": "Image removed.",
+    "displayName": "Organization name",
+    "displayNameHint": "Shown to your guests on invitations, tickets and the guest page.",
+    "color": "Main color",
+    "colorHint": "Used for the buttons and accents of the pages your guests see. Enter a 6-digit hex value (e.g. #2563EB).",
+    "save": "Save the name and color",
     "saving": "Saving…",
     "saved": "Branding saved.",
-    "noChanges": "No changes to save."
+    "errors": {
+      "photoInvalid": "This image can't be read or is too small. Choose a JPG or PNG file.",
+      "photoTooLarge": "This image is too heavy, even reduced. Choose a lighter one.",
+      "photoType": "Choose a JPG or PNG file.",
+      "logoTooSmall": "This logo is too small: it needs at least 128 × 128 px.",
+      "bannerTooSmall": "This banner is too small: it needs at least 600 × 150 px."
+    }
   },
   "personalisation": {
     "termsTitle": "Terms",
@@ -337,10 +347,29 @@
     "body": "Message body",
     "variables": "Available variables",
     "restore": "Restore default wording",
-    "preview": "Preview",
     "rendering": "Rendering…",
     "save": "Save message",
-    "saved": "Message saved."
+    "saved": "Message saved.",
+    "previewTitle": "Preview",
+    "previewStale": "The text changed: refresh the preview.",
+    "refreshPreview": "Refresh the preview",
+    "edit": "Edit the text",
+    "editHtml": "Edit the HTML (advanced)",
+    "termLabels": {
+      "ticket": "Ticket or queue number",
+      "appointment": "Booked appointment",
+      "walkIn": "Walk-in (no appointment)",
+      "person": "Person",
+      "professional": "Professional",
+      "action": "Action"
+    },
+    "templateLabels": {
+      "invitation": "Guest invitation",
+      "ticket": "Ticket sent directly (WhatsApp)",
+      "event-cancelled": "Event cancellation",
+      "appointment-reminder": "Appointment reminder (WhatsApp)",
+      "client-called": "Your turn in the line (WhatsApp or SMS)"
+    }
   },
   "email": {
     "title": "Email",

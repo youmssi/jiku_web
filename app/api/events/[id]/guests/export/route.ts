@@ -12,7 +12,7 @@ interface RouteContext {
  */
 export async function GET(_request: Request, { params }: RouteContext): Promise<Response> {
   const { id } = await params;
-  const response = await serverFetch(`/events/${id}/guests/export`);
+  const response = await serverFetch(`/events/${encodeURIComponent(id)}/guests/export`);
 
   if (!response.ok || !response.body) {
     return new Response("Unable to export the guest list.", { status: response.status || 502 });
@@ -22,7 +22,7 @@ export async function GET(_request: Request, { params }: RouteContext): Promise<
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
       "Content-Disposition":
-        response.headers.get("content-disposition") ?? `attachment; filename="guests-${id}.csv"`,
+        response.headers.get("content-disposition") ?? `attachment; filename="guests-${encodeURIComponent(id)}.csv"`,
     },
   });
 }
