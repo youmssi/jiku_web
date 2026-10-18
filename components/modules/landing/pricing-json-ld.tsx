@@ -1,32 +1,27 @@
-import { EVENT_PRICING, SERVICE_PLANS } from "@/lib/pricing";
-import type { SimulatorContent } from "./simulator-content";
 import { jsonLd } from "@/lib/json-ld";
+import type { PricingContent } from "./pricing-content";
+import { EVENT_PRICING, ORGANIZER_PACK, SERVICES_PRO } from "@/lib/pricing";
 
 /**
- * Offers for the pricing page, built from the same figures the calculator
- * uses: the Services plans (per month, for their included team) and the event
- * tiers, in Guinean francs, the reference grid. Custom-quoted offers carry no
- * price and are left out.
+ * Offers for the pricing page, built from the same figures the page shows, in
+ * Guinean francs, the reference grid: the per-guest price and the two Pro
+ * plans. The free offer and the quoted Enterprise plan carry no price.
  */
-export function PricingJsonLd({ content, url }: { content: SimulatorContent; url: string }) {
-  const plans = SERVICE_PLANS.filter((plan) => plan.monthly !== null).map((plan) => ({
+export function PricingJsonLd({ content, url }: { content: PricingContent; url: string }) {
+  const unit = (id: string) => content.offers.find((offer) => offer.id === id);
+  const offer = (id: string, gnf: number) => ({
     "@type": "Offer",
-    name: content.services.plans.find((candidate) => candidate.id === plan.id)?.name ?? plan.id,
-    price: String(plan.monthly?.gnf ?? 0),
+    name: unit(id)?.name ?? id,
+    price: String(gnf),
     priceCurrency: "GNF",
     priceSpecification: {
       "@type": "UnitPriceSpecification",
-      price: String(plan.monthly?.gnf ?? 0),
+      price: String(gnf),
       priceCurrency: "GNF",
-      unitText: content.services.perMonth,
+      valueAddedTaxIncluded: true,
+      unitText: unit(id)?.unit ?? "",
     },
-  }));
-  const tiers = EVENT_PRICING.tiers.map((tier) => ({
-    "@type": "Offer",
-    name: tier.name,
-    price: String(tier.price.gnf),
-    priceCurrency: "GNF",
-  }));
+  });
   const schema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -34,7 +29,11 @@ export function PricingJsonLd({ content, url }: { content: SimulatorContent; url
     url,
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
-    offers: [...plans, ...tiers],
+    offers: [
+      offer("event", EVENT_PRICING.perGuest.gnf),
+      offer("pack", ORGANIZER_PACK.monthly.gnf),
+      offer("services", SERVICES_PRO.perPerson.gnf),
+    ],
   };
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(schema) }} />;
 }

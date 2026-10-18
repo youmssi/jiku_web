@@ -15,16 +15,22 @@ import type {
   SubscriptionView,
 } from "./schema";
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Asks to raise [eventId] to [guests] paid guests, paid by transfer (JIKU-268). */
 export async function requestActivationAction(
   eventId: string,
-  tier: string,
+  guests: number,
 ): Promise<{ instructions?: ManualPaymentInstructions; error?: string }> {
+  const t = await getTranslations("billing.event.errors");
+  if (!UUID.test(eventId) || !Number.isSafeInteger(guests) || guests < 1) {
+    return { error: t("unavailable") };
+  }
   const response = await serverFetch(`/events/${eventId}/payments/manual`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ tier }),
+    body: JSON.stringify({ guests }),
   });
-  const t = await getTranslations("billing.event.errors");
   if (response.status === 400) {
     return { error: t("unavailable") };
   }
@@ -185,13 +191,12 @@ export async function creditNoteAction(
 
 // ─── Online checkout (JIKU-165) ─────────────────────────────────────────────
 
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
 function checkoutRequest(target: CheckoutTarget): { path: string; body: unknown } {
   switch (target.kind) {
-    case "tier":
+    case "guests":
       if (!UUID.test(target.eventId)) throw new Error("Not an event id");
-      return { path: `/events/${target.eventId}/payments`, body: { tier: target.tier } };
+      if (!Number.isSafeInteger(target.guests) || target.guests < 1) throw new Error("Not a guest count");
+      return { path: `/events/${target.eventId}/payments`, body: { guests: target.guests } };
     case "subscription":
       return { path: "/billing/subscription/checkout", body: { plan: target.plan, months: target.months } };
     case "pack":

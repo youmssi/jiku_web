@@ -169,7 +169,7 @@
     "alreadyPaid": "Ce billet ne doit plus rien : il a déjà été réglé.",
     "markPaidFailed": "Le paiement n'a pas pu être enregistré. Réessayez.",
     "noChannel": "Choisissez au moins un canal.",
-    "allowanceReached": "Le quota d'invités de cet événement est atteint. Passez au palier supérieur pour inviter davantage.",
+    "allowanceReached": "Le quota d'invités de cet événement est atteint. Ajoutez des invités depuis la facturation de l'événement pour inviter davantage.",
     "sendFailed": "Les invitations n'ont pas pu être envoyées. Réessayez.",
     "categoryFull": "Cette catégorie est complète. Augmentez sa jauge ou choisissez-en une autre.",
     "categoryFailed": "La catégorie n'a pas pu être changée. Réessayez.",

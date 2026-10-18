@@ -35,7 +35,7 @@ const WHY_ICONS = [LayoutList, ScanLine, Palette, Smartphone];
 /**
  * The page for professional event organizers (JIKU-266): wedding planners,
  * agencies and venues. It speaks only of invitations, tickets and the door,
- * shows the Organizer Pack and how to put it in a client's quote, then the
+ * shows Pro Organisateur and how to put it in a client's quote, then the
  * way in. The launch ads and the sales assistant link here.
  */
 export function OrganizersPage({
@@ -90,7 +90,7 @@ export function OrganizersPage({
                     </TrackedLink>
                   </Button>
                   <Button asChild size="lg" variant="outline" className="h-12 rounded-full px-8 text-base">
-                    <Link href={SEO_ROUTES.SIMULATOR}>{content.secondaryCta}</Link>
+                    <Link href={SEO_ROUTES.PRICING}>{content.secondaryCta}</Link>
                   </Button>
                 </div>
               </div>
@@ -243,7 +243,7 @@ export function OrganizersPage({
                   </TrackedLink>
                 </Button>
                 <Button asChild size="lg" variant="outline" className={CLOSING_OUTLINE}>
-                  <Link href={SEO_ROUTES.SIMULATOR}>{content.cta.secondary}</Link>
+                  <Link href={SEO_ROUTES.PRICING}>{content.cta.secondary}</Link>
                 </Button>
               </ClosingCta>
             </section>

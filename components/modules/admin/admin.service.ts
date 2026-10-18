@@ -112,7 +112,7 @@ export async function searchTenantEventsAction(
 export async function grantTrialAction(input: {
   tenantId: string;
   eventId: string;
-  tier: string;
+  guests: number;
   expiresAt: string;
 }): Promise<ActionResult> {
   return adminMutation("/admin/trials", input);
@@ -230,7 +230,7 @@ export async function updateBillingSettingsAction(
         mobileMoneyOperator: values.payee.mobileMoneyOperator.trim() || null,
         bankDetails: values.payee.bankDetails.trim() || null,
       },
-      tiers: values.tiers,
+      perGuest: values.perGuest,
       subscriptionPlans: values.subscriptionPlans.map((plan) => ({
         name: plan.name,
         includedPeople: plan.includedPeople,

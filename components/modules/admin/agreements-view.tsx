@@ -47,7 +47,7 @@ import {
 } from "./admin.service";
 import { formatAmount, StatusBadge } from "./admin-ui";
 import { TenantCombobox } from "./tenant-combobox";
-import type { AdminAgreement, AdminTierCatalog } from "./schema";
+import type { AdminAgreement } from "./schema";
 import {
   createAgreementSchema,
   type CreateAgreementFormValues,
@@ -150,10 +150,11 @@ function useColumns(): ColumnDef<DataTableFeatures, AdminAgreement>[] {
 
 export function AgreementsView({
   agreements,
-  catalog,
+  currency,
 }: {
   agreements: AdminAgreement[];
-  catalog: AdminTierCatalog;
+  /** The reference currency of agreement amounts. */
+  currency: string;
 }) {
   const t = useTranslations("admin.agreements");
   const columns = useColumns();
@@ -161,7 +162,7 @@ export function AgreementsView({
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{t("intro")}</p>
-        <CreateAgreementDialog currency={catalog.currency} />
+        <CreateAgreementDialog currency={currency} />
       </div>
 
       {agreements.length === 0 ? (

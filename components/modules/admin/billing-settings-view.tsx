@@ -58,7 +58,7 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
         mobileMoneyOperator: initial.payee.mobileMoneyOperator ?? "",
         bankDetails: initial.payee.bankDetails ?? "",
       },
-      tiers: initial.tiers.map((tier) => ({ name: tier.name, maxGuests: tier.maxGuests, price: tier.price })),
+      perGuest: initial.perGuest,
       subscriptionPlans: initial.subscriptionPlans.map((plan) => ({
         name: plan.name,
         includedPeople: plan.includedPeople,
@@ -69,7 +69,6 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
     },
   });
 
-  const tiers = useFieldArray({ control, name: "tiers" });
   const plans = useFieldArray({ control, name: "subscriptionPlans" });
 
   function onSubmit(values: AdminBillingSettingsFormValues) {
@@ -179,40 +178,11 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
 
       <Card>
         <CardHeader>
-          <CardTitle>{t("tiersTitle")}</CardTitle>
-          <CardDescription>{t("tiersText")}</CardDescription>
+          <CardTitle>{t("perGuestTitle")}</CardTitle>
+          <CardDescription>{t("perGuestText")}</CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          {tiers.fields.map((tier, index) => (
-            <div key={tier.id} className="flex flex-col gap-2 rounded-lg border p-3">
-              <div className="grid grid-cols-[1fr_auto] items-end gap-2 sm:grid-cols-[1fr_8rem_auto]">
-                <NumberField control={control} name={`tiers.${index}.name`} label={t("tierName")} text />
-                <NumberField control={control} name={`tiers.${index}.maxGuests`} label={t("maxGuests")} />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  disabled={tiers.fields.length <= 1}
-                  onClick={() => tiers.remove(index)}
-                >
-                  <Trash2 className="size-4" />
-                  <span className="sr-only">{t("removeTier")}</span>
-                </Button>
-              </div>
-              <PriceFields control={control} prefix={`tiers.${index}.price`} />
-            </div>
-          ))}
-          <div>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => tiers.append({ name: "", maxGuests: 0, price: { gnf: 0, fcfa: 0, usdCents: 0 } })}
-            >
-              <Plus className="size-3.5" />
-              {t("addTier")}
-            </Button>
-          </div>
+        <CardContent>
+          <PriceFields control={control} prefix="perGuest" />
         </CardContent>
       </Card>
 

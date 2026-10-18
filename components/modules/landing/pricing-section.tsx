@@ -9,8 +9,8 @@ import { priceAnchor } from "./price-anchor";
 import { SectionHeading } from "./section-heading";
 
 /**
- * One number per use and the way to the exact figure. The detail (tiers,
- * plans, commission) lives in the simulator only, so it is never repeated.
+ * One number per use and the way to the exact figure. The detail (what each
+ * offer includes, the calculator) lives on the pricing page only.
  */
 export function PricingSection({ content, locale }: { content: LandingContent["pricing"]; locale: LandingLocale }) {
   return (

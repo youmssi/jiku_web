@@ -50,42 +50,41 @@
     "teamPrice": "Price for your team",
     "reminders": "WhatsApp reminders this month",
     "remindersUsed": "{sent} of {limit}",
-    "remindersOut": "You have sent this month's {limit} free WhatsApp reminders. No more reminders go out this month: move to a paid plan for unlimited reminders.",
+    "remindersOut": "You have sent this month's {limit} free WhatsApp reminders. No more reminders go out this month: move to Services Pro: 1,000 reminders per person a month.",
     "remindersLow": "{left, plural, one {You have # free WhatsApp reminder left this month.} other {You have # free WhatsApp reminders left this month.}}"
   },
   "event": {
     "allowanceTitle": "This event's capacity",
-    "allowance": "{tier} tier: {used, number} of {allowance, number} invitations used",
+    "allowance": "{used, number} invitations out of {allowance, number}",
     "remaining": "{count, plural, one {# invitation left.} other {# invitations left.}}",
     "requestTitle": "Your activation request",
-    "viewInstructions": "View payment instructions",
-    "addTitle": "Add capacity",
-    "upTo": "Up to {count, number} guests",
-    "difference": "You only pay the difference with your current tier.",
+    "viewInstructions": "See the payment instructions",
+    "addTitle": "Add guests",
+    "perGuest": "{amount} per guest, all included: answers in WhatsApp, ticket and door check. All taxes included.",
+    "guestsLabel": "Total number of guests for this event",
+    "guestsHelp": "Count all your guests, including those already invited for free.",
+    "guestsInvalid": "Enter a number between {min, number} and {max, number}.",
+    "onlyNew": "{count, number} guests are already paid for: you only pay for the new ones.",
+    "estimate": "To pay",
     "activate": "Request activation",
     "requesting": "Requesting…",
-    "note": "You'll receive payment instructions (Mobile Money or bank transfer) with a reference. Our team unlocks the capacity once the transfer arrives.",
-    "maxed": "This event already has the largest tier. Beyond {count, number} guests, write to us.",
-    "managedTitle": "Capacity is managed by an admin",
-    "managedText": "Only admins and owners of the organization can add capacity. Ask them, or switch to an admin account.",
+    "note": "You receive the payment instructions (Mobile Money or transfer) with a reference. Our team unlocks the guests as soon as the payment arrives.",
+    "managedTitle": "Capacity is managed by an administrator",
+    "managedText": "Only the organization's administrators and owners can add guests. Ask them, or sign in with an administrator account.",
     "historyTitle": "Payment history",
     "dialogTitle": "Payment instructions",
     "dialogText": "Send the amount below and include the reference with your transfer.",
     "errors": {
-      "unavailable": "That tier isn't available. Please pick another.",
-      "forbidden": "Only an organization admin can request capacity for this event.",
-      "owned": "This event already has that tier or more.",
-      "failed": "We couldn't record your request. Please try again."
+      "unavailable": "This number of guests is not valid. Correct it and try again.",
+      "forbidden": "Only an administrator of the organization can add guests.",
+      "owned": "This event already has this many paid guests, or Pro Organizer covers it.",
+      "failed": "Your request could not be saved. Try again."
     },
-    "surcharge": "including {amount} for answers in WhatsApp",
-    "surchargeOnly": "Answers in WhatsApp for the guests you already have",
-    "coveredTitle": "Covered by your Organizer Pack",
-    "coveredText": "This event uses your Pack's guests for the month: no tier to buy. Follow and top up your Pack from the Billing page.",
-    "packTier": "Organizer Pack",
-    "activateTier": "Request activation of the {tier} tier"
+    "coveredTitle": "Covered by Pro Organizer",
+    "coveredText": "This event draws on your plan's guests for the month: nothing to buy. Track and top up your plan from the Billing page."
   },
   "instructions": {
-    "title": "Activation requested: {tier}, {amount}",
+    "title": "Activation requested: {purchase}, {amount}",
     "text": "Send the exact amount to the account below and include this reference with your transfer. Our team confirms the payment and unlocks your access, usually within a few hours, and you'll get a confirmation email.",
     "copy": "Copy",
     "copied": "Copied",
@@ -94,21 +93,20 @@
     "bank": "Bank transfer",
     "questions": "Questions",
     "or": "or",
-    "safety": "Activation is confirmed by our team once the transfer is received: it is not instant. Never share card numbers or passwords; we only need the transfer itself, with the reference."
+    "safety": "Activation is confirmed by our team once the transfer is received: it is not instant. Never share card numbers or passwords; we only need the transfer itself, with the reference.",
+    "guests": "{count, plural, one {# guest} other {# guests}}"
   },
   "history": {
     "emptyTitle": "No payments yet",
     "emptyText": "Your payments appear here once they are recorded.",
     "date": "Date",
-    "event": "Event",
-    "tier": "Tier",
+    "purchase": "Purchase",
     "amount": "Amount",
     "status": "Status",
     "receipt": "Receipt",
     "invoice": "Invoice",
     "download": "Download",
     "none": "—",
-    "subscription": "Subscription",
     "statuses": {
       "PENDING": "Pending",
       "SUCCEEDED": "Paid",
@@ -141,8 +139,8 @@
     "creditFailed": "We couldn't issue the credit note. Please try again."
   },
   "pack": {
-    "title": "Organizer Pack",
-    "pitch": "For wedding planners, agencies and venues: {guests, number} guests a month across all your events, every delivery mode included, with no tier to buy.",
+    "title": "Pro Organizer",
+    "pitch": "For wedding planners, agencies and venues: {guests, number} guests a month across all your events, every delivery mode included, with nothing to buy per event.",
     "activeUntil": "Active until {date}",
     "inactive": "Not subscribed",
     "month": "Current month: {start} to {end}",
@@ -150,8 +148,8 @@
     "remaining": "{count, plural, one {# guest left this month.} other {# guests left this month.}}",
     "owed": "{count, plural, one {# guest sent on an event day past the month is owed: it is added to the next renewal ({amount}).} other {# guests sent on an event day past the month are owed: they are added to the next renewal ({amount}).}}",
     "price": "{amount} a month",
-    "subscribe": "Get the Pack",
-    "renew": "Renew the Pack",
+    "subscribe": "Get Pro Organizer",
+    "renew": "Renew Pro Organizer",
     "cancel": "Cancel",
     "period": {
       "label": "Length",
@@ -168,8 +166,8 @@
     "requesting": "Requesting…",
     "ready": "Your payment instructions are ready.",
     "errors": {
-      "forbidden": "Only an organization admin can get the Pack.",
-      "inactive": "Extra guests need an active Pack.",
+      "forbidden": "Only an organization admin can get Pro Organizer.",
+      "inactive": "Extra guests need an active Pro Organizer.",
       "failed": "We couldn't record your request. Please try again."
     }
   },
@@ -177,10 +175,10 @@
     "title": "Your own WhatsApp number",
     "pitch": "Your guests and clients get messages from your number, under your name, and reply to you directly. Meta bills you for these messages.",
     "price": "{amount} a month",
-    "included": "Included in {plans} and the Organizer Pack.",
+    "included": "Included in {plans} and Pro Organizer.",
     "source": {
       "PLAN": "Included in your plan",
-      "PACK": "Included in your Organizer Pack",
+      "PACK": "Included in your Pro Organizer",
       "ADDON": "Add-on active until {date}",
       "NONE": "Not subscribed"
     },
@@ -209,7 +207,7 @@
     "errors": {
       "forbidden": "Only workspace admins can pay.",
       "unavailable": "This offer is not available for your workspace.",
-      "conflict": "This purchase is not possible right now: your current offer already covers it, or it needs an active Pack.",
+      "conflict": "This purchase is not possible right now: your current offer already covers it, or it needs an active Pro Organizer.",
       "provider": "The payment service is not responding. Try again in a moment, or pay by transfer.",
       "failed": "The payment could not start. Try again."
     },
@@ -237,9 +235,9 @@
         "text": "This link does not match any payment of your workspace."
       },
       "kind": {
-        "TIER": "{tier} capacity for your event",
+        "GUESTS": "{guests, plural, one {# guest} other {# guests}} for your event",
         "SUBSCRIPTION": "{tier} plan",
-        "PACK": "Organizer Pack",
+        "PACK": "Pro Organizer",
         "PACK_EXTRA": "Extra Pack guests",
         "WHATSAPP_NUMBER": "Your own WhatsApp number",
         "COMMISSION": "Commission on tickets sold"

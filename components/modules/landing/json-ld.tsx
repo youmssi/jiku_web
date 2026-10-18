@@ -1,5 +1,5 @@
 import { organizationId } from "@/components/modules/seo";
-import { EVENT_PRICING } from "@/lib/pricing";
+import { ORGANIZER_PACK } from "@/lib/pricing";
 import type { LandingContent, LandingLocale } from "./content";
 import { jsonLd } from "@/lib/json-ld";
 
@@ -34,8 +34,8 @@ export function LandingJsonLd({
       "@type": "AggregateOffer",
       priceCurrency: "GNF",
       lowPrice: "0",
-      highPrice: String(EVENT_PRICING.tiers[EVENT_PRICING.tiers.length - 1].price.gnf),
-      offerCount: EVENT_PRICING.tiers.length + 1,
+      highPrice: String(ORGANIZER_PACK.monthly.gnf),
+      offerCount: 4,
     },
   };
 

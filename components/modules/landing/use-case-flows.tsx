@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { fill } from "./simulator-format";
+import { fill } from "./price-format";
 import { JourneyPhone } from "./journey-screens";
 import type { Journey, JourneysContent } from "./use-case-journeys";
 import { SectionHeading } from "./section-heading";

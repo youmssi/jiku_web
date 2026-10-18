@@ -140,7 +140,7 @@ export function UseCasesPage({
                   </TrackedLink>
                 </Button>
                 <Link
-                  href={SEO_ROUTES.SIMULATOR}
+                  href={SEO_ROUTES.PRICING}
                   className="inline-flex min-h-11 items-center px-4 text-sm font-medium underline decoration-foreground/30 underline-offset-4 hover:decoration-foreground sm:text-base"
                 >
                   {content.cta.secondary}
@@ -170,7 +170,7 @@ export function UseCasesPage({
             <p className="mx-auto mt-14 max-w-2xl text-center text-sm text-muted-foreground sm:text-base">
               {content.pricing.text}{" "}
               <Link
-                href={SEO_ROUTES.SIMULATOR}
+                href={SEO_ROUTES.PRICING}
                 className="font-semibold text-foreground underline-offset-4 hover:underline"
               >
                 {content.pricing.cta}
@@ -196,7 +196,7 @@ export function UseCasesPage({
                   variant="outline"
                   className={CLOSING_OUTLINE}
                 >
-                  <Link href={SEO_ROUTES.SIMULATOR}>
+                  <Link href={SEO_ROUTES.PRICING}>
                     {content.cta.secondary}
                   </Link>
                 </Button>

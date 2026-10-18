@@ -50,8 +50,7 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
         <TableHeader>
           <TableRow>
             <TableHead>{t("date")}</TableHead>
-            <TableHead>{t("event")}</TableHead>
-            <TableHead>{t("tier")}</TableHead>
+            <TableHead>{t("purchase")}</TableHead>
             <TableHead>{t("amount")}</TableHead>
             <TableHead>{t("status")}</TableHead>
             <TableHead>{t("receipt")}</TableHead>
@@ -62,8 +61,7 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
           {payments.map((payment) => (
             <TableRow key={payment.paymentId}>
               <TableCell><LocalDateTime value={payment.createdAt} /></TableCell>
-              <TableCell>{payment.eventId ? payment.eventName : t("subscription")}</TableCell>
-              <TableCell>{payment.tier}</TableCell>
+              <TableCell>{payment.eventName}</TableCell>
               <TableCell>{formatAmount(payment.amountMinor, payment.currency, locale)}</TableCell>
               <TableCell>
                 <span

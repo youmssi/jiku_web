@@ -5,10 +5,9 @@ import { BillingView } from "@/components/modules/billing";
 import { isOnlinePaymentEnabled } from "@/components/modules/billing/server";
 import { getOrganizerContext } from "@/components/modules/identity/server";
 import type {
-  EventTierQuote,
+  EventPricing,
   ManualPaymentInstructions,
   PaymentHistoryItem,
-  TierCatalog,
   UsageAllowance,
 } from "@/components/modules/billing";
 
@@ -19,18 +18,17 @@ interface PageProps {
 const MANAGER_ROLES = ["ORGANIZER_OWNER", "ORGANIZER_ADMIN"];
 
 /**
- * Organizer billing page for one event (JIKU-35): current usage/allowance, capacity
- * purchase priced by the server for this event (tier difference and interactive
- * surcharge, ADR 105), and tenant-scoped payment history with downloadable receipts. Capacity
- * requests are gated to admins and owners; members see the notice instead.
+ * Organizer billing page for one event (JIKU-35): current usage/allowance, buying
+ * guests at the per-guest price (ADR 109, the server prices the payment), and
+ * tenant-scoped payment history with downloadable receipts. Guest purchases are
+ * gated to admins and owners; members see the notice instead.
  */
 export default async function BillingPage({ params }: PageProps) {
   const { id } = await params;
 
-  const [usageRes, catalogRes, quotesRes, paymentsRes, activationRes, context] = await Promise.all([
+  const [usageRes, pricingRes, paymentsRes, activationRes, context] = await Promise.all([
     serverFetch(`/events/${id}/usage`),
-    serverFetch(`/billing/tiers`),
-    serverFetch(`/events/${id}/billing/quotes`),
+    serverFetch(`/billing/event-pricing`),
     serverFetch(`/billing/payments`),
     serverFetch(`/events/${id}/payments/manual`),
     getOrganizerContext(),
@@ -41,8 +39,7 @@ export default async function BillingPage({ params }: PageProps) {
   }
 
   const usage = (await usageRes.json()) as UsageAllowance;
-  const catalog = (await catalogRes.json()) as TierCatalog;
-  const quotes = quotesRes.ok ? ((await quotesRes.json()) as EventTierQuote[]) : [];
+  const pricing = (await pricingRes.json()) as EventPricing;
   const allPayments = paymentsRes.ok ? ((await paymentsRes.json()) as PaymentHistoryItem[]) : [];
   const payments = allPayments.filter((payment) => payment.eventId === id);
   // 404 simply means no open activation request for this event.
@@ -56,8 +53,7 @@ export default async function BillingPage({ params }: PageProps) {
       <BillingView
         eventId={id}
         usage={usage}
-        catalog={catalog}
-        quotes={quotes}
+        pricing={pricing}
         payments={payments}
         activation={activation}
         canManage={canManage}
