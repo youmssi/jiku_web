@@ -72,5 +72,11 @@
   "live": {
     "label": "En direct",
     "hint": "Cet écran se met à jour dès qu’un changement arrive."
+  },
+  "messageCheck": {
+    "information": "Message d'information : il partira comme tel.",
+    "marketing": "Risque marketing : retirez {words}, sinon le message sera bloqué.",
+    "word": "« {word} »",
+    "guide": "Écrire un message qui passe"
   }
 }

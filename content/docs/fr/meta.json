@@ -1,4 +1,12 @@
 {
   "title": "Guides",
-  "pages": ["index", "invitation-card", "guest-list", "check-in", "bookings-and-day-line", "payments"]
+  "pages": [
+    "index",
+    "invitation-card",
+    "guest-list",
+    "check-in",
+    "whatsapp-messages",
+    "bookings-and-day-line",
+    "payments"
+  ]
 }

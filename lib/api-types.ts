@@ -2532,6 +2532,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/messaging/whatsapp/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["whatsAppMessageCheckCheck"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/notifications/email-feedback": {
         parameters: {
             query?: never;
@@ -6339,6 +6355,13 @@ export interface components {
         WalkInRequest: {
             clientName: string;
             clientPhone: string;
+        };
+        WhatsAppMessageCheck: {
+            category?: string;
+            promotionalWords?: string[];
+        };
+        WhatsAppMessageCheckRequest: {
+            text: string | null;
         };
         WhatsAppOverrideStatus: {
             /** Format: date-time */
@@ -10556,6 +10579,30 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["MessagingChannelsResponse"];
+                };
+            };
+        };
+    };
+    whatsAppMessageCheckCheck: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WhatsAppMessageCheckRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["WhatsAppMessageCheck"];
                 };
             };
         };

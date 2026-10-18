@@ -11,7 +11,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { FormFieldError, InfoHint } from "@/components/shared";
+import { FormFieldError, InfoHint, WhatsAppMessageCheck } from "@/components/shared";
 import { saveOpenInvitationAction } from "./open-invitation.service";
 import { settingsSchema, type OpenInvitation, type SettingsInput } from "./schema";
 
@@ -68,6 +68,7 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="open-welcome">{t("welcome")}</FieldLabel>
               <Textarea {...field} id="open-welcome" rows={3} maxLength={500} placeholder={t("welcomePlaceholder")} />
+              <WhatsAppMessageCheck text={field.value ?? ""} />
               <FormFieldError error={fieldState.error} />
             </Field>
           )}

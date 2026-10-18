@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { WhatsAppMessageCheck } from "@/components/shared";
 import {
   Select,
   SelectContent,
@@ -286,6 +287,7 @@ export function PersonalisationView({
                           setPreview(null);
                         }}
                       />
+                      {isEmail ? null : <WhatsAppMessageCheck text={body} />}
                     </div>
 
                     <div className="flex flex-col gap-1">

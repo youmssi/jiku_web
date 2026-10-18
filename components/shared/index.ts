@@ -25,3 +25,4 @@ export {TrackedAnchor, TrackedLink} from "./tracked-link";
 export {UmamiScript} from "./umami-script";
 export {ViewTracker} from "./view-tracker";
 export {VerifiedBadge} from "./verified-badge";
+export { WhatsAppMessageCheck } from "./whatsapp-message-check";
