@@ -22,4 +22,4 @@ export const COMPANY = {
 } as const;
 
 /** Date the current versions took effect, shown at the top of every page. */
-export const LEGAL_UPDATED = "2026-10-16";
+export const LEGAL_UPDATED = "2026-10-18";

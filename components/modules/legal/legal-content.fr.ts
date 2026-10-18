@@ -115,7 +115,7 @@ export const LEGAL_FR: LegalDocuments = {
             "Billets payants : une commission de 3 % du prix de chaque billet vendu, payée à Jikū par tranche avant la vente (voir l'article 6).",
             "Les envois par SMS sont une option payante dont le prix est affiché avant chaque envoi.",
           ],
-          "Les prix s'entendent [hors taxes / toutes taxes comprises]. Toute modification de prix est annoncée au moins trente jours à l'avance par e-mail et ne s'applique pas à une période déjà payée.",
+          "Les prix s'entendent toutes taxes comprises : la taxe applicable est incluse dans le montant affiché et indiquée sur la facture. Toute modification de prix est annoncée au moins trente jours à l'avance par e-mail et ne s'applique pas à une période déjà payée.",
         ],
       },
       {
@@ -249,6 +249,7 @@ export const LEGAL_FR: LegalDocuments = {
             "Invités et clients (pour le compte de l'organisation) : nom, e-mail et/ou téléphone, réponse, catégorie de billet, réponses aux questions, présence, statut de paiement déclaré.",
             "Paiements à Jikū : montant, référence, statut. Les données de carte ou de Mobile Money restent chez le prestataire de paiement.",
             "Utilisation : journaux techniques (adresse IP, navigateur, erreurs), avis et messages envoyés au support.",
+            "Échanges avec l'équipe Jikū : quand vous nous écrivez sur WhatsApp ou par le formulaire du site, votre nom, votre numéro, votre entreprise et vos messages.",
           ],
         ],
       },
@@ -261,6 +262,7 @@ export const LEGAL_FR: LegalDocuments = {
             "Sécurité et prévention des abus : journaux, limitation des tentatives, détection de fraude (intérêt légitime).",
             "Améliorer le service : mesures d'audience sans cookie et sans identification, avis donnés volontairement (intérêt légitime).",
             "Respecter nos obligations légales : factures, comptabilité, réponses aux autorités.",
+            "Répondre à vos questions et vous présenter Jikū (intérêt légitime) : quand vous écrivez à Jikū sur WhatsApp, un assistant automatique peut répondre en premier. Il se présente comme tel, ne prend aucune décision vous concernant et passe la main à une personne de l'équipe dès que vous le demandez.",
             "Vous informer des évolutions importantes du service (contrat) ; les nouveautés et conseils de Jikū ne vous sont envoyés que si vous avez coché la case prévue à l'inscription ou activé l'option dans les réglages de votre compte. Nous conservons la date et le texte accepté, et vous pouvez retirer cet accord à tout moment depuis les réglages ou en un clic depuis chaque message.",
           ],
         ],
@@ -296,8 +298,10 @@ export const LEGAL_FR: LegalDocuments = {
         heading: "Combien de temps",
         body: [
           [
-            "Invités et clients : pendant l'événement ou la relation, puis anonymisation automatique douze mois après l'événement (durée ajustable par l'organisation) ; immédiatement en cas de demande d'effacement.",
-            "Comptes : tant que le compte est ouvert, puis trente jours pour l'export avant suppression.",
+            "Invités et acheteurs de billets : pendant l'événement, puis anonymisation automatique douze mois après l'événement ; immédiatement à la demande de l'invité.",
+            "Clients des services (rendez-vous, file du jour) : leur nom et leur numéro sont retirés automatiquement douze mois après le rendez-vous ou le ticket.",
+            "Comptes : tant que le compte est ouvert. À la fermeture, demandée par e-mail, nous envoyons l'export de vos données puis supprimons le compte sous trente jours.",
+            "Professionnels qui nous contactent et échanges avec l'équipe Jikū : douze mois après le premier contact.",
             "Factures et pièces comptables : dix ans, comme le prévoit le droit comptable OHADA.",
             "Journaux techniques : douze mois au plus.",
           ],
@@ -307,7 +311,7 @@ export const LEGAL_FR: LegalDocuments = {
         id: "securite",
         heading: "Sécurité",
         body: [
-          "Échanges chiffrés (HTTPS), mots de passe hachés, jetons de session en cookies sécurisés, données de chaque organisation cloisonnées, accès du personnel limité et journalisé, sauvegardes régulières. En cas de violation de données, nous prévenons les organisations concernées et l'autorité compétente dans les délais prévus par la loi.",
+          "Échanges chiffrés (HTTPS), mots de passe hachés, jetons de session en cookies sécurisés, données de chaque organisation cloisonnées, accès du personnel limité et journalisé, sauvegardes régulières. En cas de violation de données, nous prévenons les organisations concernées sous 72 heures, ainsi que l'autorité compétente dans les délais prévus par la loi.",
         ],
       },
       {
