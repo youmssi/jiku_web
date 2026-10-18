@@ -116,22 +116,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/billing/tiers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["adminBillingCatalogCatalog"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/admin/diagnostics/error": {
         parameters: {
             query?: never;
@@ -852,6 +836,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/billing/event-pricing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["eventPricingPricing"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/billing/invoices": {
         parameters: {
             query?: never;
@@ -1156,38 +1156,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/tiers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["billingTiersTiers"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/billing/tiers/custom-quote": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["billingTiersCustomQuote"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/billing/whatsapp-number": {
         parameters: {
             query?: never;
@@ -1476,14 +1444,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/events/{eventId}/billing/quotes": {
+    "/api/v1/events/{eventId}/billing/quote": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["eventTierQuotesQuotes"];
+        get: operations["eventPricingQuote"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2558,6 +2526,22 @@ export interface paths {
         get: operations["messagingChannelsChannels"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/messaging/whatsapp/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["whatsAppMessageCheckCheck"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4183,6 +4167,8 @@ export interface components {
             currency?: string;
             /** Format: uuid */
             eventId?: string | null;
+            /** Format: int64 */
+            guests?: number | null;
             /** Format: uuid */
             id?: string;
             provider?: string;
@@ -4193,10 +4179,6 @@ export interface components {
         };
         AdminRefreshRequest: {
             refreshToken?: string;
-        };
-        AdminTierCatalog: {
-            currency?: string;
-            tiers?: components["schemas"]["BillingTierOption"][];
         };
         AdminTrialPage: {
             entries?: components["schemas"]["AdminTrialView"][];
@@ -4233,7 +4215,6 @@ export interface components {
             status?: string;
             tenantId?: string;
             tenantName?: string | null;
-            tier?: string;
         };
         AdminVerificationView: {
             /** Format: date-time */
@@ -4376,6 +4357,8 @@ export interface components {
             /** Format: int64 */
             invitedGuests?: number;
             /** Format: int64 */
+            paidGuests?: number;
+            /** Format: int64 */
             remaining?: number;
             tier?: string;
             withinAllowance?: boolean;
@@ -4391,18 +4374,6 @@ export interface components {
             packExpiresAt?: string | null;
             subscription?: components["schemas"]["SubscriptionStatusSummary"] | null;
             whatsAppReminders?: components["schemas"]["ReminderAllowance"] | null;
-        };
-        BillingTierOption: {
-            /** Format: int64 */
-            maxGuests?: number;
-            name?: string;
-            price?: components["schemas"]["PriceList"];
-            /**
-             * Format: int64
-             * @deprecated
-             * @description Use price
-             */
-            priceMinor?: number;
         };
         BookingLinkResponse: {
             shortCode?: string;
@@ -4571,29 +4542,6 @@ export interface components {
         CreateValidatorRequest: {
             label?: string | null;
         };
-        CustomQuote: {
-            currency?: string;
-            /** Format: int64 */
-            guestCount?: number;
-            /** Format: int64 */
-            priceMinor?: number;
-        };
-        CustomTierOption: {
-            /** Format: int64 */
-            beyondPerGuestMinor?: number;
-            /**
-             * Format: int64
-             * @deprecated
-             * @description Use beyondPerGuestMinor
-             */
-            perGuestUsdCents?: number;
-            /**
-             * Format: int64
-             * @deprecated
-             * @description There is no setup fee since ADR 105; always 0
-             */
-            setupFeeUsdCents?: number;
-        };
         DashboardResponse: {
             /** Format: int64 */
             checkedIn?: number;
@@ -4698,6 +4646,10 @@ export interface components {
             checkedIn?: number;
             label?: string;
         };
+        EventGuestsRequest: {
+            /** Format: int64 */
+            guests: number | null;
+        };
         EventLookRequest: {
             /** @enum {string|null} */
             cardStyle: "ELEGANT" | "MODERN" | "FESTIVE" | null;
@@ -4719,6 +4671,15 @@ export interface components {
             /** Format: date-time */
             startsAt?: string;
         };
+        EventPricingView: {
+            currency?: string;
+            /** Format: int64 */
+            freeTierGuests?: number;
+            /** Format: int64 */
+            maxGuestsPerEvent?: number;
+            /** Format: int64 */
+            perGuestMinor?: number;
+        };
         EventQuestionResponse: {
             /** Format: uuid */
             eventId?: string;
@@ -4728,6 +4689,15 @@ export interface components {
             position?: number;
             prompt?: string;
             required?: boolean;
+        };
+        EventQuote: {
+            /** Format: int64 */
+            amountMinor?: number;
+            currency?: string;
+            /** Format: int64 */
+            guests?: number;
+            /** Format: int64 */
+            paidGuests?: number;
         };
         EventResponse: {
             description?: string | null;
@@ -4767,17 +4737,6 @@ export interface components {
             /** Format: date-time */
             startDateTime?: string | null;
             status?: string;
-        };
-        EventTierQuote: {
-            /** Format: int64 */
-            amountMinor?: number;
-            currency?: string;
-            interactive?: boolean;
-            /** Format: int64 */
-            maxGuests?: number;
-            /** Format: int64 */
-            surchargeMinor?: number;
-            tier?: string;
         };
         FeedbackAck: {
             /** Format: uuid */
@@ -4855,9 +4814,10 @@ export interface components {
             eventId: string | null;
             /** Format: date-time */
             expiresAt: string | null;
+            /** Format: int64 */
+            guests: number | null;
             /** Format: uuid */
             tenantId: string | null;
-            tier: string;
         };
         GuestImportResult: {
             consentAttested?: boolean;
@@ -4906,9 +4866,6 @@ export interface components {
             ticketCode?: string | null;
             /** Format: uuid */
             ticketTypeId?: string | null;
-        };
-        InitiatePaymentRequest: {
-            tier: string;
         };
         InterruptAgreementRequest: {
             reason: string;
@@ -5059,15 +5016,14 @@ export interface components {
             /** Format: int64 */
             amountMinor?: number;
             currency?: string;
+            /** Format: int64 */
+            guests?: number | null;
             payee?: components["schemas"]["PayeeDetails"];
             /** Format: uuid */
             paymentId?: string;
             reference?: string;
             status?: string;
             tier?: string;
-        };
-        ManualPaymentRequest: {
-            tier: string;
         };
         MarkPaidRequest: {
             /** @enum {string} */
@@ -5404,6 +5360,9 @@ export interface components {
             /** Format: uuid */
             eventId?: string | null;
             eventName?: string;
+            /** Format: int64 */
+            guests?: number | null;
+            kind?: string;
             /** Format: uuid */
             paymentId?: string;
             status?: string;
@@ -5508,15 +5467,15 @@ export interface components {
         };
         PlatformBillingSettingsUpdate: {
             payee?: components["schemas"]["PayeeDetails"];
+            perGuest?: components["schemas"]["PriceList"];
             subscriptionPlans?: components["schemas"]["SubscriptionPlanOption"][];
-            tiers?: components["schemas"]["BillingTierOption"][];
         };
         PlatformBillingSettingsView: {
             currency?: string;
             managedInDatabase?: boolean;
             payee?: components["schemas"]["PayeeDetails"];
+            perGuest?: components["schemas"]["PriceList"];
             subscriptionPlans?: components["schemas"]["SubscriptionPlanOption"][];
-            tiers?: components["schemas"]["BillingTierOption"][];
         };
         PlatformWhatsAppUsage: {
             /** Format: int64 */
@@ -6206,22 +6165,6 @@ export interface components {
             /** Format: int64 */
             priceMinor?: number | null;
         };
-        TierCatalog: {
-            currency?: string;
-            custom?: components["schemas"]["CustomTierOption"];
-            /** Format: int64 */
-            freeTierGuests?: number;
-            /** Format: int64 */
-            interactivePerGuestMinor?: number;
-            tiers?: components["schemas"]["TierOption"][];
-        };
-        TierOption: {
-            /** Format: int64 */
-            maxGuests?: number;
-            name?: string;
-            /** Format: int64 */
-            priceMinor?: number;
-        };
         TimeBucket: {
             /** Format: int64 */
             count?: number;
@@ -6412,6 +6355,13 @@ export interface components {
         WalkInRequest: {
             clientName: string;
             clientPhone: string;
+        };
+        WhatsAppMessageCheck: {
+            category?: string;
+            promotionalWords?: string[];
+        };
+        WhatsAppMessageCheckRequest: {
+            text: string | null;
         };
         WhatsAppOverrideStatus: {
             /** Format: date-time */
@@ -6659,26 +6609,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["PlatformBillingSettingsView"];
-                };
-            };
-        };
-    };
-    adminBillingCatalogCatalog: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminTierCatalog"];
                 };
             };
         };
@@ -7813,6 +7743,26 @@ export interface operations {
             };
         };
     };
+    eventPricingPricing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["EventPricingView"];
+                };
+            };
+        };
+    };
     invoiceList: {
         parameters: {
             query?: never;
@@ -8235,49 +8185,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ManualPaymentInstructions"];
-                };
-            };
-        };
-    };
-    billingTiersTiers: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TierCatalog"];
-                };
-            };
-        };
-    };
-    billingTiersCustomQuote: {
-        parameters: {
-            query: {
-                guestCount: number;
-                interactive?: boolean;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CustomQuote"];
                 };
             };
         };
@@ -8802,9 +8709,11 @@ export interface operations {
             };
         };
     };
-    eventTierQuotesQuotes: {
+    eventPricingQuote: {
         parameters: {
-            query?: never;
+            query: {
+                guests: number;
+            };
             header?: never;
             path: {
                 eventId: string;
@@ -8819,7 +8728,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["EventTierQuote"][];
+                    "*/*": components["schemas"]["EventQuote"];
                 };
             };
         };
@@ -9575,7 +9484,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["InitiatePaymentRequest"];
+                "application/json": components["schemas"]["EventGuestsRequest"];
             };
         };
         responses: {
@@ -9623,7 +9532,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ManualPaymentRequest"];
+                "application/json": components["schemas"]["EventGuestsRequest"];
             };
         };
         responses: {
@@ -10670,6 +10579,30 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["MessagingChannelsResponse"];
+                };
+            };
+        };
+    };
+    whatsAppMessageCheckCheck: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WhatsAppMessageCheckRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["WhatsAppMessageCheck"];
                 };
             };
         };

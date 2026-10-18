@@ -109,14 +109,15 @@ export const LEGAL_EN: LegalDocuments = {
         id: "prix",
         heading: "4. Prices and offers",
         body: [
-          "Current prices are published on the pricing page and in the simulator, in Guinean francs (GNF) for organizations based in Guinea. A US dollar equivalent may be shown for information; only the local-currency amount is binding.",
+          "Current prices are published on the pricing page, in Guinean francs (GNF) for organizations based in Guinea. A US dollar equivalent may be shown for information; only the local-currency amount is binding.",
           [
-            "Services (appointments, bookings, queue): a subscription per person who serves clients, per month, payable monthly or yearly. The Solo offer is free for one person.",
-            "Events with free invitations: free up to 100 guests over a rolling twelve months per organization, then a price per event based on the number of guests. Moving up a tier only charges the difference.",
+            "Services (appointments, bookings, queue): a Services Pro subscription per person who serves clients, per month, payable monthly or yearly. The Solo offer is free for one person. Services Pro WhatsApp reminders are subject to fair use of 1,000 reminders per person per month; beyond that, Jikū may limit sending after warning the organization.",
+            "Pro Organizer: a monthly plan covering 1,000 guests a month across all the organization's events, then a price per guest. Guests not used in a month do not carry over.",
+            "Events with free invitations: free up to 100 guests over a rolling twelve months per organization, then a price per guest of the event, all included. Adding guests only charges the new ones.",
             "Paid tickets: a commission of 3% of the price of each ticket sold, paid to Jikū in tranches before the sale (see section 6).",
             "SMS sends are a paid option whose price is shown before each send.",
           ],
-          "Prices are [exclusive / inclusive] of taxes. Any price change is announced by email at least thirty days in advance and does not apply to a period already paid.",
+          "Prices include all taxes: the applicable tax is included in the amount shown and stated on the invoice. Any price change is announced by email at least thirty days in advance and does not apply to a period already paid.",
         ],
       },
       {
@@ -250,6 +251,7 @@ export const LEGAL_EN: LegalDocuments = {
             "Guests and clients (on the organization's behalf): name, email and/or phone, answer, ticket category, answers to questions, attendance, declared payment status.",
             "Payments to Jikū: amount, reference, status. Card and Mobile Money details stay with the payment provider.",
             "Usage: technical logs (IP address, browser, errors), feedback and messages sent to support.",
+            "Conversations with the Jikū team: when you write to us on WhatsApp or through the site's form, your name, number, business and messages.",
           ],
         ],
       },
@@ -262,6 +264,7 @@ export const LEGAL_EN: LegalDocuments = {
             "Security and abuse prevention: logs, rate limiting, fraud detection (legitimate interest).",
             "Improving the service: cookieless, non-identifying audience measurement, and feedback given voluntarily (legitimate interest).",
             "Meeting our legal obligations: invoices, accounting, answers to authorities.",
+            "Answering your questions and presenting Jikū (legitimate interest): when you write to Jikū on WhatsApp, an automated assistant may answer first. It says so, makes no decision about you, and hands over to a person on the team as soon as you ask.",
             "Informing you of significant changes to the service (contract); Jikū news and tips are only sent if you ticked the box at sign-up or turned the option on in your account settings. We keep the date and the wording you accepted, and you can withdraw this consent at any time from the settings or in one click from each message.",
           ],
         ],
@@ -297,8 +300,10 @@ export const LEGAL_EN: LegalDocuments = {
         heading: "How long",
         body: [
           [
-            "Guests and clients: during the event or relationship, then automatic anonymization twelve months after the event (adjustable by the organization); immediately on an erasure request.",
-            "Accounts: while the account is open, then thirty days for export before deletion.",
+            "Guests and ticket buyers: during the event, then automatic anonymization twelve months after the event; immediately at the guest's request.",
+            "Service clients (appointments, day line): their name and number are removed automatically twelve months after the appointment or ticket.",
+            "Accounts: while the account is open. On closure, requested by email, we send you an export of your data and then delete the account within thirty days.",
+            "Professionals who contact us and conversations with the Jikū team: twelve months after the first contact.",
             "Invoices and accounting records: ten years, as OHADA accounting law requires.",
             "Technical logs: twelve months at most.",
           ],
@@ -308,7 +313,7 @@ export const LEGAL_EN: LegalDocuments = {
         id: "securite",
         heading: "Security",
         body: [
-          "Encrypted connections (HTTPS), hashed passwords, session tokens in secure cookies, each organization's data kept separate, limited and logged staff access, regular backups. In the event of a data breach, we inform the organizations concerned and the competent authority within the time limits set by law.",
+          "Encrypted connections (HTTPS), hashed passwords, session tokens in secure cookies, each organization's data kept separate, limited and logged staff access, regular backups. In the event of a data breach, we inform the organizations concerned within 72 hours, and the competent authority within the time limits set by law.",
         ],
       },
       {

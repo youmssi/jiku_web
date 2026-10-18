@@ -164,7 +164,7 @@
         },
         "INTERACTIVE": {
           "title": "Interactive WhatsApp ticket",
-          "description": "Guests confirm with a button in WhatsApp and get their ticket in the chat. A per-guest surcharge is added to paid tiers."
+          "description": "Guests confirm with a button in WhatsApp and get their ticket in the chat."
         }
       }
     },
@@ -280,7 +280,7 @@
       },
       "allowance": {
         "title": "Guest allowance reached",
-        "description": "{invited} of {allowance} invitations used. Move to the next tier to invite more guests.",
+        "description": "{invited} of {allowance} invitations used. Add guests from the event's billing page to invite more.",
         "cta": "See plans"
       }
     },

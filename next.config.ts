@@ -56,6 +56,13 @@ const nextConfig: NextConfig = {
       bodySizeLimit: (process.env.SERVER_ACTIONS_BODY_LIMIT ?? "8mb") as `${number}mb`,
     },
   },
+  // The pricing page replaced the simulator (ADR 109); old links keep working.
+  async redirects() {
+    return [
+      { source: "/simulator", destination: "/pricing", permanent: true },
+      { source: "/en/simulator", destination: "/en/pricing", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

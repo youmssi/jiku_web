@@ -21,7 +21,7 @@ export function PaymentReturn({ initial }: { initial: PaymentStatusView }) {
   const { payment, timedOut } = usePaymentStatus(initial.paymentId, initial);
   const state = payment.status === "PENDING" ? (timedOut ? "late" : "pending") : payment.status === "SUCCEEDED" ? "paid" : "failed";
   const back =
-    payment.kind === "TIER" && payment.eventId
+    payment.kind === "GUESTS" && payment.eventId
       ? billingRoute(payment.eventId)
       : payment.kind === "COMMISSION" && payment.eventId
         ? eventOrdersRoute(payment.eventId)
@@ -36,7 +36,7 @@ export function PaymentReturn({ initial }: { initial: PaymentStatusView }) {
           <CardDescription>{t(`${state}.text`)}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">{t(`kind.${kindKey(payment.kind)}`, { tier: payment.tier })}</p>
+          <p className="text-sm text-muted-foreground">{t(`kind.${kindKey(payment.kind)}`, { tier: payment.tier, guests: payment.guests ?? 0 })}</p>
           <p className="mt-1 text-2xl font-semibold">{formatAmount(payment.amountMinor, payment.currency, locale)}</p>
         </CardContent>
         <CardFooter className="justify-center">
@@ -51,11 +51,11 @@ export function PaymentReturn({ initial }: { initial: PaymentStatusView }) {
 
 type ReturnState = "pending" | "late" | "paid" | "failed";
 
-const KINDS = ["TIER", "SUBSCRIPTION", "PACK", "PACK_EXTRA", "WHATSAPP_NUMBER", "COMMISSION"] as const;
+const KINDS = ["GUESTS", "SUBSCRIPTION", "PACK", "PACK_EXTRA", "WHATSAPP_NUMBER", "COMMISSION"] as const;
 type PaymentKind = (typeof KINDS)[number];
 
 function kindKey(kind: string): PaymentKind {
-  return KINDS.find((known) => known === kind) ?? "TIER";
+  return KINDS.find((known) => known === kind) ?? "GUESTS";
 }
 
 function StateIcon({ state }: { state: ReturnState }) {

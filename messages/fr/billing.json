@@ -50,42 +50,41 @@
     "teamPrice": "Prix pour votre équipe",
     "reminders": "Rappels WhatsApp ce mois-ci",
     "remindersUsed": "{sent} sur {limit}",
-    "remindersOut": "Vous avez envoyé les {limit} rappels WhatsApp gratuits de ce mois. Plus aucun rappel ne partira ce mois-ci : passez à une formule payante pour des rappels illimités.",
+    "remindersOut": "Vous avez envoyé les {limit} rappels WhatsApp gratuits de ce mois. Plus aucun rappel ne partira ce mois-ci : passez à Services Pro : 1 000 rappels par personne et par mois.",
     "remindersLow": "{left, plural, one {Il vous reste # rappel WhatsApp gratuit ce mois-ci.} other {Il vous reste # rappels WhatsApp gratuits ce mois-ci.}}"
   },
   "event": {
     "allowanceTitle": "Capacité de cet événement",
-    "allowance": "Palier {tier} : {used, number} invitations sur {allowance, number}",
+    "allowance": "{used, number} invitations sur {allowance, number}",
     "remaining": "{count, plural, one {# invitation restante.} other {# invitations restantes.}}",
     "requestTitle": "Votre demande d'activation",
     "viewInstructions": "Voir les instructions de paiement",
-    "addTitle": "Ajouter de la capacité",
-    "upTo": "Jusqu'à {count, number} invités",
-    "difference": "Vous ne payez que la différence avec votre palier actuel.",
+    "addTitle": "Ajouter des invités",
+    "perGuest": "{amount} par invité, tout compris : réponse dans WhatsApp, billet et contrôle à l'entrée. Toutes taxes comprises.",
+    "guestsLabel": "Nombre total d'invités pour cet événement",
+    "guestsHelp": "Comptez tous vos invités, y compris ceux déjà invités gratuitement.",
+    "guestsInvalid": "Indiquez un nombre entre {min, number} et {max, number}.",
+    "onlyNew": "{count, number} invités sont déjà payés : vous ne payez que les nouveaux.",
+    "estimate": "À payer",
     "activate": "Demander l'activation",
     "requesting": "Demande…",
-    "note": "Vous recevez les instructions de paiement (Mobile Money ou virement) avec une référence. La capacité est débloquée par notre équipe dès réception.",
-    "maxed": "Cet événement a déjà le plus grand palier. Au-delà de {count, number} invités, écrivez-nous.",
+    "note": "Vous recevez les instructions de paiement (Mobile Money ou virement) avec une référence. Les invités sont débloqués par notre équipe dès réception.",
     "managedTitle": "La capacité est gérée par un administrateur",
-    "managedText": "Seuls les administrateurs et propriétaires de l'organisation peuvent ajouter de la capacité. Demandez-leur, ou connectez-vous avec un compte administrateur.",
+    "managedText": "Seuls les administrateurs et propriétaires de l'organisation peuvent ajouter des invités. Demandez-leur, ou connectez-vous avec un compte administrateur.",
     "historyTitle": "Historique des paiements",
     "dialogTitle": "Instructions de paiement",
     "dialogText": "Envoyez le montant ci-dessous en indiquant la référence avec votre transfert.",
     "errors": {
-      "unavailable": "Ce palier n'est pas disponible. Choisissez-en un autre.",
-      "forbidden": "Seul un administrateur de l'organisation peut demander de la capacité.",
-      "owned": "Cet événement a déjà ce palier ou plus.",
+      "unavailable": "Ce nombre d'invités n'est pas valide. Corrigez-le et réessayez.",
+      "forbidden": "Seul un administrateur de l'organisation peut ajouter des invités.",
+      "owned": "Cet événement a déjà ce nombre d'invités payés, ou il est couvert par Pro Organisateur.",
       "failed": "Impossible d'enregistrer votre demande. Réessayez."
     },
-    "surcharge": "dont {amount} de réponses dans WhatsApp",
-    "surchargeOnly": "Réponses dans WhatsApp pour vos invités déjà couverts",
-    "coveredTitle": "Couvert par votre Pack Organisateur",
-    "coveredText": "Cet événement puise dans les invités du mois de votre Pack : aucun palier à acheter. Suivez et complétez votre Pack depuis la page Facturation.",
-    "packTier": "Pack Organisateur",
-    "activateTier": "Demander l'activation du palier {tier}"
+    "coveredTitle": "Couvert par Pro Organisateur",
+    "coveredText": "Cet événement puise dans les invités du mois de votre forfait : rien à acheter. Suivez et complétez votre forfait depuis la page Facturation."
   },
   "instructions": {
-    "title": "Activation demandée : {tier}, {amount}",
+    "title": "Activation demandée : {purchase}, {amount}",
     "text": "Envoyez le montant exact au compte ci-dessous en indiquant cette référence. Notre équipe confirme le paiement et débloque votre accès, en général en quelques heures, et vous recevez un e-mail de confirmation.",
     "copy": "Copier",
     "copied": "Copié",
@@ -94,21 +93,20 @@
     "bank": "Virement bancaire",
     "questions": "Questions",
     "or": "ou",
-    "safety": "L'activation est confirmée par notre équipe dès réception du transfert : elle n'est pas instantanée. Ne communiquez jamais un numéro de carte ou un mot de passe ; seul le transfert, avec la référence, est nécessaire."
+    "safety": "L'activation est confirmée par notre équipe dès réception du transfert : elle n'est pas instantanée. Ne communiquez jamais un numéro de carte ou un mot de passe ; seul le transfert, avec la référence, est nécessaire.",
+    "guests": "{count, plural, one {# invité} other {# invités}}"
   },
   "history": {
     "emptyTitle": "Aucun paiement",
     "emptyText": "Vos paiements apparaissent ici dès qu'ils sont enregistrés.",
     "date": "Date",
-    "event": "Événement",
-    "tier": "Palier",
+    "purchase": "Achat",
     "amount": "Montant",
     "status": "Statut",
     "receipt": "Reçu",
     "invoice": "Facture",
     "download": "Télécharger",
     "none": "—",
-    "subscription": "Abonnement",
     "statuses": {
       "PENDING": "En attente",
       "SUCCEEDED": "Payé",
@@ -141,8 +139,8 @@
     "creditFailed": "Impossible d'émettre la note de crédit. Réessayez."
   },
   "pack": {
-    "title": "Pack Organisateur",
-    "pitch": "Pour les wedding planners, agences et salles : {guests, number} invités par mois sur tous vos événements, tous les modes d'envoi compris, sans palier à acheter.",
+    "title": "Pro Organisateur",
+    "pitch": "Pour les wedding planners, agences et salles : {guests, number} invités par mois sur tous vos événements, tous les modes d'envoi compris, sans rien acheter par événement.",
     "activeUntil": "Actif jusqu'au {date}",
     "inactive": "Non souscrit",
     "month": "Mois en cours : du {start} au {end}",
@@ -150,8 +148,8 @@
     "remaining": "{count, plural, one {# invité restant ce mois-ci.} other {# invités restants ce mois-ci.}}",
     "owed": "{count, plural, one {# invité envoyé le jour J au-delà du mois est dû : il s'ajoute au prochain renouvellement ({amount}).} other {# invités envoyés le jour J au-delà du mois sont dus : ils s'ajoutent au prochain renouvellement ({amount}).}}",
     "price": "{amount} par mois",
-    "subscribe": "Souscrire au Pack",
-    "renew": "Renouveler le Pack",
+    "subscribe": "Souscrire à Pro Organisateur",
+    "renew": "Renouveler Pro Organisateur",
     "cancel": "Annuler",
     "period": {
       "label": "Durée",
@@ -168,8 +166,8 @@
     "requesting": "Demande…",
     "ready": "Vos instructions de paiement sont prêtes.",
     "errors": {
-      "forbidden": "Seul un administrateur de l'organisation peut souscrire au Pack.",
-      "inactive": "Les invités en plus demandent un Pack actif.",
+      "forbidden": "Seul un administrateur de l'organisation peut souscrire à Pro Organisateur.",
+      "inactive": "Les invités en plus demandent Pro Organisateur actif.",
       "failed": "Impossible d'enregistrer votre demande. Réessayez."
     }
   },
@@ -177,10 +175,10 @@
     "title": "Votre propre numéro WhatsApp",
     "pitch": "Vos invités et vos clients reçoivent les messages depuis votre numéro, à votre nom, et vous répondent directement. Meta vous facture ces messages.",
     "price": "{amount} par mois",
-    "included": "Compris dans {plans} et le Pack Organisateur.",
+    "included": "Compris dans {plans} et Pro Organisateur.",
     "source": {
       "PLAN": "Compris dans votre formule",
-      "PACK": "Compris dans votre Pack Organisateur",
+      "PACK": "Compris dans votre Pro Organisateur",
       "ADDON": "Option active jusqu'au {date}",
       "NONE": "Non souscrit"
     },
@@ -209,7 +207,7 @@
     "errors": {
       "forbidden": "Seuls les administrateurs de l'espace peuvent payer.",
       "unavailable": "Cette offre n'est pas disponible pour votre espace.",
-      "conflict": "Cet achat n'est pas possible pour le moment : votre offre actuelle le couvre déjà, ou il demande un Pack actif.",
+      "conflict": "Cet achat n'est pas possible pour le moment : votre offre actuelle le couvre déjà, ou il demande Pro Organisateur actif.",
       "provider": "Le service de paiement ne répond pas. Réessayez dans un instant, ou payez par virement.",
       "failed": "Le paiement n'a pas pu démarrer. Réessayez."
     },
@@ -237,10 +235,10 @@
         "text": "Ce lien ne correspond à aucun paiement de votre espace."
       },
       "kind": {
-        "TIER": "Capacité {tier} pour votre événement",
+        "GUESTS": "{guests, plural, one {# invité} other {# invités}} pour votre événement",
         "SUBSCRIPTION": "Formule {tier}",
-        "PACK": "Pack Organisateur",
-        "PACK_EXTRA": "Invités supplémentaires du Pack",
+        "PACK": "Pro Organisateur",
+        "PACK_EXTRA": "Invités supplémentaires de Pro Organisateur",
         "WHATSAPP_NUMBER": "Votre propre numéro WhatsApp",
         "COMMISSION": "Commission sur les billets vendus"
       }

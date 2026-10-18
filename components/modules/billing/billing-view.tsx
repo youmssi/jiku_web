@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { InfoIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -18,23 +20,18 @@ import { ActivationInstructions } from "./activation-instructions";
 import { requestActivationAction } from "./billing.service";
 import { PayOnlineButton } from "./pay-online-button";
 import { PaymentHistoryTable } from "./payment-history-table";
-import type {
-  EventTierQuote,
-  ManualPaymentInstructions,
-  PaymentHistoryItem,
-  TierCatalog,
-  UsageAllowance,
-} from "./schema";
+import type { EventPricing, ManualPaymentInstructions, PaymentHistoryItem, UsageAllowance } from "./schema";
 
-/** The tier an event reports while an Organizer Pack covers it (ADR 105). */
+/** The tier an event reports while Pro Organisateur covers it (ADR 105). */
 const PACK_TIER = "PACK";
+/** Guests suggested above what the event already uses, when it buys more. */
+const HEADROOM = 50;
 
 interface BillingViewProps {
   eventId: string;
   usage: UsageAllowance;
-  catalog: TierCatalog;
-  /** What each tier this event can still buy costs it, from the server (ADR 105). */
-  quotes: EventTierQuote[];
+  /** The per-guest price in the organization's currency (ADR 109). */
+  pricing: EventPricing;
   payments: PaymentHistoryItem[];
   /** The event's open activation request, when one exists (JIKU-45). */
   activation: ManualPaymentInstructions | null;
@@ -47,8 +44,7 @@ interface BillingViewProps {
 export function BillingView({
   eventId,
   usage,
-  catalog,
-  quotes,
+  pricing,
   payments,
   activation,
   canManage,
@@ -57,15 +53,16 @@ export function BillingView({
   const t = useTranslations("billing.event");
   const locale = useLocale();
   const [request, setRequest] = useState<ManualPaymentInstructions | null>(activation);
-  const paid = catalog.tiers.filter((tier) => tier.maxGuests <= usage.allowance).at(-1);
-  const lastTier = catalog.tiers.at(-1);
+  const [guests, setGuests] = useState(Math.max(usage.paidGuests + 1, usage.invitedGuests + HEADROOM));
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [pendingTier, setPendingTier] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  const valid = Number.isSafeInteger(guests) && guests > usage.paidGuests && guests <= pricing.maxGuestsPerEvent;
+  const estimate = valid ? (guests - usage.paidGuests) * pricing.perGuestMinor : 0;
 
-  function requestTier(tier: string) {
-    setPendingTier(tier);
-    requestActivationAction(eventId, tier).then(({ instructions, error }) => {
-      setPendingTier(null);
+  function requestGuests() {
+    setPending(true);
+    requestActivationAction(eventId, guests).then(({ instructions, error }) => {
+      setPending(false);
       if (error) {
         toast.error(error);
         return;
@@ -83,7 +80,7 @@ export function BillingView({
         <SectionHeading>{t("allowanceTitle")}</SectionHeading>
         <div className="rounded-xl border p-5">
           <p className="text-sm text-muted-foreground">
-            {t("allowance", { tier: usage.tier === PACK_TIER ? t("packTier") : usage.tier, used: usage.invitedGuests, allowance: usage.allowance })}
+            {t("allowance", { used: usage.invitedGuests, allowance: usage.allowance })}
           </p>
           <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-muted">
             <div
@@ -120,50 +117,48 @@ export function BillingView({
       ) : canManage ? (
         <section>
           <SectionHeading>{t("addTitle")}</SectionHeading>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {quotes.length === 0 && lastTier ? (
-              <p className="text-sm text-muted-foreground">{t("maxed", { count: lastTier.maxGuests })}</p>
-            ) : null}
-            {quotes.map((quote) => (
-              <div key={quote.tier} className="flex flex-col justify-between rounded-xl border p-4">
-                <div>
-                  <p className="font-medium">{quote.tier}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {quote.maxGuests <= usage.allowance ? t("surchargeOnly") : t("upTo", { count: quote.maxGuests })}
-                  </p>
-                </div>
-                <div className="mt-4 flex items-end justify-between gap-3">
-                  <div>
-                    <span className="text-lg font-semibold">
-                      {formatAmount(quote.amountMinor, quote.currency, locale)}
-                    </span>
-                    {quote.surchargeMinor > 0 ? (
-                      <p className="text-xs text-muted-foreground">
-                        {t("surcharge", { amount: formatAmount(quote.surchargeMinor, quote.currency, locale) })}
-                      </p>
-                    ) : null}
-                  </div>
-                  <div className="flex flex-wrap justify-end gap-2">
-                    <Button
-                      variant={online ? "outline" : "default"}
-                      aria-label={t("activateTier", { tier: quote.tier })}
-                      onClick={() => requestTier(quote.tier)}
-                      disabled={pendingTier !== null}
-                    >
-                      {pendingTier === quote.tier ? t("requesting") : t("activate")}
-                    </Button>
-                    {online ? (
-                      <PayOnlineButton target={{ kind: "tier", eventId, tier: quote.tier }} />
-                    ) : null}
-                  </div>
-                </div>
+          <div className="rounded-xl border p-5">
+            <p className="text-sm text-muted-foreground">
+              {t("perGuest", { amount: formatAmount(pricing.perGuestMinor, pricing.currency, locale) })}
+            </p>
+            <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="billing-guests">{t("guestsLabel")}</Label>
+                <Input
+                  id="billing-guests"
+                  type="number"
+                  inputMode="numeric"
+                  min={usage.paidGuests + 1}
+                  max={pricing.maxGuestsPerEvent}
+                  value={Number.isFinite(guests) ? guests : ""}
+                  onChange={(event) => setGuests(event.target.valueAsNumber)}
+                  aria-invalid={!valid}
+                  aria-describedby="billing-guests-help"
+                  className="w-40"
+                />
               </div>
-            ))}
+              <div aria-live="polite">
+                <p className="text-xs text-muted-foreground">{t("estimate")}</p>
+                <p className="text-2xl font-semibold tabular-nums">{formatAmount(estimate, pricing.currency, locale)}</p>
+              </div>
+            </div>
+            <p id="billing-guests-help" className="mt-2 text-xs text-muted-foreground">
+              {valid
+                ? usage.paidGuests > 0
+                  ? t("onlyNew", { count: usage.paidGuests })
+                  : t("guestsHelp")
+                : t("guestsInvalid", { min: usage.paidGuests + 1, max: pricing.maxGuestsPerEvent })}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button variant={online ? "outline" : "default"} onClick={requestGuests} disabled={!valid || pending}>
+                {pending ? t("requesting") : t("activate")}
+              </Button>
+              {online ? (
+                <PayOnlineButton target={{ kind: "guests", eventId, guests }} disabled={!valid} />
+              ) : null}
+            </div>
           </div>
-          <p className="mt-3 text-xs text-muted-foreground">
-            {paid ? `${t("difference")} ` : ""}
-            {t("note")}
-          </p>
+          <p className="mt-3 text-xs text-muted-foreground">{t("note")}</p>
         </section>
       ) : (
         <Alert>

@@ -164,7 +164,7 @@
         },
         "INTERACTIVE": {
           "title": "Billet interactif WhatsApp",
-          "description": "L'invité confirme d'un bouton dans WhatsApp et reçoit son billet dans la conversation. Un supplément par invité s'ajoute aux paliers payants."
+          "description": "L'invité confirme d'un bouton dans WhatsApp et reçoit son billet dans la conversation."
         }
       }
     },
@@ -280,7 +280,7 @@
       },
       "allowance": {
         "title": "Quota d'invités atteint",
-        "description": "{invited} invitations utilisées sur {allowance}. Passez au palier supérieur pour inviter davantage.",
+        "description": "{invited} invitations utilisées sur {allowance}. Ajoutez des invités depuis la facturation de l'événement pour inviter davantage.",
         "cta": "Voir les offres"
       }
     },

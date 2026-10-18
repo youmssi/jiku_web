@@ -57,10 +57,10 @@ export function HeroSection({
               </TrackedLink>
             </Button>
             <Button asChild size="lg" variant="outline" className="hidden h-12 rounded-full bg-background/60 px-8 text-base backdrop-blur sm:inline-flex">
-              <Link href={SEO_ROUTES.SIMULATOR}>{content.secondaryCta}</Link>
+              <Link href={SEO_ROUTES.PRICING}>{content.secondaryCta}</Link>
             </Button>
             <Link
-              href={SEO_ROUTES.SIMULATOR}
+              href={SEO_ROUTES.PRICING}
               className="inline-flex min-h-11 items-center text-sm font-medium underline decoration-foreground/30 underline-offset-4 sm:hidden"
             >
               {content.secondaryCta}

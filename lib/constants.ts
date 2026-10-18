@@ -133,10 +133,13 @@ export const COOKIES = {
 // the site stays valid as the product expands beyond a single market.
 /** The step-by-step guides (JIKU-235), served by Fumadocs under each locale. */
 export const DOCS_ROUTE = "/docs";
+/** The guide to writing WhatsApp messages Meta treats as information (JIKU-269). */
+export const WHATSAPP_MESSAGES_GUIDE = `${DOCS_ROUTE}/whatsapp-messages`;
 
 export const SEO_ROUTES = {
   USE_CASES: "/use-cases",
-  SIMULATOR: "/simulator",
+  ORGANIZERS: "/organizers",
+  PRICING: "/pricing",
   FAQ: "/faq",
   BIRTHDAY_CARD: "/birthday-invitation-card",
   BIRTHDAY_TEXTS: "/birthday-invitation-texts",

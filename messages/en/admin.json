@@ -103,13 +103,13 @@
   "payments": {
     "date": "Date",
     "reference": "Reference",
-    "tier": "Tier",
+    "tier": "Purchase",
     "amount": "Amount",
     "provider": "Provider",
     "tenant": "Tenant",
     "markPaid": "Mark paid",
     "confirmTitle": "Confirm {reference}",
-    "confirmText": "Only confirm after the transfer is visible on the receiving account. This unlocks the tier immediately.",
+    "confirmText": "Only confirm after the transfer is visible on the receiving account. This unlocks the purchase immediately.",
     "observedReference": "Observed transaction reference",
     "confirm": "Confirm payment",
     "reject": "Reject",
@@ -272,7 +272,6 @@
     "granted": "Granted",
     "organization": "Organization",
     "event": "Event",
-    "tier": "Tier",
     "expires": "Expires",
     "endEarly": "End early",
     "endTitle": "End this trial",
@@ -295,18 +294,16 @@
     "next": "Next",
     "page": "Page {page} of {count}",
     "status": "Status",
-    "allTiers": "All tiers",
     "expiringChip": "Expiring ≤ 7d",
     "grant": "Grant trial",
     "grantText": "Grant a free allowance for one event. The organizer is notified instantly and sees a countdown to the deadline in their own dashboard.",
-    "upToGuests": "Up to {count, number} guests",
-    "tierHint": "This capacity and price are granted for free: pick deliberately.",
     "cancel": "Cancel",
     "granting": "Granting…",
     "grantedToast": "Trial granted: the organizer has been notified.",
     "pickBoth": "Pick an organization and an event first.",
     "noStatus": "No status",
-    "noTier": "No tier"
+    "guests": "Guests lent",
+    "guestsHint": "The event may invite this many guests until the trial ends. If it buys them first, the trial is converted."
   },
   "billing": {
     "defaultsTitle": "Defaults from configuration",
@@ -321,12 +318,6 @@
     "bankDetails": "Bank transfer details",
     "bankPlaceholder": "Bank, branch, account number, account name…",
     "bankHint": "Free text shown to the organizer. Leave empty to hide the bank option.",
-    "tiersTitle": "Event tiers",
-    "tiersText": "The capacity tiers an organizer can request for an event, ascending by guests. Each price is set by hand in GNF, FCFA (XOF and XAF) and US cents (ADR 105).",
-    "tierName": "Tier name",
-    "maxGuests": "Max guests",
-    "removeTier": "Remove tier",
-    "addTier": "Add tier",
     "plansTitle": "Services plans (per month)",
     "plansText": "Priced for the team: the monthly price covers the included people, then each extra person costs the extra price. Leave the cap empty for no limit, and the extra price at zero for a plan that takes no one more. Yearly payment charges ten months.",
     "planName": "Plan name",
@@ -341,7 +332,9 @@
     "saved": "Billing settings saved.",
     "gnf": "GNF",
     "fcfa": "FCFA",
-    "usdCents": "USD (cents)"
+    "usdCents": "USD (cents)",
+    "perGuestTitle": "Price per event guest",
+    "perGuestText": "What an organizer pays for each guest of an event, all included and tax-inclusive. Set by hand in GNF, FCFA (XOF and XAF) and US cents (ADR 109)."
   },
   "verifications": {
     "filters": {

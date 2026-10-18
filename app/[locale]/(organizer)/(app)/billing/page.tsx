@@ -24,7 +24,7 @@ const MANAGER_ROLES = ["ORGANIZER_OWNER", "ORGANIZER_ADMIN"];
 /**
  * Organizer billing overview: the prepaid subscription (JIKU-90), the formula,
  * expiry, active resources used and included, the renewal banner, the
- * Organizer Pack and the own WhatsApp number (ADR 105), then payment history across every event in the
+ * Pro Organisateur and the own WhatsApp number (ADR 105, ADR 109), then payment history across every event in the
  * tenant and any accounting-grade invoices.
  */
 export default async function BillingPage() {

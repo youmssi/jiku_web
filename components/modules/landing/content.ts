@@ -4,7 +4,7 @@
 // today; what is on its way carries `soon: true` and shows a "Bientôt" badge.
 // Amounts are not written here: pricing captions carry `{price}` and the FAQ's
 // pricing answers are written by `pricingAnswers`, both from `lib/pricing.ts`,
-// the same figures the simulator uses (JIKU-195, JIKU-197).
+// the same figures the pricing page uses (JIKU-195, JIKU-197, ADR 109).
 
 import type { CardStyle } from "@/lib/card-style";
 import { pricingAnswers } from "./price-anchor";
@@ -19,7 +19,7 @@ export interface LandingFeature {
 }
 
 /** Which published price a pricing caption quotes in place of `{price}`. */
-export type LandingPriceAnchor = "firstEventTier" | "teams" | null;
+export type LandingPriceAnchor = "perGuest" | "pack" | "servicesPro" | null;
 
 export interface LandingPricingPlan {
   name: string;
@@ -378,27 +378,27 @@ const fr: LandingContent = {
       {
         name: "Événements",
         price: "Gratuit",
-        details: ["Jusqu'à 100 invités par an", "Puis dès {price} par événement"],
-        anchor: "firstEventTier",
-        cta: "Estimer mon événement",
-        href: "/simulator",
+        details: ["Jusqu'à 100 invités par an", "Puis {price} par invité, tout compris"],
+        anchor: "perGuest",
+        cta: "Estimer mon prix",
+        href: "/pricing",
         highlighted: true,
+      },
+      {
+        name: "Pro Organisateur",
+        price: "Forfait",
+        details: ["{price} par mois pour 1 000 invités", "Wedding planners, agences et salles"],
+        anchor: "pack",
+        cta: "Découvrir l'offre",
+        href: "/organizers",
       },
       {
         name: "Services",
         price: "Gratuit en solo",
-        details: ["Pour une personne, pour toujours", "En équipe dès {price} par mois"],
-        anchor: "teams",
+        details: ["Pour une personne, pour toujours", "Services Pro : {price} par personne et par mois"],
+        anchor: "servicesPro",
         cta: "Voir les offres",
-        href: "/simulator",
-      },
-      {
-        name: "Vente de billets",
-        price: "3 %",
-        details: ["Par billet vendu, rien si rien n'est vendu", "50 premiers billets offerts"],
-        anchor: null,
-        cta: "Estimer ma commission",
-        href: "/simulator",
+        href: "/pricing",
       },
     ],
     enterprise: {
@@ -406,7 +406,7 @@ const fr: LandingContent = {
       cta: "Parlons-en",
       mailSubject: "Jikū - offre Entreprise",
     },
-    note: "En francs guinéens, en francs CFA ou en dollars, taxes comprises. Le simulateur donne le montant exact.",
+    note: "Toutes taxes comprises, en francs guinéens, en francs CFA ou en dollars. Vente de billets : 3 % par billet vendu, les 50 premiers offerts.",
   },
   faq: {
     badge: "Questions fréquentes",
@@ -466,9 +466,9 @@ const fr: LandingContent = {
           { label: "Carte d'invitation", href: "/#cards" },
           { label: "Événements", href: "/#events" },
           { label: "Services", href: "/#services" },
-          { label: "Tarifs", href: "/#pricing" },
+          { label: "Tarifs", href: "/pricing" },
+          { label: "Organisateurs d'événements", href: "/organizers" },
           { label: "Cas d'usage", href: "/use-cases" },
-          { label: "Simulateur", href: "/simulator" },
           { label: "FAQ", href: "/faq" },
         ],
       },
@@ -702,27 +702,27 @@ const en: LandingContent = {
       {
         name: "Events",
         price: "Free",
-        details: ["Up to 100 guests a year", "Then from {price} per event"],
-        anchor: "firstEventTier",
-        cta: "Estimate my event",
-        href: "/simulator",
+        details: ["Up to 100 guests a year", "Then {price} per guest, all included"],
+        anchor: "perGuest",
+        cta: "Estimate my price",
+        href: "/pricing",
         highlighted: true,
+      },
+      {
+        name: "Pro Organizer",
+        price: "Monthly plan",
+        details: ["{price} a month for 1,000 guests", "Wedding planners, agencies and venues"],
+        anchor: "pack",
+        cta: "Discover the plan",
+        href: "/organizers",
       },
       {
         name: "Services",
         price: "Free for one",
-        details: ["For one person, forever", "For a team from {price} a month"],
-        anchor: "teams",
+        details: ["For one person, forever", "Services Pro: {price} per person per month"],
+        anchor: "servicesPro",
         cta: "See the plans",
-        href: "/simulator",
-      },
-      {
-        name: "Ticket sales",
-        price: "3%",
-        details: ["Per ticket sold, nothing if nothing sells", "First 50 tickets free"],
-        anchor: null,
-        cta: "Estimate my commission",
-        href: "/simulator",
+        href: "/pricing",
       },
     ],
     enterprise: {
@@ -730,7 +730,7 @@ const en: LandingContent = {
       cta: "Let's talk",
       mailSubject: "Jikū - Enterprise offer",
     },
-    note: "In Guinean francs, CFA francs or dollars, taxes included. The simulator gives the exact amount.",
+    note: "All taxes included, in Guinean francs, CFA francs or dollars. Ticket sales: 3% per ticket sold, the first 50 free.",
   },
   faq: {
     badge: "Frequently asked",
@@ -790,9 +790,9 @@ const en: LandingContent = {
           { label: "Invitation card", href: "/#cards" },
           { label: "Events", href: "/#events" },
           { label: "Services", href: "/#services" },
-          { label: "Pricing", href: "/#pricing" },
+          { label: "Pricing", href: "/pricing" },
+          { label: "Event organizers", href: "/organizers" },
           { label: "Use cases", href: "/use-cases" },
-          { label: "Simulator", href: "/simulator" },
           { label: "FAQ", href: "/faq" },
         ],
       },

@@ -15,7 +15,7 @@ export interface MarketingNavContent {
 }
 
 /**
- * The sticky header of the standalone marketing pages (use cases, simulator,
+ * The sticky header of the standalone marketing pages (use cases, pricing,
  * FAQ, birthday card, invitation texts): the logo back home, the landing's
  * own navigation from 1024px up so every page offers the same way around
  * (JIKU-234), the other language for the same page at [path], and the two

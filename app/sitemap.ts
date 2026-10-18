@@ -27,7 +27,7 @@ function entries(): MetadataRoute.Sitemap {
 
   const lastModified = new Date();
 
-  // The marketing pages (use-cases, simulator, birthday pages, FAQ) are bilingual with the
+  // The marketing pages (use-cases, pricing, organizers, birthday pages, FAQ) are bilingual with the
   // default locale (fr) serving unprefixed — they carry explicit hreflang
   // alternates, like the landing page. The legal pages are bilingual too.
   return [
@@ -74,30 +74,30 @@ function entries(): MetadataRoute.Sitemap {
       },
     },
     {
-      url: `${origin}${SEO_ROUTES.SIMULATOR}`,
+      url: `${origin}${SEO_ROUTES.PRICING}`,
       lastModified,
       changeFrequency: "monthly",
       priority: 0.8,
       alternates: {
         languages: {
-          fr: `${origin}${SEO_ROUTES.SIMULATOR}`,
-          en: `${origin}/en${SEO_ROUTES.SIMULATOR}`,
+          fr: `${origin}${SEO_ROUTES.PRICING}`,
+          en: `${origin}/en${SEO_ROUTES.PRICING}`,
         },
       },
     },
     {
-      url: `${origin}/en${SEO_ROUTES.SIMULATOR}`,
+      url: `${origin}/en${SEO_ROUTES.PRICING}`,
       lastModified,
       changeFrequency: "monthly",
       priority: 0.8,
       alternates: {
         languages: {
-          fr: `${origin}${SEO_ROUTES.SIMULATOR}`,
-          en: `${origin}/en${SEO_ROUTES.SIMULATOR}`,
+          fr: `${origin}${SEO_ROUTES.PRICING}`,
+          en: `${origin}/en${SEO_ROUTES.PRICING}`,
         },
       },
     },
-    ...[SEO_ROUTES.BIRTHDAY_CARD, SEO_ROUTES.BIRTHDAY_TEXTS].flatMap((path) =>
+    ...[SEO_ROUTES.ORGANIZERS, SEO_ROUTES.BIRTHDAY_CARD, SEO_ROUTES.BIRTHDAY_TEXTS].flatMap((path) =>
       [`${origin}${path}`, `${origin}/en${path}`].map((url) => ({
         url,
         lastModified,

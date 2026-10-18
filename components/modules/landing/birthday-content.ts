@@ -6,7 +6,9 @@
 // evidence. Texts use [brackets] for what the visitor fills in.
 
 import type { LandingCardSample, LandingLocale } from "./content";
+import { EVENT_PRICING } from "@/lib/pricing";
 import type { MarketingNavContent } from "./marketing-header";
+import { formatPrice } from "./price-anchor";
 
 export interface BirthdayCardPageContent {
   meta: { title: string; description: string; keywords: string[] };
@@ -137,7 +139,7 @@ const frCard: BirthdayCardPageContent = {
       {
         question: "La carte d'invitation est-elle gratuite ?",
         answer:
-          "Oui, jusqu'à 100 invités par an. Au-delà, vous payez une fois pour l'événement : le simulateur de tarifs vous donne le prix exact.",
+          `Oui, jusqu'à 100 invités par an. Au-delà, chaque invité coûte ${formatPrice(EVENT_PRICING.perGuest, "fr")}, tout compris : la page des tarifs vous donne le prix exact.`,
       },
       {
         question: "Mes invités doivent-ils installer une application ?",
@@ -238,7 +240,7 @@ const enCard: BirthdayCardPageContent = {
       {
         question: "Is the invitation card free?",
         answer:
-          "Yes, for up to 100 guests a year. Beyond that you pay once for the event: the pricing simulator gives you the exact price.",
+          `Yes, for up to 100 guests a year. Beyond that, each guest costs ${formatPrice(EVENT_PRICING.perGuest, "en")}, all included: the pricing page gives you the exact price.`,
       },
       {
         question: "Do my guests need to install an app?",
