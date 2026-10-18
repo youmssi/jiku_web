@@ -11,6 +11,8 @@ export interface UsageAllowance {
   guestsImported: number;
   invitationsSentEmail: number;
   invitationsSentWhatsapp: number;
+  /** Guests the event bought (JIKU-268); buying more charges only those above it. */
+  paidGuests: number;
 }
 
 export interface PaymentHistoryItem {
@@ -19,17 +21,18 @@ export interface PaymentHistoryItem {
   eventId: string | null;
   eventName: string;
   tier: string;
+  /** GUESTS, SUBSCRIPTION, PACK, PACK_EXTRA, WHATSAPP_NUMBER or COMMISSION. */
+  kind: string;
+  /** Guests the payment bought or settled; null when it bought none. */
+  guests: number | null;
   amountMinor: number;
   currency: string;
   status: string;
   createdAt: string;
 }
 
-/** Event tiers priced in the organization's billing currency (ADR 105). */
-export type TierOption = Schema<"TierOption">;
-export type TierCatalog = Schema<"TierCatalog">;
-/** A tier this event can still buy, priced by the server for it (tier difference + interactive surcharge). */
-export type EventTierQuote = Schema<"EventTierQuote">;
+/** The per-guest price of an event in the organization's billing currency (ADR 109). */
+export type EventPricing = Schema<"EventPricingView">;
 
 export interface PaymentInstruction {
   type: string;
@@ -51,6 +54,8 @@ export interface ManualPaymentInstructions {
   paymentId: string;
   reference: string;
   tier: string;
+  /** Paid guests the event is raised to; null for any other purchase. */
+  guests: number | null;
   amountMinor: number;
   currency: string;
   status: string;
@@ -93,7 +98,7 @@ export type PaymentStatusView = Schema<"PaymentStatusView">;
 
 /** Everything that can be paid online, and what the backend needs to price it. */
 export type CheckoutTarget =
-  | { kind: "tier"; eventId: string; tier: string }
+  | { kind: "guests"; eventId: string; guests: number }
   | { kind: "subscription"; plan: string; months: number }
   | { kind: "pack"; months: number }
   | { kind: "packExtra"; blocks: number }

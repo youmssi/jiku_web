@@ -193,7 +193,7 @@
     "text": "Take several clients in the same slot, for a class or a guided tour. Each client books a place; the slot closes when it is full.",
     "label": "Clients per slot",
     "limit": "Your plan allows up to {max} clients per slot.",
-    "single": "Your plan takes one client at a time. Group sessions come with Teams (10 clients) and Organisation (30 clients).",
+    "single": "Your plan takes one client at a time. Group sessions of up to 30 clients come with Services Pro.",
     "save": "Save",
     "saving": "Saving…",
     "saved": "Group sessions saved."

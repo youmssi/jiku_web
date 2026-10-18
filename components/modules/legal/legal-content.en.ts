@@ -109,10 +109,11 @@ export const LEGAL_EN: LegalDocuments = {
         id: "prix",
         heading: "4. Prices and offers",
         body: [
-          "Current prices are published on the pricing page and in the simulator, in Guinean francs (GNF) for organizations based in Guinea. A US dollar equivalent may be shown for information; only the local-currency amount is binding.",
+          "Current prices are published on the pricing page, in Guinean francs (GNF) for organizations based in Guinea. A US dollar equivalent may be shown for information; only the local-currency amount is binding.",
           [
-            "Services (appointments, bookings, queue): a subscription per person who serves clients, per month, payable monthly or yearly. The Solo offer is free for one person.",
-            "Events with free invitations: free up to 100 guests over a rolling twelve months per organization, then a price per event based on the number of guests. Moving up a tier only charges the difference.",
+            "Services (appointments, bookings, queue): a Services Pro subscription per person who serves clients, per month, payable monthly or yearly. The Solo offer is free for one person. Services Pro WhatsApp reminders are subject to fair use of 1,000 reminders per person per month; beyond that, Jikū may limit sending after warning the organization.",
+            "Pro Organizer: a monthly plan covering 1,000 guests a month across all the organization's events, then a price per guest. Guests not used in a month do not carry over.",
+            "Events with free invitations: free up to 100 guests over a rolling twelve months per organization, then a price per guest of the event, all included. Adding guests only charges the new ones.",
             "Paid tickets: a commission of 3% of the price of each ticket sold, paid to Jikū in tranches before the sale (see section 6).",
             "SMS sends are a paid option whose price is shown before each send.",
           ],

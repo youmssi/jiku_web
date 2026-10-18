@@ -5,7 +5,7 @@
 // numbers, no claims the product cannot evidence; every amount comes from
 // `lib/pricing.ts` through `formatPrice`.
 
-import { EVENT_PRICING, ORGANIZER_PACK } from "@/lib/pricing";
+import { EVENT_PRICING, FREE_OFFER, ORGANIZER_PACK, organizerPackBreakEven } from "@/lib/pricing";
 import type { LandingCardSample, LandingLocale } from "./content";
 import type { MarketingNavContent } from "./marketing-header";
 import { formatPrice } from "./price-anchor";
@@ -38,7 +38,7 @@ export interface OrganizersPageContent {
 
 const pack = (locale: LandingLocale) => formatPrice(ORGANIZER_PACK.monthly, locale);
 const extra = (locale: LandingLocale) => formatPrice(ORGANIZER_PACK.extraPerGuest, locale);
-const firstTier = (locale: LandingLocale) => formatPrice(EVENT_PRICING.tiers[0].price, locale);
+const perGuest = (locale: LandingLocale) => formatPrice(EVENT_PRICING.perGuest, locale);
 const included = (locale: LandingLocale) =>
   new Intl.NumberFormat(locale === "fr" ? "fr-FR" : "en-US").format(ORGANIZER_PACK.includedGuests);
 
@@ -115,7 +115,7 @@ const fr: OrganizersPageContent = {
     ],
   },
   pack: {
-    heading: "Le Pack Organisateur",
+    heading: "Pro Organisateur",
     price: pack("fr"),
     per: "par mois",
     includes: [
@@ -123,12 +123,13 @@ const fr: OrganizersPageContent = {
       `Au-delà, ${extra("fr")} par invité`,
       "Invitations, cartes à partager, billets QR et contrôle d'entrée",
       "Votre équipe d'entrée et vos opérateurs sans supplément",
+      "Votre propre numéro WhatsApp, à votre nom",
     ],
     resell: {
       heading: "Intégrez-le à votre devis",
-      text: "Les invitations numériques et le contrôle d'entrée sont un service que vous apportez à votre client : ajoutez-les à votre devis. Le forfait est remboursé dès vos premiers événements du mois.",
+      text: `Les invitations numériques et le contrôle d'entrée sont un service que vous apportez à votre client : ajoutez-les à votre devis. Dès ${new Intl.NumberFormat("fr-FR").format(organizerPackBreakEven("GNF"))} invités par mois, le forfait coûte moins que de payer chaque événement.`,
     },
-    note: `Vous organisez un seul événement ? Jusqu'à ${EVENT_PRICING.freeTierGuests} invités sur l'année, c'est gratuit ; au-delà, un montant unique par événement, à partir de ${firstTier("fr")}.`,
+    note: `Vous organisez un seul événement ? Jusqu'à ${FREE_OFFER.guestsPerYear} invités sur l'année, c'est gratuit ; au-delà, ${perGuest("fr")} par invité, tout compris. Prix toutes taxes comprises.`,
   },
   faq: {
     heading: "Les questions des organisateurs",
@@ -145,7 +146,7 @@ const fr: OrganizersPageContent = {
       {
         question: "Puis-je gérer plusieurs clients en même temps ?",
         answer:
-          "Oui. Chaque événement a sa propre liste, ses catégories, ses contrôleurs et son suivi, et le Pack Organisateur couvre tous vos événements du mois.",
+          "Oui. Chaque événement a sa propre liste, ses catégories, ses contrôleurs et son suivi, et Pro Organisateur couvre tous vos événements du mois.",
       },
       {
         question: "Jikū touche-t-il à l'argent de mes clients ?",
@@ -247,7 +248,7 @@ const en: OrganizersPageContent = {
     ],
   },
   pack: {
-    heading: "The Organizer Pack",
+    heading: "Pro Organizer",
     price: pack("en"),
     per: "per month",
     includes: [
@@ -255,12 +256,13 @@ const en: OrganizersPageContent = {
       `Beyond that, ${extra("en")} per guest`,
       "Invitations, shareable cards, QR tickets and door check-in",
       "Your door staff and operators at no extra cost",
+      "Your own WhatsApp number, in your name",
     ],
     resell: {
       heading: "Put it in your quote",
-      text: "Digital invitations and door check-in are a service you bring to your client: add them to your quote. The plan pays for itself with your first events of the month.",
+      text: `Digital invitations and door check-in are a service you bring to your client: add them to your quote. From ${new Intl.NumberFormat("en-US").format(organizerPackBreakEven("GNF"))} guests a month, the plan costs less than paying for each event.`,
     },
-    note: `Running a single event? Up to ${EVENT_PRICING.freeTierGuests} guests a year is free; beyond that, one payment per event, from ${firstTier("en")}.`,
+    note: `Running a single event? Up to ${FREE_OFFER.guestsPerYear} guests a year is free; beyond that, ${perGuest("en")} per guest, all included. Prices include all taxes.`,
   },
   faq: {
     heading: "Organizers' questions",
@@ -277,7 +279,7 @@ const en: OrganizersPageContent = {
       {
         question: "Can I handle several clients at once?",
         answer:
-          "Yes. Each event has its own list, categories, door staff and tracking, and the Organizer Pack covers all your events of the month.",
+          "Yes. Each event has its own list, categories, door staff and tracking, and Pro Organizer covers all your events of the month.",
       },
       {
         question: "Does Jikū touch my clients' money?",

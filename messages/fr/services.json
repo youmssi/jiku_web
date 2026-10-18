@@ -193,7 +193,7 @@
     "text": "Recevez plusieurs clients sur le même créneau, pour un cours ou une visite guidée. Chaque client réserve sa place ; le créneau se ferme quand il est complet.",
     "label": "Clients par créneau",
     "limit": "Votre offre permet jusqu'à {max} clients par créneau.",
-    "single": "Votre offre reçoit un client à la fois. Les séances collectives sont incluses dans Teams (10 clients) et Organisation (30 clients).",
+    "single": "Votre offre reçoit un client à la fois. Les séances collectives jusqu'à 30 clients sont incluses dans Services Pro.",
     "save": "Enregistrer",
     "saving": "Enregistrement…",
     "saved": "Séances enregistrées."

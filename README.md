@@ -100,7 +100,7 @@ app/
 │   ├── widget/[token]        embeddable booking widget
 │   ├── docs/                 step-by-step guides (Fumadocs, content in content/docs/<locale>/)
 │   ├── legal, privacy, terms legal notice, privacy policy, terms
-│   └── page.tsx              landing page, simulator, use cases, FAQ, legal pages
+│   └── page.tsx              landing page, pricing, use cases, FAQ, legal pages
 └── api/                      route handlers for file downloads (receipts, exports, certificates)
 ```
 

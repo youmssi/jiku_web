@@ -278,7 +278,7 @@ export function BirthdayCardPage({
                   variant="outline"
                   className={CLOSING_OUTLINE}
                 >
-                  <Link href={SEO_ROUTES.SIMULATOR}>
+                  <Link href={SEO_ROUTES.PRICING}>
                     {content.cta.secondary}
                   </Link>
                 </Button>

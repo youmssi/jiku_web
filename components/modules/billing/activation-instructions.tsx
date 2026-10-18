@@ -36,7 +36,10 @@ export function ActivationInstructions({
   return (
     <div className="rounded-xl border border-blue-300 bg-blue-50 p-5 text-sm text-blue-950 dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-100">
       <p className="font-semibold">
-        {t("title", { tier: instructions.tier, amount: formatAmount(instructions.amountMinor, instructions.currency, locale) })}
+        {t("title", {
+          purchase: instructions.guests ? t("guests", { count: instructions.guests }) : instructions.tier,
+          amount: formatAmount(instructions.amountMinor, instructions.currency, locale),
+        })}
       </p>
       <p className="mt-2">
         {t("text")}

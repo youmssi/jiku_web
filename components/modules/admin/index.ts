@@ -12,8 +12,6 @@ export { AdminPage } from "./admin-page";
 export type {
   AdminAgreement,
   AdminPayment,
-  AdminTierCatalog,
-  AdminTierOption,
   AdminTrial,
   AdminTrialPage,
   AdminTrialStats,

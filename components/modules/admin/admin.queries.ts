@@ -8,7 +8,6 @@ import type {
   AdminAgreement,
   AdminBillingSettingsView,
   AdminPayment,
-  AdminTierCatalog,
   AdminTrialPage,
   AdminTrialStats,
   AdminVerification,
@@ -53,7 +52,6 @@ const DESK_PAGE_SIZE = 50;
 const AUDIT_PAGE_SIZE = 100;
 const TRIALS_PAGE_SIZE = 25;
 
-const EMPTY_CATALOG: AdminTierCatalog = { currency: "", tiers: [] };
 
 /** Confirms the admin session is still accepted, for pages that load nothing up front. */
 export async function requireAdminSession(): Promise<void> {
@@ -74,7 +72,7 @@ export function loadPayments(status = "PENDING"): Promise<AdminPayment[]> {
 }
 
 export async function loadTrials(page: number) {
-  const [trialsPage, stats, catalog] = await Promise.all([
+  const [trialsPage, stats] = await Promise.all([
     adminRead<AdminTrialPage>(`/admin/trials?${query({ page, size: TRIALS_PAGE_SIZE })}`, {
       entries: [],
       total: 0,
@@ -87,17 +85,16 @@ export async function loadTrials(page: number) {
       convertedThisMonth: 0,
       conversionRatePercent: null,
     }),
-    adminRead<AdminTierCatalog>("/admin/billing/tiers", EMPTY_CATALOG),
   ]);
-  return { trialsPage, stats, catalog };
+  return { trialsPage, stats };
 }
 
 export async function loadAgreements() {
-  const [agreements, catalog] = await Promise.all([
+  const [agreements, settings] = await Promise.all([
     adminRead<AdminAgreement[]>(`/admin/agreements?${query({ size: DESK_PAGE_SIZE })}`, []),
-    adminRead<AdminTierCatalog>("/admin/billing/tiers", EMPTY_CATALOG),
+    adminRead<AdminBillingSettingsView | null>("/admin/billing/settings", null),
   ]);
-  return { agreements, catalog };
+  return { agreements, currency: settings?.currency ?? "" };
 }
 
 const FEEDBACK_PAGE_SIZE = 50;

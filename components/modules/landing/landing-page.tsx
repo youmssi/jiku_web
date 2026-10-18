@@ -26,7 +26,7 @@ const SERVICE_ICONS = [Link2, BellRing, ListOrdered, ScanLine];
  * order a visitor decides (JIKU-195): the promise with the product, what it
  * replaces, the shareable card, the two uses, trust, who it is for, the price,
  * the doubts, and the action. Every idea is said once; the detail lives on
- * the use-cases page, the simulator and the FAQ.
+ * the use-cases page, the pricing page and the FAQ.
  */
 export function LandingPage({ locale, siteUrl }: { locale: LandingLocale; siteUrl: string }) {
   const content = LANDING_CONTENT[locale];

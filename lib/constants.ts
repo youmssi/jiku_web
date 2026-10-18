@@ -137,7 +137,7 @@ export const DOCS_ROUTE = "/docs";
 export const SEO_ROUTES = {
   USE_CASES: "/use-cases",
   ORGANIZERS: "/organizers",
-  SIMULATOR: "/simulator",
+  PRICING: "/pricing",
   FAQ: "/faq",
   BIRTHDAY_CARD: "/birthday-invitation-card",
   BIRTHDAY_TEXTS: "/birthday-invitation-texts",

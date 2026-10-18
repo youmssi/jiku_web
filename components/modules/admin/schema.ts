@@ -33,30 +33,11 @@ export interface AdminPayment {
   createdAt: string;
 }
 
-/**
- * The configured pricing grid, read from the backend (JIKU-66) rather than
- * restated here — the operator must be offered exactly the tiers the platform
- * is running, and a second copy in the UI would drift the next time pricing
- * changes in configuration.
- */
 /** One price in the three billing currencies (ADR 105); USD is in cents. */
 export interface AdminPriceList {
   gnf: number;
   fcfa: number;
   usdCents: number;
-}
-
-export interface AdminTierOption {
-  name: string;
-  maxGuests: number;
-  price: AdminPriceList;
-  /** The GNF price, kept by the API for older clients. */
-  priceMinor: number;
-}
-
-export interface AdminTierCatalog {
-  currency: string;
-  tiers: AdminTierOption[];
 }
 
 export interface AdminTrial {
@@ -65,7 +46,7 @@ export interface AdminTrial {
   tenantName: string | null;
   eventId: string;
   eventName: string | null;
-  tier: string;
+  /** Guests the trial lends the event. */
   grantedAllowance: number;
   expiresAt: string;
   status: string;
@@ -182,7 +163,7 @@ export const grantTrialSchema = z.object({
   event: z
     .union([adminEventReferenceSchema, z.null()])
     .refine((event) => event !== null, "pickEvent"),
-  tier: z.string().min(1, "pickTier"),
+  guests: z.number({ invalid_type_error: "guestsRange" }).int("guestsRange").min(1, "guestsRange").max(100_000, "guestsRange"),
   expiresAt: z
     .string()
     .min(1, "required")
@@ -198,7 +179,7 @@ export const grantTrialSchema = z.object({
 export interface GrantTrialFormValues {
   tenant: TenantDirectoryEntry | null;
   event: AdminEventSummary | null;
-  tier: string;
+  guests: number;
   expiresAt: string;
 }
 
@@ -261,7 +242,8 @@ export interface AdminSubscriptionPlanOption {
 export interface AdminBillingSettingsView {
   currency: string;
   payee: AdminPayeeDetails;
-  tiers: AdminTierOption[];
+  /** Tax-inclusive price of one event guest (ADR 109). */
+  perGuest: AdminPriceList;
   subscriptionPlans: AdminSubscriptionPlanOption[];
   managedInDatabase: boolean;
 }
@@ -283,15 +265,7 @@ export const adminBillingSettingsSchema = z.object({
     mobileMoneyOperator: z.string().trim().max(40, "tooLong"),
     bankDetails: z.string().max(2000, "tooLong"),
   }),
-  tiers: z
-    .array(
-      z.object({
-        name: z.string().trim().min(1, "required").max(40, "tooLong"),
-        maxGuests: z.coerce.number().int("wholeNumber").positive("positive"),
-        price: priceListSchema,
-      }),
-    )
-    .min(1, "atLeastOneTier"),
+  perGuest: priceListSchema,
   subscriptionPlans: z
     .array(
       z.object({

@@ -108,10 +108,11 @@ export const LEGAL_FR: LegalDocuments = {
         id: "prix",
         heading: "4. Prix et offres",
         body: [
-          "Les prix en vigueur sont publiés sur la page des prix et dans le simulateur, en francs guinéens (GNF) pour les organisations établies en Guinée. Un équivalent en dollars peut être affiché à titre indicatif ; seul le montant en monnaie locale fait foi.",
+          "Les prix en vigueur sont publiés sur la page des tarifs, en francs guinéens (GNF) pour les organisations établies en Guinée. Un équivalent en dollars peut être affiché à titre indicatif ; seul le montant en monnaie locale fait foi.",
           [
-            "Services (rendez-vous, réservation, file d'attente) : abonnement par personne qui sert les clients et par mois, payable au mois ou à l'année. L'offre Solo est gratuite pour une personne.",
-            "Événements avec invitations gratuites : gratuits jusqu'à 100 invités sur douze mois glissants par organisation, puis un prix par événement selon le nombre d'invités. Passer au palier supérieur ne fait payer que la différence.",
+            "Services (rendez-vous, réservation, file d'attente) : abonnement Services Pro par personne qui sert les clients et par mois, payable au mois ou à l'année. L'offre Solo est gratuite pour une personne. Les rappels WhatsApp de Services Pro relèvent d'un usage raisonnable de 1 000 rappels par personne et par mois ; au-delà, Jikū peut limiter les envois après en avoir averti l'organisation.",
+            "Pro Organisateur : forfait mensuel qui couvre 1 000 invités par mois sur tous les événements de l'organisation, puis un prix par invité. Les invités non utilisés d'un mois ne sont pas reportés.",
+            "Événements avec invitations gratuites : gratuits jusqu'à 100 invités sur douze mois glissants par organisation, puis un prix par invité de l'événement, tout compris. Ajouter des invités ne fait payer que les nouveaux.",
             "Billets payants : une commission de 3 % du prix de chaque billet vendu, payée à Jikū par tranche avant la vente (voir l'article 6).",
             "Les envois par SMS sont une option payante dont le prix est affiché avant chaque envoi.",
           ],

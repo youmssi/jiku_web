@@ -169,7 +169,7 @@
     "alreadyPaid": "This ticket owes nothing any more: it was already paid.",
     "markPaidFailed": "The payment could not be recorded. Try again.",
     "noChannel": "Choose at least one channel.",
-    "allowanceReached": "This event's guest allowance is reached. Move to the next tier to invite more guests.",
+    "allowanceReached": "This event's guest allowance is reached. Add guests from the event's billing page to invite more.",
     "sendFailed": "The invitations could not be sent. Try again.",
     "categoryFull": "This category is full. Raise its capacity or choose another one.",
     "categoryFailed": "The category could not be changed. Try again.",

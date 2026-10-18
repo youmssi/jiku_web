@@ -37,21 +37,18 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { FormFieldError, Stat } from "@/components/shared";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { ActionDialog } from "./action-dialog";
 import { endTrialAction, grantTrialAction } from "./admin.service";
-import { formatAmount, IdentityCell, TrialStatusBadge } from "./admin-ui";
+import { IdentityCell, TrialStatusBadge } from "./admin-ui";
 import { TenantCombobox } from "./tenant-combobox";
 import { EventCombobox } from "./event-combobox";
 import {
   grantTrialSchema,
-  type AdminTierCatalog,
   type AdminTrial,
   type AdminTrialPage,
   type AdminTrialStats,
@@ -138,9 +135,8 @@ function useColumns(): ColumnDef<DataTableFeatures, AdminTrial>[] {
     ),
   },
   {
-    accessorKey: "tier",
-    header: t("tier"),
-    filterFn: "includesString",
+    accessorKey: "grantedAllowance",
+    header: t("guests"),
   },
   {
     accessorKey: "expiresAt",
@@ -216,11 +212,9 @@ function useColumns(): ColumnDef<DataTableFeatures, AdminTrial>[] {
 export function TrialsView({
   trialsPage,
   stats,
-  catalog,
 }: {
   trialsPage: AdminTrialPage;
   stats: AdminTrialStats;
-  catalog: AdminTierCatalog;
 }) {
   const t = useTranslations("admin.trials");
   const columns = useColumns();
@@ -232,7 +226,7 @@ export function TrialsView({
 
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{t("intro")}</p>
-        <GrantTrialDialog catalog={catalog} />
+        <GrantTrialDialog />
       </div>
 
       {trials.length === 0 ? (
@@ -251,7 +245,7 @@ export function TrialsView({
             columns={columns}
             data={trials}
             pageSize={trialsPage.size}
-            toolbar={(table) => <TrialsToolbar table={table} catalog={catalog} />}
+            toolbar={(table) => <TrialsToolbar table={table} />}
           />
           <TrialsPager page={trialsPage.page} size={trialsPage.size} total={trialsPage.total} />
         </>
@@ -333,15 +327,13 @@ function TrialsPager({ page, size, total }: { page: number; size: number; total:
 
 /**
  * Client-side filters of the trials table: the page is not server-filtered
- * beyond pagination, so the table owns status, tier and urgency filtering
+ * beyond pagination, so the table owns status and urgency filtering
  * within the current page, like the organizer's data tables.
  */
 function TrialsToolbar({
   table,
-  catalog,
 }: {
   table: import("@tanstack/react-table").Table<DataTableFeatures, AdminTrial>;
-  catalog: AdminTierCatalog;
 }) {
   const t = useTranslations("admin.trials");
   const statusLabel = useTranslations("admin.trialStatus");
@@ -364,7 +356,6 @@ function TrialsToolbar({
         emptyMessage={t("noStatus")}
         className="w-44"
       />
-      <TierFilter table={table} catalog={catalog} />
       <Button
         type="button"
         size="sm"
@@ -382,43 +373,17 @@ function TrialsToolbar({
   );
 }
 
-function TierFilter({
-  table,
-  catalog,
-}: {
-  table: import("@tanstack/react-table").Table<DataTableFeatures, AdminTrial>;
-  catalog: AdminTierCatalog;
-}) {
-  const t = useTranslations("admin.trials");
-  const [tier, setTier] = useState("ALL");
-
-  return (
-    <Combobox<string>
-      value={tier === "ALL" ? null : tier}
-      onValueChange={(next) => {
-        setTier(next ?? "ALL");
-        table.getColumn("tier")?.setFilterValue(next ?? "");
-      }}
-      items={catalog.tiers.map((option) => option.name)}
-      itemKey={(name) => name}
-      itemLabel={(name) => name}
-      placeholder={t("allTiers")}
-      searchPlaceholder={t("tier")}
-      emptyMessage={t("noTier")}
-      className="w-44"
-    />
-  );
-}
-
 /**
  * Grant-a-trial flow, in a dialog so it doesn't compete for space with the
  * overview strip or the table — the same pattern as inviting a teammate.
  */
-function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
+/** Guests a new trial lends unless the admin changes it. */
+const DEFAULT_TRIAL_GUESTS = 300;
+
+function GrantTrialDialog() {
   const t = useTranslations("admin.trials");
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const defaultTier = catalog.tiers[0]?.name ?? "";
   const {
     control,
     handleSubmit,
@@ -432,7 +397,7 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
     defaultValues: {
       tenant: null,
       event: null,
-      tier: defaultTier,
+      guests: DEFAULT_TRIAL_GUESTS,
       expiresAt: "",
     },
   });
@@ -440,7 +405,7 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
   const tenant = useWatch({ control, name: "tenant" });
 
   function resetForm() {
-    reset({ tenant: null, event: null, tier: defaultTier, expiresAt: "" });
+    reset({ tenant: null, event: null, guests: DEFAULT_TRIAL_GUESTS, expiresAt: "" });
   }
 
   async function onSubmit(values: GrantTrialFormValues) {
@@ -451,7 +416,7 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
     const result = await grantTrialAction({
       tenantId: values.tenant.id,
       eventId: values.event.id,
-      tier: values.tier,
+      guests: values.guests,
       expiresAt: new Date(values.expiresAt).toISOString(),
     });
     if (!result.ok) {
@@ -521,35 +486,20 @@ function GrantTrialDialog({ catalog }: { catalog: AdminTierCatalog }) {
           />
           <Controller
             control={control}
-            name="tier"
+            name="guests"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>{t("tier")}</FieldLabel>
-                <RadioGroup
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="grid grid-cols-1 gap-2 sm:grid-cols-3"
-                >
-                  {catalog.tiers.map((option) => (
-                    <Label
-                      key={option.name}
-                      htmlFor={`trial-tier-${option.name}`}
-                      className="flex cursor-pointer flex-col gap-1.5 rounded-lg border p-3 text-sm font-normal transition-colors has-data-checked:border-foreground has-data-checked:ring-1 has-data-checked:ring-foreground"
-                    >
-                      <span className="flex items-center justify-between">
-                        <span className="font-medium">{option.name}&nbsp;{" "}</span>
-                        <RadioGroupItem value={option.name} id={`trial-tier-${option.name}`} />
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {t("upToGuests", { count: option.maxGuests })}
-                      </span>
-                      <span className="text-sm font-semibold">
-                        {formatAmount(option.priceMinor, catalog.currency)}
-                      </span>
-                    </Label>
-                  ))}
-                </RadioGroup>
-                <FieldDescription>{t("tierHint")}</FieldDescription>
+                <FieldLabel htmlFor="trial-guests">{t("guests")}</FieldLabel>
+                <Input
+                  id="trial-guests"
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  value={Number.isFinite(field.value) ? field.value : ""}
+                  onChange={(event) => field.onChange(event.target.valueAsNumber)}
+                  className="w-40"
+                />
+                <FieldDescription>{t("guestsHint")}</FieldDescription>
                 <FormFieldError error={fieldState.error} />
               </Field>
             )}
