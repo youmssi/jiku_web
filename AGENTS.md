@@ -143,7 +143,8 @@ Step-by-step guides are MDX files in `content/docs/<locale>/` (same file name in
 `fr/` and `en/`, ordered by `meta.json`), rendered by Fumadocs through the
 `components/modules/docs` module at `/docs` and `/en/docs`. Name screens and
 buttons exactly as the app's message catalogs do, and update the guide in the
-same PR as a flow it describes.
+same PR as a flow it describes. Screenshots live in `public/guides/<locale>/` as WebP, taken from the real app
+with neutral sample data, and are retaken when the screen they show changes.
 
 ## UX (ux-expert skill)
 
