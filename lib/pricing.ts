@@ -17,7 +17,7 @@ export interface PriceList {
 }
 
 /** A price in [currency]'s minor unit: whole francs, or US cents. */
-export function priceIn(price: PriceList, currency: PricingCurrency): number {
+function priceIn(price: PriceList, currency: PricingCurrency): number {
   if (currency === "GNF") return price.gnf;
   if (currency === "FCFA") return price.fcfa;
   return price.usdCents;
@@ -52,9 +52,6 @@ export const SERVICES_PRO = {
 export const OWN_WHATSAPP_NUMBER = {
   monthly: { gnf: 100_000, fcfa: 7_000, usdCents: 1_200 } satisfies PriceList,
 } as const;
-
-/** Paying a year of a Pro offer charges ten of the twelve months: two months free. */
-export const YEARLY_CHARGED_MONTHS = 10;
 
 /** 3 % of each ticket sold; the first tranche of 50 tickets is free. */
 export const TICKET_SALES = {
