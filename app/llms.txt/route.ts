@@ -2,6 +2,7 @@ import {
   BIRTHDAY_CARD_CONTENT,
   BIRTHDAY_TEXTS_CONTENT,
   LANDING_CONTENT,
+  ORGANIZERS_CONTENT,
   SIMULATOR_CONTENT,
   USE_CASES_CONTENT,
 } from "@/components/modules/landing";
@@ -34,6 +35,7 @@ export function GET(): Response {
     link(fr.meta.title, "/", fr.meta.description),
     link(USE_CASES_CONTENT.fr.meta.title, SEO_ROUTES.USE_CASES, USE_CASES_CONTENT.fr.meta.description),
     link(SIMULATOR_CONTENT.fr.meta.title, SEO_ROUTES.SIMULATOR, SIMULATOR_CONTENT.fr.meta.description),
+    link(ORGANIZERS_CONTENT.fr.meta.title, SEO_ROUTES.ORGANIZERS, ORGANIZERS_CONTENT.fr.meta.description),
     link(BIRTHDAY_CARD_CONTENT.fr.meta.title, SEO_ROUTES.BIRTHDAY_CARD, BIRTHDAY_CARD_CONTENT.fr.meta.description),
     link(BIRTHDAY_TEXTS_CONTENT.fr.meta.title, SEO_ROUTES.BIRTHDAY_TEXTS, BIRTHDAY_TEXTS_CONTENT.fr.meta.description),
     link(fr.faq.page.title, SEO_ROUTES.FAQ, fr.faq.page.description),
@@ -43,6 +45,7 @@ export function GET(): Response {
     link(en.meta.title, "/en", en.meta.description),
     link(USE_CASES_CONTENT.en.meta.title, `/en${SEO_ROUTES.USE_CASES}`, USE_CASES_CONTENT.en.meta.description),
     link(SIMULATOR_CONTENT.en.meta.title, `/en${SEO_ROUTES.SIMULATOR}`, SIMULATOR_CONTENT.en.meta.description),
+    link(ORGANIZERS_CONTENT.en.meta.title, `/en${SEO_ROUTES.ORGANIZERS}`, ORGANIZERS_CONTENT.en.meta.description),
     link(BIRTHDAY_CARD_CONTENT.en.meta.title, `/en${SEO_ROUTES.BIRTHDAY_CARD}`, BIRTHDAY_CARD_CONTENT.en.meta.description),
     link(BIRTHDAY_TEXTS_CONTENT.en.meta.title, `/en${SEO_ROUTES.BIRTHDAY_TEXTS}`, BIRTHDAY_TEXTS_CONTENT.en.meta.description),
     link(en.faq.page.title, `/en${SEO_ROUTES.FAQ}`, en.faq.page.description),
