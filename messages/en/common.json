@@ -72,5 +72,11 @@
   "live": {
     "label": "Live",
     "hint": "This screen updates as soon as something changes."
+  },
+  "messageCheck": {
+    "information": "Informational message: it will go out as such.",
+    "marketing": "Marketing risk: remove {words}, or the message will be blocked.",
+    "word": "“{word}”",
+    "guide": "Writing a message that goes through"
   }
 }
