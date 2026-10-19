@@ -51,7 +51,10 @@
     "reminders": "WhatsApp reminders this month",
     "remindersUsed": "{sent} of {limit}",
     "remindersOut": "You have sent this month's {limit} free WhatsApp reminders. No more reminders go out this month: move to Services Pro: 1,000 reminders per person a month.",
-    "remindersLow": "{left, plural, one {You have # free WhatsApp reminder left this month.} other {You have # free WhatsApp reminders left this month.}}"
+    "remindersLow": "{left, plural, one {You have # free WhatsApp reminder left this month.} other {You have # free WhatsApp reminders left this month.}}",
+    "remindersOutPaid": "You have sent this month's {limit} WhatsApp reminders from the Jikū number. Reminders go by the service's other channels until next month. Connect your own WhatsApp number to have no limit.",
+
+    "remindersLowPaid": "{left, plural, one {You have # WhatsApp reminder left this month from the Jikū number.} other {You have # WhatsApp reminders left this month from the Jikū number.}}"
   },
   "event": {
     "allowanceTitle": "This event's capacity",
@@ -65,6 +68,7 @@
     "guestsHelp": "Count all your guests, including those already invited for free.",
     "guestsInvalid": "Enter a number between {min, number} and {max, number}.",
     "onlyNew": "{count, number} guests are already paid for: you only pay for the new ones.",
+    "freeDeducted": "{count, number} free guests are taken off: you only pay for those beyond.",
     "estimate": "To pay",
     "activate": "Request activation",
     "requesting": "Requesting…",

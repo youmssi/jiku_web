@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { LANDING_CONTENT, LandingPage } from "@/components/modules/landing";
 import { languageAlternates, SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
+import { visitorCurrency } from "@/lib/visitor-currency";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -55,5 +56,5 @@ export default async function HomePage({ params }: Readonly<PageProps>) {
     ? locale
     : routing.defaultLocale;
   setRequestLocale(resolved);
-  return <LandingPage locale={resolved} siteUrl={siteUrl()} />;
+  return <LandingPage locale={resolved} siteUrl={siteUrl()} currency={await visitorCurrency(resolved)} />;
 }

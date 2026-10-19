@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { ORGANIZERS_CONTENT, OrganizersPage } from "@/components/modules/landing";
+import { ORGANIZERS_CONTENT, OrganizersPage, organizersContent } from "@/components/modules/landing";
 import { localizedPageMetadata, siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 import { SEO_ROUTES } from "@/lib/constants";
+import { visitorCurrency } from "@/lib/visitor-currency";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -31,5 +32,6 @@ export default async function OrganizersPageRoute({ params }: Readonly<PageProps
   const { locale } = await params;
   const resolved = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
   setRequestLocale(resolved);
-  return <OrganizersPage content={ORGANIZERS_CONTENT[resolved]} locale={resolved} siteUrl={siteUrl()} />;
+  const content = organizersContent(resolved, await visitorCurrency(resolved));
+  return <OrganizersPage content={content} locale={resolved} siteUrl={siteUrl()} />;
 }

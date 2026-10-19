@@ -127,6 +127,9 @@ export const COOKIES = {
   REFRESH_TOKEN: "jiku_refresh_token",
   // Separate cookie so an admin session never crosses into organizer routes.
   ADMIN_ACCESS_TOKEN: "jiku_admin_access_token",
+  // The currency a visitor picked on the marketing pages (JIKU-270); readable
+  // by the page script, holds no personal data.
+  CURRENCY: "jiku_currency",
 } as const;
 
 // Public marketing pages, deliberately generic: no location-targeted slugs, so

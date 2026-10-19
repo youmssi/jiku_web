@@ -1,7 +1,8 @@
 import type { PricingCurrency } from "@/lib/pricing";
 import type { LandingLocale } from "./content";
+import { formatAmount } from "./price-anchor";
 
-/** Amounts in the pricing calculator, in the currency the visitor picked. */
+/** Amounts in the pricing calculator, in the currency the page quotes. */
 export interface PriceFormat {
   currency: PricingCurrency;
   /** An amount in the currency's minor unit (whole francs, or US cents). */
@@ -11,20 +12,11 @@ export interface PriceFormat {
 
 export function priceFormat(locale: LandingLocale, currency: PricingCurrency): PriceFormat {
   const tag = locale === "fr" ? "fr-FR" : "en-US";
-  const number = (value: number) => value.toLocaleString(tag, { maximumFractionDigits: 0 });
-  const dollars = (cents: number) =>
-    (cents / 100).toLocaleString(tag, { style: "currency", currency: "USD", maximumFractionDigits: cents % 100 === 0 ? 0 : 2 });
   return {
     currency,
-    money: (amountMinor) =>
-      currency === "USD" ? dollars(amountMinor) : `${number(amountMinor)} ${currency === "GNF" ? "GNF" : "FCFA"}`,
-    number,
+    money: (amountMinor) => formatAmount(amountMinor, locale, currency),
+    number: (value) => value.toLocaleString(tag, { maximumFractionDigits: 0 }),
   };
-}
-
-/** The currency a visitor most likely pays in: Guinean francs in French, dollars in English. */
-export function defaultCurrency(locale: LandingLocale): PricingCurrency {
-  return locale === "fr" ? "GNF" : "USD";
 }
 
 /** Replaces `{name}` placeholders in a content string. */

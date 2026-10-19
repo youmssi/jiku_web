@@ -4349,6 +4349,8 @@ export interface components {
             /** Format: int64 */
             allowance?: number;
             /** Format: int64 */
+            freeGuests?: number;
+            /** Format: int64 */
             guestsImported?: number;
             /** Format: int64 */
             invitationsSentEmail?: number;
@@ -4373,7 +4375,7 @@ export interface components {
             /** Format: date-time */
             packExpiresAt?: string | null;
             subscription?: components["schemas"]["SubscriptionStatusSummary"] | null;
-            whatsAppReminders?: components["schemas"]["ReminderAllowance"] | null;
+            whatsAppReminders?: components["schemas"]["ReminderAllowance"];
         };
         BookingLinkResponse: {
             shortCode?: string;
@@ -4694,6 +4696,8 @@ export interface components {
             /** Format: int64 */
             amountMinor?: number;
             currency?: string;
+            /** Format: int64 */
+            freeGuests?: number;
             /** Format: int64 */
             guests?: number;
             /** Format: int64 */

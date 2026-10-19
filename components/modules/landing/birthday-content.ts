@@ -6,7 +6,7 @@
 // evidence. Texts use [brackets] for what the visitor fills in.
 
 import type { LandingCardSample, LandingLocale } from "./content";
-import { EVENT_PRICING } from "@/lib/pricing";
+import { DEFAULT_CURRENCY, EVENT_PRICING, FREE_OFFER, type PricingCurrency } from "@/lib/pricing";
 import type { MarketingNavContent } from "./marketing-header";
 import { formatPrice } from "./price-anchor";
 
@@ -63,214 +63,218 @@ const enNav: MarketingNavContent = {
   switchLocale: { label: "FR", locale: "fr", ariaLabel: "Lire cette page en français" },
 };
 
-const frCard: BirthdayCardPageContent = {
-  meta: {
-    title: "Carte d'invitation anniversaire en ligne",
-    description:
-      "Créez une carte d'invitation d'anniversaire en ligne, partagez-la sur WhatsApp et voyez qui vient. Un billet QR pour chaque « oui ». Gratuit jusqu'à 100 invités par an.",
-    keywords: [
-      "carte d'invitation anniversaire",
-      "invitation anniversaire",
-      "carte d'invitation anniversaire virtuelle",
-      "invitation anniversaire WhatsApp",
-      "créer une carte d'invitation en ligne",
-      "carte d'invitation à personnaliser",
-    ],
-  },
-  eyebrow: "Carte d'invitation d'anniversaire",
-  title: "Carte d'invitation d'anniversaire en ligne, à partager sur WhatsApp",
-  intro:
-    "Fini le carton à imprimer et les « tu viens ? » un par un. Créez la carte de votre anniversaire en quelques minutes, publiez-la dans vos groupes WhatsApp et voyez en direct qui vient. Chaque invité qui répond « oui » reçoit son billet, contrôlé à l'entrée.",
-  primaryCta: "Créer ma carte",
-  sample: {
-    style: "FESTIVE",
-    event: "Les 30 ans d'Aïssatou",
-    organizer: "Aïssatou",
-    when: "sam. 14 nov. · 19 h",
-    color: "#7C2D12",
-    photo: true,
-  },
-  invites: "vous invite",
-  steps: {
-    heading: "Votre invitation en trois gestes",
-    guide: "Le guide pas à pas, avec chaque réglage",
-    items: [
-      {
-        title: "Créez votre carte",
-        text: "Le titre, la date et le lieu, puis un style : Élégant, Moderne ou Festif, avec votre photo ou votre couleur.",
-      },
-      {
-        title: "Partagez-la sur WhatsApp",
-        text: "Dans vos groupes et vos statuts, ou par son lien et son QR code. L'aperçu de la carte s'affiche directement dans la conversation.",
-      },
-      {
-        title: "Comptez les « oui »",
-        text: "Vos invités répondent sur WhatsApp ou sur la page de la carte, avec le nombre d'accompagnants que vous autorisez. Chaque « oui » reçoit son billet QR.",
-      },
-    ],
-  },
-  why: {
-    heading: "Pourquoi une carte en ligne plutôt qu'un carton ?",
-    items: [
-      { title: "Rien à imprimer, rien à distribuer", text: "La carte arrive là où vos proches sont déjà : sur WhatsApp." },
-      { title: "Vous savez qui vient", text: "Les réponses s'affichent en direct : plus besoin de relancer chacun." },
-      {
-        title: "Une entrée sans mauvaise surprise",
-        text: "Le billet QR ne passe qu'une fois, et le contrôle à l'entrée marche même sans réseau.",
-      },
-      {
-        title: "Aucune application à installer",
-        text: "Ni pour vous, ni pour vos invités : tout se passe sur WhatsApp et dans le navigateur.",
-      },
-    ],
-  },
-  occasions: {
-    heading: "Pour tous les anniversaires",
-    items: ["18 ans", "30 ans", "40 ans", "50 ans", "Anniversaire surprise", "Anniversaire d'enfant"],
-  },
-  texts: {
-    heading: "Besoin des mots justes ?",
-    text: "Piochez dans nos textes d'invitation d'anniversaire, à copier tels quels ou à adapter, puis collez-les sur votre carte.",
-    cta: "Voir les textes d'invitation",
-  },
-  faq: {
-    heading: "Questions fréquentes",
-    items: [
-      {
-        question: "La carte d'invitation est-elle gratuite ?",
-        answer:
-          `Oui, jusqu'à 100 invités par an. Au-delà, chaque invité coûte ${formatPrice(EVENT_PRICING.perGuest, "fr")}, tout compris : la page des tarifs vous donne le prix exact.`,
-      },
-      {
-        question: "Mes invités doivent-ils installer une application ?",
-        answer: "Non. Ils ouvrent la carte depuis WhatsApp ou un navigateur et répondent en un geste.",
-      },
-      {
-        question: "Puis-je limiter le nombre d'accompagnants ?",
-        answer: "Oui. Vous fixez combien de personnes chaque invité peut amener, et la réponse en tient compte.",
-      },
-      {
-        question: "Comment contrôler les entrées le jour de la fête ?",
-        answer:
-          "Chaque « oui » reçoit un billet QR. À l'entrée, un proche le scanne avec son téléphone, même sans réseau, et un billet ne passe qu'une fois.",
-      },
-      {
-        question: "Puis-je aussi inviter mes proches un par un ?",
-        answer:
-          "Oui. Si vous avez votre liste, importez-la : chacun reçoit son invitation personnelle par e-mail ou par WhatsApp, avec son propre lien.",
-      },
-    ],
-  },
-  cta: {
-    heading: "Créez la carte de votre anniversaire",
-    text: "Gratuit jusqu'à 100 invités par an, sans application à installer.",
-    primary: "Créer ma carte",
-    secondary: "Trouver ma formule",
-  },
-  breadcrumb: "Carte d'invitation d'anniversaire",
-  nav: frNav,
-};
+function frCard(currency: PricingCurrency): BirthdayCardPageContent {
+  return {
+    meta: {
+      title: "Carte d'invitation anniversaire en ligne",
+      description:
+        "Créez une carte d'invitation d'anniversaire en ligne, partagez-la sur WhatsApp et voyez qui vient. Un billet QR pour chaque « oui ». Gratuit jusqu'à 100 invités par an.",
+      keywords: [
+        "carte d'invitation anniversaire",
+        "invitation anniversaire",
+        "carte d'invitation anniversaire virtuelle",
+        "invitation anniversaire WhatsApp",
+        "créer une carte d'invitation en ligne",
+        "carte d'invitation à personnaliser",
+      ],
+    },
+    eyebrow: "Carte d'invitation d'anniversaire",
+    title: "Carte d'invitation d'anniversaire en ligne, à partager sur WhatsApp",
+    intro:
+      "Fini le carton à imprimer et les « tu viens ? » un par un. Créez la carte de votre anniversaire en quelques minutes, publiez-la dans vos groupes WhatsApp et voyez en direct qui vient. Chaque invité qui répond « oui » reçoit son billet, contrôlé à l'entrée.",
+    primaryCta: "Créer ma carte",
+    sample: {
+      style: "FESTIVE",
+      event: "Les 30 ans d'Aïssatou",
+      organizer: "Aïssatou",
+      when: "sam. 14 nov. · 19 h",
+      color: "#7C2D12",
+      photo: true,
+    },
+    invites: "vous invite",
+    steps: {
+      heading: "Votre invitation en trois gestes",
+      guide: "Le guide pas à pas, avec chaque réglage",
+      items: [
+        {
+          title: "Créez votre carte",
+          text: "Le titre, la date et le lieu, puis un style : Élégant, Moderne ou Festif, avec votre photo ou votre couleur.",
+        },
+        {
+          title: "Partagez-la sur WhatsApp",
+          text: "Dans vos groupes et vos statuts, ou par son lien et son QR code. L'aperçu de la carte s'affiche directement dans la conversation.",
+        },
+        {
+          title: "Comptez les « oui »",
+          text: "Vos invités répondent sur WhatsApp ou sur la page de la carte, avec le nombre d'accompagnants que vous autorisez. Chaque « oui » reçoit son billet QR.",
+        },
+      ],
+    },
+    why: {
+      heading: "Pourquoi une carte en ligne plutôt qu'un carton ?",
+      items: [
+        { title: "Rien à imprimer, rien à distribuer", text: "La carte arrive là où vos proches sont déjà : sur WhatsApp." },
+        { title: "Vous savez qui vient", text: "Les réponses s'affichent en direct : plus besoin de relancer chacun." },
+        {
+          title: "Une entrée sans mauvaise surprise",
+          text: "Le billet QR ne passe qu'une fois, et le contrôle à l'entrée marche même sans réseau.",
+        },
+        {
+          title: "Aucune application à installer",
+          text: "Ni pour vous, ni pour vos invités : tout se passe sur WhatsApp et dans le navigateur.",
+        },
+      ],
+    },
+    occasions: {
+      heading: "Pour tous les anniversaires",
+      items: ["18 ans", "30 ans", "40 ans", "50 ans", "Anniversaire surprise", "Anniversaire d'enfant"],
+    },
+    texts: {
+      heading: "Besoin des mots justes ?",
+      text: "Piochez dans nos textes d'invitation d'anniversaire, à copier tels quels ou à adapter, puis collez-les sur votre carte.",
+      cta: "Voir les textes d'invitation",
+    },
+    faq: {
+      heading: "Questions fréquentes",
+      items: [
+        {
+          question: "La carte d'invitation est-elle gratuite ?",
+          answer:
+            `Oui, jusqu'à ${FREE_OFFER.guestsPerYear} invités par an. Au-delà, chaque invité coûte ${formatPrice(EVENT_PRICING.perGuest, "fr", currency)}, tout compris : la page des tarifs vous donne le prix exact.`,
+        },
+        {
+          question: "Mes invités doivent-ils installer une application ?",
+          answer: "Non. Ils ouvrent la carte depuis WhatsApp ou un navigateur et répondent en un geste.",
+        },
+        {
+          question: "Puis-je limiter le nombre d'accompagnants ?",
+          answer: "Oui. Vous fixez combien de personnes chaque invité peut amener, et la réponse en tient compte.",
+        },
+        {
+          question: "Comment contrôler les entrées le jour de la fête ?",
+          answer:
+            "Chaque « oui » reçoit un billet QR. À l'entrée, un proche le scanne avec son téléphone, même sans réseau, et un billet ne passe qu'une fois.",
+        },
+        {
+          question: "Puis-je aussi inviter mes proches un par un ?",
+          answer:
+            "Oui. Si vous avez votre liste, importez-la : chacun reçoit son invitation personnelle par e-mail ou par WhatsApp, avec son propre lien.",
+        },
+      ],
+    },
+    cta: {
+      heading: "Créez la carte de votre anniversaire",
+      text: "Gratuit jusqu'à 100 invités par an, sans application à installer.",
+      primary: "Créer ma carte",
+      secondary: "Trouver ma formule",
+    },
+    breadcrumb: "Carte d'invitation d'anniversaire",
+    nav: frNav,
+  };
+}
 
-const enCard: BirthdayCardPageContent = {
-  meta: {
-    title: "Online birthday invitation card",
-    description:
-      "Create an online birthday invitation card, share it on WhatsApp and see who's coming. A QR ticket for every “yes”. Free for up to 100 guests a year.",
-    keywords: [
-      "birthday invitation card",
-      "online birthday invitation",
-      "virtual birthday invitation",
-      "WhatsApp birthday invitation",
-      "create an invitation card online",
-    ],
-  },
-  eyebrow: "Birthday invitation card",
-  title: "Online birthday invitation card, made to share on WhatsApp",
-  intro:
-    "No more printed cards and asking “are you coming?” one by one. Create your birthday card in minutes, post it in your WhatsApp groups and see who's coming as it happens. Every guest who says “yes” gets a ticket, checked at the door.",
-  primaryCta: "Create my card",
-  sample: {
-    style: "FESTIVE",
-    event: "Aïssatou turns 30",
-    organizer: "Aïssatou",
-    when: "Sat Nov 14 · 7 pm",
-    color: "#7C2D12",
-    photo: true,
-  },
-  invites: "invites you",
-  steps: {
-    heading: "Your invitation in three steps",
-    guide: "The step-by-step guide, with every setting",
-    items: [
-      {
-        title: "Create your card",
-        text: "The title, date and place, then a style: Elegant, Modern or Festive, with your photo or your color.",
-      },
-      {
-        title: "Share it on WhatsApp",
-        text: "In your groups and statuses, or with its link and QR code. The card's preview shows right in the chat.",
-      },
-      {
-        title: "Count the “yes”",
-        text: "Guests answer on WhatsApp or on the card's page, with as many companions as you allow. Every “yes” gets a QR ticket.",
-      },
-    ],
-  },
-  why: {
-    heading: "Why an online card rather than a printed one?",
-    items: [
-      { title: "Nothing to print or hand out", text: "The card goes where your people already are: WhatsApp." },
-      { title: "You know who's coming", text: "Answers show up as they come in: no more chasing everyone." },
-      { title: "No surprises at the door", text: "A QR ticket only gets in once, and checking works even offline." },
-      { title: "No app to install", text: "Not for you, not for your guests: it all happens on WhatsApp and in the browser." },
-    ],
-  },
-  occasions: {
-    heading: "For every birthday",
-    items: ["18th", "30th", "40th", "50th", "Surprise party", "Kids' party"],
-  },
-  texts: {
-    heading: "Looking for the right words?",
-    text: "Pick from our birthday invitation texts, to copy as they are or adapt, then paste them on your card.",
-    cta: "See the invitation texts",
-  },
-  faq: {
-    heading: "Frequently asked questions",
-    items: [
-      {
-        question: "Is the invitation card free?",
-        answer:
-          `Yes, for up to 100 guests a year. Beyond that, each guest costs ${formatPrice(EVENT_PRICING.perGuest, "en")}, all included: the pricing page gives you the exact price.`,
-      },
-      {
-        question: "Do my guests need to install an app?",
-        answer: "No. They open the card from WhatsApp or a browser and answer in one tap.",
-      },
-      {
-        question: "Can I limit how many companions a guest brings?",
-        answer: "Yes. You set how many people each guest may bring, and the answer counts them.",
-      },
-      {
-        question: "How do I check people in on the day?",
-        answer:
-          "Every “yes” gets a QR ticket. At the door, a friend scans it with their phone, even offline, and a ticket only gets in once.",
-      },
-      {
-        question: "Can I also invite people one by one?",
-        answer:
-          "Yes. If you have a guest list, import it: everyone gets a personal invitation by email or WhatsApp, with their own link.",
-      },
-    ],
-  },
-  cta: {
-    heading: "Create your birthday card",
-    text: "Free for up to 100 guests a year, no app to install.",
-    primary: "Create my card",
-    secondary: "Find my plan",
-  },
-  breadcrumb: "Birthday invitation card",
-  nav: enNav,
-};
+function enCard(currency: PricingCurrency): BirthdayCardPageContent {
+  return {
+    meta: {
+      title: "Online birthday invitation card",
+      description:
+        "Create an online birthday invitation card, share it on WhatsApp and see who's coming. A QR ticket for every “yes”. Free for up to 100 guests a year.",
+      keywords: [
+        "birthday invitation card",
+        "online birthday invitation",
+        "virtual birthday invitation",
+        "WhatsApp birthday invitation",
+        "create an invitation card online",
+      ],
+    },
+    eyebrow: "Birthday invitation card",
+    title: "Online birthday invitation card, made to share on WhatsApp",
+    intro:
+      "No more printed cards and asking “are you coming?” one by one. Create your birthday card in minutes, post it in your WhatsApp groups and see who's coming as it happens. Every guest who says “yes” gets a ticket, checked at the door.",
+    primaryCta: "Create my card",
+    sample: {
+      style: "FESTIVE",
+      event: "Aïssatou turns 30",
+      organizer: "Aïssatou",
+      when: "Sat Nov 14 · 7 pm",
+      color: "#7C2D12",
+      photo: true,
+    },
+    invites: "invites you",
+    steps: {
+      heading: "Your invitation in three steps",
+      guide: "The step-by-step guide, with every setting",
+      items: [
+        {
+          title: "Create your card",
+          text: "The title, date and place, then a style: Elegant, Modern or Festive, with your photo or your color.",
+        },
+        {
+          title: "Share it on WhatsApp",
+          text: "In your groups and statuses, or with its link and QR code. The card's preview shows right in the chat.",
+        },
+        {
+          title: "Count the “yes”",
+          text: "Guests answer on WhatsApp or on the card's page, with as many companions as you allow. Every “yes” gets a QR ticket.",
+        },
+      ],
+    },
+    why: {
+      heading: "Why an online card rather than a printed one?",
+      items: [
+        { title: "Nothing to print or hand out", text: "The card goes where your people already are: WhatsApp." },
+        { title: "You know who's coming", text: "Answers show up as they come in: no more chasing everyone." },
+        { title: "No surprises at the door", text: "A QR ticket only gets in once, and checking works even offline." },
+        { title: "No app to install", text: "Not for you, not for your guests: it all happens on WhatsApp and in the browser." },
+      ],
+    },
+    occasions: {
+      heading: "For every birthday",
+      items: ["18th", "30th", "40th", "50th", "Surprise party", "Kids' party"],
+    },
+    texts: {
+      heading: "Looking for the right words?",
+      text: "Pick from our birthday invitation texts, to copy as they are or adapt, then paste them on your card.",
+      cta: "See the invitation texts",
+    },
+    faq: {
+      heading: "Frequently asked questions",
+      items: [
+        {
+          question: "Is the invitation card free?",
+          answer:
+            `Yes, for up to ${FREE_OFFER.guestsPerYear} guests a year. Beyond that, each guest costs ${formatPrice(EVENT_PRICING.perGuest, "en", currency)}, all included: the pricing page gives you the exact price.`,
+        },
+        {
+          question: "Do my guests need to install an app?",
+          answer: "No. They open the card from WhatsApp or a browser and answer in one tap.",
+        },
+        {
+          question: "Can I limit how many companions a guest brings?",
+          answer: "Yes. You set how many people each guest may bring, and the answer counts them.",
+        },
+        {
+          question: "How do I check people in on the day?",
+          answer:
+            "Every “yes” gets a QR ticket. At the door, a friend scans it with their phone, even offline, and a ticket only gets in once.",
+        },
+        {
+          question: "Can I also invite people one by one?",
+          answer:
+            "Yes. If you have a guest list, import it: everyone gets a personal invitation by email or WhatsApp, with their own link.",
+        },
+      ],
+    },
+    cta: {
+      heading: "Create your birthday card",
+      text: "Free for up to 100 guests a year, no app to install.",
+      primary: "Create my card",
+      secondary: "Find my plan",
+    },
+    breadcrumb: "Birthday invitation card",
+    nav: enNav,
+  };
+}
 
 const frTexts: BirthdayTextsPageContent = {
   meta: {
@@ -445,5 +449,16 @@ const enTexts: BirthdayTextsPageContent = {
   nav: enNav,
 };
 
-export const BIRTHDAY_CARD_CONTENT: Record<LandingLocale, BirthdayCardPageContent> = { fr: frCard, en: enCard };
+const CARD_BUILDERS: Record<LandingLocale, (currency: PricingCurrency) => BirthdayCardPageContent> = { fr: frCard, en: enCard };
+
+/** The birthday card page in [locale], its price in [currency]. */
+export function birthdayCardContent(locale: LandingLocale, currency: PricingCurrency): BirthdayCardPageContent {
+  return CARD_BUILDERS[locale](currency);
+}
+
+/** Each locale in its default currency, for its metadata. */
+export const BIRTHDAY_CARD_CONTENT: Record<LandingLocale, BirthdayCardPageContent> = {
+  fr: frCard(DEFAULT_CURRENCY.fr),
+  en: enCard(DEFAULT_CURRENCY.en),
+};
 export const BIRTHDAY_TEXTS_CONTENT: Record<LandingLocale, BirthdayTextsPageContent> = { fr: frTexts, en: enTexts };
