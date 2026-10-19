@@ -9,6 +9,28 @@
 export const PRICING_CURRENCIES = ["GNF", "FCFA", "USD"] as const;
 export type PricingCurrency = (typeof PRICING_CURRENCIES)[number];
 
+export function isPricingCurrency(value: unknown): value is PricingCurrency {
+  return typeof value === "string" && (PRICING_CURRENCIES as readonly string[]).includes(value);
+}
+
+/** Countries that pay in CFA francs: the eight of the UEMOA (XOF) and the six of the CEMAC (XAF). */
+const CFA_COUNTRIES = new Set(["BJ", "BF", "CI", "GW", "ML", "NE", "SN", "TG", "CM", "CF", "TD", "CG", "GQ", "GA"]);
+
+/**
+ * The currency a visitor from [country] (ISO 3166-1 alpha-2) pays in: Guinean
+ * francs in Guinea, CFA francs in the franc zone, dollars elsewhere. Null when
+ * the country is unknown, so the caller falls back on the page's language.
+ */
+export function currencyForCountry(country: string | null | undefined): PricingCurrency | null {
+  const code = country?.trim().toUpperCase() ?? "";
+  if (!/^[A-Z]{2}$/.test(code) || code === "XX" || code === "T1") return null;
+  if (code === "GN") return "GNF";
+  return CFA_COUNTRIES.has(code) ? "FCFA" : "USD";
+}
+
+/** When the country is unknown: CFA francs in French, spoken in fourteen franc-zone countries, and dollars in English. */
+export const DEFAULT_CURRENCY = { fr: "FCFA", en: "USD" } as const satisfies Record<"fr" | "en", PricingCurrency>;
+
 /** One price, set by hand in each currency (round amounts, never converted). USD is in cents. */
 export interface PriceList {
   gnf: number;
@@ -17,7 +39,7 @@ export interface PriceList {
 }
 
 /** A price in [currency]'s minor unit: whole francs, or US cents. */
-function priceIn(price: PriceList, currency: PricingCurrency): number {
+export function priceIn(price: PriceList, currency: PricingCurrency): number {
   if (currency === "GNF") return price.gnf;
   if (currency === "FCFA") return price.fcfa;
   return price.usdCents;
@@ -31,12 +53,12 @@ export const FREE_OFFER = {
 
 /** Per event: each guest at one price, every delivery mode included. */
 export const EVENT_PRICING = {
-  perGuest: { gnf: 750, fcfa: 50, usdCents: 8 } satisfies PriceList,
+  perGuest: { gnf: 750, fcfa: 50, usdCents: 9 } satisfies PriceList,
 } as const;
 
 /** Pro Organisateur: a monthly guest allowance across every event, for planners, agencies and venues. */
 export const ORGANIZER_PACK = {
-  monthly: { gnf: 600_000, fcfa: 40_000, usdCents: 7_000 } satisfies PriceList,
+  monthly: { gnf: 600_000, fcfa: 40_000, usdCents: 7_200 } satisfies PriceList,
   includedGuests: 1_000,
   extraPerGuest: { gnf: 600, fcfa: 40, usdCents: 7 } satisfies PriceList,
 } as const;

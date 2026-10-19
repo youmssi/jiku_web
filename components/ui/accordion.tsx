@@ -75,6 +75,8 @@ function AccordionContent({
       data-slot="accordion-content"
       className={cn(
         "overflow-hidden px-2 text-xs/relaxed data-open:animate-accordion-down data-closed:animate-accordion-up",
+        // The height animates on this element only; the inner block keeps its
+        // natural height, or a long answer is cut off once open.
         // A force-mounted answer stays in the HTML for search engines but is hidden while closed.
         props.forceMount && "data-closed:hidden"
       )}
@@ -82,7 +84,7 @@ function AccordionContent({
     >
       <div
         className={cn(
-          "h-(--radix-accordion-content-height) pt-0 pb-4 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
+          "pt-0 pb-4 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
           className
         )}
       >

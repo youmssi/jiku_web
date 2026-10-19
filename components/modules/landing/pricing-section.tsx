@@ -4,7 +4,9 @@ import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
 import { salesMailto } from "@/lib/support";
 import { cn } from "@/lib/utils";
+import type { PricingCurrency } from "@/lib/pricing";
 import type { LandingContent, LandingLocale } from "./content";
+import { CurrencySwitcher } from "./currency-switcher";
 import { priceAnchor } from "./price-anchor";
 import { SectionHeading } from "./section-heading";
 
@@ -12,11 +14,22 @@ import { SectionHeading } from "./section-heading";
  * One number per use and the way to the exact figure. The detail (what each
  * offer includes, the calculator) lives on the pricing page only.
  */
-export function PricingSection({ content, locale }: { content: LandingContent["pricing"]; locale: LandingLocale }) {
+export function PricingSection({
+  content,
+  locale,
+  currency,
+}: {
+  content: LandingContent["pricing"];
+  locale: LandingLocale;
+  currency: PricingCurrency;
+}) {
   return (
     <section id="pricing" className="scroll-mt-24 border-t border-border/30 py-16 sm:py-24">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading badge={content.badge} heading={content.heading} subheading={content.subheading} />
+        <div className="mt-8 flex justify-center">
+          <CurrencySwitcher value={currency} label={content.currencyLabel} />
+        </div>
 
         <div className="mt-10 sm:mt-14 grid gap-5 md:grid-cols-3">
           {content.plans.map((plan) => (
@@ -28,7 +41,7 @@ export function PricingSection({ content, locale }: { content: LandingContent["p
                   {plan.details.map((detail) => (
                     <li key={detail} className="flex gap-2">
                       <Check className="mt-0.5 size-4 shrink-0 text-foreground" aria-hidden />
-                      {detail.replace("{price}", priceAnchor(plan.anchor, locale))}
+                      {detail.replace("{price}", priceAnchor(plan.anchor, locale, currency))}
                     </li>
                   ))}
                 </ul>

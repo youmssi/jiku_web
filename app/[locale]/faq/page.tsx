@@ -5,6 +5,7 @@ import { FaqPage, LANDING_CONTENT } from "@/components/modules/landing";
 import { languageAlternates, SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 import { SEO_ROUTES } from "@/lib/constants";
+import { visitorCurrency } from "@/lib/visitor-currency";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -31,5 +32,5 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function FaqPageRoute({ params }: Readonly<PageProps>) {
   const locale = resolveLocale((await params).locale);
   setRequestLocale(locale);
-  return <FaqPage locale={locale} siteUrl={siteUrl()} />;
+  return <FaqPage locale={locale} siteUrl={siteUrl()} currency={await visitorCurrency(locale)} />;
 }

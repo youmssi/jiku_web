@@ -51,7 +51,9 @@
     "reminders": "Rappels WhatsApp ce mois-ci",
     "remindersUsed": "{sent} sur {limit}",
     "remindersOut": "Vous avez envoyé les {limit} rappels WhatsApp gratuits de ce mois. Plus aucun rappel ne partira ce mois-ci : passez à Services Pro : 1 000 rappels par personne et par mois.",
-    "remindersLow": "{left, plural, one {Il vous reste # rappel WhatsApp gratuit ce mois-ci.} other {Il vous reste # rappels WhatsApp gratuits ce mois-ci.}}"
+    "remindersLow": "{left, plural, one {Il vous reste # rappel WhatsApp gratuit ce mois-ci.} other {Il vous reste # rappels WhatsApp gratuits ce mois-ci.}}",
+    "remindersOutPaid": "Vous avez envoyé les {limit} rappels WhatsApp de ce mois depuis le numéro Jikū. Les rappels partent par les autres canaux du service jusqu'au mois prochain. Branchez votre propre numéro WhatsApp pour ne plus avoir de limite.",
+    "remindersLowPaid": "{left, plural, one {Il vous reste # rappel WhatsApp ce mois-ci depuis le numéro Jikū.} other {Il vous reste # rappels WhatsApp ce mois-ci depuis le numéro Jikū.}}"
   },
   "event": {
     "allowanceTitle": "Capacité de cet événement",
@@ -65,6 +67,7 @@
     "guestsHelp": "Comptez tous vos invités, y compris ceux déjà invités gratuitement.",
     "guestsInvalid": "Indiquez un nombre entre {min, number} et {max, number}.",
     "onlyNew": "{count, number} invités sont déjà payés : vous ne payez que les nouveaux.",
+    "freeDeducted": "{count, number} invités gratuits sont déduits : vous ne payez que ceux au-delà.",
     "estimate": "À payer",
     "activate": "Demander l'activation",
     "requesting": "Demande…",

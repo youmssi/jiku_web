@@ -9,10 +9,12 @@ import { JikūLogo } from "@/components/ui/jiku-logo";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Link } from "@/i18n/navigation";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
+import type { PricingCurrency } from "@/lib/pricing";
 import { salesMailto } from "@/lib/support";
 import { cn } from "@/lib/utils";
 import { PearlBackdrop } from "./backdrops";
 import { ClosingCta, CLOSING_OUTLINE } from "./closing-cta";
+import { CurrencySwitcher } from "./currency-switcher";
 import { MarketingFooter } from "./footer-section";
 import { MarketingHeader } from "./marketing-header";
 import { PricingCalculator } from "./pricing-calculator";
@@ -28,10 +30,12 @@ export function PricingPage({
   content,
   locale,
   siteUrl,
+  currency,
 }: {
   content: PricingContent;
   locale: "fr" | "en";
   siteUrl: string;
+  currency: PricingCurrency;
 }) {
   const path = locale === "fr" ? SEO_ROUTES.PRICING : `/en${SEO_ROUTES.PRICING}`;
 
@@ -58,6 +62,9 @@ export function PricingPage({
               </div>
               <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-6xl">{content.title}</h1>
               <p className="mt-6 text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">{content.rule}</p>
+              <div className="mt-8 flex justify-center">
+                <CurrencySwitcher value={currency} label={content.calculator.currencyLabel} />
+              </div>
             </div>
           </section>
 
@@ -109,7 +116,7 @@ export function PricingPage({
             <p className="mt-2 text-center text-xs text-muted-foreground">{content.taxNote}</p>
 
             <section className="mt-16" aria-labelledby="pricing-calculator">
-              <PricingCalculator content={content.calculator} locale={locale} />
+              <PricingCalculator content={content.calculator} locale={locale} currency={currency} />
             </section>
 
             <section className="mt-16" aria-labelledby="pricing-compare">

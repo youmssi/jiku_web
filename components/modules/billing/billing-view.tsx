@@ -53,11 +53,12 @@ export function BillingView({
   const t = useTranslations("billing.event");
   const locale = useLocale();
   const [request, setRequest] = useState<ManualPaymentInstructions | null>(activation);
-  const [guests, setGuests] = useState(Math.max(usage.paidGuests + 1, usage.invitedGuests + HEADROOM));
+  const covered = Math.max(usage.paidGuests, usage.freeGuests);
+  const [guests, setGuests] = useState(Math.max(covered + 1, usage.invitedGuests + HEADROOM));
   const [dialogOpen, setDialogOpen] = useState(false);
   const [pending, setPending] = useState(false);
-  const valid = Number.isSafeInteger(guests) && guests > usage.paidGuests && guests <= pricing.maxGuestsPerEvent;
-  const estimate = valid ? (guests - usage.paidGuests) * pricing.perGuestMinor : 0;
+  const valid = Number.isSafeInteger(guests) && guests > covered && guests <= pricing.maxGuestsPerEvent;
+  const estimate = valid ? (guests - covered) * pricing.perGuestMinor : 0;
 
   function requestGuests() {
     setPending(true);
@@ -128,7 +129,7 @@ export function BillingView({
                   id="billing-guests"
                   type="number"
                   inputMode="numeric"
-                  min={usage.paidGuests + 1}
+                  min={covered + 1}
                   max={pricing.maxGuestsPerEvent}
                   value={Number.isFinite(guests) ? guests : ""}
                   onChange={(event) => setGuests(event.target.valueAsNumber)}
@@ -146,8 +147,10 @@ export function BillingView({
               {valid
                 ? usage.paidGuests > 0
                   ? t("onlyNew", { count: usage.paidGuests })
-                  : t("guestsHelp")
-                : t("guestsInvalid", { min: usage.paidGuests + 1, max: pricing.maxGuestsPerEvent })}
+                  : usage.freeGuests > 0
+                    ? t("freeDeducted", { count: usage.freeGuests })
+                    : t("guestsHelp")
+                : t("guestsInvalid", { min: covered + 1, max: pricing.maxGuestsPerEvent })}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <Button variant={online ? "outline" : "default"} onClick={requestGuests} disabled={!valid || pending}>

@@ -111,9 +111,9 @@ export const LEGAL_EN: LegalDocuments = {
         body: [
           "Current prices are published on the pricing page, in Guinean francs (GNF) for organizations based in Guinea. A US dollar equivalent may be shown for information; only the local-currency amount is binding.",
           [
-            "Services (appointments, bookings, queue): a Services Pro subscription per person who serves clients, per month, payable monthly or yearly. The Solo offer is free for one person. Services Pro WhatsApp reminders are subject to fair use of 1,000 reminders per person per month; beyond that, Jikū may limit sending after warning the organization.",
+            "Services (appointments, bookings, queue): a Services Pro subscription per person who serves clients, per month, payable monthly or yearly. The Solo offer is free for one person. Services Pro WhatsApp reminders are subject to fair use of 1,000 reminders per person per month sent from the Jikū number; beyond that, reminders go by the service's other channels until the next month, and the billing screen warns as the limit nears. Reminders sent from the organization's own number do not count.",
             "Pro Organizer: a monthly plan covering 1,000 guests a month across all the organization's events, then a price per guest. Guests not used in a month do not carry over.",
-            "Events with free invitations: free up to 100 guests over a rolling twelve months per organization, then a price per guest of the event, all included. Adding guests only charges the new ones.",
+            "Events with free invitations: free up to 100 guests over a rolling twelve months per organization, then a price per guest of the event, all included. On an event's first purchase, the free guests still available are taken off and reserved for it; adding guests only charges the new ones. On the event's day, invitations may keep going out up to 20% beyond the event's guests (at least 20); those guests remain due.",
             "Paid tickets: a commission of 3% of the price of each ticket sold, paid to Jikū in tranches before the sale (see section 6).",
             "SMS sends are a paid option whose price is shown before each send.",
           ],
@@ -328,7 +328,7 @@ export const LEGAL_EN: LegalDocuments = {
         id: "cookies",
         heading: "Cookies",
         body: [
-          "Jikū uses only necessary cookies: the sign-in session and the chosen language. No advertising or cross-site tracking cookies. Audience measurement works without cookies and without storing IP addresses, so it does not require consent.",
+          "Jikū uses only necessary cookies: the sign-in session, the chosen language and the currency chosen to show prices. No advertising or cross-site tracking cookies. Audience measurement works without cookies and without storing IP addresses, so it does not require consent.",
         ],
       },
       {

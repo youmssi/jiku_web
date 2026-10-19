@@ -13,6 +13,8 @@ export interface UsageAllowance {
   invitationsSentWhatsapp: number;
   /** Guests the event bought (JIKU-268); buying more charges only those above it. */
   paidGuests: number;
+  /** Free guests a first purchase leaves out of the price (JIKU-270); 0 once the event bought guests. */
+  freeGuests: number;
 }
 
 export interface PaymentHistoryItem {
