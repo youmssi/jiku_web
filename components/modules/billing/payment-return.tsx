@@ -51,7 +51,7 @@ export function PaymentReturn({ initial }: { initial: PaymentStatusView }) {
 
 type ReturnState = "pending" | "late" | "paid" | "failed";
 
-const KINDS = ["GUESTS", "SUBSCRIPTION", "PACK", "PACK_EXTRA", "WHATSAPP_NUMBER", "COMMISSION"] as const;
+const KINDS = ["GUESTS", "SUBSCRIPTION", "PACK", "PACK_EXTRA", "COMMISSION"] as const;
 type PaymentKind = (typeof KINDS)[number];
 
 function kindKey(kind: string): PaymentKind {

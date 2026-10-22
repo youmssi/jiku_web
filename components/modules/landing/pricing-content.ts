@@ -6,7 +6,6 @@ import {
   EVENT_PRICING,
   FREE_OFFER,
   ORGANIZER_PACK,
-  OWN_WHATSAPP_NUMBER,
   perEventCost,
   SERVICES_PRO,
   DEFAULT_CURRENCY,
@@ -124,7 +123,6 @@ function fr(currency: PricingCurrency): PricingContent {
         features: [
           `${number(ORGANIZER_PACK.includedGuests, "fr")} invités par mois sur tous vos événements`,
           `Puis ${formatPrice(ORGANIZER_PACK.extraPerGuest, "fr", currency)} par invité`,
-          "Votre propre numéro WhatsApp inclus",
           "Chaque événement aux couleurs de votre client",
         ],
         cta: "Choisir Pro Organisateur",
@@ -141,7 +139,6 @@ function fr(currency: PricingCurrency): PricingContent {
           "Seules les personnes qui reçoivent des clients comptent",
           `Séances de groupe jusqu'à ${SERVICES_PRO.groupSize} clients`,
           `${number(SERVICES_PRO.remindersPerPerson, "fr")} rappels WhatsApp par personne et par mois`,
-          "Votre propre numéro WhatsApp inclus",
         ],
         cta: "Choisir Services Pro",
         href: ROUTES.REGISTER,
@@ -168,7 +165,7 @@ function fr(currency: PricingCurrency): PricingContent {
           label: "Rappels WhatsApp de rendez-vous",
           values: [`${FREE_OFFER.soloWhatsAppReminders} par mois`, false, false, `${number(SERVICES_PRO.remindersPerPerson, "fr")} par personne et par mois`],
         },
-        { label: "Votre propre numéro WhatsApp", values: ["En option", "En option", true, true] },
+        { label: "Votre propre numéro WhatsApp, gratuit", values: [true, true, true, true] },
         { label: "Paiement à l'année : 2 mois offerts", values: [false, false, true, true] },
         { label: `Vente de billets : ${rate("fr")} par billet vendu`, values: [true, true, true, true] },
       ],
@@ -197,7 +194,7 @@ function fr(currency: PricingCurrency): PricingContent {
         },
         {
           title: "Votre propre numéro WhatsApp",
-          text: `Vos messages partent de votre numéro, avec votre nom, et vos contacts restent les vôtres. Inclus dans les offres Pro, ${formatPrice(OWN_WHATSAPP_NUMBER.monthly, "fr", currency)} par mois sinon. Meta vous facture alors directement vos messages.`,
+          text: `Vos messages partent de votre numéro, avec votre nom, et vos contacts restent les vôtres. Gratuit dans toutes les offres : Meta vous facture alors directement vos messages, et le guide vous montre les étapes chez Meta.`,
         },
         {
           title: "Carte partagée",
@@ -209,8 +206,8 @@ function fr(currency: PricingCurrency): PricingContent {
       heading: "Comment on paie",
       toJiku: {
         title: "Vous payez Jikū",
-        text: "Le montant exact s'affiche avant le paiement, en un seul écran. Vous confirmez sur votre téléphone, la facture arrive aussitôt.",
-        methods: [{ name: "Orange Money" }, { name: "MoMo" }, { name: "Carte bancaire" }, { name: "Wave", soon: true }],
+        text: "Le montant exact s'affiche avant le paiement. Vous l'envoyez par Mobile Money ou par virement avec la référence indiquée : notre équipe confirme et active, en général en quelques heures, et la facture arrive dans votre espace.",
+        methods: [{ name: "Orange Money" }, { name: "MTN MoMo" }, { name: "Virement bancaire" }, { name: "Paiement en ligne", soon: true }],
         soon: "bientôt",
       },
       toYou: {
@@ -281,7 +278,6 @@ function en(currency: PricingCurrency): PricingContent {
         features: [
           `${number(ORGANIZER_PACK.includedGuests, "en")} guests a month across all your events`,
           `Then ${formatPrice(ORGANIZER_PACK.extraPerGuest, "en", currency)} per guest`,
-          "Your own WhatsApp number included",
           "Each event in your client's colors",
         ],
         cta: "Choose Pro Organizer",
@@ -298,7 +294,6 @@ function en(currency: PricingCurrency): PricingContent {
           "Only the people who serve clients count",
           `Group sessions of up to ${SERVICES_PRO.groupSize} clients`,
           `${number(SERVICES_PRO.remindersPerPerson, "en")} WhatsApp reminders per person per month`,
-          "Your own WhatsApp number included",
         ],
         cta: "Choose Services Pro",
         href: ROUTES.REGISTER,
@@ -325,7 +320,7 @@ function en(currency: PricingCurrency): PricingContent {
           label: "WhatsApp appointment reminders",
           values: [`${FREE_OFFER.soloWhatsAppReminders} a month`, false, false, `${number(SERVICES_PRO.remindersPerPerson, "en")} per person per month`],
         },
-        { label: "Your own WhatsApp number", values: ["Add-on", "Add-on", true, true] },
+        { label: "Your own WhatsApp number, free", values: [true, true, true, true] },
         { label: "Yearly payment: 2 months free", values: [false, false, true, true] },
         { label: `Ticket sales: ${rate("en")} per ticket sold`, values: [true, true, true, true] },
       ],
@@ -354,7 +349,7 @@ function en(currency: PricingCurrency): PricingContent {
         },
         {
           title: "Your own WhatsApp number",
-          text: `Your messages go out from your number, with your name, and your contacts stay yours. Included in the Pro plans, ${formatPrice(OWN_WHATSAPP_NUMBER.monthly, "en", currency)} a month otherwise. Meta then bills your messages to you directly.`,
+          text: `Your messages go out from your number, with your name, and your contacts stay yours. Free in every plan: Meta then bills your messages to you directly, and the guide walks you through Meta's steps.`,
         },
         {
           title: "Shared card",
@@ -366,8 +361,8 @@ function en(currency: PricingCurrency): PricingContent {
       heading: "How payment works",
       toJiku: {
         title: "You pay Jikū",
-        text: "The exact amount shows before you pay, on one screen. You confirm on your phone and the invoice arrives right away.",
-        methods: [{ name: "Orange Money" }, { name: "MoMo" }, { name: "Bank card" }, { name: "Wave", soon: true }],
+        text: "The exact amount shows before you pay. You send it by Mobile Money or bank transfer with the reference shown: our team confirms and activates, usually within a few hours, and the invoice arrives in your space.",
+        methods: [{ name: "Orange Money" }, { name: "MTN MoMo" }, { name: "Bank transfer" }, { name: "Online payment", soon: true }],
         soon: "soon",
       },
       toYou: {

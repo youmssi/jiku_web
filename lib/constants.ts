@@ -138,6 +138,8 @@ export const COOKIES = {
 export const DOCS_ROUTE = "/docs";
 /** The guide to writing WhatsApp messages Meta treats as information (JIKU-269). */
 export const WHATSAPP_MESSAGES_GUIDE = `${DOCS_ROUTE}/whatsapp-messages`;
+/** The guide to connecting an organization's own WhatsApp number (JIKU-271). */
+export const OWN_WHATSAPP_NUMBER_GUIDE = `${DOCS_ROUTE}/own-whatsapp-number`;
 
 export const SEO_ROUTES = {
   USE_CASES: "/use-cases",

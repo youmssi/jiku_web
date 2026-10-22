@@ -24,15 +24,13 @@
   "whatsappNumber": {
     "title": "Votre numéro WhatsApp",
     "platform": "Vos messages WhatsApp partent du numéro de Jikū. Aucune configuration nécessaire.",
-    "pitch": "Envoyez depuis votre propre numéro : vos invités et vos clients voient votre nom et vous répondent directement. Meta vous facture ces messages.",
-    "notIncluded": "Votre propre numéro est compris dans Services Pro et Pro Organisateur, ou disponible en option mensuelle.",
-    "seeOption": "Voir l'option",
+    "pitch": "Envoyez depuis votre propre numéro, gratuitement dans toutes les offres : vos invités et vos clients voient votre nom et vous répondent directement. Meta vous facture ces messages.",
     "connect": "Connecter mon numéro WhatsApp",
     "connecting": "Connexion…",
     "connectHelp": "Une fenêtre Meta s'ouvre : choisissez ou créez votre compte WhatsApp Business et votre numéro. Il vous faut un compte Meta Business et un moyen de paiement enregistré chez Meta.",
+    "guide": "Voir les étapes",
     "unavailable": "La connexion par Meta n'est pas encore disponible. Vous pouvez saisir vos identifiants ci-dessous.",
     "connected": "Connecté",
-    "lapsed": "Votre offre ne comprend plus votre propre numéro : vos messages partent du numéro de Jikū jusqu'au renouvellement.",
     "numberId": "Identifiant du numéro : {id}",
     "disconnect": "Déconnecter",
     "disconnected": "Votre numéro est déconnecté. Vos messages partent du numéro de Jikū.",
@@ -58,7 +56,6 @@
       "failed": "Échec du test : {error}"
     },
     "errors": {
-      "notIncluded": "Votre offre ne comprend pas votre propre numéro WhatsApp. Ajoutez l'option depuis la facturation.",
       "taken": "Ce numéro est déjà connecté à une autre organisation.",
       "metaRefused": "Meta a refusé la connexion. Réessayez depuis la fenêtre Meta.",
       "unavailable": "La connexion par Meta n'est pas disponible pour le moment.",

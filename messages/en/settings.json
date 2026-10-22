@@ -24,15 +24,13 @@
   "whatsappNumber": {
     "title": "Your WhatsApp number",
     "platform": "Your WhatsApp messages go out from Jikū's number. Nothing to set up.",
-    "pitch": "Send from your own number: your guests and clients see your name and reply to you directly. Meta bills you for these messages.",
-    "notIncluded": "Your own number is included in Services Pro and Pro Organizer, or available as a monthly add-on.",
-    "seeOption": "See the option",
+    "pitch": "Send from your own number, free in every plan: your guests and clients see your name and reply to you directly. Meta bills you for these messages.",
     "connect": "Connect my WhatsApp number",
     "connecting": "Connecting…",
     "connectHelp": "A Meta window opens: choose or create your WhatsApp Business account and number. You need a Meta Business account and a payment method on file with Meta.",
+    "guide": "See the steps",
     "unavailable": "Connecting through Meta is not available yet. You can enter your credentials below.",
     "connected": "Connected",
-    "lapsed": "Your offer no longer includes your own number: your messages go out from Jikū's number until you renew.",
     "numberId": "Number ID: {id}",
     "disconnect": "Disconnect",
     "disconnected": "Your number is disconnected. Your messages go out from Jikū's number.",
@@ -58,7 +56,6 @@
       "failed": "Test failed: {error}"
     },
     "errors": {
-      "notIncluded": "Your offer doesn't include your own WhatsApp number. Add the option from billing.",
       "taken": "This number is already connected to another organization.",
       "metaRefused": "Meta refused the connection. Try again from the Meta window.",
       "unavailable": "Connecting through Meta is not available right now.",

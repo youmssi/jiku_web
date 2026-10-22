@@ -23,7 +23,7 @@ export interface PaymentHistoryItem {
   eventId: string | null;
   eventName: string;
   tier: string;
-  /** GUESTS, SUBSCRIPTION, PACK, PACK_EXTRA, WHATSAPP_NUMBER or COMMISSION. */
+  /** GUESTS, SUBSCRIPTION, PACK, PACK_EXTRA or COMMISSION. */
   kind: string;
   /** Guests the payment bought or settled; null when it bought none. */
   guests: number | null;
@@ -80,8 +80,7 @@ export type PackView = Schema<"PackView">;
 /** Everything the organization pays for, in one read (JIKU-254). */
 export type BillingStatus = Schema<"BillingStatusView">;
 
-/** Whether the organization may send from its own WhatsApp number, and the add-on's price (ADR 105). */
-export type OwnWhatsAppNumberView = Schema<"OwnWhatsAppNumberView">;
+/** The services subscription, its plans and prepaid periods. */
 export type SubscriptionView = Schema<"SubscriptionView">;
 export type SubscriptionPlanOption = Schema<"PlanOption">;
 export type SubscriptionMonthOption = Schema<"MonthOption">;
@@ -103,5 +102,4 @@ export type CheckoutTarget =
   | { kind: "guests"; eventId: string; guests: number }
   | { kind: "subscription"; plan: string; months: number }
   | { kind: "pack"; months: number }
-  | { kind: "packExtra"; blocks: number }
-  | { kind: "ownNumber"; months: number };
+  | { kind: "packExtra"; blocks: number };

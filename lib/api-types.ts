@@ -1156,54 +1156,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/billing/whatsapp-number": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ownWhatsAppNumberOwnNumberView"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/billing/whatsapp-number/checkout": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["ownWhatsAppNumberCheckoutOwnNumber"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/billing/whatsapp-number/request": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["ownWhatsAppNumberRequestOwnNumber"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/branding": {
         parameters: {
             query?: never;
@@ -4368,9 +4320,6 @@ export interface components {
         BillingStatusView: {
             /** @enum {string} */
             attention?: "SERVICES_PAUSED" | "GRACE" | "OVER_LIMIT" | "EXPIRING_SOON" | "NONE";
-            ownWhatsAppNumber?: boolean;
-            /** Format: date-time */
-            ownWhatsAppNumberAddonExpiresAt?: string | null;
             packActive?: boolean;
             /** Format: date-time */
             packExpiresAt?: string | null;
@@ -5295,18 +5244,6 @@ export interface components {
             ticketCount?: number;
             /** Format: int64 */
             totalMinor?: number;
-        };
-        OwnWhatsAppNumberView: {
-            /** Format: date-time */
-            addonExpiresAt?: string | null;
-            allowed?: boolean;
-            currency?: string;
-            includedPlans?: string[];
-            /** Format: int64 */
-            monthlyMinor?: number;
-            months?: components["schemas"]["MonthOption"][];
-            /** @enum {string} */
-            source?: "PLAN" | "PACK" | "ADDON" | "NONE";
         };
         PackExtraRequest: {
             /** Format: int32 */
@@ -6381,7 +6318,6 @@ export interface components {
         };
         WhatsAppProviderView: {
             accessTokenMasked?: string | null;
-            allowed?: boolean;
             configured?: boolean;
             displayPhoneNumber?: string | null;
             phoneNumberId?: string | null;
@@ -8179,74 +8115,6 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["SubscriptionRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ManualPaymentInstructions"];
-                };
-            };
-        };
-    };
-    ownWhatsAppNumberOwnNumberView: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["OwnWhatsAppNumberView"];
-                };
-            };
-        };
-    };
-    ownWhatsAppNumberCheckoutOwnNumber: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PackRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PaymentInitiationResult"];
-                };
-            };
-        };
-    };
-    ownWhatsAppNumberRequestOwnNumber: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PackRequest"];
             };
         };
         responses: {
