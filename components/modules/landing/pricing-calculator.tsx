@@ -3,9 +3,7 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { SpotlightCard } from "@/components/effects";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
-  PRICING_CURRENCIES,
   organizerPackBreakEven,
   organizerPackCost,
   perEventCost,
@@ -14,7 +12,8 @@ import {
 import { cn } from "@/lib/utils";
 import type { LandingLocale } from "./content";
 import { NumberField } from "./number-field";
-import { defaultCurrency, fill, priceFormat } from "./price-format";
+import { CurrencySwitcher } from "./currency-switcher";
+import { fill, priceFormat } from "./price-format";
 import type { PricingContent } from "./pricing-content";
 
 /**
@@ -22,9 +21,16 @@ import type { PricingContent } from "./pricing-content";
  * costs side by side, the cheaper one marked. Estimates only; the backend
  * prices every payment.
  */
-export function PricingCalculator({ content, locale }: { content: PricingContent["calculator"]; locale: LandingLocale }) {
+export function PricingCalculator({
+  content,
+  locale,
+  currency,
+}: {
+  content: PricingContent["calculator"];
+  locale: LandingLocale;
+  currency: PricingCurrency;
+}) {
   const [guests, setGuests] = useState(600);
-  const [currency, setCurrency] = useState<PricingCurrency>(defaultCurrency(locale));
   const format = priceFormat(locale, currency);
   const perEvent = perEventCost(guests, currency);
   const pack = organizerPackCost(guests, currency);
@@ -43,19 +49,7 @@ export function PricingCalculator({ content, locale }: { content: PricingContent
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">{content.text}</p>
         </div>
-        <ToggleGroup
-          type="single"
-          variant="outline"
-          aria-label={content.currencyLabel}
-          value={currency}
-          onValueChange={(value) => value && setCurrency(value as PricingCurrency)}
-        >
-          {PRICING_CURRENCIES.map((code) => (
-            <ToggleGroupItem key={code} value={code} className="h-11 px-4 text-sm">
-              {content.currencyNames[code]}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
+        <CurrencySwitcher value={currency} label={content.currencyLabel} />
       </div>
 
       <div className="mt-8">

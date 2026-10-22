@@ -84,8 +84,10 @@ export function SubscriptionSection({
 
   return (
     <div className="flex flex-col gap-4">
-      {reminders && remindersOut ? <Banner>{t("remindersOut", { limit: reminders.limit })}</Banner> : null}
-      {remindersLow ? <Banner>{t("remindersLow", { left: remindersLeft ?? 0 })}</Banner> : null}
+      {reminders && remindersOut ? (
+        <Banner>{t(isFree ? "remindersOut" : "remindersOutPaid", { limit: reminders.limit })}</Banner>
+      ) : null}
+      {remindersLow ? <Banner>{t(isFree ? "remindersLow" : "remindersLowPaid", { left: remindersLeft ?? 0 })}</Banner> : null}
 
       <div className="rounded-xl border p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { PRICING_CONTENT, PricingPage } from "@/components/modules/landing";
+import { PRICING_CONTENT, PricingPage, pricingContent } from "@/components/modules/landing";
 import { languageAlternates, SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 import { SEO_ROUTES } from "@/lib/constants";
+import { visitorCurrency } from "@/lib/visitor-currency";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -48,6 +49,6 @@ export default async function PricingPageRoute({ params }: Readonly<PageProps>) 
   const { locale } = await params;
   const resolved = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
   setRequestLocale(resolved);
-  const origin = siteUrl();
-  return <PricingPage content={PRICING_CONTENT[resolved]} locale={resolved} siteUrl={origin} />;
+  const currency = await visitorCurrency(resolved);
+  return <PricingPage content={pricingContent(resolved, currency)} locale={resolved} siteUrl={siteUrl()} currency={currency} />;
 }

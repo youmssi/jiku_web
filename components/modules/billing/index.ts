@@ -5,7 +5,6 @@ export { AllPaymentsView } from "./all-payments-view";
 export { InvoicesTable } from "./invoices-table";
 export { SubscriptionSection } from "./subscription-section";
 export { PackSection } from "./pack-section";
-export { OwnNumberSection } from "./own-number-section";
 export { PayOnlineButton } from "./pay-online-button";
 export { PaymentReturn, PaymentReturnMissing } from "./payment-return";
 export { ActivationInstructions } from "./activation-instructions";
@@ -14,7 +13,6 @@ export {
   issueInvoiceAction,
   fetchSubscriptionAction,
   fetchPackAction,
-  fetchOwnNumberAction,
   fetchPaymentStatusAction,
 } from "./billing.service";
 export type {
@@ -27,7 +25,6 @@ export type {
   UsageAllowance,
   PackView,
   BillingStatus,
-  OwnWhatsAppNumberView,
   SubscriptionView,
   SubscriptionPlanOption,
   SubscriptionMonthOption,

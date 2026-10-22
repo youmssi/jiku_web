@@ -1,4 +1,13 @@
-import { EVENT_PRICING, FREE_OFFER, ORGANIZER_PACK, SERVICES_PRO, TICKET_SALES, type PriceList } from "@/lib/pricing";
+import {
+  EVENT_PRICING,
+  FREE_OFFER,
+  ORGANIZER_PACK,
+  priceIn,
+  SERVICES_PRO,
+  TICKET_SALES,
+  type PriceList,
+  type PricingCurrency,
+} from "@/lib/pricing";
 import type { LandingLocale, LandingPriceAnchor } from "./content";
 
 // Every amount the marketing pages write out comes from `lib/pricing.ts`, the
@@ -19,29 +28,36 @@ function count(value: number, locale: LandingLocale): string {
 }
 
 /**
- * A published price: francs first in French, dollars first in English, the
- * other currency in brackets. Dollars keep their cents only when they have
- * some ("$70", "$0.08").
+ * An amount in [currency]'s minor unit, as the locale writes it, always with
+ * the currency named (JIKU-270): "750 GNF", "50 FCFA", "0,09 $US", "$72".
+ * Dollars keep their cents only when they have some.
  */
-export function formatPrice(price: PriceList, locale: LandingLocale): string {
-  if (locale === "fr") return `${count(price.gnf, "fr")} GNF (${count(price.fcfa, "fr")} FCFA)`;
-  const dollars = new Intl.NumberFormat("en-US", {
+export function formatAmount(amountMinor: number, locale: LandingLocale, currency: PricingCurrency): string {
+  if (currency !== "USD") return `${count(amountMinor, locale)} ${currency}`;
+  return new Intl.NumberFormat(NUMBER_LOCALE[locale], {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
-  });
-  return `${dollars.format(price.usdCents / 100)} (${count(price.gnf, "en")} GNF)`;
+  }).format(amountMinor / 100);
+}
+
+/** A published price in the one currency the visitor reads (JIKU-270). */
+export function formatPrice(price: PriceList, locale: LandingLocale, currency: PricingCurrency): string {
+  return formatAmount(priceIn(price, currency), locale, currency);
 }
 
 /** The price a pricing caption quotes in place of `{price}`. */
-export function priceAnchor(anchor: LandingPriceAnchor, locale: LandingLocale): string {
-  return anchor ? formatPrice(ANCHORS[anchor], locale) : "";
+export function priceAnchor(anchor: LandingPriceAnchor, locale: LandingLocale, currency: PricingCurrency): string {
+  return anchor ? formatPrice(ANCHORS[anchor], locale, currency) : "";
 }
 
 /** The FAQ's three pricing answers, written from the published figures. */
-export function pricingAnswers(locale: LandingLocale): { events: string; services: string; sales: string } {
-  const price = (list: PriceList) => formatPrice(list, locale);
+export function pricingAnswers(
+  locale: LandingLocale,
+  currency: PricingCurrency,
+): { events: string; services: string; sales: string } {
+  const price = (list: PriceList) => formatPrice(list, locale, currency);
   const rate = `${Math.round(TICKET_SALES.commissionRate * 100)}${locale === "fr" ? " %" : "%"}`;
   const tranche = TICKET_SALES.trancheSize;
   const free = FREE_OFFER.guestsPerYear;

@@ -127,6 +127,9 @@ export const COOKIES = {
   REFRESH_TOKEN: "jiku_refresh_token",
   // Separate cookie so an admin session never crosses into organizer routes.
   ADMIN_ACCESS_TOKEN: "jiku_admin_access_token",
+  // The currency a visitor picked on the marketing pages (JIKU-270); readable
+  // by the page script, holds no personal data.
+  CURRENCY: "jiku_currency",
 } as const;
 
 // Public marketing pages, deliberately generic: no location-targeted slugs, so
@@ -135,6 +138,8 @@ export const COOKIES = {
 export const DOCS_ROUTE = "/docs";
 /** The guide to writing WhatsApp messages Meta treats as information (JIKU-269). */
 export const WHATSAPP_MESSAGES_GUIDE = `${DOCS_ROUTE}/whatsapp-messages`;
+/** The guide to connecting an organization's own WhatsApp number (JIKU-271). */
+export const OWN_WHATSAPP_NUMBER_GUIDE = `${DOCS_ROUTE}/own-whatsapp-number`;
 
 export const SEO_ROUTES = {
   USE_CASES: "/use-cases",

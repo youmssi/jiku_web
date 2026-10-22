@@ -1,10 +1,11 @@
 import { BellRing, ClipboardCheck, Layers, Link2, ListOrdered, Mail, QrCode, ScanLine } from "lucide-react";
 import { MotionProvider, RevealFallback } from "@/components/effects";
 import { cardFontVariables } from "@/lib/card-display-fonts";
+import type { PricingCurrency } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 import { BentoSection } from "./bento-section";
 import { CardsSection } from "./cards-section";
-import { LANDING_CONTENT, type LandingLocale } from "./content";
+import { landingContent, type LandingLocale } from "./content";
 import { CtaSection } from "./cta-section";
 import { FaqSection } from "./faq-section";
 import { FooterSection } from "./footer-section";
@@ -28,8 +29,16 @@ const SERVICE_ICONS = [Link2, BellRing, ListOrdered, ScanLine];
  * the doubts, and the action. Every idea is said once; the detail lives on
  * the use-cases page, the pricing page and the FAQ.
  */
-export function LandingPage({ locale, siteUrl }: { locale: LandingLocale; siteUrl: string }) {
-  const content = LANDING_CONTENT[locale];
+export function LandingPage({
+  locale,
+  siteUrl,
+  currency,
+}: {
+  locale: LandingLocale;
+  siteUrl: string;
+  currency: PricingCurrency;
+}) {
+  const content = landingContent(locale, currency);
 
   return (
     <MotionProvider>
@@ -62,7 +71,7 @@ export function LandingPage({ locale, siteUrl }: { locale: LandingLocale; siteUr
         />
         <TrustSection content={content.trust} />
         <UseCasesSection content={content.useCases} />
-        <PricingSection content={content.pricing} locale={locale} />
+        <PricingSection content={content.pricing} locale={locale} currency={currency} />
         <FaqSection content={content.faq} />
         <CtaSection content={content.cta} />
       </main>

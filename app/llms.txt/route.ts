@@ -1,7 +1,7 @@
 import {
   BIRTHDAY_CARD_CONTENT,
   BIRTHDAY_TEXTS_CONTENT,
-  LANDING_CONTENT,
+  landingContent,
   ORGANIZERS_CONTENT,
   PRICING_CONTENT,
   USE_CASES_CONTENT,
@@ -19,8 +19,8 @@ export const dynamic = "force-static";
 
 export function GET(): Response {
   const origin = siteUrl();
-  const fr = LANDING_CONTENT.fr;
-  const en = LANDING_CONTENT.en;
+  const fr = landingContent("fr", "GNF");
+  const en = landingContent("en", "USD");
   const link = (title: string, path: string, note: string) => `- [${title}](${origin}${path}): ${note}`;
 
   const body = [

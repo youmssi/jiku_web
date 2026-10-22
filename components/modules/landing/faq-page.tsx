@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/modules/seo";
 import { Link } from "@/i18n/navigation";
 import { ROUTES, SEO_ROUTES } from "@/lib/constants";
+import type { PricingCurrency } from "@/lib/pricing";
 import { supportMailto, supportWhatsAppLink } from "@/lib/support";
 import { PearlBackdrop } from "./backdrops";
 import { ClosingCta, CLOSING_OUTLINE } from "./closing-cta";
-import { LANDING_CONTENT, type LandingLocale } from "./content";
+import { landingContent, type LandingLocale } from "./content";
 import { MarketingFooter } from "./footer-section";
 import { MarketingHeader } from "./marketing-header";
 
@@ -19,8 +20,8 @@ import { MarketingHeader } from "./marketing-header";
  * closed so search engines read them, a human to ask when no answer fits,
  * the shared closing band and footer (JIKU-232).
  */
-export function FaqPage({ locale, siteUrl }: { locale: LandingLocale; siteUrl: string }) {
-  const { faq, nav, cta } = LANDING_CONTENT[locale];
+export function FaqPage({ locale, siteUrl, currency }: { locale: LandingLocale; siteUrl: string; currency: PricingCurrency }) {
+  const { faq, nav, cta } = landingContent(locale, currency);
   const prefix = locale === "fr" ? "" : `/${locale}`;
   const other: LandingLocale = locale === "fr" ? "en" : "fr";
   const whatsApp = supportWhatsAppLink();

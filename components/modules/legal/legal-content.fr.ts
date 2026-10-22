@@ -110,9 +110,10 @@ export const LEGAL_FR: LegalDocuments = {
         body: [
           "Les prix en vigueur sont publiés sur la page des tarifs, en francs guinéens (GNF) pour les organisations établies en Guinée. Un équivalent en dollars peut être affiché à titre indicatif ; seul le montant en monnaie locale fait foi.",
           [
-            "Services (rendez-vous, réservation, file d'attente) : abonnement Services Pro par personne qui sert les clients et par mois, payable au mois ou à l'année. L'offre Solo est gratuite pour une personne. Les rappels WhatsApp de Services Pro relèvent d'un usage raisonnable de 1 000 rappels par personne et par mois ; au-delà, Jikū peut limiter les envois après en avoir averti l'organisation.",
+            "Services (rendez-vous, réservation, file d'attente) : abonnement Services Pro par personne qui sert les clients et par mois, payable au mois ou à l'année. L'offre Solo est gratuite pour une personne. Les rappels WhatsApp de Services Pro relèvent d'un usage raisonnable de 1 000 rappels par personne et par mois envoyés depuis le numéro Jikū ; au-delà, les rappels passent par les autres canaux du service jusqu'au mois suivant, et l'écran de facturation l'annonce à l'approche de la limite. Les rappels envoyés depuis le numéro propre de l'organisation ne comptent pas.",
             "Pro Organisateur : forfait mensuel qui couvre 1 000 invités par mois sur tous les événements de l'organisation, puis un prix par invité. Les invités non utilisés d'un mois ne sont pas reportés.",
-            "Événements avec invitations gratuites : gratuits jusqu'à 100 invités sur douze mois glissants par organisation, puis un prix par invité de l'événement, tout compris. Ajouter des invités ne fait payer que les nouveaux.",
+            "Numéro WhatsApp de l'organisation : toute offre peut connecter gratuitement son propre numéro WhatsApp Business. Meta facture alors directement à l'organisation les messages envoyés depuis ce numéro, selon ses propres conditions, et l'organisation reste titulaire de son compte WhatsApp Business.",
+            "Événements avec invitations gratuites : gratuits jusqu'à 100 invités sur douze mois glissants par organisation, puis un prix par invité de l'événement, tout compris. Au premier achat d'un événement, les invités gratuits encore disponibles sont déduits et lui sont alors réservés ; ajouter des invités ne fait payer que les nouveaux. Le jour de l'événement, l'envoi des invitations peut continuer jusqu'à 20 % au-delà des invités de l'événement (au moins 20) ; ces invités restent dus.",
             "Billets payants : une commission de 3 % du prix de chaque billet vendu, payée à Jikū par tranche avant la vente (voir l'article 6).",
             "Les envois par SMS sont une option payante dont le prix est affiché avant chaque envoi.",
           ],
@@ -279,7 +280,7 @@ export const LEGAL_FR: LegalDocuments = {
             "E-mails : useSend, qui les achemine par Amazon Web Services (Amazon SES), ou le fournisseur d'e-mail configuré par l'organisation.",
             "WhatsApp : Meta Platforms (WhatsApp Business Platform).",
             "SMS : Nimba SMS (Guinée), seulement quand l'envoi de SMS est activé.",
-            "Paiements à Jikū : CinetPay.",
+            "Paiements à Jikū : les opérateurs Mobile Money (Orange Money, MTN MoMo) et notre banque, pour les transferts que vous nous envoyez.",
             "Suivi des erreurs : Sentry.",
             "Mesure d'audience : Umami, sans cookie, sur une instance que nous administrons.",
             "Échanges avec l'équipe Jikū (ventes et assistance) : Chatwoot et n8n, sur des instances que nous administrons ; Anthropic (Claude), pour un assistant automatique qui répond aux premiers messages et passe la main à une personne de l'équipe ; Cal.com, pour réserver un rendez-vous avec nous. Ces outils ne reçoivent que les messages envoyés à Jikū, jamais les données des invités et clients des organisations.",
@@ -327,7 +328,7 @@ export const LEGAL_FR: LegalDocuments = {
         id: "cookies",
         heading: "Cookies",
         body: [
-          "Jikū n'utilise que des cookies nécessaires : la session de connexion et la langue choisie. Aucun cookie publicitaire ni de suivi entre sites. La mesure d'audience fonctionne sans cookie et sans conserver d'adresse IP : elle ne demande donc pas de consentement.",
+          "Jikū n'utilise que des cookies nécessaires : la session de connexion, la langue choisie et la monnaie choisie pour afficher les prix. Aucun cookie publicitaire ni de suivi entre sites. La mesure d'audience fonctionne sans cookie et sans conserver d'adresse IP : elle ne demande donc pas de consentement.",
         ],
       },
       {

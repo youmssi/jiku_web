@@ -3,14 +3,13 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "@/i18n/navigation";
-import { ROUTES } from "@/lib/constants";
+import { OWN_WHATSAPP_NUMBER_GUIDE } from "@/lib/constants";
 import {
   completeEmbeddedSignupAction,
   removeProviderAction,
@@ -66,11 +65,11 @@ function isFacebookOrigin(origin: string): boolean {
 }
 
 /**
- * The organization's WhatsApp number (ADR 105). Without an offer that includes
- * it, messages go out from Jikū's number and the section points to the
- * option. With one, the organizer connects their number through Meta's
- * Embedded Signup window — or enters credentials by hand — then sees the
- * connected number, can send a test and disconnect it.
+ * The organization's WhatsApp number, free in every offer (ADR 109, decision
+ * 11). Until one is connected, messages go out from Jikū's number. The
+ * organizer connects theirs through Meta's Embedded Signup window — or enters
+ * credentials by hand — then sees the connected number, can send a test and
+ * disconnect it. The guide "Brancher votre numéro WhatsApp" lists Meta's steps.
  */
 export function WhatsAppNumberSection({
   whatsapp,
@@ -164,28 +163,8 @@ export function WhatsAppNumberSection({
     });
   }
 
-  if (!whatsapp.allowed && !whatsapp.configured) {
-    return (
-      <div className="flex flex-col gap-3">
-        <p className="text-sm text-muted-foreground">{t("platform")}</p>
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border p-4">
-          <p className="max-w-md text-sm">{t("notIncluded")}</p>
-          <Button asChild variant="outline">
-            <Link href={ROUTES.BILLING}>{t("seeOption")}</Link>
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col gap-4">
-      {whatsapp.configured && !whatsapp.allowed ? (
-        <Alert className="border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200">
-          <AlertDescription className="text-inherit">{t("lapsed")}</AlertDescription>
-        </Alert>
-      ) : null}
-
       {whatsapp.configured ? (
         <div className="flex flex-wrap items-start justify-between gap-3 rounded-xl border p-4">
           <div>
@@ -210,7 +189,12 @@ export function WhatsAppNumberSection({
               <Button className="self-start" onClick={connect} disabled={isConnecting}>
                 {isConnecting ? t("connecting") : t("connect")}
               </Button>
-              <p className="text-xs text-muted-foreground">{t("connectHelp")}</p>
+              <p className="text-xs text-muted-foreground">
+                {t("connectHelp")}{" "}
+                <Link href={OWN_WHATSAPP_NUMBER_GUIDE} className="font-medium underline underline-offset-4">
+                  {t("guide")}
+                </Link>
+              </p>
             </>
           ) : (
             <p className="text-xs text-muted-foreground">{t("unavailable")}</p>
@@ -219,7 +203,7 @@ export function WhatsAppNumberSection({
       )}
 
       {whatsapp.configured ? <TestSend /> : null}
-      {whatsapp.allowed ? <ManualCredentials whatsapp={whatsapp} onUpdated={onUpdated} /> : null}
+      <ManualCredentials whatsapp={whatsapp} onUpdated={onUpdated} />
     </div>
   );
 }
