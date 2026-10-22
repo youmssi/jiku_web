@@ -79,7 +79,7 @@ function fr(currency: PricingCurrency): PricingContent {
   return {
     meta: {
       title: "Tarifs : gratuit, par événement ou Pro",
-      description: `${number(FREE_OFFER.guestsPerYear, "fr")} invités gratuits par an, puis ${formatPrice(EVENT_PRICING.perGuest, "fr", currency)} par invité, tout compris. Pro Organisateur et Services Pro pour les professionnels. Prix toutes taxes comprises.`,
+      description: `${number(FREE_OFFER.guestsPerYear, "fr")} invités gratuits par an, puis ${formatPrice(EVENT_PRICING.perGuest, "fr", "GNF")} (${formatPrice(EVENT_PRICING.perGuest, "fr", "FCFA")}) par invité, tout compris. Pro Organisateur et Services Pro pour les professionnels. Prix toutes taxes comprises.`,
     },
     eyebrow: "Tarifs",
     title: "Un prix par invité. Rien d'autre à calculer.",
@@ -234,7 +234,7 @@ function en(currency: PricingCurrency): PricingContent {
   return {
     meta: {
       title: "Pricing: free, per event or Pro",
-      description: `${number(FREE_OFFER.guestsPerYear, "en")} free guests a year, then ${formatPrice(EVENT_PRICING.perGuest, "en", currency)} per guest, all included. Pro Organizer and Services Pro for professionals. Prices include all taxes.`,
+      description: `${number(FREE_OFFER.guestsPerYear, "en")} free guests a year, then ${formatPrice(EVENT_PRICING.perGuest, "en", "USD")} (${formatPrice(EVENT_PRICING.perGuest, "en", "GNF")}) per guest, all included. Pro Organizer and Services Pro for professionals. Prices include all taxes.`,
     },
     eyebrow: "Pricing",
     title: "One price per guest. Nothing else to work out.",

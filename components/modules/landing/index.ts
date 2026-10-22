@@ -2,7 +2,7 @@
 // Routes render <LandingPage/> and <UseCasesPage/>; every word lives in a
 // content contract so the two locales can never drift in shape.
 export { LandingPage } from "./landing-page";
-export { LANDING_CONTENT } from "./content";
+export { LANDING_CONTENT, landingContent } from "./content";
 export type { LandingContent, LandingLocale } from "./content";
 export { UseCasesPage } from "./use-cases-page";
 export { USE_CASES_CONTENT } from "./use-cases-content";
