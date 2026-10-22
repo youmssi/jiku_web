@@ -29,10 +29,7 @@ export interface EmailProviderView {
   apiKeyMasked: string | null;
 }
 
-/**
- * The organization's WhatsApp number (ADR 105). [allowed] says whether its
- * offer includes its own number; saved credentials are used only while it does.
- */
+/** The organization's own WhatsApp number, free in every offer (ADR 109, decision 11). */
 export type WhatsAppProviderView = Schema<"WhatsAppProviderView">;
 
 /** What Meta's Embedded Signup window needs; [enabled] is false until the Meta app is configured. */

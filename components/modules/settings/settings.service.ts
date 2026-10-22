@@ -148,7 +148,6 @@ export async function completeEmbeddedSignupAction(
 
 async function whatsAppResult(response: Response): Promise<ActionResult<ProviderSettingsResponse>> {
   const t = await getTranslations("settings.whatsappNumber.errors");
-  if (response.status === 402) return fail(t("notIncluded"));
   if (response.status === 409) return fail(t("taken"));
   if (response.status === 502) return fail(t("metaRefused"));
   if (response.status === 503) return fail(t("unavailable"));

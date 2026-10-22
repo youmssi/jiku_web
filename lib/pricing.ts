@@ -70,11 +70,6 @@ export const SERVICES_PRO = {
   remindersPerPerson: 1_000,
 } as const;
 
-/** Sending from the organization's own WhatsApp number, outside the Pro offers that include it. */
-export const OWN_WHATSAPP_NUMBER = {
-  monthly: { gnf: 100_000, fcfa: 7_000, usdCents: 1_200 } satisfies PriceList,
-} as const;
-
 /** 3 % of each ticket sold; the first tranche of 50 tickets is free. */
 export const TICKET_SALES = {
   commissionRate: 0.03,

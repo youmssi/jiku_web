@@ -9,7 +9,6 @@ import type {
   ManualPaymentInstructions,
   PaymentInitiationResult,
   PaymentStatusView,
-  OwnWhatsAppNumberView,
   PackView,
   SubscriptionRequestInput,
   SubscriptionView,
@@ -74,37 +73,6 @@ export async function requestSubscriptionAction(
   }
   if (response.status === 409) {
     return { ok: false, error: t("tooSmall") };
-  }
-  if (!response.ok) {
-    reportApiError(response);
-    return { ok: false, error: t("failed") };
-  }
-  return { ok: true, instructions: (await response.json()) as ManualPaymentInstructions };
-}
-
-// ─── Own WhatsApp number (ADR 105) ───────────────────────────────────────────
-
-export async function fetchOwnNumberAction(): Promise<OwnWhatsAppNumberView | null> {
-  const response = await serverFetch("/billing/whatsapp-number");
-  if (!response.ok) return null;
-  return (await response.json()) as OwnWhatsAppNumberView;
-}
-
-/** Asks to pay for [months] of the "own WhatsApp number" add-on. */
-export async function requestOwnNumberAction(
-  months: number,
-): Promise<{ ok: true; instructions: ManualPaymentInstructions } | { ok: false; error: string }> {
-  const response = await serverFetch("/billing/whatsapp-number/request", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ months }),
-  });
-  const t = await getTranslations("billing.ownNumber.errors");
-  if (response.status === 401 || response.status === 403) {
-    return { ok: false, error: t("forbidden") };
-  }
-  if (response.status === 409) {
-    return { ok: false, error: t("included") };
   }
   if (!response.ok) {
     reportApiError(response);
@@ -203,8 +171,6 @@ function checkoutRequest(target: CheckoutTarget): { path: string; body: unknown 
       return { path: "/billing/pack/checkout", body: { months: target.months } };
     case "packExtra":
       return { path: "/billing/pack/extra/checkout", body: { blocks: target.blocks } };
-    case "ownNumber":
-      return { path: "/billing/whatsapp-number/checkout", body: { months: target.months } };
   }
 }
 

@@ -50,7 +50,6 @@ const UNCONFIGURED_PROVIDERS: ProviderSettingsResponse = {
     accessTokenMasked: null,
     templateName: null,
     templateLanguage: null,
-    allowed: false,
     displayPhoneNumber: null,
     verifiedName: null,
   },
