@@ -270,7 +270,7 @@
     "description": "Your public profile. Clients open it to see every bookable service and book without an account.",
     "label": "Public username",
     "placeholder": "my-salon",
-    "hint": "3 to 32 lowercase letters, numbers and hyphens. Shown as jiku.app/o/{username}.",
+    "hint": "3 to 32 lowercase letters, numbers and hyphens. Shown as hellojiku.com/o/{username}.",
     "fallback": "username",
     "save": "Save",
     "saving": "Saving…",

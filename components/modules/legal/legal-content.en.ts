@@ -125,7 +125,7 @@ export const LEGAL_EN: LegalDocuments = {
         id: "paiement",
         heading: "5. Payment and invoicing",
         body: [
-          "Amounts owed to Jikū are paid in advance, by Orange Money, MTN Mobile Money, bank card or any other method offered at checkout. Online payments are handled by our payment provider; we never store your card details.",
+          "Amounts owed to Jikū are paid in advance, by Orange Money, by bank transfer or by any other method offered at checkout. When online payment is offered, it is handled by our payment provider; we never store your card details.",
           "An invoice is issued for each payment and stays available in the organization's space.",
           "A subscription that expires without renewal remains usable during a three-day grace period. After that, paid features are suspended until payment; the data is not deleted.",
           "Unless the law provides otherwise, amounts paid are not refundable. A current period is not refunded pro rata on termination.",
@@ -278,10 +278,10 @@ export const LEGAL_EN: LegalDocuments = {
           [
             "Hosting: Hetzner Online (servers and database, European Union).",
             "Website delivery, network protection and encrypted backup storage: Cloudflare.",
-            "Email: useSend, which delivers through Amazon Web Services (Amazon SES), or the email provider the organization configured.",
+            "Email: useSend, which delivers through Amazon Web Services (Amazon SES), Resend and Brevo, or the email provider the organization configured.",
             "WhatsApp: Meta Platforms (WhatsApp Business Platform).",
             "SMS: Nimba SMS (Guinea), only when SMS sending is turned on.",
-            "Payments to Jikū: the Mobile Money operators (Orange Money, MTN MoMo) and our bank, for the transfers you send us.",
+            "Payments to Jikū: Orange Money and our bank, for the transfers you send us.",
             "Error tracking: Sentry.",
             "Audience measurement: Umami, cookieless, on an instance we operate.",
             "Conversations with the Jikū team (sales and support): Chatwoot and n8n, on instances we operate; Anthropic (Claude), for an automated assistant that answers first messages and hands over to a person on the team; Cal.com, to book a meeting with us. These tools only receive messages sent to Jikū, never the data of the organizations' guests and clients.",
