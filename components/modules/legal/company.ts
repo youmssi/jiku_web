@@ -16,8 +16,8 @@ export const COMPANY = {
   shareCapital: "2 000 000 GNF",
   rccm: "GN.TCC.2026.B.14483",
   address: "Kaporo Rails, commune de Ratoma, Conakry, République de Guinée",
-  email: "mrvin100mail@gmail.com",
-  privacyEmail: "mrvin100mail@gmail.com",
+  email: "contact@hellojiku.com",
+  privacyEmail: "privacy@hellojiku.com",
   dpaDeclaration: null as string | null,
 } as const;
 

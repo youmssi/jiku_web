@@ -270,7 +270,7 @@
     "description": "Votre profil public. Vos clients l'ouvrent pour voir tous vos services réservables et réserver sans compte.",
     "label": "Identifiant public",
     "placeholder": "mon-salon",
-    "hint": "3 à 32 lettres minuscules, chiffres et tirets. Affiché sous la forme jiku.app/o/{username}.",
+    "hint": "3 à 32 lettres minuscules, chiffres et tirets. Affiché sous la forme hellojiku.com/o/{username}.",
     "fallback": "identifiant",
     "save": "Enregistrer",
     "saving": "Enregistrement…",

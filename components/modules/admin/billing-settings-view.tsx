@@ -29,6 +29,7 @@ import { updateBillingSettingsAction } from "./admin.service";
 import type { AdminBillingSettingsView } from "./schema";
 import {
   adminBillingSettingsSchema,
+  type AdminBillingSettingsFormInput,
   type AdminBillingSettingsFormValues,
 } from "./schema";
 
@@ -47,7 +48,7 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
     control,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<AdminBillingSettingsFormValues>({
+  } = useForm<AdminBillingSettingsFormInput, unknown, AdminBillingSettingsFormValues>({
     resolver: zodResolver(adminBillingSettingsSchema),
     defaultValues: {
       payee: {
@@ -246,8 +247,8 @@ export function BillingSettingsView({ initial }: { initial: AdminBillingSettings
   );
 }
 
-type FormControl = Control<AdminBillingSettingsFormValues>;
-type FormPath = FieldPath<AdminBillingSettingsFormValues>;
+type FormControl = Control<AdminBillingSettingsFormInput, unknown, AdminBillingSettingsFormValues>;
+type FormPath = FieldPath<AdminBillingSettingsFormInput>;
 
 /** One labelled input bound to the settings form; numeric unless [text]. */
 function NumberField({

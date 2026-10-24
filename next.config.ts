@@ -82,6 +82,9 @@ const nextConfig: NextConfig = {
       noindexRoute("/checkin/:path*"),
       noindexRoute("/line/:path*"),
       noindexRoute("/admin/:path*"),
+      // Vercel previews and the develop branch duplicate the real site: keep
+      // every page of them out of search, so only production gets indexed.
+      ...(process.env.VERCEL_ENV === "preview" ? [{ source: "/:path*", headers: NOINDEX_HEADERS }] : []),
     ];
   },
 };
