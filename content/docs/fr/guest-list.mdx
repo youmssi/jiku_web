@@ -10,7 +10,7 @@ Quand vous savez déjà qui inviter (un mariage, un séminaire, une assemblée g
 
 ### Ajoutez vos invités
 
-Dans l'onglet **Invités** de l'événement, **importez une liste d'invités** depuis votre fichier Excel ou CSV, ou ajoutez-les un par un. Les doublons sont signalés.
+Dans l'onglet **Invités** de l'événement, **importez une liste d'invités** depuis votre fichier Excel ou CSV, ou ajoutez-les un par un. Les doublons sont signalés. Une colonne facultative **canal** (`email` ou `whatsapp`) fixe le canal d'un invité ; sans elle, la règle de l'événement s'applique.
 
 ![L'onglet Invités d'un événement, avec la liste importée et les boutons Ajouter, Importer et Exporter](/guides/fr/guests.webp)
 
@@ -28,6 +28,12 @@ Si votre événement a plusieurs catégories (VIP, presse, standard), créez-les
 
 Dans l'**Aperçu** de l'événement, touchez **Email**, **WhatsApp** ou les deux : le choix s'enregistre tout de suite.
 
+Même avec les deux canaux, chaque invité ne reçoit qu'**une seule invitation**. Dans **Paramètres**, section **Invitations**, choisissez le **Canal prioritaire** et gardez **Utiliser l'autre canal si le premier est impossible** activé : un invité sans numéro reçoit alors l'e-mail, et une livraison qui échoue définitivement est retentée une fois sur l'autre canal.
+
+<Callout>
+  Pour un mariage, une fête de famille ou une association, WhatsApp en premier : vos invités le lisent tout de suite. Pour un séminaire, une école ou une entreprise, l'e-mail en premier convient souvent mieux, car les invités y retrouvent le billet et l'ajout au calendrier.
+</Callout>
+
 ![L'Aperçu d'un événement : la liste Préparez votre événement, avec le canal d'invitation Email et WhatsApp](/guides/fr/event-overview.webp)
 
 </Step>
@@ -42,7 +48,7 @@ La liste **Publier l'événement** vérifie le nom et la date, le canal, les cat
 
 ## Après l'envoi
 
-Vous suivez qui a répondu et qui vient, en direct : l'**Aperçu** de l'événement montre combien ont confirmé, vous signale les invités qui n'ont pas encore reçu leur invitation, et **Sans réponse** ouvre la liste des invités à relancer. Le jour de l'événement, les entrées passent en tête de l'Aperçu. L'invité ouvre son lien court (`/v/…`) et touche **Je viens** : son billet QR s'affiche aussitôt, à présenter à l'entrée. Le même lien rouvre ensuite directement le billet.
+Vous suivez qui a répondu et qui vient, en direct : l'**Aperçu** de l'événement montre combien ont confirmé, vous signale les invités qui n'ont pas encore reçu leur invitation, et **Sans réponse** ouvre la liste des invités à relancer. Pour les relancer, ouvrez **Envoyer les invitations** dans l'onglet **Invités** : **Relancer les invités sans réponse** vous laisse choisir le canal de la relance, et seuls les invités qui n'ont pas encore répondu reçoivent un nouveau message. Le jour de l'événement, les entrées passent en tête de l'Aperçu. L'invité ouvre son lien court (`/v/…`) et touche **Je viens** : son billet QR s'affiche aussitôt, à présenter à l'entrée, et lui est aussi envoyé sur le canal de son invitation. Le même lien rouvre ensuite directement le billet.
 
 <Callout>
   Vous pouvez aussi combiner les deux : une liste d'invités nommés et une [carte à partager](./invitation-card) pour les autres.

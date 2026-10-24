@@ -86,7 +86,7 @@
     "trigger": "Importer",
     "title": "Importer une liste d'invités",
     "description": "Un fichier CSV avec prénom, nom, e-mail et téléphone. Chaque ligne est vérifiée avant l'import.",
-    "columnsHint": "Colonnes attendues : prénom, nom, e-mail, téléphone.",
+    "columnsHint": "Colonnes attendues : prénom, nom, e-mail, téléphone. Une colonne « canal » (email ou whatsapp) peut fixer le canal d'un invité.",
     "template": "Télécharger le modèle",
     "drop": "Déposez le fichier ici",
     "reading": "Lecture du fichier…",
@@ -140,22 +140,34 @@
   "send": {
     "trigger": "Envoyer les invitations",
     "title": "Envoyer les invitations",
-    "description": "Chaque invité reçoit son lien personnel pour répondre et obtenir son billet.",
-    "channels": "Canaux",
+    "description": "Chaque invité reçoit son lien personnel, sur un seul canal, pour répondre et obtenir son billet.",
+    "ruleTitle": "Comment vos invités sont joints",
+    "rule": {
+      "single": "Chaque invité reçoit son invitation sur {channel}.",
+      "fallback": "Chaque invité reçoit une seule invitation : sur {primary}, ou sur {other} s'il ne peut pas être joint sur {primary}.",
+      "noFallback": "Chaque invité reçoit une seule invitation, sur {primary}. Ceux qui n'ont pas de coordonnée pour ce canal ne sont pas invités."
+    },
     "reach": {
       "EMAIL": "{count, plural, =0 {Aucun invité n'a d'e-mail} one {# invité a un e-mail} other {# invités ont un e-mail}}",
       "WHATSAPP": "{count, plural, =0 {Aucun invité n'a de numéro} one {# invité a un numéro} other {# invités ont un numéro}}"
     },
-    "once": "Un invité déjà invité sur un canal ne reçoit pas le lien deux fois : vous pouvez renvoyer après avoir ajouté des invités.",
+    "once": "Un invité déjà invité ne reçoit pas le lien deux fois : vous pouvez renvoyer après avoir ajouté des invités.",
     "submit": "Envoyer",
     "sending": "Envoi…",
     "queued": "{count, plural, =0 {Aucune nouvelle invitation à envoyer.} one {# invitation en cours d'envoi.} other {# invitations en cours d'envoi.}}",
     "noChannelTitle": "Aucun canal activé",
-    "noChannelDescription": "Choisissez l'e-mail, WhatsApp ou les deux dans les paramètres de l'événement.",
+    "noChannelDescription": "Choisissez l'e-mail ou WhatsApp dans les paramètres de l'événement.",
     "openSettings": "Ouvrir les paramètres",
     "allowanceTitle": "Quota d'invités atteint",
     "allowanceCta": "Voir les offres",
-    "confirmEmailTitle": "Adresse e-mail à confirmer"
+    "confirmEmailTitle": "Adresse e-mail à confirmer",
+    "remind": {
+      "title": "Relancer les invités sans réponse",
+      "description": "{count, plural, one {# invité n'a pas encore répondu.} other {# invités n'ont pas encore répondu.}} Choisissez le canal de la relance : chacun reçoit un nouveau message sur ce canal.",
+      "channel": "Canal de la relance",
+      "submit": "Relancer",
+      "queued": "{count, plural, =0 {Aucun invité à relancer sur ce canal.} one {# relance en cours d'envoi.} other {# relances en cours d'envoi.}}"
+    }
   },
   "errors": {
     "invalid": "Vérifiez les informations et réessayez.",

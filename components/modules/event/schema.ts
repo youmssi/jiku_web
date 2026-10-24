@@ -41,6 +41,10 @@ export const eventFormSchema = z
     overbookingAllowed: z.boolean(),
     maxOverbookingCount: z.number().int("wholeNumber").min(0, "positive").nullable(),
     invitationChannels: z.array(z.enum(INVITATION_CHANNELS)),
+    // One invitation per guest (JIKU-273): the channel tried first, and whether
+    // the other one stands in when the first cannot reach the guest.
+    primaryChannel: z.enum(INVITATION_CHANNELS).nullable(),
+    channelFallback: z.boolean(),
     deliveryMode: z.enum(DELIVERY_MODES),
     brandName: z.string().max(255, "tooLong"),
     brandLogoUrl: z.string().max(2048, "tooLong").regex(HTTPS_OR_EMPTY, "httpsUrl"),
@@ -65,6 +69,8 @@ export const emptyEventValues: EventFormValues = {
   overbookingAllowed: false,
   maxOverbookingCount: null,
   invitationChannels: [],
+  primaryChannel: null,
+  channelFallback: true,
   deliveryMode: "LINK",
   brandName: "",
   brandLogoUrl: "",

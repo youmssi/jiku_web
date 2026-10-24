@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
+import type { InvitationChannel } from "@/lib/channels";
 import { eventGuestsRoute } from "@/lib/constants";
 import { type ActionResult, fail, fromResponse, ok, problemCode, reportApiError } from "@/lib/action-result";
 import {
@@ -154,13 +155,14 @@ export interface SendInvitationsFailure {
 
 export async function sendInvitationsAction(
   eventId: string,
-  channels: string[],
+  reminder?: { channel: InvitationChannel },
 ): Promise<{ ok: true; data: { queued: number } } | SendInvitationsFailure> {
   const t = await errors();
-  if (channels.length === 0) {
-    return { ok: false, error: t("noChannel"), reason: null };
-  }
-  const params = new URLSearchParams({ channels: channels.join(",") });
+  // Without a reminder, the event's rule picks one channel per guest (JIKU-273);
+  // a reminder goes on the channel chosen, to the guests who have not answered.
+  const params = new URLSearchParams(
+    reminder ? { channels: reminder.channel, onlyUnsent: "false", onlyUnanswered: "true" } : {},
+  );
   const response = await serverFetch(`/events/${eventId}/invitations/send?${params.toString()}`, {
     method: "POST",
   });

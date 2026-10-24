@@ -79,7 +79,7 @@
       },
       "channels": {
         "title": "Invitation channel",
-        "description": "Email, WhatsApp or both.",
+        "description": "Email or WhatsApp: each guest gets one invitation.",
         "cta": "Choose"
       },
       "tickets": {
@@ -166,6 +166,14 @@
           "title": "Interactive WhatsApp ticket",
           "description": "Guests confirm with a button in WhatsApp and get their ticket in the chat."
         }
+      },
+      "primary": {
+        "label": "Primary channel",
+        "hint": "Each guest gets one invitation, on this channel first."
+      },
+      "fallback": {
+        "label": "Use the other channel if the first one can't be used",
+        "hint": "For a guest with no contact on the primary channel, or when delivery fails for good. One try, never both channels at once."
       }
     },
     "rules": {

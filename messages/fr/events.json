@@ -79,7 +79,7 @@
       },
       "channels": {
         "title": "Canal d'invitation",
-        "description": "E-mail, WhatsApp ou les deux.",
+        "description": "E-mail ou WhatsApp : chaque invité reçoit une seule invitation.",
         "cta": "Choisir"
       },
       "tickets": {
@@ -166,6 +166,14 @@
           "title": "Billet interactif WhatsApp",
           "description": "L'invité confirme d'un bouton dans WhatsApp et reçoit son billet dans la conversation."
         }
+      },
+      "primary": {
+        "label": "Canal prioritaire",
+        "hint": "Chaque invité reçoit une seule invitation, d'abord sur ce canal."
+      },
+      "fallback": {
+        "label": "Utiliser l'autre canal si le premier est impossible",
+        "hint": "Pour un invité sans coordonnée sur le canal prioritaire, ou quand la livraison échoue définitivement. Un seul essai, jamais les deux canaux à la fois."
       }
     },
     "rules": {

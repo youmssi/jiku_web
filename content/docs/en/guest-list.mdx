@@ -10,7 +10,7 @@ When you already know who to invite (a wedding, a seminar, a general assembly), 
 
 ### Add your guests
 
-In the event's **Guests** tab, **import a guest list** from your Excel or CSV file, or add guests one by one. Duplicates are flagged.
+In the event's **Guests** tab, **import a guest list** from your Excel or CSV file, or add guests one by one. Duplicates are flagged. An optional **channel** column (`email` or `whatsapp`) sets a guest's channel; without it, the event's rule applies.
 
 ![An event's Guests tab, with the imported list and the Add, Import and Export buttons](/guides/en/guests.webp)
 
@@ -28,6 +28,12 @@ If your event has several categories (VIP, press, standard), create them with th
 
 On the event's **Overview**, tap **Email**, **WhatsApp** or both: the choice is saved at once.
 
+Even with both channels, each guest gets **one invitation only**. In **Settings**, **Invitations** section, pick the **Primary channel** and keep **Use the other channel if the first one can't be used** on: a guest with no number then gets the email, and a delivery that fails for good is tried once on the other channel.
+
+<Callout>
+  For a wedding, a family party or an association, put WhatsApp first: guests read it right away. For a seminar, a school or a company, email first often works better, as guests find the ticket and the calendar invite there.
+</Callout>
+
 ![An event's Overview: the Get your event ready checklist, with Email and WhatsApp as invitation channels](/guides/en/event-overview.webp)
 
 </Step>
@@ -42,7 +48,7 @@ The **Publish the event** checklist checks the name and date, the channel, the c
 
 ## After sending
 
-You follow who answered and who is coming, live: the event's **Overview** shows how many confirmed, points out the guests who haven't received an invitation yet, and **No answer** opens the list of guests to remind. On the event's day, the door figures lead the Overview. The guest opens their short link (`/v/…`) and taps **I'm coming**: their QR ticket shows right away, to present at the door. The same link then opens the ticket directly.
+You follow who answered and who is coming, live: the event's **Overview** shows how many confirmed, points out the guests who haven't received an invitation yet, and **No answer** opens the list of guests to remind. To remind them, open **Send invitations** in the **Guests** tab: **Remind guests who haven't answered** lets you pick the reminder's channel, and only the guests who haven't answered yet get a new message. On the event's day, the door figures lead the Overview. The guest opens their short link (`/v/…`) and taps **I'm coming**: their QR ticket shows right away, to present at the door, and is also sent on the channel of their invitation. The same link then opens the ticket directly.
 
 <Callout>
   You can also combine both: a list of named guests and a [card to share](./invitation-card) for everyone else.

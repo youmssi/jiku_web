@@ -19,6 +19,7 @@ export type AnalyticsEvent =
   | "ticket_category_saved"
   | "guests_added"
   | "invitation_sent"
+  | "invitation_reminded"
   | "ticket_marked_paid"
   | "rsvp_confirmed"
   | "rsvp_declined"
