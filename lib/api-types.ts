@@ -2516,6 +2516,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/notifications/email-feedback/brevo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["brevoEmailFeedbackReceive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/notifications/email-feedback/resend": {
         parameters: {
             query?: never;
@@ -4473,6 +4489,7 @@ export interface components {
             required?: boolean;
         };
         CreateEventRequest: {
+            channelFallback?: boolean;
             description?: string | null;
             /** Format: date-time */
             endDateTime?: string | null;
@@ -4481,6 +4498,8 @@ export interface components {
             /** Format: int32 */
             maxCapacity?: number | null;
             name: string;
+            /** @enum {string|null} */
+            primaryChannel?: "EMAIL" | "WHATSAPP" | null;
             settings?: components["schemas"]["EventSettingsDto"];
             /** Format: date-time */
             startDateTime?: string | null;
@@ -4653,6 +4672,7 @@ export interface components {
             paidGuests?: number;
         };
         EventResponse: {
+            channelFallback?: boolean;
             description?: string | null;
             /** Format: date-time */
             endDateTime?: string | null;
@@ -4663,6 +4683,8 @@ export interface components {
             /** Format: int32 */
             maxCapacity?: number | null;
             name?: string;
+            /** @enum {string|null} */
+            primaryChannel?: "EMAIL" | "WHATSAPP" | null;
             quorum?: components["schemas"]["QuorumResponse"] | null;
             settings?: components["schemas"]["EventSettingsDto"];
             /** Format: date-time */
@@ -4814,6 +4836,8 @@ export interface components {
             /** @enum {string|null} */
             paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID" | null;
             phoneNumber?: string | null;
+            /** @enum {string|null} */
+            preferredChannel?: "EMAIL" | "WHATSAPP" | null;
             /** @enum {string} */
             rsvpStatus?: "PENDING" | "CONFIRMED" | "DECLINED" | "TRANSFERRED";
             ticketCode?: string | null;
@@ -6138,6 +6162,7 @@ export interface components {
             fromName?: string | null;
         };
         UpdateEventRequest: {
+            channelFallback?: boolean;
             description?: string | null;
             /** Format: date-time */
             endDateTime?: string | null;
@@ -6146,6 +6171,8 @@ export interface components {
             /** Format: int32 */
             maxCapacity?: number | null;
             name: string;
+            /** @enum {string|null} */
+            primaryChannel?: "EMAIL" | "WHATSAPP" | null;
             settings?: components["schemas"]["EventSettingsDto"];
             /** Format: date-time */
             startDateTime?: string | null;
@@ -9043,6 +9070,7 @@ export interface operations {
             query?: {
                 channels?: ("EMAIL" | "WHATSAPP")[];
                 onlyUnsent?: boolean;
+                onlyUnanswered?: boolean;
             };
             header?: never;
             path: {
@@ -10491,6 +10519,30 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["EmailFeedbackWebhookRequest"];
+            };
+        };
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    brevoEmailFeedbackReceive: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string;
             };
         };
         responses: {

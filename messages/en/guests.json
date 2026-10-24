@@ -86,7 +86,7 @@
     "trigger": "Import",
     "title": "Import a guest list",
     "description": "A CSV file with first name, last name, email and phone. Every row is checked before importing.",
-    "columnsHint": "Expected columns: first name, last name, email, phone.",
+    "columnsHint": "Expected columns: first name, last name, email, phone. A “channel” column (email or whatsapp) can set a guest's channel.",
     "template": "Download the template",
     "drop": "Drop the file here",
     "reading": "Reading the file…",
@@ -140,22 +140,34 @@
   "send": {
     "trigger": "Send invitations",
     "title": "Send the invitations",
-    "description": "Each guest gets their personal link to answer and receive their ticket.",
-    "channels": "Channels",
+    "description": "Each guest gets their personal link, on one channel, to answer and receive their ticket.",
+    "ruleTitle": "How your guests are reached",
+    "rule": {
+      "single": "Each guest gets their invitation on {channel}.",
+      "fallback": "Each guest gets one invitation: on {primary}, or on {other} if they can't be reached on {primary}.",
+      "noFallback": "Each guest gets one invitation, on {primary}. Guests with no contact for that channel aren't invited."
+    },
     "reach": {
       "EMAIL": "{count, plural, =0 {No guest has an email} one {# guest has an email} other {# guests have an email}}",
       "WHATSAPP": "{count, plural, =0 {No guest has a number} one {# guest has a number} other {# guests have a number}}"
     },
-    "once": "A guest already invited on a channel doesn't get the link twice: you can send again after adding guests.",
+    "once": "A guest already invited doesn't get the link twice: you can send again after adding guests.",
     "submit": "Send",
     "sending": "Sending…",
     "queued": "{count, plural, =0 {No new invitation to send.} one {# invitation on its way.} other {# invitations on their way.}}",
     "noChannelTitle": "No channel enabled",
-    "noChannelDescription": "Choose email, WhatsApp or both in the event's settings.",
+    "noChannelDescription": "Choose email or WhatsApp in the event's settings.",
     "openSettings": "Open settings",
     "allowanceTitle": "Guest allowance reached",
     "allowanceCta": "See plans",
-    "confirmEmailTitle": "Email address to confirm"
+    "confirmEmailTitle": "Email address to confirm",
+    "remind": {
+      "title": "Remind guests who haven't answered",
+      "description": "{count, plural, one {# guest hasn't answered yet.} other {# guests haven't answered yet.}} Pick the reminder's channel: each of them gets a new message there.",
+      "channel": "Reminder channel",
+      "submit": "Remind",
+      "queued": "{count, plural, =0 {No guest to remind on this channel.} one {# reminder on its way.} other {# reminders on their way.}}"
+    }
   },
   "errors": {
     "invalid": "Check the details and try again.",

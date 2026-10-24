@@ -49,7 +49,12 @@ export async function GuestsView({ eventId, answer }: { eventId: string; answer?
     getTranslations("guests"),
   ]);
   const event = eventResponse.ok
-    ? ((await eventResponse.json()) as { invitationChannels: InvitationChannel[]; status: string })
+    ? ((await eventResponse.json()) as {
+        invitationChannels: InvitationChannel[];
+        primaryChannel?: InvitationChannel | null;
+        channelFallback?: boolean;
+        status: string;
+      })
     : null;
   const enabledChannels: InvitationChannel[] = event?.invitationChannels ?? [];
   // A draft is sent from the header's "Publish and send"; here sending appears once it is live.
@@ -79,6 +84,9 @@ export async function GuestsView({ eventId, answer }: { eventId: string; answer?
     EMAIL: guests.filter((guest) => guest.email && !guest.excludedFromInvitations).length,
     WHATSAPP: guests.filter((guest) => guest.phoneNumber && !guest.excludedFromInvitations).length,
   } satisfies Record<InvitationChannel, number>;
+  const unanswered = guests.filter(
+    (guest) => !guest.excludedFromInvitations && (guest.rsvpStatus ?? "PENDING") === "PENDING",
+  ).length;
   const awaitingConsent = enabledChannels.includes("WHATSAPP")
     ? guests.filter((guest) => guest.phoneNumber && guest.consentAttested === false).length
     : 0;
@@ -91,7 +99,16 @@ export async function GuestsView({ eventId, answer }: { eventId: string; answer?
         </h2>
         {guests.length > 0 ? (
           <div className="flex flex-wrap items-center gap-2">
-            {canSend ? <SendInvitationsDialog eventId={eventId} enabledChannels={enabledChannels} reach={reach} /> : null}
+            {canSend ? (
+              <SendInvitationsDialog
+                eventId={eventId}
+                enabledChannels={enabledChannels}
+                primaryChannel={event?.primaryChannel ?? null}
+                channelFallback={event?.channelFallback ?? true}
+                reach={reach}
+                unanswered={unanswered}
+              />
+            ) : null}
             <AddGuestDialog eventId={eventId} />
             <ImportGuestsDialog eventId={eventId} />
             <ExportGuestsButton href={eventGuestsExportRoute(eventId)} />

@@ -38,6 +38,10 @@ function toPayload(values: EventFormValues) {
       brandColor: values.brandColor || null,
     },
     invitationChannels: values.invitationChannels,
+    // A primary channel the event no longer offers is dropped rather than refused.
+    primaryChannel:
+      values.primaryChannel && values.invitationChannels.includes(values.primaryChannel) ? values.primaryChannel : null,
+    channelFallback: values.channelFallback,
   };
 }
 

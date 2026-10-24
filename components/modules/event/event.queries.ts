@@ -111,6 +111,8 @@ export function toEventFormValues(event: EventResponse): EventFormValues {
     overbookingAllowed: event.settings.overbookingAllowed,
     maxOverbookingCount: event.settings.maxOverbookingCount,
     invitationChannels: event.invitationChannels,
+    primaryChannel: event.primaryChannel ?? null,
+    channelFallback: event.channelFallback ?? true,
     deliveryMode: event.settings.deliveryMode,
     brandName: event.settings.brandName ?? "",
     brandLogoUrl: event.settings.brandLogoUrl ?? "",
