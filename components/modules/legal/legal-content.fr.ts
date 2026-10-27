@@ -124,7 +124,7 @@ export const LEGAL_FR: LegalDocuments = {
         id: "paiement",
         heading: "5. Paiement et facturation",
         body: [
-          "Les sommes dues à Jikū se paient d'avance, par Orange Money, par virement bancaire ou par tout autre moyen proposé au moment du paiement. Quand le paiement en ligne est proposé, il est traité par notre prestataire de paiement ; nous ne conservons jamais vos données de carte.",
+          "Les sommes dues à Jikū se paient d'avance, par virement bancaire ou par tout autre moyen proposé au moment du paiement. Quand le paiement en ligne est proposé, il est traité par notre prestataire de paiement ; nous ne conservons jamais vos données de carte.",
           "Une facture est émise pour chaque paiement et reste disponible dans l'espace de l'organisation.",
           "Un abonnement arrivé à échéance et non renouvelé reste utilisable pendant un délai de grâce de trois jours. Passé ce délai, les fonctions payantes sont suspendues jusqu'au paiement ; les données ne sont pas supprimées pour autant.",
           "Sauf disposition légale contraire, une somme payée n'est pas remboursable. Une période en cours n'est pas remboursée au prorata en cas de résiliation.",
@@ -280,7 +280,7 @@ export const LEGAL_FR: LegalDocuments = {
             "E-mails : useSend, qui les achemine par Amazon Web Services (Amazon SES), Resend et Brevo, ou le fournisseur d'e-mail configuré par l'organisation.",
             "WhatsApp : Meta Platforms (WhatsApp Business Platform).",
             "SMS : Nimba SMS (Guinée), seulement quand l'envoi de SMS est activé.",
-            "Paiements à Jikū : Orange Money et notre banque, pour les transferts que vous nous envoyez.",
+            "Paiements à Jikū : notre banque, pour les virements que vous nous envoyez.",
             "Suivi des erreurs : Sentry.",
             "Mesure d'audience : Umami, sans cookie, sur une instance que nous administrons.",
             "Échanges avec l'équipe Jikū (ventes et assistance) : Chatwoot et n8n, sur des instances que nous administrons ; Anthropic (Claude), pour un assistant automatique qui répond aux premiers messages et passe la main à une personne de l'équipe ; Cal.com, pour réserver un rendez-vous avec nous. Ces outils ne reçoivent que les messages envoyés à Jikū, jamais les données des invités et clients des organisations.",
