@@ -465,7 +465,8 @@
     "errors": {
       "failed": "We couldn't process the batch. Try again.",
       "notAvailable": "This option is no longer available; reload the page.",
-      "provider": "Online payment is unavailable right now. Try again or pay by transfer."
+      "provider": "Online payment is unavailable right now. Try again or pay by transfer.",
+      "currency": "Online payment isn't offered in your currency yet. Choose bank transfer."
     }
   },
   "openInvitation": {

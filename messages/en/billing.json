@@ -182,7 +182,8 @@
       "unavailable": "This offer is not available for your workspace.",
       "conflict": "This purchase is not possible right now: your current offer already covers it, or it needs an active Pro Organizer.",
       "provider": "The payment service is not responding. Try again in a moment, or pay by transfer.",
-      "failed": "The payment could not start. Try again."
+      "failed": "The payment could not start. Try again.",
+      "currency": "Online payment isn't offered in your currency yet. Pay by transfer using the payment instructions."
     },
     "return": {
       "metaTitle": "Your payment",

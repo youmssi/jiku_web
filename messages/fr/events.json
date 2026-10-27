@@ -465,7 +465,8 @@
     "errors": {
       "failed": "Impossible de traiter la tranche. Réessayez.",
       "notAvailable": "Cette option n'est plus disponible ; rechargez la page.",
-      "provider": "Le paiement en ligne est indisponible pour le moment. Réessayez ou payez par transfert."
+      "provider": "Le paiement en ligne est indisponible pour le moment. Réessayez ou payez par transfert.",
+      "currency": "Le paiement en ligne n'est pas encore proposé dans votre monnaie. Choisissez le virement."
     }
   },
   "openInvitation": {

@@ -8003,6 +8003,7 @@ export interface operations {
             query?: never;
             header?: {
                 "X-Signature"?: string;
+                "X-Webhook-Signature"?: string;
             };
             path: {
                 provider: string;
