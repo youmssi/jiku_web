@@ -206,8 +206,8 @@ function fr(currency: PricingCurrency): PricingContent {
       heading: "Comment on paie",
       toJiku: {
         title: "Vous payez Jikū",
-        text: "Le montant exact s'affiche avant le paiement. Vous l'envoyez par Mobile Money ou par virement avec la référence indiquée : notre équipe confirme et active, en général en quelques heures, et la facture arrive dans votre espace.",
-        methods: [{ name: "Orange Money" }, { name: "Virement bancaire" }, { name: "Paiement en ligne", soon: true }],
+        text: "Le montant exact s'affiche avant le paiement. Vous l'envoyez par virement bancaire avec la référence indiquée : notre équipe confirme et active, en général en quelques heures, et la facture arrive dans votre espace.",
+        methods: [{ name: "Virement bancaire" }, { name: "Paiement en ligne", soon: true }],
         soon: "bientôt",
       },
       toYou: {
@@ -361,8 +361,8 @@ function en(currency: PricingCurrency): PricingContent {
       heading: "How payment works",
       toJiku: {
         title: "You pay Jikū",
-        text: "The exact amount shows before you pay. You send it by Mobile Money or bank transfer with the reference shown: our team confirms and activates, usually within a few hours, and the invoice arrives in your space.",
-        methods: [{ name: "Orange Money" }, { name: "Bank transfer" }, { name: "Online payment", soon: true }],
+        text: "The exact amount shows before you pay. You send it by bank transfer with the reference shown: our team confirms and activates, usually within a few hours, and the invoice arrives in your space.",
+        methods: [{ name: "Bank transfer" }, { name: "Online payment", soon: true }],
         soon: "soon",
       },
       toYou: {
