@@ -182,7 +182,8 @@
       "unavailable": "Cette offre n'est pas disponible pour votre espace.",
       "conflict": "Cet achat n'est pas possible pour le moment : votre offre actuelle le couvre déjà, ou il demande Pro Organisateur actif.",
       "provider": "Le service de paiement ne répond pas. Réessayez dans un instant, ou payez par virement.",
-      "failed": "Le paiement n'a pas pu démarrer. Réessayez."
+      "failed": "Le paiement n'a pas pu démarrer. Réessayez.",
+      "currency": "Le paiement en ligne n'est pas encore proposé dans votre monnaie. Payez par virement avec les instructions de paiement."
     },
     "return": {
       "metaTitle": "Votre paiement",

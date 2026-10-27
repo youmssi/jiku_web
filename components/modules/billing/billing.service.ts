@@ -2,7 +2,7 @@
 
 import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
-import { fail, ok, reportApiError, type ActionResult } from "@/lib/action-result";
+import { fail, ok, problemCode, reportApiError, type ActionResult } from "@/lib/action-result";
 import type {
   CheckoutTarget,
   InvoiceSummary,
@@ -191,7 +191,11 @@ export async function checkoutAction(target: CheckoutTarget): Promise<ActionResu
     if (response.status >= 500) reportApiError(response);
     if (response.status === 401 || response.status === 403) return fail(t("forbidden"));
     if (response.status === 400) return fail(t("unavailable"));
-    if (response.status === 409) return fail(t("conflict"));
+    if (response.status === 409) {
+      // No online payment in this currency (JIKU-272): the transfer instructions stay the way to pay.
+      const code = await problemCode(response);
+      return fail(t(code === "billing.online-payment-unavailable" ? "currency" : "conflict"));
+    }
     if (response.status === 502) return fail(t("provider"));
     return fail(t("failed"));
   }
