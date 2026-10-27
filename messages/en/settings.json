@@ -280,8 +280,8 @@
     "open": "Open public page in a new tab"
   },
   "legal": {
-    "intro": "Only needed if you invoice a company or an institution. Leave it blank if you never need an invoice.",
-    "complete": "Complete: invoices can be issued for your organization.",
+    "intro": "Fill it in to get an invoice for every confirmed payment, by email and in Billing. Without it, each payment keeps its receipt.",
+    "complete": "Complete: each confirmed payment issues its invoice and emails it to you.",
     "incomplete": "Incomplete: an invoice needs a legal name, address, city and country.",
     "legalName": "Registered company name",
     "legalNamePlaceholder": "Example Company Ltd",

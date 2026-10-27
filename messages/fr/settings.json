@@ -280,8 +280,8 @@
     "open": "Ouvrir la page publique dans un nouvel onglet"
   },
   "legal": {
-    "intro": "Utile seulement si vous facturez une entreprise ou une institution. Laissez vide si vous n'avez jamais besoin de facture.",
-    "complete": "Complet : des factures peuvent être émises pour votre organisation.",
+    "intro": "Renseignez-la pour recevoir une facture à chaque paiement confirmé, par e-mail et dans Facturation. Sans elle, chaque paiement garde son reçu.",
+    "complete": "Complet : chaque paiement confirmé émet sa facture et vous l'envoie par e-mail.",
     "incomplete": "Incomplet : une facture exige une raison sociale, une adresse, une ville et un pays.",
     "legalName": "Raison sociale",
     "legalNamePlaceholder": "Société Exemple SARL",
