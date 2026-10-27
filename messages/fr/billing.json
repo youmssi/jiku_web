@@ -114,7 +114,8 @@
       "PENDING": "En attente",
       "SUCCEEDED": "Payé",
       "FAILED": "Échoué"
-    }
+    },
+    "automatic": "Chaque paiement confirmé émet sa facture et vous l'envoie par e-mail, dès que l'<settings>identité légale</settings> de votre organisation est complète. Sinon, le reçu fait foi."
   },
   "invoices": {
     "emptyTitle": "Aucune facture",

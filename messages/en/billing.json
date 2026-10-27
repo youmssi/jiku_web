@@ -114,7 +114,8 @@
       "PENDING": "Pending",
       "SUCCEEDED": "Paid",
       "FAILED": "Failed"
-    }
+    },
+    "automatic": "Each confirmed payment issues its invoice and emails it to you once your organization's <settings>legal identity</settings> is complete. Otherwise, the receipt stands."
   },
   "invoices": {
     "emptyTitle": "No invoices yet",
