@@ -1,8 +1,8 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { MessageCircle } from "lucide-react";
-import { CardHero, ClampedText, OrganizerMark, StateMessage, VerifiedBadge } from "@/components/shared";
+import { MapPin, MessageCircle } from "lucide-react";
+import { CardHero, ClampedText, directionsLink, googleCalendarLink, OrganizerMark, StateMessage, VerifiedBadge } from "@/components/shared";
 import { CARD_STYLE_TOKENS, cardStyleOf, displayTitle, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
-import { fullWhen, liveWhen, shortDay, shortTime } from "@/lib/short-dates";
+import { countdown, fullWhen, liveWhen, shortDay, shortTime } from "@/lib/short-dates";
 import { RespondForm } from "./respond-form";
 import { CardVisit } from "./card-visit";
 import { whatsappAnswerLink, type CardSource } from "./share";
@@ -34,6 +34,20 @@ export async function OpenInvitationPage({
     ? whatsappAnswerLink(invitation.whatsappNumber, t("whatsappMessage", { code: invitation.code }))
     : null;
   const pill = style === "MODERN" ? "rounded-sm" : "rounded-full";
+  const until = start ? countdown(start, zone, locale) : null;
+  // Offered once the person answered: saving the date only matters to someone who may come (JIKU-289).
+  const calendar = start
+    ? {
+        google: googleCalendarLink({
+          title: invitation.eventName,
+          start,
+          end: invitation.eventEnd ?? null,
+          location: invitation.eventLocation ?? null,
+          details: invitation.organizerName,
+        }),
+        ics: `/api/cards/${encodeURIComponent(invitation.code)}/calendar`,
+      }
+    : null;
 
   return (
     <div className="flex flex-1 flex-col" style={{ background: tokens.panel, color: tokens.panelInk }}>
@@ -54,15 +68,25 @@ export async function OpenInvitationPage({
                 <time
                   dateTime={start}
                   title={fullWhen(start, zone, locale)}
-                  className={`border border-white/30 bg-white/15 px-3 py-1 first-letter:uppercase ${pill}`}
+                  className={`inline-flex min-h-8 items-center border border-white/30 bg-white/15 px-3 py-1 first-letter:uppercase ${pill}`}
                 >
                   {liveWhen(start, zone, locale)}
                 </time>
               ) : null}
               {invitation.eventLocation ? (
-                <span className={`border border-white/30 bg-white/15 px-3 py-1 ${pill}`}>{invitation.eventLocation}</span>
+                <a
+                  href={directionsLink(invitation.eventLocation)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={t("directions", { place: invitation.eventLocation })}
+                  className={`inline-flex min-h-8 items-center gap-1.5 border border-white/30 bg-white/15 px-3 py-1 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 ${pill}`}
+                >
+                  <MapPin aria-hidden className="size-3.5" />
+                  {invitation.eventLocation}
+                </a>
               ) : null}
             </div>
+            {start && until ? <p className="text-sm font-medium opacity-90">{until}</p> : null}
           </div>
         </div>
       </CardHero>
@@ -97,7 +121,7 @@ export async function OpenInvitationPage({
                 </p>
               </div>
             ) : null}
-            <RespondForm invitation={invitation} style={style} source={source} />
+            <RespondForm invitation={invitation} style={style} source={source} calendar={calendar} />
           </>
         ) : (
           <StateMessage title={t("closedTitle")} description={t(`closed.${invitation.closedReason ?? "DISABLED"}`)} />

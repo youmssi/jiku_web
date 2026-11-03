@@ -6,3 +6,4 @@ export { renderCard, type CardFormat } from "./card-image";
 export { fetchPublicOpenInvitation } from "./open-invitation.queries";
 export { OpenInvitationView } from "./open-invitation-view";
 export { cardMetadata } from "./card-metadata";
+export { cardCalendar } from "./card-calendar";
