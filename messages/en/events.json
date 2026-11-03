@@ -498,13 +498,17 @@
       "copy": "Copy the link",
       "open": "Open the card",
       "copyFailed": "Could not copy the link.",
-      "whatsapp": "Share on WhatsApp",
+      "whatsapp": "WhatsApp",
       "download": "Download the card",
       "message": "{event}\n{when}\nAnswer here: {url}",
       "cardAnswer": "Scan to answer",
       "cardAnswerBy": "Until {date}",
       "fileName": "Invitation {event}.png",
-      "downloadFailed": "Couldn't download the card. Try again."
+      "downloadFailed": "Couldn't download the card. Try again.",
+      "share": "Share…",
+      "shareHint": "Sends the card image and the ready message: pick WhatsApp, Facebook, Messenger, Telegram or SMS.",
+      "facebook": "Facebook",
+      "telegram": "Telegram"
     },
     "stats": {
       "expected": "People expected",
