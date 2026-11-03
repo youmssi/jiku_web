@@ -10,7 +10,8 @@ import { cn } from "@/lib/utils";
 import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
 import { UmamiScript } from "@/components/shared/umami-script";
 import { SHARE_IMAGE, SiteJsonLd, siteUrl } from "@/components/modules/seo";
-import { routing } from "@/i18n/routing";
+import { DirectionProvider } from "@/components/ui/direction";
+import { guestRouting, localeDirection, routing } from "@/i18n/routing";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -120,12 +121,15 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) notFound();
+  // Arabic is a guest-screen locale; the proxy sends /ar on any other page back to French.
+  if (!hasLocale(guestRouting.locales, locale)) notFound();
   setRequestLocale(locale);
+  const dir = localeDirection(locale);
 
   return (
     <html
       lang={locale}
+      dir={dir}
       className={cn(
         "h-full",
         "antialiased",
@@ -136,7 +140,9 @@ export default async function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <SiteJsonLd siteUrl={siteUrl()} />
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <DirectionProvider dir={dir}>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        </DirectionProvider>
         <ServiceWorkerRegister />
         <UmamiScript />
       </body>

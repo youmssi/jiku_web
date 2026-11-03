@@ -23,7 +23,8 @@ export function ClampedText({
   const clamp = { 2: "line-clamp-2", 3: "line-clamp-3", 4: "line-clamp-4" }[lines];
   return (
     <div className={className}>
-      <p className={cn("whitespace-pre-line text-pretty", !open && long && clamp)}>{text}</p>
+      {/* The writer's own language sets the direction, whatever the page reads in (JIKU-292). */}
+      <p dir="auto" className={cn("whitespace-pre-line text-pretty", !open && long && clamp)}>{text}</p>
       {long && !open ? (
         <button type="button" onClick={() => setOpen(true)} className="mt-1 text-xs font-medium underline underline-offset-4">
           {more}

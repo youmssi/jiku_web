@@ -68,7 +68,7 @@ export function VoicePlayer({ voice, organizer, style }: { voice: CardVoice; org
         </span>
       </button>
       {voice.transcript ? (
-        <p className="text-sm italic" style={{ color: tokens.panelMuted }}>
+        <p dir="auto" className="text-sm italic" style={{ color: tokens.panelMuted }}>
           « {voice.transcript} »
         </p>
       ) : null}

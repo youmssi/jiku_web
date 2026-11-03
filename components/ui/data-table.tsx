@@ -120,7 +120,7 @@ export function DataTable<TData extends RowData>({
 
       {table.getPageCount() > 1 ? (
         <div className="flex items-center justify-end gap-2">
-          <span className="mr-auto text-xs text-muted-foreground">
+          <span className="me-auto text-xs text-muted-foreground">
             Page {(table.atoms.pagination?.get()?.pageIndex ?? 0) + 1} of{" "}
             {table.getPageCount()}
           </span>

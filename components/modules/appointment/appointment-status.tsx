@@ -83,7 +83,7 @@ export function AppointmentStatus({
         <p className="mt-1 text-sm text-muted-foreground">{view.status === "PENDING" ? t("PENDING") : t("CONFIRMED")}</p>
       </div>
       {error ? (
-        <Alert variant="destructive" className="text-left">
+        <Alert variant="destructive" className="text-start">
           <AlertTitle>{t("cancelFailed")}</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>

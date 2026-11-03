@@ -312,5 +312,18 @@
       "pause": "Pause",
       "failed": "Can't play right now."
     }
+  },
+  "orgPublic": {
+    "bookOnline": "Book online",
+    "tagline": "Book an appointment in a few taps, no account needed.",
+    "emptyTitle": "No services to book yet",
+    "emptyText": "This organization has not published any bookable services yet. Check back soon.",
+    "servicesTitle": "Bookable services",
+    "available": "{count, plural, one {# available} other {# available}}",
+    "pickTime": "Pick a time that suits you",
+    "book": "Book"
+  },
+  "languages": {
+    "label": "Language"
   }
 }

@@ -6,6 +6,9 @@ import { join } from "node:path";
 const root = new URL("../messages/", import.meta.url).pathname;
 const reference = "fr";
 const locales = readdirSync(root).filter((entry) => entry !== reference);
+// Arabic covers only the guest screens (JIKU-292): its other namespaces read in
+// French (i18n/messages.ts). Keep this list in step with PARTIAL_LOCALES there.
+const partial = { ar: ["common.json", "guest.json"] };
 
 function keys(value, prefix = "") {
   if (typeof value !== "object" || value === null || Array.isArray(value)) return [`${prefix}:${Array.isArray(value) ? "array" : typeof value}`];
@@ -16,6 +19,7 @@ const problems = [];
 for (const file of readdirSync(join(root, reference))) {
   const expected = new Set(keys(JSON.parse(readFileSync(join(root, reference, file), "utf8"))));
   for (const locale of locales) {
+    if (partial[locale] && !partial[locale].includes(file)) continue;
     let actual;
     try {
       actual = new Set(keys(JSON.parse(readFileSync(join(root, locale, file), "utf8"))));
@@ -57,12 +61,19 @@ function visibleLength(text) {
 
 for (const locale of [reference, ...locales]) {
   for (const { file, key, max } of budgets) {
+    if (partial[locale] && !partial[locale].includes(file)) continue;
     const catalog = JSON.parse(readFileSync(join(root, locale, file), "utf8"));
     for (const [path, value] of entries(catalog)) {
       if (typeof value !== "string" || !key.test(path) || budgetExceptions.has(path)) continue;
       const length = visibleLength(value);
       if (length > max) problems.push(`${locale}/${file}: ${path} is ${length} characters, the budget is ${max}`);
     }
+  }
+}
+
+for (const [locale, files] of Object.entries(partial)) {
+  for (const file of readdirSync(join(root, locale))) {
+    if (!files.includes(file)) problems.push(`${locale}/${file}: not a namespace this locale translates`);
   }
 }
 
