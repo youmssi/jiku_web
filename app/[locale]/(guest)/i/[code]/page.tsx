@@ -1,21 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cardSourceOf, OpenInvitationPage } from "@/components/modules/open-invitation";
-import { fetchPublicOpenInvitation } from "@/components/modules/open-invitation/server";
+import { cardMetadata, fetchPublicOpenInvitation } from "@/components/modules/open-invitation/server";
 
 type Params = Promise<{ locale: string; code: string }>;
 type SearchParams = Promise<{ via?: string | string[] }>;
 
 export async function generateMetadata({ params }: Readonly<{ params: Params }>): Promise<Metadata> {
-  const { code } = await params;
+  const { locale, code } = await params;
   const invitation = await fetchPublicOpenInvitation(code);
   if (!invitation) return { robots: { index: false, follow: false } };
-  return {
-    title: `${invitation.eventName} · ${invitation.organizerName}`,
-    description: invitation.welcomeMessage ?? undefined,
-    robots: { index: false, follow: false },
-    openGraph: { title: invitation.eventName, description: invitation.welcomeMessage ?? invitation.organizerName },
-  };
+  return cardMetadata(invitation, locale);
 }
 
 /** Route resolution only: an unknown code is a 404. */

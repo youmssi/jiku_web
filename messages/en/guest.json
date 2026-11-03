@@ -294,6 +294,8 @@
       "closed": "Answers closed, or no place left.",
       "tooMany": "Too many tries. Try again in a few minutes.",
       "failed": "Could not send your answer. Try again."
-    }
+    },
+    "previewAlt": "Invitation: {event}, {when}",
+    "previewAltNoDate": "Invitation: {event}"
   }
 }

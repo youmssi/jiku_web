@@ -2,14 +2,19 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Check, Copy, Download, ExternalLink, Loader2, MessageCircle, Send, Share2 } from "lucide-react";
+import { Check, ChevronDown, Copy, Download, ExternalLink, Loader2, MessageCircle, Send, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { trackEvent } from "@/lib/analytics";
 import { openInvitationRoute } from "@/lib/constants";
 import { recordShareAction } from "./open-invitation.service";
 import { facebookShareLink, taggedLink, telegramShareLink, whatsappShareLink, type CardSource } from "./share";
+
+/** The card images an organizer can save (JIKU-283): a status, a post, a link-sized landscape. */
+const DOWNLOAD_FORMATS = ["status", "portrait", "landscape"] as const;
+type DownloadFormat = (typeof DOWNLOAD_FORMATS)[number];
 
 interface CardDetails {
   eventName: string;
@@ -25,7 +30,18 @@ interface CardDetails {
  * from one button. Direct WhatsApp, Facebook and Telegram links, the link to
  * copy and the image to download cover computers and older browsers.
  */
-export function SharePanel({ eventId, code, card }: { eventId: string; code: string; card: CardDetails }) {
+export function SharePanel({
+  eventId,
+  code,
+  card,
+  version,
+}: {
+  eventId: string;
+  code: string;
+  card: CardDetails;
+  /** The card's look fingerprint (JIKU-283): a changed card gets a fresh link preview. */
+  version?: string;
+}) {
   const t = useTranslations("events.openInvitation.share");
   const locale = useLocale();
   const origin = useSyncExternalStore(noSubscription, () => window.location.origin, () => "");
@@ -38,7 +54,8 @@ export function SharePanel({ eventId, code, card }: { eventId: string; code: str
 
   const when = [card.when, card.answerBy ? t("cardAnswerBy", { date: card.answerBy }) : null].filter(Boolean).join("\n");
   // Every link carries the network it leaves through, so its visits and answers count there (JIKU-282).
-  const messageFor = (source: CardSource) => t("message", { event: card.eventName, when, url: taggedLink(url, source) });
+  const link = (source: CardSource) => taggedLink(url, source, version);
+  const messageFor = (source: CardSource) => t("message", { event: card.eventName, when, url: link(source) });
 
   function counted(source: CardSource) {
     trackEvent("card_shared", { network: source });
@@ -80,7 +97,7 @@ export function SharePanel({ eventId, code, card }: { eventId: string; code: str
 
   async function copy() {
     try {
-      await navigator.clipboard.writeText(taggedLink(url, "link"));
+      await navigator.clipboard.writeText(link("link"));
       setCopied(true);
       counted("link");
       setTimeout(() => setCopied(false), 2000);
@@ -89,15 +106,15 @@ export function SharePanel({ eventId, code, card }: { eventId: string; code: str
     }
   }
 
-  async function download() {
+  async function download(format: DownloadFormat) {
     setDownloading(true);
     try {
-      const file = await cardImage();
-      if (!file) throw new Error("card image");
-      const href = URL.createObjectURL(file);
+      const response = await fetch(`/api/cards/${encodeURIComponent(code)}?format=${format}&lang=${locale}&v=${version ?? ""}`);
+      if (!response.ok) throw new Error(`card ${response.status}`);
+      const href = URL.createObjectURL(await response.blob());
       const anchor = document.createElement("a");
       anchor.href = href;
-      anchor.download = fileName;
+      anchor.download = t(`formats.${format}.fileName`, { event: card.eventName });
       anchor.click();
       // The image's QR code carries its own tag; posting the image is a share by QR.
       counted("qr");
@@ -111,8 +128,8 @@ export function SharePanel({ eventId, code, card }: { eventId: string; code: str
 
   const networks: { network: CardSource; href: string; label: string; icon: typeof Share2 }[] = [
     { network: "whatsapp", href: whatsappShareLink(messageFor("whatsapp")), label: t("whatsapp"), icon: MessageCircle },
-    { network: "facebook", href: facebookShareLink(taggedLink(url, "facebook")), label: t("facebook"), icon: Share2 },
-    { network: "telegram", href: telegramShareLink(taggedLink(url, "telegram"), messageFor("telegram")), label: t("telegram"), icon: Send },
+    { network: "facebook", href: facebookShareLink(link("facebook")), label: t("facebook"), icon: Share2 },
+    { network: "telegram", href: telegramShareLink(link("telegram"), messageFor("telegram")), label: t("telegram"), icon: Send },
   ];
 
   return (
@@ -152,10 +169,23 @@ export function SharePanel({ eventId, code, card }: { eventId: string; code: str
             </a>
           </Button>
         ))}
-        <Button type="button" variant="outline" className="max-md:h-11" onClick={download} disabled={downloading}>
-          {downloading ? <Loader2 aria-hidden className="animate-spin" /> : <Download aria-hidden />}
-          {t("download")}
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button type="button" variant="outline" className="max-md:h-11" disabled={downloading}>
+              {downloading ? <Loader2 aria-hidden className="animate-spin" /> : <Download aria-hidden />}
+              {t("download")}
+              <ChevronDown aria-hidden />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-64">
+            {DOWNLOAD_FORMATS.map((format) => (
+              <DropdownMenuItem key={format} className="flex-col items-start gap-0.5 py-2" onSelect={() => void download(format)}>
+                <span className="font-medium">{t(`formats.${format}.label`)}</span>
+                <span className="text-xs text-muted-foreground">{t(`formats.${format}.hint`)}</span>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

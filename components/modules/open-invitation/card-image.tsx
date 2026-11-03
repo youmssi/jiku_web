@@ -8,11 +8,11 @@ import { cardStyleOf, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
 import { openInvitationRoute } from "@/lib/constants";
 import { datePart, shortDay, shortTime, shortWhen } from "@/lib/short-dates";
 import { taggedLink } from "./share";
-import { LANDSCAPE, LandscapeCard, PORTRAIT, PortraitCard, type CardArtData } from "./card-art";
+import { LANDSCAPE, LandscapeCard, PORTRAIT, PortraitCard, STATUS, StatusCard, type CardArtData } from "./card-art";
 import { cardFonts } from "./card-fonts";
 import { fetchPublicOpenInvitation } from "./open-invitation.queries";
 
-export type CardFormat = "portrait" | "landscape";
+export type CardFormat = "portrait" | "status" | "landscape";
 
 /** Reads an image into a data URL, or null when it cannot be read: a broken link never breaks the card. */
 async function inline(url: string | null | undefined): Promise<string | null> {
@@ -75,8 +75,10 @@ export async function renderCard(
       via: t("via"),
     },
   };
-  const size = format === "portrait" ? PORTRAIT : LANDSCAPE;
-  return new ImageResponse(format === "portrait" ? <PortraitCard data={data} /> : <LandscapeCard data={data} />, {
+  const size = format === "portrait" ? PORTRAIT : format === "status" ? STATUS : LANDSCAPE;
+  const art =
+    format === "portrait" ? <PortraitCard data={data} /> : format === "status" ? <StatusCard data={data} /> : <LandscapeCard data={data} />;
+  return new ImageResponse(art, {
     ...size,
     fonts: await cardFonts(style),
   });

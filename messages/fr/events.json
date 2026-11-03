@@ -508,7 +508,24 @@
       "share": "Partager…",
       "shareHint": "Envoie l'image de la carte et le message prêt : choisissez WhatsApp, Facebook, Messenger, Telegram ou SMS.",
       "facebook": "Facebook",
-      "telegram": "Telegram"
+      "telegram": "Telegram",
+      "formats": {
+        "status": {
+          "label": "Pour un statut",
+          "hint": "Vertical, plein écran : statut WhatsApp ou Facebook",
+          "fileName": "Invitation {event} - statut.png"
+        },
+        "portrait": {
+          "label": "Pour une publication",
+          "hint": "Le format des fils Facebook et des discussions",
+          "fileName": "Invitation {event}.png"
+        },
+        "landscape": {
+          "label": "Format paysage",
+          "hint": "Pour un e-mail, un site ou une impression large",
+          "fileName": "Invitation {event} - paysage.png"
+        }
+      }
     },
     "stats": {
       "expected": "Personnes attendues",
