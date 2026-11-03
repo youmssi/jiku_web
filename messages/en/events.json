@@ -584,6 +584,25 @@
       "photoTooSmall": "Photo too small: at least 600 × 300 px.",
       "preview": "Card preview"
     },
-    "customize": "Customize the card"
+    "customize": "Customize the card",
+    "funnel": {
+      "title": "Where answers come from",
+      "text": "Each shared link carries its network: you see where your people answer most.",
+      "failed": "Figures unavailable for now. Reload the page later.",
+      "empty": "Share your card to see where the answers come from.",
+      "answers": "{count, plural, =0 {No answers} one {# answer} other {# answers}}",
+      "detail": "{shares, plural, =0 {no shares} one {# share} other {# shares}} · {visits, plural, =0 {no visits} one {# visit} other {# visits}} · {coming, plural, =0 {nobody coming} one {# coming} other {# coming}}",
+      "rate": "{rate} of visitors answered",
+      "rateTooFew": "too few visits for a rate",
+      "source": {
+        "whatsapp": "WhatsApp",
+        "facebook": "Facebook",
+        "telegram": "Telegram",
+        "share": "Share menu",
+        "link": "Copied link",
+        "qr": "Image QR code",
+        "other": "Other or unknown"
+      }
+    }
   }
 }

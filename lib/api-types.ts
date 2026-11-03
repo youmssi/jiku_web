@@ -1812,6 +1812,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/open-invitation/funnel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["openInvitationFunnel"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/open-invitation/responses": {
         parameters: {
             query?: never;
@@ -1839,6 +1855,22 @@ export interface paths {
         put?: never;
         post?: never;
         delete: operations["openInvitationRemove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/open-invitation/shares": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["openInvitationShare"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -2622,6 +2654,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["publicOpenInvitationRespond"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/open/{code}/visits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["publicOpenInvitationVisit"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4387,6 +4435,17 @@ export interface components {
         CancelEventRequest: {
             notifyGuests?: boolean | null;
         };
+        CardFunnelRow: {
+            /** Format: int64 */
+            answers?: number;
+            /** Format: int64 */
+            coming?: number;
+            /** Format: int64 */
+            shares?: number;
+            source?: string;
+            /** Format: int64 */
+            visits?: number;
+        };
         ChangeRoleRequest: {
             role: string;
         };
@@ -5138,6 +5197,7 @@ export interface components {
             companions?: number;
             name: string;
             phone: string;
+            source?: string | null;
         };
         OpenResponseView: {
             /** @enum {string} */
@@ -9345,6 +9405,28 @@ export interface operations {
             };
         };
     };
+    openInvitationFunnel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CardFunnelRow"][];
+                };
+            };
+        };
+    };
     openInvitationResponses: {
         parameters: {
             query?: never;
@@ -9374,6 +9456,28 @@ export interface operations {
             path: {
                 eventId: string;
                 responseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    openInvitationShare: {
+        parameters: {
+            query: {
+                source: string;
+            };
+            header?: never;
+            path: {
+                eventId: string;
             };
             cookie?: never;
         };
@@ -10740,6 +10844,28 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["OpenResponseView"];
                 };
+            };
+        };
+    };
+    publicOpenInvitationVisit: {
+        parameters: {
+            query?: {
+                source?: string;
+            };
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

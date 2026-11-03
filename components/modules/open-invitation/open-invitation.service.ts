@@ -6,6 +6,7 @@ import { publicFetch, serverFetch } from "@/lib/api-server";
 import { eventOpenInvitationRoute } from "@/lib/constants";
 import { CARD_STYLES, type CardStyle } from "@/lib/card-style";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
+import { CARD_SOURCES, type CardSource } from "./share";
 import { respondSchema, type EventLook, type OpenResponse, type RespondInput, type SettingsInput } from "./schema";
 
 /**
@@ -146,4 +147,27 @@ export async function removeBannerAction(eventId: string): Promise<ActionResult<
   }
   revalidatePath(eventOpenInvitationRoute(eventId));
   return ok((await response.json()) as EventLook);
+}
+
+/**
+ * Counts one share of the card through [source] (JIKU-282). A lost count never
+ * stops the share: the organizer is already on their way to the network.
+ */
+export async function recordShareAction(eventId: string, source: CardSource): Promise<void> {
+  if (!CARD_SOURCES.includes(source)) return;
+  const response = await serverFetch(
+    `/events/${encodeURIComponent(eventId)}/open-invitation/shares?source=${encodeURIComponent(source)}`,
+    { method: "POST" },
+  );
+  if (!response.ok) reportApiError(response, "open-invitation");
+}
+
+/**
+ * Counts one visit of the card page, from the page's own script so link previews
+ * never count (JIKU-282). Only a number is kept; a failure is silent for the guest.
+ */
+export async function recordVisitAction(code: string, source: CardSource | null): Promise<void> {
+  const query = source && CARD_SOURCES.includes(source) ? `?source=${encodeURIComponent(source)}` : "";
+  const response = await publicFetch(`/open/${encodeURIComponent(code)}/visits${query}`, { method: "POST" });
+  if (!response.ok && response.status !== 429) reportApiError(response, "open-invitation");
 }

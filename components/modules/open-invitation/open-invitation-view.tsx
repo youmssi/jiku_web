@@ -8,7 +8,8 @@ import { FALLBACK_BRAND_COLOR } from "@/lib/card-style";
 import { CardLook } from "./card-look";
 import { loadEvent } from "@/components/modules/event/server";
 import { shortDay, shortTime, shortWhen } from "@/lib/short-dates";
-import { fetchPublicOpenInvitation, loadEventLook, loadOpenInvitation, loadOpenResponses } from "./open-invitation.queries";
+import { CardFunnel } from "./card-funnel";
+import { fetchPublicOpenInvitation, loadCardFunnel, loadEventLook, loadOpenInvitation, loadOpenResponses } from "./open-invitation.queries";
 import { OpenInvitationStart } from "./open-invitation-start";
 import { OpenResponses } from "./open-responses";
 import { AcceptingSwitch, OpenSettingsForm } from "./open-settings-form";
@@ -50,10 +51,11 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
     );
   }
 
-  const [responses, card, look] = await Promise.all([
+  const [responses, card, look, funnel] = await Promise.all([
     loadOpenResponses(eventId),
     fetchPublicOpenInvitation(invitation.code),
     loadEventLook(eventId),
+    loadCardFunnel(eventId),
   ]);
   const zone = event.timezone;
   const when = event.startDateTime ? shortWhen(event.startDateTime, zone, locale) : null;
@@ -82,7 +84,8 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
             : t("stats.remainingCount", { count: invitation.remainingPlaces }),
         }}
       />
-      <SharePanel code={invitation.code} card={{ eventName: event.name, when, answerBy }} />
+      <SharePanel eventId={eventId} code={invitation.code} card={{ eventName: event.name, when, answerBy }} />
+      <CardFunnel rows={funnel} />
       <AcceptingSwitch eventId={eventId} invitation={invitation} />
       <OpenResponses eventId={eventId} responses={responses} />
       <Collapsible>

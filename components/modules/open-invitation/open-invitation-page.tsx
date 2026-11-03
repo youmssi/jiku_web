@@ -4,7 +4,8 @@ import { CardHero, ClampedText, OrganizerMark, StateMessage, VerifiedBadge } fro
 import { CARD_STYLE_TOKENS, cardStyleOf, displayTitle, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
 import { fullWhen, liveWhen, shortDay, shortTime } from "@/lib/short-dates";
 import { RespondForm } from "./respond-form";
-import { whatsappAnswerLink } from "./share";
+import { CardVisit } from "./card-visit";
+import { whatsappAnswerLink, type CardSource } from "./share";
 import type { PublicOpenInvitation } from "./schema";
 
 /**
@@ -12,7 +13,14 @@ import type { PublicOpenInvitation } from "./schema";
  * the banner with the title and the date, the host's word, then the answer.
  * The WhatsApp button answers without a form; the form answers here.
  */
-export async function OpenInvitationPage({ invitation }: { invitation: PublicOpenInvitation }) {
+export async function OpenInvitationPage({
+  invitation,
+  source = null,
+}: {
+  invitation: PublicOpenInvitation;
+  /** The network the page was opened from (JIKU-282); null when the link carried none. */
+  source?: CardSource | null;
+}) {
   const [t, locale] = await Promise.all([getTranslations("guest.openInvitation"), getLocale()]);
   const style = cardStyleOf(invitation.cardStyle);
   const tokens = CARD_STYLE_TOKENS[style];
@@ -29,6 +37,7 @@ export async function OpenInvitationPage({ invitation }: { invitation: PublicOpe
 
   return (
     <div className="flex flex-1 flex-col" style={{ background: tokens.panel, color: tokens.panelInk }}>
+      <CardVisit code={invitation.code} source={source} />
       <CardHero style={style} color={invitation.primaryColor ?? FALLBACK_BRAND_COLOR} bannerUrl={invitation.bannerUrl}>
         <div className="mx-auto flex min-h-72 w-full max-w-lg flex-col justify-between gap-8 px-5 pb-6 pt-8">
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
@@ -88,7 +97,7 @@ export async function OpenInvitationPage({ invitation }: { invitation: PublicOpe
                 </p>
               </div>
             ) : null}
-            <RespondForm invitation={invitation} style={style} />
+            <RespondForm invitation={invitation} style={style} source={source} />
           </>
         ) : (
           <StateMessage title={t("closedTitle")} description={t(`closed.${invitation.closedReason ?? "DISABLED"}`)} />

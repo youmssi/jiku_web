@@ -13,6 +13,7 @@ import { FormFieldError } from "@/components/shared";
 import { CARD_STYLE_TOKENS, type CardStyle } from "@/lib/card-style";
 import { invitationRoute } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import type { CardSource } from "./share";
 import { respondAction } from "./open-invitation.service";
 import { OPEN_ANSWERS, respondSchema, type OpenAnswer, type OpenResponse, type PublicOpenInvitation, type RespondInput } from "./schema";
 
@@ -23,7 +24,15 @@ const ICONS: Record<OpenAnswer, typeof Check> = { YES: Check, MAYBE: HelpCircle,
  * the answer and who comes along, then the name and the number. Answering again
  * from the same number changes the answer; a yes leads to the ticket.
  */
-export function RespondForm({ invitation, style }: { invitation: PublicOpenInvitation; style: CardStyle }) {
+export function RespondForm({
+  invitation,
+  style,
+  source,
+}: {
+  invitation: PublicOpenInvitation;
+  style: CardStyle;
+  source: CardSource | null;
+}) {
   const t = useTranslations("guest.openInvitation");
   const tokens = CARD_STYLE_TOKENS[style];
   const radius = Math.min(tokens.radius, 18);
@@ -48,6 +57,7 @@ export function RespondForm({ invitation, style }: { invitation: PublicOpenInvit
     const result = await respondAction(invitation.code, {
       ...values,
       companions: values.answer === "YES" ? values.companions : 0,
+      source: source ?? undefined,
     });
     if (!result.ok) {
       toast.error(result.error);

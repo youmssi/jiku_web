@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trackEvent } from "@/lib/analytics";
 import { openInvitationRoute } from "@/lib/constants";
-import { facebookShareLink, telegramShareLink, whatsappShareLink } from "./share";
+import { recordShareAction } from "./open-invitation.service";
+import { facebookShareLink, taggedLink, telegramShareLink, whatsappShareLink, type CardSource } from "./share";
 
 interface CardDetails {
   eventName: string;
@@ -24,7 +25,7 @@ interface CardDetails {
  * from one button. Direct WhatsApp, Facebook and Telegram links, the link to
  * copy and the image to download cover computers and older browsers.
  */
-export function SharePanel({ code, card }: { code: string; card: CardDetails }) {
+export function SharePanel({ eventId, code, card }: { eventId: string; code: string; card: CardDetails }) {
   const t = useTranslations("events.openInvitation.share");
   const locale = useLocale();
   const origin = useSyncExternalStore(noSubscription, () => window.location.origin, () => "");
@@ -35,11 +36,14 @@ export function SharePanel({ code, card }: { code: string; card: CardDetails }) 
   const image = useRef<Promise<File | null> | null>(null);
   const fileName = t("fileName", { event: card.eventName });
 
-  const message = t("message", {
-    event: card.eventName,
-    when: [card.when, card.answerBy ? t("cardAnswerBy", { date: card.answerBy }) : null].filter(Boolean).join("\n"),
-    url,
-  });
+  const when = [card.when, card.answerBy ? t("cardAnswerBy", { date: card.answerBy }) : null].filter(Boolean).join("\n");
+  // Every link carries the network it leaves through, so its visits and answers count there (JIKU-282).
+  const messageFor = (source: CardSource) => t("message", { event: card.eventName, when, url: taggedLink(url, source) });
+
+  function counted(source: CardSource) {
+    trackEvent("card_shared", { network: source });
+    void recordShareAction(eventId, source);
+  }
 
   function cardImage(): Promise<File | null> {
     image.current ??= fetch(`/api/cards/${encodeURIComponent(code)}?format=portrait&lang=${locale}&v=${Date.now()}`)
@@ -64,19 +68,21 @@ export function SharePanel({ code, card }: { code: string; card: CardDetails }) 
     const file = await cardImage();
     const withImage = file !== null && navigator.canShare?.({ files: [file] }) === true;
     try {
-      await navigator.share(withImage ? { files: [file], text: message } : { text: message });
-      trackEvent("card_shared", { network: withImage ? "share_image" : "share_text" });
+      const text = messageFor("share");
+      await navigator.share(withImage ? { files: [file], text } : { text });
+      counted("share");
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
-      window.open(whatsappShareLink(message), "_blank", "noopener,noreferrer");
+      counted("whatsapp");
+      window.open(whatsappShareLink(messageFor("whatsapp")), "_blank", "noopener,noreferrer");
     }
   }
 
   async function copy() {
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(taggedLink(url, "link"));
       setCopied(true);
-      trackEvent("card_shared", { network: "link" });
+      counted("link");
       setTimeout(() => setCopied(false), 2000);
     } catch {
       toast.error(t("copyFailed"));
@@ -93,7 +99,8 @@ export function SharePanel({ code, card }: { code: string; card: CardDetails }) 
       anchor.href = href;
       anchor.download = fileName;
       anchor.click();
-      trackEvent("card_shared", { network: "image" });
+      // The image's QR code carries its own tag; posting the image is a share by QR.
+      counted("qr");
       setTimeout(() => URL.revokeObjectURL(href), 1000);
     } catch {
       toast.error(t("downloadFailed"));
@@ -102,10 +109,10 @@ export function SharePanel({ code, card }: { code: string; card: CardDetails }) 
     }
   }
 
-  const networks = [
-    { network: "whatsapp", href: whatsappShareLink(message), label: t("whatsapp"), icon: MessageCircle },
-    { network: "facebook", href: facebookShareLink(url), label: t("facebook"), icon: Share2 },
-    { network: "telegram", href: telegramShareLink(url, message), label: t("telegram"), icon: Send },
+  const networks: { network: CardSource; href: string; label: string; icon: typeof Share2 }[] = [
+    { network: "whatsapp", href: whatsappShareLink(messageFor("whatsapp")), label: t("whatsapp"), icon: MessageCircle },
+    { network: "facebook", href: facebookShareLink(taggedLink(url, "facebook")), label: t("facebook"), icon: Share2 },
+    { network: "telegram", href: telegramShareLink(taggedLink(url, "telegram"), messageFor("telegram")), label: t("telegram"), icon: Send },
   ];
 
   return (
@@ -138,7 +145,7 @@ export function SharePanel({ code, card }: { code: string; card: CardDetails }) 
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => trackEvent("card_shared", { network })}
+              onClick={() => counted(network)}
             >
               <Icon aria-hidden />
               {label}

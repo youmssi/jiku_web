@@ -2,4 +2,5 @@
 // a guest list. The card's public page and its answer form; the organizer's tab
 // and the server reads are exported from `./server`.
 export { OpenInvitationPage } from "./open-invitation-page";
+export { cardSourceOf, type CardSource } from "./share";
 export type { OpenInvitation, PublicOpenInvitation, OrganizerOpenResponse } from "./schema";

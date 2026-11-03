@@ -2,7 +2,7 @@ import "server-only";
 
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { reportApiError } from "@/lib/action-result";
-import type { EventLook, OpenInvitation, OrganizerOpenResponse, PublicOpenInvitation } from "./schema";
+import type { CardFunnelRow, EventLook, OpenInvitation, OrganizerOpenResponse, PublicOpenInvitation } from "./schema";
 
 /** The page of a shared card; null for an unknown code (a 404, never a degraded page). */
 export async function fetchPublicOpenInvitation(code: string): Promise<PublicOpenInvitation | null> {
@@ -45,4 +45,14 @@ export async function loadEventLook(eventId: string): Promise<EventLook> {
     return { cardStyle: "MODERN", bannerUrl: null };
   }
   return (await response.json()) as EventLook;
+}
+
+/** Shares, visits and answers per network (JIKU-282); null when the read fails, so the tab says so. */
+export async function loadCardFunnel(eventId: string): Promise<CardFunnelRow[] | null> {
+  const response = await serverFetch(`/events/${encodeURIComponent(eventId)}/open-invitation/funnel`);
+  if (!response.ok) {
+    reportApiError(response, "open-invitation");
+    return null;
+  }
+  return (await response.json()) as CardFunnelRow[];
 }
