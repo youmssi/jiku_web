@@ -55,7 +55,7 @@ export async function CardFunnel({ rows }: { rows: CardFunnelRow[] | null }) {
   );
 }
 
-const KNOWN_SOURCES = ["whatsapp", "facebook", "telegram", "share", "link", "qr", "other"] as const;
+const KNOWN_SOURCES = ["whatsapp", "facebook", "telegram", "share", "link", "qr", "relay", "other"] as const;
 
 function sourceKey(source: string): (typeof KNOWN_SOURCES)[number] {
   return KNOWN_SOURCES.find((known) => known === source) ?? "other";

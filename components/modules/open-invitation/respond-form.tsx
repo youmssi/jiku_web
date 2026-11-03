@@ -4,16 +4,16 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, CalendarPlus, Check, HelpCircle, Minus, Plus, X } from "lucide-react";
+import { ArrowLeft, CalendarPlus, Check, HelpCircle, Minus, Plus, UserPlus, X } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "@/i18n/navigation";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { FormFieldError } from "@/components/shared";
 import { CARD_STYLE_TOKENS, type CardStyle } from "@/lib/card-style";
-import { invitationRoute } from "@/lib/constants";
+import { invitationRoute, openInvitationRoute } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import type { CardSource } from "./share";
+import { cardVersion, taggedLink, whatsappShareLink, type CardSource } from "./share";
 import { respondAction } from "./open-invitation.service";
 import { OPEN_ANSWERS, respondSchema, type OpenAnswer, type OpenResponse, type PublicOpenInvitation, type RespondInput } from "./schema";
 
@@ -29,12 +29,15 @@ export function RespondForm({
   style,
   source,
   calendar,
+  relayWhen,
 }: {
   invitation: PublicOpenInvitation;
   style: CardStyle;
   source: CardSource | null;
   /** Where to save the date once answered (JIKU-289); null when the event has no date. */
   calendar: { google: string; ics: string } | null;
+  /** The date as the relay message writes it, e.g. ", sam. 12 déc. · 17 h"; empty without a date. */
+  relayWhen: string;
 }) {
   const t = useTranslations("guest.openInvitation");
   const tokens = CARD_STYLE_TOKENS[style];
@@ -67,6 +70,24 @@ export function RespondForm({
       return;
     }
     setAnswered(result.data);
+  }
+
+  /**
+   * Passes the card on to someone forgotten (JIKU-285), through the phone's share
+   * sheet or WhatsApp, with a link counted under "relay".
+   */
+  async function relay() {
+    const link = taggedLink(`${window.location.origin}${openInvitationRoute(invitation.code)}`, "relay", cardVersion(invitation));
+    const text = t("relayMessage", { event: invitation.eventName, when: relayWhen, link });
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ text });
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+      }
+    }
+    window.open(whatsappShareLink(text), "_blank", "noopener,noreferrer");
   }
 
   if (answered) {
@@ -106,6 +127,17 @@ export function RespondForm({
               </a>
             </div>
           </div>
+        ) : null}
+        {invitation.relay && answered.answer === "YES" ? (
+          <button
+            type="button"
+            onClick={() => void relay()}
+            className="flex h-11 w-full items-center justify-center gap-1.5 border text-sm font-semibold"
+            style={{ borderRadius: radius, borderColor: `color-mix(in srgb, ${tokens.panelInk} 18%, transparent)` }}
+          >
+            <UserPlus aria-hidden className="size-4" />
+            {t("relay")}
+          </button>
         ) : null}
         <button
           type="button"

@@ -302,6 +302,8 @@
     "googleCalendar": "Google Calendar",
     "otherCalendar": "Other calendar",
     "signature": "Made with Jikū · Create your card for free",
-    "coming": "{count, plural, one {# person is coming} other {# people are coming}}"
+    "coming": "{count, plural, one {# person is coming} other {# people are coming}}",
+    "relay": "Invite someone",
+    "relayMessage": "I'm going to {event}{when}! Come too: {link}"
   }
 }

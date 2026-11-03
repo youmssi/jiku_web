@@ -576,7 +576,9 @@
       "save": "Enregistrer",
       "saved": "Réglages enregistrés.",
       "showComing": "Afficher le nombre de présents",
-      "showComingHelp": "Affiché dès 5 personnes. Seul le nombre apparaît, jamais un nom."
+      "showComingHelp": "Affiché dès 5 personnes. Seul le nombre apparaît, jamais un nom.",
+      "relay": "Laisser inviter un proche",
+      "relayHelp": "Après « Je viens », l'invité peut partager la carte à un proche oublié."
     },
     "errors": {
       "invalid": "Vérifiez les réglages.",
@@ -620,7 +622,8 @@
         "share": "Menu de partage",
         "link": "Lien copié",
         "qr": "QR code de l'image",
-        "other": "Autre ou inconnu"
+        "other": "Autre ou inconnu",
+        "relay": "Relais d'invités"
       }
     }
   }
