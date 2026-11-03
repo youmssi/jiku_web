@@ -1144,6 +1144,9 @@
       },
       "CreateEventRequest" : {
         "properties" : {
+          "channelFallback" : {
+            "type" : "boolean"
+          },
           "description" : {
             "type" : [
               "string",
@@ -1184,6 +1187,16 @@
           "name" : {
             "minLength" : 1,
             "type" : "string"
+          },
+          "primaryChannel" : {
+            "enum" : [
+              "EMAIL",
+              "WHATSAPP"
+            ],
+            "type" : [
+              "string",
+              "null"
+            ]
           },
           "settings" : {
             "$ref" : "#/components/schemas/EventSettingsDto"
@@ -1706,6 +1719,9 @@
       },
       "EventResponse" : {
         "properties" : {
+          "channelFallback" : {
+            "type" : "boolean"
+          },
           "description" : {
             "type" : [
               "string",
@@ -1749,6 +1765,16 @@
           },
           "name" : {
             "type" : "string"
+          },
+          "primaryChannel" : {
+            "enum" : [
+              "EMAIL",
+              "WHATSAPP"
+            ],
+            "type" : [
+              "string",
+              "null"
+            ]
           },
           "quorum" : {
             "oneOf" : [
@@ -2319,6 +2345,16 @@
             ]
           },
           "phoneNumber" : {
+            "type" : [
+              "string",
+              "null"
+            ]
+          },
+          "preferredChannel" : {
+            "enum" : [
+              "EMAIL",
+              "WHATSAPP"
+            ],
             "type" : [
               "string",
               "null"
@@ -3726,6 +3762,40 @@
           "totalMinor" : {
             "format" : "int64",
             "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "OrganizerWhatsAppGuest" : {
+        "properties" : {
+          "firstName" : {
+            "type" : "string"
+          },
+          "guestId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "link" : {
+            "type" : [
+              "string",
+              "null"
+            ]
+          },
+          "phone" : {
+            "type" : "string"
+          },
+          "sentAt" : {
+            "format" : "date-time",
+            "type" : [
+              "string",
+              "null"
+            ]
+          },
+          "sentByOrganizer" : {
+            "type" : "boolean"
           }
         },
         "type" : "object"
@@ -6747,6 +6817,9 @@
       },
       "UpdateEventRequest" : {
         "properties" : {
+          "channelFallback" : {
+            "type" : "boolean"
+          },
           "description" : {
             "type" : [
               "string",
@@ -6787,6 +6860,16 @@
           "name" : {
             "minLength" : 1,
             "type" : "string"
+          },
+          "primaryChannel" : {
+            "enum" : [
+              "EMAIL",
+              "WHATSAPP"
+            ],
+            "type" : [
+              "string",
+              "null"
+            ]
           },
           "settings" : {
             "$ref" : "#/components/schemas/EventSettingsDto"
@@ -9852,6 +9935,14 @@
             "schema" : {
               "type" : "string"
             }
+          },
+          {
+            "in" : "header",
+            "name" : "X-Webhook-Signature",
+            "required" : false,
+            "schema" : {
+              "type" : "string"
+            }
           }
         ],
         "requestBody" : {
@@ -11430,6 +11521,80 @@
         ]
       }
     },
+    "/api/v1/events/{eventId}/invitations/own-whatsapp" : {
+      "post" : {
+        "operationId" : "invitationPrepareOwnWhatsApp",
+        "parameters" : [
+          {
+            "in" : "path",
+            "name" : "eventId",
+            "required" : true,
+            "schema" : {
+              "format" : "uuid",
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/OrganizerWhatsAppGuest"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [
+          "invitation-controller"
+        ]
+      }
+    },
+    "/api/v1/events/{eventId}/invitations/own-whatsapp/{guestId}/sent" : {
+      "post" : {
+        "operationId" : "invitationMarkSentFromOwnWhatsApp",
+        "parameters" : [
+          {
+            "in" : "path",
+            "name" : "eventId",
+            "required" : true,
+            "schema" : {
+              "format" : "uuid",
+              "type" : "string"
+            }
+          },
+          {
+            "in" : "path",
+            "name" : "guestId",
+            "required" : true,
+            "schema" : {
+              "format" : "uuid",
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OrganizerWhatsAppGuest"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [
+          "invitation-controller"
+        ]
+      }
+    },
     "/api/v1/events/{eventId}/invitations/send" : {
       "post" : {
         "operationId" : "invitationSend",
@@ -11448,9 +11613,6 @@
             "name" : "channels",
             "required" : false,
             "schema" : {
-              "default" : [
-                "EMAIL"
-              ],
               "items" : {
                 "enum" : [
                   "EMAIL",
@@ -11468,6 +11630,15 @@
             "required" : false,
             "schema" : {
               "default" : true,
+              "type" : "boolean"
+            }
+          },
+          {
+            "in" : "query",
+            "name" : "onlyUnanswered",
+            "required" : false,
+            "schema" : {
+              "default" : false,
               "type" : "boolean"
             }
           }
@@ -13622,6 +13793,39 @@
         },
         "tags" : [
           "email-feedback-controller"
+        ]
+      }
+    },
+    "/api/v1/notifications/email-feedback/brevo" : {
+      "post" : {
+        "operationId" : "brevoEmailFeedbackReceive",
+        "parameters" : [
+          {
+            "in" : "header",
+            "name" : "Authorization",
+            "required" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "string"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          }
+        },
+        "tags" : [
+          "brevo-email-feedback-controller"
         ]
       }
     },

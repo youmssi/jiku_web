@@ -11,6 +11,7 @@ import {
   singleGuestSchema,
   type Guest,
   type ImportResult,
+  type OwnWhatsAppGuest,
   type PaymentMethod,
   type SingleGuestInput,
 } from "@/components/modules/guest/schema";
@@ -180,6 +181,40 @@ export async function sendInvitationsAction(
   }
   reportApiError(response);
   return { ok: false, reason: null, error: t("sendFailed") };
+}
+
+/**
+ * Prepares every guest's personal link for the organizer to send from their own
+ * WhatsApp (JIKU-281). The guests count against the event's allowance as a send
+ * does, so a refusal here is the same paywall.
+ */
+export async function prepareOwnWhatsAppAction(
+  eventId: string,
+): Promise<{ ok: true; data: OwnWhatsAppGuest[] } | SendInvitationsFailure> {
+  const t = await errors();
+  const response = await serverFetch(`/events/${eventId}/invitations/own-whatsapp`, { method: "POST" });
+  if (response.ok) {
+    revalidatePath(eventGuestsRoute(eventId));
+    return { ok: true, data: (await response.json()) as OwnWhatsAppGuest[] };
+  }
+  if ((await problemCode(response)) === "billing.guest-allowance") {
+    return { ok: false, reason: "paywall", error: t("allowanceReached") };
+  }
+  reportApiError(response);
+  return { ok: false, reason: null, error: t("ownWhatsAppFailed") };
+}
+
+/** The organizer opened the guest's chat with the link: the invitation counts as sent. */
+export async function markOwnWhatsAppSentAction(eventId: string, guestId: string): Promise<ActionResult<OwnWhatsAppGuest>> {
+  const t = await errors();
+  const response = await serverFetch(`/events/${eventId}/invitations/own-whatsapp/${guestId}/sent`, { method: "POST" });
+  if (response.ok) {
+    revalidatePath(eventGuestsRoute(eventId));
+    return ok((await response.json()) as OwnWhatsAppGuest);
+  }
+  // 409: the link was never prepared, or a direct ticket could not be issued (event full).
+  if (response.status !== 409) reportApiError(response);
+  return fail(t("ownWhatsAppMarkFailed"));
 }
 
 /**

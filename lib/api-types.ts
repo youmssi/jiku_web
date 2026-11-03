@@ -1700,6 +1700,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/invitations/own-whatsapp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["invitationPrepareOwnWhatsApp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/invitations/own-whatsapp/{guestId}/sent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["invitationMarkSentFromOwnWhatsApp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/invitations/send": {
         parameters: {
             query?: never;
@@ -5268,6 +5300,17 @@ export interface components {
             ticketCount?: number;
             /** Format: int64 */
             totalMinor?: number;
+        };
+        OrganizerWhatsAppGuest: {
+            firstName?: string;
+            /** Format: uuid */
+            guestId?: string;
+            lastName?: string;
+            link?: string | null;
+            phone?: string;
+            /** Format: date-time */
+            sentAt?: string | null;
+            sentByOrganizer?: boolean;
         };
         PackExtraRequest: {
             /** Format: int32 */
@@ -9062,6 +9105,51 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["InvitationStatusResponse"][];
+                };
+            };
+        };
+    };
+    invitationPrepareOwnWhatsApp: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerWhatsAppGuest"][];
+                };
+            };
+        };
+    };
+    invitationMarkSentFromOwnWhatsApp: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                guestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerWhatsAppGuest"];
                 };
             };
         };
