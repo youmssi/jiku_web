@@ -508,7 +508,24 @@
       "share": "Share…",
       "shareHint": "Sends the card image and the ready message: pick WhatsApp, Facebook, Messenger, Telegram or SMS.",
       "facebook": "Facebook",
-      "telegram": "Telegram"
+      "telegram": "Telegram",
+      "formats": {
+        "status": {
+          "label": "For a status",
+          "hint": "Vertical, full screen: WhatsApp or Facebook status",
+          "fileName": "Invitation {event} - status.png"
+        },
+        "portrait": {
+          "label": "For a post",
+          "hint": "The size of Facebook feeds and chats",
+          "fileName": "Invitation {event}.png"
+        },
+        "landscape": {
+          "label": "Landscape",
+          "hint": "For an email, a website or a wide print",
+          "fileName": "Invitation {event} - landscape.png"
+        }
+      }
     },
     "stats": {
       "expected": "People expected",

@@ -294,6 +294,8 @@
       "closed": "Réponses fermées, ou plus de place.",
       "tooMany": "Trop d'essais. Réessayez dans quelques minutes.",
       "failed": "Impossible d'envoyer votre réponse. Réessayez."
-    }
+    },
+    "previewAlt": "Invitation : {event}, {when}",
+    "previewAltNoDate": "Invitation : {event}"
   }
 }

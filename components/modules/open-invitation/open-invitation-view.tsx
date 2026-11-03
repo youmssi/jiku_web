@@ -14,6 +14,7 @@ import { OpenInvitationStart } from "./open-invitation-start";
 import { OpenResponses } from "./open-responses";
 import { AcceptingSwitch, OpenSettingsForm } from "./open-settings-form";
 import { SharePanel } from "./share-panel";
+import { cardVersion } from "./share";
 
 /**
  * An event's open invitation tab (JIKU-184, ADR 106): the card to share, the
@@ -84,7 +85,12 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
             : t("stats.remainingCount", { count: invitation.remainingPlaces }),
         }}
       />
-      <SharePanel eventId={eventId} code={invitation.code} card={{ eventName: event.name, when, answerBy }} />
+      <SharePanel
+        eventId={eventId}
+        code={invitation.code}
+        card={{ eventName: event.name, when, answerBy }}
+        version={card ? cardVersion(card) : undefined}
+      />
       <CardFunnel rows={funnel} />
       <AcceptingSwitch eventId={eventId} invitation={invitation} />
       <OpenResponses eventId={eventId} responses={responses} />

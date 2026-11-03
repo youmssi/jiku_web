@@ -3,14 +3,19 @@ import "server-only";
 import { qrPath } from "@/lib/qr-path";
 import { CARD_STYLE_TOKENS, PHOTO_SHADE, brandBackground, type CardStyle } from "@/lib/card-style";
 
-// The card of an open invitation, drawn for `ImageResponse` (JIKU-194): one
-// artwork, two formats. The portrait card (1080 × 1350) is the one people
-// post; the landscape card (1200 × 630) is the link preview and the image at
+// The card of an open invitation, drawn for `ImageResponse` (JIKU-194,
+// JIKU-283): one artwork, three formats. The portrait card (1080 × 1350) is the
+// one people post; the status card (1080 × 1920) fills a WhatsApp or Facebook
+// status; the landscape card (1200 × 630) is the link preview and the image at
 // the top of the WhatsApp message. Only flexbox and inline styles: the renderer
 // supports nothing else.
 
 export const PORTRAIT = { width: 1080, height: 1350 };
+export const STATUS = { width: 1080, height: 1920 };
 export const LANDSCAPE = { width: 1200, height: 630 };
+
+/** The bands a status viewer covers with its progress bar, name and reply field: nothing that matters goes there. */
+const STATUS_SAFE_BAND = 250;
 
 export interface CardArtData {
   style: CardStyle;
@@ -127,8 +132,17 @@ function Organizer({ data, size }: { data: CardArtData; size: number }) {
   );
 }
 
+/** A long event name steps its size down, so it wraps on a few lines instead of running off the card. */
+function titleScale(name: string): number {
+  if (name.length > 60) return 0.58;
+  if (name.length > 40) return 0.72;
+  if (name.length > 24) return 0.86;
+  return 1;
+}
+
 function Title({ data, size }: { data: CardArtData; size: number }) {
   const tokens = CARD_STYLE_TOKENS[data.style];
+  size = size * titleScale(data.eventName);
   return (
     <div
       style={{
@@ -265,6 +279,86 @@ export function LandscapeCard({ data }: { data: CardArtData }) {
           </div>
         </div>
       </Hero>
+    </div>
+  );
+}
+
+/** The status card: the title high on the photo, the date, place and QR code low, all clear of the viewer's bands. */
+export function StatusCard({ data }: { data: CardArtData }) {
+  const tokens = CARD_STYLE_TOKENS[data.style];
+  const qr = qrPath(data.url);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", background: tokens.panel }}>
+      <div style={{ display: "flex", height: 1120 }}>
+        <Hero data={data} padding={72}>
+          <div style={{ display: "flex", marginTop: STATUS_SAFE_BAND - 72 }}>
+            <Organizer data={data} size={68} />
+          </div>
+          <Title data={data} size={136} />
+        </Hero>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          padding: `56px 72px ${STATUS_SAFE_BAND}px`,
+          gap: 28,
+          color: tokens.panelInk,
+          background: tokens.panel,
+          borderTop: data.style === "MODERN" ? `12px solid ${tokens.panelInk}` : data.style === "ELEGANT" ? `3px solid ${tokens.detail}` : "none",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 48 }}>
+          <div style={{ display: "flex", flexDirection: "column", flex: 1, gap: 18 }}>
+            {data.day ? (
+              <div style={{ display: "flex", alignItems: "flex-end", gap: 20 }}>
+                <div style={{ display: "flex", fontFamily: tokens.fontFamily, fontWeight: tokens.fontWeight, fontSize: 150, lineHeight: 0.8 }}>
+                  {data.day}
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", fontFamily: "Inter", paddingBottom: 6 }}>
+                  <div style={{ display: "flex", fontWeight: 700, fontSize: 34, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                    {data.month}
+                  </div>
+                  <div style={{ display: "flex", fontWeight: 500, fontSize: 32, color: tokens.panelMuted }}>{data.weekdayTime}</div>
+                </div>
+              </div>
+            ) : null}
+            {data.location ? (
+              <div style={{ display: "flex", fontFamily: "Inter", fontWeight: 500, fontSize: 32, color: tokens.panelMuted }}>{data.location}</div>
+            ) : null}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+            <div style={{ display: "flex", padding: 14, background: "#FFFFFF", borderRadius: Math.max(8, tokens.radius) }}>
+              <svg width={230} height={230} viewBox={`0 0 ${qr.size} ${qr.size}`} shapeRendering="crispEdges">
+                <path d={qr.path} fill="#111111" />
+              </svg>
+            </div>
+            <div style={{ display: "flex", fontFamily: "Inter", fontWeight: 700, fontSize: 26 }}>{data.labels.scan}</div>
+          </div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto", gap: 24 }}>
+          {data.answerBy ? (
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "Inter",
+                fontWeight: 700,
+                fontSize: 28,
+                padding: "10px 22px",
+                borderRadius: data.style === "MODERN" ? 4 : 999,
+                background: data.style === "MODERN" ? tokens.panelInk : tokens.soft,
+                color: data.style === "MODERN" ? "#FFFFFF" : tokens.panelInk,
+              }}
+            >
+              {data.answerBy}
+            </div>
+          ) : (
+            <div style={{ display: "flex" }} />
+          )}
+          <Via data={data} size={24} color={tokens.panelMuted} />
+        </div>
+      </div>
     </div>
   );
 }
