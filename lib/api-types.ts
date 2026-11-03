@@ -5625,6 +5625,7 @@ export interface components {
             /** Format: date-time */
             eventStart?: string | null;
             eventTimezone?: string;
+            jikuSignature?: boolean;
             logoUrl?: string | null;
             /** Format: int32 */
             maxCompanions?: number;

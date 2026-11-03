@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { MapPin, MessageCircle } from "lucide-react";
-import { CardHero, ClampedText, directionsLink, googleCalendarLink, OrganizerMark, StateMessage, VerifiedBadge } from "@/components/shared";
+import { CardHero, ClampedText, directionsLink, googleCalendarLink, OrganizerMark, StateMessage, TrackedLink, VerifiedBadge } from "@/components/shared";
 import { CARD_STYLE_TOKENS, cardStyleOf, displayTitle, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
 import { countdown, fullWhen, liveWhen, shortDay, shortTime } from "@/lib/short-dates";
 import { RespondForm } from "./respond-form";
@@ -68,9 +68,9 @@ export async function OpenInvitationPage({
                 <time
                   dateTime={start}
                   title={fullWhen(start, zone, locale)}
-                  className={`inline-flex min-h-8 items-center border border-white/30 bg-white/15 px-3 py-1 first-letter:uppercase ${pill}`}
+                  className={`inline-flex min-h-8 items-center border border-white/30 bg-white/15 px-3 py-1 ${pill}`}
                 >
-                  {liveWhen(start, zone, locale)}
+                  <span className="block first-letter:uppercase">{liveWhen(start, zone, locale)}</span>
                 </time>
               ) : null}
               {invitation.eventLocation ? (
@@ -126,6 +126,19 @@ export async function OpenInvitationPage({
         ) : (
           <StateMessage title={t("closedTitle")} description={t(`closed.${invitation.closedReason ?? "DISABLED"}`)} />
         )}
+        {invitation.jikuSignature ? (
+          <TrackedLink
+            href="/"
+            eventName="cta_click"
+            eventProperties={{ from: "card_signature" }}
+            className="mx-auto mt-auto inline-flex min-h-11 items-center gap-2 pt-8 text-xs font-medium underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+            style={{ color: tokens.panelMuted }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element -- a 16 px static mark, no optimisation needed */}
+            <img src="/jiku-logo-mark.png" alt="" width={16} height={16} className="size-4" />
+            {t("signature")}
+          </TrackedLink>
+        ) : null}
       </div>
     </div>
   );
