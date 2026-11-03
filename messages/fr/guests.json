@@ -40,7 +40,8 @@
     "PENDING": "en cours",
     "QUEUED": "en file",
     "SENT": "envoyée",
-    "FAILED": "échec"
+    "FAILED": "échec",
+    "PREPARED": "prêt à envoyer"
   },
   "actions": {
     "label": "Actions pour {name}",
@@ -185,7 +186,9 @@
     "sendFailed": "Les invitations n'ont pas pu être envoyées. Réessayez.",
     "categoryFull": "Cette catégorie est complète. Augmentez sa jauge ou choisissez-en une autre.",
     "categoryFailed": "La catégorie n'a pas pu être changée. Réessayez.",
-    "confirmEmailFirst": "Confirmez d'abord votre adresse e-mail : le lien vous attend dans votre boîte de réception."
+    "confirmEmailFirst": "Confirmez d'abord votre adresse e-mail : le lien vous attend dans votre boîte de réception.",
+    "ownWhatsAppFailed": "Les liens n'ont pas pu être préparés. Réessayez.",
+    "ownWhatsAppMarkFailed": "L'envoi n'a pas pu être enregistré. Rouvrez la liste pour vérifier."
   },
   "noMatch": "Aucun invité ne correspond à ces filtres.",
   "showMore": "{count, plural, one {Voir # invité de plus} other {Voir # invités de plus}}",
@@ -195,5 +198,22 @@
     "action": "Je confirme leur accord",
     "done": "{count, plural, =0 {Aucun invité à confirmer.} one {Accord confirmé pour # invité.} other {Accord confirmé pour # invités.}}",
     "failed": "La confirmation n'a pas pu être enregistrée. Réessayez."
+  },
+  "ownWhatsApp": {
+    "trigger": "Depuis mon WhatsApp",
+    "title": "Envoyer depuis mon WhatsApp",
+    "description": "Chaque invité reçoit son lien personnel, envoyé de votre numéro : il vient de quelqu'un qu'il connaît. Touchez « Envoyer », puis envoyez le message dans WhatsApp et revenez ici.",
+    "preparing": "Préparation des liens…",
+    "progress": "{sent} sur {total} envoyées",
+    "send": "Envoyer",
+    "sent": "Envoyée",
+    "sendTo": "Envoyer à {name} dans WhatsApp",
+    "sendAgainTo": "Renvoyer à {name} dans WhatsApp",
+    "message": "Bonjour {firstName}, vous êtes invité(e) à {event}{when}. Répondez ici, votre billet suit aussitôt : {link}",
+    "byJiku": "{count, plural, one {# invité est déjà invité par Jikū : rien à lui envoyer.} other {# invités sont déjà invités par Jikū : rien à leur envoyer.}}",
+    "allByJiku": "Jikū invite déjà tous vos invités qui ont un numéro WhatsApp.",
+    "noNumber": "Aucun invité n'a de numéro WhatsApp. Ajoutez des numéros pour utiliser cet envoi.",
+    "allowanceTitle": "Quota d'invités atteint",
+    "allowanceCta": "Ajouter des invités"
   }
 }

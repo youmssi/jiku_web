@@ -426,7 +426,8 @@ function InvitationBadges({ invitations }: { invitations: Record<string, string 
     <div className="flex flex-wrap gap-1">
       {reached.map((channel: InvitationChannel) => {
         const status = invitations[channel] ?? "";
-        const known = status === "SENT" || status === "FAILED" || status === "PENDING" || status === "QUEUED";
+        const known =
+          status === "SENT" || status === "FAILED" || status === "PENDING" || status === "QUEUED" || status === "PREPARED";
         return (
           <Badge key={channel} variant={status === "FAILED" ? "destructive" : status === "SENT" ? "outline" : "secondary"}>
             {INVITATION_CHANNEL_LABELS[channel]} · {known ? t(status) : status}

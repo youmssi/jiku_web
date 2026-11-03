@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Users } from "lucide-react";
 import {
   Empty,
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/empty";
 import { AddGuestDialog, ExportGuestsButton, ImportGuestsDialog, SendInvitationsDialog } from "@/components/modules/guest/guest-actions";
 import { ConsentBanner } from "@/components/modules/guest/consent-banner";
+import { OwnWhatsAppDialog } from "@/components/modules/guest/own-whatsapp";
 import { GuestsTable, type GuestRow, type ResponseFilter } from "@/components/modules/guest/guests-table";
 
 const RESPONSE_FILTERS: ResponseFilter[] = ["ALL", "CONFIRMED", "PENDING", "DECLINED", "PAYMENT_DUE"];
@@ -24,6 +25,7 @@ import { serverFetch } from "@/lib/api-server";
 import type { Guest, Invitation } from "@/components/modules/guest/schema";
 import { INVITATION_CHANNELS, type InvitationChannel } from "@/lib/channels";
 import { eventGuestsExportRoute } from "@/lib/constants";
+import { fullWhen } from "@/lib/short-dates";
 
 async function readList<T>(path: string): Promise<T[]> {
   const response = await serverFetch(path);
@@ -41,12 +43,13 @@ async function readList<T>(path: string): Promise<T[]> {
  * offers adding and importing once, in its empty state.
  */
 export async function GuestsView({ eventId, answer }: { eventId: string; answer?: string }) {
-  const [guests, invitations, ticketTypes, eventResponse, t] = await Promise.all([
+  const [guests, invitations, ticketTypes, eventResponse, t, locale] = await Promise.all([
     readList<Guest>(`/events/${eventId}/guests`),
     readList<Invitation>(`/events/${eventId}/invitations`),
     readList<TicketTypeResponse>(`/events/${eventId}/ticket-types`),
     serverFetch(`/events/${eventId}`),
     getTranslations("guests"),
+    getLocale(),
   ]);
   const event = eventResponse.ok
     ? ((await eventResponse.json()) as {
@@ -54,6 +57,9 @@ export async function GuestsView({ eventId, answer }: { eventId: string; answer?
         primaryChannel?: InvitationChannel | null;
         channelFallback?: boolean;
         status: string;
+        name: string;
+        startDateTime?: string | null;
+        timezone: string;
       })
     : null;
   const enabledChannels: InvitationChannel[] = event?.invitationChannels ?? [];
@@ -107,6 +113,13 @@ export async function GuestsView({ eventId, answer }: { eventId: string; answer?
                 channelFallback={event?.channelFallback ?? true}
                 reach={reach}
                 unanswered={unanswered}
+              />
+            ) : null}
+            {canSend && event && reach.WHATSAPP > 0 ? (
+              <OwnWhatsAppDialog
+                eventId={eventId}
+                eventName={event.name}
+                eventWhen={event.startDateTime ? fullWhen(event.startDateTime, event.timezone, locale) : null}
               />
             ) : null}
             <AddGuestDialog eventId={eventId} />

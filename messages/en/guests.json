@@ -40,7 +40,8 @@
     "PENDING": "sending",
     "QUEUED": "queued",
     "SENT": "sent",
-    "FAILED": "failed"
+    "FAILED": "failed",
+    "PREPARED": "ready to send"
   },
   "actions": {
     "label": "Actions for {name}",
@@ -185,7 +186,9 @@
     "sendFailed": "The invitations could not be sent. Try again.",
     "categoryFull": "This category is full. Raise its capacity or choose another one.",
     "categoryFailed": "The category could not be changed. Try again.",
-    "confirmEmailFirst": "Confirm your email address first: the link is waiting in your inbox."
+    "confirmEmailFirst": "Confirm your email address first: the link is waiting in your inbox.",
+    "ownWhatsAppFailed": "The links could not be prepared. Try again.",
+    "ownWhatsAppMarkFailed": "The send could not be recorded. Reopen the list to check."
   },
   "noMatch": "No guest matches these filters.",
   "showMore": "{count, plural, one {Show # more guest} other {Show # more guests}}",
@@ -195,5 +198,22 @@
     "action": "I confirm their agreement",
     "done": "{count, plural, =0 {No guest to confirm.} one {Agreement confirmed for # guest.} other {Agreement confirmed for # guests.}}",
     "failed": "The confirmation could not be saved. Try again."
+  },
+  "ownWhatsApp": {
+    "trigger": "From my WhatsApp",
+    "title": "Send from my WhatsApp",
+    "description": "Each guest gets their personal link, sent from your number: it comes from someone they know. Tap “Send”, send the message in WhatsApp, then come back here.",
+    "preparing": "Preparing the links…",
+    "progress": "{sent} of {total} sent",
+    "send": "Send",
+    "sent": "Sent",
+    "sendTo": "Send to {name} in WhatsApp",
+    "sendAgainTo": "Send to {name} again in WhatsApp",
+    "message": "Hi {firstName}, you're invited to {event}{when}. Answer here and your ticket follows right away: {link}",
+    "byJiku": "{count, plural, one {# guest is already invited by Jikū: nothing to send them.} other {# guests are already invited by Jikū: nothing to send them.}}",
+    "allByJiku": "Jikū already invites every guest who has a WhatsApp number.",
+    "noNumber": "No guest has a WhatsApp number. Add numbers to use this send.",
+    "allowanceTitle": "Guest allowance reached",
+    "allowanceCta": "Add guests"
   }
 }
