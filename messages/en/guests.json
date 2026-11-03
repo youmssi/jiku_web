@@ -188,7 +188,8 @@
     "categoryFailed": "The category could not be changed. Try again.",
     "confirmEmailFirst": "Confirm your email address first: the link is waiting in your inbox.",
     "ownWhatsAppFailed": "The links could not be prepared. Try again.",
-    "ownWhatsAppMarkFailed": "The send could not be recorded. Reopen the list to check."
+    "ownWhatsAppMarkFailed": "The send could not be recorded. Reopen the list to check.",
+    "ownWhatsAppRemindersFailed": "The guests to remind could not be loaded. Try again."
   },
   "noMatch": "No guest matches these filters.",
   "showMore": "{count, plural, one {Show # more guest} other {Show # more guests}}",
@@ -201,8 +202,8 @@
   },
   "ownWhatsApp": {
     "trigger": "From my WhatsApp",
-    "title": "Send from my WhatsApp",
-    "description": "Each guest gets their personal link, sent from your number: it comes from someone they know. Tap “Send”, send the message in WhatsApp, then come back here.",
+    "title": "From my WhatsApp",
+    "description": "Send each guest their personal link from your number, then remind those who haven't answered. Tap a button, send the message in WhatsApp, then come back here.",
     "preparing": "Preparing the links…",
     "progress": "{sent} of {total} sent",
     "send": "Send",
@@ -214,6 +215,17 @@
     "allByJiku": "Jikū already invites every guest who has a WhatsApp number.",
     "noNumber": "No guest has a WhatsApp number. Add numbers to use this send.",
     "allowanceTitle": "Guest allowance reached",
-    "allowanceCta": "Add guests"
+    "allowanceCta": "Add guests",
+    "tabs": {
+      "invite": "Invite{count, plural, =0 {} other { (#)}}",
+      "remind": "Remind{count, plural, =0 {} other { (#)}}"
+    },
+    "remindIntro": "{count, plural, one {# guest hasn't answered yet.} other {# guests haven't answered yet.}} The same personal link goes with a short reminder.",
+    "reminder": "A quick reminder, {firstName}: you're invited to {event}{when}. Let us know if you're coming, it only takes a moment: {link}",
+    "remind": "Remind",
+    "remindAgain": "Reminded",
+    "remindTo": "Remind {name} in WhatsApp",
+    "remindedAt": "Reminded {when}",
+    "allAnswered": "All your guests have answered. Nothing to remind."
   }
 }

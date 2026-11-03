@@ -188,7 +188,8 @@
     "categoryFailed": "La catégorie n'a pas pu être changée. Réessayez.",
     "confirmEmailFirst": "Confirmez d'abord votre adresse e-mail : le lien vous attend dans votre boîte de réception.",
     "ownWhatsAppFailed": "Les liens n'ont pas pu être préparés. Réessayez.",
-    "ownWhatsAppMarkFailed": "L'envoi n'a pas pu être enregistré. Rouvrez la liste pour vérifier."
+    "ownWhatsAppMarkFailed": "L'envoi n'a pas pu être enregistré. Rouvrez la liste pour vérifier.",
+    "ownWhatsAppRemindersFailed": "Les invités à relancer n'ont pas pu être chargés. Réessayez."
   },
   "noMatch": "Aucun invité ne correspond à ces filtres.",
   "showMore": "{count, plural, one {Voir # invité de plus} other {Voir # invités de plus}}",
@@ -201,8 +202,8 @@
   },
   "ownWhatsApp": {
     "trigger": "Depuis mon WhatsApp",
-    "title": "Envoyer depuis mon WhatsApp",
-    "description": "Chaque invité reçoit son lien personnel, envoyé de votre numéro : il vient de quelqu'un qu'il connaît. Touchez « Envoyer », puis envoyez le message dans WhatsApp et revenez ici.",
+    "title": "Depuis mon WhatsApp",
+    "description": "Envoyez à chaque invité son lien personnel depuis votre numéro, puis relancez ceux qui n'ont pas répondu. Touchez un bouton, envoyez le message dans WhatsApp et revenez ici.",
     "preparing": "Préparation des liens…",
     "progress": "{sent} sur {total} envoyées",
     "send": "Envoyer",
@@ -214,6 +215,17 @@
     "allByJiku": "Jikū invite déjà tous vos invités qui ont un numéro WhatsApp.",
     "noNumber": "Aucun invité n'a de numéro WhatsApp. Ajoutez des numéros pour utiliser cet envoi.",
     "allowanceTitle": "Quota d'invités atteint",
-    "allowanceCta": "Ajouter des invités"
+    "allowanceCta": "Ajouter des invités",
+    "tabs": {
+      "invite": "Inviter{count, plural, =0 {} other { (#)}}",
+      "remind": "Relancer{count, plural, =0 {} other { (#)}}"
+    },
+    "remindIntro": "{count, plural, one {# invité n'a pas encore répondu.} other {# invités n'ont pas encore répondu.}} Le même lien personnel part avec un petit rappel.",
+    "reminder": "Petit rappel, {firstName} : vous êtes invité(e) à {event}{when}. Dites-nous si vous venez, cela prend un instant : {link}",
+    "remind": "Relancer",
+    "remindAgain": "Relancé",
+    "remindTo": "Relancer {name} dans WhatsApp",
+    "remindedAt": "Relancé {when}",
+    "allAnswered": "Tous vos invités ont répondu. Rien à relancer."
   }
 }
