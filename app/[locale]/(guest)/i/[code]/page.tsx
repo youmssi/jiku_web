@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cardSourceOf, OpenInvitationPage } from "@/components/modules/open-invitation";
-import { cardMetadata, fetchPublicOpenInvitation } from "@/components/modules/open-invitation/server";
+import { cardMetadata, fetchPublicOpenInvitation } from "@/components/modules/open-invitation/public-server";
 
 type Params = Promise<{ locale: string; code: string }>;
 type SearchParams = Promise<{ via?: string | string[] }>;

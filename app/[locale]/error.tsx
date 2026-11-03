@@ -3,7 +3,9 @@
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { StateMessage } from "@/components/shared";
+// By file, not through the shared barrel: this boundary loads with every page,
+// and the barrel would ship organizer-only components to all of them (JIKU-287).
+import { StateMessage } from "@/components/shared/state-message";
 import { captureException } from "@/lib/error-tracking";
 
 /**

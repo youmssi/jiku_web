@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { TrackedLink } from "@/components/shared";
+import { TrackedLink } from "@/components/shared/tracked-link";
 import { JikūLogo } from "@/components/ui/jiku-logo";
 import { Link } from "@/i18n/navigation";
 import { ROUTES } from "@/lib/constants";

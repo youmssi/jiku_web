@@ -1,6 +1,15 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { MapPin, MessageCircle, Users } from "lucide-react";
-import { CardHero, ClampedText, directionsLink, googleCalendarLink, OrganizerMark, StateMessage, TrackedLink, VerifiedBadge } from "@/components/shared";
+// Guest pages import shared pieces by file, not through the shared barrel: the
+// barrel also re-exports organizer-only client components (command palette,
+// motion effects) that would otherwise ship to every guest (JIKU-287).
+import { directionsLink, googleCalendarLink } from "@/components/shared/calendar-link";
+import { CardHero, OrganizerMark } from "@/components/shared/card-hero";
+import { ClampedText } from "@/components/shared/clamped-text";
+import { JikuSymbol } from "@/components/shared/jiku-symbol";
+import { StateMessage } from "@/components/shared/state-message";
+import { TrackedLink } from "@/components/shared/tracked-link";
+import { VerifiedBadge } from "@/components/shared/verified-badge";
 import { CARD_STYLE_TOKENS, cardStyleOf, displayTitle, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
 import { countdown, fullWhen, liveWhen, shortDay, shortTime } from "@/lib/short-dates";
 import { RespondForm } from "./respond-form";
@@ -146,8 +155,7 @@ export async function OpenInvitationPage({
             className="mx-auto mt-auto inline-flex min-h-11 items-center gap-2 pt-8 text-xs font-medium underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
             style={{ color: tokens.panelMuted }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element -- a 16 px static mark, no optimisation needed */}
-            <img src="/jiku-logo-mark.png" alt="" width={16} height={16} className="size-4" />
+            <JikuSymbol className="size-4" />
             {t("signature")}
           </TrackedLink>
         ) : null}

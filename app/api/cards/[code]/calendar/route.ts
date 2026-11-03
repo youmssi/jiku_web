@@ -1,4 +1,4 @@
-import { cardCalendar } from "@/components/modules/open-invitation/server";
+import { cardCalendar } from "@/components/modules/open-invitation/public-server";
 
 /** The card's event as an .ics file (JIKU-289): Apple Calendar, Outlook and other agendas open it. */
 export async function GET(_request: Request, { params }: { params: Promise<{ code: string }> }) {

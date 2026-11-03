@@ -1,6 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { JikūLogo } from "@/components/ui/jiku-logo";
-import { TrackedAnchor } from "@/components/shared";
+import { TrackedAnchor } from "@/components/shared/tracked-link";
 import { supportMailto, supportWhatsAppLink } from "@/lib/support";
 import { LANDING_CONTENT, type LandingContent, type LandingLocale } from "./content";
 

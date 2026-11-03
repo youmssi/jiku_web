@@ -28,3 +28,4 @@ export {VerifiedBadge} from "./verified-badge";
 export { WhatsAppMessageCheck } from "./whatsapp-message-check";
 export {whatsappChatLink} from "./whatsapp-link";
 export {directionsLink, googleCalendarLink, icsCalendar} from "./calendar-link";
+export {JikuSymbol} from "./jiku-symbol";
