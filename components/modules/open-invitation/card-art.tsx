@@ -36,6 +36,8 @@ export interface CardArtData {
   answerBy: string | null;
   /** The answer page the QR code opens. */
   url: string;
+  /** Jikū signs free cards only (JIKU-288); a paid organizer's card carries its brand alone. */
+  signature: boolean;
   labels: { invites: string; scan: string; via: string };
 }
 
@@ -162,6 +164,7 @@ function Title({ data, size }: { data: CardArtData; size: number }) {
 }
 
 function Via({ data, size, color }: { data: CardArtData; size: number; color: string }) {
+  if (!data.signature) return <div style={{ display: "flex" }} />;
   return (
     <div style={{ display: "flex", alignItems: "center", gap: size * 0.4, fontFamily: "Inter", fontWeight: 500, fontSize: size, color, flexShrink: 0, whiteSpace: "nowrap" }}>
       <JikuMark size={size * 1.3} color={color} />

@@ -300,6 +300,7 @@
     "directions": "Directions to {place}",
     "saveDate": "Save the date",
     "googleCalendar": "Google Calendar",
-    "otherCalendar": "Other calendar"
+    "otherCalendar": "Other calendar",
+    "signature": "Made with Jikū · Create your card for free"
   }
 }

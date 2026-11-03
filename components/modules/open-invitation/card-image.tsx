@@ -68,6 +68,7 @@ export async function renderCard(
             date: `${shortDay(invitation.closesAt, zone, locale, { weekday: false })} · ${shortTime(invitation.closesAt, zone, locale)}`,
           })
         : null,
+    signature: invitation.jikuSignature,
     url: taggedLink(`${siteUrl()}${prefix}${openInvitationRoute(invitation.code)}`, "qr"),
     labels: {
       invites: t("invitedBy", { organizer: invitation.organizerName }),

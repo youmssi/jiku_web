@@ -300,6 +300,7 @@
     "directions": "Itinéraire vers {place}",
     "saveDate": "Gardez la date",
     "googleCalendar": "Google Agenda",
-    "otherCalendar": "Autre agenda"
+    "otherCalendar": "Autre agenda",
+    "signature": "Créé avec Jikū · Créez votre carte gratuitement"
   }
 }
