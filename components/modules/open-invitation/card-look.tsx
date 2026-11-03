@@ -6,7 +6,7 @@ import { Check, ImagePlus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { resizeImage, type ResizeRules } from "@/components/shared";
-import { brandBackground, CARD_STYLE_TOKENS, CARD_STYLES, cardStyleOf, displayTitle, type CardStyle } from "@/lib/card-style";
+import { brandBackground, readableBrand, CARD_STYLE_TOKENS, CARD_STYLES, cardStyleOf, displayTitle, type CardStyle } from "@/lib/card-style";
 import { cn } from "@/lib/utils";
 import { removeBannerAction, saveCardStyleAction, uploadBannerAction } from "./open-invitation.service";
 import type { EventLook } from "./schema";
@@ -104,7 +104,7 @@ export function CardLook({
               >
                 <span
                   className="relative flex h-20 items-end p-2.5 text-white"
-                  style={{ backgroundImage: brandBackground(option, color), backgroundColor: color }}
+                  style={{ backgroundImage: brandBackground(option, color), backgroundColor: readableBrand(color) }}
                 >
                   <span style={displayTitle(tokens, "1.35rem")}>Aa</span>
                   {selected ? (

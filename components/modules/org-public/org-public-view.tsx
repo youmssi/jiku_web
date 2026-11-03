@@ -1,4 +1,5 @@
 import { Link } from "@/i18n/navigation";
+import { readableBrand } from "@/lib/card-style";
 import { VerifiedBadge } from "@/components/shared";
 import { ArrowRight, CalendarDays, Sparkles } from "lucide-react";
 import {
@@ -90,7 +91,7 @@ export function OrgPublicView({ profile }: OrgPublicViewProps) {
                 ) : (
                   <div
                     className="flex size-full items-center justify-center text-2xl font-bold text-white"
-                    style={{ backgroundColor: profile.primaryColor }}
+                    style={{ backgroundColor: readableBrand(profile.primaryColor) }}
                   >
                     {profile.organizationName.slice(0, 1).toUpperCase()}
                   </div>

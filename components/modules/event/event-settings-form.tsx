@@ -43,6 +43,7 @@ import {
   type InvitationChannel,
 } from "./schema";
 import { effectivePrimaryChannel } from "@/lib/channels";
+import { readableBrand } from "@/lib/card-style";
 
 const DEFAULT_BRAND_COLOR = "#1E293B";
 const HEX = /^#[0-9a-fA-F]{6}$/;
@@ -349,6 +350,9 @@ export function EventSettingsForm({
                           className="max-w-32 font-mono uppercase"
                         />
                       </div>
+                      {HEX.test(field.value ?? "") && readableBrand(field.value) !== field.value ? (
+                        <FieldDescription>{t("client.colorDeepened")}</FieldDescription>
+                      ) : null}
                       <FormFieldError error={fieldState.error} />
                     </Field>
                   )}
