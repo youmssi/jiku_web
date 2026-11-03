@@ -24,7 +24,8 @@ export type AnalyticsEvent =
   | "rsvp_confirmed"
   | "rsvp_declined"
   | "appointment_booked"
-  | "plan_found";
+  | "plan_found"
+  | "card_shared";
 
 export function trackEvent(name: AnalyticsEvent, properties?: Record<string, unknown>): void {
   if (typeof window === "undefined") return;

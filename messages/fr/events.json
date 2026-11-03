@@ -498,13 +498,17 @@
       "copy": "Copier le lien",
       "open": "Ouvrir la carte",
       "copyFailed": "Impossible de copier le lien.",
-      "whatsapp": "Partager sur WhatsApp",
+      "whatsapp": "WhatsApp",
       "download": "Télécharger la carte",
       "message": "{event}\n{when}\nRépondez ici : {url}",
       "cardAnswer": "Scannez pour répondre",
       "cardAnswerBy": "Jusqu'au {date}",
       "fileName": "Invitation {event}.png",
-      "downloadFailed": "Impossible de télécharger la carte. Réessayez."
+      "downloadFailed": "Impossible de télécharger la carte. Réessayez.",
+      "share": "Partager…",
+      "shareHint": "Envoie l'image de la carte et le message prêt : choisissez WhatsApp, Facebook, Messenger, Telegram ou SMS.",
+      "facebook": "Facebook",
+      "telegram": "Telegram"
     },
     "stats": {
       "expected": "Personnes attendues",
