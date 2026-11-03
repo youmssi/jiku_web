@@ -14,6 +14,7 @@ import { OpenInvitationStart } from "./open-invitation-start";
 import { OpenResponses } from "./open-responses";
 import { AcceptingSwitch, OpenSettingsForm } from "./open-settings-form";
 import { SharePanel } from "./share-panel";
+import { VoiceRecorder } from "./voice-recorder";
 import { cardVersion } from "./share";
 
 /**
@@ -91,6 +92,7 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
         card={{ eventName: event.name, when, answerBy }}
         version={card ? cardVersion(card) : undefined}
       />
+      <VoiceRecorder eventId={eventId} voice={invitation.voice ?? null} />
       <CardFunnel rows={funnel} />
       <AcceptingSwitch eventId={eventId} invitation={invitation} />
       <OpenResponses eventId={eventId} responses={responses} />

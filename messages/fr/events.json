@@ -626,6 +626,36 @@
         "other": "Autre ou inconnu",
         "relay": "Relais d'invités"
       }
+    },
+    "voice": {
+      "title": "Message vocal",
+      "text": "Dites l'invitation de votre voix, {seconds} secondes au plus : vos invités l'écoutent sur la carte.",
+      "record": "Enregistrer",
+      "replace": "Réenregistrer",
+      "import": "Importer un fichier",
+      "remove": "Supprimer",
+      "recording": "Enregistrement…",
+      "remaining": "{seconds} s restantes",
+      "stop": "Arrêter",
+      "listenDraft": "Écouter l'enregistrement",
+      "listenSaved": "Écouter le message, {seconds} secondes",
+      "use": "Utiliser ce message",
+      "again": "Recommencer",
+      "saved": "Message vocal enregistré.",
+      "transcript": "Les mots du message (facultatif)",
+      "transcriptHint": "Affichés sous le lecteur, pour qui ne peut pas écouter.",
+      "removeTitle": "Supprimer le message vocal ?",
+      "removeText": "La carte n'aura plus de message vocal. Vous pourrez en enregistrer un autre.",
+      "keep": "Garder",
+      "removeConfirm": "Supprimer",
+      "micDenied": "Le micro n'est pas disponible. Autorisez-le dans le navigateur, ou importez un fichier audio.",
+      "errors": {
+        "invalid": "Ce fichier n'est pas un enregistrement.",
+        "tooLong": "Le message doit durer 30 secondes au plus.",
+        "tooBig": "Le fichier est trop lourd.",
+        "type": "Ce format audio n'est pas pris en charge.",
+        "failed": "Le message n'a pas pu être enregistré. Réessayez."
+      }
     }
   }
 }

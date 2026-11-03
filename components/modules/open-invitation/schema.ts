@@ -13,6 +13,8 @@ export type OrganizerOpenResponse = Schema<"OrganizerOpenResponseView">;
 export type EventLook = Schema<"EventLookView">;
 /** One network's shares, visits and answers (JIKU-282). */
 export type CardFunnelRow = Schema<"CardFunnelRow">;
+/** The host's voice message (JIKU-284): where to play it, its length and its words. */
+export type CardVoice = Schema<"CardVoiceView">;
 export type OpenAnswer = OpenResponse["answer"];
 export type OpenClosedReason = NonNullable<PublicOpenInvitation["closedReason"]>;
 
