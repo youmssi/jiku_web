@@ -574,7 +574,9 @@
       "notifyOnCancelHelp": "“Yes” and “maybe” answers get a WhatsApp message if you cancel.",
       "notifyOnCancelIncluded": "Included in your plan.",
       "save": "Save",
-      "saved": "Settings saved."
+      "saved": "Settings saved.",
+      "showComing": "Show how many are coming",
+      "showComingHelp": "Shown from 5 people. Only the number appears, never a name."
     },
     "errors": {
       "invalid": "Check the settings.",

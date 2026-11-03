@@ -5198,6 +5198,7 @@ export interface components {
             /** Format: int32 */
             maxCompanions?: number | null;
             notifyOnCancel?: boolean | null;
+            showComing?: boolean | null;
             welcomeMessage?: string | null;
         };
         OpenInvitationView: {
@@ -5219,6 +5220,7 @@ export interface components {
             notifyOnCancel?: boolean;
             /** Format: int32 */
             remainingPlaces?: number | null;
+            showComing?: boolean;
             welcomeMessage?: string | null;
             whatsappNumber?: string | null;
         };
@@ -5660,6 +5662,8 @@ export interface components {
             /** Format: date-time */
             closesAt?: string | null;
             code?: string;
+            /** Format: int32 */
+            comingCount?: number | null;
             /** Format: date-time */
             eventEnd?: string | null;
             eventLocation?: string | null;

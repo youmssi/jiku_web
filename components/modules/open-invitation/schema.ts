@@ -40,6 +40,7 @@ export function settingsSchema(maxCompanions: number) {
     maxCompanions: z.number().int("wholeNumber").min(0, "outOfRange").max(maxCompanions, "outOfRange"),
     closesAt: z.string(),
     notifyOnCancel: z.boolean(),
+    showComing: z.boolean(),
   });
 }
 
