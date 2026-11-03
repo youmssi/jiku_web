@@ -301,6 +301,7 @@
     "saveDate": "Gardez la date",
     "googleCalendar": "Google Agenda",
     "otherCalendar": "Autre agenda",
-    "signature": "Créé avec Jikū · Créez votre carte gratuitement"
+    "signature": "Créé avec Jikū · Créez votre carte gratuitement",
+    "coming": "{count, plural, one {# personne vient} other {# personnes viennent}}"
   }
 }

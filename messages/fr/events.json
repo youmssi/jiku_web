@@ -574,7 +574,9 @@
       "notifyOnCancelHelp": "Les « oui » et « peut-être » reçoivent un message WhatsApp si vous annulez.",
       "notifyOnCancelIncluded": "Inclus dans votre formule.",
       "save": "Enregistrer",
-      "saved": "Réglages enregistrés."
+      "saved": "Réglages enregistrés.",
+      "showComing": "Afficher le nombre de présents",
+      "showComingHelp": "Affiché dès 5 personnes. Seul le nombre apparaît, jamais un nom."
     },
     "errors": {
       "invalid": "Vérifiez les réglages.",

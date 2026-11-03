@@ -1,5 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { MapPin, MessageCircle } from "lucide-react";
+import { MapPin, MessageCircle, Users } from "lucide-react";
 import { CardHero, ClampedText, directionsLink, googleCalendarLink, OrganizerMark, StateMessage, TrackedLink, VerifiedBadge } from "@/components/shared";
 import { CARD_STYLE_TOKENS, cardStyleOf, displayTitle, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
 import { countdown, fullWhen, liveWhen, shortDay, shortTime } from "@/lib/short-dates";
@@ -104,6 +104,12 @@ export async function OpenInvitationPage({
 
         {invitation.accepting ? (
           <>
+            {invitation.comingCount ? (
+              <p className="flex items-center gap-2 text-sm font-semibold">
+                <Users aria-hidden className="size-4" style={{ color: tokens.detail }} />
+                {t("coming", { count: invitation.comingCount })}
+              </p>
+            ) : null}
             {whatsapp ? (
               <div className="flex flex-col gap-2">
                 <a
