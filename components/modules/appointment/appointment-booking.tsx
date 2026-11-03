@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { enUS, fr } from "date-fns/locale";
+import { ar, enUS, fr } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { trackEvent } from "@/lib/analytics";
@@ -32,6 +32,8 @@ import {
   type AppointmentSlot,
   type BookingInput,
 } from "@/components/modules/appointment/schema";
+
+const CALENDAR_LOCALES: Record<string, typeof fr> = { fr, en: enUS, ar };
 
 /** UTC calendar date, `YYYY-MM-DD` — the format every date-only string in this component uses. */
 function toDateOnly(d: Date): string {
@@ -187,7 +189,7 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
             <PopoverContent className="w-auto p-0" align="end">
               <Calendar
                 mode="single"
-                locale={locale === "en" ? enUS : fr}
+                locale={CALENDAR_LOCALES[locale] ?? fr}
                 selected={selectedDate}
                 defaultMonth={selectedDate}
                 disabled={{ before: today }}
@@ -238,7 +240,7 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
       <Drawer open={picked !== null} onOpenChange={(open) => !open && setPicked(null)}>
         <DrawerContent>
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="mx-auto flex w-full max-w-lg flex-col">
-            <DrawerHeader className="text-left">
+            <DrawerHeader className="text-start">
               <DrawerTitle>{view?.name}</DrawerTitle>
               <DrawerDescription>
                 {picked

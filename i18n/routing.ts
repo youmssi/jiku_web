@@ -25,7 +25,37 @@ export const routing = defineRouting({
 
 export type Locale = (typeof routing.locales)[number];
 
-export const LOCALE_LABELS: Record<Locale, string> = {
+/**
+ * The guest screens (JIKU-292) also read in Arabic: the card, the RSVP page, the
+ * ticket, the sale and order pages, an organizer's public page, and a client's
+ * booking and queue pages. The rest of
+ * the site stays in French and English, so Arabic is a separate routing that
+ * only the proxy, the root layout and the guest screens use.
+ */
+export const guestRouting = defineRouting({
+  ...routing,
+  locales: ["fr", "en", "ar"] as const,
+});
+
+export type GuestLocale = (typeof guestRouting.locales)[number];
+
+/** The guest locales the rest of the site does not have. */
+export const GUEST_ONLY_LOCALES: readonly GuestLocale[] = ["ar"];
+
+/** The writing direction of a locale: Arabic reads right to left. */
+export function localeDirection(locale: string): "ltr" | "rtl" {
+  return locale === "ar" ? "rtl" : "ltr";
+}
+
+/** Locale-stripped prefixes of the guest screens, the only ones served in every guest locale. */
+const GUEST_PREFIXES = ["/appointments/", "/c/", "/i/", "/invitation/", "/o/", "/orders/", "/r/", "/v/", "/widget/"];
+
+export function isGuestRoute(route: string): boolean {
+  return GUEST_PREFIXES.some((prefix) => route.startsWith(prefix));
+}
+
+export const LOCALE_LABELS: Record<GuestLocale, string> = {
   fr: "Français",
   en: "English",
+  ar: "العربية",
 };

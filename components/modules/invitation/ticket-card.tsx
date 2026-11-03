@@ -137,8 +137,8 @@ export function TicketCard({
 
         <div aria-hidden className="relative h-5">
           <div className="absolute inset-x-5 top-1/2 border-t-2 border-dashed" style={{ borderColor: `color-mix(in srgb, ${tokens.panelInk} 18%, transparent)` }} />
-          <div className="absolute -left-3 top-1/2 size-6 -translate-y-1/2 rounded-full bg-white dark:bg-zinc-900" />
-          <div className="absolute -right-3 top-1/2 size-6 -translate-y-1/2 rounded-full bg-white dark:bg-zinc-900" />
+          <div className="absolute -start-3 top-1/2 size-6 -translate-y-1/2 rounded-full bg-white dark:bg-zinc-900" />
+          <div className="absolute -end-3 top-1/2 size-6 -translate-y-1/2 rounded-full bg-white dark:bg-zinc-900" />
         </div>
 
         <div className="flex flex-col items-center gap-3 px-5 pb-5 pt-2">

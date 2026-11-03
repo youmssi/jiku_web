@@ -312,5 +312,18 @@
       "pause": "Mettre en pause",
       "failed": "Lecture impossible pour le moment."
     }
+  },
+  "orgPublic": {
+    "bookOnline": "Réservation en ligne",
+    "tagline": "Prenez rendez-vous en quelques gestes, sans compte.",
+    "emptyTitle": "Aucun service à réserver pour l'instant",
+    "emptyText": "Cette organisation n'a pas encore publié de service à réserver. Revenez bientôt.",
+    "servicesTitle": "Services à réserver",
+    "available": "{count, plural, one {# disponible} other {# disponibles}}",
+    "pickTime": "Choisissez l'heure qui vous convient",
+    "book": "Réserver"
+  },
+  "languages": {
+    "label": "Langue"
   }
 }

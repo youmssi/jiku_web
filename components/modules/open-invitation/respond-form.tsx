@@ -242,7 +242,7 @@ export function RespondForm({
       ) : (
         <>
           <button type="button" onClick={() => setStep("answer")} className="flex items-center gap-1.5 self-start text-sm font-medium">
-            <ArrowLeft aria-hidden className="size-4" />
+            <ArrowLeft aria-hidden className="size-4 rtl:rotate-180" />
             {t(`answers.${answer}`)}
             {answer === "YES" && companions > 0 ? ` + ${companions}` : null}
           </button>

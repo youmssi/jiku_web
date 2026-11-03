@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { readableBrand } from "@/lib/card-style";
 import { VerifiedBadge } from "@/components/shared";
@@ -36,7 +37,8 @@ interface OrgPublicViewProps {
  * the services bookable by short link. A visitor clicks a service and lands
  * on its booking page, no account needed.
  */
-export function OrgPublicView({ profile }: OrgPublicViewProps) {
+export async function OrgPublicView({ profile }: OrgPublicViewProps) {
+  const t = await getTranslations("guest.orgPublic");
   const bannerStyle = {
     background: `linear-gradient(135deg, ${mixHex(profile.primaryColor, "#000000", 0.35)} 0%, ${profile.primaryColor} 55%, ${mixHex(profile.primaryColor, "#ffffff", 0.4)} 100%)`,
   };
@@ -58,11 +60,11 @@ export function OrgPublicView({ profile }: OrgPublicViewProps) {
             <>
               <div
                 aria-hidden
-                className="pointer-events-none absolute -top-16 -right-10 size-52 rounded-full bg-white/10 blur-2xl"
+                className="pointer-events-none absolute -top-16 -end-10 size-52 rounded-full bg-white/10 blur-2xl"
               />
               <div
                 aria-hidden
-                className="pointer-events-none absolute -bottom-24 left-1/4 size-64 rounded-full bg-black/10 blur-3xl"
+                className="pointer-events-none absolute -bottom-24 start-1/4 size-64 rounded-full bg-black/10 blur-3xl"
               />
             </>
           )}
@@ -104,7 +106,7 @@ export function OrgPublicView({ profile }: OrgPublicViewProps) {
                   <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
                 </span>
-                Book online
+                {t("bookOnline")}
               </Badge>
             ) : null}
           </div>
@@ -115,7 +117,7 @@ export function OrgPublicView({ profile }: OrgPublicViewProps) {
           </h1>
           <VerifiedBadge kind={profile.verification} className="mt-2" />
           <p className="mt-1 text-sm text-muted-foreground">
-            Book an appointment in a few taps — no account needed.
+            {t("tagline")}
           </p>
 
           <Separator className="my-6" />
@@ -124,11 +126,11 @@ export function OrgPublicView({ profile }: OrgPublicViewProps) {
             <Empty className="py-6">
               <EmptyHeader>
                 <EmptyMedia variant="icon">
-                  <ArrowRight />
+                  <ArrowRight className="rtl:rotate-180" />
                 </EmptyMedia>
-                <EmptyTitle>No services to book yet</EmptyTitle>
+                <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
                 <EmptyDescription>
-                  This organization has not published any bookable services — check back soon.
+                  {t("emptyText")}
                 </EmptyDescription>
               </EmptyHeader>
             </Empty>
@@ -136,9 +138,9 @@ export function OrgPublicView({ profile }: OrgPublicViewProps) {
             <>
               <div className="flex items-center justify-between">
                 <h2 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Bookable services
+                  {t("servicesTitle")}
                 </h2>
-                <Badge variant="secondary">{profile.services.length} available</Badge>
+                <Badge variant="secondary">{t("available", { count: profile.services.length })}</Badge>
               </div>
               <ul className="mt-3">
                 {profile.services.map((service, index) => (
@@ -154,19 +156,19 @@ export function OrgPublicView({ profile }: OrgPublicViewProps) {
                         <span className="leading-tight">
                           <span className="block text-sm font-medium">{service.name}</span>
                           <span className="block text-xs text-muted-foreground">
-                            Pick a time that suits you
+                            {t("pickTime")}
                           </span>
                         </span>
                       </span>
                       <span className="flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors group-hover:text-primary">
-                        Book
+                        {t("book")}
                         <ArrowRight
-                          className="size-4 transition-transform group-hover:translate-x-0.5"
+                          className="size-4 transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5"
                           aria-hidden
                         />
                       </span>
                     </Link>
-                    {index < profile.services.length - 1 ? <Separator className="ml-12 w-auto" /> : null}
+                    {index < profile.services.length - 1 ? <Separator className="ms-12 w-auto" /> : null}
                   </li>
                 ))}
               </ul>
