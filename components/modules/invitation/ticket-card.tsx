@@ -3,7 +3,8 @@
 import { useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { MapPin } from "lucide-react";
-import { CardHero, OrganizerMark, QrCode } from "@/components/shared";
+import { CardHero, OrganizerMark } from "@/components/shared/card-hero";
+import { QrCode } from "@/components/shared/qr-code";
 import { CARD_STYLE_TOKENS, displayTitle, type CardStyle } from "@/lib/card-style";
 import { cn } from "@/lib/utils";
 

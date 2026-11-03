@@ -1,6 +1,6 @@
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
-import { renderCard } from "@/components/modules/open-invitation/server";
+import { renderCard } from "@/components/modules/open-invitation/public-server";
 
 /**
  * The card of an open invitation as a PNG (JIKU-194, JIKU-283). `format=portrait`

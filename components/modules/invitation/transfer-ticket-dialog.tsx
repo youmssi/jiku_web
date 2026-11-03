@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { useLocalDateTime } from "@/components/shared";
+import { useLocalDateTime } from "@/components/shared/use-local-date-time";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { FormFieldError } from "@/components/shared";
+import { FormFieldError } from "@/components/shared/form-field-error";
 import { transferTicketAction } from "@/components/modules/invitation/invitation.service";
 import {
   transferTicketSchema,

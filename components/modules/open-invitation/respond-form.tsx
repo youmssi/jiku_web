@@ -3,19 +3,19 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, CalendarPlus, Check, HelpCircle, Minus, Plus, UserPlus, X } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "@/i18n/navigation";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { FormFieldError } from "@/components/shared";
+import { FormFieldError } from "@/components/shared/form-field-error";
 import { CARD_STYLE_TOKENS, type CardStyle } from "@/lib/card-style";
 import { invitationRoute, openInvitationRoute } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { cardVersion, taggedLink, whatsappShareLink, type CardSource } from "./share";
 import { respondAction } from "./open-invitation.service";
-import { OPEN_ANSWERS, respondSchema, type OpenAnswer, type OpenResponse, type PublicOpenInvitation, type RespondInput } from "./schema";
+import { compactPhone, NAME_MAX, NAME_MIN, OPEN_ANSWERS, PHONE_PATTERN } from "./answers";
+import type { OpenAnswer, OpenResponse, PublicOpenInvitation, RespondInput } from "./schema";
 
 const ICONS: Record<OpenAnswer, typeof Check> = { YES: Check, MAYBE: HelpCircle, NO: X };
 
@@ -50,7 +50,6 @@ export function RespondForm({
     setValue,
     formState: { isSubmitting },
   } = useForm<RespondInput>({
-    resolver: zodResolver(respondSchema),
     mode: "onTouched",
     defaultValues: { name: "", phone: "", answer: "YES", companions: 0 },
   });
@@ -62,6 +61,8 @@ export function RespondForm({
   async function onSubmit(values: RespondInput) {
     const result = await respondAction(invitation.code, {
       ...values,
+      name: values.name.trim(),
+      phone: compactPhone(values.phone),
       companions: values.answer === "YES" ? values.companions : 0,
       source: source ?? undefined,
     });
@@ -249,6 +250,14 @@ export function RespondForm({
             <Controller
               control={control}
               name="name"
+              rules={{
+                validate: (value) => {
+                  const name = value.trim();
+                  if (!name) return "required";
+                  if (name.length < NAME_MIN) return "tooShort";
+                  return name.length <= NAME_MAX || "tooLong";
+                },
+              }}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="open-name">{t("name")}</FieldLabel>
@@ -260,6 +269,7 @@ export function RespondForm({
             <Controller
               control={control}
               name="phone"
+              rules={{ validate: (value) => PHONE_PATTERN.test(compactPhone(value)) || "phone" }}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="open-phone">{t("phone")}</FieldLabel>

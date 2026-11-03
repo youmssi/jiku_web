@@ -2,7 +2,7 @@
 // chat" and "share" addresses, and the share pages of Facebook and Telegram,
 // built the same way on the card page and the organizer's tab.
 
-import { whatsappChatLink } from "@/components/shared";
+import { whatsappChatLink } from "@/components/shared/whatsapp-link";
 
 /** Opens a chat with the cards [number], with [message] ready to send. */
 export const whatsappAnswerLink = whatsappChatLink;

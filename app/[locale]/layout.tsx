@@ -5,7 +5,10 @@ import { notFound } from "next/navigation";
 import { Geist_Mono, Inter } from "next/font/google";
 import "../globals.css";
 import { cn } from "@/lib/utils";
-import { ServiceWorkerRegister, UmamiScript } from "@/components/shared";
+// By file, not through the shared barrel: the root layout wraps every page, and
+// the barrel would ship organizer-only client components to all of them (JIKU-287).
+import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
+import { UmamiScript } from "@/components/shared/umami-script";
 import { SHARE_IMAGE, SiteJsonLd, siteUrl } from "@/components/modules/seo";
 import { routing } from "@/i18n/routing";
 

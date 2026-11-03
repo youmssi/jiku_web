@@ -4,9 +4,11 @@ import { Archivo, Bricolage_Grotesque, Cormorant_Garamond } from "next/font/goog
 // `CARD_STYLE_TOKENS` read. Applied on guest pages and around the organizer's
 // style picker. They are not preloaded, so they never delay the page's own text
 // on a slow connection; a card title shows in the fallback face for a moment
-// and its fixed card frame keeps the swap from shifting the page.
+// and its fixed card frame keeps the swap from shifting the page. Each face
+// loads only the weight its style draws with (JIKU-287), not the whole family,
+// except Modern, whose condensed title needs Archivo's variable width axis.
 const elegant = Cormorant_Garamond({ subsets: ["latin"], weight: ["600"], variable: "--font-card-elegant", preload: false });
 const modern = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-card-modern", preload: false });
-const festive = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-card-festive", preload: false });
+const festive = Bricolage_Grotesque({ subsets: ["latin"], weight: ["800"], variable: "--font-card-festive", preload: false });
 
 export const cardFontVariables = `${elegant.variable} ${modern.variable} ${festive.variable}`;

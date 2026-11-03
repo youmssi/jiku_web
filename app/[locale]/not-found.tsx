@@ -1,6 +1,6 @@
 import { getLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
-import { NotFoundPage } from "@/components/modules/landing";
+import { NotFoundPage } from "@/components/modules/landing/not-found";
 import { routing } from "@/i18n/routing";
 
 /** The site's own 404, in the visitor's language (JIKU-236). */

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { Schema } from "@/lib/api-contract";
+import { compactPhone, NAME_MAX, NAME_MIN, OPEN_ANSWERS, PHONE_PATTERN } from "./answers";
 
 // CONTRACT — open invitation (JIKU-184, ADR 106): an event shared in groups
 // without a guest list, answered yes, maybe or no.
@@ -15,16 +16,16 @@ export type CardFunnelRow = Schema<"CardFunnelRow">;
 export type OpenAnswer = OpenResponse["answer"];
 export type OpenClosedReason = NonNullable<PublicOpenInvitation["closedReason"]>;
 
-export const OPEN_ANSWERS: OpenAnswer[] = ["YES", "MAYBE", "NO"];
+export { OPEN_ANSWERS } from "./answers";
 
-/** What a person fills in; messages are `common.validation` keys. */
+/** What a person fills in; messages are `common.validation` keys. The browser checks the same rules (./answers). */
 export const respondSchema = z.object({
-  name: z.string().trim().min(1, "required").min(2, "tooShort").max(120, "tooLong"),
+  name: z.string().trim().min(1, "required").min(NAME_MIN, "tooShort").max(NAME_MAX, "tooLong"),
   phone: z
     .string()
-    .transform((value) => value.replace(/\s+/g, ""))
-    .pipe(z.string().regex(/^\+[1-9][0-9]{7,14}$/, "phone")),
-  answer: z.enum(["YES", "MAYBE", "NO"]),
+    .transform(compactPhone)
+    .pipe(z.string().regex(PHONE_PATTERN, "phone")),
+  answer: z.enum(OPEN_ANSWERS),
   companions: z.number().int().min(0),
   /** The network the card was opened from (JIKU-282). */
   source: z.string().max(16).optional(),
