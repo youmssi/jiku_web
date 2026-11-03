@@ -1716,6 +1716,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/invitations/own-whatsapp/reminders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["invitationOwnWhatsAppReminders"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/invitations/own-whatsapp/{guestId}/reminded": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["invitationMarkRemindedFromOwnWhatsApp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/invitations/own-whatsapp/{guestId}/sent": {
         parameters: {
             query?: never;
@@ -5371,6 +5403,16 @@ export interface components {
             /** Format: date-time */
             sentAt?: string | null;
             sentByOrganizer?: boolean;
+        };
+        OrganizerWhatsAppReminder: {
+            firstName?: string;
+            /** Format: uuid */
+            guestId?: string;
+            lastName?: string;
+            link?: string;
+            phone?: string;
+            /** Format: date-time */
+            remindedAt?: string | null;
         };
         PackExtraRequest: {
             /** Format: int32 */
@@ -9188,6 +9230,51 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["OrganizerWhatsAppGuest"][];
+                };
+            };
+        };
+    };
+    invitationOwnWhatsAppReminders: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerWhatsAppReminder"][];
+                };
+            };
+        };
+    };
+    invitationMarkRemindedFromOwnWhatsApp: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                guestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerWhatsAppReminder"];
                 };
             };
         };

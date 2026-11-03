@@ -12,6 +12,7 @@ import {
   type Guest,
   type ImportResult,
   type OwnWhatsAppGuest,
+  type OwnWhatsAppReminder,
   type PaymentMethod,
   type SingleGuestInput,
 } from "@/components/modules/guest/schema";
@@ -213,6 +214,27 @@ export async function markOwnWhatsAppSentAction(eventId: string, guestId: string
     return ok((await response.json()) as OwnWhatsAppGuest);
   }
   // 409: the link was never prepared, or a direct ticket could not be issued (event full).
+  if (response.status !== 409) reportApiError(response);
+  return fail(t("ownWhatsAppMarkFailed"));
+}
+
+/** The invited guests who have not answered, to remind from the organizer's own WhatsApp (JIKU-290). */
+export async function ownWhatsAppRemindersAction(eventId: string): Promise<ActionResult<OwnWhatsAppReminder[]>> {
+  const t = await errors();
+  const response = await serverFetch(`/events/${eventId}/invitations/own-whatsapp/reminders`, { method: "POST" });
+  if (response.ok) return ok((await response.json()) as OwnWhatsAppReminder[]);
+  reportApiError(response);
+  return fail(t("ownWhatsAppRemindersFailed"));
+}
+
+/** The organizer opened the guest's chat with a reminder. */
+export async function markOwnWhatsAppRemindedAction(
+  eventId: string,
+  guestId: string,
+): Promise<ActionResult<OwnWhatsAppReminder>> {
+  const t = await errors();
+  const response = await serverFetch(`/events/${eventId}/invitations/own-whatsapp/${guestId}/reminded`, { method: "POST" });
+  if (response.ok) return ok((await response.json()) as OwnWhatsAppReminder);
   if (response.status !== 409) reportApiError(response);
   return fail(t("ownWhatsAppMarkFailed"));
 }
