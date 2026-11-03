@@ -584,6 +584,25 @@
       "photoTooSmall": "Photo trop petite : 600 × 300 px au moins.",
       "preview": "Aperçu de la carte"
     },
-    "customize": "Personnaliser la carte"
+    "customize": "Personnaliser la carte",
+    "funnel": {
+      "title": "D'où viennent les réponses",
+      "text": "Chaque lien partagé porte son réseau : vous voyez où vos proches répondent le plus.",
+      "failed": "Chiffres indisponibles pour le moment. Rechargez la page plus tard.",
+      "empty": "Partagez votre carte pour voir d'où viennent les réponses.",
+      "answers": "{count, plural, =0 {Aucune réponse} one {# réponse} other {# réponses}}",
+      "detail": "{shares, plural, =0 {aucun partage} one {# partage} other {# partages}} · {visits, plural, =0 {aucune visite} one {# visite} other {# visites}} · {coming, plural, =0 {personne ne vient} one {# vient} other {# viennent}}",
+      "rate": "{rate} des visiteurs ont répondu",
+      "rateTooFew": "trop peu de visites pour un taux",
+      "source": {
+        "whatsapp": "WhatsApp",
+        "facebook": "Facebook",
+        "telegram": "Telegram",
+        "share": "Menu de partage",
+        "link": "Lien copié",
+        "qr": "QR code de l'image",
+        "other": "Autre ou inconnu"
+      }
+    }
   }
 }

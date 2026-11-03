@@ -7,6 +7,7 @@ import { siteUrl } from "@/components/modules/seo";
 import { cardStyleOf, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
 import { openInvitationRoute } from "@/lib/constants";
 import { datePart, shortDay, shortTime, shortWhen } from "@/lib/short-dates";
+import { taggedLink } from "./share";
 import { LANDSCAPE, LandscapeCard, PORTRAIT, PortraitCard, type CardArtData } from "./card-art";
 import { cardFonts } from "./card-fonts";
 import { fetchPublicOpenInvitation } from "./open-invitation.queries";
@@ -67,7 +68,7 @@ export async function renderCard(
             date: `${shortDay(invitation.closesAt, zone, locale, { weekday: false })} · ${shortTime(invitation.closesAt, zone, locale)}`,
           })
         : null,
-    url: `${siteUrl()}${prefix}${openInvitationRoute(invitation.code)}`,
+    url: taggedLink(`${siteUrl()}${prefix}${openInvitationRoute(invitation.code)}`, "qr"),
     labels: {
       invites: t("invitedBy", { organizer: invitation.organizerName }),
       scan: tShare("cardAnswer"),

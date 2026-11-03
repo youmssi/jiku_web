@@ -10,6 +10,8 @@ export type OpenResponse = Schema<"OpenResponseView">;
 export type OrganizerOpenResponse = Schema<"OrganizerOpenResponseView">;
 /** The event's look on every guest surface (JIKU-194): a style and an optional banner photo. */
 export type EventLook = Schema<"EventLookView">;
+/** One network's shares, visits and answers (JIKU-282). */
+export type CardFunnelRow = Schema<"CardFunnelRow">;
 export type OpenAnswer = OpenResponse["answer"];
 export type OpenClosedReason = NonNullable<PublicOpenInvitation["closedReason"]>;
 
@@ -24,6 +26,8 @@ export const respondSchema = z.object({
     .pipe(z.string().regex(/^\+[1-9][0-9]{7,14}$/, "phone")),
   answer: z.enum(["YES", "MAYBE", "NO"]),
   companions: z.number().int().min(0),
+  /** The network the card was opened from (JIKU-282). */
+  source: z.string().max(16).optional(),
 });
 
 export type RespondInput = z.input<typeof respondSchema>;

@@ -21,3 +21,17 @@ export function facebookShareLink(url: string): string {
 export function telegramShareLink(url: string, text: string): string {
   return `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
 }
+
+/** The networks a card's link can leave through (JIKU-282); each link carries its own in `?via=`. */
+export const CARD_SOURCES = ["whatsapp", "facebook", "telegram", "share", "link", "qr"] as const;
+export type CardSource = (typeof CARD_SOURCES)[number];
+
+/** [url] tagged with the network it leaves through, so its visits and answers count there. */
+export function taggedLink(url: string, source: CardSource): string {
+  return `${url}${url.includes("?") ? "&" : "?"}via=${source}`;
+}
+
+/** The network a card page was opened from, when its `via` is one we tag; anything else is left out. */
+export function cardSourceOf(value: string | string[] | undefined): CardSource | undefined {
+  return CARD_SOURCES.find((source) => source === value);
+}
