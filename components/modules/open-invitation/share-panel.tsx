@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Check, Copy, Download, ExternalLink, Loader2, Send, Share2 } from "lucide-react";
+import { Check, Copy, Download, ExternalLink, Loader2, MessageCircle, Send, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -103,7 +103,7 @@ export function SharePanel({ code, card }: { code: string; card: CardDetails }) 
   }
 
   const networks = [
-    { network: "whatsapp", href: whatsappShareLink(message), label: t("whatsapp"), icon: Share2 },
+    { network: "whatsapp", href: whatsappShareLink(message), label: t("whatsapp"), icon: MessageCircle },
     { network: "facebook", href: facebookShareLink(url), label: t("facebook"), icon: Share2 },
     { network: "telegram", href: telegramShareLink(url, message), label: t("telegram"), icon: Send },
   ];
