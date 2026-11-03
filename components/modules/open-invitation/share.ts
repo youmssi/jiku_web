@@ -23,7 +23,7 @@ export function telegramShareLink(url: string, text: string): string {
 }
 
 /** The networks a card's link can leave through (JIKU-282); each link carries its own in `?via=`. */
-export const CARD_SOURCES = ["whatsapp", "facebook", "telegram", "share", "link", "qr"] as const;
+export const CARD_SOURCES = ["whatsapp", "facebook", "telegram", "share", "link", "qr", "relay"] as const;
 export type CardSource = (typeof CARD_SOURCES)[number];
 
 /**

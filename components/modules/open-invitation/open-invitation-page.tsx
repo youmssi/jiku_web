@@ -127,7 +127,13 @@ export async function OpenInvitationPage({
                 </p>
               </div>
             ) : null}
-            <RespondForm invitation={invitation} style={style} source={source} calendar={calendar} />
+            <RespondForm
+              invitation={invitation}
+              style={style}
+              source={source}
+              calendar={calendar}
+              relayWhen={start ? `, ${shortDay(start, zone, locale)} · ${shortTime(start, zone, locale)}` : ""}
+            />
           </>
         ) : (
           <StateMessage title={t("closedTitle")} description={t(`closed.${invitation.closedReason ?? "DISABLED"}`)} />

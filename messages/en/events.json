@@ -576,7 +576,9 @@
       "save": "Save",
       "saved": "Settings saved.",
       "showComing": "Show how many are coming",
-      "showComingHelp": "Shown from 5 people. Only the number appears, never a name."
+      "showComingHelp": "Shown from 5 people. Only the number appears, never a name.",
+      "relay": "Let guests invite someone",
+      "relayHelp": "After “I'm coming”, a guest can pass the card to someone forgotten."
     },
     "errors": {
       "invalid": "Check the settings.",
@@ -620,7 +622,8 @@
         "share": "Share menu",
         "link": "Copied link",
         "qr": "Image QR code",
-        "other": "Other or unknown"
+        "other": "Other or unknown",
+        "relay": "Guests passing it on"
       }
     }
   }

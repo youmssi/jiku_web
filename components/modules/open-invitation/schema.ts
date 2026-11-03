@@ -41,6 +41,7 @@ export function settingsSchema(maxCompanions: number) {
     closesAt: z.string(),
     notifyOnCancel: z.boolean(),
     showComing: z.boolean(),
+    relay: z.boolean(),
   });
 }
 

@@ -302,6 +302,8 @@
     "googleCalendar": "Google Agenda",
     "otherCalendar": "Autre agenda",
     "signature": "Créé avec Jikū · Créez votre carte gratuitement",
-    "coming": "{count, plural, one {# personne vient} other {# personnes viennent}}"
+    "coming": "{count, plural, one {# personne vient} other {# personnes viennent}}",
+    "relay": "Inviter un proche",
+    "relayMessage": "Je viens à {event}{when} ! Viens aussi : {link}"
   }
 }

@@ -5198,6 +5198,7 @@ export interface components {
             /** Format: int32 */
             maxCompanions?: number | null;
             notifyOnCancel?: boolean | null;
+            relay?: boolean | null;
             showComing?: boolean | null;
             welcomeMessage?: string | null;
         };
@@ -5218,6 +5219,7 @@ export interface components {
             /** Format: int32 */
             maxCompanionsAllowed?: number;
             notifyOnCancel?: boolean;
+            relay?: boolean;
             /** Format: int32 */
             remainingPlaces?: number | null;
             showComing?: boolean;
@@ -5678,6 +5680,7 @@ export interface components {
             organizerName?: string;
             organizerVerification?: string | null;
             primaryColor?: string | null;
+            relay?: boolean;
             welcomeMessage?: string | null;
             whatsappNumber?: string | null;
         };
