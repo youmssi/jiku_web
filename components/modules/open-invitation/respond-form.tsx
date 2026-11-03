@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, Check, HelpCircle, Minus, Plus, X } from "lucide-react";
+import { ArrowLeft, CalendarPlus, Check, HelpCircle, Minus, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "@/i18n/navigation";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -28,10 +28,13 @@ export function RespondForm({
   invitation,
   style,
   source,
+  calendar,
 }: {
   invitation: PublicOpenInvitation;
   style: CardStyle;
   source: CardSource | null;
+  /** Where to save the date once answered (JIKU-289); null when the event has no date. */
+  calendar: { google: string; ics: string } | null;
 }) {
   const t = useTranslations("guest.openInvitation");
   const tokens = CARD_STYLE_TOKENS[style];
@@ -77,6 +80,32 @@ export function RespondForm({
           <Link href={invitationRoute(answered.ticketToken)} className="flex h-12 w-full items-center justify-center text-[15px] font-semibold" style={primary}>
             {t("seeTicket")}
           </Link>
+        ) : null}
+        {calendar && answered.answer !== "NO" ? (
+          <div className="flex w-full flex-col gap-2">
+            <p className="text-sm font-medium">{t("saveDate")}</p>
+            <div className="grid grid-cols-2 gap-2">
+              <a
+                href={calendar.google}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 items-center justify-center gap-1.5 border text-sm font-semibold"
+                style={{ borderRadius: radius, borderColor: `color-mix(in srgb, ${tokens.panelInk} 18%, transparent)` }}
+              >
+                <CalendarPlus aria-hidden className="size-4" />
+                {t("googleCalendar")}
+              </a>
+              <a
+                href={calendar.ics}
+                download
+                className="flex h-11 items-center justify-center gap-1.5 border text-sm font-semibold"
+                style={{ borderRadius: radius, borderColor: `color-mix(in srgb, ${tokens.panelInk} 18%, transparent)` }}
+              >
+                <CalendarPlus aria-hidden className="size-4" />
+                {t("otherCalendar")}
+              </a>
+            </div>
+          </div>
         ) : null}
         <button
           type="button"

@@ -296,6 +296,10 @@
       "failed": "Could not send your answer. Try again."
     },
     "previewAlt": "Invitation: {event}, {when}",
-    "previewAltNoDate": "Invitation: {event}"
+    "previewAltNoDate": "Invitation: {event}",
+    "directions": "Directions to {place}",
+    "saveDate": "Save the date",
+    "googleCalendar": "Google Calendar",
+    "otherCalendar": "Other calendar"
   }
 }

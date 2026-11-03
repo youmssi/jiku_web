@@ -99,6 +99,17 @@ export function relativeDay(utcInstant: string, timeZone: string, locale: string
   return text.charAt(0).toLocaleUpperCase(locale) + text.slice(1);
 }
 
+/**
+ * "Dans 39 jours" for an event further than the relative days above, up to a
+ * year; null otherwise, since [liveWhen] already says "Demain" or "Dans 3 jours".
+ */
+export function countdown(utcInstant: string, timeZone: string, locale: string, now: Date = new Date()): string | null {
+  const days = daysBetween(now, new Date(utcInstant), timeZone);
+  if (days <= RELATIVE_WITHIN_DAYS || days > 365) return null;
+  const text = new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(days, "day");
+  return text.charAt(0).toLocaleUpperCase(locale) + text.slice(1);
+}
+
 /** The day for a live page: relative when close, short otherwise, with the time. */
 export function liveWhen(utcInstant: string, timeZone: string, locale: string, now: Date = new Date()): string {
   const day = relativeDay(utcInstant, timeZone, locale, now) ?? shortDay(utcInstant, timeZone, locale, { now });

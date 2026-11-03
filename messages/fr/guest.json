@@ -296,6 +296,10 @@
       "failed": "Impossible d'envoyer votre réponse. Réessayez."
     },
     "previewAlt": "Invitation : {event}, {when}",
-    "previewAltNoDate": "Invitation : {event}"
+    "previewAltNoDate": "Invitation : {event}",
+    "directions": "Itinéraire vers {place}",
+    "saveDate": "Gardez la date",
+    "googleCalendar": "Google Agenda",
+    "otherCalendar": "Autre agenda"
   }
 }
