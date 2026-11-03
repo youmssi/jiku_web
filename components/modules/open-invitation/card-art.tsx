@@ -1,7 +1,7 @@
 import "server-only";
 
 import { qrPath } from "@/lib/qr-path";
-import { CARD_STYLE_TOKENS, PHOTO_SHADE, brandBackground, type CardStyle } from "@/lib/card-style";
+import { CARD_STYLE_TOKENS, PHOTO_SHADE, brandBackground, readableBrand, type CardStyle } from "@/lib/card-style";
 
 // The card of an open invitation, drawn for `ImageResponse` (JIKU-194,
 // JIKU-283): one artwork, three formats. The portrait card (1080 × 1350) is the
@@ -89,7 +89,7 @@ function Hero({ data, children, padding }: { data: CardArtData; children: React.
         height: "100%",
         padding,
         color: "#FFFFFF",
-        backgroundColor: data.color,
+        backgroundColor: readableBrand(data.color),
         // The renderer fails on an undefined background, so the key is left out rather than emptied.
         ...(data.photo ? {} : { backgroundImage: brandBackground(data.style, data.color) }),
         overflow: "hidden",

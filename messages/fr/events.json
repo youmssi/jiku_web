@@ -199,7 +199,8 @@
       "logo": "Adresse du logo",
       "logoHint": "Une image en ligne, en https://",
       "color": "Couleur",
-      "preview": "Aperçu pour vos invités"
+      "preview": "Aperçu pour vos invités",
+      "colorDeepened": "Trop claire pour un texte blanc : les cartes et billets l'affichent un peu plus foncée."
     },
     "advanced": "Options avancées",
     "leaveUnsaved": "Vos modifications ne sont pas enregistrées. Quitter quand même ?",

@@ -95,8 +95,41 @@ export function darken(hex: string, amount: number): string {
   return `rgb(${channel(16)}, ${channel(8)}, ${channel(0)})`;
 }
 
-/** The background of a hero without a photo: the brand colour, treated per style. */
-export function brandBackground(style: CardStyle, color: string): string {
+/** WCAG contrast of white text over a hex colour. */
+function contrastWithWhite(hex: string): number {
+  const n = parseInt(hex.slice(1), 16);
+  const linear = (shift: number) => {
+    const value = ((n >> shift) & 0xff) / 255;
+    return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance = 0.2126 * linear(16) + 0.7152 * linear(8) + 0.0722 * linear(0);
+  return 1.05 / (luminance + 0.05);
+}
+
+/** Contrast the hero's white text needs everywhere on it (WCAG AA for normal text). */
+const MIN_HERO_CONTRAST = 4.5;
+
+/**
+ * The organizer's colour, deepened just enough for the hero's white text to read
+ * (JIKU-291): a light yellow or pink becomes the same hue, darker, instead of
+ * white text at 1.4:1. Dark colours come back unchanged.
+ */
+export function readableBrand(color: string): string {
+  const match = /^#?([0-9a-f]{6})$/i.exec(color.trim());
+  if (!match) return color;
+  const n = parseInt(match[1], 16);
+  for (let step = 0; step <= 20; step++) {
+    const keep = 1 - step * 0.05;
+    const channel = (shift: number) => Math.round(((n >> shift) & 0xff) * keep);
+    const hex = `#${[16, 8, 0].map((shift) => channel(shift).toString(16).padStart(2, "0")).join("")}`;
+    if (contrastWithWhite(hex) >= MIN_HERO_CONTRAST) return hex;
+  }
+  return "#000000";
+}
+
+/** The background of a hero without a photo: the brand colour, made readable, then treated per style. */
+export function brandBackground(style: CardStyle, brand: string): string {
+  const color = readableBrand(brand);
   switch (style) {
     case "ELEGANT":
       return `radial-gradient(120% 90% at 20% 0%, ${color} 0%, ${darken(color, 0.35)} 45%, ${darken(color, 0.7)} 100%)`;

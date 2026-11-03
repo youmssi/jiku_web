@@ -199,7 +199,8 @@
       "logo": "Logo address",
       "logoHint": "An online image, starting with https://",
       "color": "Color",
-      "preview": "What your guests see"
+      "preview": "What your guests see",
+      "colorDeepened": "Too light for white text: cards and tickets show it slightly darker."
     },
     "advanced": "Advanced options",
     "leaveUnsaved": "Your changes are not saved. Leave anyway?",
