@@ -626,6 +626,36 @@
         "other": "Other or unknown",
         "relay": "Guests passing it on"
       }
+    },
+    "voice": {
+      "title": "Voice message",
+      "text": "Say the invitation in your own voice, {seconds} seconds at most: guests listen on the card.",
+      "record": "Record",
+      "replace": "Record again",
+      "import": "Import a file",
+      "remove": "Remove",
+      "recording": "Recording…",
+      "remaining": "{seconds} s left",
+      "stop": "Stop",
+      "listenDraft": "Listen to the recording",
+      "listenSaved": "Listen to the message, {seconds} seconds",
+      "use": "Use this message",
+      "again": "Start over",
+      "saved": "Voice message saved.",
+      "transcript": "The message's words (optional)",
+      "transcriptHint": "Shown under the player, for those who cannot listen.",
+      "removeTitle": "Remove the voice message?",
+      "removeText": "The card will have no voice message. You can record another one.",
+      "keep": "Keep",
+      "removeConfirm": "Remove",
+      "micDenied": "The microphone isn't available. Allow it in the browser, or import an audio file.",
+      "errors": {
+        "invalid": "This file isn't a recording.",
+        "tooLong": "The message must last 30 seconds at most.",
+        "tooBig": "The file is too large.",
+        "type": "This audio format isn't supported.",
+        "failed": "The message couldn't be saved. Try again."
+      }
     }
   }
 }

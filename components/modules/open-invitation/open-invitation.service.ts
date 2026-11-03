@@ -7,7 +7,7 @@ import { eventOpenInvitationRoute } from "@/lib/constants";
 import { CARD_STYLES, type CardStyle } from "@/lib/card-style";
 import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
 import { CARD_SOURCES, type CardSource } from "./share";
-import { respondSchema, type EventLook, type OpenResponse, type RespondInput, type SettingsInput } from "./schema";
+import { respondSchema, type CardVoice, type EventLook, type OpenResponse, type RespondInput, type SettingsInput } from "./schema";
 
 /**
  * Records a person's answer to a shared card; answering again from the same
@@ -172,4 +172,42 @@ export async function recordVisitAction(code: string, source: CardSource | null)
   const query = source && CARD_SOURCES.includes(source) ? `?source=${encodeURIComponent(source)}` : "";
   const response = await publicFetch(`/open/${encodeURIComponent(code)}/visits${query}`, { method: "POST" });
   if (!response.ok && response.status !== 429) reportApiError(response, "open-invitation");
+}
+
+/**
+ * Saves the host's voice message (JIKU-284): the form carries the recording as
+ * `file`, its length in whole seconds as `durationSeconds` and an optional
+ * `transcript`.
+ */
+export async function saveVoiceAction(eventId: string, form: FormData): Promise<ActionResult<CardVoice>> {
+  const t = await getTranslations("events.openInvitation.voice.errors");
+  if (!(form.get("file") instanceof Blob)) return fail(t("invalid"));
+  const response = await serverFetch(`/events/${encodeURIComponent(eventId)}/open-invitation/voice`, { method: "PUT", body: form });
+  if (response.ok) {
+    revalidatePath(eventOpenInvitationRoute(eventId));
+    return ok((await response.json()) as CardVoice);
+  }
+  switch (response.status) {
+    case 400:
+      return fail(t("tooLong"));
+    case 413:
+      return fail(t("tooBig"));
+    case 415:
+      return fail(t("type"));
+    default:
+      reportApiError(response, "open-invitation");
+      return fail(t("failed"));
+  }
+}
+
+/** Removes the host's voice message. */
+export async function removeVoiceAction(eventId: string): Promise<ActionResult> {
+  const t = await getTranslations("events.openInvitation.voice.errors");
+  const response = await serverFetch(`/events/${encodeURIComponent(eventId)}/open-invitation/voice`, { method: "DELETE" });
+  if (!response.ok) {
+    reportApiError(response, "open-invitation");
+    return fail(t("failed"));
+  }
+  revalidatePath(eventOpenInvitationRoute(eventId));
+  return ok(null);
 }

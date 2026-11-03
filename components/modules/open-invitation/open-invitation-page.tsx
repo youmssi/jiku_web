@@ -14,6 +14,7 @@ import { CARD_STYLE_TOKENS, cardStyleOf, displayTitle, FALLBACK_BRAND_COLOR } fr
 import { countdown, fullWhen, liveWhen, shortDay, shortTime } from "@/lib/short-dates";
 import { RespondForm } from "./respond-form";
 import { CardVisit } from "./card-visit";
+import { VoicePlayer } from "./voice-player";
 import { whatsappAnswerLink, type CardSource } from "./share";
 import type { PublicOpenInvitation } from "./schema";
 
@@ -101,6 +102,7 @@ export async function OpenInvitationPage({
       </CardHero>
 
       <div className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-5 px-5 pb-10 pt-6">
+        {invitation.voice ? <VoicePlayer voice={invitation.voice} organizer={invitation.organizerName} style={style} /> : null}
         {invitation.welcomeMessage ? (
           <ClampedText text={invitation.welcomeMessage} more={t("readMore")} className="text-[15px] leading-relaxed" />
         ) : null}

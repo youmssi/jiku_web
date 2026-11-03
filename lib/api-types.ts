@@ -1908,6 +1908,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/open-invitation/voice": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["openInvitationReplaceVoice"];
+        post?: never;
+        delete: operations["openInvitationRemoveVoice"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/orders": {
         parameters: {
             query?: never;
@@ -2702,6 +2718,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["publicOpenInvitationVisit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/open/{code}/voice": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicOpenInvitationVoice"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -4478,6 +4510,12 @@ export interface components {
             /** Format: int64 */
             visits?: number;
         };
+        CardVoiceView: {
+            /** Format: int32 */
+            durationSeconds?: number;
+            transcript?: string | null;
+            url?: string;
+        };
         ChangeRoleRequest: {
             role: string;
         };
@@ -5223,6 +5261,7 @@ export interface components {
             /** Format: int32 */
             remainingPlaces?: number | null;
             showComing?: boolean;
+            voice?: components["schemas"]["CardVoiceView"] | null;
             welcomeMessage?: string | null;
             whatsappNumber?: string | null;
         };
@@ -5681,6 +5720,7 @@ export interface components {
             organizerVerification?: string | null;
             primaryColor?: string | null;
             relay?: boolean;
+            voice?: components["schemas"]["CardVoiceView"] | null;
             welcomeMessage?: string | null;
             whatsappNumber?: string | null;
         };
@@ -9587,6 +9627,58 @@ export interface operations {
             };
         };
     };
+    openInvitationReplaceVoice: {
+        parameters: {
+            query: {
+                durationSeconds: number;
+                transcript?: string;
+            };
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CardVoiceView"];
+                };
+            };
+        };
+    };
+    openInvitationRemoveVoice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     ticketOrderList: {
         parameters: {
             query?: {
@@ -10961,6 +11053,28 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    publicOpenInvitationVoice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
+                };
             };
         };
     };

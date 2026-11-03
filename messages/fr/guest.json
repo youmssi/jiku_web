@@ -304,6 +304,13 @@
     "signature": "Créé avec Jikū · Créez votre carte gratuitement",
     "coming": "{count, plural, one {# personne vient} other {# personnes viennent}}",
     "relay": "Inviter un proche",
-    "relayMessage": "Je viens à {event}{when} ! Viens aussi : {link}"
+    "relayMessage": "Je viens à {event}{when} ! Viens aussi : {link}",
+    "voice": {
+      "title": "Écoutez {organizer}",
+      "length": "Message vocal · {seconds} s",
+      "play": "Écouter le message de {organizer}, {seconds} secondes",
+      "pause": "Mettre en pause",
+      "failed": "Lecture impossible pour le moment."
+    }
   }
 }
