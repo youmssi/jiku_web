@@ -1,5 +1,5 @@
 import { hasLocale } from "next-intl";
-import { routing } from "@/i18n/routing";
+import { guestRouting } from "@/i18n/routing";
 import { renderCard } from "@/components/modules/open-invitation/public-server";
 
 /**
@@ -12,8 +12,8 @@ import { renderCard } from "@/components/modules/open-invitation/public-server";
 export async function GET(request: Request, { params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
   const search = new URL(request.url).searchParams;
-  const requested = search.get("lang") ?? routing.defaultLocale;
-  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
+  const requested = search.get("lang") ?? guestRouting.defaultLocale;
+  const locale = hasLocale(guestRouting.locales, requested) ? requested : guestRouting.defaultLocale;
   const requestedFormat = search.get("format");
   const format = requestedFormat === "portrait" || requestedFormat === "status" ? requestedFormat : "landscape";
   const image = await renderCard(code, format, locale);

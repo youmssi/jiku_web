@@ -18,6 +18,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { whatsappChatLink } from "@/components/shared";
+import { outgoingTranslator, type OutgoingWords } from "@/components/shared/outgoing-words";
 import { trackEvent } from "@/lib/analytics";
 import { billingRoute } from "@/lib/constants";
 import {
@@ -41,11 +42,14 @@ export function OwnWhatsAppDialog({
   eventId,
   eventName,
   eventWhen,
+  words,
 }: {
   eventId: string;
   eventName: string;
-  /** The event's date, already written for people; null when it has none yet. */
+  /** The event's date, already written for its guests; null when it has none yet. */
   eventWhen: string | null;
+  /** The messages' words, in the event's guest language (JIKU-293). */
+  words: OutgoingWords;
 }) {
   const t = useTranslations("guests.ownWhatsApp");
   const [open, setOpen] = useState(false);
@@ -153,11 +157,11 @@ export function OwnWhatsAppDialog({
                   </AlertDescription>
                 </Alert>
               ) : (
-                <InviteList guests={guests} eventName={eventName} when={when} onOpened={sent} />
+                <InviteList guests={guests} eventName={eventName} when={when} words={words} onOpened={sent} />
               )}
             </TabsContent>
             <TabsContent value="remind" className="flex min-h-0 flex-col gap-3">
-              <RemindList reminders={reminders} eventName={eventName} when={when} onOpened={reminded} />
+              <RemindList reminders={reminders} eventName={eventName} when={when} words={words} onOpened={reminded} />
             </TabsContent>
           </Tabs>
         )}
@@ -171,14 +175,17 @@ function InviteList({
   guests,
   eventName,
   when,
+  words,
   onOpened,
 }: {
   guests: OwnWhatsAppGuest[];
   eventName: string;
   when: string;
+  words: OutgoingWords;
   onOpened: (guest: OwnWhatsAppGuest) => void;
 }) {
   const t = useTranslations("guests.ownWhatsApp");
+  const outgoing = outgoingTranslator(words);
   const toSend = guests.filter((guest) => guest.link !== null);
   const byJiku = guests.length - toSend.length;
   if (toSend.length === 0) {
@@ -203,7 +210,7 @@ function InviteList({
               key={guest.guestId}
               name={`${guest.firstName} ${guest.lastName}`}
               phone={guest.phone}
-              href={whatsappChatLink(guest.phone, t("message", { firstName: guest.firstName, event: eventName, when, link: guest.link ?? "" }))}
+              href={whatsappChatLink(guest.phone, outgoing("invite", { firstName: guest.firstName, event: eventName, when, link: guest.link ?? "" }))}
               done={done}
               label={t(done ? "sent" : "send")}
               ariaLabel={t(done ? "sendAgainTo" : "sendTo", { name: `${guest.firstName} ${guest.lastName}` })}
@@ -221,14 +228,17 @@ function RemindList({
   reminders,
   eventName,
   when,
+  words,
   onOpened,
 }: {
   reminders: OwnWhatsAppReminder[];
   eventName: string;
   when: string;
+  words: OutgoingWords;
   onOpened: (guest: OwnWhatsAppReminder) => void;
 }) {
   const t = useTranslations("guests.ownWhatsApp");
+  const outgoing = outgoingTranslator(words);
   const format = useFormatter();
   const now = useNow({ updateInterval: 60_000 });
   if (reminders.length === 0) {
@@ -245,7 +255,7 @@ function RemindList({
             key={guest.guestId}
             name={`${guest.firstName} ${guest.lastName}`}
             phone={guest.remindedAt ? t("remindedAt", { when: format.relativeTime(new Date(guest.remindedAt), now) }) : guest.phone}
-            href={whatsappChatLink(guest.phone, t("reminder", { firstName: guest.firstName, event: eventName, when, link: guest.link }))}
+            href={whatsappChatLink(guest.phone, outgoing("reminder", { firstName: guest.firstName, event: eventName, when, link: guest.link }))}
             done={guest.remindedAt !== null}
             label={t(guest.remindedAt ? "remindAgain" : "remind")}
             ariaLabel={t("remindTo", { name: `${guest.firstName} ${guest.lastName}` })}

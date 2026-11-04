@@ -127,7 +127,8 @@
     "ticketTypeVerifyFirst": "Verify your organization in Settings › Verification before setting a price.",
     "ticketTypeFailed": "The category could not be saved. Try again.",
     "ticketTypeInUse": "{count, plural, =0 {Guests are assigned to this category} one {# guest is assigned to this category} other {# guests are assigned to this category}}: move them before deleting it.",
-    "ticketTypeDeleteFailed": "The category could not be deleted. Try again."
+    "ticketTypeDeleteFailed": "The category could not be deleted. Try again.",
+    "guestLanguageFailed": "The language could not be saved. Try again."
   },
   "settings": {
     "saved": "Changes saved.",
@@ -209,6 +210,16 @@
       "yes": "Allowed",
       "until": "Allowed until {date}",
       "extra": "{count, plural, one {Up to # extra confirmation} other {Up to # extra confirmations}}"
+    },
+    "guestLanguage": {
+      "title": "Guests' language",
+      "text": "Your guests' card, ticket, links, and WhatsApp and email messages. Each guest can also switch at the bottom of the page.",
+      "saved": "Your guests will read in {language}.",
+      "names": {
+        "fr": "French",
+        "en": "English",
+        "ar": "Arabic"
+      }
     }
   },
   "quorum": {
@@ -501,9 +512,6 @@
       "copyFailed": "Could not copy the link.",
       "whatsapp": "WhatsApp",
       "download": "Download the card",
-      "message": "{event}\n{when}\nAnswer here: {url}",
-      "cardAnswer": "Scan to answer",
-      "cardAnswerBy": "Until {date}",
       "fileName": "Invitation {event}.png",
       "downloadFailed": "Couldn't download the card. Try again.",
       "share": "Share…",

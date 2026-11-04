@@ -325,5 +325,12 @@
   },
   "languages": {
     "label": "Langue"
+  },
+  "outgoing": {
+    "invite": "Bonjour {firstName}, vous êtes invité(e) à {event}{when}. Répondez ici, votre billet suit aussitôt : {link}",
+    "reminder": "Petit rappel, {firstName} : vous êtes invité(e) à {event}{when}. Dites-nous si vous venez, cela prend un instant : {link}",
+    "share": "{event}\n{when}\nRépondez ici : {url}",
+    "answerBy": "Jusqu'au {date}",
+    "scan": "Scannez pour répondre"
   }
 }

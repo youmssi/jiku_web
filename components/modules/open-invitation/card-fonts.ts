@@ -10,7 +10,7 @@ import type { CardStyle } from "@/lib/card-style";
  * (the image renderer reads no variable axes) of an OFL face from Google Fonts;
  * the paths are literal so the build traces them into the server bundle.
  */
-type Weight = 500 | 600 | 700 | 800;
+type Weight = 400 | 500 | 600 | 700 | 800;
 
 interface ImageFont {
   name: string;
@@ -51,11 +51,21 @@ const DISPLAY: Record<CardStyle, () => Promise<ImageFont>> = {
   }),
 };
 
-/** The display face of [style] and the text face, for `ImageResponse`. */
-export async function cardFonts(style: CardStyle): Promise<ImageFont[]> {
+/**
+ * The display face of [style] and the text face, for `ImageResponse`; with
+ * [arabic], Noto Sans Arabic too (JIKU-293), which the renderer falls back to
+ * for the Arabic letters the other faces lack.
+ */
+export async function cardFonts(style: CardStyle, arabic = false): Promise<ImageFont[]> {
   return Promise.all([
     DISPLAY[style](),
     load(join(process.cwd(), "assets/card-fonts/inter-500.ttf")).then((data) => ({ name: "Inter", data, weight: 500 as const, style: "normal" as const })),
     load(join(process.cwd(), "assets/card-fonts/inter-700.ttf")).then((data) => ({ name: "Inter", data, weight: 700 as const, style: "normal" as const })),
+    ...(arabic
+      ? [
+          load(join(process.cwd(), "assets/card-fonts/noto-sans-arabic-400.ttf")).then((data) => ({ name: "Noto Sans Arabic", data, weight: 400 as const, style: "normal" as const })),
+          load(join(process.cwd(), "assets/card-fonts/noto-sans-arabic-700.ttf")).then((data) => ({ name: "Noto Sans Arabic", data, weight: 700 as const, style: "normal" as const })),
+        ]
+      : []),
   ]);
 }

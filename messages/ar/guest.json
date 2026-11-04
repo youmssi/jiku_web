@@ -325,5 +325,12 @@
   },
   "languages": {
     "label": "اللغة"
+  },
+  "outgoing": {
+    "invite": "مرحبًا {firstName}، أنت مدعو إلى {event}{when}. ردّ من هنا، وتصلك تذكرتك فورًا: {link}",
+    "reminder": "تذكير صغير يا {firstName}: أنت مدعو إلى {event}{when}. أخبرنا إن كنت ستحضر، لن يستغرق ذلك إلا لحظة: {link}",
+    "share": "{event}\n{when}\nردّ من هنا: {url}",
+    "answerBy": "حتى {date}",
+    "scan": "امسح للرد"
   }
 }

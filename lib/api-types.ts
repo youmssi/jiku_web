@@ -1572,6 +1572,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/guest-language": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["eventGuestLanguageGet"];
+        put: operations["eventGuestLanguageUpdate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/guests": {
         parameters: {
             query?: never;
@@ -4965,6 +4981,13 @@ export interface components {
             /** Format: int32 */
             skippedDuplicates?: number;
             warnings?: components["schemas"]["RowIssue"][];
+        };
+        GuestLanguageRequest: {
+            language?: string | null;
+        };
+        GuestLanguageView: {
+            chosen?: boolean;
+            language?: string;
         };
         GuestMatch: {
             /** Format: date-time */
@@ -9063,6 +9086,54 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["LiveTicket"];
+                };
+            };
+        };
+    };
+    eventGuestLanguageGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GuestLanguageView"];
+                };
+            };
+        };
+    };
+    eventGuestLanguageUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GuestLanguageRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GuestLanguageView"];
                 };
             };
         };

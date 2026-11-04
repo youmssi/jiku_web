@@ -1,3 +1,4 @@
+import { guestRouting } from "@/i18n/routing";
 import { z } from "zod";
 import type { Schema } from "@/lib/api-contract";
 import {
@@ -150,3 +151,9 @@ export const TICKET_TYPE_COLORS = [
   "#A16207",
   "#334155",
 ] as const;
+
+/** The language an event's guests read (JIKU-293): the chosen one, else the organization's. */
+export type GuestLanguageView = Schema<"GuestLanguageView">;
+
+/** The languages an event's guests can read in, as the guest screens serve them. */
+export const GUEST_LANGUAGES = guestRouting.locales;

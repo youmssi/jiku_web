@@ -325,5 +325,12 @@
   },
   "languages": {
     "label": "Language"
+  },
+  "outgoing": {
+    "invite": "Hi {firstName}, you're invited to {event}{when}. Answer here and your ticket follows right away: {link}",
+    "reminder": "A quick reminder, {firstName}: you're invited to {event}{when}. Let us know if you're coming, it only takes a moment: {link}",
+    "share": "{event}\n{when}\nAnswer here: {url}",
+    "answerBy": "Until {date}",
+    "scan": "Scan to answer"
   }
 }

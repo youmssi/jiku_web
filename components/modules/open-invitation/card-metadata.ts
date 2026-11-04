@@ -3,7 +3,7 @@ import "server-only";
 import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { routing } from "@/i18n/routing";
+import { guestRouting } from "@/i18n/routing";
 import { siteUrl } from "@/components/modules/seo";
 import { fullWhen } from "@/lib/short-dates";
 import { LANDSCAPE } from "./card-art";
@@ -16,7 +16,7 @@ import type { PublicOpenInvitation } from "./schema";
  * after any change, and a text alternative that says what the card is.
  */
 export async function cardMetadata(invitation: PublicOpenInvitation, locale: string): Promise<Metadata> {
-  const language = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const language = hasLocale(guestRouting.locales, locale) ? locale : guestRouting.defaultLocale;
   const t = await getTranslations({ locale: language, namespace: "guest.openInvitation" });
   const when = invitation.eventStart ? fullWhen(invitation.eventStart, invitation.eventTimezone, locale) : null;
   const query = new URLSearchParams({ lang: locale, v: cardVersion(invitation) });
