@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Check, ChevronDown, Copy, Download, ExternalLink, Loader2, MessageCircle, Send, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Input } from "@/components/ui/input";
 import { trackEvent } from "@/lib/analytics";
 import { openInvitationRoute } from "@/lib/constants";
+import { routing } from "@/i18n/routing";
+import { outgoingTranslator, type OutgoingWords } from "@/components/shared/outgoing-words";
 import { recordShareAction } from "./open-invitation.service";
 import { facebookShareLink, taggedLink, telegramShareLink, whatsappShareLink, type CardSource } from "./share";
 
@@ -35,27 +37,32 @@ export function SharePanel({
   code,
   card,
   version,
+  words,
 }: {
   eventId: string;
   code: string;
   card: CardDetails;
   /** The card's look fingerprint (JIKU-283): a changed card gets a fresh link preview. */
   version?: string;
+  /** The words of the shared message, in the event's guest language (JIKU-293). */
+  words: OutgoingWords;
 }) {
   const t = useTranslations("events.openInvitation.share");
-  const locale = useLocale();
+  const outgoing = outgoingTranslator(words);
+  // The card opens, and its image is drawn, in the guests' language whatever the organizer reads.
+  const locale = words.locale;
   const origin = useSyncExternalStore(noSubscription, () => window.location.origin, () => "");
   const canShare = useSyncExternalStore(noSubscription, () => typeof navigator.share === "function", () => false);
-  const url = `${origin}${openInvitationRoute(code)}`;
+  const url = `${origin}${locale === routing.defaultLocale ? "" : `/${locale}`}${openInvitationRoute(code)}`;
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const image = useRef<Promise<File | null> | null>(null);
   const fileName = t("fileName", { event: card.eventName });
 
-  const when = [card.when, card.answerBy ? t("cardAnswerBy", { date: card.answerBy }) : null].filter(Boolean).join("\n");
+  const when = [card.when, card.answerBy ? outgoing("answerBy", { date: card.answerBy }) : null].filter(Boolean).join("\n");
   // Every link carries the network it leaves through, so its visits and answers count there (JIKU-282).
   const link = (source: CardSource) => taggedLink(url, source, version);
-  const messageFor = (source: CardSource) => t("message", { event: card.eventName, when, url: link(source) });
+  const messageFor = (source: CardSource) => outgoing("share", { event: card.eventName, when, url: link(source) });
 
   function counted(source: CardSource) {
     trackEvent("card_shared", { network: source });

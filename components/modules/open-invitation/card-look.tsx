@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Check, ImagePlus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -24,14 +24,16 @@ export function CardLook({
   code,
   look,
   color,
+  locale,
 }: {
   eventId: string;
   code: string;
   look: EventLook;
   color: string;
+  /** The guests' language (JIKU-293): the preview shows the card they get. */
+  locale: string;
 }) {
   const t = useTranslations("events.openInvitation.look");
-  const locale = useLocale();
   const [style, setStyle] = useState<CardStyle>(cardStyleOf(look.cardStyle));
   const [bannerUrl, setBannerUrl] = useState<string | null>(look.bannerUrl ?? null);
   const [pending, startTransition] = useTransition();

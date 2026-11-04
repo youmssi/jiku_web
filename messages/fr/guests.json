@@ -210,7 +210,6 @@
     "sent": "Envoyée",
     "sendTo": "Envoyer à {name} dans WhatsApp",
     "sendAgainTo": "Renvoyer à {name} dans WhatsApp",
-    "message": "Bonjour {firstName}, vous êtes invité(e) à {event}{when}. Répondez ici, votre billet suit aussitôt : {link}",
     "byJiku": "{count, plural, one {# invité est déjà invité par Jikū : rien à lui envoyer.} other {# invités sont déjà invités par Jikū : rien à leur envoyer.}}",
     "allByJiku": "Jikū invite déjà tous vos invités qui ont un numéro WhatsApp.",
     "noNumber": "Aucun invité n'a de numéro WhatsApp. Ajoutez des numéros pour utiliser cet envoi.",
@@ -221,7 +220,6 @@
       "remind": "Relancer{count, plural, =0 {} other { (#)}}"
     },
     "remindIntro": "{count, plural, one {# invité n'a pas encore répondu.} other {# invités n'ont pas encore répondu.}} Le même lien personnel part avec un petit rappel.",
-    "reminder": "Petit rappel, {firstName} : vous êtes invité(e) à {event}{when}. Dites-nous si vous venez, cela prend un instant : {link}",
     "remind": "Relancer",
     "remindAgain": "Relancé",
     "remindTo": "Relancer {name} dans WhatsApp",

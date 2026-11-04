@@ -127,7 +127,8 @@
     "ticketTypeVerifyFirst": "Vérifiez votre organisation dans Paramètres › Vérification avant de fixer un prix.",
     "ticketTypeFailed": "La catégorie n'a pas pu être enregistrée. Réessayez.",
     "ticketTypeInUse": "{count, plural, =0 {Des invités sont rattachés à cette catégorie} one {# invité est rattaché à cette catégorie} other {# invités sont rattachés à cette catégorie}} : déplacez-les avant de la supprimer.",
-    "ticketTypeDeleteFailed": "La catégorie n'a pas pu être supprimée. Réessayez."
+    "ticketTypeDeleteFailed": "La catégorie n'a pas pu être supprimée. Réessayez.",
+    "guestLanguageFailed": "La langue n'a pas pu être enregistrée. Réessayez."
   },
   "settings": {
     "saved": "Modifications enregistrées.",
@@ -209,6 +210,16 @@
       "yes": "Autorisé",
       "until": "Autorisé jusqu'au {date}",
       "extra": "{count, plural, one {Jusqu'à # confirmation en plus} other {Jusqu'à # confirmations en plus}}"
+    },
+    "guestLanguage": {
+      "title": "Langue des invités",
+      "text": "La carte, le billet, les liens et les messages WhatsApp et e-mail de vos invités. Chacun peut aussi changer en bas de la page.",
+      "saved": "Vos invités liront en {language}.",
+      "names": {
+        "fr": "français",
+        "en": "anglais",
+        "ar": "arabe"
+      }
     }
   },
   "quorum": {
@@ -501,9 +512,6 @@
       "copyFailed": "Impossible de copier le lien.",
       "whatsapp": "WhatsApp",
       "download": "Télécharger la carte",
-      "message": "{event}\n{when}\nRépondez ici : {url}",
-      "cardAnswer": "Scannez pour répondre",
-      "cardAnswerBy": "Jusqu'au {date}",
       "fileName": "Invitation {event}.png",
       "downloadFailed": "Impossible de télécharger la carte. Réessayez.",
       "share": "Partager…",

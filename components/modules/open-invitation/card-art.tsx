@@ -2,6 +2,7 @@ import "server-only";
 
 import { qrPath } from "@/lib/qr-path";
 import { CARD_STYLE_TOKENS, PHOTO_SHADE, brandBackground, readableBrand, type CardStyle } from "@/lib/card-style";
+import { CardText, hasArabic, type TextDirection } from "./card-text";
 
 // The card of an open invitation, drawn for `ImageResponse` (JIKU-194,
 // JIKU-283): one artwork, three formats. The portrait card (1080 × 1350) is the
@@ -39,6 +40,8 @@ export interface CardArtData {
   /** Jikū signs free cards only (JIKU-288); a paid organizer's card carries its brand alone. */
   signature: boolean;
   labels: { invites: string; scan: string; via: string };
+  /** The direction of the card's own words, right to left in Arabic (JIKU-293). */
+  direction: TextDirection;
 }
 
 function initials(name: string): string {
@@ -129,7 +132,7 @@ function Organizer({ data, size }: { data: CardArtData; size: number }) {
           initials(data.organizerName)
         )}
       </div>
-      <div style={{ display: "flex" }}>{data.labels.invites}</div>
+      <div style={{ display: "flex" }}><CardText text={data.labels.invites} direction={data.direction} /></div>
     </div>
   );
 }
@@ -153,12 +156,13 @@ function Title({ data, size }: { data: CardArtData; size: number }) {
         fontWeight: tokens.fontWeight,
         fontSize: size * tokens.titleScale,
         lineHeight: 0.98,
-        letterSpacing: tokens.letterSpacing,
+        // Letter spacing would break the joins between Arabic letters.
+        letterSpacing: hasArabic(data.eventName) ? 0 : tokens.letterSpacing,
         textTransform: tokens.uppercase ? "uppercase" : "none",
         maxWidth: "92%",
       }}
     >
-      {data.eventName}
+      <CardText text={data.eventName} wrap />
     </div>
   );
 }
@@ -168,7 +172,7 @@ function Via({ data, size, color }: { data: CardArtData; size: number; color: st
   return (
     <div style={{ display: "flex", alignItems: "center", gap: size * 0.4, fontFamily: "Inter", fontWeight: 500, fontSize: size, color, flexShrink: 0, whiteSpace: "nowrap" }}>
       <JikuMark size={size * 1.3} color={color} />
-      {data.labels.via}
+      <CardText text={data.labels.via} direction={data.direction} />
     </div>
   );
 }
@@ -206,15 +210,15 @@ export function PortraitCard({ data }: { data: CardArtData }) {
                 {data.day}
               </div>
               <div style={{ display: "flex", flexDirection: "column", fontFamily: "Inter", paddingBottom: 6 }}>
-                <div style={{ display: "flex", fontWeight: 700, fontSize: 34, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                  {data.month}
+                <div style={{ display: "flex", fontWeight: 700, fontSize: 34, letterSpacing: data.direction === "rtl" ? 0 : "0.08em", textTransform: "uppercase" }}>
+                  <CardText text={data.month ?? ""} direction={data.direction} />
                 </div>
-                <div style={{ display: "flex", fontWeight: 500, fontSize: 32, color: tokens.panelMuted }}>{data.weekdayTime}</div>
+                <div style={{ display: "flex", fontWeight: 500, fontSize: 32, color: tokens.panelMuted }}><CardText text={data.weekdayTime ?? ""} direction={data.direction} /></div>
               </div>
             </div>
           ) : null}
           {data.location ? (
-            <div style={{ display: "flex", fontFamily: "Inter", fontWeight: 500, fontSize: 32, color: tokens.panelMuted }}>{data.location}</div>
+            <div style={{ display: "flex", fontFamily: "Inter", fontWeight: 500, fontSize: 32, color: tokens.panelMuted }}><CardText text={data.location} wrap /></div>
           ) : null}
           {data.answerBy ? (
             <div style={{ display: "flex" }}>
@@ -230,7 +234,7 @@ export function PortraitCard({ data }: { data: CardArtData }) {
                   color: data.style === "MODERN" ? "#FFFFFF" : tokens.panelInk,
                 }}
               >
-                {data.answerBy}
+                <CardText text={data.answerBy} direction={data.direction} />
               </div>
             </div>
           ) : null}
@@ -244,7 +248,7 @@ export function PortraitCard({ data }: { data: CardArtData }) {
               <path d={qr.path} fill="#111111" />
             </svg>
           </div>
-          <div style={{ display: "flex", fontFamily: "Inter", fontWeight: 700, fontSize: 26 }}>{data.labels.scan}</div>
+          <div style={{ display: "flex", fontFamily: "Inter", fontWeight: 700, fontSize: 26 }}><CardText text={data.labels.scan} direction={data.direction} /></div>
         </div>
       </div>
     </div>
@@ -276,7 +280,7 @@ export function LandscapeCard({ data }: { data: CardArtData }) {
                       border: "2px solid rgba(255,255,255,0.3)",
                     }}
                   >
-                    {part}
+                    <CardText text={part} direction={part === data.location ? undefined : data.direction} />
                   </div>
                 ))}
           </div>
@@ -320,15 +324,15 @@ export function StatusCard({ data }: { data: CardArtData }) {
                   {data.day}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", fontFamily: "Inter", paddingBottom: 6 }}>
-                  <div style={{ display: "flex", fontWeight: 700, fontSize: 34, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                    {data.month}
+                  <div style={{ display: "flex", fontWeight: 700, fontSize: 34, letterSpacing: data.direction === "rtl" ? 0 : "0.08em", textTransform: "uppercase" }}>
+                    <CardText text={data.month ?? ""} direction={data.direction} />
                   </div>
-                  <div style={{ display: "flex", fontWeight: 500, fontSize: 32, color: tokens.panelMuted }}>{data.weekdayTime}</div>
+                  <div style={{ display: "flex", fontWeight: 500, fontSize: 32, color: tokens.panelMuted }}><CardText text={data.weekdayTime ?? ""} direction={data.direction} /></div>
                 </div>
               </div>
             ) : null}
             {data.location ? (
-              <div style={{ display: "flex", fontFamily: "Inter", fontWeight: 500, fontSize: 32, color: tokens.panelMuted }}>{data.location}</div>
+              <div style={{ display: "flex", fontFamily: "Inter", fontWeight: 500, fontSize: 32, color: tokens.panelMuted }}><CardText text={data.location} wrap /></div>
             ) : null}
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
@@ -337,7 +341,7 @@ export function StatusCard({ data }: { data: CardArtData }) {
                 <path d={qr.path} fill="#111111" />
               </svg>
             </div>
-            <div style={{ display: "flex", fontFamily: "Inter", fontWeight: 700, fontSize: 26 }}>{data.labels.scan}</div>
+            <div style={{ display: "flex", fontFamily: "Inter", fontWeight: 700, fontSize: 26 }}><CardText text={data.labels.scan} direction={data.direction} /></div>
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto", gap: 24 }}>
@@ -354,7 +358,7 @@ export function StatusCard({ data }: { data: CardArtData }) {
                 color: data.style === "MODERN" ? "#FFFFFF" : tokens.panelInk,
               }}
             >
-              {data.answerBy}
+              <CardText text={data.answerBy} direction={data.direction} />
             </div>
           ) : (
             <div style={{ display: "flex" }} />

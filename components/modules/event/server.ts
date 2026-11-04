@@ -7,4 +7,4 @@ export { EventWorkspace } from "./event-workspace";
 export { EventSetup } from "./event-setup";
 export { EventSettingsView } from "./event-settings-view";
 export { TicketTypesView } from "./ticket-types-view";
-export { loadEvent } from "./event.queries";
+export { guestLocaleOf, loadEvent, loadGuestLanguage } from "./event.queries";

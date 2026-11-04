@@ -1,4 +1,4 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Users } from "lucide-react";
 import {
   Empty,
@@ -26,6 +26,8 @@ import type { Guest, Invitation } from "@/components/modules/guest/schema";
 import { INVITATION_CHANNELS, type InvitationChannel } from "@/lib/channels";
 import { eventGuestsExportRoute } from "@/lib/constants";
 import { fullWhen } from "@/lib/short-dates";
+import { guestLocaleOf, loadGuestLanguage } from "@/components/modules/event/server";
+import { loadOutgoingWords } from "@/components/shared/outgoing-words.server";
 
 async function readList<T>(path: string): Promise<T[]> {
   const response = await serverFetch(path);
@@ -43,14 +45,17 @@ async function readList<T>(path: string): Promise<T[]> {
  * offers adding and importing once, in its empty state.
  */
 export async function GuestsView({ eventId, answer }: { eventId: string; answer?: string }) {
-  const [guests, invitations, ticketTypes, eventResponse, t, locale] = await Promise.all([
+  const [guests, invitations, ticketTypes, eventResponse, t, guestLanguage] = await Promise.all([
     readList<Guest>(`/events/${eventId}/guests`),
     readList<Invitation>(`/events/${eventId}/invitations`),
     readList<TicketTypeResponse>(`/events/${eventId}/ticket-types`),
     serverFetch(`/events/${eventId}`),
     getTranslations("guests"),
-    getLocale(),
+    loadGuestLanguage(eventId),
   ]);
+  // What the organizer sends from their WhatsApp reads in the guests' language (JIKU-293).
+  const guestLocale = guestLocaleOf(guestLanguage);
+  const outgoing = await loadOutgoingWords(guestLocale);
   const event = eventResponse.ok
     ? ((await eventResponse.json()) as {
         invitationChannels: InvitationChannel[];
@@ -119,7 +124,8 @@ export async function GuestsView({ eventId, answer }: { eventId: string; answer?
               <OwnWhatsAppDialog
                 eventId={eventId}
                 eventName={event.name}
-                eventWhen={event.startDateTime ? fullWhen(event.startDateTime, event.timezone, locale) : null}
+                eventWhen={event.startDateTime ? fullWhen(event.startDateTime, event.timezone, guestLocale) : null}
+                words={outgoing}
               />
             ) : null}
             <AddGuestDialog eventId={eventId} />
