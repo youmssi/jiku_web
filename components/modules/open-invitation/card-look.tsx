@@ -1,12 +1,12 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Check, ImagePlus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { resizeImage, type ResizeRules } from "@/components/shared";
-import { brandBackground, CARD_STYLE_TOKENS, CARD_STYLES, cardStyleOf, displayTitle, type CardStyle } from "@/lib/card-style";
+import { brandBackground, readableBrand, CARD_STYLE_TOKENS, CARD_STYLES, cardStyleOf, displayTitle, type CardStyle } from "@/lib/card-style";
 import { cn } from "@/lib/utils";
 import { removeBannerAction, saveCardStyleAction, uploadBannerAction } from "./open-invitation.service";
 import type { EventLook } from "./schema";
@@ -24,14 +24,16 @@ export function CardLook({
   code,
   look,
   color,
+  locale,
 }: {
   eventId: string;
   code: string;
   look: EventLook;
   color: string;
+  /** The guests' language (JIKU-293): the preview shows the card they get. */
+  locale: string;
 }) {
   const t = useTranslations("events.openInvitation.look");
-  const locale = useLocale();
   const [style, setStyle] = useState<CardStyle>(cardStyleOf(look.cardStyle));
   const [bannerUrl, setBannerUrl] = useState<string | null>(look.bannerUrl ?? null);
   const [pending, startTransition] = useTransition();
@@ -104,7 +106,7 @@ export function CardLook({
               >
                 <span
                   className="relative flex h-20 items-end p-2.5 text-white"
-                  style={{ backgroundImage: brandBackground(option, color), backgroundColor: color }}
+                  style={{ backgroundImage: brandBackground(option, color), backgroundColor: readableBrand(color) }}
                 >
                   <span style={displayTitle(tokens, "1.35rem")}>Aa</span>
                   {selected ? (

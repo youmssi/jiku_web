@@ -13,8 +13,8 @@ import { createSign } from "node:crypto";
  * Env vars (see .env.example):
  *  - GOOGLE_SEARCH_CONSOLE_CLIENT_EMAIL  service account email
  *  - GOOGLE_SEARCH_CONSOLE_PRIVATE_KEY   PEM private key (\n-escaped allowed)
- *  - GOOGLE_SEARCH_CONSOLE_SITE_URL      property ("https://jiku.app/" or
- *                                        "sc-domain:jiku.app"); defaults to
+ *  - GOOGLE_SEARCH_CONSOLE_SITE_URL      property ("https://hellojiku.com/" or
+ *                                        "sc-domain:hellojiku.com"); defaults to
  *                                        NEXT_PUBLIC_SITE_URL
  */
 

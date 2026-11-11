@@ -3,18 +3,19 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, Check, HelpCircle, Minus, Plus, X } from "lucide-react";
+import { ArrowLeft, CalendarPlus, Check, HelpCircle, Minus, Plus, UserPlus, X } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "@/i18n/navigation";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { FormFieldError } from "@/components/shared";
+import { FormFieldError } from "@/components/shared/form-field-error";
 import { CARD_STYLE_TOKENS, type CardStyle } from "@/lib/card-style";
-import { invitationRoute } from "@/lib/constants";
+import { invitationRoute, openInvitationRoute } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { cardVersion, taggedLink, whatsappShareLink, type CardSource } from "./share";
 import { respondAction } from "./open-invitation.service";
-import { OPEN_ANSWERS, respondSchema, type OpenAnswer, type OpenResponse, type PublicOpenInvitation, type RespondInput } from "./schema";
+import { compactPhone, NAME_MAX, NAME_MIN, OPEN_ANSWERS, PHONE_PATTERN } from "./answers";
+import type { OpenAnswer, OpenResponse, PublicOpenInvitation, RespondInput } from "./schema";
 
 const ICONS: Record<OpenAnswer, typeof Check> = { YES: Check, MAYBE: HelpCircle, NO: X };
 
@@ -23,7 +24,21 @@ const ICONS: Record<OpenAnswer, typeof Check> = { YES: Check, MAYBE: HelpCircle,
  * the answer and who comes along, then the name and the number. Answering again
  * from the same number changes the answer; a yes leads to the ticket.
  */
-export function RespondForm({ invitation, style }: { invitation: PublicOpenInvitation; style: CardStyle }) {
+export function RespondForm({
+  invitation,
+  style,
+  source,
+  calendar,
+  relayWhen,
+}: {
+  invitation: PublicOpenInvitation;
+  style: CardStyle;
+  source: CardSource | null;
+  /** Where to save the date once answered (JIKU-289); null when the event has no date. */
+  calendar: { google: string; ics: string } | null;
+  /** The date as the relay message writes it, e.g. ", sam. 12 déc. · 17 h"; empty without a date. */
+  relayWhen: string;
+}) {
   const t = useTranslations("guest.openInvitation");
   const tokens = CARD_STYLE_TOKENS[style];
   const radius = Math.min(tokens.radius, 18);
@@ -35,7 +50,6 @@ export function RespondForm({ invitation, style }: { invitation: PublicOpenInvit
     setValue,
     formState: { isSubmitting },
   } = useForm<RespondInput>({
-    resolver: zodResolver(respondSchema),
     mode: "onTouched",
     defaultValues: { name: "", phone: "", answer: "YES", companions: 0 },
   });
@@ -47,13 +61,34 @@ export function RespondForm({ invitation, style }: { invitation: PublicOpenInvit
   async function onSubmit(values: RespondInput) {
     const result = await respondAction(invitation.code, {
       ...values,
+      name: values.name.trim(),
+      phone: compactPhone(values.phone),
       companions: values.answer === "YES" ? values.companions : 0,
+      source: source ?? undefined,
     });
     if (!result.ok) {
       toast.error(result.error);
       return;
     }
     setAnswered(result.data);
+  }
+
+  /**
+   * Passes the card on to someone forgotten (JIKU-285), through the phone's share
+   * sheet or WhatsApp, with a link counted under "relay".
+   */
+  async function relay() {
+    const link = taggedLink(`${window.location.origin}${openInvitationRoute(invitation.code)}`, "relay", cardVersion(invitation));
+    const text = t("relayMessage", { event: invitation.eventName, when: relayWhen, link });
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ text });
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+      }
+    }
+    window.open(whatsappShareLink(text), "_blank", "noopener,noreferrer");
   }
 
   if (answered) {
@@ -67,6 +102,43 @@ export function RespondForm({ invitation, style }: { invitation: PublicOpenInvit
           <Link href={invitationRoute(answered.ticketToken)} className="flex h-12 w-full items-center justify-center text-[15px] font-semibold" style={primary}>
             {t("seeTicket")}
           </Link>
+        ) : null}
+        {calendar && answered.answer !== "NO" ? (
+          <div className="flex w-full flex-col gap-2">
+            <p className="text-sm font-medium">{t("saveDate")}</p>
+            <div className="grid grid-cols-2 gap-2">
+              <a
+                href={calendar.google}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 items-center justify-center gap-1.5 border text-sm font-semibold"
+                style={{ borderRadius: radius, borderColor: `color-mix(in srgb, ${tokens.panelInk} 18%, transparent)` }}
+              >
+                <CalendarPlus aria-hidden className="size-4" />
+                {t("googleCalendar")}
+              </a>
+              <a
+                href={calendar.ics}
+                download
+                className="flex h-11 items-center justify-center gap-1.5 border text-sm font-semibold"
+                style={{ borderRadius: radius, borderColor: `color-mix(in srgb, ${tokens.panelInk} 18%, transparent)` }}
+              >
+                <CalendarPlus aria-hidden className="size-4" />
+                {t("otherCalendar")}
+              </a>
+            </div>
+          </div>
+        ) : null}
+        {invitation.relay && answered.answer === "YES" ? (
+          <button
+            type="button"
+            onClick={() => void relay()}
+            className="flex h-11 w-full items-center justify-center gap-1.5 border text-sm font-semibold"
+            style={{ borderRadius: radius, borderColor: `color-mix(in srgb, ${tokens.panelInk} 18%, transparent)` }}
+          >
+            <UserPlus aria-hidden className="size-4" />
+            {t("relay")}
+          </button>
         ) : null}
         <button
           type="button"
@@ -170,7 +242,7 @@ export function RespondForm({ invitation, style }: { invitation: PublicOpenInvit
       ) : (
         <>
           <button type="button" onClick={() => setStep("answer")} className="flex items-center gap-1.5 self-start text-sm font-medium">
-            <ArrowLeft aria-hidden className="size-4" />
+            <ArrowLeft aria-hidden className="size-4 rtl:rotate-180" />
             {t(`answers.${answer}`)}
             {answer === "YES" && companions > 0 ? ` + ${companions}` : null}
           </button>
@@ -178,6 +250,14 @@ export function RespondForm({ invitation, style }: { invitation: PublicOpenInvit
             <Controller
               control={control}
               name="name"
+              rules={{
+                validate: (value) => {
+                  const name = value.trim();
+                  if (!name) return "required";
+                  if (name.length < NAME_MIN) return "tooShort";
+                  return name.length <= NAME_MAX || "tooLong";
+                },
+              }}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="open-name">{t("name")}</FieldLabel>
@@ -189,6 +269,7 @@ export function RespondForm({ invitation, style }: { invitation: PublicOpenInvit
             <Controller
               control={control}
               name="phone"
+              rules={{ validate: (value) => PHONE_PATTERN.test(compactPhone(value)) || "phone" }}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="open-phone">{t("phone")}</FieldLabel>

@@ -1,7 +1,7 @@
-// Server-only surface of the open invitation module: the read a card's page is
-// rendered from, and the event's open invitation tab.
+// Server-only surface of the open invitation module for the organizer: the
+// event's open invitation tab. What a card's public page and its images need
+// lives in `./public-server`, so a guest's page never pulls in the organizer's
+// screens (JIKU-287).
 import "server-only";
 
-export { renderCard, type CardFormat } from "./card-image";
-export { fetchPublicOpenInvitation } from "./open-invitation.queries";
 export { OpenInvitationView } from "./open-invitation-view";

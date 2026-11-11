@@ -5,7 +5,7 @@
  * unset.
  */
 export function supportEmail(): string {
-  return process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? "support@jiku.app";
+  return process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? "support@hellojiku.com";
 }
 
 export function supportWhatsApp(): string | null {

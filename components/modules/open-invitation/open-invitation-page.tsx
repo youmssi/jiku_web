@@ -1,10 +1,21 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { MessageCircle } from "lucide-react";
-import { CardHero, ClampedText, OrganizerMark, StateMessage, VerifiedBadge } from "@/components/shared";
+import { MapPin, MessageCircle, Users } from "lucide-react";
+// Guest pages import shared pieces by file, not through the shared barrel: the
+// barrel also re-exports organizer-only client components (command palette,
+// motion effects) that would otherwise ship to every guest (JIKU-287).
+import { directionsLink, googleCalendarLink } from "@/components/shared/calendar-link";
+import { CardHero, OrganizerMark } from "@/components/shared/card-hero";
+import { ClampedText } from "@/components/shared/clamped-text";
+import { JikuSymbol } from "@/components/shared/jiku-symbol";
+import { StateMessage } from "@/components/shared/state-message";
+import { TrackedLink } from "@/components/shared/tracked-link";
+import { VerifiedBadge } from "@/components/shared/verified-badge";
 import { CARD_STYLE_TOKENS, cardStyleOf, displayTitle, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
-import { fullWhen, liveWhen, shortDay, shortTime } from "@/lib/short-dates";
+import { countdown, fullWhen, liveWhen, shortDay, shortTime } from "@/lib/short-dates";
 import { RespondForm } from "./respond-form";
-import { whatsappAnswerLink } from "./share";
+import { CardVisit } from "./card-visit";
+import { VoicePlayer } from "./voice-player";
+import { whatsappAnswerLink, type CardSource } from "./share";
 import type { PublicOpenInvitation } from "./schema";
 
 /**
@@ -12,7 +23,14 @@ import type { PublicOpenInvitation } from "./schema";
  * the banner with the title and the date, the host's word, then the answer.
  * The WhatsApp button answers without a form; the form answers here.
  */
-export async function OpenInvitationPage({ invitation }: { invitation: PublicOpenInvitation }) {
+export async function OpenInvitationPage({
+  invitation,
+  source = null,
+}: {
+  invitation: PublicOpenInvitation;
+  /** The network the page was opened from (JIKU-282); null when the link carried none. */
+  source?: CardSource | null;
+}) {
   const [t, locale] = await Promise.all([getTranslations("guest.openInvitation"), getLocale()]);
   const style = cardStyleOf(invitation.cardStyle);
   const tokens = CARD_STYLE_TOKENS[style];
@@ -26,9 +44,24 @@ export async function OpenInvitationPage({ invitation }: { invitation: PublicOpe
     ? whatsappAnswerLink(invitation.whatsappNumber, t("whatsappMessage", { code: invitation.code }))
     : null;
   const pill = style === "MODERN" ? "rounded-sm" : "rounded-full";
+  const until = start ? countdown(start, zone, locale) : null;
+  // Offered once the person answered: saving the date only matters to someone who may come (JIKU-289).
+  const calendar = start
+    ? {
+        google: googleCalendarLink({
+          title: invitation.eventName,
+          start,
+          end: invitation.eventEnd ?? null,
+          location: invitation.eventLocation ?? null,
+          details: invitation.organizerName,
+        }),
+        ics: `/api/cards/${encodeURIComponent(invitation.code)}/calendar`,
+      }
+    : null;
 
   return (
     <div className="flex flex-1 flex-col" style={{ background: tokens.panel, color: tokens.panelInk }}>
+      <CardVisit code={invitation.code} source={source} />
       <CardHero style={style} color={invitation.primaryColor ?? FALLBACK_BRAND_COLOR} bannerUrl={invitation.bannerUrl}>
         <div className="mx-auto flex min-h-72 w-full max-w-lg flex-col justify-between gap-8 px-5 pb-6 pt-8">
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
@@ -45,20 +78,31 @@ export async function OpenInvitationPage({ invitation }: { invitation: PublicOpe
                 <time
                   dateTime={start}
                   title={fullWhen(start, zone, locale)}
-                  className={`border border-white/30 bg-white/15 px-3 py-1 first-letter:uppercase ${pill}`}
+                  className={`inline-flex min-h-8 items-center border border-white/30 bg-white/15 px-3 py-1 ${pill}`}
                 >
-                  {liveWhen(start, zone, locale)}
+                  <span className="block first-letter:uppercase">{liveWhen(start, zone, locale)}</span>
                 </time>
               ) : null}
               {invitation.eventLocation ? (
-                <span className={`border border-white/30 bg-white/15 px-3 py-1 ${pill}`}>{invitation.eventLocation}</span>
+                <a
+                  href={directionsLink(invitation.eventLocation)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={t("directions", { place: invitation.eventLocation })}
+                  className={`inline-flex min-h-8 items-center gap-1.5 border border-white/30 bg-white/15 px-3 py-1 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 ${pill}`}
+                >
+                  <MapPin aria-hidden className="size-3.5" />
+                  {invitation.eventLocation}
+                </a>
               ) : null}
             </div>
+            {start && until ? <p className="text-sm font-medium opacity-90">{until}</p> : null}
           </div>
         </div>
       </CardHero>
 
       <div className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-5 px-5 pb-10 pt-6">
+        {invitation.voice ? <VoicePlayer voice={invitation.voice} organizer={invitation.organizerName} style={style} /> : null}
         {invitation.welcomeMessage ? (
           <ClampedText text={invitation.welcomeMessage} more={t("readMore")} className="text-[15px] leading-relaxed" />
         ) : null}
@@ -71,6 +115,12 @@ export async function OpenInvitationPage({ invitation }: { invitation: PublicOpe
 
         {invitation.accepting ? (
           <>
+            {invitation.comingCount ? (
+              <p className="flex items-center gap-2 text-sm font-semibold">
+                <Users aria-hidden className="size-4" style={{ color: tokens.detail }} />
+                {t("coming", { count: invitation.comingCount })}
+              </p>
+            ) : null}
             {whatsapp ? (
               <div className="flex flex-col gap-2">
                 <a
@@ -88,11 +138,29 @@ export async function OpenInvitationPage({ invitation }: { invitation: PublicOpe
                 </p>
               </div>
             ) : null}
-            <RespondForm invitation={invitation} style={style} />
+            <RespondForm
+              invitation={invitation}
+              style={style}
+              source={source}
+              calendar={calendar}
+              relayWhen={start ? `, ${shortDay(start, zone, locale)} · ${shortTime(start, zone, locale)}` : ""}
+            />
           </>
         ) : (
           <StateMessage title={t("closedTitle")} description={t(`closed.${invitation.closedReason ?? "DISABLED"}`)} />
         )}
+        {invitation.jikuSignature ? (
+          <TrackedLink
+            href="/"
+            eventName="cta_click"
+            eventProperties={{ from: "card_signature" }}
+            className="mx-auto mt-auto inline-flex min-h-11 items-center gap-2 pt-8 text-xs font-medium underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+            style={{ color: tokens.panelMuted }}
+          >
+            <JikuSymbol className="size-4" />
+            {t("signature")}
+          </TrackedLink>
+        ) : null}
       </div>
     </div>
   );

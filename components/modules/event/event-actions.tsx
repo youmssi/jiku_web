@@ -129,7 +129,7 @@ function PublishDialog({
         router.refresh();
         return;
       }
-      const sent = await sendInvitationsAction(eventId, channels);
+      const sent = await sendInvitationsAction(eventId);
       if (!sent.ok) {
         // The guests tab carries the fix for every refusal but the paywall:
         // its send panel offers to resend the confirmation link in place.

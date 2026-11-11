@@ -45,6 +45,8 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
       maxCompanions: invitation.maxCompanions,
       closesAt: toLocalInput(invitation.closesAt),
       notifyOnCancel: invitation.notifyOnCancel,
+      showComing: invitation.showComing,
+      relay: invitation.relay,
     },
   });
 
@@ -129,6 +131,30 @@ export function OpenSettingsForm({ eventId, invitation }: { eventId: string; inv
             </Field>
           )}
         />
+        <Controller
+          control={control}
+          name="showComing"
+          render={({ field }) => (
+            <Field orientation="horizontal">
+              <Label htmlFor="open-show-coming" help={t("showComingHelp")} more={t("moreInfo")}>
+                {t("showComing")}
+              </Label>
+              <Switch id="open-show-coming" checked={field.value} onCheckedChange={field.onChange} />
+            </Field>
+          )}
+        />
+        <Controller
+          control={control}
+          name="relay"
+          render={({ field }) => (
+            <Field orientation="horizontal">
+              <Label htmlFor="open-relay" help={t("relayHelp")} more={t("moreInfo")}>
+                {t("relay")}
+              </Label>
+              <Switch id="open-relay" checked={field.value} onCheckedChange={field.onChange} />
+            </Field>
+          )}
+        />
       </FieldGroup>
       <Button type="submit" className="self-start" disabled={isSubmitting || !isDirty}>
         {t("save")}
@@ -166,6 +192,8 @@ export function AcceptingSwitch({ eventId, invitation }: { eventId: string; invi
         maxCompanions: invitation.maxCompanions,
         closesAt: toLocalInput(invitation.closesAt),
         notifyOnCancel: invitation.notifyOnCancel,
+        showComing: invitation.showComing,
+        relay: invitation.relay,
       });
       if (!result.ok) {
         toast.error(result.error);

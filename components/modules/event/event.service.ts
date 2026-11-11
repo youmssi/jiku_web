@@ -11,7 +11,9 @@ import {
   QUORUM_FRACTIONS,
   quorumFormSchema,
   ticketTypeFormSchema,
+  GUEST_LANGUAGES,
   type EventFormValues,
+  type GuestLanguageView,
   type InvitationChannel,
   type QuorumFormValues,
   type TicketTypeFormValues,
@@ -38,6 +40,10 @@ function toPayload(values: EventFormValues) {
       brandColor: values.brandColor || null,
     },
     invitationChannels: values.invitationChannels,
+    // A primary channel the event no longer offers is dropped rather than refused.
+    primaryChannel:
+      values.primaryChannel && values.invitationChannels.includes(values.primaryChannel) ? values.primaryChannel : null,
+    channelFallback: values.channelFallback,
   };
 }
 
@@ -183,6 +189,24 @@ export async function saveQuorumAction(
     return fail(t("quorumFailed"));
   }
   return ok(null);
+}
+
+/** The language the event's guests read (JIKU-293); returns the language now in force. */
+export async function saveGuestLanguageAction(eventId: string, language: string): Promise<ActionResult<GuestLanguageView>> {
+  const t = await errors();
+  if (!(GUEST_LANGUAGES as readonly string[]).includes(language)) {
+    return fail(t("guestLanguageFailed"));
+  }
+  const response = await serverFetch(`/events/${eventId}/guest-language`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ language }),
+  });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail(t("guestLanguageFailed"));
+  }
+  return ok((await response.json()) as GuestLanguageView);
 }
 
 /**

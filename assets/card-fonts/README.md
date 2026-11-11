@@ -10,5 +10,6 @@ SIL Open Font License 1.1 and were exported from Google Fonts:
 | `archivo-condensed-800.ttf` | Archivo | width 62.5, weight 800 |
 | `bricolage-grotesque-800.ttf` | Bricolage Grotesque | weight 800 |
 | `inter-500.ttf`, `inter-700.ttf` | Inter | weights 500 and 700 |
+| `noto-sans-arabic-400.ttf`, `noto-sans-arabic-700.ttf` | Noto Sans Arabic | weights 400 and 700, for Arabic cards (JIKU-293) |
 
 The page itself loads the same faces through `next/font` (`lib/card-display-fonts.ts`).

@@ -14,7 +14,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { billingReceiptRoute } from "@/lib/constants";
+import { Link } from "@/i18n/navigation";
+import { billingReceiptRoute, ROUTES } from "@/lib/constants";
 import { useLocale, useTranslations } from "next-intl";
 import { formatAmount } from "@/lib/currency";
 import { LocalDateTime } from "@/components/shared";
@@ -45,60 +46,71 @@ export function PaymentHistoryTable({ payments }: { payments: PaymentHistoryItem
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t("date")}</TableHead>
-            <TableHead>{t("purchase")}</TableHead>
-            <TableHead>{t("amount")}</TableHead>
-            <TableHead>{t("status")}</TableHead>
-            <TableHead>{t("receipt")}</TableHead>
-            <TableHead>{t("invoice")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {payments.map((payment) => (
-            <TableRow key={payment.paymentId}>
-              <TableCell><LocalDateTime value={payment.createdAt} /></TableCell>
-              <TableCell>{payment.eventName}</TableCell>
-              <TableCell>{formatAmount(payment.amountMinor, payment.currency, locale)}</TableCell>
-              <TableCell>
-                <span
-                  className={
-                    payment.status === "SUCCEEDED"
-                      ? "text-green-600 dark:text-green-400"
-                      : payment.status === "FAILED"
-                        ? "text-red-600 dark:text-red-400"
-                        : "text-muted-foreground"
-                  }
-                >
-                  {STATUSES.includes(payment.status as PaymentStatus) ? t(`statuses.${payment.status as PaymentStatus}`) : payment.status}
-                </span>
-              </TableCell>
-              <TableCell>
-                {payment.status === "SUCCEEDED" ? (
-                  <a
-                    href={billingReceiptRoute(payment.paymentId)}
-                    className="underline underline-offset-4"
-                  >
-                    {t("download")}
-                  </a>
-                ) : (
-                  <span className="text-muted-foreground">{t("none")}</span>
-                )}
-              </TableCell>
-              <TableCell>
-                {payment.status === "SUCCEEDED" ? (
-                  <IssueInvoiceButton paymentId={payment.paymentId} />
-                ) : (
-                  <span className="text-muted-foreground">{t("none")}</span>
-                )}
-              </TableCell>
+    <div className="flex flex-col gap-2">
+      <div className="overflow-hidden rounded-xl border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t("date")}</TableHead>
+              <TableHead>{t("purchase")}</TableHead>
+              <TableHead>{t("amount")}</TableHead>
+              <TableHead>{t("status")}</TableHead>
+              <TableHead>{t("receipt")}</TableHead>
+              <TableHead>{t("invoice")}</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {payments.map((payment) => (
+              <TableRow key={payment.paymentId}>
+                <TableCell><LocalDateTime value={payment.createdAt} /></TableCell>
+                <TableCell>{payment.eventName}</TableCell>
+                <TableCell>{formatAmount(payment.amountMinor, payment.currency, locale)}</TableCell>
+                <TableCell>
+                  <span
+                    className={
+                      payment.status === "SUCCEEDED"
+                        ? "text-green-600 dark:text-green-400"
+                        : payment.status === "FAILED"
+                          ? "text-red-600 dark:text-red-400"
+                          : "text-muted-foreground"
+                    }
+                  >
+                    {STATUSES.includes(payment.status as PaymentStatus) ? t(`statuses.${payment.status as PaymentStatus}`) : payment.status}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  {payment.status === "SUCCEEDED" ? (
+                    <a
+                      href={billingReceiptRoute(payment.paymentId)}
+                      className="underline underline-offset-4"
+                    >
+                      {t("download")}
+                    </a>
+                  ) : (
+                    <span className="text-muted-foreground">{t("none")}</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {payment.status === "SUCCEEDED" ? (
+                    <IssueInvoiceButton paymentId={payment.paymentId} />
+                  ) : (
+                    <span className="text-muted-foreground">{t("none")}</span>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <p className="text-sm text-muted-foreground">
+        {t.rich("automatic", {
+          settings: (chunks) => (
+            <Link href={`${ROUTES.SETTINGS}?tab=legal`} className="underline underline-offset-4">
+              {chunks}
+            </Link>
+          ),
+        })}
+      </p>
     </div>
   );
 }

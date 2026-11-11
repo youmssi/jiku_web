@@ -99,7 +99,7 @@ export function UsernameForm({ initial }: { initial: string | null }) {
                   <FieldLabel htmlFor={field.name}>{t("label")}</FieldLabel>
                   <div className="flex items-center gap-0 overflow-hidden rounded-md border border-input">
                     <span className="border-r border-input bg-muted/50 px-2.5 py-1.5 text-xs text-muted-foreground">
-                      jiku.app/o/
+                      hellojiku.com/o/
                     </span>
                     <Input
                       {...field}

@@ -9,8 +9,9 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   // Browsers ignore it over plain HTTP, so local runs are unaffected.
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
-  // The camera serves the door's QR scanner; nothing asks for anything else.
-  { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(), payment=(), usb=()" },
+  // The camera serves the door's QR scanner and the microphone the host's voice
+  // message on a card (JIKU-284), both on this site only; nothing asks for anything else.
+  { key: "Permissions-Policy", value: "camera=(self), microphone=(self), geolocation=(), payment=(), usb=()" },
   // Directives that cannot break a page: no framing, no plugins, and no <base>
   // or form post that points away from this site. Scripts and styles are left
   // to the defaults until a nonce-based policy covers Next, Sentry and Umami.
@@ -82,6 +83,9 @@ const nextConfig: NextConfig = {
       noindexRoute("/checkin/:path*"),
       noindexRoute("/line/:path*"),
       noindexRoute("/admin/:path*"),
+      // Vercel previews and the develop branch duplicate the real site: keep
+      // every page of them out of search, so only production gets indexed.
+      ...(process.env.VERCEL_ENV === "preview" ? [{ source: "/:path*", headers: NOINDEX_HEADERS }] : []),
     ];
   },
 };

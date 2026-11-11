@@ -69,12 +69,18 @@ export function ImportGuestsDialog({ eventId }: { eventId: string }) {
 export function SendInvitationsDialog({
   eventId,
   enabledChannels,
+  primaryChannel,
+  channelFallback,
   reach,
+  unanswered,
 }: {
   eventId: string;
   enabledChannels: InvitationChannel[];
+  primaryChannel: InvitationChannel | null;
+  channelFallback: boolean;
   /** How many guests each channel can reach: an address for email, a number for WhatsApp. */
   reach: Record<InvitationChannel, number>;
+  unanswered: number;
 }) {
   const t = useTranslations("guests.send");
   const [open, setOpen] = useState(false);
@@ -94,7 +100,10 @@ export function SendInvitationsDialog({
         <SendInvitations
           eventId={eventId}
           enabledChannels={enabledChannels}
+          primaryChannel={primaryChannel}
+          channelFallback={channelFallback}
           reach={reach}
+          unanswered={unanswered}
           onSent={() => setOpen(false)}
         />
       </DialogContent>

@@ -6,7 +6,8 @@ import { reportApiError } from "@/lib/action-result";
 import { serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 import { utcToLocalInput } from "@/lib/datetime";
-import type { EventFormValues, EventResponse, TicketTypeResponse } from "./schema";
+import { routing, type GuestLocale } from "@/i18n/routing";
+import type { EventFormValues, EventResponse, GuestLanguageView, TicketTypeResponse } from "./schema";
 
 export type EventLoad =
   | { kind: "ok"; event: EventResponse }
@@ -43,6 +44,25 @@ export const loadTicketTypes = cache(async function loadTicketTypes(id: string):
   }
   return (await response.json()) as TicketTypeResponse[];
 });
+
+/**
+ * The language the event's guests read (JIKU-293). When it cannot load, the
+ * default locale: the messages the organizer sends from the app still go out,
+ * in the language most guests read.
+ */
+export const loadGuestLanguage = cache(async function loadGuestLanguage(id: string): Promise<GuestLanguageView> {
+  const response = await serverFetch(`/events/${id}/guest-language`);
+  if (!response.ok) {
+    reportApiError(response, "event");
+    return { language: routing.defaultLocale, chosen: false };
+  }
+  return (await response.json()) as GuestLanguageView;
+});
+
+/** The guest language as a locale the guest screens serve. */
+export function guestLocaleOf(view: GuestLanguageView): GuestLocale {
+  return view.language === "en" || view.language === "ar" ? view.language : "fr";
+}
 
 /** The organization's currency, which every ticket price is stated in. */
 export async function loadOrganizationCurrency(): Promise<string | null> {
@@ -111,6 +131,8 @@ export function toEventFormValues(event: EventResponse): EventFormValues {
     overbookingAllowed: event.settings.overbookingAllowed,
     maxOverbookingCount: event.settings.maxOverbookingCount,
     invitationChannels: event.invitationChannels,
+    primaryChannel: event.primaryChannel ?? null,
+    channelFallback: event.channelFallback ?? true,
     deliveryMode: event.settings.deliveryMode,
     brandName: event.settings.brandName ?? "",
     brandLogoUrl: event.settings.brandLogoUrl ?? "",

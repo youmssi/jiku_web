@@ -1,4 +1,4 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -6,13 +6,17 @@ import { StateMessage } from "@/components/shared";
 import { cardFontVariables } from "@/lib/card-display-fonts";
 import { FALLBACK_BRAND_COLOR } from "@/lib/card-style";
 import { CardLook } from "./card-look";
-import { loadEvent } from "@/components/modules/event/server";
+import { guestLocaleOf, loadEvent, loadGuestLanguage } from "@/components/modules/event/server";
+import { loadOutgoingWords } from "@/components/shared/outgoing-words.server";
 import { shortDay, shortTime, shortWhen } from "@/lib/short-dates";
-import { fetchPublicOpenInvitation, loadEventLook, loadOpenInvitation, loadOpenResponses } from "./open-invitation.queries";
+import { CardFunnel } from "./card-funnel";
+import { fetchPublicOpenInvitation, loadCardFunnel, loadEventLook, loadOpenInvitation, loadOpenResponses } from "./open-invitation.queries";
 import { OpenInvitationStart } from "./open-invitation-start";
 import { OpenResponses } from "./open-responses";
 import { AcceptingSwitch, OpenSettingsForm } from "./open-settings-form";
 import { SharePanel } from "./share-panel";
+import { VoiceRecorder } from "./voice-recorder";
+import { cardVersion } from "./share";
 
 /**
  * An event's open invitation tab (JIKU-184, ADR 106): the card to share, the
@@ -20,12 +24,14 @@ import { SharePanel } from "./share-panel";
  * is opened, what it does and the button that opens it.
  */
 export async function OpenInvitationView({ eventId }: { eventId: string }) {
-  const [{ invitation, failed }, loaded, t, locale] = await Promise.all([
+  const [{ invitation, failed }, loaded, t, guestLanguage] = await Promise.all([
     loadOpenInvitation(eventId),
     loadEvent(eventId),
     getTranslations("events.openInvitation"),
-    getLocale(),
+    loadGuestLanguage(eventId),
   ]);
+  // The shared message and its dates read in the guests' language (JIKU-293).
+  const locale = guestLocaleOf(guestLanguage);
   const heading = (
     <div>
       <h2 className="text-lg font-semibold">{t("title")}</h2>
@@ -50,10 +56,12 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
     );
   }
 
-  const [responses, card, look] = await Promise.all([
+  const [responses, card, look, funnel, words] = await Promise.all([
     loadOpenResponses(eventId),
     fetchPublicOpenInvitation(invitation.code),
     loadEventLook(eventId),
+    loadCardFunnel(eventId),
+    loadOutgoingWords(locale),
   ]);
   const zone = event.timezone;
   const when = event.startDateTime ? shortWhen(event.startDateTime, zone, locale) : null;
@@ -82,7 +90,15 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
             : t("stats.remainingCount", { count: invitation.remainingPlaces }),
         }}
       />
-      <SharePanel code={invitation.code} card={{ eventName: event.name, when, answerBy }} />
+      <SharePanel
+        eventId={eventId}
+        code={invitation.code}
+        card={{ eventName: event.name, when, answerBy }}
+        version={card ? cardVersion(card) : undefined}
+        words={words}
+      />
+      <VoiceRecorder eventId={eventId} voice={invitation.voice ?? null} />
+      <CardFunnel rows={funnel} />
       <AcceptingSwitch eventId={eventId} invitation={invitation} />
       <OpenResponses eventId={eventId} responses={responses} />
       <Collapsible>
@@ -99,6 +115,7 @@ export async function OpenInvitationView({ eventId }: { eventId: string }) {
               code={invitation.code}
               look={look}
               color={card?.primaryColor ?? FALLBACK_BRAND_COLOR}
+              locale={locale}
             />
           </div>
           <OpenSettingsForm eventId={eventId} invitation={invitation} />

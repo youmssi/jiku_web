@@ -57,7 +57,7 @@ Les conditions 1 et 3 se construisent en semaines, voire en mois, avec les
   - le contact support.
   - Le `LocalBusiness` sans adresse, invalide pour Google, est retiré.
   - Le `WebSite` nommé « Jikū » est le signal que Google lit pour afficher
-    « Jikū » au-dessus du résultat, au lieu de « mrvin100.de » aujourd'hui.
+    « Jikū » au-dessus du résultat.
 - **Langues :** `x-default` dans chaque balise hreflang et dans le sitemap.
 - **Hiérarchie :** fil d'Ariane structuré sur les guides, en plus des pages
   marketing.
@@ -75,13 +75,16 @@ Les conditions 1 et 3 se construisent en semaines, voire en mois, avec les
 
 ### 1. Google Search Console (jour 1)
 
-1. Créer une propriété **Domaine** `mrvin100.de`, vérifiée par un
-   enregistrement DNS TXT. Elle couvre `jiku.mrvin100.de`.
-2. Envoyer le sitemap : `https://jiku.mrvin100.de/sitemap.xml`.
-3. Avec **Inspection de l'URL**, demander l'indexation de :
+1. Créer une propriété **Domaine** `hellojiku.com`, vérifiée par un
+   enregistrement DNS TXT dans Cloudflare.
+2. Envoyer le sitemap : `https://hellojiku.com/sitemap.xml`.
+3. Une fois la redirection de `jiku.mrvin100.de` en place (ADR 110), déclarer
+   le **changement d'adresse** depuis la propriété `mrvin100.de` si elle
+   existe.
+4. Avec **Inspection de l'URL**, demander l'indexation de :
    - `/` et `/en` ;
    - `/use-cases`, `/simulator`, `/faq` et `/docs`.
-4. Suivre chaque semaine :
+5. Suivre chaque semaine :
    - **Performances** : requêtes de marque, positions, clics ;
    - **Signaux Web essentiels** : données de vrais visiteurs, celles qui
      comptent pour le classement ;
@@ -97,7 +100,7 @@ Les conditions 1 et 3 se construisent en semaines, voire en mois, avec les
    mise en production qui change des pages publiques, lancer :
 
    ```
-   SITE_URL=https://jiku.mrvin100.de INDEXNOW_KEY=<clé> pnpm seo:indexnow
+   SITE_URL=https://hellojiku.com INDEXNOW_KEY=<clé> pnpm seo:indexnow
    ```
 
 Yandex (`NEXT_PUBLIC_YANDEX_SITE_VERIFICATION`) est facultatif : peu utilisé
@@ -127,7 +130,7 @@ que si l'entreprise :
   place) :
   1. créer la fiche au nom légal de la société, catégorie « Éditeur de
      logiciels » ;
-  2. renseigner le site `https://jiku.mrvin100.de`, le même téléphone et le
+  2. renseigner le site `https://hellojiku.com`, le même téléphone et le
      même e-mail que sur le site ;
   3. vérifier la fiche (vidéo ou courrier).
 - **Sinon, ne pas en créer** : une fiche non conforme est suspendue et peut
@@ -163,18 +166,11 @@ Quand une recherche « Jikū » affiche un encadré à droite, cliquer sur
 Search Console de l'étape 1. On peut ensuite proposer le bon logo, la
 description et les profils.
 
-## Décision à prendre : un domaine propre
+## Domaine
 
-`jiku.mrvin100.de` est un sous-domaine de l'agence : la recherche « jiku »
-s'associe moins vite au produit, et le nom du site affiché par Google peut
-rester « mrvin100.de ». Le résultat de roadmap.sh vient aussi d'un domaine à
-son nom.
-
-**Recommandation :** si `jiku.app` (le domaine de l'adresse de support) est à
-nous, y servir le site, puis rediriger `jiku.mrvin100.de` en 301 page par page
-et déclarer le **changement d'adresse** dans la Search Console. Une migration se
-fait une seule fois et tôt : le plus tard elle arrive, plus il y a d'historique
-à transférer.
+Le site est servi sur `hellojiku.com` (ADR 110 du dépôt de l'API). L'ancien
+`jiku.mrvin100.de` est redirigé en 308 page par page, une fois la vérification
+Meta terminée, et la préproduction `jiku-web.vercel.app` envoie `noindex`.
 
 ## Suivi mensuel
 

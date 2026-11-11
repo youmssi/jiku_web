@@ -11,3 +11,17 @@ export const INVITATION_CHANNEL_LABELS: Record<InvitationChannel, string> = {
   EMAIL: "Email",
   WHATSAPP: "WhatsApp",
 };
+
+/**
+ * The channel a guest is invited on first (JIKU-273): the event's choice when it
+ * still offers it, else WhatsApp, else whatever the event offers. Mirrors the
+ * backend's `InvitationChannel.channelOrder`.
+ */
+export function effectivePrimaryChannel(
+  enabled: readonly InvitationChannel[],
+  primary: InvitationChannel | null | undefined,
+): InvitationChannel | null {
+  if (primary && enabled.includes(primary)) return primary;
+  if (enabled.includes("WHATSAPP")) return "WHATSAPP";
+  return enabled[0] ?? null;
+}

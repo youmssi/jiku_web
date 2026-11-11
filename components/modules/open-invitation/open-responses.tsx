@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useNow, useTranslations } from "next-intl";
 import { MessageCircle, Globe, UserX } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -27,6 +27,8 @@ type Filter = OpenAnswer | "ALL";
 export function OpenResponses({ eventId, responses }: { eventId: string; responses: OrganizerOpenResponse[] }) {
   const t = useTranslations("events.openInvitation.responses");
   const format = useFormatter();
+  // A shared clock keeps "2 minutes ago" the same on the server and the client, and moves it on each minute.
+  const now = useNow({ updateInterval: 60_000 });
   const [filter, setFilter] = useState<Filter>("YES");
   const [removing, setRemoving] = useState<OrganizerOpenResponse | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -87,7 +89,7 @@ export function OpenResponses({ eventId, responses }: { eventId: string; respons
                   ) : null}
                 </p>
                 <p className="truncate text-xs text-muted-foreground">
-                  {response.phone} · {format.relativeTime(new Date(response.updatedAt))}
+                  {response.phone} · {format.relativeTime(new Date(response.updatedAt), now)}
                 </p>
               </div>
               <Badge variant={response.answer === "YES" ? "default" : "secondary"}>{t(`answers.${response.answer}`)}</Badge>

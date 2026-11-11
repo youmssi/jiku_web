@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { PHOTO_SHADE, brandBackground, type CardStyle } from "@/lib/card-style";
+import { PHOTO_SHADE, brandBackground, readableBrand, type CardStyle } from "@/lib/card-style";
 import { cn } from "@/lib/utils";
 
 /**
@@ -23,7 +23,7 @@ export function CardHero({
   return (
     <div
       className={cn("relative isolate overflow-hidden text-white", className)}
-      style={{ backgroundColor: color, backgroundImage: bannerUrl ? undefined : brandBackground(style, color) }}
+      style={{ backgroundColor: readableBrand(color), backgroundImage: bannerUrl ? undefined : brandBackground(style, color) }}
     >
       {bannerUrl ? (
         <>

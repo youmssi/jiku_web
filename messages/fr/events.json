@@ -79,7 +79,7 @@
       },
       "channels": {
         "title": "Canal d'invitation",
-        "description": "E-mail, WhatsApp ou les deux.",
+        "description": "E-mail ou WhatsApp : chaque invité reçoit une seule invitation.",
         "cta": "Choisir"
       },
       "tickets": {
@@ -127,7 +127,8 @@
     "ticketTypeVerifyFirst": "Vérifiez votre organisation dans Paramètres › Vérification avant de fixer un prix.",
     "ticketTypeFailed": "La catégorie n'a pas pu être enregistrée. Réessayez.",
     "ticketTypeInUse": "{count, plural, =0 {Des invités sont rattachés à cette catégorie} one {# invité est rattaché à cette catégorie} other {# invités sont rattachés à cette catégorie}} : déplacez-les avant de la supprimer.",
-    "ticketTypeDeleteFailed": "La catégorie n'a pas pu être supprimée. Réessayez."
+    "ticketTypeDeleteFailed": "La catégorie n'a pas pu être supprimée. Réessayez.",
+    "guestLanguageFailed": "La langue n'a pas pu être enregistrée. Réessayez."
   },
   "settings": {
     "saved": "Modifications enregistrées.",
@@ -166,6 +167,14 @@
           "title": "Billet interactif WhatsApp",
           "description": "L'invité confirme d'un bouton dans WhatsApp et reçoit son billet dans la conversation."
         }
+      },
+      "primary": {
+        "label": "Canal prioritaire",
+        "hint": "Chaque invité reçoit une seule invitation, d'abord sur ce canal."
+      },
+      "fallback": {
+        "label": "Utiliser l'autre canal si le premier est impossible",
+        "hint": "Pour un invité sans coordonnée sur le canal prioritaire, ou quand la livraison échoue définitivement. Un seul essai, jamais les deux canaux à la fois."
       }
     },
     "rules": {
@@ -191,7 +200,8 @@
       "logo": "Adresse du logo",
       "logoHint": "Une image en ligne, en https://",
       "color": "Couleur",
-      "preview": "Aperçu pour vos invités"
+      "preview": "Aperçu pour vos invités",
+      "colorDeepened": "Trop claire pour un texte blanc : les cartes et billets l'affichent un peu plus foncée."
     },
     "advanced": "Options avancées",
     "leaveUnsaved": "Vos modifications ne sont pas enregistrées. Quitter quand même ?",
@@ -200,6 +210,16 @@
       "yes": "Autorisé",
       "until": "Autorisé jusqu'au {date}",
       "extra": "{count, plural, one {Jusqu'à # confirmation en plus} other {Jusqu'à # confirmations en plus}}"
+    },
+    "guestLanguage": {
+      "title": "Langue des invités",
+      "text": "La carte, le billet, les liens et les messages WhatsApp et e-mail de vos invités. Chacun peut aussi changer en bas de la page.",
+      "saved": "Vos invités liront en {language}.",
+      "names": {
+        "fr": "français",
+        "en": "anglais",
+        "ar": "arabe"
+      }
     }
   },
   "quorum": {
@@ -457,7 +477,8 @@
     "errors": {
       "failed": "Impossible de traiter la tranche. Réessayez.",
       "notAvailable": "Cette option n'est plus disponible ; rechargez la page.",
-      "provider": "Le paiement en ligne est indisponible pour le moment. Réessayez ou payez par transfert."
+      "provider": "Le paiement en ligne est indisponible pour le moment. Réessayez ou payez par transfert.",
+      "currency": "Le paiement en ligne n'est pas encore proposé dans votre monnaie. Choisissez le virement."
     }
   },
   "openInvitation": {
@@ -489,13 +510,31 @@
       "copy": "Copier le lien",
       "open": "Ouvrir la carte",
       "copyFailed": "Impossible de copier le lien.",
-      "whatsapp": "Partager sur WhatsApp",
+      "whatsapp": "WhatsApp",
       "download": "Télécharger la carte",
-      "message": "{event}\n{when}\nRépondez ici : {url}",
-      "cardAnswer": "Scannez pour répondre",
-      "cardAnswerBy": "Jusqu'au {date}",
       "fileName": "Invitation {event}.png",
-      "downloadFailed": "Impossible de télécharger la carte. Réessayez."
+      "downloadFailed": "Impossible de télécharger la carte. Réessayez.",
+      "share": "Partager…",
+      "shareHint": "Envoie l'image de la carte et le message prêt : choisissez WhatsApp, Facebook, Messenger, Telegram ou SMS.",
+      "facebook": "Facebook",
+      "telegram": "Telegram",
+      "formats": {
+        "status": {
+          "label": "Pour un statut",
+          "hint": "Vertical, plein écran : statut WhatsApp ou Facebook",
+          "fileName": "Invitation {event} - statut.png"
+        },
+        "portrait": {
+          "label": "Pour une publication",
+          "hint": "Le format des fils Facebook et des discussions",
+          "fileName": "Invitation {event}.png"
+        },
+        "landscape": {
+          "label": "Format paysage",
+          "hint": "Pour un e-mail, un site ou une impression large",
+          "fileName": "Invitation {event} - paysage.png"
+        }
+      }
     },
     "stats": {
       "expected": "Personnes attendues",
@@ -544,7 +583,11 @@
       "notifyOnCancelHelp": "Les « oui » et « peut-être » reçoivent un message WhatsApp si vous annulez.",
       "notifyOnCancelIncluded": "Inclus dans votre formule.",
       "save": "Enregistrer",
-      "saved": "Réglages enregistrés."
+      "saved": "Réglages enregistrés.",
+      "showComing": "Afficher le nombre de présents",
+      "showComingHelp": "Affiché dès 5 personnes. Seul le nombre apparaît, jamais un nom.",
+      "relay": "Laisser inviter un proche",
+      "relayHelp": "Après « Je viens », l'invité peut partager la carte à un proche oublié."
     },
     "errors": {
       "invalid": "Vérifiez les réglages.",
@@ -571,6 +614,56 @@
       "photoTooSmall": "Photo trop petite : 600 × 300 px au moins.",
       "preview": "Aperçu de la carte"
     },
-    "customize": "Personnaliser la carte"
+    "customize": "Personnaliser la carte",
+    "funnel": {
+      "title": "D'où viennent les réponses",
+      "text": "Chaque lien partagé porte son réseau : vous voyez où vos proches répondent le plus.",
+      "failed": "Chiffres indisponibles pour le moment. Rechargez la page plus tard.",
+      "empty": "Partagez votre carte pour voir d'où viennent les réponses.",
+      "answers": "{count, plural, =0 {Aucune réponse} one {# réponse} other {# réponses}}",
+      "detail": "{shares, plural, =0 {aucun partage} one {# partage} other {# partages}} · {visits, plural, =0 {aucune visite} one {# visite} other {# visites}} · {coming, plural, =0 {personne ne vient} one {# vient} other {# viennent}}",
+      "rate": "{rate} des visiteurs ont répondu",
+      "rateTooFew": "trop peu de visites pour un taux",
+      "source": {
+        "whatsapp": "WhatsApp",
+        "facebook": "Facebook",
+        "telegram": "Telegram",
+        "share": "Menu de partage",
+        "link": "Lien copié",
+        "qr": "QR code de l'image",
+        "other": "Autre ou inconnu",
+        "relay": "Relais d'invités"
+      }
+    },
+    "voice": {
+      "title": "Message vocal",
+      "text": "Dites l'invitation de votre voix, {seconds} secondes au plus : vos invités l'écoutent sur la carte.",
+      "record": "Enregistrer",
+      "replace": "Réenregistrer",
+      "import": "Importer un fichier",
+      "remove": "Supprimer",
+      "recording": "Enregistrement…",
+      "remaining": "{seconds} s restantes",
+      "stop": "Arrêter",
+      "listenDraft": "Écouter l'enregistrement",
+      "listenSaved": "Écouter le message, {seconds} secondes",
+      "use": "Utiliser ce message",
+      "again": "Recommencer",
+      "saved": "Message vocal enregistré.",
+      "transcript": "Les mots du message (facultatif)",
+      "transcriptHint": "Affichés sous le lecteur, pour qui ne peut pas écouter.",
+      "removeTitle": "Supprimer le message vocal ?",
+      "removeText": "La carte n'aura plus de message vocal. Vous pourrez en enregistrer un autre.",
+      "keep": "Garder",
+      "removeConfirm": "Supprimer",
+      "micDenied": "Le micro n'est pas disponible. Autorisez-le dans le navigateur, ou importez un fichier audio.",
+      "errors": {
+        "invalid": "Ce fichier n'est pas un enregistrement.",
+        "tooLong": "Le message doit durer 30 secondes au plus.",
+        "tooBig": "Le fichier est trop lourd.",
+        "type": "Ce format audio n'est pas pris en charge.",
+        "failed": "Le message n'a pas pu être enregistré. Réessayez."
+      }
+    }
   }
 }

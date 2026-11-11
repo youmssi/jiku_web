@@ -163,7 +163,7 @@ export const grantTrialSchema = z.object({
   event: z
     .union([adminEventReferenceSchema, z.null()])
     .refine((event) => event !== null, "pickEvent"),
-  guests: z.number({ invalid_type_error: "guestsRange" }).int("guestsRange").min(1, "guestsRange").max(100_000, "guestsRange"),
+  guests: z.number({ error: "guestsRange" }).int("guestsRange").min(1, "guestsRange").max(100_000, "guestsRange"),
   expiresAt: z
     .string()
     .min(1, "required")
@@ -281,6 +281,8 @@ export const adminBillingSettingsSchema = z.object({
     .min(1, "atLeastOnePlan"),
 });
 export type AdminBillingSettingsFormValues = z.infer<typeof adminBillingSettingsSchema>;
+/** What the form holds before parsing: the price fields accept text that coerces to numbers. */
+export type AdminBillingSettingsFormInput = z.input<typeof adminBillingSettingsSchema>;
 
 // ─── Organizer feedback (JIKU-133) ────────────────────────────────────────────
 

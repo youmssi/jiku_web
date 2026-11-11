@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { eventOrdersRoute } from "@/lib/constants";
-import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
+import { type ActionResult, fail, ok, problemCode, reportApiError } from "@/lib/action-result";
 import {
   checkoutSchema,
   declareSchema,
@@ -157,7 +157,11 @@ export async function openBatchAction(
     revalidatePath(eventOrdersRoute(eventId));
     return ok((await response.json()) as OpenedBatch);
   }
-  if (response.status === 409) return fail(t("notAvailable"));
+  if (response.status === 409) {
+    // No online payment in this currency (JIKU-272): the transfer stays the way to pay.
+    const code = await problemCode(response);
+    return fail(t(code === "billing.online-payment-unavailable" ? "currency" : "notAvailable"));
+  }
   if (response.status === 502) return fail(t("provider"));
   reportApiError(response, "sale");
   return fail(t("failed"));

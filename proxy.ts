@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
 
-import { routing } from "@/i18n/routing";
+import { GUEST_ONLY_LOCALES, guestRouting, isGuestRoute, routing } from "@/i18n/routing";
 import { COOKIES, ROUTES } from "@/lib/constants";
 
 /**
@@ -15,6 +15,8 @@ import { COOKIES, ROUTES } from "@/lib/constants";
  * they are locale-agnostic resources.
  */
 const intlMiddleware = createIntlMiddleware(routing);
+/** The guest screens also read in Arabic (JIKU-292); everything else keeps the site's own locales. */
+const guestIntlMiddleware = createIntlMiddleware(guestRouting);
 
 /** Routes that require an organizer session (locale-stripped prefixes). */
 const GUARDED_PREFIXES = [
@@ -29,7 +31,7 @@ const GUARDED_PREFIXES = [
 
 /** Strip the optional locale prefix so we can match on the canonical route. */
 function stripLocale(pathname: string): string {
-  for (const loc of routing.locales) {
+  for (const loc of guestRouting.locales) {
     if (pathname === `/${loc}`) return "/";
     if (pathname.startsWith(`/${loc}/`)) return pathname.slice(loc.length + 1);
   }
@@ -69,11 +71,22 @@ export function proxy(request: NextRequest): NextResponse {
   // API routes never need locale rewriting or auth at this layer.
   if (pathname.startsWith("/api/")) return NextResponse.next();
 
-  // Let next-intl decide the locale (it may redirect — return that immediately).
-  const intlResponse = withoutRouterFetchCookie(request, intlMiddleware(request));
-  if (intlResponse.headers.get("location")) return intlResponse;
-
   const bareRoute = stripLocale(pathname);
+  const guestRoute = isGuestRoute(bareRoute);
+
+  // A guest-only locale outside the guest screens (an /ar link to the home page
+  // or the dashboard) opens the same page in the default locale.
+  const prefix = pathname.split("/")[1];
+  if (!guestRoute && GUEST_ONLY_LOCALES.some((locale) => locale === prefix)) {
+    const url = request.nextUrl.clone();
+    url.pathname = bareRoute;
+    return NextResponse.redirect(url);
+  }
+
+  // Let next-intl decide the locale (it may redirect — return that immediately).
+  const intl = guestRoute ? guestIntlMiddleware : intlMiddleware;
+  const intlResponse = withoutRouterFetchCookie(request, intl(request));
+  if (intlResponse.headers.get("location")) return intlResponse;
 
   // A payment provider may send the payer back with a cross-site form POST,
   // which carries no SameSite=Lax session cookie. Answer it with a 303 to the
@@ -110,7 +123,7 @@ export const config = {
     // Run on everything except Next internals, static assets, and API routes.
     // The explicit icon/manifest entries stop next-intl's locale detection from
     // rewriting those static URLs to /{locale}/... which would 404. `landing/`
-    // holds the landing page's images.
-    "/((?!api|_next/static|_next/image|landing/|favicon\\.ico|sw\\.js|icon-192\\.png|icon-512\\.png|icon-maskable-512\\.png|apple-icon-180\\.png|jiku-logo-mark\\.png|jiku-logo-1024\\.png|robots\\.txt|llms\\.txt|indexnow-key\\.txt|sitemap\\.xml|manifest\\.webmanifest|opengraph-image).*)",
+    // holds the landing page's images and `email/` the images transactional emails load.
+    "/((?!api|_next/static|_next/image|landing/|email/|favicon\\.ico|sw\\.js|icon-192\\.png|icon-512\\.png|icon-maskable-512\\.png|apple-icon-180\\.png|jiku-logo-mark\\.png|jiku-logo-1024\\.png|robots\\.txt|llms\\.txt|indexnow-key\\.txt|sitemap\\.xml|manifest\\.webmanifest|opengraph-image).*)",
   ],
 };

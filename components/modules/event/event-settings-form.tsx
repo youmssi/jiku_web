@@ -42,6 +42,8 @@ import {
   type EventFormValues,
   type InvitationChannel,
 } from "./schema";
+import { effectivePrimaryChannel } from "@/lib/channels";
+import { readableBrand } from "@/lib/card-style";
 
 const DEFAULT_BRAND_COLOR = "#1E293B";
 const HEX = /^#[0-9a-fA-F]{6}$/;
@@ -73,6 +75,7 @@ export function EventSettingsForm({
     mode: "onTouched",
     defaultValues: initialValues,
   });
+  const invitationChannels = useWatch({ control, name: "invitationChannels" });
   const transferAllowed = useWatch({ control, name: "transferAllowed" });
   const overbookingAllowed = useWatch({ control, name: "overbookingAllowed" });
   const [brandName, brandLogoUrl, brandColor] = useWatch({ control, name: ["brandName", "brandLogoUrl", "brandColor"] });
@@ -233,6 +236,48 @@ export function EventSettingsForm({
                   </FieldSet>
                 )}
               />
+              {invitationChannels.length > 1 ? (
+                <>
+                  <Controller
+                    control={control}
+                    name="primaryChannel"
+                    render={({ field }) => (
+                      <Field>
+                        <FieldLabel htmlFor={field.name}>{t("invitations.primary.label")}</FieldLabel>
+                        <Select
+                          value={effectivePrimaryChannel(invitationChannels, field.value) ?? undefined}
+                          onValueChange={(value) => field.onChange(value as InvitationChannel)}
+                        >
+                          <SelectTrigger id={field.name} className="w-full sm:w-64">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {INVITATION_CHANNELS.filter((channel) => invitationChannels.includes(channel)).map((channel) => (
+                              <SelectItem key={channel} value={channel}>
+                                {INVITATION_CHANNEL_LABELS[channel]}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FieldDescription>{t("invitations.primary.hint")}</FieldDescription>
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="channelFallback"
+                    render={({ field }) => (
+                      <Field orientation="horizontal">
+                        <FieldContent>
+                          <FieldLabel htmlFor={field.name}>{t("invitations.fallback.label")}</FieldLabel>
+                          <FieldDescription>{t("invitations.fallback.hint")}</FieldDescription>
+                        </FieldContent>
+                        <Switch id={field.name} checked={field.value} onCheckedChange={field.onChange} />
+                      </Field>
+                    )}
+                  />
+                </>
+              ) : null}
             </FieldGroup>
           </CardContent>
         </Card>
@@ -305,6 +350,9 @@ export function EventSettingsForm({
                           className="max-w-32 font-mono uppercase"
                         />
                       </div>
+                      {HEX.test(field.value ?? "") && readableBrand(field.value) !== field.value ? (
+                        <FieldDescription>{t("client.colorDeepened")}</FieldDescription>
+                      ) : null}
                       <FormFieldError error={fieldState.error} />
                     </Field>
                   )}

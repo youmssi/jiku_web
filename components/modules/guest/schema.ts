@@ -8,6 +8,10 @@ export type RowIssue = Schema<"RowIssue">;
 /** A guest row with its answer and its live ticket (organizer views). */
 export type Guest = Schema<"GuestResponse">;
 export type Invitation = Schema<"InvitationStatusResponse">;
+/** A guest the organizer invites from their own WhatsApp (JIKU-281); `link` is null when Jikū invites them. */
+export type OwnWhatsAppGuest = Schema<"OrganizerWhatsAppGuest">;
+/** An invited guest who has not answered, to remind from the organizer's own WhatsApp (JIKU-290). */
+export type OwnWhatsAppReminder = Schema<"OrganizerWhatsAppReminder">;
 
 export type RsvpStatus = NonNullable<Guest["rsvpStatus"]>;
 export type TicketPaymentStatus = NonNullable<Guest["paymentStatus"]>;

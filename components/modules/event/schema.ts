@@ -1,3 +1,4 @@
+import { guestRouting } from "@/i18n/routing";
 import { z } from "zod";
 import type { Schema } from "@/lib/api-contract";
 import {
@@ -41,6 +42,10 @@ export const eventFormSchema = z
     overbookingAllowed: z.boolean(),
     maxOverbookingCount: z.number().int("wholeNumber").min(0, "positive").nullable(),
     invitationChannels: z.array(z.enum(INVITATION_CHANNELS)),
+    // One invitation per guest (JIKU-273): the channel tried first, and whether
+    // the other one stands in when the first cannot reach the guest.
+    primaryChannel: z.enum(INVITATION_CHANNELS).nullable(),
+    channelFallback: z.boolean(),
     deliveryMode: z.enum(DELIVERY_MODES),
     brandName: z.string().max(255, "tooLong"),
     brandLogoUrl: z.string().max(2048, "tooLong").regex(HTTPS_OR_EMPTY, "httpsUrl"),
@@ -65,6 +70,8 @@ export const emptyEventValues: EventFormValues = {
   overbookingAllowed: false,
   maxOverbookingCount: null,
   invitationChannels: [],
+  primaryChannel: null,
+  channelFallback: true,
   deliveryMode: "LINK",
   brandName: "",
   brandLogoUrl: "",
@@ -144,3 +151,9 @@ export const TICKET_TYPE_COLORS = [
   "#A16207",
   "#334155",
 ] as const;
+
+/** The language an event's guests read (JIKU-293): the chosen one, else the organization's. */
+export type GuestLanguageView = Schema<"GuestLanguageView">;
+
+/** The languages an event's guests can read in, as the guest screens serve them. */
+export const GUEST_LANGUAGES = guestRouting.locales;

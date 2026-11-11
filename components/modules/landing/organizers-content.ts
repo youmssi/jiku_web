@@ -164,7 +164,7 @@ function fr(currency: PricingCurrency): OrganizersPageContent {
         {
           question: "Comment payer Jikū ?",
           answer:
-            "Depuis la facturation de votre espace, en Mobile Money ou par carte, en francs guinéens, en francs CFA ou en dollars. Le montant exact s'affiche avant le paiement.",
+            "Depuis la facturation de votre espace, par virement bancaire, en francs guinéens, en francs CFA ou en dollars. Le montant exact et la référence à indiquer s'affichent avant le paiement ; le paiement en ligne arrive bientôt.",
         },
       ],
     },
@@ -298,7 +298,7 @@ function en(currency: PricingCurrency): OrganizersPageContent {
         {
           question: "How do I pay Jikū?",
           answer:
-            "From the billing page of your workspace, by Mobile Money or card, in Guinean francs, CFA francs or US dollars. The exact amount shows before you pay.",
+            "From the billing page of your workspace, by bank transfer, in Guinean francs, CFA francs or US dollars. The exact amount and the reference to quote show before you pay; online payment is coming soon.",
         },
       ],
     },

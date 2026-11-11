@@ -10,7 +10,7 @@ import type { CheckoutTarget } from "@/components/modules/billing/schema";
 
 /**
  * Pays [target] online (JIKU-165): starts the payment, then leaves for the
- * provider's page (Orange Money, MTN MoMo or card). The payer comes back to the
+ * provider's page (Mobile Money or card). The payer comes back to the
  * return page, which follows the payment until the provider confirms it.
  */
 export function PayOnlineButton({

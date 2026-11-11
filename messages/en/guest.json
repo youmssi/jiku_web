@@ -294,6 +294,43 @@
       "closed": "Answers closed, or no place left.",
       "tooMany": "Too many tries. Try again in a few minutes.",
       "failed": "Could not send your answer. Try again."
+    },
+    "previewAlt": "Invitation: {event}, {when}",
+    "previewAltNoDate": "Invitation: {event}",
+    "directions": "Directions to {place}",
+    "saveDate": "Save the date",
+    "googleCalendar": "Google Calendar",
+    "otherCalendar": "Other calendar",
+    "signature": "Made with Jikū · Create your card for free",
+    "coming": "{count, plural, one {# person is coming} other {# people are coming}}",
+    "relay": "Invite someone",
+    "relayMessage": "I'm going to {event}{when}! Come too: {link}",
+    "voice": {
+      "title": "Listen to {organizer}",
+      "length": "Voice message · {seconds} s",
+      "play": "Listen to {organizer}'s message, {seconds} seconds",
+      "pause": "Pause",
+      "failed": "Can't play right now."
     }
+  },
+  "orgPublic": {
+    "bookOnline": "Book online",
+    "tagline": "Book an appointment in a few taps, no account needed.",
+    "emptyTitle": "No services to book yet",
+    "emptyText": "This organization has not published any bookable services yet. Check back soon.",
+    "servicesTitle": "Bookable services",
+    "available": "{count, plural, one {# available} other {# available}}",
+    "pickTime": "Pick a time that suits you",
+    "book": "Book"
+  },
+  "languages": {
+    "label": "Language"
+  },
+  "outgoing": {
+    "invite": "Hi {firstName}, you're invited to {event}{when}. Answer here and your ticket follows right away: {link}",
+    "reminder": "A quick reminder, {firstName}: you're invited to {event}{when}. Let us know if you're coming, it only takes a moment: {link}",
+    "share": "{event}\n{when}\nAnswer here: {url}",
+    "answerBy": "Until {date}",
+    "scan": "Scan to answer"
   }
 }

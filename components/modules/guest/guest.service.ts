@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
+import type { InvitationChannel } from "@/lib/channels";
 import { eventGuestsRoute } from "@/lib/constants";
 import { type ActionResult, fail, fromResponse, ok, problemCode, reportApiError } from "@/lib/action-result";
 import {
@@ -10,6 +11,8 @@ import {
   singleGuestSchema,
   type Guest,
   type ImportResult,
+  type OwnWhatsAppGuest,
+  type OwnWhatsAppReminder,
   type PaymentMethod,
   type SingleGuestInput,
 } from "@/components/modules/guest/schema";
@@ -154,13 +157,14 @@ export interface SendInvitationsFailure {
 
 export async function sendInvitationsAction(
   eventId: string,
-  channels: string[],
+  reminder?: { channel: InvitationChannel },
 ): Promise<{ ok: true; data: { queued: number } } | SendInvitationsFailure> {
   const t = await errors();
-  if (channels.length === 0) {
-    return { ok: false, error: t("noChannel"), reason: null };
-  }
-  const params = new URLSearchParams({ channels: channels.join(",") });
+  // Without a reminder, the event's rule picks one channel per guest (JIKU-273);
+  // a reminder goes on the channel chosen, to the guests who have not answered.
+  const params = new URLSearchParams(
+    reminder ? { channels: reminder.channel, onlyUnsent: "false", onlyUnanswered: "true" } : {},
+  );
   const response = await serverFetch(`/events/${eventId}/invitations/send?${params.toString()}`, {
     method: "POST",
   });
@@ -178,6 +182,61 @@ export async function sendInvitationsAction(
   }
   reportApiError(response);
   return { ok: false, reason: null, error: t("sendFailed") };
+}
+
+/**
+ * Prepares every guest's personal link for the organizer to send from their own
+ * WhatsApp (JIKU-281). The guests count against the event's allowance as a send
+ * does, so a refusal here is the same paywall.
+ */
+export async function prepareOwnWhatsAppAction(
+  eventId: string,
+): Promise<{ ok: true; data: OwnWhatsAppGuest[] } | SendInvitationsFailure> {
+  const t = await errors();
+  const response = await serverFetch(`/events/${eventId}/invitations/own-whatsapp`, { method: "POST" });
+  if (response.ok) {
+    revalidatePath(eventGuestsRoute(eventId));
+    return { ok: true, data: (await response.json()) as OwnWhatsAppGuest[] };
+  }
+  if ((await problemCode(response)) === "billing.guest-allowance") {
+    return { ok: false, reason: "paywall", error: t("allowanceReached") };
+  }
+  reportApiError(response);
+  return { ok: false, reason: null, error: t("ownWhatsAppFailed") };
+}
+
+/** The organizer opened the guest's chat with the link: the invitation counts as sent. */
+export async function markOwnWhatsAppSentAction(eventId: string, guestId: string): Promise<ActionResult<OwnWhatsAppGuest>> {
+  const t = await errors();
+  const response = await serverFetch(`/events/${eventId}/invitations/own-whatsapp/${guestId}/sent`, { method: "POST" });
+  if (response.ok) {
+    revalidatePath(eventGuestsRoute(eventId));
+    return ok((await response.json()) as OwnWhatsAppGuest);
+  }
+  // 409: the link was never prepared, or a direct ticket could not be issued (event full).
+  if (response.status !== 409) reportApiError(response);
+  return fail(t("ownWhatsAppMarkFailed"));
+}
+
+/** The invited guests who have not answered, to remind from the organizer's own WhatsApp (JIKU-290). */
+export async function ownWhatsAppRemindersAction(eventId: string): Promise<ActionResult<OwnWhatsAppReminder[]>> {
+  const t = await errors();
+  const response = await serverFetch(`/events/${eventId}/invitations/own-whatsapp/reminders`, { method: "POST" });
+  if (response.ok) return ok((await response.json()) as OwnWhatsAppReminder[]);
+  reportApiError(response);
+  return fail(t("ownWhatsAppRemindersFailed"));
+}
+
+/** The organizer opened the guest's chat with a reminder. */
+export async function markOwnWhatsAppRemindedAction(
+  eventId: string,
+  guestId: string,
+): Promise<ActionResult<OwnWhatsAppReminder>> {
+  const t = await errors();
+  const response = await serverFetch(`/events/${eventId}/invitations/own-whatsapp/${guestId}/reminded`, { method: "POST" });
+  if (response.ok) return ok((await response.json()) as OwnWhatsAppReminder);
+  if (response.status !== 409) reportApiError(response);
+  return fail(t("ownWhatsAppMarkFailed"));
 }
 
 /**

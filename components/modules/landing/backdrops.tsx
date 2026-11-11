@@ -1,4 +1,6 @@
-import { LazyBackground } from "@/components/effects";
+// By file: the effects barrel also holds the motion-driven components, which the
+// 404 page (rendered inside every layout) would otherwise ship everywhere (JIKU-287).
+import { LazyBackground } from "@/components/effects/lazy-background";
 
 // The two backgrounds of the marketing pages (JIKU-221), in the brand's greys
 // only: the colour on a page comes from the invitation cards, never from here.

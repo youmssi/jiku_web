@@ -1572,6 +1572,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/guest-language": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["eventGuestLanguageGet"];
+        put: operations["eventGuestLanguageUpdate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/guests": {
         parameters: {
             query?: never;
@@ -1700,6 +1716,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/invitations/own-whatsapp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["invitationPrepareOwnWhatsApp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/invitations/own-whatsapp/reminders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["invitationOwnWhatsAppReminders"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/invitations/own-whatsapp/{guestId}/reminded": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["invitationMarkRemindedFromOwnWhatsApp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/invitations/own-whatsapp/{guestId}/sent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["invitationMarkSentFromOwnWhatsApp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/invitations/send": {
         parameters: {
             query?: never;
@@ -1780,6 +1860,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/open-invitation/funnel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["openInvitationFunnel"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/open-invitation/responses": {
         parameters: {
             query?: never;
@@ -1807,6 +1903,38 @@ export interface paths {
         put?: never;
         post?: never;
         delete: operations["openInvitationRemove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/open-invitation/shares": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["openInvitationShare"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/open-invitation/voice": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["openInvitationReplaceVoice"];
+        post?: never;
+        delete: operations["openInvitationRemoveVoice"];
         options?: never;
         head?: never;
         patch?: never;
@@ -2516,6 +2644,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/notifications/email-feedback/brevo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["brevoEmailFeedbackReceive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/notifications/email-feedback/resend": {
         parameters: {
             query?: never;
@@ -2574,6 +2718,38 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["publicOpenInvitationRespond"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/open/{code}/visits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["publicOpenInvitationVisit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/open/{code}/voice": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicOpenInvitationVoice"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -4339,6 +4515,23 @@ export interface components {
         CancelEventRequest: {
             notifyGuests?: boolean | null;
         };
+        CardFunnelRow: {
+            /** Format: int64 */
+            answers?: number;
+            /** Format: int64 */
+            coming?: number;
+            /** Format: int64 */
+            shares?: number;
+            source?: string;
+            /** Format: int64 */
+            visits?: number;
+        };
+        CardVoiceView: {
+            /** Format: int32 */
+            durationSeconds?: number;
+            transcript?: string | null;
+            url?: string;
+        };
         ChangeRoleRequest: {
             role: string;
         };
@@ -4473,6 +4666,7 @@ export interface components {
             required?: boolean;
         };
         CreateEventRequest: {
+            channelFallback?: boolean;
             description?: string | null;
             /** Format: date-time */
             endDateTime?: string | null;
@@ -4481,6 +4675,8 @@ export interface components {
             /** Format: int32 */
             maxCapacity?: number | null;
             name: string;
+            /** @enum {string|null} */
+            primaryChannel?: "EMAIL" | "WHATSAPP" | null;
             settings?: components["schemas"]["EventSettingsDto"];
             /** Format: date-time */
             startDateTime?: string | null;
@@ -4653,6 +4849,7 @@ export interface components {
             paidGuests?: number;
         };
         EventResponse: {
+            channelFallback?: boolean;
             description?: string | null;
             /** Format: date-time */
             endDateTime?: string | null;
@@ -4663,6 +4860,8 @@ export interface components {
             /** Format: int32 */
             maxCapacity?: number | null;
             name?: string;
+            /** @enum {string|null} */
+            primaryChannel?: "EMAIL" | "WHATSAPP" | null;
             quorum?: components["schemas"]["QuorumResponse"] | null;
             settings?: components["schemas"]["EventSettingsDto"];
             /** Format: date-time */
@@ -4783,6 +4982,13 @@ export interface components {
             skippedDuplicates?: number;
             warnings?: components["schemas"]["RowIssue"][];
         };
+        GuestLanguageRequest: {
+            language?: string | null;
+        };
+        GuestLanguageView: {
+            chosen?: boolean;
+            language?: string;
+        };
         GuestMatch: {
             /** Format: date-time */
             checkedInAt?: string | null;
@@ -4814,6 +5020,8 @@ export interface components {
             /** @enum {string|null} */
             paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID" | null;
             phoneNumber?: string | null;
+            /** @enum {string|null} */
+            preferredChannel?: "EMAIL" | "WHATSAPP" | null;
             /** @enum {string} */
             rsvpStatus?: "PENDING" | "CONFIRMED" | "DECLINED" | "TRANSFERRED";
             ticketCode?: string | null;
@@ -5051,6 +5259,8 @@ export interface components {
             /** Format: int32 */
             maxCompanions?: number | null;
             notifyOnCancel?: boolean | null;
+            relay?: boolean | null;
+            showComing?: boolean | null;
             welcomeMessage?: string | null;
         };
         OpenInvitationView: {
@@ -5070,8 +5280,11 @@ export interface components {
             /** Format: int32 */
             maxCompanionsAllowed?: number;
             notifyOnCancel?: boolean;
+            relay?: boolean;
             /** Format: int32 */
             remainingPlaces?: number | null;
+            showComing?: boolean;
+            voice?: components["schemas"]["CardVoiceView"] | null;
             welcomeMessage?: string | null;
             whatsappNumber?: string | null;
         };
@@ -5082,6 +5295,7 @@ export interface components {
             companions?: number;
             name: string;
             phone: string;
+            source?: string | null;
         };
         OpenResponseView: {
             /** @enum {string} */
@@ -5244,6 +5458,27 @@ export interface components {
             ticketCount?: number;
             /** Format: int64 */
             totalMinor?: number;
+        };
+        OrganizerWhatsAppGuest: {
+            firstName?: string;
+            /** Format: uuid */
+            guestId?: string;
+            lastName?: string;
+            link?: string | null;
+            phone?: string;
+            /** Format: date-time */
+            sentAt?: string | null;
+            sentByOrganizer?: boolean;
+        };
+        OrganizerWhatsAppReminder: {
+            firstName?: string;
+            /** Format: uuid */
+            guestId?: string;
+            lastName?: string;
+            link?: string;
+            phone?: string;
+            /** Format: date-time */
+            remindedAt?: string | null;
         };
         PackExtraRequest: {
             /** Format: int32 */
@@ -5491,6 +5726,8 @@ export interface components {
             /** Format: date-time */
             closesAt?: string | null;
             code?: string;
+            /** Format: int32 */
+            comingCount?: number | null;
             /** Format: date-time */
             eventEnd?: string | null;
             eventLocation?: string | null;
@@ -5498,12 +5735,15 @@ export interface components {
             /** Format: date-time */
             eventStart?: string | null;
             eventTimezone?: string;
+            jikuSignature?: boolean;
             logoUrl?: string | null;
             /** Format: int32 */
             maxCompanions?: number;
             organizerName?: string;
             organizerVerification?: string | null;
             primaryColor?: string | null;
+            relay?: boolean;
+            voice?: components["schemas"]["CardVoiceView"] | null;
             welcomeMessage?: string | null;
             whatsappNumber?: string | null;
         };
@@ -6138,6 +6378,7 @@ export interface components {
             fromName?: string | null;
         };
         UpdateEventRequest: {
+            channelFallback?: boolean;
             description?: string | null;
             /** Format: date-time */
             endDateTime?: string | null;
@@ -6146,6 +6387,8 @@ export interface components {
             /** Format: int32 */
             maxCapacity?: number | null;
             name: string;
+            /** @enum {string|null} */
+            primaryChannel?: "EMAIL" | "WHATSAPP" | null;
             settings?: components["schemas"]["EventSettingsDto"];
             /** Format: date-time */
             startDateTime?: string | null;
@@ -7976,6 +8219,7 @@ export interface operations {
             query?: never;
             header?: {
                 "X-Signature"?: string;
+                "X-Webhook-Signature"?: string;
             };
             path: {
                 provider: string;
@@ -8846,6 +9090,54 @@ export interface operations {
             };
         };
     };
+    eventGuestLanguageGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GuestLanguageView"];
+                };
+            };
+        };
+    };
+    eventGuestLanguageUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GuestLanguageRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GuestLanguageView"];
+                };
+            };
+        };
+    };
     guestList: {
         parameters: {
             query?: never;
@@ -9038,11 +9330,102 @@ export interface operations {
             };
         };
     };
+    invitationPrepareOwnWhatsApp: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerWhatsAppGuest"][];
+                };
+            };
+        };
+    };
+    invitationOwnWhatsAppReminders: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerWhatsAppReminder"][];
+                };
+            };
+        };
+    };
+    invitationMarkRemindedFromOwnWhatsApp: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                guestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerWhatsAppReminder"];
+                };
+            };
+        };
+    };
+    invitationMarkSentFromOwnWhatsApp: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                guestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerWhatsAppGuest"];
+                };
+            };
+        };
+    };
     invitationSend: {
         parameters: {
             query?: {
                 channels?: ("EMAIL" | "WHATSAPP")[];
                 onlyUnsent?: boolean;
+                onlyUnanswered?: boolean;
             };
             header?: never;
             path: {
@@ -9228,6 +9611,28 @@ export interface operations {
             };
         };
     };
+    openInvitationFunnel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CardFunnelRow"][];
+                };
+            };
+        };
+    };
     openInvitationResponses: {
         parameters: {
             query?: never;
@@ -9257,6 +9662,80 @@ export interface operations {
             path: {
                 eventId: string;
                 responseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    openInvitationShare: {
+        parameters: {
+            query: {
+                source: string;
+            };
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    openInvitationReplaceVoice: {
+        parameters: {
+            query: {
+                durationSeconds: number;
+                transcript?: string;
+            };
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CardVoiceView"];
+                };
+            };
+        };
+    };
+    openInvitationRemoveVoice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
             };
             cookie?: never;
         };
@@ -10503,6 +10982,30 @@ export interface operations {
             };
         };
     };
+    brevoEmailFeedbackReceive: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string;
+            };
+        };
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     resendEmailFeedbackReceive: {
         parameters: {
             query?: never;
@@ -10598,6 +11101,50 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["OpenResponseView"];
+                };
+            };
+        };
+    };
+    publicOpenInvitationVisit: {
+        parameters: {
+            query?: {
+                source?: string;
+            };
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    publicOpenInvitationVoice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
                 };
             };
         };

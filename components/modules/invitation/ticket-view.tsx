@@ -8,9 +8,10 @@ import { TicketCard } from "@/components/modules/invitation/ticket-card";
 import { TicketActions } from "@/components/modules/invitation/ticket-actions";
 import { TicketSecondaryActions } from "@/components/modules/invitation/ticket-secondary-actions";
 import { DataDeletion } from "@/components/modules/invitation/data-deletion";
-import { googleCalendarLink } from "@/components/modules/invitation/calendar-link";
+import { googleCalendarLink } from "@/components/shared/calendar-link";
 import type { RsvpView } from "@/components/modules/invitation/schema";
-import { PaymentDue, VerifiedBadge } from "@/components/shared";
+import { PaymentDue } from "@/components/shared/payment-due";
+import { VerifiedBadge } from "@/components/shared/verified-badge";
 import { siteUrl } from "@/components/modules/seo";
 
 /**

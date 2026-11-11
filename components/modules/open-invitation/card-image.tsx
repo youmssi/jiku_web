@@ -2,16 +2,18 @@ import "server-only";
 
 import { ImageResponse } from "next/og";
 import { getTranslations } from "next-intl/server";
-import { routing } from "@/i18n/routing";
+import { localeDirection, routing, type GuestLocale } from "@/i18n/routing";
 import { siteUrl } from "@/components/modules/seo";
 import { cardStyleOf, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
 import { openInvitationRoute } from "@/lib/constants";
 import { datePart, shortDay, shortTime, shortWhen } from "@/lib/short-dates";
-import { LANDSCAPE, LandscapeCard, PORTRAIT, PortraitCard, type CardArtData } from "./card-art";
+import { taggedLink } from "./share";
+import { LANDSCAPE, LandscapeCard, PORTRAIT, PortraitCard, STATUS, StatusCard, type CardArtData } from "./card-art";
 import { cardFonts } from "./card-fonts";
+import { hasArabic } from "./card-text";
 import { fetchPublicOpenInvitation } from "./open-invitation.queries";
 
-export type CardFormat = "portrait" | "landscape";
+export type CardFormat = "portrait" | "status" | "landscape";
 
 /** Reads an image into a data URL, or null when it cannot be read: a broken link never breaks the card. */
 async function inline(url: string | null | undefined): Promise<string | null> {
@@ -35,13 +37,13 @@ async function inline(url: string | null | undefined): Promise<string | null> {
 export async function renderCard(
   code: string,
   format: CardFormat,
-  locale: (typeof routing.locales)[number],
+  locale: GuestLocale,
 ): Promise<ImageResponse | null> {
   const invitation = await fetchPublicOpenInvitation(code);
   if (!invitation) return null;
   const [t, tShare, photo, logo] = await Promise.all([
     getTranslations({ locale, namespace: "guest.openInvitation" }),
-    getTranslations({ locale, namespace: "events.openInvitation.share" }),
+    getTranslations({ locale, namespace: "guest.outgoing" }),
     inline(invitation.bannerUrl),
     inline(invitation.logoUrl),
   ]);
@@ -63,20 +65,25 @@ export async function renderCard(
     location: invitation.eventLocation ?? null,
     answerBy:
       invitation.closesAt && invitation.accepting
-        ? tShare("cardAnswerBy", {
+        ? tShare("answerBy", {
             date: `${shortDay(invitation.closesAt, zone, locale, { weekday: false })} · ${shortTime(invitation.closesAt, zone, locale)}`,
           })
         : null,
-    url: `${siteUrl()}${prefix}${openInvitationRoute(invitation.code)}`,
+    signature: invitation.jikuSignature,
+    url: taggedLink(`${siteUrl()}${prefix}${openInvitationRoute(invitation.code)}`, "qr"),
     labels: {
       invites: t("invitedBy", { organizer: invitation.organizerName }),
-      scan: tShare("cardAnswer"),
+      scan: tShare("scan"),
       via: t("via"),
     },
+    direction: localeDirection(locale),
   };
-  const size = format === "portrait" ? PORTRAIT : LANDSCAPE;
-  return new ImageResponse(format === "portrait" ? <PortraitCard data={data} /> : <LandscapeCard data={data} />, {
+  const size = format === "portrait" ? PORTRAIT : format === "status" ? STATUS : LANDSCAPE;
+  const art =
+    format === "portrait" ? <PortraitCard data={data} /> : format === "status" ? <StatusCard data={data} /> : <LandscapeCard data={data} />;
+  return new ImageResponse(art, {
     ...size,
-    fonts: await cardFonts(style),
+    // The Arabic face loads only for a card with Arabic on it, in its words or in what the organizer wrote.
+    fonts: await cardFonts(style, Object.values(data.labels).concat(data.eventName, data.organizerName, data.location ?? "").some(hasArabic)),
   });
 }

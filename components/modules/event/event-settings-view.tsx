@@ -2,7 +2,8 @@ import { AdvancedOnly, AdvancedSettings, AdvancedToggle } from "@/components/sha
 import { getTranslations } from "next-intl/server";
 import { EventSettingsForm } from "./event-settings-form";
 import { EventSummary } from "./event-summary";
-import { loadEvent, toEventFormValues } from "./event.queries";
+import { loadEvent, loadGuestLanguage, toEventFormValues } from "./event.queries";
+import { GuestLanguageSettings } from "./guest-language-settings";
 import { QuorumSettings } from "./quorum-settings";
 
 /**
@@ -12,7 +13,7 @@ import { QuorumSettings } from "./quorum-settings";
  * changes, stays a form (JIKU-255).
  */
 export async function EventSettingsView({ eventId }: { eventId: string }) {
-  const load = await loadEvent(eventId);
+  const [load, guestLanguage] = await Promise.all([loadEvent(eventId), loadGuestLanguage(eventId)]);
   if (load.kind !== "ok") return null;
   const { event } = load;
 
@@ -24,6 +25,7 @@ export async function EventSettingsView({ eventId }: { eventId: string }) {
           <EventSummary event={event} />
           {event.status === "CANCELLED" ? null : (
             <>
+              <GuestLanguageSettings eventId={event.id} initial={guestLanguage} />
               {event.quorum ? null : <AdvancedToggle label={t("advanced")} />}
               <AdvancedOnly first>
                 <QuorumSettings eventId={event.id} initial={event.quorum ?? null} />
@@ -43,6 +45,7 @@ export async function EventSettingsView({ eventId }: { eventId: string }) {
     >
       <div className="flex flex-col gap-6">
         <EventSettingsForm eventId={event.id} initialValues={toEventFormValues(event)} />
+        <GuestLanguageSettings eventId={event.id} initial={guestLanguage} />
         <AdvancedOnly>
           <QuorumSettings eventId={event.id} initial={event.quorum ?? null} />
         </AdvancedOnly>

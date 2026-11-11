@@ -79,7 +79,7 @@
       },
       "channels": {
         "title": "Invitation channel",
-        "description": "Email, WhatsApp or both.",
+        "description": "Email or WhatsApp: each guest gets one invitation.",
         "cta": "Choose"
       },
       "tickets": {
@@ -127,7 +127,8 @@
     "ticketTypeVerifyFirst": "Verify your organization in Settings › Verification before setting a price.",
     "ticketTypeFailed": "The category could not be saved. Try again.",
     "ticketTypeInUse": "{count, plural, =0 {Guests are assigned to this category} one {# guest is assigned to this category} other {# guests are assigned to this category}}: move them before deleting it.",
-    "ticketTypeDeleteFailed": "The category could not be deleted. Try again."
+    "ticketTypeDeleteFailed": "The category could not be deleted. Try again.",
+    "guestLanguageFailed": "The language could not be saved. Try again."
   },
   "settings": {
     "saved": "Changes saved.",
@@ -166,6 +167,14 @@
           "title": "Interactive WhatsApp ticket",
           "description": "Guests confirm with a button in WhatsApp and get their ticket in the chat."
         }
+      },
+      "primary": {
+        "label": "Primary channel",
+        "hint": "Each guest gets one invitation, on this channel first."
+      },
+      "fallback": {
+        "label": "Use the other channel if the first one can't be used",
+        "hint": "For a guest with no contact on the primary channel, or when delivery fails for good. One try, never both channels at once."
       }
     },
     "rules": {
@@ -191,7 +200,8 @@
       "logo": "Logo address",
       "logoHint": "An online image, starting with https://",
       "color": "Color",
-      "preview": "What your guests see"
+      "preview": "What your guests see",
+      "colorDeepened": "Too light for white text: cards and tickets show it slightly darker."
     },
     "advanced": "Advanced options",
     "leaveUnsaved": "Your changes are not saved. Leave anyway?",
@@ -200,6 +210,16 @@
       "yes": "Allowed",
       "until": "Allowed until {date}",
       "extra": "{count, plural, one {Up to # extra confirmation} other {Up to # extra confirmations}}"
+    },
+    "guestLanguage": {
+      "title": "Guests' language",
+      "text": "Your guests' card, ticket, links, and WhatsApp and email messages. Each guest can also switch at the bottom of the page.",
+      "saved": "Your guests will read in {language}.",
+      "names": {
+        "fr": "French",
+        "en": "English",
+        "ar": "Arabic"
+      }
     }
   },
   "quorum": {
@@ -457,7 +477,8 @@
     "errors": {
       "failed": "We couldn't process the batch. Try again.",
       "notAvailable": "This option is no longer available; reload the page.",
-      "provider": "Online payment is unavailable right now. Try again or pay by transfer."
+      "provider": "Online payment is unavailable right now. Try again or pay by transfer.",
+      "currency": "Online payment isn't offered in your currency yet. Choose bank transfer."
     }
   },
   "openInvitation": {
@@ -489,13 +510,31 @@
       "copy": "Copy the link",
       "open": "Open the card",
       "copyFailed": "Could not copy the link.",
-      "whatsapp": "Share on WhatsApp",
+      "whatsapp": "WhatsApp",
       "download": "Download the card",
-      "message": "{event}\n{when}\nAnswer here: {url}",
-      "cardAnswer": "Scan to answer",
-      "cardAnswerBy": "Until {date}",
       "fileName": "Invitation {event}.png",
-      "downloadFailed": "Couldn't download the card. Try again."
+      "downloadFailed": "Couldn't download the card. Try again.",
+      "share": "Share…",
+      "shareHint": "Sends the card image and the ready message: pick WhatsApp, Facebook, Messenger, Telegram or SMS.",
+      "facebook": "Facebook",
+      "telegram": "Telegram",
+      "formats": {
+        "status": {
+          "label": "For a status",
+          "hint": "Vertical, full screen: WhatsApp or Facebook status",
+          "fileName": "Invitation {event} - status.png"
+        },
+        "portrait": {
+          "label": "For a post",
+          "hint": "The size of Facebook feeds and chats",
+          "fileName": "Invitation {event}.png"
+        },
+        "landscape": {
+          "label": "Landscape",
+          "hint": "For an email, a website or a wide print",
+          "fileName": "Invitation {event} - landscape.png"
+        }
+      }
     },
     "stats": {
       "expected": "People expected",
@@ -544,7 +583,11 @@
       "notifyOnCancelHelp": "“Yes” and “maybe” answers get a WhatsApp message if you cancel.",
       "notifyOnCancelIncluded": "Included in your plan.",
       "save": "Save",
-      "saved": "Settings saved."
+      "saved": "Settings saved.",
+      "showComing": "Show how many are coming",
+      "showComingHelp": "Shown from 5 people. Only the number appears, never a name.",
+      "relay": "Let guests invite someone",
+      "relayHelp": "After “I'm coming”, a guest can pass the card to someone forgotten."
     },
     "errors": {
       "invalid": "Check the settings.",
@@ -571,6 +614,56 @@
       "photoTooSmall": "Photo too small: at least 600 × 300 px.",
       "preview": "Card preview"
     },
-    "customize": "Customize the card"
+    "customize": "Customize the card",
+    "funnel": {
+      "title": "Where answers come from",
+      "text": "Each shared link carries its network: you see where your people answer most.",
+      "failed": "Figures unavailable for now. Reload the page later.",
+      "empty": "Share your card to see where the answers come from.",
+      "answers": "{count, plural, =0 {No answers} one {# answer} other {# answers}}",
+      "detail": "{shares, plural, =0 {no shares} one {# share} other {# shares}} · {visits, plural, =0 {no visits} one {# visit} other {# visits}} · {coming, plural, =0 {nobody coming} one {# coming} other {# coming}}",
+      "rate": "{rate} of visitors answered",
+      "rateTooFew": "too few visits for a rate",
+      "source": {
+        "whatsapp": "WhatsApp",
+        "facebook": "Facebook",
+        "telegram": "Telegram",
+        "share": "Share menu",
+        "link": "Copied link",
+        "qr": "Image QR code",
+        "other": "Other or unknown",
+        "relay": "Guests passing it on"
+      }
+    },
+    "voice": {
+      "title": "Voice message",
+      "text": "Say the invitation in your own voice, {seconds} seconds at most: guests listen on the card.",
+      "record": "Record",
+      "replace": "Record again",
+      "import": "Import a file",
+      "remove": "Remove",
+      "recording": "Recording…",
+      "remaining": "{seconds} s left",
+      "stop": "Stop",
+      "listenDraft": "Listen to the recording",
+      "listenSaved": "Listen to the message, {seconds} seconds",
+      "use": "Use this message",
+      "again": "Start over",
+      "saved": "Voice message saved.",
+      "transcript": "The message's words (optional)",
+      "transcriptHint": "Shown under the player, for those who cannot listen.",
+      "removeTitle": "Remove the voice message?",
+      "removeText": "The card will have no voice message. You can record another one.",
+      "keep": "Keep",
+      "removeConfirm": "Remove",
+      "micDenied": "The microphone isn't available. Allow it in the browser, or import an audio file.",
+      "errors": {
+        "invalid": "This file isn't a recording.",
+        "tooLong": "The message must last 30 seconds at most.",
+        "tooBig": "The file is too large.",
+        "type": "This audio format isn't supported.",
+        "failed": "The message couldn't be saved. Try again."
+      }
+    }
   }
 }
