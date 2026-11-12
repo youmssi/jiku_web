@@ -123,7 +123,8 @@ export const config = {
     // Run on everything except Next internals, static assets, and API routes.
     // The explicit icon/manifest entries stop next-intl's locale detection from
     // rewriting those static URLs to /{locale}/... which would 404. `landing/`
-    // holds the landing page's images and `email/` the images transactional emails load.
-    "/((?!api|_next/static|_next/image|landing/|email/|favicon\\.ico|sw\\.js|icon-192\\.png|icon-512\\.png|icon-maskable-512\\.png|apple-icon-180\\.png|jiku-logo-mark\\.png|jiku-logo-1024\\.png|robots\\.txt|llms\\.txt|indexnow-key\\.txt|sitemap\\.xml|manifest\\.webmanifest|opengraph-image).*)",
+    // holds the landing page's images, `email/` the images transactional emails
+    // load and `fonts/` the self-hosted card face (JIKU-300).
+    "/((?!api|_next/static|_next/image|landing/|email/|fonts/|favicon\\.ico|sw\\.js|icon-192\\.png|icon-512\\.png|icon-maskable-512\\.png|apple-icon-180\\.png|jiku-logo-mark\\.png|jiku-logo-1024\\.png|robots\\.txt|llms\\.txt|indexnow-key\\.txt|sitemap\\.xml|manifest\\.webmanifest|opengraph-image).*)",
   ],
 };

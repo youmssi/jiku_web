@@ -7,6 +7,21 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* The Modern card face (JIKU-300): Archivo at weight 800 and width 62.5 only,
+   cut from the variable font (public/fonts/OFL-Archivo.txt). The browser
+   fetches it only when a Modern card title is on the page. */
+@font-face {
+  font-family: "Archivo Card";
+  src: url("/fonts/archivo-800-condensed.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-card-modern: "Archivo Card";
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

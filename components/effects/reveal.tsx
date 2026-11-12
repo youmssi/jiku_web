@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import type { ReactNode } from "react";
 
 /**
@@ -19,7 +19,7 @@ export function Reveal({
   className?: string;
 }) {
   return (
-    <motion.div
+    <m.div
       data-reveal=""
       className={className}
       initial={{ opacity: 0, y: 24 }}
@@ -28,7 +28,7 @@ export function Reveal({
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 

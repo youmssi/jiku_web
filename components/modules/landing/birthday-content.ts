@@ -68,7 +68,7 @@ function frCard(currency: PricingCurrency): BirthdayCardPageContent {
     meta: {
       title: "Carte d'invitation anniversaire en ligne",
       description:
-        "Créez une carte d'invitation d'anniversaire en ligne, partagez-la sur WhatsApp et voyez qui vient. Un billet QR pour chaque « oui ». Gratuit jusqu'à 100 invités par an.",
+        "Créez une carte d'invitation d'anniversaire en ligne, partagez-la sur WhatsApp et voyez qui vient. Un billet QR par « oui », gratuit jusqu'à 100 invités par an.",
       keywords: [
         "carte d'invitation anniversaire",
         "invitation anniversaire",
@@ -280,7 +280,7 @@ const frTexts: BirthdayTextsPageContent = {
   meta: {
     title: "Textes d'invitation d'anniversaire à copier",
     description:
-      "Des textes d'invitation d'anniversaire à copier : adulte, surprise, enfant, 18, 30 ou 50 ans, et version courte pour WhatsApp. Avec ce qu'une invitation doit dire.",
+      "Textes d'invitation d'anniversaire à copier : adulte, surprise, enfant, 18, 30 ou 50 ans, version courte pour WhatsApp, et ce qu'une invitation doit dire.",
     keywords: [
       "texte invitation anniversaire",
       "texte invitation anniversaire adulte",
