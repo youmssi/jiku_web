@@ -14,13 +14,18 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
   const requested = (await params).locale;
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
   const t = await getTranslations({ locale, namespace: "auth.meta.register" });
-  return localizedPageMetadata({
-    locale,
-    defaultLocale: routing.defaultLocale,
-    path: ROUTES.REGISTER,
-    title: t("title"),
-    description: t("description"),
-  });
+  // A form, not content: kept out of search results (it is not in the sitemap
+  // either) while its links are still followed.
+  return {
+    ...localizedPageMetadata({
+      locale,
+      defaultLocale: routing.defaultLocale,
+      path: ROUTES.REGISTER,
+      title: t("title"),
+      description: t("description"),
+    }),
+    robots: { index: false, follow: true },
+  };
 }
 
 interface PageProps {

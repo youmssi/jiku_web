@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useEffect, useState, type ReactNode } from "react";
 
 /**
@@ -47,7 +47,7 @@ export function OccasionShowcase({
             {lead}{" "}
             <span className="relative inline-grid overflow-hidden align-bottom text-muted-foreground">
               <AnimatePresence mode="popLayout" initial={false}>
-                <motion.span
+                <m.span
                   key={occasions[index]}
                   initial={{ y: "100%", opacity: 0, filter: "blur(6px)" }}
                   animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
@@ -56,7 +56,7 @@ export function OccasionShowcase({
                   className="col-start-1 row-start-1 whitespace-nowrap"
                 >
                   {occasions[index]}
-                </motion.span>
+                </m.span>
               </AnimatePresence>
             </span>
           </span>
@@ -67,7 +67,7 @@ export function OccasionShowcase({
       <div className="mx-auto w-full max-w-[17rem] sm:max-w-[21rem]">
         <div className="relative aspect-[4/5]">
           <AnimatePresence mode="popLayout" initial={false}>
-            <motion.div
+            <m.div
               key={index}
               className="absolute inset-0"
               initial={{ opacity: 0, rotate: 6, y: 30, scale: 0.94 }}
@@ -76,7 +76,7 @@ export function OccasionShowcase({
               transition={{ type: "spring", damping: 24, stiffness: 220 }}
             >
               {cards[index]}
-            </motion.div>
+            </m.div>
           </AnimatePresence>
           {overlay}
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useTransform, type PanInfo } from "motion/react";
+import { m, useMotionValue, useTransform, type PanInfo } from "motion/react";
 import { useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +23,7 @@ function Draggable({ children, onSendToBack }: { children: ReactNode; onSendToBa
   }
 
   return (
-    <motion.div
+    <m.div
       className="absolute inset-0 cursor-grab active:cursor-grabbing"
       style={{ x, y, rotateX, rotateY }}
       drag
@@ -32,7 +32,7 @@ function Draggable({ children, onSendToBack }: { children: ReactNode; onSendToBa
       onDragEnd={onDragEnd}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -83,7 +83,7 @@ export function CardStack({
     >
       {order.map((cardIndex, position) => (
         <Draggable key={cardIndex} onSendToBack={() => sendToBack(position)}>
-          <motion.div
+          <m.div
             className="size-full"
             onClick={() => sendToBack(position)}
             animate={{
@@ -95,7 +95,7 @@ export function CardStack({
             transition={{ type: "spring", stiffness: 260, damping: 22 }}
           >
             {cards[cardIndex]}
-          </motion.div>
+          </m.div>
         </Draggable>
       ))}
     </div>
