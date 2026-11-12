@@ -78,6 +78,16 @@ const nextConfig: NextConfig = {
           { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
         ],
       },
+      {
+        // Self-hosted fonts (JIKU-300) are kept for a year: a changed font
+        // ships under a new file name, never over an existing one.
+        source: "/fonts/:file*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
+        source: "/landing/:file*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=86400" }],
+      },
       noindexRoute("/invitation/:path*"),
       noindexRoute("/orders/:path*"),
       noindexRoute("/checkin/:path*"),

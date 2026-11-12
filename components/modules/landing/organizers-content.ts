@@ -52,9 +52,9 @@ const included = (locale: LandingLocale) =>
 function fr(currency: PricingCurrency): OrganizersPageContent {
   return {
     meta: {
-      title: "Jikū pour les organisateurs d'événements : invitations WhatsApp et entrée par QR",
+      title: "Organisateurs : invitations WhatsApp et entrée par QR",
       description:
-        "Wedding planners, agences et salles : envoyez les invitations sur WhatsApp, recevez les réponses en direct et contrôlez l'entrée par QR, même sans réseau. Un forfait mensuel pour tous vos événements.",
+        "Wedding planners, agences et salles : invitations WhatsApp, réponses en direct et entrée par QR, même sans réseau. Un forfait mensuel pour tous vos événements.",
       keywords: [
         "wedding planner",
         "agence événementielle",
@@ -187,9 +187,9 @@ function fr(currency: PricingCurrency): OrganizersPageContent {
 function en(currency: PricingCurrency): OrganizersPageContent {
   return {
     meta: {
-      title: "Jikū for event organizers: WhatsApp invitations and QR check-in",
+      title: "For organizers: WhatsApp invitations, QR check-in",
       description:
-        "Wedding planners, agencies and venues: send invitations on WhatsApp, see answers live and check guests in by QR code, even offline. One monthly plan for all your events.",
+        "Wedding planners, agencies and venues: WhatsApp invitations, live answers and QR check-in, even offline. One monthly plan for all your events.",
       keywords: [
         "wedding planner",
         "event agency",

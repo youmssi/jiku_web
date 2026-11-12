@@ -79,7 +79,7 @@ function fr(currency: PricingCurrency): PricingContent {
   return {
     meta: {
       title: "Tarifs : gratuit, par événement ou Pro",
-      description: `${number(FREE_OFFER.guestsPerYear, "fr")} invités gratuits par an, puis ${formatPrice(EVENT_PRICING.perGuest, "fr", "GNF")} (${formatPrice(EVENT_PRICING.perGuest, "fr", "FCFA")}) par invité, tout compris. Pro Organisateur et Services Pro pour les professionnels. Prix toutes taxes comprises.`,
+      description: `${number(FREE_OFFER.guestsPerYear, "fr")} invités gratuits par an, puis ${formatPrice(EVENT_PRICING.perGuest, "fr", "GNF")} (${formatPrice(EVENT_PRICING.perGuest, "fr", "FCFA")}) par invité, tout compris (TTC). Pro Organisateur et Services Pro pour les professionnels.`,
     },
     eyebrow: "Tarifs",
     title: "Un prix par invité. Rien d'autre à calculer.",

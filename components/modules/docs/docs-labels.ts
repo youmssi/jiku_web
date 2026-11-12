@@ -11,7 +11,7 @@ export const DOCS_BREADCRUMB_HOME: Record<Locale, string> = { fr: "Accueil", en:
 
 export const DOCS_META: Record<Locale, { title: string; description: string }> = {
   fr: {
-    title: "Guides",
+    title: "Step-by-step guides",
     description:
       "Guides pas à pas : créer et partager une carte d'invitation, inviter une liste, contrôler les entrées, ouvrir les rendez-vous et la file du jour.",
   },
