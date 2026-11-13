@@ -62,8 +62,7 @@ Les conditions 1 et 3 se construisent en semaines, voire en mois, avec les
 - **Hiérarchie :** fil d'Ariane structuré sur les guides, en plus des pages
   marketing.
 - **Moteurs autres que Google :**
-  - balises de vérification Bing (`NEXT_PUBLIC_BING_SITE_VERIFICATION`) et
-    Yandex ;
+  - Bing vérifié par import depuis Search Console, sans balise ;
   - IndexNow : clé servie à `/indexnow-key.txt` et commande
     `pnpm seo:indexnow`.
 - **Assistants IA :** `llms.txt` est statique (il ne peut plus dépasser le
@@ -93,7 +92,7 @@ Les conditions 1 et 3 se construisent en semaines, voire en mois, avec les
 ### 2. Bing Webmaster Tools (jour 1)
 
 1. **Importer depuis Google Search Console** : site et sitemap repris en un
-   clic. Sinon, coller la balise dans `NEXT_PUBLIC_BING_SITE_VERIFICATION`.
+   clic, sans balise de vérification à poser.
 2. L'index de Bing alimente aussi Yahoo, DuckDuckGo, Ecosia, ainsi que la
    recherche de ChatGPT et de Copilot.
 3. Générer une clé IndexNow et la déployer dans `INDEXNOW_KEY`. Après chaque
@@ -103,8 +102,8 @@ Les conditions 1 et 3 se construisent en semaines, voire en mois, avec les
    SITE_URL=https://hellojiku.com INDEXNOW_KEY=<clé> pnpm seo:indexnow
    ```
 
-Yandex (`NEXT_PUBLIC_YANDEX_SITE_VERIFICATION`) est facultatif : peu utilisé
-dans nos marchés.
+Yandex n'est pas suivi : peu utilisé dans nos marchés, il reçoit quand même
+les pages par IndexNow.
 
 ### 3. Profils officiels de la marque (semaine 1)
 
