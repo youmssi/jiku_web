@@ -84,15 +84,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  // Ownership proofs for each search engine's webmaster console. Bing's also
-  // covers Yahoo, DuckDuckGo and Ecosia, which use its index.
-  verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
-    yandex: process.env.NEXT_PUBLIC_YANDEX_SITE_VERIFICATION,
-    ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION && {
-      other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION },
-    }),
-  },
 };
 
 export const viewport: Viewport = {
