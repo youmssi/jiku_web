@@ -124,8 +124,8 @@ Routing (app/) → Component (<feature>.tsx) → Cache (use<Domain>.ts) → Serv
 
 | Service | Provider |
 |---|---|
-| Frontend | **Hetzner server** with Dokploy, image built by GitHub Actions on GHCR; Vercel for pull request previews |
-| Backend | **Hetzner server** (Spring Boot container) |
+| Frontend | **Contabo server** (ADR 111) with Dokploy, image built by GitHub Actions on GHCR; Vercel for pull request previews |
+| Backend | **Contabo server** (Spring Boot container) |
 | Database | **PostgreSQL 18** on the same server, WAL-G backups to Cloudflare R2 |
 | Network | **Cloudflare** (DNS, cache, web firewall) |
 

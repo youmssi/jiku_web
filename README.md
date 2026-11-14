@@ -231,7 +231,7 @@ read it:
 
 ## Deployment
 
-Production runs as a container on the Jikū server (Hetzner, driven by Dokploy,
+Production runs as a container on the Jikū server (Contabo, driven by Dokploy,
 behind Cloudflare; ADR 107 and 108 in the API repository). GitHub Actions builds
 the image from the [`Dockerfile`](Dockerfile) and publishes it on GHCR
 ([`images.yml`](.github/workflows/images.yml)). Vercel still builds a preview of
