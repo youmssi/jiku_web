@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useLiveSignal } from "@/components/shared";
+import { useLiveSignal, refreshQuietly } from "@/components/shared";
 import { fetchDayLineAction, fetchDayLineLiveTicketAction } from "@/components/modules/dayline/dayline.service";
 import type { DayLineAuth, DayLineView } from "@/components/modules/dayline/schema";
 
@@ -38,10 +38,10 @@ export function useDayLine(auth: DayLineAuth, initial: DayLineView) {
     await refresh();
   }, [refresh]);
 
-  const live = useLiveSignal(dayLineKey(auth), () => fetchDayLineLiveTicketAction(auth), () => void reload());
+  const live = useLiveSignal(dayLineKey(auth), () => fetchDayLineLiveTicketAction(auth), () => void refreshQuietly(reload));
 
   useEffect(() => {
-    const timer = setInterval(() => void reload(), live ? LIVE_POLL_INTERVAL_MS : POLL_INTERVAL_MS);
+    const timer = setInterval(() => void refreshQuietly(reload), live ? LIVE_POLL_INTERVAL_MS : POLL_INTERVAL_MS);
     return () => clearInterval(timer);
   }, [reload, live]);
 

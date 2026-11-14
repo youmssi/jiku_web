@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useLiveSignal } from "@/components/shared";
+import { useLiveSignal, refreshQuietly } from "@/components/shared";
 import { fetchDashboardAction, fetchDashboardLiveTicketAction } from "@/components/modules/dashboard/dashboard.service";
 import type { DashboardData } from "@/components/modules/dashboard/schema";
 
@@ -29,10 +29,10 @@ export function useDashboard(eventId: string, initial: DashboardData) {
     }
   }, [eventId]);
 
-  const live = useLiveSignal(eventId, () => fetchDashboardLiveTicketAction(eventId), () => void reload());
+  const live = useLiveSignal(eventId, () => fetchDashboardLiveTicketAction(eventId), () => void refreshQuietly(reload));
 
   useEffect(() => {
-    const timer = setInterval(() => void reload(), live ? LIVE_POLL_INTERVAL_MS : POLL_INTERVAL_MS);
+    const timer = setInterval(() => void refreshQuietly(reload), live ? LIVE_POLL_INTERVAL_MS : POLL_INTERVAL_MS);
     return () => clearInterval(timer);
   }, [reload, live]);
 

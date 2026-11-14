@@ -15,6 +15,7 @@ export {ServiceWorkerRegister} from "./service-worker-register";
 export {useRoleLabel} from "./use-role-label";
 export {useUnsavedChangesGuard} from "./use-unsaved-changes-guard";
 export {type LiveTicket, useLiveSignal} from "./use-live-signal";
+export { refreshQuietly } from "./refresh-quietly";
 export {PaymentDue} from "./payment-due";
 export {QrCode} from "./qr-code";
 export {resizeImage, type ResizeRules} from "./resize-image";

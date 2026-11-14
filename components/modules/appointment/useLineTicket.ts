@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useLiveSignal } from "@/components/shared";
+import { useLiveSignal, refreshQuietly } from "@/components/shared";
 import { loadLineLiveTicket, loadLineTicket, type AppointmentLinkRef } from "@/components/modules/appointment/appointment.service";
 import type { ClientLineTicketView } from "@/components/modules/appointment/schema";
 
@@ -33,12 +33,12 @@ export function useLineTicket(link: AppointmentLinkRef, ticketCode: string, init
   const live = useLiveSignal(
     settled ? "" : ticketCode,
     () => (settled ? Promise.resolve(null) : loadLineLiveTicket(link, ticketCode)),
-    () => void reload(),
+    () => void refreshQuietly(reload),
   );
 
   useEffect(() => {
     if (settled) return;
-    const timer = setInterval(() => void reload(), live ? LIVE_POLL_INTERVAL_MS : POLL_INTERVAL_MS);
+    const timer = setInterval(() => void refreshQuietly(reload), live ? LIVE_POLL_INTERVAL_MS : POLL_INTERVAL_MS);
     return () => clearInterval(timer);
   }, [reload, live, settled]);
 
