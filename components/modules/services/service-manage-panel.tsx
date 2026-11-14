@@ -606,7 +606,7 @@ export function ServiceManagePanel({
       ) : null}
 
       <Dialog open={scheduleFor != null} onOpenChange={(open) => !open && setScheduleFor(null)}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-xl">
           <DialogHeader>
             <DialogTitle>{t("resources.scheduleTitle", { name: scheduleFor?.name ?? "" })}</DialogTitle>
           </DialogHeader>
