@@ -6,8 +6,10 @@ import {
   AllPaymentsView,
   InvoicesTable,
   PackSection,
+  PendingPayments,
   SubscriptionSection,
   fetchInvoicesAction,
+  fetchOpenRequestsAction,
   fetchPackAction,
   fetchSubscriptionAction,
 } from "@/components/modules/billing";
@@ -20,7 +22,8 @@ import { ROUTES } from "@/lib/constants";
 const MANAGER_ROLES = ["ORGANIZER_OWNER", "ORGANIZER_ADMIN"];
 
 /**
- * Organizer billing overview: the prepaid subscription (JIKU-90), the formula,
+ * Organizer billing overview: the transfer requests still waiting (JIKU-307),
+ * the prepaid subscription (JIKU-90), the formula,
  * expiry, active resources used and included, the renewal banner, the
  * Pro Organisateur (ADR 109), then payment history across every event in the
  * tenant and any accounting-grade invoices.
@@ -31,10 +34,11 @@ export default async function BillingPage() {
     return localeRedirect(ROUTES.LOGIN);
   }
   const payments = response.ok ? ((await response.json()) as PaymentHistoryItem[]) : [];
-  const [invoices, subscription, pack, context, t] = await Promise.all([
+  const [invoices, subscription, pack, waiting, context, t] = await Promise.all([
     fetchInvoicesAction(),
     fetchSubscriptionAction(),
     fetchPackAction(),
+    fetchOpenRequestsAction(),
     getOrganizerContext(),
     getTranslations("billing.page"),
   ]);
@@ -51,15 +55,25 @@ export default async function BillingPage() {
         <AlertDescription>{t("notice.text")}</AlertDescription>
       </Alert>
 
+      {waiting.length > 0 ? (
+        <div className="mb-10">
+          <PendingPayments requests={waiting} canManage={canManage} />
+        </div>
+      ) : null}
+
       {subscription ? (
         <section className="mb-10 flex flex-col gap-4">
-          <SubscriptionSection initial={subscription} online={online} />
+          <SubscriptionSection
+            initial={subscription}
+            online={online}
+            waiting={waiting.find((request) => request.kind === "SUBSCRIPTION") ?? null}
+          />
         </section>
       ) : null}
 
       {pack ? (
         <section className="mb-10 flex flex-col gap-4">
-          <PackSection initial={pack} canManage={canManage} online={online} />
+          <PackSection initial={pack} canManage={canManage} online={online} waiting={waiting} />
         </section>
       ) : null}
 

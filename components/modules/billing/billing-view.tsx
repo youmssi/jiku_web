@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { formatAmount } from "@/lib/currency";
 import { ActivationInstructions } from "./activation-instructions";
+import { PendingRequest } from "./pending-payments";
 import { requestActivationAction } from "./billing.service";
 import { PayOnlineButton } from "./pay-online-button";
 import { PaymentHistoryTable } from "./payment-history-table";
@@ -108,7 +109,11 @@ export function BillingView({
       ) : request ? (
         <section>
           <SectionHeading>{t("requestTitle")}</SectionHeading>
-          <ActivationInstructions instructions={request} />
+          <PendingRequest
+            request={request}
+            canManage={canManage}
+            onChange={(updated) => setRequest(updated.status === "PENDING" ? updated : null)}
+          />
           <div className="mt-2">
             <Button variant="outline" size="sm" onClick={() => setDialogOpen(true)}>
               {t("viewInstructions")}

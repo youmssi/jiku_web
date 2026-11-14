@@ -22,7 +22,7 @@
     "people": "{active, plural, one {# personne sert vos clients} other {# personnes servent vos clients}}",
     "included": "{count, plural, one {# incluse} other {# incluses}}",
     "change": "Renouveler ou changer",
-    "cancel": "Annuler",
+    "cancel": "Fermer",
     "choose": "Choisir une formule",
     "plan": {
       "base": "{amount} par mois",
@@ -53,7 +53,11 @@
     "remindersOut": "Vous avez envoyé les {limit} rappels WhatsApp gratuits de ce mois. Plus aucun rappel ne partira ce mois-ci : passez à Services Pro : 1 000 rappels par personne et par mois.",
     "remindersLow": "{left, plural, one {Il vous reste # rappel WhatsApp gratuit ce mois-ci.} other {Il vous reste # rappels WhatsApp gratuits ce mois-ci.}}",
     "remindersOutPaid": "Vous avez envoyé les {limit} rappels WhatsApp de ce mois depuis le numéro Jikū. Les rappels partent par les autres canaux du service jusqu'au mois prochain. Branchez votre propre numéro WhatsApp pour ne plus avoir de limite.",
-    "remindersLowPaid": "{left, plural, one {Il vous reste # rappel WhatsApp ce mois-ci depuis le numéro Jikū.} other {Il vous reste # rappels WhatsApp ce mois-ci depuis le numéro Jikū.}}"
+    "remindersLowPaid": "{left, plural, one {Il vous reste # rappel WhatsApp ce mois-ci depuis le numéro Jikū.} other {Il vous reste # rappels WhatsApp ce mois-ci depuis le numéro Jikū.}}",
+    "outgrownBadge": "Équipe trop grande",
+    "outgrownPaused": "Gratuit pour {covered, plural, one {une personne} other {# personnes}} : vos réservations sont en pause.",
+    "outgrownUntil": "Gratuit pour {covered, plural, one {une personne} other {# personnes}} : choisissez une formule avant le {date}.",
+    "outgrownNoDate": "Gratuit pour {covered, plural, one {une personne} other {# personnes}} : choisissez une formule d'équipe."
   },
   "event": {
     "allowanceTitle": "Capacité de cet événement",
@@ -87,7 +91,7 @@
     "coveredText": "Cet événement puise dans les invités du mois de votre forfait : rien à acheter. Suivez et complétez votre forfait depuis la page Facturation."
   },
   "instructions": {
-    "title": "Activation demandée : {purchase}, {amount}",
+    "title": "Paiement demandé : {purchase}, {amount}",
     "text": "Envoyez le montant exact au compte ci-dessous en indiquant cette référence. Notre équipe confirme le paiement et débloque votre accès, en général en quelques heures, et vous recevez un e-mail de confirmation.",
     "copy": "Copier",
     "copied": "Copié",
@@ -96,8 +100,7 @@
     "bank": "Virement bancaire",
     "questions": "Questions",
     "or": "ou",
-    "safety": "L'activation est confirmée par notre équipe dès réception du transfert : elle n'est pas instantanée. Ne communiquez jamais un numéro de carte ou un mot de passe ; seul le transfert, avec la référence, est nécessaire.",
-    "guests": "{count, plural, one {# invité} other {# invités}}"
+    "safety": "L'activation est confirmée par notre équipe dès réception du transfert : elle n'est pas instantanée. Ne communiquez jamais un numéro de carte ou un mot de passe ; seul le transfert, avec la référence, est nécessaire."
   },
   "history": {
     "emptyTitle": "Aucun paiement",
@@ -113,9 +116,16 @@
     "statuses": {
       "PENDING": "En attente",
       "SUCCEEDED": "Payé",
-      "FAILED": "Échoué"
+      "CANCELLED": "Annulé",
+      "EXPIRED": "Expiré",
+      "REJECTED": "Refusé",
+      "UNFINISHED": "Non abouti"
     },
-    "automatic": "Chaque paiement confirmé émet sa facture et vous l'envoie par e-mail, dès que l'<settings>identité légale</settings> de votre organisation est complète. Sinon, le reçu fait foi."
+    "automatic": "Chaque paiement confirmé émet sa facture et vous l'envoie par e-mail, dès que l’<settings>identité légale</settings> de votre organisation est complète. Sinon, le reçu fait foi.",
+    "reason": "Motif : {reason}",
+    "showAll": "Afficher tout ({count})",
+    "showMain": "Afficher les paiements payés et en attente",
+    "filtered": "Les paiements annulés, expirés, refusés ou non aboutis sont masqués."
   },
   "invoices": {
     "emptyTitle": "Aucune facture",
@@ -240,6 +250,46 @@
       "description": "Votre abonnement {plan} se termine le {date}. Renouvelez-le pour que vos clients continuent de réserver.",
       "action": "Renouveler"
     },
-    "askManager": "Prévenez la personne qui gère la facturation de votre organisation."
+    "askManager": "Prévenez la personne qui gère la facturation de votre organisation.",
+    "outgrown": {
+      "title": "Votre équipe a dépassé {plan}",
+      "pausedTitle": "Vos services sont en pause",
+      "description": "Votre équipe compte {people} personnes et {plan} en couvre {covered, plural, one {une} other {#}}. Choisissez une formule d'équipe avant le {date}, sinon les réservations se mettront en pause.",
+      "descriptionNoDate": "Votre équipe compte {people} personnes et {plan} en couvre {covered, plural, one {une} other {#}}. Choisissez une formule d'équipe pour que vos clients continuent de réserver.",
+      "pausedDescription": "Votre équipe compte {people} personnes et {plan} en couvre {covered, plural, one {une} other {#}} : vos clients ne peuvent plus réserver ni prendre de ticket. Les rendez-vous déjà pris et vos événements continuent.",
+      "upgrade": "Choisir une formule d'équipe",
+      "shrink": "Garder {covered, plural, one {une seule personne} other {# personnes}}"
+    }
+  },
+  "purchase": {
+    "GUESTS": "{event} : {count, plural, one {# invité} other {# invités}}",
+    "SUBSCRIPTION": "Abonnement {plan}, {months} mois",
+    "PACK": "Pro Organisateur, {months} mois",
+    "PACK_EXTRA": "Pro Organisateur : {count, plural, one {# invité} other {# invités}} en plus",
+    "COMMISSION": "Commission sur les billets : {event}",
+    "event": "Événement"
+  },
+  "requests": {
+    "title": "Paiements en attente",
+    "intro": "Ces demandes attendent votre virement. L'accès est débloqué dès que notre équipe confirme sa réception.",
+    "expires": "Expire le {date} sans virement.",
+    "sentOn": "Virement signalé le {date}. Notre équipe le confirme dès réception.",
+    "markSent": "J'ai envoyé le virement",
+    "marking": "Envoi…",
+    "sentDone": "Merci, notre équipe est prévenue.",
+    "cancel": "Annuler la demande",
+    "cancelTitle": "Annuler cette demande ?",
+    "cancelText": "La référence {reference} ne sera plus attendue. Si vous avez déjà envoyé le virement, gardez la demande : notre équipe le confirmera.",
+    "cancelConfirm": "Annuler la demande",
+    "keep": "Garder",
+    "cancelled": "Demande annulée.",
+    "replaceTitle": "Remplacer la demande en cours ?",
+    "replaceText": "Une demande attend déjà votre virement : {purchase}, {amount}, référence {reference}. La nouvelle la remplace. N'envoyez que le montant de la nouvelle demande, avec sa nouvelle référence.",
+    "replaceConfirm": "Remplacer",
+    "errors": {
+      "forbidden": "Seule la personne qui gère la facturation peut changer cette demande.",
+      "gone": "Cette demande n'est plus en attente. Rechargez la page.",
+      "failed": "La demande n'a pas pu être modifiée. Réessayez."
+    }
   }
 }

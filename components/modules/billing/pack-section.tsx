@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,27 +12,33 @@ import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { formatAmount } from "@/lib/currency";
 import { requestPackAction } from "@/components/modules/billing/billing.service";
-import { ActivationInstructions } from "@/components/modules/billing/activation-instructions";
+import { ReplaceRequestDialog } from "@/components/modules/billing/replace-request-dialog";
 import { PayOnlineButton } from "@/components/modules/billing/pay-online-button";
 import type { ManualPaymentInstructions, PackView } from "@/components/modules/billing/schema";
 
 const MAX_BLOCKS = 50;
 
+type PackInput = { months: number } | { blocks: number };
+
 /**
  * The Organizer Pack (ADR 105): the month's guests shared by every event, a
  * request for one month or a year (two months free) with any guests still
  * owed from an event day, and extra guests for the month in blocks. Paid
- * online when offered, or through the manual Mobile Money flow.
+ * online when offered, or through the manual Mobile Money flow. A request that
+ * would replace one still waiting asks first (JIKU-307).
  */
 export function PackSection({
   initial,
   canManage,
   online,
+  waiting,
 }: {
   initial: PackView;
   canManage: boolean;
   /** Online payment is offered next to the manual transfer (JIKU-165). */
   online: boolean;
+  /** The organization's transfer requests still waiting (JIKU-307). */
+  waiting: ManualPaymentInstructions[];
 }) {
   const t = useTranslations("billing.pack");
   const locale = useLocale();
@@ -44,25 +51,43 @@ export function PackSection({
   const [open, setOpen] = useState(false);
   const [months, setMonths] = useState(pack.months[0]?.months ?? 1);
   const [blocks, setBlocks] = useState(1);
-  const [instructions, setInstructions] = useState<ManualPaymentInstructions | null>(null);
+  const [replacing, setReplacing] = useState<{ waiting: ManualPaymentInstructions; input: PackInput } | null>(null);
   const [isSaving, startSave] = useTransition();
+  const router = useRouter();
 
   const period = pack.months.find((option) => option.months === months);
   const total = period ? pack.monthlyMinor * period.chargedMonths + pack.owedMinor : null;
   const extraGuests = blocks * pack.extraBlockGuests;
 
-  function submit(input: { months: number } | { blocks: number }) {
+  function submit(input: PackInput) {
+    const kind = "months" in input ? "PACK" : "PACK_EXTRA";
+    const current = waiting.find((request) => request.kind === kind);
+    const same =
+      current &&
+      ("months" in input
+        ? current.months === input.months && current.amountMinor === total
+        : current.guests === input.blocks * pack.extraBlockGuests);
+    if (current && !same) {
+      setReplacing({ waiting: current, input });
+      return;
+    }
+    send(input);
+  }
+
+  function send(input: PackInput) {
+    setReplacing(null);
     startSave(async () => {
       const result = await requestPackAction(input);
       if (!result.ok) {
         toast.error(result.error);
         return;
       }
-      setInstructions(result.instructions);
       setOpen(false);
       toast.success(t("ready"));
+      router.refresh();
     });
   }
+
 
   return (
     <div className="flex flex-col gap-4">
@@ -111,7 +136,11 @@ export function PackSection({
         </Alert>
       ) : null}
 
-      {instructions ? <ActivationInstructions instructions={instructions} /> : null}
+      <ReplaceRequestDialog
+        waiting={replacing?.waiting ?? null}
+        onConfirm={() => replacing && send(replacing.input)}
+        onCancel={() => setReplacing(null)}
+      />
 
       {open ? (
         <div className="flex flex-col gap-4 rounded-xl border p-5">

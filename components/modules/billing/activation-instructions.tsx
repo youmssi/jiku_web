@@ -1,24 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatAmount } from "@/lib/currency";
+import { usePurchaseLabel } from "./purchase-label";
 import type { ManualPaymentInstructions } from "./schema";
 
 /**
- * Payment instructions for an open activation request (JIKU-45): what to pay,
- * where to send it, and the reference to quote. Rendered from the server-fetched
- * open request or right after submitting one, so it is never a one-shot screen.
+ * Payment instructions for a waiting transfer request (JIKU-45, JIKU-307): what
+ * to pay, where to send it, the reference to quote, and until when it waits.
+ * Rendered from the server-fetched request, so it is never a one-shot screen;
+ * [children] holds the actions the organizer can take on it.
  */
 export function ActivationInstructions({
   instructions,
+  children,
 }: {
   instructions: ManualPaymentInstructions;
+  children?: React.ReactNode;
 }) {
   const t = useTranslations("billing.instructions");
+  const tRequests = useTranslations("billing.requests");
   const locale = useLocale();
+  const format = useFormatter();
+  const purchaseLabel = usePurchaseLabel();
+  const day = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "long" });
   const [copied, setCopied] = useState(false);
   const { payee } = instructions;
 
@@ -37,7 +45,7 @@ export function ActivationInstructions({
     <div className="rounded-xl border border-blue-300 bg-blue-50 p-5 text-sm text-blue-950 dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-100">
       <p className="font-semibold">
         {t("title", {
-          purchase: instructions.guests ? t("guests", { count: instructions.guests }) : instructions.tier,
+          purchase: purchaseLabel({ ...instructions, eventTitle: instructions.eventName }),
           amount: formatAmount(instructions.amountMinor, instructions.currency, locale),
         })}
       </p>
@@ -87,9 +95,17 @@ export function ActivationInstructions({
         ) : null}
       </dl>
 
+      {instructions.transferDeclaredAt ? (
+        <p className="mt-4 font-medium">{tRequests("sentOn", { date: day(instructions.transferDeclaredAt) })}</p>
+      ) : instructions.expiresAt ? (
+        <p className="mt-4">{tRequests("expires", { date: day(instructions.expiresAt) })}</p>
+      ) : null}
+
       <p className="mt-4 text-xs opacity-80">
         {t("safety")}
       </p>
+
+      {children ? <div className="mt-4 flex flex-wrap gap-2 border-t border-blue-300/60 pt-4 dark:border-blue-900/50">{children}</div> : null}
     </div>
   );
 }
