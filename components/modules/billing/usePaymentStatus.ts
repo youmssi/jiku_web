@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { refreshQuietly } from "@/lib/refresh-quietly";
 import { fetchPaymentStatusAction } from "@/components/modules/billing/billing.service";
 import type { PaymentStatusView } from "@/components/modules/billing/schema";
 
@@ -35,7 +36,7 @@ export function usePaymentStatus(paymentId: string, initial: PaymentStatusView) 
       if (active && next) setPayment(next);
     }
 
-    const timer = setInterval(poll, POLL_INTERVAL_MS);
+    const timer = setInterval(() => void refreshQuietly(poll), POLL_INTERVAL_MS);
     return () => {
       active = false;
       clearInterval(timer);
