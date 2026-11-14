@@ -16,6 +16,7 @@ import type { ResourceAvailability, WeeklyRange } from "./schema";
 const FIRST_MONDAY_UTC = Date.UTC(2024, 0, 1);
 const DAYS = [1, 2, 3, 4, 5, 6, 7] as const;
 const NEW_RANGE = { start: "09:00", end: "18:00" };
+const LAST_MINUTE = 23 * 60 + 59;
 
 interface Range {
   start: string;
@@ -45,6 +46,29 @@ function runs(week: Week): [number, number, Range[]][] {
     else result.push([day, day, week[day]]);
   }
   return result;
+}
+
+function toMinutes(time: string): number {
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+function toTime(minutes: number): string {
+  const clamped = Math.min(Math.max(minutes, 0), LAST_MINUTE);
+  return `${String(Math.floor(clamped / 60)).padStart(2, "0")}:${String(clamped % 60).padStart(2, "0")}`;
+}
+
+/**
+ * The range added after the day's last one: it starts an hour after that one
+ * ends and lasts an hour, so it is valid as soon as it appears. A day already
+ * running to midnight gets the default range for the organizer to adjust.
+ */
+function nextRange(ranges: Range[]): Range {
+  const lastEnd = ranges.at(-1)?.end;
+  if (!lastEnd) return { ...NEW_RANGE };
+  const start = toMinutes(lastEnd) + 60;
+  if (start + 60 > LAST_MINUTE) return { ...NEW_RANGE };
+  return { start: toTime(start), end: toTime(start + 60) };
 }
 
 function toRows(week: Week): WeeklyRange[] {
@@ -138,15 +162,15 @@ export function WeeklyHours({ resourceId, initial }: { resourceId: string; initi
           const open = ranges.length > 0;
           const switchId = `${resourceId}-day-${day}`;
           return (
-            <li key={day} className="flex flex-col gap-2 py-2 sm:flex-row sm:items-start">
-              <label htmlFor={switchId} className="flex min-h-11 w-40 shrink-0 items-center gap-3 text-sm font-medium capitalize">
+            <li key={day} className="flex min-w-0 flex-col gap-2 py-2 sm:flex-row sm:items-start">
+              <label htmlFor={switchId} className="flex min-h-11 shrink-0 items-center gap-3 text-sm font-medium capitalize sm:w-32">
                 <Switch id={switchId} checked={open} onCheckedChange={(checked) => setDay(day, checked ? [{ ...NEW_RANGE }] : [])} />
                 {dayLabels[index]}
               </label>
               {open ? (
-                <div className="flex flex-1 flex-col gap-2">
+                <div className="flex min-w-0 flex-1 flex-col gap-2">
                   {ranges.map((range, rangeIndex) => (
-                    <div key={rangeIndex} className="flex items-center gap-2">
+                    <div key={rangeIndex} className="flex min-w-0 items-center gap-2">
                       <Input
                         type="time"
                         value={range.start}
@@ -155,7 +179,7 @@ export function WeeklyHours({ resourceId, initial }: { resourceId: string; initi
                         onChange={(event) =>
                           setDay(day, ranges.map((r, i) => (i === rangeIndex ? { ...r, start: event.target.value } : r)))
                         }
-                        className="w-36"
+                        className="min-w-0 flex-1"
                       />
                       <span aria-hidden>–</span>
                       <Input
@@ -166,10 +190,11 @@ export function WeeklyHours({ resourceId, initial }: { resourceId: string; initi
                         onChange={(event) =>
                           setDay(day, ranges.map((r, i) => (i === rangeIndex ? { ...r, end: event.target.value } : r)))
                         }
-                        className="w-36"
+                        className="min-w-0 flex-1"
                       />
                       {ranges.length > 1 ? (
                         <Button
+                          className="shrink-0"
                           type="button"
                           variant="ghost"
                           size="icon"
@@ -185,7 +210,7 @@ export function WeeklyHours({ resourceId, initial }: { resourceId: string; initi
                     type="button"
                     variant="link"
                     className="self-start px-0 max-md:px-0"
-                    onClick={() => setDay(day, [...ranges, { start: ranges.at(-1)?.end ?? NEW_RANGE.start, end: NEW_RANGE.end }])}
+                    onClick={() => setDay(day, [...ranges, nextRange(ranges)])}
                   >
                     <Plus aria-hidden />
                     {t("addRange")}
