@@ -1012,6 +1012,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/billing/payment-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["paymentRequestOpen"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/payment-requests/{paymentId}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["paymentRequestCancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/payment-requests/{paymentId}/transfer-sent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["paymentRequestTransferSent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/billing/payments": {
         parameters: {
             query?: never;
@@ -4301,9 +4349,12 @@ export interface components {
             id?: string;
             provider?: string;
             reference?: string;
+            rejectionReason?: string | null;
             status?: string;
             tenantId?: string;
             tier?: string;
+            /** Format: date-time */
+            transferDeclaredAt?: string | null;
         };
         AdminRefreshRequest: {
             refreshToken?: string;
@@ -5178,15 +5229,27 @@ export interface components {
         ManualPaymentInstructions: {
             /** Format: int64 */
             amountMinor?: number;
+            /** Format: date-time */
+            createdAt?: string | null;
             currency?: string;
+            /** Format: uuid */
+            eventId?: string | null;
+            eventName?: string | null;
+            /** Format: date-time */
+            expiresAt?: string | null;
             /** Format: int64 */
             guests?: number | null;
+            kind?: string;
+            /** Format: int32 */
+            months?: number | null;
             payee?: components["schemas"]["PayeeDetails"];
             /** Format: uuid */
             paymentId?: string;
             reference?: string;
             status?: string;
             tier?: string;
+            /** Format: date-time */
+            transferDeclaredAt?: string | null;
         };
         MarkPaidRequest: {
             /** @enum {string} */
@@ -5538,11 +5601,16 @@ export interface components {
             /** Format: uuid */
             eventId?: string | null;
             eventName?: string;
+            eventTitle?: string | null;
             /** Format: int64 */
             guests?: number | null;
             kind?: string;
+            /** Format: int32 */
+            months?: number | null;
             /** Format: uuid */
             paymentId?: string;
+            provider?: string;
+            rejectionReason?: string | null;
             status?: string;
             tier?: string;
         };
@@ -6143,9 +6211,14 @@ export interface components {
             attention?: "SERVICES_PAUSED" | "GRACE" | "OVER_LIMIT" | "EXPIRING_SOON" | "NONE";
             /** Format: date-time */
             expiresAt?: string | null;
+            freePlan?: boolean;
             overLimit?: boolean;
             /** Format: date-time */
             pausesAt?: string | null;
+            /** Format: int64 */
+            people?: number;
+            /** Format: int64 */
+            peopleCovered?: number | null;
             plan?: string;
             servicesPaused?: boolean;
             status?: string;
@@ -8160,6 +8233,70 @@ export interface operations {
                 "application/json": components["schemas"]["PackRequest"];
             };
         };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ManualPaymentInstructions"];
+                };
+            };
+        };
+    };
+    paymentRequestOpen: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ManualPaymentInstructions"][];
+                };
+            };
+        };
+    };
+    paymentRequestCancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                paymentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ManualPaymentInstructions"];
+                };
+            };
+        };
+    };
+    paymentRequestTransferSent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                paymentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {

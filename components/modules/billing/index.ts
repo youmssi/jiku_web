@@ -8,12 +8,14 @@ export { PackSection } from "./pack-section";
 export { PayOnlineButton } from "./pay-online-button";
 export { PaymentReturn, PaymentReturnMissing } from "./payment-return";
 export { ActivationInstructions } from "./activation-instructions";
+export { PendingPayments } from "./pending-payments";
 export {
   fetchInvoicesAction,
   issueInvoiceAction,
   fetchSubscriptionAction,
   fetchPackAction,
   fetchPaymentStatusAction,
+  fetchOpenRequestsAction,
 } from "./billing.service";
 export type {
   InvoiceSummary,

@@ -22,7 +22,7 @@
     "people": "{active, plural, one {# person serves your clients} other {# people serve your clients}}",
     "included": "{count} included",
     "change": "Renew or change",
-    "cancel": "Cancel",
+    "cancel": "Close",
     "choose": "Choose a plan",
     "plan": {
       "base": "{amount} a month",
@@ -53,7 +53,11 @@
     "remindersOut": "You have sent this month's {limit} free WhatsApp reminders. No more reminders go out this month: move to Services Pro: 1,000 reminders per person a month.",
     "remindersLow": "{left, plural, one {You have # free WhatsApp reminder left this month.} other {You have # free WhatsApp reminders left this month.}}",
     "remindersOutPaid": "You have sent this month's {limit} WhatsApp reminders from the Jikū number. Reminders go by the service's other channels until next month. Connect your own WhatsApp number to have no limit.",
-    "remindersLowPaid": "{left, plural, one {You have # WhatsApp reminder left this month from the Jikū number.} other {You have # WhatsApp reminders left this month from the Jikū number.}}"
+    "remindersLowPaid": "{left, plural, one {You have # WhatsApp reminder left this month from the Jikū number.} other {You have # WhatsApp reminders left this month from the Jikū number.}}",
+    "outgrownBadge": "Team too large",
+    "outgrownPaused": "Free for {covered, plural, one {one person} other {# people}}: your bookings are paused.",
+    "outgrownUntil": "Free for {covered, plural, one {one person} other {# people}}: choose a plan before {date}.",
+    "outgrownNoDate": "Free for {covered, plural, one {one person} other {# people}}: choose a team plan."
   },
   "event": {
     "allowanceTitle": "This event's capacity",
@@ -87,7 +91,7 @@
     "coveredText": "This event draws on your plan's guests for the month: nothing to buy. Track and top up your plan from the Billing page."
   },
   "instructions": {
-    "title": "Activation requested: {purchase}, {amount}",
+    "title": "Payment requested: {purchase}, {amount}",
     "text": "Send the exact amount to the account below and include this reference with your transfer. Our team confirms the payment and unlocks your access, usually within a few hours, and you'll get a confirmation email.",
     "copy": "Copy",
     "copied": "Copied",
@@ -96,8 +100,7 @@
     "bank": "Bank transfer",
     "questions": "Questions",
     "or": "or",
-    "safety": "Activation is confirmed by our team once the transfer is received: it is not instant. Never share card numbers or passwords; we only need the transfer itself, with the reference.",
-    "guests": "{count, plural, one {# guest} other {# guests}}"
+    "safety": "Activation is confirmed by our team once the transfer is received: it is not instant. Never share card numbers or passwords; we only need the transfer itself, with the reference."
   },
   "history": {
     "emptyTitle": "No payments yet",
@@ -111,11 +114,18 @@
     "download": "Download",
     "none": "—",
     "statuses": {
-      "PENDING": "Pending",
+      "PENDING": "Waiting",
       "SUCCEEDED": "Paid",
-      "FAILED": "Failed"
+      "CANCELLED": "Cancelled",
+      "EXPIRED": "Expired",
+      "REJECTED": "Declined",
+      "UNFINISHED": "Not completed"
     },
-    "automatic": "Each confirmed payment issues its invoice and emails it to you once your organization's <settings>legal identity</settings> is complete. Otherwise, the receipt stands."
+    "automatic": "Each confirmed payment issues its invoice and emails it to you once your organization's <settings>legal identity</settings> is complete. Otherwise, the receipt stands.",
+    "reason": "Reason: {reason}",
+    "showAll": "Show all ({count})",
+    "showMain": "Show paid and waiting payments only",
+    "filtered": "Cancelled, expired, declined and unfinished payments are hidden."
   },
   "invoices": {
     "emptyTitle": "No invoices yet",
@@ -240,6 +250,46 @@
       "description": "Your {plan} subscription ends on {date}. Renew it so clients keep booking.",
       "action": "Renew"
     },
-    "askManager": "Let the person who manages your organization's billing know."
+    "askManager": "Let the person who manages your organization's billing know.",
+    "outgrown": {
+      "title": "Your team has outgrown {plan}",
+      "pausedTitle": "Your services are paused",
+      "description": "Your team has {people} people and {plan} covers {covered}. Choose a team plan before {date}, or bookings will pause.",
+      "descriptionNoDate": "Your team has {people} people and {plan} covers {covered}. Choose a team plan so clients keep booking.",
+      "pausedDescription": "Your team has {people} people and {plan} covers {covered}: clients can no longer book or take a line ticket. Appointments already booked and your events carry on.",
+      "upgrade": "Choose a team plan",
+      "shrink": "Keep {covered, plural, one {one person} other {# people}}"
+    }
+  },
+  "purchase": {
+    "GUESTS": "{event}: {count, plural, one {# guest} other {# guests}}",
+    "SUBSCRIPTION": "{plan} subscription, {months, plural, one {# month} other {# months}}",
+    "PACK": "Pro Organizer, {months, plural, one {# month} other {# months}}",
+    "PACK_EXTRA": "Pro Organizer: {count, plural, one {# extra guest} other {# extra guests}}",
+    "COMMISSION": "Ticket sales commission: {event}",
+    "event": "Event"
+  },
+  "requests": {
+    "title": "Waiting payments",
+    "intro": "These requests are waiting for your transfer. Access is unlocked as soon as our team confirms it arrived.",
+    "expires": "Expires on {date} without a transfer.",
+    "sentOn": "Transfer reported on {date}. Our team confirms it as soon as it arrives.",
+    "markSent": "I've sent the transfer",
+    "marking": "Sending…",
+    "sentDone": "Thanks, our team has been told.",
+    "cancel": "Cancel the request",
+    "cancelTitle": "Cancel this request?",
+    "cancelText": "Reference {reference} will no longer be expected. If you already sent the transfer, keep the request: our team will confirm it.",
+    "cancelConfirm": "Cancel the request",
+    "keep": "Keep it",
+    "cancelled": "Request cancelled.",
+    "replaceTitle": "Replace the waiting request?",
+    "replaceText": "A request is already waiting for your transfer: {purchase}, {amount}, reference {reference}. The new one replaces it. Only send the new request's amount, with its new reference.",
+    "replaceConfirm": "Replace",
+    "errors": {
+      "forbidden": "Only the person who manages billing can change this request.",
+      "gone": "This request is no longer waiting. Reload the page.",
+      "failed": "The request couldn't be changed. Try again."
+    }
   }
 }
