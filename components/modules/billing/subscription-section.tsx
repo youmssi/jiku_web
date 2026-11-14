@@ -5,6 +5,7 @@ import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { Check } from "lucide-react";
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { formatAmount } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 import { requestSubscriptionAction } from "@/components/modules/billing/billing.service";
-import { ActivationInstructions } from "@/components/modules/billing/activation-instructions";
+import { ReplaceRequestDialog } from "@/components/modules/billing/replace-request-dialog";
 import { PayOnlineButton } from "@/components/modules/billing/pay-online-button";
 import type {
   ManualPaymentInstructions,
@@ -28,15 +29,19 @@ const REMINDERS_LOW_SHARE = 0.8;
  * The organizer's services subscription (JIKU-90, priced per team since ADR 105):
  * the plan and what it costs for this team, and a request for a
  * prepayment of one month or a year (two months free), paid online when offered
- * or through the manual Mobile Money flow.
+ * or through the manual Mobile Money flow. A request that would replace one
+ * still waiting asks first (JIKU-307); waiting requests show at the top of billing.
  */
 export function SubscriptionSection({
   initial,
   online,
+  waiting,
 }: {
   initial: SubscriptionView;
   /** Online payment is offered next to the manual transfer (JIKU-165). */
   online: boolean;
+  /** The subscription request still waiting for its transfer, if any (JIKU-307). */
+  waiting: ManualPaymentInstructions | null;
 }) {
   const t = useTranslations("billing.subscription");
   const locale = useLocale();
@@ -53,8 +58,9 @@ export function SubscriptionSection({
     (current && !isFree ? current : paidOptions.find((option) => option.teamMonthlyMinor !== null))?.name ?? "",
   );
   const [months, setMonths] = useState(subscription.months[0]?.months ?? 1);
-  const [instructions, setInstructions] = useState<ManualPaymentInstructions | null>(null);
+  const [replacing, setReplacing] = useState<ManualPaymentInstructions | null>(null);
   const [isSaving, startSave] = useTransition();
+  const router = useRouter();
 
   const status = subscription.status as SubscriptionStatus;
   const outgrown = subscription.overLimit && isFree;
@@ -70,15 +76,24 @@ export function SubscriptionSection({
     selected?.teamMonthlyMinor != null && period ? selected.teamMonthlyMinor * period.chargedMonths : null;
 
   function submitRequest() {
+    if (waiting && (waiting.tier !== plan || waiting.months !== months || waiting.amountMinor !== total)) {
+      setReplacing(waiting);
+      return;
+    }
+    sendRequest();
+  }
+
+  function sendRequest() {
+    setReplacing(null);
     startSave(async () => {
       const result = await requestSubscriptionAction({ plan, months });
       if (!result.ok) {
         toast.error(result.error);
         return;
       }
-      setInstructions(result.instructions);
       setOpen(false);
       toast.success(t("ready"));
+      router.refresh();
     });
   }
 
@@ -94,12 +109,22 @@ export function SubscriptionSection({
           <div>
             <p className="flex items-center gap-2 text-base font-semibold">
               {t("title", { plan: subscription.plan })}
-              <Badge variant={status === "ACTIVE" ? "secondary" : "destructive"}>{t(`status.${status}`)}</Badge>
+              {outgrown ? (
+                <Badge variant="destructive">{t("outgrownBadge")}</Badge>
+              ) : (
+                <Badge variant={status === "ACTIVE" ? "secondary" : "destructive"}>{t(`status.${status}`)}</Badge>
+              )}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              {isFree
-                ? t("free")
-                : t(status === "ACTIVE" ? "renews" : "ended", { date: day(subscription.expiresAt) })}
+              {outgrown
+                ? status === "EXPIRED"
+                  ? t("outgrownPaused", { covered: subscription.resourcesIncluded })
+                  : subscription.expiresAt
+                    ? t("outgrownUntil", { covered: subscription.resourcesIncluded, date: day(subscription.expiresAt) })
+                    : t("outgrownNoDate", { covered: subscription.resourcesIncluded })
+                : isFree
+                  ? t("free")
+                  : t(status === "ACTIVE" ? "renews" : "ended", { date: day(subscription.expiresAt) })}
             </p>
           </div>
           <Button
@@ -143,7 +168,7 @@ export function SubscriptionSection({
         </dl>
       </div>
 
-      {instructions ? <ActivationInstructions instructions={instructions} /> : null}
+      <ReplaceRequestDialog waiting={replacing} onConfirm={sendRequest} onCancel={() => setReplacing(null)} />
 
       {open ? (
         <div className="flex flex-col gap-5 rounded-xl border p-5">

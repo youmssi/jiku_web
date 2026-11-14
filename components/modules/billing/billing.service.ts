@@ -47,6 +47,44 @@ export async function requestActivationAction(
   return { instructions };
 }
 
+// ─── Waiting transfer requests (JIKU-307) ────────────────────────────────────
+
+/** Every transfer request of the organization still waiting, newest first. */
+export async function fetchOpenRequestsAction(): Promise<ManualPaymentInstructions[]> {
+  const response = await serverFetch("/billing/payment-requests");
+  if (!response.ok) {
+    if (response.status >= 500) reportApiError(response);
+    return [];
+  }
+  return (await response.json()) as ManualPaymentInstructions[];
+}
+
+/** Cancels a waiting request the organizer no longer needs. */
+export async function cancelRequestAction(paymentId: string): Promise<ActionResult<ManualPaymentInstructions>> {
+  return changeRequest(paymentId, "cancel");
+}
+
+/** Tells the payments team the transfer for a waiting request is sent. */
+export async function transferSentAction(paymentId: string): Promise<ActionResult<ManualPaymentInstructions>> {
+  return changeRequest(paymentId, "transfer-sent");
+}
+
+async function changeRequest(
+  paymentId: string,
+  action: "cancel" | "transfer-sent",
+): Promise<ActionResult<ManualPaymentInstructions>> {
+  const t = await getTranslations("billing.requests.errors");
+  if (!UUID.test(paymentId)) return fail(t("gone"));
+  const response = await serverFetch(`/billing/payment-requests/${paymentId}/${action}`, { method: "POST" });
+  if (!response.ok) {
+    if (response.status >= 500) reportApiError(response);
+    if (response.status === 401 || response.status === 403) return fail(t("forbidden"));
+    if (response.status === 404 || response.status === 409) return fail(t("gone"));
+    return fail(t("failed"));
+  }
+  return ok((await response.json()) as ManualPaymentInstructions);
+}
+
 // ─── Subscription (JIKU-90) ──────────────────────────────────────────────────
 
 /**

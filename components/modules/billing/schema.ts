@@ -17,21 +17,11 @@ export interface UsageAllowance {
   freeGuests: number;
 }
 
-export interface PaymentHistoryItem {
-  paymentId: string;
-  /** Null for a prepaid subscription renewal (JIKU-90). */
-  eventId: string | null;
-  eventName: string;
-  tier: string;
-  /** GUESTS, SUBSCRIPTION, PACK, PACK_EXTRA or COMMISSION. */
-  kind: string;
-  /** Guests the payment bought or settled; null when it bought none. */
-  guests: number | null;
-  amountMinor: number;
-  currency: string;
-  status: string;
-  createdAt: string;
-}
+/**
+ * One payment of the organization (JIKU-35). `status` is PENDING, SUCCEEDED, FAILED,
+ * CANCELLED or EXPIRED (JIKU-307); `provider` is `manual` for a transfer request.
+ */
+export type PaymentHistoryItem = Schema<"PaymentHistoryItem">;
 
 /** The per-guest price of an event in the organization's billing currency (ADR 109). */
 export type EventPricing = Schema<"EventPricingView">;
@@ -41,28 +31,12 @@ export interface PaymentInstruction {
   value: string;
 }
 
-export interface PayeeDetails {
-  payeeName: string | null;
-  contactEmail: string | null;
-  contactPhone: string | null;
-  mobileMoneyNumber: string | null;
-  mobileMoneyOperator: string | null;
-  bankDetails: string | null;
-}
+export type PayeeDetails = Schema<"PayeeDetails">;
 
-// Manual (concierge) activation request (JIKU-41/45): the client prepays the
-// displayed payee quoting the reference; the team confirms and unlocks.
-export interface ManualPaymentInstructions {
-  paymentId: string;
-  reference: string;
-  tier: string;
-  /** Paid guests the event is raised to; null for any other purchase. */
-  guests: number | null;
-  amountMinor: number;
-  currency: string;
-  status: string;
-  payee: PayeeDetails;
-}
+// Manual (concierge) payment request (JIKU-41/45, JIKU-307): the client pays the
+// displayed payee quoting the reference; the team confirms and unlocks. It waits
+// until then, and can be cancelled, replaced or expire.
+export type ManualPaymentInstructions = Schema<"ManualPaymentInstructions">;
 
 
 // ─── Invoices (JIKU-69) ─────────────────────────────────────────────────────
