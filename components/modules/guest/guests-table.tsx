@@ -72,6 +72,8 @@ export interface GuestRow {
   email: string | null;
   phone: string | null;
   excludedFromInvitations: boolean;
+  /** How the guest joined (JIKU-304): a card answer or a purchase needs no invitation. */
+  origin: GuestOrigin;
   /** When the guest came in; decides whether a certificate can be issued (JIKU-95). */
   checkedInAt: string | null;
   ticketTypeId: string | null;
@@ -82,6 +84,8 @@ export interface GuestRow {
   amountDueCurrency: string | null;
   invitations: Record<string, string | null>;
 }
+
+export type GuestOrigin = "INVITED" | "PURCHASED" | "OPEN";
 
 export type ResponseFilter = "ALL" | "CONFIRMED" | "PENDING" | "DECLINED" | "PAYMENT_DUE";
 
@@ -162,7 +166,9 @@ export function GuestsTable({
           <div className="flex min-w-0 flex-col">
             <span className="flex items-center gap-2 font-medium">
               {row.original.name}
-              {row.original.excludedFromInvitations ? <Badge variant="outline">{t("excluded")}</Badge> : null}
+              {row.original.excludedFromInvitations && row.original.origin === "INVITED" ? (
+                <Badge variant="outline">{t("excluded")}</Badge>
+              ) : null}
             </span>
             <span className="truncate text-xs text-muted-foreground">
               {row.original.email ?? row.original.phone ?? t("noContact")}
@@ -221,7 +227,7 @@ export function GuestsTable({
         id: "invitation",
         header: t("columns.invitation"),
         enableSorting: false,
-        cell: ({ row }) => <InvitationBadges invitations={row.original.invitations} />,
+        cell: ({ row }) => <InvitationBadges invitations={row.original.invitations} origin={row.original.origin} />,
       },
       {
         id: "actions",
@@ -308,7 +314,7 @@ function GuestCards({
               <ItemContent>
                 <ItemTitle>
                   {row.name}
-                  {row.excludedFromInvitations ? <Badge variant="outline">{t("excluded")}</Badge> : null}
+                  {row.excludedFromInvitations && row.origin === "INVITED" ? <Badge variant="outline">{t("excluded")}</Badge> : null}
                 </ItemTitle>
                 <ItemDescription>{row.email ?? row.phone ?? t("noContact")}</ItemDescription>
                 <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
@@ -416,11 +422,18 @@ function PaymentBadge({ row }: { row: GuestRow }) {
   }
 }
 
-function InvitationBadges({ invitations }: { invitations: Record<string, string | null> }) {
+function InvitationBadges({
+  invitations,
+  origin,
+}: {
+  invitations: Record<string, string | null>;
+  origin: GuestOrigin;
+}) {
   const t = useTranslations("guests.invitation");
   const reached = INVITATION_CHANNELS.filter((channel) => invitations[channel]);
   if (reached.length === 0) {
-    return <span className="text-xs text-muted-foreground">{t("notSent")}</span>;
+    const label = origin === "OPEN" ? t("viaCard") : origin === "PURCHASED" ? t("purchased") : t("notSent");
+    return <span className="text-xs text-muted-foreground">{label}</span>;
   }
   return (
     <div className="flex flex-wrap gap-1">
