@@ -32,10 +32,6 @@ const dsn = process.env.NEXT_PUBLIC_ERROR_TRACKING_DSN;
 const release = process.env.NEXT_PUBLIC_ERROR_TRACKING_RELEASE;
 const beacon = process.env.NEXT_PUBLIC_ERROR_BEACON_URL;
 
-export function isErrorTrackingEnabled(): boolean {
-    return Boolean(dsn);
-}
-
 /**
  * Scrubs every string in the context. Non-string values are structural (status
  * codes, flags) and pass through; `requestId` is an opaque identifier and is the
