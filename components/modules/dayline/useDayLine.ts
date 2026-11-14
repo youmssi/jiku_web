@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useLiveSignal, refreshQuietly } from "@/components/shared";
+import { useLiveSignal } from "@/components/shared";
+import { refreshQuietly } from "@/lib/refresh-quietly";
 import { fetchDayLineAction, fetchDayLineLiveTicketAction } from "@/components/modules/dayline/dayline.service";
 import type { DayLineAuth, DayLineView } from "@/components/modules/dayline/schema";
 

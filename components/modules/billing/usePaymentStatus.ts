@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { refreshQuietly } from "@/components/shared";
+import { refreshQuietly } from "@/lib/refresh-quietly";
 import { fetchPaymentStatusAction } from "@/components/modules/billing/billing.service";
 import type { PaymentStatusView } from "@/components/modules/billing/schema";
 

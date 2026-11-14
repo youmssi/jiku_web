@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useLiveSignal, refreshQuietly } from "@/components/shared";
+import { useLiveSignal } from "@/components/shared";
+import { refreshQuietly } from "@/lib/refresh-quietly";
 import { loadLineLiveTicket, loadLineTicket, type AppointmentLinkRef } from "@/components/modules/appointment/appointment.service";
 import type { ClientLineTicketView } from "@/components/modules/appointment/schema";
 

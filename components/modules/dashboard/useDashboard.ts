@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useLiveSignal, refreshQuietly } from "@/components/shared";
+import { useLiveSignal } from "@/components/shared";
+import { refreshQuietly } from "@/lib/refresh-quietly";
 import { fetchDashboardAction, fetchDashboardLiveTicketAction } from "@/components/modules/dashboard/dashboard.service";
 import type { DashboardData } from "@/components/modules/dashboard/schema";
 
