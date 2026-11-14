@@ -80,6 +80,7 @@ export async function GuestsView({ eventId, answer }: { eventId: string; answer?
     email: guest.email ?? null,
     phone: guest.phoneNumber ?? null,
     excludedFromInvitations: guest.excludedFromInvitations,
+    origin: guest.origin ?? "INVITED",
     checkedInAt: guest.checkedInAt ?? null,
     ticketTypeId: guest.ticketTypeId ?? null,
     rsvpStatus: guest.rsvpStatus ?? "PENDING",

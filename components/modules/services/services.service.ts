@@ -16,7 +16,6 @@ import type {
   ServiceRequirement,
   ServiceResource,
   ServiceSummary,
-  StaffLink,
   StaffLinkCreated,
   WeeklyRange,
 } from "./schema";
@@ -174,14 +173,6 @@ export async function fetchBookingLinkAction(
   });
 }
 
-export async function listStaffLinksAction(serviceId: string): Promise<ActionResult<StaffLink[]>> {
-  const t = await getTranslations("services.errors");
-  const response = await serverFetch(`/services/${serviceId}/staff-links`);
-  return fromResponse<StaffLink[]>(response, {
-    default: t("staffLoad"),
-  });
-}
-
 export async function createStaffLinkAction(
   serviceId: string,
   label: string,
@@ -204,14 +195,6 @@ export async function revokeStaffLinkAction(serviceId: string, staffId: string):
   });
   return response.ok ? { ok: true, data: null } : fromResponse<null>(response, {
     default: t("staffRevoke"),
-  });
-}
-
-export async function listResourcesAction(): Promise<ActionResult<ServiceResource[]>> {
-  const t = await getTranslations("services.errors");
-  const response = await serverFetch(`/resources`);
-  return fromResponse<ServiceResource[]>(response, {
-    default: t("resourcesLoad"),
   });
 }
 
@@ -240,14 +223,6 @@ export async function setResourceActiveAction(id: string, active: boolean): Prom
   });
   return fromResponse<ServiceResource>(response, {
     default: t("resourceUpdate"),
-  });
-}
-
-export async function listRequirementsAction(serviceId: string): Promise<ActionResult<ServiceRequirement[]>> {
-  const t = await getTranslations("services.errors");
-  const response = await serverFetch(`/services/${serviceId}/requirements`);
-  return fromResponse<ServiceRequirement[]>(response, {
-    default: t("requirementsLoad"),
   });
 }
 

@@ -37,6 +37,8 @@
   },
   "invitation": {
     "notSent": "Not sent yet",
+    "viaCard": "Answered on the card",
+    "purchased": "Bought a ticket",
     "PENDING": "sending",
     "QUEUED": "queued",
     "SENT": "sent",

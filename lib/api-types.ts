@@ -5017,6 +5017,8 @@ export interface components {
             /** Format: uuid */
             id?: string;
             lastName?: string;
+            /** @enum {string} */
+            origin?: "INVITED" | "PURCHASED" | "OPEN";
             /** @enum {string|null} */
             paymentStatus?: "NOT_REQUIRED" | "DUE" | "DUE_AFTER_SERVICE" | "PAID" | null;
             phoneNumber?: string | null;
