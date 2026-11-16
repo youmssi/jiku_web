@@ -17,6 +17,11 @@ export const routing = defineRouting({
   // market) and keeps it explicit for every other locale (/en/...). Switching
   // to "always" later only requires changing this line.
   localePrefix: "as-needed",
+  // No redirect from the browser's language (JIKU-310): search engines crawl
+  // with an English Accept-Language, so redirecting "/" to "/en" made every
+  // French page look like a duplicate of its English one. The URL decides the
+  // language, and the language switcher moves between them.
+  localeDetection: false,
   localeCookie: {
     name: "jiku.locale",
     maxAge: 60 * 60 * 24 * 365,
