@@ -1,7 +1,7 @@
 import { localeRedirect } from "@/i18n/redirect";
 import { AppBreadcrumb, AppSidebar, type SidebarProject } from "@/components/modules/dashboard";
 import { RatingPrompt } from "@/components/modules/feedback";
-import { NavCommandPalette } from "@/components/shared";
+import { NavCommandPalette, ProductAnalytics } from "@/components/shared";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -78,6 +78,7 @@ export default async function OrganizerAppLayout({
           <div className="flex flex-1 flex-col pb-24 md:pb-16">{children}</div>
         </SidebarInset>
         <RatingPrompt />
+        <ProductAnalytics userId={context.userId} organizationId={context.activeTenantId} role={context.role} />
       </SidebarProvider>
     </TooltipProvider>
   );
