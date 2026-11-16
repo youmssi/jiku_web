@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
+import { withoutLocalePrefix } from "@/lib/locale-path";
 
 import { GUEST_ONLY_LOCALES, guestRouting, isGuestRoute, routing } from "@/i18n/routing";
 import { COOKIES, ROUTES } from "@/lib/constants";
@@ -29,14 +30,6 @@ const GUARDED_PREFIXES = [
   ROUTES.ONBOARDING,
 ];
 
-/** Strip the optional locale prefix so we can match on the canonical route. */
-function stripLocale(pathname: string): string {
-  for (const loc of guestRouting.locales) {
-    if (pathname === `/${loc}`) return "/";
-    if (pathname.startsWith(`/${loc}/`)) return pathname.slice(loc.length + 1);
-  }
-  return pathname;
-}
 
 /**
  * Only a page load may move the locale cookie. The router's own fetches
@@ -71,7 +64,7 @@ export function proxy(request: NextRequest): NextResponse {
   // API routes never need locale rewriting or auth at this layer.
   if (pathname.startsWith("/api/")) return NextResponse.next();
 
-  const bareRoute = stripLocale(pathname);
+  const bareRoute = withoutLocalePrefix(pathname, guestRouting.locales);
   const guestRoute = isGuestRoute(bareRoute);
 
   // A guest-only locale outside the guest screens (an /ar link to the home page
@@ -81,6 +74,14 @@ export function proxy(request: NextRequest): NextResponse {
     const url = request.nextUrl.clone();
     url.pathname = bareRoute;
     return NextResponse.redirect(url);
+  }
+
+  // The default locale has no prefix: /fr/... is the same page as /... for good
+  // (308), so search engines keep one address per page (JIKU-310).
+  if (prefix === routing.defaultLocale) {
+    const url = request.nextUrl.clone();
+    url.pathname = bareRoute;
+    return NextResponse.redirect(url, 308);
   }
 
   // Let next-intl decide the locale (it may redirect — return that immediately).
@@ -111,7 +112,9 @@ export function proxy(request: NextRequest): NextResponse {
       locale && locale !== routing.defaultLocale
         ? `/${locale}${ROUTES.LOGIN}`
         : ROUTES.LOGIN;
-    url.searchParams.set("next", pathname);
+    // The page to return to, without its locale: the login redirect adds the
+    // locale back, so keeping it here would land on /en/en/... (JIKU-310).
+    url.searchParams.set("next", bareRoute);
     return NextResponse.redirect(url);
   }
 
