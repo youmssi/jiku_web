@@ -283,6 +283,7 @@ export const LEGAL_FR: LegalDocuments = {
             "Paiements à Jikū : DEXPAY (DEXCHANGE PAY), pour les paiements en ligne par Mobile Money, et notre banque, pour les virements que vous nous envoyez.",
             "Suivi des erreurs : Sentry.",
             "Mesure d'audience : Umami, sans cookie, sur une instance que nous administrons.",
+            "Mesure d'usage de l'espace organisateur : PostHog (Union européenne), sans cookie et avec toutes les saisies et tous les textes masqués ; jamais sur les pages des invités.",
             "Échanges avec l'équipe Jikū (ventes et assistance) : Chatwoot et n8n, sur des instances que nous administrons ; Anthropic (Claude), pour un assistant automatique qui répond aux premiers messages et passe la main à une personne de l'équipe ; Cal.com, pour réserver un rendez-vous avec nous. Ces outils ne reçoivent que les messages envoyés à Jikū, jamais les données des invités et clients des organisations.",
           ],
           "Nous ne communiquons de données à une autorité que sur demande légale.",
