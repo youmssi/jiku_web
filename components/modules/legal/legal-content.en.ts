@@ -284,6 +284,7 @@ export const LEGAL_EN: LegalDocuments = {
             "Payments to Jikū: DEXPAY (DEXCHANGE PAY), for online Mobile Money payments, and our bank, for the transfers you send us.",
             "Error tracking: Sentry.",
             "Audience measurement: Umami, cookieless, on an instance we operate.",
+            "Usage measurement of the organizer space: PostHog (European Union), without cookies and with every input and text masked; never on guest pages.",
             "Conversations with the Jikū team (sales and support): Chatwoot and n8n, on instances we operate; Anthropic (Claude), for an automated assistant that answers first messages and hands over to a person on the team; Cal.com, to book a meeting with us. These tools only receive messages sent to Jikū, never the data of the organizations' guests and clients.",
           ],
           "We disclose data to an authority only on a lawful request.",
