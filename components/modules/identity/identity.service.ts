@@ -21,6 +21,8 @@ import {
   type ResetPasswordInput,
 } from "@/components/modules/identity/schema";
 import { safeNext } from "@/lib/safe-next";
+import { withoutLocalePrefix } from "@/lib/locale-path";
+import { guestRouting } from "@/i18n/routing";
 
 export async function registerAction(
   input: RegisterInput,
@@ -53,7 +55,7 @@ export async function registerAction(
   await setAuthCookies(tokens);
   // The organization exists already; the address is confirmed later, before
   // the first invitation leaves (JIKU-253).
-  return localeRedirect(safeNext(next, ROUTES.DASHBOARD));
+  return localeRedirect(afterSignIn(next));
 }
 
 export async function loginAction(input: LoginInput, next?: string): Promise<ActionResult> {
@@ -89,7 +91,7 @@ export async function loginAction(input: LoginInput, next?: string): Promise<Act
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
   // The app layout bounces members with no organization to onboarding.
-  return localeRedirect(safeNext(next, ROUTES.DASHBOARD));
+  return localeRedirect(afterSignIn(next));
 }
 
 /** Exchanges the Google Identity Services credential for a session (JIKU-51). */
@@ -120,7 +122,7 @@ export async function googleLoginAction(idToken: string, next?: string): Promise
   }
   const tokens = (await response.json()) as AuthTokens;
   await setAuthCookies(tokens);
-  return localeRedirect(safeNext(next, ROUTES.DASHBOARD));
+  return localeRedirect(afterSignIn(next));
 }
 
 export async function forgotPasswordAction(input: ForgotPasswordInput): Promise<ActionResult> {
@@ -267,4 +269,12 @@ export async function acceptInvitationAction(token: string): Promise<ActionResul
 export async function logoutAction(): Promise<void> {
   await clearAuthCookies();
   return localeRedirect(ROUTES.LOGIN);
+}
+
+/**
+ * Where a fresh session goes: the page asked for, kept on this site, without a
+ * locale prefix since the redirect adds the current one (JIKU-310).
+ */
+function afterSignIn(next: string | undefined): string {
+  return withoutLocalePrefix(safeNext(next, ROUTES.DASHBOARD), guestRouting.locales);
 }
