@@ -190,3 +190,4 @@ export interface AccountDeletionInput {
 
 export type MfaStatus = Schema<"MfaStatus">;
 export type SessionView = Schema<"SessionView">;
+export type PasskeyView = Schema<"PasskeyView">;

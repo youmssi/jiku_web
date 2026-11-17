@@ -61,3 +61,13 @@ overrides:
   undici@>=7.0.0 <7.29.1: ^7.29.1
   body-parser@>=2.0.0 <2.4.0: ^2.4.0
   zod@>=4.0.0 <4.6.6: ^4.6.6
+
+# Audit exceptions (pnpm audit --prod in CI). Each names an advisory with no
+# fixed release yet and why it cannot be exploited here; remove it, and add the
+# matching override above, as soon as the fixed version is published.
+auditConfig:
+  ignoreGhsas:
+    # picomatch <=4.0.7, ReDoS on crafted extglob patterns (17 Nov 2026). Only the
+    # Sentry build plugin uses it, on patterns from our build configuration,
+    # never on visitor input; 4.0.8 is not published yet.
+    - GHSA-fc5q-39xc-vjpf

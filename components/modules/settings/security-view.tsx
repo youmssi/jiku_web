@@ -26,7 +26,8 @@ import {
   renewBackupCodesAction,
   startTwoStepAction,
 } from "@/components/modules/settings/settings.service";
-import type { MfaStatus, SessionView } from "@/components/modules/settings/schema";
+import type { MfaStatus, PasskeyView, SessionView } from "@/components/modules/settings/schema";
+import { PasskeysCard } from "@/components/modules/settings/passkeys-card";
 
 type Dialogs = "setup" | "disable" | "renew" | null;
 
@@ -34,7 +35,15 @@ type Dialogs = "setup" | "disable" | "renew" | null;
  * Settings → Security (JIKU-317): the authentication app as a second factor,
  * and the browsers signed in to the account, each of which can be signed out.
  */
-export function SecurityView({ mfa, sessions }: { mfa: MfaStatus; sessions: SessionView[] }) {
+export function SecurityView({
+  mfa,
+  sessions,
+  passkeys,
+}: {
+  mfa: MfaStatus;
+  sessions: SessionView[];
+  passkeys: PasskeyView[];
+}) {
   const t = useTranslations("settings.security");
   const formatDateTime = useLocalDateTime();
   const formatDate = useLocalDateTime(true);
@@ -110,6 +119,8 @@ export function SecurityView({ mfa, sessions }: { mfa: MfaStatus; sessions: Sess
           )}
         </CardContent>
       </Card>
+
+      <PasskeysCard passkeys={passkeys} />
 
       <Card>
         <CardHeader>

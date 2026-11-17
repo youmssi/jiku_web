@@ -469,6 +469,33 @@
       "closeOthers": "Sign out all other devices",
       "closed": "Device signed out.",
       "closedOthers": "The other devices are signed out."
+    },
+    "passkeys": {
+      "title": "Passkeys",
+      "description": "Sign in with the fingerprint, face or PIN of your phone or computer, without a password or app code.",
+      "add": "Add a passkey",
+      "unsupported": "This browser does not support passkeys. Try from your phone or a recent browser.",
+      "lastUsed": "Used on {date}",
+      "addedOn": "Added on {date}",
+      "rename": "Rename",
+      "remove": "Remove",
+      "addTitle": "Add a passkey",
+      "addDescription": "Give it a name to recognize it, then follow your device's instructions.",
+      "renameTitle": "Rename the passkey",
+      "renameDescription": "A name that tells you which device holds it.",
+      "label": "Name",
+      "labelPlaceholder": "My phone",
+      "cancel": "Cancel",
+      "save": "Save",
+      "continue": "Continue",
+      "added": "Passkey added.",
+      "renamed": "Passkey renamed.",
+      "removed": "Passkey removed.",
+      "labelRequired": "Give the passkey a name.",
+      "tooMany": "You have reached the maximum number of passkeys. Remove one first.",
+      "notVerified": "The passkey could not be verified. Try again.",
+      "deviceFailed": "Your device could not create the passkey. Try again.",
+      "failed": "That did not go through. Try again."
     }
   }
 }

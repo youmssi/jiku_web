@@ -469,6 +469,33 @@
       "closeOthers": "Déconnecter tous les autres appareils",
       "closed": "Appareil déconnecté.",
       "closedOthers": "Les autres appareils sont déconnectés."
+    },
+    "passkeys": {
+      "title": "Passkeys",
+      "description": "Connectez-vous avec l'empreinte, le visage ou le code de votre téléphone ou ordinateur, sans mot de passe ni code d'application.",
+      "add": "Ajouter une passkey",
+      "unsupported": "Ce navigateur ne gère pas les passkeys. Essayez depuis votre téléphone ou un navigateur récent.",
+      "lastUsed": "Utilisée le {date}",
+      "addedOn": "Ajoutée le {date}",
+      "rename": "Renommer",
+      "remove": "Supprimer",
+      "addTitle": "Ajouter une passkey",
+      "addDescription": "Donnez-lui un nom pour la reconnaître, puis suivez les instructions de votre appareil.",
+      "renameTitle": "Renommer la passkey",
+      "renameDescription": "Un nom qui vous aide à savoir sur quel appareil elle se trouve.",
+      "label": "Nom",
+      "labelPlaceholder": "Mon téléphone",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "continue": "Continuer",
+      "added": "Passkey ajoutée.",
+      "renamed": "Passkey renommée.",
+      "removed": "Passkey supprimée.",
+      "labelRequired": "Donnez un nom à la passkey.",
+      "tooMany": "Vous avez atteint le nombre maximal de passkeys. Supprimez-en une d'abord.",
+      "notVerified": "La passkey n'a pas pu être vérifiée. Réessayez.",
+      "deviceFailed": "Votre appareil n'a pas pu créer la passkey. Réessayez.",
+      "failed": "L'action n'a pas abouti. Réessayez."
     }
   }
 }
