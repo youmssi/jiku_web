@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { Schema } from "@/lib/api-contract";
 
 /** When a client pays for a service: free, before the appointment, or once served. */
 export type ServicePaymentRule = "FREE" | "BEFORE" | "AFTER_SERVICE";
@@ -13,6 +14,8 @@ export interface ServiceSummary {
   /** Null for a free service. */
   priceMinor: number | null;
   currency: string | null;
+  /** Where the service takes place, shown on its card (JIKU-189). */
+  place?: string | null;
 }
 
 /** Canal de rappel d'un service (JIKU-89) : seul WhatsApp est livrable aujourd'hui. */
@@ -129,3 +132,6 @@ export type CreateServiceInput = z.infer<typeof createServiceSchema>;
 
 /** Resource kinds in display order; labels are `services.resourceTypes` keys. */
 export const RESOURCE_TYPES: readonly ResourceType[] = ["PERSON", "LOCATION", "EQUIPMENT"];
+
+/** The Share tab of a service (JIKU-189): its short link, whether it may be shared, and how it did. */
+export type ServiceShare = Schema<"ServiceShareView">;

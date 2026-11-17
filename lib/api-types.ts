@@ -3956,6 +3956,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/r/{code}/open": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["shortLinkPublicOpen"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/resources": {
         parameters: {
             query?: never;
@@ -4255,6 +4271,22 @@ export interface paths {
         put?: never;
         post?: never;
         delete: operations["serviceRemoveRequirement"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{id}/share": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["serviceShare"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -4988,6 +5020,7 @@ export interface components {
         AppointmentBookingRequest: {
             clientName: string;
             clientPhone: string;
+            source?: string | null;
             /** Format: date-time */
             startsAt?: string;
         };
@@ -5004,10 +5037,17 @@ export interface components {
             /** Format: int32 */
             clientsPerSlot?: number;
             confirmationMode?: string;
+            currency?: string | null;
+            /** Format: int32 */
+            durationMinutes?: number | null;
             logoUrl?: string | null;
             name?: string;
             organizerName?: string | null;
             organizerVerification?: string | null;
+            place?: string | null;
+            /** Format: int64 */
+            priceMinor?: number | null;
+            primaryColor?: string | null;
             professionals?: string[];
             /** Format: uuid */
             serviceId?: string;
@@ -6751,6 +6791,16 @@ export interface components {
             /** Format: int32 */
             queued?: number;
         };
+        ServiceCardCounts: {
+            /** Format: int64 */
+            card?: number;
+            /** Format: int64 */
+            link?: number;
+        };
+        ServiceCardOpenRequest: {
+            agent?: string | null;
+            source?: string | null;
+        };
         ServiceConfigUpdate: {
             /** Format: int32 */
             bufferMinutes?: number | null;
@@ -6814,9 +6864,18 @@ export interface components {
             name?: string;
             /** @enum {string} */
             paymentRule?: "FREE" | "BEFORE" | "AFTER_SERVICE";
+            place?: string | null;
             /** Format: int64 */
             priceMinor?: number | null;
             timezone?: string;
+        };
+        ServiceShareView: {
+            bookings?: components["schemas"]["ServiceCardCounts"];
+            canShare?: boolean;
+            code?: string;
+            opens?: components["schemas"]["ServiceCardCounts"];
+            /** Format: int64 */
+            windowDays?: number;
         };
         ServiceStaffCreateRequest: {
             label: string;
@@ -6847,6 +6906,7 @@ export interface components {
             name?: string | null;
             /** @enum {string|null} */
             paymentRule?: "FREE" | "BEFORE" | "AFTER_SERVICE" | null;
+            place?: string | null;
             /** Format: int64 */
             priceMinor?: number | null;
         };
@@ -13781,6 +13841,30 @@ export interface operations {
             };
         };
     };
+    shortLinkPublicOpen: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ServiceCardOpenRequest"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     resourceList: {
         parameters: {
             query?: never;
@@ -14446,6 +14530,28 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    serviceShare: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ServiceShareView"];
+                };
             };
         };
     };

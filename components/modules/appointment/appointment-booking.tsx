@@ -25,7 +25,13 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { FormFieldError, OrganizerMark, VerifiedBadge } from "@/components/shared";
-import { bookAppointment, loadAppointment, type AppointmentLinkRef } from "@/components/modules/appointment/appointment.service";
+import {
+  bookAppointment,
+  loadAppointment,
+  recordServiceOpenAction,
+  type AppointmentLinkRef,
+} from "@/components/modules/appointment/appointment.service";
+import { serviceCardSource, type ServiceCardSource } from "@/components/modules/appointment/service-card-link";
 import {
   bookingSchema,
   type AppointmentServiceView,
@@ -73,6 +79,34 @@ function byPeriod(slots: AppointmentSlot[], timeZone: string): [Period, Appointm
  * can reload or keep. Times show in the service's timezone, in the visitor's
  * language.
  */
+/**
+ * How the visitor reached a short link (JIKU-189): `?src=card` or `?src=link`.
+ * The open is counted once the page runs in a browser, and the way in is kept
+ * for the tab's session so the booking made after it is counted for it too.
+ * Session storage only: nothing follows the visitor elsewhere.
+ */
+function useCardSource(link: AppointmentLinkRef): ServiceCardSource | null {
+  const code = "code" in link ? link.code : null;
+  const [source, setSource] = useState<ServiceCardSource | null>(null);
+  useEffect(() => {
+    if (!code) return;
+    const key = `jiku:card-source:${code}`;
+    const fromUrl = serviceCardSource(new URLSearchParams(window.location.search).get("src"));
+    let kept: ServiceCardSource | null = null;
+    try {
+      kept = serviceCardSource(window.sessionStorage.getItem(key));
+      if (fromUrl) window.sessionStorage.setItem(key, fromUrl);
+    } catch {
+      // Storage can be off (private browsing): the open still counts, the booking does not.
+    }
+    const current = fromUrl ?? kept;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the way in is read from the browser once, after hydration.
+    setSource(current);
+    if (fromUrl) void recordServiceOpenAction(code, fromUrl);
+  }, [code]);
+  return source;
+}
+
 export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
   const t = useTranslations("guest.appointment");
   const format = useFormatter();
@@ -100,6 +134,8 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
     loadAppointment(link, date).then(setView);
   }, [link, date]);
 
+  const source = useCardSource(link);
+
   function pick(slot: AppointmentSlot) {
     setError(null);
     setValue("startsAt", slot.startsAt, { shouldValidate: true });
@@ -108,7 +144,7 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
 
   async function onSubmit(values: BookingInput) {
     setError(null);
-    const result = await bookAppointment(link, values);
+    const result = await bookAppointment(link, values, source);
     if (!result.ok) {
       setError(result.error);
       return;
