@@ -45,7 +45,10 @@
     "email": "Email",
     "password": "Password",
     "submit": "Sign in",
-    "submitting": "Signing in…"
+    "submitting": "Signing in…",
+    "setupTitle": "Turn on two-step verification",
+    "setupDescription": "The desk sees every organization: a code from your authentication app is asked for at each sign-in.",
+    "continue": "Open the desk"
   },
   "status": {
     "ACTIVE": "Active",

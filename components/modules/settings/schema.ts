@@ -185,3 +185,8 @@ export interface AccountDeletionInput {
   googleIdToken?: string;
   deleteOrganizations: boolean;
 }
+
+// ─── Security (JIKU-317) ────────────────────────────────────────────────────
+
+export type MfaStatus = Schema<"MfaStatus">;
+export type SessionView = Schema<"SessionView">;

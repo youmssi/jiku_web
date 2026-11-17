@@ -12,7 +12,8 @@
       "legal": "Facturation",
       "personalisation": "Personnalisation",
       "account": "Compte",
-      "verification": "Vérification"
+      "verification": "Vérification",
+      "security": "Sécurité"
     },
     "groups": {
       "organization": "Votre organisation",
@@ -436,6 +437,38 @@
     "templatePreview": "Impossible d'afficher l'aperçu de ce message.",
     "usernameTaken": "Cet identifiant est déjà pris. Choisissez-en un autre.",
     "usernameInvalid": "Utilisez 3 à 32 lettres minuscules, chiffres et tirets.",
-    "username": "Impossible d'enregistrer l'identifiant. Réessayez."
+    "username": "Impossible d'enregistrer l'identifiant. Réessayez.",
+    "security": "L'action n'a pas abouti. Réessayez."
+  },
+  "security": {
+    "mfa": {
+      "title": "Vérification en deux étapes",
+      "on": "Activée",
+      "description": "À chaque connexion depuis un nouvel appareil, un code de votre application d'authentification est demandé en plus du mot de passe.",
+      "enable": "Activer",
+      "enabledSince": "Activée depuis le {date}.",
+      "backupLeft": "{count, plural, =0 {Plus aucun code de secours : créez-en de nouveaux.} one {# code de secours restant} other {# codes de secours restants}}",
+      "renew": "Nouveaux codes de secours",
+      "disable": "Désactiver",
+      "setupTitle": "Activer la vérification en deux étapes",
+      "setupDescription": "Il vous faut votre téléphone et une application d'authentification.",
+      "done": "Terminé",
+      "disableTitle": "Désactiver la vérification en deux étapes ?",
+      "disableDescription": "Votre mot de passe suffira de nouveau pour vous connecter. Confirmez avec un code.",
+      "disabled": "Vérification en deux étapes désactivée.",
+      "renewTitle": "Nouveaux codes de secours",
+      "renewDescription": "Les anciens codes ne fonctionneront plus. Confirmez avec un code de l'application."
+    },
+    "sessions": {
+      "title": "Appareils connectés",
+      "description": "Les navigateurs connectés à votre compte. Déconnectez ceux que vous ne reconnaissez pas, puis changez votre mot de passe.",
+      "current": "Cet appareil",
+      "unknownDevice": "Appareil inconnu",
+      "lastUsed": "Dernière activité : {date}",
+      "close": "Déconnecter",
+      "closeOthers": "Déconnecter tous les autres appareils",
+      "closed": "Appareil déconnecté.",
+      "closedOthers": "Les autres appareils sont déconnectés."
+    }
   }
 }

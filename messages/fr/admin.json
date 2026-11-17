@@ -45,7 +45,10 @@
     "email": "E-mail",
     "password": "Mot de passe",
     "submit": "Se connecter",
-    "submitting": "Connexion…"
+    "submitting": "Connexion…",
+    "setupTitle": "Activez la vérification en deux étapes",
+    "setupDescription": "Le bureau voit toutes les organisations : un code de votre application d'authentification est demandé à chaque connexion.",
+    "continue": "Ouvrir le bureau"
   },
   "status": {
     "ACTIVE": "Active",
