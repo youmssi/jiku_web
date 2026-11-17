@@ -2676,6 +2676,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/notices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["organizerNoticeList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notices/live-ticket": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["organizerNoticeLiveTicket"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notices/read-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["organizerNoticeReadAll"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notices/unread-count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["organizerNoticeUnread"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notices/{noticeId}/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["organizerNoticeRead"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/notifications/email-feedback": {
         parameters: {
             query?: never;
@@ -5484,6 +5564,25 @@ export interface components {
             /** Format: int64 */
             totalMinor?: number;
         };
+        OrganizerNoticePage: {
+            hasMore?: boolean;
+            items?: components["schemas"]["OrganizerNoticeView"][];
+            /** Format: int64 */
+            unread?: number;
+        };
+        OrganizerNoticeView: {
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: uuid */
+            id?: string;
+            kind?: string;
+            link?: string | null;
+            params?: {
+                [key: string]: string;
+            };
+            /** Format: date-time */
+            readAt?: string | null;
+        };
         OrganizerOpenResponseView: {
             /** @enum {string} */
             answer?: "YES" | "MAYBE" | "NO";
@@ -6439,6 +6538,10 @@ export interface components {
             reason?: string | null;
             /** Format: date-time */
             startsAt?: string;
+        };
+        UnreadNotices: {
+            /** Format: int64 */
+            unread?: number;
         };
         UpdateBrandingRequest: {
             bannerUrl?: string | null;
@@ -11093,6 +11196,111 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["WhatsAppMessageCheck"];
+                };
+            };
+        };
+    };
+    organizerNoticeList: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerNoticePage"];
+                };
+            };
+        };
+    };
+    organizerNoticeLiveTicket: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LiveTicket"];
+                };
+            };
+        };
+    };
+    organizerNoticeReadAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UnreadNotices"];
+                };
+            };
+        };
+    };
+    organizerNoticeUnread: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UnreadNotices"];
+                };
+            };
+        };
+    };
+    organizerNoticeRead: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                noticeId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OrganizerNoticeView"];
                 };
             };
         };

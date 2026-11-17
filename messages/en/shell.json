@@ -89,5 +89,33 @@
       "servicesTitle": "A service",
       "servicesDescription": "Clinic, salon, agency: booking link, reminders and the daily line."
     }
+  },
+  "notices": {
+    "open": "Notifications",
+    "openUnread": "Notifications, {count} unread",
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "loading": "Loading notifications",
+    "loadError": "Notifications could not be loaded. Try again.",
+    "retry": "Try again",
+    "emptyTitle": "No notifications yet",
+    "emptyDescription": "Offered trials, payments, subscriptions and invoices will show here.",
+    "more": "Show more",
+    "unread": "Unread",
+    "kinds": {
+      "trialGranted": "Trial offered: {guests} guests for your event, until {until}.",
+      "trialExpiring": "Your {guests}-guest trial ends on {until}. Pay to keep these guests.",
+      "trialExpired": "Your {guests}-guest trial has ended.",
+      "trialEnded": "Your {guests}-guest trial was stopped. {note}",
+      "paymentConfirmed": "Payment confirmed ({amount}): {guests} guests available on your event.",
+      "paymentRejected": "Your transfer {reference} was not confirmed. {note}",
+      "subscriptionReactivated": "{plan} subscription active until {until}.",
+      "subscriptionExpiring": "Your {plan} subscription ends on {until}. Renew it to keep your services.",
+      "subscriptionGraceStarted": "Your {plan} subscription is due. Your services will pause on {suspension} unless it is renewed.",
+      "subscriptionExpired": "Your {plan} subscription has lapsed: your services are paused until it is renewed.",
+      "paymentRequestExpired": "Your payment request {reference} ({amount}) expired with no transfer received.",
+      "invoiceIssued": "Invoice {number} issued ({amount}).",
+      "other": "New information about your account."
+    }
   }
 }
