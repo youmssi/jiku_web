@@ -3,12 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useLocalDateTime } from "@/components/shared";
-import { useRouter } from "@/i18n/navigation";
-import { ArrowUpDown, Plus, Timer } from "lucide-react";
-import { Controller, useForm, useWatch } from "react-hook-form";
-import type { Resolver } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { ArrowUpDown, Gift, Timer } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -16,44 +11,21 @@ import { Combobox } from "@/components/ui/combobox";
 import { DataTable } from "@/components/ui/data-table";
 import type { DataTableFeatures } from "@/components/ui/data-table-features";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import {
-  Field,
-  FieldDescription,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { FormFieldError, Stat } from "@/components/shared";
+import { Stat } from "@/components/shared";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { ActionDialog } from "./action-dialog";
-import { endTrialAction, grantTrialAction } from "./admin.service";
+import { endTrialAction } from "./admin.service";
 import { IdentityCell, TrialStatusBadge } from "./admin-ui";
-import { TenantCombobox } from "./tenant-combobox";
-import { EventCombobox } from "./event-combobox";
-import {
-  grantTrialSchema,
-  type AdminTrial,
-  type AdminTrialPage,
-  type AdminTrialStats,
-  type GrantTrialFormValues,
-} from "./schema";
+import type { AdminTrial, AdminTrialPage, AdminTrialStats } from "./schema";
 
 const TRIAL_STATUSES = ["ACTIVE", "CONVERTED", "ENDED", "EXPIRED"] as const;
 type TrialStatus = (typeof TRIAL_STATUSES)[number];
@@ -226,7 +198,12 @@ export function TrialsView({
 
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{t("intro")}</p>
-        <GrantTrialDialog />
+        <Button asChild>
+          <Link href={ADMIN_ROUTES.GIFTS}>
+            <Gift className="size-3.5" data-icon="inline-start" />
+            {t("offerGift")}
+          </Link>
+        </Button>
       </div>
 
       {trials.length === 0 ? (
@@ -370,166 +347,5 @@ function TrialsToolbar({
         {t("expiringChip")}
       </Button>
     </div>
-  );
-}
-
-/**
- * Grant-a-trial flow, in a dialog so it doesn't compete for space with the
- * overview strip or the table — the same pattern as inviting a teammate.
- */
-/** Guests a new trial lends unless the admin changes it. */
-const DEFAULT_TRIAL_GUESTS = 300;
-
-function GrantTrialDialog() {
-  const t = useTranslations("admin.trials");
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const {
-    control,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { isSubmitting },
-  } = useForm<GrantTrialFormValues>({
-    // The schema checks the tenant/event structurally (an id is required); the
-    // form value carries the full entry so each combobox can display the pick.
-    resolver: zodResolver(grantTrialSchema) as Resolver<GrantTrialFormValues>,
-    defaultValues: {
-      tenant: null,
-      event: null,
-      guests: DEFAULT_TRIAL_GUESTS,
-      expiresAt: "",
-    },
-  });
-
-  const tenant = useWatch({ control, name: "tenant" });
-
-  function resetForm() {
-    reset({ tenant: null, event: null, guests: DEFAULT_TRIAL_GUESTS, expiresAt: "" });
-  }
-
-  async function onSubmit(values: GrantTrialFormValues) {
-    if (!values.tenant || !values.event) {
-      toast.error(t("pickBoth"));
-      return;
-    }
-    const result = await grantTrialAction({
-      tenantId: values.tenant.id,
-      eventId: values.event.id,
-      guests: values.guests,
-      expiresAt: new Date(values.expiresAt).toISOString(),
-    });
-    if (!result.ok) {
-      toast.error(result.error);
-      return;
-    }
-    toast.success(t("grantedToast"));
-    resetForm();
-    setOpen(false);
-    router.refresh();
-  }
-
-  return (
-    <Dialog
-      open={open}
-      onOpenChange={(next) => {
-        setOpen(next);
-        if (!next) resetForm();
-      }}
-    >
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="size-3.5" data-icon="inline-start" />
-          {t("grant")}
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle>{t("grant")}</DialogTitle>
-          <DialogDescription>{t("grantText")}</DialogDescription>
-        </DialogHeader>
-        <form id="grant-trial-form" onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
-          <Controller
-            control={control}
-            name="tenant"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="trial-tenant">{t("organization")}</FieldLabel>
-                <TenantCombobox
-                  id="trial-tenant"
-                  value={field.value}
-                  onChange={(next) => {
-                    field.onChange(next);
-                    // A picked event never survives a change of organization.
-                    setValue("event", null);
-                  }}
-                />
-                <FormFieldError error={fieldState.error} />
-              </Field>
-            )}
-          />
-          <Controller
-            control={control}
-            name="event"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="trial-event">{t("event")}</FieldLabel>
-                <EventCombobox
-                  id="trial-event"
-                  tenantId={tenant?.id ?? null}
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-                <FormFieldError error={fieldState.error} />
-              </Field>
-            )}
-          />
-          <Controller
-            control={control}
-            name="guests"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="trial-guests">{t("guests")}</FieldLabel>
-                <Input
-                  id="trial-guests"
-                  type="number"
-                  inputMode="numeric"
-                  min={1}
-                  value={Number.isFinite(field.value) ? field.value : ""}
-                  onChange={(event) => field.onChange(event.target.valueAsNumber)}
-                  className="w-40"
-                />
-                <FieldDescription>{t("guestsHint")}</FieldDescription>
-                <FormFieldError error={fieldState.error} />
-              </Field>
-            )}
-          />
-          <Controller
-            control={control}
-            name="expiresAt"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>{t("expires")}</FieldLabel>
-                <Input
-                  {...field}
-                  id={field.name}
-                  type="datetime-local"
-                  aria-invalid={fieldState.invalid}
-                />
-                <FormFieldError error={fieldState.error} />
-              </Field>
-            )}
-          />
-        </form>
-        <DialogFooter>
-          <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-            {t("cancel")}
-          </Button>
-          <Button type="submit" form="grant-trial-form" disabled={isSubmitting}>
-            {isSubmitting ? t("granting") : t("grant")}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   );
 }

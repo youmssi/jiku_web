@@ -85,7 +85,7 @@ export async function rejectPaymentAction(
   return adminMutation(`/admin/payments/${paymentId}/reject`, { reason });
 }
 
-/** Search-as-you-type tenant lookup for admin forms (Grant Trial, agreements). */
+/** Search-as-you-type tenant lookup for admin forms (gifts, agreements). */
 export async function searchTenantsAction(query: string): Promise<TenantDirectoryEntry[]> {
   const params = new URLSearchParams({ query, size: "10" });
   const response = await adminFetch(`/admin/tenants?${params.toString()}`);
@@ -96,7 +96,7 @@ export async function searchTenantsAction(query: string): Promise<TenantDirector
   return page.entries;
 }
 
-/** Search-as-you-type event lookup for the trial grant form, scoped to one organization. */
+/** Search-as-you-type event lookup for the gift form, scoped to one organization. */
 export async function searchTenantEventsAction(
   tenantId: string,
   query: string,
@@ -107,15 +107,6 @@ export async function searchTenantEventsAction(
     return [];
   }
   return (await response.json()) as AdminEventSummary[];
-}
-
-export async function grantTrialAction(input: {
-  tenantId: string;
-  eventId: string;
-  guests: number;
-  expiresAt: string;
-}): Promise<ActionResult> {
-  return adminMutation("/admin/trials", input);
 }
 
 export async function offerGiftAction(input: {
