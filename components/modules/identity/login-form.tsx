@@ -20,6 +20,7 @@ import { FormFieldError, TwoStepCodeForm } from "@/components/shared";
 import { AuthCard } from "@/components/modules/identity/auth-card";
 import { AuthTerms } from "@/components/modules/identity/auth-terms";
 import { GoogleButton } from "@/components/modules/identity/google-button";
+import { PasskeyButton } from "@/components/modules/identity/passkey-button";
 import { loginAction, verifyTwoStepAction } from "@/components/modules/identity/identity.service";
 import {
   loginSchema,
@@ -141,6 +142,7 @@ export function LoginForm({
                   {isSubmitting ? t("submitting") : t("submit")}
                 </Button>
                 <GoogleButton next={next} onCodeStep={() => setCodeStep(true)} />
+                <PasskeyButton next={next} />
                 <FieldDescription className="text-center">
                   {t("noAccount")} <Link href={ROUTES.REGISTER}>{t("signUp")}</Link>
                 </FieldDescription>

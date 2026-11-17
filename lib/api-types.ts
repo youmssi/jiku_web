@@ -948,6 +948,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/auth/me/passkeys": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["passkeyList"];
+        put?: never;
+        post: operations["passkeyRegister"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/passkeys/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["passkeyOptions"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/passkeys/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["passkeyDelete"];
+        options?: never;
+        head?: never;
+        patch: operations["passkeyRename"];
+        trace?: never;
+    };
     "/api/v1/auth/me/sessions": {
         parameters: {
             query?: never;
@@ -1006,6 +1054,38 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["authVerifyMfa"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/passkey": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["passkeySignInSignIn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/passkey/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["passkeySignInOptions"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5654,6 +5734,34 @@ export interface components {
             /** Format: int64 */
             totalMinor?: number;
         };
+        JsonNode: {
+            array?: boolean;
+            bigDecimal?: boolean;
+            bigInteger?: boolean;
+            binary?: boolean;
+            boolean?: boolean;
+            container?: boolean;
+            double?: boolean;
+            embeddedValue?: boolean;
+            empty?: boolean;
+            float?: boolean;
+            floatingPointNumber?: boolean;
+            int?: boolean;
+            integralNumber?: boolean;
+            long?: boolean;
+            missingNode?: boolean;
+            /** @enum {string} */
+            nodeType?: "ARRAY" | "BINARY" | "BOOLEAN" | "MISSING" | "NULL" | "NUMBER" | "OBJECT" | "POJO" | "STRING";
+            null?: boolean;
+            number?: boolean;
+            object?: boolean;
+            pojo?: boolean;
+            short?: boolean;
+            string?: boolean;
+            /** @deprecated */
+            textual?: boolean;
+            valueNode?: boolean;
+        };
         LegalIdentityResponse: {
             addressLine?: string | null;
             city?: string | null;
@@ -6131,6 +6239,32 @@ export interface components {
             startedAt?: string | null;
             /** Format: int64 */
             usedGuests?: number;
+        };
+        PasskeyCeremony: {
+            ceremonyId?: string;
+            options?: components["schemas"]["JsonNode"];
+        };
+        PasskeyLabelRequest: {
+            label: string;
+        };
+        PasskeyRegistrationRequest: {
+            ceremonyId: string;
+            credential: components["schemas"]["JsonNode"];
+            label: string;
+        };
+        PasskeySignInRequest: {
+            ceremonyId: string;
+            credential: components["schemas"]["JsonNode"];
+            device?: string | null;
+            deviceId?: string | null;
+        };
+        PasskeyView: {
+            /** Format: date-time */
+            createdAt?: string | null;
+            id?: string;
+            label?: string;
+            /** Format: date-time */
+            lastUsedAt?: string | null;
         };
         PayeeDetails: {
             bankDetails?: string | null;
@@ -8756,6 +8890,116 @@ export interface operations {
             };
         };
     };
+    passkeyList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PasskeyView"][];
+                };
+            };
+        };
+    };
+    passkeyRegister: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PasskeyRegistrationRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PasskeyView"];
+                };
+            };
+        };
+    };
+    passkeyOptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PasskeyCeremony"];
+                };
+            };
+        };
+    };
+    passkeyDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    passkeyRename: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PasskeyLabelRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PasskeyView"];
+                };
+            };
+        };
+    };
     accountSecuritySessions: {
         parameters: {
             query?: never;
@@ -8834,6 +9078,50 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["AuthResponse"];
+                };
+            };
+        };
+    };
+    passkeySignInSignIn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PasskeySignInRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AuthResponse"];
+                };
+            };
+        };
+    };
+    passkeySignInOptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PasskeyCeremony"];
                 };
             };
         };

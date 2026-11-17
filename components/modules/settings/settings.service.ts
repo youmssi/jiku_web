@@ -145,6 +145,73 @@ export async function closeOtherSessionsAction(): Promise<ActionResult> {
   return ok(null);
 }
 
+// ─── Passkeys (JIKU-318) ────────────────────────────────────────────────────
+
+const PASSKEY_ID = /^[A-Za-z0-9_-]{1,1400}$/;
+
+export async function startPasskeyRegistrationAction(): Promise<
+  ActionResult<{ ceremonyId: string; options: Record<string, unknown> }>
+> {
+  const t = await getTranslations("settings.security.passkeys");
+  const response = await serverFetch("/auth/me/passkeys/options", { method: "POST" });
+  if (!response.ok) {
+    if (response.status === 409) return fail(t("tooMany"));
+    reportApiError(response);
+    return fail(t("failed"));
+  }
+  return ok(await response.json());
+}
+
+export async function finishPasskeyRegistrationAction(input: {
+  ceremonyId: string;
+  credential: Record<string, unknown>;
+  label: string;
+}): Promise<ActionResult> {
+  const t = await getTranslations("settings.security.passkeys");
+  const label = input.label.trim().slice(0, 100);
+  if (!label) return fail(t("labelRequired"));
+  const response = await serverFetch("/auth/me/passkeys", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...input, label }),
+  });
+  if (!response.ok) {
+    if (response.status !== 401) reportApiError(response);
+    return fail(t(response.status === 401 ? "notVerified" : "failed"));
+  }
+  revalidatePath("/settings");
+  return ok(null);
+}
+
+export async function renamePasskeyAction(id: string, label: string): Promise<ActionResult> {
+  const t = await getTranslations("settings.security.passkeys");
+  const name = label.trim().slice(0, 100);
+  if (!PASSKEY_ID.test(id) || !name) return fail(t("labelRequired"));
+  const response = await serverFetch(`/auth/me/passkeys/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ label: name }),
+  });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail(t("failed"));
+  }
+  revalidatePath("/settings");
+  return ok(null);
+}
+
+export async function deletePasskeyAction(id: string): Promise<ActionResult> {
+  const t = await getTranslations("settings.security.passkeys");
+  if (!PASSKEY_ID.test(id)) return fail(t("failed"));
+  const response = await serverFetch(`/auth/me/passkeys/${id}`, { method: "DELETE" });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail(t("failed"));
+  }
+  revalidatePath("/settings");
+  return ok(null);
+}
+
 type SettingsErrorKey = keyof Messages["settings"]["errors"];
 
 async function settingsError(key: SettingsErrorKey): Promise<string> {

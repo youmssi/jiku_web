@@ -5,6 +5,7 @@ import { reportApiError } from "@/lib/action-result";
 import type {
   AccountDeletionStatus,
   MfaStatus,
+  PasskeyView,
   SessionView,
   BrandingResponse,
   EmbeddedSignupConfig,
@@ -68,7 +69,11 @@ export function loadAccountDeletion(): Promise<AccountDeletionStatus | null> {
 }
 
 /** The account's second factor and signed-in sessions (JIKU-317). */
-export async function loadSecurity(): Promise<{ mfa: MfaStatus; sessions: SessionView[] } | null> {
-  const [mfa, sessions] = await Promise.all([read<MfaStatus>("/auth/me/mfa"), read<SessionView[]>("/auth/me/sessions")]);
-  return mfa && sessions ? { mfa, sessions } : null;
+export async function loadSecurity(): Promise<{ mfa: MfaStatus; sessions: SessionView[]; passkeys: PasskeyView[] } | null> {
+  const [mfa, sessions, passkeys] = await Promise.all([
+    read<MfaStatus>("/auth/me/mfa"),
+    read<SessionView[]>("/auth/me/sessions"),
+    read<PasskeyView[]>("/auth/me/passkeys"),
+  ]);
+  return mfa && sessions ? { mfa, sessions, passkeys: passkeys ?? [] } : null;
 }

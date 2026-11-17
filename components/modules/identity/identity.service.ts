@@ -95,6 +95,44 @@ export async function verifyTwoStepAction(input: TwoStepInput, next?: string): P
   return localeRedirect(afterSignIn(next));
 }
 
+/** A passkey ceremony: the id the API keeps it under and the options for the browser (JIKU-318). */
+export interface PasskeyCeremony {
+  ceremonyId: string;
+  options: Record<string, unknown>;
+}
+
+/** Starts a passkey sign-in: the challenge any of this site's passkeys can sign. */
+export async function startPasskeySignInAction(): Promise<ActionResult<PasskeyCeremony>> {
+  const t = await getTranslations("auth.passkey");
+  const response = await publicFetch("/auth/passkey/options", { method: "POST" });
+  if (!response.ok) {
+    if (response.status !== 429) reportApiError(response);
+    return fail(t(response.status === 429 ? "tooMany" : "failed"));
+  }
+  return ok((await response.json()) as PasskeyCeremony);
+}
+
+/** Finishes a passkey sign-in: a passkey is both factors, so the session opens at once. */
+export async function finishPasskeySignInAction(
+  ceremonyId: string,
+  credential: Record<string, unknown>,
+  next?: string,
+): Promise<ActionResult> {
+  const t = await getTranslations("auth.passkey");
+  const response = await publicFetch("/auth/passkey", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ceremonyId, credential, ...(await deviceInfo()) }),
+  });
+  if (!response.ok) {
+    if (response.status === 403 && (await problemCode(response)) === "account.suspended") return fail(t("suspended"));
+    if (response.status !== 401 && response.status !== 429) reportApiError(response);
+    return fail(t(response.status === 429 ? "tooMany" : response.status === 401 ? "unknown" : "failed"));
+  }
+  await setAuthCookies((await response.json()) as AuthTokens);
+  return localeRedirect(afterSignIn(next));
+}
+
 export async function loginAction(input: LoginInput, next?: string): Promise<ActionResult<SignInStep>> {
   const t = await getTranslations();
   const parsed = loginSchema.safeParse(input);
