@@ -5,6 +5,7 @@
 import "server-only";
 
 export { cardCalendar } from "./card-calendar";
-export { renderCard, type CardFormat } from "./card-image";
+export { inline as inlineCardImage, renderCard, renderCardArt, type CardFormat } from "./card-image";
+export type { CardArtData } from "./card-art";
 export { cardMetadata } from "./card-metadata";
 export { fetchPublicOpenInvitation } from "./open-invitation.queries";

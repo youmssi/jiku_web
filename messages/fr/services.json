@@ -231,5 +231,31 @@
     "save": "Enregistrer le prix",
     "saving": "Enregistrement…",
     "saved": "Prix enregistré."
+  },
+  "share": {
+    "title": "Carte et lien du service",
+    "description": "Partagez la carte de votre service dans vos statuts et discussions WhatsApp. Vos clients scannent ou touchent le lien et réservent directement.",
+    "cardAlt": "Carte du service {service}",
+    "message": "Réservez « {service} » ici : {link}",
+    "whatsapp": "Partager sur WhatsApp",
+    "download": "Télécharger la carte",
+    "copy": "Copier le lien",
+    "copied": "Lien copié",
+    "copyFailed": "Impossible de copier le lien, sélectionnez-le à la main",
+    "verifyFirst": "Faites vérifier votre organisation pour partager cette carte.",
+    "verify": "Vérifier mon organisation",
+    "place": "Lieu affiché sur la carte",
+    "placePlaceholder": "Ex. Kaloum, Conakry",
+    "placeHelp": "Facultatif. Laissez vide pour ne pas afficher de lieu.",
+    "save": "Enregistrer",
+    "placeSaved": "Lieu enregistré",
+    "placeTooLong": "Le lieu ne doit pas dépasser 160 caractères",
+    "placeFailed": "Impossible d'enregistrer le lieu, réessayez",
+    "results": "Résultats sur {days} jours",
+    "resultsHelp": "Une ouverture compte une personne une fois par jour. Les aperçus de lien dans WhatsApp ne sont pas comptés.",
+    "opensCard": "Ouvertures par la carte",
+    "opensLink": "Ouvertures par le lien",
+    "bookingsCard": "Réservations par la carte",
+    "bookingsLink": "Réservations par le lien"
   }
 }

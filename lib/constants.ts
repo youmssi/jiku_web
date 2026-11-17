@@ -36,6 +36,11 @@ export function serviceConfigurationRoute(id: string): string {
   return `/services/${id}/configuration`;
 }
 
+/** The service's card and link to share, with what they brought in (JIKU-189). */
+export function serviceShareRoute(id: string): string {
+  return `/services/${id}/share`;
+}
+
 /** The event's overview: setup checklist while a draft, live dashboard once published. */
 export function eventRoute(id: string): string {
   return `/events/${id}`;

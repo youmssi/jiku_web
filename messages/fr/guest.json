@@ -332,5 +332,11 @@
     "share": "{event}\n{when}\nRépondez ici : {url}",
     "answerBy": "Jusqu'au {date}",
     "scan": "Scannez pour répondre"
+  },
+  "serviceCard": {
+    "minutes": "{count} min",
+    "by": "Par {organizer}",
+    "book": "Réservez votre créneau",
+    "via": "Réservation via Jikū"
   }
 }

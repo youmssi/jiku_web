@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { fail, fromResponse } from "@/lib/action-result";
@@ -317,4 +318,20 @@ export async function removeUnavailabilityAction(resourceId: string, unavailabil
   const t = await getTranslations("services.errors");
   const response = await serverFetch(`/resources/${resourceId}/unavailability/${unavailabilityId}`, { method: "DELETE" });
   return response.ok ? { ok: true, data: null } : fromResponse<null>(response, { default: t("closureRemove") });
+}
+
+/** Sets where the service takes place, shown on its card (JIKU-189); blank removes it. */
+export async function updateServicePlaceAction(serviceId: string, place: string): Promise<ActionResult<null>> {
+  const t = await getTranslations("services.share");
+  const value = place.trim();
+  if (value.length > 160) return fail(t("placeTooLong"));
+  const response = await serverFetch(`/services/${serviceId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ place: value }),
+  });
+  const result = await fromResponse<unknown>(response, { default: t("placeFailed") });
+  if (!result.ok) return result;
+  revalidatePath("/services");
+  return { ok: true, data: null };
 }

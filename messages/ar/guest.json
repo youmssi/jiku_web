@@ -332,5 +332,11 @@
     "share": "{event}\n{when}\nردّ من هنا: {url}",
     "answerBy": "حتى {date}",
     "scan": "امسح للرد"
+  },
+  "serviceCard": {
+    "minutes": "{count} د",
+    "by": "من {organizer}",
+    "book": "احجز موعدك",
+    "via": "الحجز عبر Jikū"
   }
 }

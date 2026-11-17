@@ -231,5 +231,31 @@
     "save": "Save price",
     "saving": "Saving…",
     "saved": "Price saved."
+  },
+  "share": {
+    "title": "Service card and link",
+    "description": "Share your service's card in your WhatsApp statuses and chats. Clients scan it or tap the link and book straight away.",
+    "cardAlt": "Card for {service}",
+    "message": "Book \"{service}\" here: {link}",
+    "whatsapp": "Share on WhatsApp",
+    "download": "Download the card",
+    "copy": "Copy the link",
+    "copied": "Link copied",
+    "copyFailed": "Couldn't copy the link, select it by hand",
+    "verifyFirst": "Get your organization verified to share this card.",
+    "verify": "Verify my organization",
+    "place": "Place shown on the card",
+    "placePlaceholder": "E.g. Kaloum, Conakry",
+    "placeHelp": "Optional. Leave it empty to show no place.",
+    "save": "Save",
+    "placeSaved": "Place saved",
+    "placeTooLong": "The place must be 160 characters or fewer",
+    "placeFailed": "Couldn't save the place, try again",
+    "results": "Results over {days} days",
+    "resultsHelp": "An open counts a person once a day. WhatsApp link previews are not counted.",
+    "opensCard": "Opens from the card",
+    "opensLink": "Opens from the link",
+    "bookingsCard": "Bookings from the card",
+    "bookingsLink": "Bookings from the link"
   }
 }

@@ -332,5 +332,11 @@
     "share": "{event}\n{when}\nAnswer here: {url}",
     "answerBy": "Until {date}",
     "scan": "Scan to answer"
+  },
+  "serviceCard": {
+    "minutes": "{count} min",
+    "by": "By {organizer}",
+    "book": "Book your slot",
+    "via": "Booking via Jikū"
   }
 }

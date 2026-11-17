@@ -12,6 +12,7 @@ import {
   serviceConfigurationRoute,
   serviceLineRoute,
   serviceManageRoute,
+  serviceShareRoute,
 } from "@/lib/constants";
 
 /** A key of the `shell.nav` catalog: nav labels are translated where they render. */
@@ -148,6 +149,12 @@ export const SERVICE_SUB_NAV_ITEMS: EventSubNavItem[] = [
     href: serviceConfigurationRoute,
     icon: Settings,
     match: (pathname, serviceId) => pathname === serviceConfigurationRoute(serviceId),
+  },
+  {
+    labelKey: "share",
+    href: serviceShareRoute,
+    icon: Share2,
+    match: (pathname, serviceId) => pathname === serviceShareRoute(serviceId),
   },
 ];
 
