@@ -11,6 +11,7 @@ import {
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BillingAttentionBanner, loadBillingStatus } from "@/components/modules/billing/server";
 import { ConfirmEmailBanner } from "@/components/modules/identity";
+import { NotificationBell } from "@/components/modules/notices";
 import { getOrganizerContext } from "@/components/modules/identity/server";
 import { serverFetch } from "@/lib/api-server";
 import { eventRoute, ROUTES } from "@/lib/constants";
@@ -61,7 +62,8 @@ export default async function OrganizerAppLayout({
               />
               <AppBreadcrumb brandName={context.brandName} />
             </div>
-            <div className="ml-auto flex items-center px-4">
+            <div className="ml-auto flex items-center gap-1 px-4">
+              <NotificationBell />
               <NavCommandPalette variant="organizer" />
             </div>
           </header>

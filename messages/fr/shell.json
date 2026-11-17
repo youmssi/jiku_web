@@ -89,5 +89,33 @@
       "servicesTitle": "Un service",
       "servicesDescription": "Clinique, salon, agence : lien de réservation, rappels et file du jour."
     }
+  },
+  "notices": {
+    "open": "Notifications",
+    "openUnread": "Notifications, {count, plural, one {# non lue} other {# non lues}}",
+    "title": "Notifications",
+    "markAllRead": "Tout marquer comme lu",
+    "loading": "Chargement des notifications",
+    "loadError": "Impossible de charger les notifications. Réessayez.",
+    "retry": "Réessayer",
+    "emptyTitle": "Aucune notification pour l’instant",
+    "emptyDescription": "Les essais offerts, paiements, abonnements et factures s’afficheront ici.",
+    "more": "Afficher plus",
+    "unread": "Non lue",
+    "kinds": {
+      "trialGranted": "Essai offert : {guests} invités pour votre événement, jusqu’au {until}.",
+      "trialExpiring": "Votre essai de {guests} invités se termine le {until}. Payez pour garder ces invités.",
+      "trialExpired": "Votre essai de {guests} invités est terminé.",
+      "trialEnded": "Votre essai de {guests} invités a été arrêté. {note}",
+      "paymentConfirmed": "Paiement confirmé ({amount}) : {guests} invités disponibles sur votre événement.",
+      "paymentRejected": "Votre virement {reference} n’a pas été confirmé. {note}",
+      "subscriptionReactivated": "Abonnement {plan} actif jusqu’au {until}.",
+      "subscriptionExpiring": "Votre abonnement {plan} se termine le {until}. Renouvelez-le pour garder vos services.",
+      "subscriptionGraceStarted": "Votre abonnement {plan} est échu. Vos services seront mis en pause le {suspension} sans renouvellement.",
+      "subscriptionExpired": "Votre abonnement {plan} est échu : vos services sont en pause jusqu’au renouvellement.",
+      "paymentRequestExpired": "Votre demande de paiement {reference} ({amount}) a expiré sans virement reçu.",
+      "invoiceIssued": "Facture {number} émise ({amount}).",
+      "other": "Nouvelle information sur votre compte."
+    }
   }
 }
