@@ -246,7 +246,8 @@ export const LEGAL_FR: LegalDocuments = {
         heading: "Les données que nous traitons",
         body: [
           [
-            "Compte : nom, e-mail, téléphone, mot de passe (stocké sous forme chiffrée irréversible), rôle, langue.",
+            "Compte : nom, e-mail, téléphone, mot de passe (stocké sous forme chiffrée irréversible), rôle, langue. Si vous activez la vérification en deux étapes : la clé de votre application d'authentification (chiffrée) et vos codes de secours (sous forme chiffrée irréversible).",
+            "Appareils connectés : type de navigateur et de système, dates de connexion et de dernière activité, pour lister vos sessions et vous prévenir d'une connexion depuis un nouvel appareil.",
             "Organisation : nom, logo, couleurs, pays, moyens de paiement affichés à ses clients, paramètres.",
             "Invités et clients (pour le compte de l'organisation) : nom, e-mail et/ou téléphone, réponse, catégorie de billet, réponses aux questions, présence, statut de paiement déclaré.",
             "Paiements à Jikū : montant, référence, statut. Les données de carte ou de Mobile Money restent chez le prestataire de paiement.",

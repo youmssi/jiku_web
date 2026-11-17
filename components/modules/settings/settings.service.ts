@@ -4,6 +4,8 @@ import { serverFetch } from "@/lib/api-server";
 import { type ActionResult, fail, ok, problemCode, reportApiError } from "@/lib/action-result";
 import { clearAuthCookies } from "@/lib/auth";
 import { localeRedirect } from "@/i18n/redirect";
+import { enrollmentFrom } from "@/lib/two-step";
+import type { TwoStepEnrollment, TwoStepInput } from "@/components/shared/two-step";
 import { revalidatePath } from "next/cache";
 import { ROUTES } from "@/lib/constants";
 import { getTranslations } from "next-intl/server";
@@ -73,6 +75,74 @@ export async function requestAccountDeletionAction(input: AccountDeletionInput):
   }
   await clearAuthCookies();
   return localeRedirect(`${ROUTES.LOGIN}?deletion=scheduled`);
+}
+
+// ─── Security (JIKU-317) ────────────────────────────────────────────────────
+
+/** Starts setting up the authentication app: the QR code and the key to type. */
+export async function startTwoStepAction(): Promise<ActionResult<TwoStepEnrollment>> {
+  const t = await getTranslations("common.twoStep");
+  const response = await serverFetch("/auth/me/mfa/setup", { method: "POST" });
+  const enrollment = response.ok ? await enrollmentFrom(await response.json()) : null;
+  if (!enrollment) {
+    reportApiError(response);
+    return fail(t("failed"));
+  }
+  return ok(enrollment);
+}
+
+/** Turns the second factor on with a first code; the backup codes come back once. */
+export async function confirmTwoStepAction(code: string): Promise<ActionResult<{ backupCodes: string[] }>> {
+  return twoStepWrite("/auth/me/mfa/confirm", { code });
+}
+
+export async function renewBackupCodesAction(code: string): Promise<ActionResult<{ backupCodes: string[] }>> {
+  return twoStepWrite("/auth/me/mfa/backup-codes", { code });
+}
+
+export async function disableTwoStepAction(input: TwoStepInput): Promise<ActionResult<null>> {
+  const result = await twoStepWrite<null>("/auth/me/mfa/disable", { code: input.code, backupCode: input.backupCode });
+  return result.ok ? ok(null) : result;
+}
+
+async function twoStepWrite<T>(path: string, body: unknown): Promise<ActionResult<T>> {
+  const t = await getTranslations("common.twoStep");
+  const response = await serverFetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    if (response.status === 429) return fail(t("tooMany"));
+    if (response.status === 401) return fail(t("invalid"));
+    reportApiError(response);
+    return fail(t("failed"));
+  }
+  revalidatePath("/settings");
+  return ok((response.status === 204 ? null : await response.json()) as T);
+}
+
+/** Signs one session out (JIKU-317). */
+export async function closeSessionAction(sessionId: string): Promise<ActionResult> {
+  if (!/^[0-9a-f-]{36}$/i.test(sessionId)) return fail(await settingsError("security"));
+  const response = await serverFetch(`/auth/me/sessions/${sessionId}`, { method: "DELETE" });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail(await settingsError("security"));
+  }
+  revalidatePath("/settings");
+  return ok(null);
+}
+
+/** "Sign out everywhere else": every session but this one. */
+export async function closeOtherSessionsAction(): Promise<ActionResult> {
+  const response = await serverFetch("/auth/me/sessions/close-others", { method: "POST" });
+  if (!response.ok) {
+    reportApiError(response);
+    return fail(await settingsError("security"));
+  }
+  revalidatePath("/settings");
+  return ok(null);
 }
 
 type SettingsErrorKey = keyof Messages["settings"]["errors"];

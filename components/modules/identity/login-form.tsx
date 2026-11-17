@@ -16,11 +16,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { ROUTES } from "@/lib/constants";
-import { FormFieldError } from "@/components/shared";
+import { FormFieldError, TwoStepCodeForm } from "@/components/shared";
 import { AuthCard } from "@/components/modules/identity/auth-card";
 import { AuthTerms } from "@/components/modules/identity/auth-terms";
 import { GoogleButton } from "@/components/modules/identity/google-button";
-import { loginAction } from "@/components/modules/identity/identity.service";
+import { loginAction, verifyTwoStepAction } from "@/components/modules/identity/identity.service";
 import {
   loginSchema,
   type LoginInput,
@@ -31,9 +31,20 @@ import {
  * After asking for the account's deletion, a note says that signing in cancels
  * it (JIKU-316).
  */
-export function LoginForm({ next, deletionScheduled = false }: { next?: string; deletionScheduled?: boolean }) {
+export function LoginForm({
+  next,
+  deletionScheduled = false,
+  codeStepFirst = false,
+}: {
+  next?: string;
+  deletionScheduled?: boolean;
+  /** A Google sign-in started elsewhere already reached the code step (JIKU-317). */
+  codeStepFirst?: boolean;
+}) {
   const t = useTranslations("auth.login");
+  const tStep = useTranslations("common.twoStep");
   const [formError, setFormError] = useState<string | null>(null);
+  const [codeStep, setCodeStep] = useState(codeStepFirst);
   const {
     control,
     handleSubmit,
@@ -49,7 +60,23 @@ export function LoginForm({ next, deletionScheduled = false }: { next?: string; 
     const result = await loginAction(values, next);
     if (!result.ok) {
       setFormError(result.error);
+    } else if (result.data.step === "code") {
+      setCodeStep(true);
     }
+  }
+
+  if (codeStep) {
+    return (
+      <>
+        <AuthCard title={tStep("title")} description={tStep("description")}>
+          <TwoStepCodeForm
+            onVerify={(input) => verifyTwoStepAction(input, next)}
+            onCancel={() => setCodeStep(false)}
+          />
+        </AuthCard>
+        <AuthTerms />
+      </>
+    );
   }
 
   return (
@@ -113,7 +140,7 @@ export function LoginForm({ next, deletionScheduled = false }: { next?: string; 
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? t("submitting") : t("submit")}
                 </Button>
-                <GoogleButton next={next} />
+                <GoogleButton next={next} onCodeStep={() => setCodeStep(true)} />
                 <FieldDescription className="text-center">
                   {t("noAccount")} <Link href={ROUTES.REGISTER}>{t("signUp")}</Link>
                 </FieldDescription>

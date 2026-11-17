@@ -4,6 +4,8 @@ import { serverFetch } from "@/lib/api-server";
 import { reportApiError } from "@/lib/action-result";
 import type {
   AccountDeletionStatus,
+  MfaStatus,
+  SessionView,
   BrandingResponse,
   EmbeddedSignupConfig,
   PaymentMethodsInfo,
@@ -63,4 +65,10 @@ export async function loadTemplates(): Promise<TemplateSummary[]> {
 /** What deleting the account would take with it (JIKU-316). */
 export function loadAccountDeletion(): Promise<AccountDeletionStatus | null> {
   return read("/auth/me/deletion");
+}
+
+/** The account's second factor and signed-in sessions (JIKU-317). */
+export async function loadSecurity(): Promise<{ mfa: MfaStatus; sessions: SessionView[] } | null> {
+  const [mfa, sessions] = await Promise.all([read<MfaStatus>("/auth/me/mfa"), read<SessionView[]>("/auth/me/sessions")]);
+  return mfa && sessions ? { mfa, sessions } : null;
 }

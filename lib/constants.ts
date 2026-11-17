@@ -130,6 +130,15 @@ export const COOKIES = {
   // The currency a visitor picked on the marketing pages (JIKU-270); readable
   // by the page script, holds no personal data.
   CURRENCY: "jiku_currency",
+  // Two-step sign-in (JIKU-317): the step token between the password and the
+  // code, the "don't ask again" token per surface, and the browser's own id.
+  MFA_CHALLENGE: "jiku_mfa_challenge",
+  ADMIN_MFA_CHALLENGE: "jiku_admin_mfa_challenge",
+  TRUSTED_DEVICE: "jiku_trusted_device",
+  ADMIN_TRUSTED_DEVICE: "jiku_admin_trusted_device",
+  DEVICE_ID: "jiku_device",
+  // A desk session opened by a first setup, held until its backup codes are seen.
+  ADMIN_PENDING_SESSION: "jiku_admin_pending_session",
 } as const;
 
 // Public marketing pages, deliberately generic: no location-targeted slugs, so

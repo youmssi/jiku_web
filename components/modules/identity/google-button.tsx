@@ -4,6 +4,8 @@ import Script from "next/script";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { ActionResult } from "@/lib/action-result";
+import { useRouter } from "@/i18n/navigation";
+import { ROUTES } from "@/lib/constants";
 import { googleLoginAction } from "@/components/modules/identity/identity.service";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -36,11 +38,15 @@ declare global {
 export function GoogleButton({
   next,
   onCredential,
+  onCodeStep,
 }: {
   next?: string;
-  onCredential?: (idToken: string) => Promise<ActionResult | void>;
+  onCredential?: (idToken: string) => Promise<ActionResult<unknown> | void>;
+  /** The account has a second factor: the form asks for the code next (JIKU-317). */
+  onCodeStep?: () => void;
 }) {
   const t = useTranslations();
+  const router = useRouter();
   const container = useRef<HTMLDivElement>(null);
   const initialized = useRef(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,9 +72,14 @@ export function GoogleButton({
         setPending(true);
         (onCredential ? onCredential(response.credential) : googleLoginAction(response.credential, next))
           .then((result) => {
-            // Success redirects server-side; only a returned failure reaches us.
+            // Success redirects server-side; a failure or the code step reaches us.
             if (result && !result.ok) {
               setError(result.error);
+            } else if (result?.ok && result.data && typeof result.data === "object" && "step" in result.data) {
+              // Elsewhere than the sign-in page (registering with a Google
+              // account that already exists), the sign-in page takes the code.
+              if (onCodeStep) onCodeStep();
+              else router.push(`${ROUTES.LOGIN}?step=code${next ? `&next=${encodeURIComponent(next)}` : ""}`);
             }
             setPending(false);
           })
@@ -87,7 +98,7 @@ export function GoogleButton({
       // button never overflows a narrow phone, which is most of this market.
       width: Math.min(320, Math.round(container.current.getBoundingClientRect().width) || 320),
     });
-  }, [next, onCredential, t]);
+  }, [next, onCredential, onCodeStep, router, t]);
 
   // `Script.onLoad` only fires the first time the script is fetched. Navigating
   // between /login and /register client-side reuses the already-loaded script,
