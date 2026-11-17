@@ -9,7 +9,7 @@
     "desk": "Bureau",
     "tenants": "Organisations",
     "payments": "Paiements",
-    "trials": "Essais",
+    "trials": "Invités offerts",
     "agreements": "Contrats",
     "billingInfo": "Facturation",
     "audit": "Journal",
@@ -24,7 +24,7 @@
   "pages": {
     "tenants": "Organisations",
     "payments": "Bureau des paiements",
-    "trials": "Essais",
+    "trials": "Invités offerts en cours",
     "agreements": "Contrats entreprise",
     "billingInfo": "Informations de facturation",
     "audit": "Journal d'audit",
@@ -280,9 +280,9 @@
     "endText": "L'allocation de l'événement revient à ce qui a été payé et l'organisateur est prévenu.",
     "reason": "Motif",
     "endConfirm": "Arrêter l'essai",
-    "intro": "Tous les essais accordés, du plus récent au plus ancien.",
-    "emptyTitle": "Aucun essai",
-    "emptyText": "Accordez un essai pour débloquer une allocation gratuite sur un événement.",
+    "intro": "Les invités offerts par cadeau sur un événement, du plus récent au plus ancien : compte à rebours, arrêt anticipé et conversion.",
+    "emptyTitle": "Aucun invité offert en cours",
+    "emptyText": "Offrez des invités par un cadeau : ils apparaissent ici une fois activés par l’organisateur.",
     "stats": {
       "active": "Essais en cours",
       "expiring": "Expirent sous 7 jours",
@@ -297,15 +297,9 @@
     "page": "Page {page} sur {count}",
     "status": "Statut",
     "expiringChip": "Expire sous 7 j",
-    "grant": "Accorder un essai",
-    "grantText": "Accordez une allocation gratuite pour un événement. L'organisateur est prévenu tout de suite et voit un compte à rebours dans son tableau de bord.",
-    "cancel": "Annuler",
-    "granting": "Attribution…",
-    "grantedToast": "Essai accordé : l'organisateur est prévenu.",
-    "pickBoth": "Choisissez d'abord une organisation et un événement.",
     "noStatus": "Aucun statut",
     "guests": "Invités prêtés",
-    "guestsHint": "L'événement peut inviter ce nombre d'invités jusqu'à la fin de l'essai. S'il les achète avant, l'essai est converti."
+    "offerGift": "Offrir un cadeau"
   },
   "billing": {
     "defaultsTitle": "Valeurs de la configuration",

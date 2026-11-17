@@ -71,7 +71,7 @@ export interface AdminTrialStats {
   conversionRatePercent: number | null;
 }
 
-/** An event as the trial grant form's tenant-scoped picker sees it (JIKU-99). */
+/** An event as the gift form's tenant-scoped picker sees it (JIKU-99, JIKU-315). */
 export interface AdminEventSummary {
   id: string;
   name: string;
@@ -156,32 +156,6 @@ export type AdminLoginFormValues = z.infer<typeof adminLoginSchema>;
 /** Shape an admin form needs to identify an event: full id, everything else structural. */
 const adminEventReferenceSchema = z.object({ id: z.string().min(1) });
 
-export const grantTrialSchema = z.object({
-  tenant: z
-    .union([adminTenantReferenceSchema, z.null()])
-    .refine((tenant) => tenant !== null, "pickOrganization"),
-  event: z
-    .union([adminEventReferenceSchema, z.null()])
-    .refine((event) => event !== null, "pickEvent"),
-  guests: z.number({ error: "guestsRange" }).int("guestsRange").min(1, "guestsRange").max(100_000, "guestsRange"),
-  expiresAt: z
-    .string()
-    .min(1, "required")
-    .refine(
-      (value) => !Number.isNaN(new Date(value).getTime()),
-      "invalidDate",
-    )
-    .refine(
-      (value) => new Date(value).getTime() > Date.now(),
-      "dateInFuture",
-    ),
-});
-export interface GrantTrialFormValues {
-  tenant: TenantDirectoryEntry | null;
-  event: AdminEventSummary | null;
-  guests: number;
-  expiresAt: string;
-}
 
 export const createAgreementSchema = z
   .object({

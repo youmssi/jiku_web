@@ -9,7 +9,7 @@
     "desk": "Desk",
     "tenants": "Tenants",
     "payments": "Payments",
-    "trials": "Trials",
+    "trials": "Offered guests",
     "agreements": "Agreements",
     "billingInfo": "Billing info",
     "audit": "Audit",
@@ -24,7 +24,7 @@
   "pages": {
     "tenants": "Tenants",
     "payments": "Payments desk",
-    "trials": "Trials",
+    "trials": "Offered guests running",
     "agreements": "Enterprise agreements",
     "billingInfo": "Billing info",
     "audit": "Audit log",
@@ -280,9 +280,9 @@
     "endText": "The event's allowance reverts to its paid entitlement and the organizer is notified.",
     "reason": "Reason",
     "endConfirm": "End trial",
-    "intro": "Every trial ever granted, newest first.",
-    "emptyTitle": "No trials yet",
-    "emptyText": "Grant a trial to unlock a free allowance for one event.",
+    "intro": "Guests offered by gift on an event, newest first: countdown, early end and conversion.",
+    "emptyTitle": "No offered guests running",
+    "emptyText": "Offer guests with a gift: they show here once the organizer activates them.",
     "stats": {
       "active": "Active trials",
       "expiring": "Expiring ≤ 7 days",
@@ -297,15 +297,9 @@
     "page": "Page {page} of {count}",
     "status": "Status",
     "expiringChip": "Expiring ≤ 7d",
-    "grant": "Grant trial",
-    "grantText": "Grant a free allowance for one event. The organizer is notified instantly and sees a countdown to the deadline in their own dashboard.",
-    "cancel": "Cancel",
-    "granting": "Granting…",
-    "grantedToast": "Trial granted: the organizer has been notified.",
-    "pickBoth": "Pick an organization and an event first.",
     "noStatus": "No status",
     "guests": "Guests lent",
-    "guestsHint": "The event may invite this many guests until the trial ends. If it buys them first, the trial is converted."
+    "offerGift": "Offer a gift"
   },
   "billing": {
     "defaultsTitle": "Defaults from configuration",
