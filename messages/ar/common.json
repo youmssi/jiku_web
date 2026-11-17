@@ -81,5 +81,41 @@
     "marketing": "خطر تسويقي: احذف {words}، وإلا ستُحظر الرسالة.",
     "word": "«{word}»",
     "guide": "كيف تكتب رسالة تصل"
+  },
+  "twoStep": {
+    "title": "Two-step verification",
+    "description": "Enter the 6-digit code shown by your authentication app.",
+    "codeLabel": "6-digit code",
+    "codeHelp": "It changes every 30 seconds in your app.",
+    "backupLabel": "Backup code",
+    "backupHelp": "Each backup code works only once.",
+    "useBackup": "Use a backup code",
+    "useApp": "Use the app",
+    "trustDevice": "Don't ask again on this device",
+    "verify": "Verify",
+    "back": "Back",
+    "copied": "Copied",
+    "expired": "This sign-in has expired. Start again with your password.",
+    "invalid": "Wrong or already used code. Wait for the next code and try again.",
+    "invalidBackup": "Wrong or already used backup code.",
+    "tooMany": "Too many codes tried. Wait a few minutes.",
+    "failed": "Verification did not go through. Try again.",
+    "setup": {
+      "install": "Install an authentication app (Google Authenticator, Microsoft Authenticator, 1Password…).",
+      "scan": "Scan this QR code with the app, or type the key below.",
+      "enter": "Enter the 6-digit code it shows.",
+      "qrLabel": "QR code to scan with your authentication app",
+      "key": "Key to type by hand",
+      "copyKey": "Copy the key",
+      "codeHelp": "The code confirms the app is set up correctly.",
+      "confirm": "Turn on"
+    },
+    "backup": {
+      "title": "Your backup codes",
+      "help": "If you lose your phone, each of these codes signs you in once. Keep them somewhere safe: they will not be shown again.",
+      "copy": "Copy the codes",
+      "download": "Download",
+      "fileTitle": "Jikū backup codes: each works only once."
+    }
   }
 }

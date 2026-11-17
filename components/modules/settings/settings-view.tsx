@@ -13,6 +13,7 @@ import { VerificationView } from "@/components/modules/verification";
 import { loadVerification } from "@/components/modules/verification/server";
 import { loadSmsAvailable } from "@/lib/sms-available";
 import { AccountView } from "@/components/modules/settings/account-view";
+import { SecurityView } from "@/components/modules/settings/security-view";
 import { BrandingView } from "@/components/modules/settings/branding-view";
 import { LegalIdentityView } from "@/components/modules/settings/legal-identity-view";
 import { PaymentMethodsForm } from "@/components/modules/settings/payment-methods-form";
@@ -29,6 +30,7 @@ import {
   loadTemplates,
   loadVocabulary,
   loadAccountDeletion,
+  loadSecurity,
 } from "@/components/modules/settings/settings.queries";
 import type {
   BrandingResponse,
@@ -108,12 +110,12 @@ const SECTION_GROUPS = [
   { id: "organization", sections: ["organization", "branding", "members"] },
   { id: "payments", sections: ["verification", "payments", "sales", "legal"] },
   { id: "messages", sections: ["messaging", "personalisation"] },
-  { id: "account", sections: ["account"] },
+  { id: "account", sections: ["account", "security"] },
 ] as const;
 
 type Section = (typeof SECTION_GROUPS)[number]["sections"][number];
 
-const MEMBER_SECTIONS: readonly Section[] = ["organization", "account"];
+const MEMBER_SECTIONS: readonly Section[] = ["organization", "account", "security"];
 
 /**
  * The organizer's settings: organization, branding, team, payments, messaging
@@ -137,6 +139,7 @@ export async function SettingsView({ tab }: { tab?: string }) {
   const opened = groups.some((group) => group.sections.some((section) => section === tab)) ? (tab as Section) : null;
   const shown: Section = opened ?? "organization";
   const deletion = shown === "account" ? await loadAccountDeletion() : null;
+  const security = shown === "security" ? await loadSecurity() : null;
   const label = (section: Section) =>
     section === "verification" ? tPage("tabs.verification") : section === "sales" ? tSales("tab") : tPage(`tabs.${section}`);
 
@@ -217,6 +220,8 @@ export async function SettingsView({ tab }: { tab?: string }) {
             deletion={deletion}
           />
         );
+      case "security":
+        return security ? <SecurityView mfa={security.mfa} sessions={security.sessions} /> : null;
     }
     if (!settings) return null;
     switch (section) {

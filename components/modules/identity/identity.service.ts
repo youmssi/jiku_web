@@ -5,6 +5,8 @@ import { localeRedirect } from "@/i18n/redirect";
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 import { setAuthCookies, clearAuthCookies, type AuthTokens } from "@/lib/auth";
+import { clearChallenge, deviceInfo, readChallenge, rememberDevice, setChallenge, trustedDeviceToken } from "@/lib/two-step";
+import type { SignInStep, TwoStepInput } from "@/components/shared/two-step";
 import { type ActionResult, fail, ok, problemCode, reportApiError } from "@/lib/action-result";
 import {
   MARKETING_CONSENT_VERSION,
@@ -58,7 +60,42 @@ export async function registerAction(
   return localeRedirect(afterSignIn(next));
 }
 
-export async function loginAction(input: LoginInput, next?: string): Promise<ActionResult> {
+/**
+ * A refused sign-in that asks for the authentication app's code (JIKU-317): the
+ * step token goes into an httpOnly cookie and the form shows the code step.
+ */
+async function codeStepFrom(response: Response): Promise<ActionResult<SignInStep> | null> {
+  if (response.status !== 401 || (await problemCode(response)) !== "auth.mfa-required") return null;
+  const body = (await response.json().catch(() => null)) as { challengeToken?: unknown } | null;
+  if (typeof body?.challengeToken !== "string") return null;
+  await setChallenge("organizer", body.challengeToken);
+  return ok({ step: "code" });
+}
+
+/** The code step of a sign-in (JIKU-317): the app's code or one backup code. */
+export async function verifyTwoStepAction(input: TwoStepInput, next?: string): Promise<ActionResult<SignInStep>> {
+  const t = await getTranslations("common.twoStep");
+  const challengeToken = await readChallenge("organizer");
+  if (!challengeToken) return fail(t("expired"));
+  const response = await publicFetch("/auth/mfa/verify", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ challengeToken, ...input, ...(await deviceInfo()) }),
+  });
+  if (!response.ok) {
+    if (response.status === 429) return fail(t("tooMany"));
+    if (response.status === 401) return fail(t(input.backupCode ? "invalidBackup" : "invalid"));
+    reportApiError(response);
+    return fail(t("failed"));
+  }
+  const tokens = (await response.json()) as AuthTokens & { trustedDeviceToken?: string | null };
+  await clearChallenge("organizer");
+  await rememberDevice("organizer", tokens.trustedDeviceToken);
+  await setAuthCookies(tokens);
+  return localeRedirect(afterSignIn(next));
+}
+
+export async function loginAction(input: LoginInput, next?: string): Promise<ActionResult<SignInStep>> {
   const t = await getTranslations();
   const parsed = loginSchema.safeParse(input);
   if (!parsed.success) {
@@ -67,8 +104,14 @@ export async function loginAction(input: LoginInput, next?: string): Promise<Act
   const response = await publicFetch("/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(parsed.data),
+    body: JSON.stringify({
+      ...parsed.data,
+      ...(await deviceInfo()),
+      trustedDeviceToken: (await trustedDeviceToken("organizer")) ?? null,
+    }),
   });
+  const codeStep = await codeStepFrom(response);
+  if (codeStep) return codeStep;
   if (!response.ok) {
     if (response.status !== 401 && response.status !== 403 && response.status !== 429) {
       reportApiError(response);
@@ -95,14 +138,18 @@ export async function loginAction(input: LoginInput, next?: string): Promise<Act
 }
 
 /** Exchanges the Google Identity Services credential for a session (JIKU-51). */
-export async function googleLoginAction(idToken: string, next?: string): Promise<ActionResult> {
+export async function googleLoginAction(idToken: string, next?: string): Promise<ActionResult<SignInStep>> {
   const t = await getTranslations();
   let response: Response;
   try {
     response = await publicFetch("/auth/google", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idToken }),
+      body: JSON.stringify({
+        idToken,
+        ...(await deviceInfo()),
+        trustedDeviceToken: (await trustedDeviceToken("organizer")) ?? null,
+      }),
     });
   } catch {
     // The backend aborts a slow request after 10s (e.g. a cold instance). A
@@ -110,6 +157,8 @@ export async function googleLoginAction(idToken: string, next?: string): Promise
     // rejection that leaves the visitor on the login page with no feedback.
     return fail(t("common.errors.unreachable"));
   }
+  const codeStep = await codeStepFrom(response);
+  if (codeStep) return codeStep;
   if (!response.ok) {
     if (response.status !== 401) {
       reportApiError(response);

@@ -30,3 +30,6 @@ export { WhatsAppMessageCheck } from "./whatsapp-message-check";
 export {whatsappChatLink} from "./whatsapp-link";
 export {directionsLink, googleCalendarLink, icsCalendar} from "./calendar-link";
 export {JikuSymbol} from "./jiku-symbol";
+export {TwoStepCodeForm} from "./two-step-code-form";
+export {BackupCodes, TwoStepSetup} from "./two-step-setup";
+export type {SignInStep, TwoStepEnrollment, TwoStepInput} from "./two-step";

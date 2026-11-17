@@ -81,5 +81,41 @@
     "marketing": "Risque marketing : retirez {words}, sinon le message sera bloqué.",
     "word": "« {word} »",
     "guide": "Écrire un message qui passe"
+  },
+  "twoStep": {
+    "title": "Vérification en deux étapes",
+    "description": "Saisissez le code à 6 chiffres affiché par votre application d'authentification.",
+    "codeLabel": "Code à 6 chiffres",
+    "codeHelp": "Il change toutes les 30 secondes dans votre application.",
+    "backupLabel": "Code de secours",
+    "backupHelp": "Chaque code de secours ne sert qu'une fois.",
+    "useBackup": "Utiliser un code de secours",
+    "useApp": "Utiliser l'application",
+    "trustDevice": "Ne plus demander sur cet appareil",
+    "verify": "Vérifier",
+    "back": "Retour",
+    "copied": "Copié",
+    "expired": "Cette connexion a expiré. Recommencez avec votre mot de passe.",
+    "invalid": "Code incorrect ou déjà utilisé. Attendez le code suivant et réessayez.",
+    "invalidBackup": "Code de secours incorrect ou déjà utilisé.",
+    "tooMany": "Trop de codes essayés. Patientez quelques minutes.",
+    "failed": "La vérification n'a pas abouti. Réessayez.",
+    "setup": {
+      "install": "Installez une application d'authentification (Google Authenticator, Microsoft Authenticator, 1Password…).",
+      "scan": "Scannez ce QR code avec l'application, ou saisissez la clé ci-dessous.",
+      "enter": "Saisissez le code à 6 chiffres qu'elle affiche.",
+      "qrLabel": "QR code à scanner avec votre application d'authentification",
+      "key": "Clé à saisir à la main",
+      "copyKey": "Copier la clé",
+      "codeHelp": "Le code confirme que l'application est bien réglée.",
+      "confirm": "Activer"
+    },
+    "backup": {
+      "title": "Vos codes de secours",
+      "help": "Si vous perdez votre téléphone, chacun de ces codes permet de vous connecter une fois. Rangez-les en lieu sûr : ils ne seront plus affichés.",
+      "copy": "Copier les codes",
+      "download": "Télécharger",
+      "fileTitle": "Codes de secours Jikū : chacun sert une seule fois."
+    }
   }
 }

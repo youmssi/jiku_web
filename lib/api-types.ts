@@ -84,6 +84,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/auth/mfa/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminAuthStartSetup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/auth/mfa/setup/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminAuthConfirmSetup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/auth/mfa/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminAuthVerifyMfa"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/auth/refresh": {
         parameters: {
             query?: never;
@@ -238,6 +286,38 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["adminGiftRevoke"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/me/mfa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminMfaStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/me/mfa/backup-codes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminMfaRenewBackupCodes"];
         delete?: never;
         options?: never;
         head?: never;
@@ -782,6 +862,150 @@ export interface paths {
         get?: never;
         put: operations["authUpdateMarketingConsent"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/mfa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["accountSecurityMfa"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/mfa/backup-codes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["accountSecurityRenewBackupCodes"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/mfa/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["accountSecurityConfirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/mfa/disable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["accountSecurityDisable"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/mfa/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["accountSecuritySetup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["accountSecuritySessions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/sessions/close-others": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["accountSecurityCloseOthers"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/sessions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["accountSecurityClose"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/mfa/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["authVerifyMfa"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4505,6 +4729,10 @@ export interface components {
         AdminAuthResponse: {
             accessToken?: string;
             refreshToken?: string;
+            trustedDeviceToken?: string | null;
+        };
+        AdminBackupCodesView: {
+            backupCodes?: string[];
         };
         AdminGiftPage: {
             entries?: components["schemas"]["AdminGiftView"][];
@@ -4547,6 +4775,28 @@ export interface components {
         AdminLoginRequest: {
             email?: string;
             password?: string;
+            trustedDeviceToken?: string | null;
+        };
+        AdminMfaCodeRequest: {
+            code: string;
+        };
+        AdminMfaConfirmRequest: {
+            challengeToken: string;
+            code: string;
+        };
+        AdminMfaSetupRequest: {
+            challengeToken: string;
+        };
+        AdminMfaSetupResponse: {
+            accessToken?: string;
+            backupCodes?: string[];
+            refreshToken?: string;
+        };
+        AdminMfaVerifyRequest: {
+            backupCode?: string | null;
+            challengeToken: string;
+            code?: string | null;
+            trustDevice?: boolean;
         };
         AdminPaymentView: {
             /** Format: int64 */
@@ -4730,12 +4980,16 @@ export interface components {
             accessToken?: string;
             refreshToken?: string;
             tokenType?: string;
+            trustedDeviceToken?: string | null;
         };
         AvailabilityRequest: {
             /** Format: int32 */
             dayOfWeek?: number;
             end?: string;
             start?: string;
+        };
+        BackupCodesView: {
+            backupCodes?: string[];
         };
         BillingAllowance: {
             /** Format: int64 */
@@ -5245,7 +5499,10 @@ export interface components {
             status?: string;
         };
         GoogleLoginRequest: {
+            device?: string | null;
+            deviceId?: string | null;
             idToken: string;
+            trustedDeviceToken?: string | null;
         };
         GuestImportResult: {
             consentAttested?: boolean;
@@ -5443,9 +5700,12 @@ export interface components {
             ticket?: string;
         };
         LoginRequest: {
+            device?: string | null;
+            deviceId?: string | null;
             /** Format: email */
             email: string;
             password: string;
+            trustedDeviceToken?: string | null;
         };
         ManualCheckInRequest: {
             /** Format: uuid */
@@ -5509,6 +5769,32 @@ export interface components {
         };
         MessagingChannelsResponse: {
             sms?: boolean;
+        };
+        MfaCodeRequest: {
+            code: string;
+        };
+        MfaDisableRequest: {
+            backupCode?: string | null;
+            code?: string | null;
+        };
+        MfaEnrollmentStart: {
+            otpauthUri?: string;
+            secret?: string;
+        };
+        MfaStatus: {
+            /** Format: int32 */
+            backupCodesLeft?: number;
+            enabled?: boolean;
+            /** Format: date-time */
+            enabledAt?: string | null;
+        };
+        MfaVerifyRequest: {
+            backupCode?: string | null;
+            challengeToken: string;
+            code?: string | null;
+            device?: string | null;
+            deviceId?: string | null;
+            trustDevice?: boolean;
         };
         MonthOption: {
             /** Format: int32 */
@@ -6430,6 +6716,15 @@ export interface components {
             /** Format: int64 */
             priceMinor?: number | null;
         };
+        SessionView: {
+            /** Format: date-time */
+            createdAt?: string;
+            current?: boolean;
+            device?: string | null;
+            id?: string;
+            /** Format: date-time */
+            lastUsedAt?: string;
+        };
         SetContentOverrideRequest: {
             active?: boolean;
             reason: string;
@@ -7076,6 +7371,78 @@ export interface operations {
             };
         };
     };
+    adminAuthStartSetup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminMfaSetupRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MfaEnrollmentStart"];
+                };
+            };
+        };
+    };
+    adminAuthConfirmSetup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminMfaConfirmRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminMfaSetupResponse"];
+                };
+            };
+        };
+    };
+    adminAuthVerifyMfa: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminMfaVerifyRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminAuthResponse"];
+                };
+            };
+        };
+    };
     adminAuthRefresh: {
         parameters: {
             query?: never;
@@ -7347,6 +7714,50 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["AdminGiftView"];
+                };
+            };
+        };
+    };
+    adminMfaStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MfaStatus"];
+                };
+            };
+        };
+    };
+    adminMfaRenewBackupCodes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminMfaCodeRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminBackupCodesView"];
                 };
             };
         };
@@ -8232,6 +8643,198 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    accountSecurityMfa: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MfaStatus"];
+                };
+            };
+        };
+    };
+    accountSecurityRenewBackupCodes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaCodeRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BackupCodesView"];
+                };
+            };
+        };
+    };
+    accountSecurityConfirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaCodeRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BackupCodesView"];
+                };
+            };
+        };
+    };
+    accountSecurityDisable: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaDisableRequest"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    accountSecuritySetup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MfaEnrollmentStart"];
+                };
+            };
+        };
+    };
+    accountSecuritySessions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SessionView"][];
+                };
+            };
+        };
+    };
+    accountSecurityCloseOthers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    accountSecurityClose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    authVerifyMfa: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaVerifyRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AuthResponse"];
+                };
             };
         };
     };

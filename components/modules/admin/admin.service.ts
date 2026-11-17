@@ -3,9 +3,20 @@
 import { getTranslations } from "next-intl/server";
 import { localeRedirect } from "@/i18n/redirect";
 import { revalidatePath } from "next/cache";
-import { type ActionResult, fail, failWithReason, ok, reportApiError } from "@/lib/action-result";
+import { type ActionResult, fail, failWithReason, ok, problemCode, reportApiError } from "@/lib/action-result";
 import { adminFetch, publicFetch } from "@/lib/api-server";
 import { clearAdminAuthCookie, setAdminAuthCookie } from "@/lib/auth";
+import {
+  clearChallenge,
+  enrollmentFrom,
+  holdAdminSession,
+  readChallenge,
+  rememberDevice,
+  setChallenge,
+  takeAdminSession,
+  trustedDeviceToken,
+} from "@/lib/two-step";
+import type { TwoStepEnrollment, TwoStepInput } from "@/components/shared/two-step";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import type {
   VerificationDocumentLink,
@@ -15,17 +26,31 @@ import type {
   AdminEventSummary,
 } from "@/components/modules/admin/schema";
 
+/** A desk sign-in that needs the code next, or the authentication app set up first (JIKU-317). */
+export type AdminSignInStep = { step: "code" } | { step: "setup"; enrollment: TwoStepEnrollment };
+
 export async function adminLoginAction(
   email: string,
   password: string,
-): Promise<ActionResult> {
+): Promise<ActionResult<AdminSignInStep>> {
   const response = await publicFetch("/admin/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, trustedDeviceToken: (await trustedDeviceToken("admin")) ?? null }),
   });
   const t = await getTranslations("admin.errors");
   if (response.status === 401) {
+    const code = await problemCode(response);
+    const body = (await response.json().catch(() => null)) as { challengeToken?: unknown } | null;
+    const challengeToken = typeof body?.challengeToken === "string" ? body.challengeToken : null;
+    if (challengeToken && code === "auth.mfa-required") {
+      await setChallenge("admin", challengeToken);
+      return ok({ step: "code" });
+    }
+    if (challengeToken && code === "auth.mfa-setup-required") {
+      await setChallenge("admin", challengeToken);
+      return startAdminSetup(challengeToken);
+    }
     return fail(t("invalidCredentials"));
   }
   if (!response.ok) {
@@ -35,6 +60,72 @@ export async function adminLoginAction(
   const tokens = (await response.json()) as { accessToken: string };
   await setAdminAuthCookie(tokens.accessToken);
   return localeRedirect(ADMIN_ROUTES.TENANTS);
+}
+
+async function startAdminSetup(challengeToken: string): Promise<ActionResult<AdminSignInStep>> {
+  const t = await getTranslations("common.twoStep");
+  const response = await publicFetch("/admin/auth/mfa/setup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ challengeToken }),
+  });
+  const enrollment = response.ok ? await enrollmentFrom(await response.json()) : null;
+  if (!enrollment) {
+    reportApiError(response, "admin");
+    return fail(t("failed"));
+  }
+  return ok({ step: "setup", enrollment });
+}
+
+/** The desk's code step (JIKU-317). A success opens the desk. */
+export async function adminVerifyTwoStepAction(input: TwoStepInput): Promise<ActionResult<null>> {
+  const t = await getTranslations("common.twoStep");
+  const challengeToken = await readChallenge("admin");
+  if (!challengeToken) return fail(t("expired"));
+  const response = await publicFetch("/admin/auth/mfa/verify", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ challengeToken, ...input }),
+  });
+  if (!response.ok) return twoStepFailure(response, Boolean(input.backupCode));
+  const tokens = (await response.json()) as { accessToken: string; trustedDeviceToken?: string | null };
+  await clearChallenge("admin");
+  await rememberDevice("admin", tokens.trustedDeviceToken);
+  await setAdminAuthCookie(tokens.accessToken);
+  return localeRedirect(ADMIN_ROUTES.TENANTS);
+}
+
+/** Confirms the desk's first setup with a code (JIKU-317); the session opens and the backup codes show once. */
+export async function adminConfirmSetupAction(code: string): Promise<ActionResult<{ backupCodes: string[] }>> {
+  const t = await getTranslations("common.twoStep");
+  const challengeToken = await readChallenge("admin");
+  if (!challengeToken) return fail(t("expired"));
+  const response = await publicFetch("/admin/auth/mfa/setup/confirm", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ challengeToken, code }),
+  });
+  if (!response.ok) return twoStepFailure(response, false);
+  const result = (await response.json()) as { accessToken: string; backupCodes: string[] };
+  await clearChallenge("admin");
+  await holdAdminSession(result.accessToken);
+  return ok({ backupCodes: result.backupCodes });
+}
+
+/** Opens the desk once the first setup's backup codes have been seen (JIKU-317). */
+export async function adminFinishSetupAction(): Promise<ActionResult> {
+  const accessToken = await takeAdminSession();
+  if (!accessToken) return fail((await getTranslations("common.twoStep"))("expired"));
+  await setAdminAuthCookie(accessToken);
+  return localeRedirect(ADMIN_ROUTES.TENANTS);
+}
+
+async function twoStepFailure(response: Response, backup: boolean): Promise<ActionResult<never>> {
+  const t = await getTranslations("common.twoStep");
+  if (response.status === 429) return fail(t("tooMany"));
+  if (response.status === 401) return fail(t(backup ? "invalidBackup" : "invalid"));
+  reportApiError(response, "admin");
+  return fail(t("failed"));
 }
 
 export async function adminLogoutAction(): Promise<void> {

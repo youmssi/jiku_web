@@ -12,7 +12,8 @@
       "legal": "Invoicing details",
       "personalisation": "Personalisation",
       "account": "Account",
-      "verification": "Verification"
+      "verification": "Verification",
+      "security": "Security"
     },
     "groups": {
       "organization": "Your organization",
@@ -436,6 +437,38 @@
     "templatePreview": "We couldn't preview this message.",
     "usernameTaken": "This username is already taken. Pick another.",
     "usernameInvalid": "Use 3 to 32 lowercase letters, numbers and hyphens.",
-    "username": "We couldn't save the username. Please try again."
+    "username": "We couldn't save the username. Please try again.",
+    "security": "That did not go through. Try again."
+  },
+  "security": {
+    "mfa": {
+      "title": "Two-step verification",
+      "on": "On",
+      "description": "Each time you sign in on a new device, a code from your authentication app is asked for as well as the password.",
+      "enable": "Turn on",
+      "enabledSince": "On since {date}.",
+      "backupLeft": "{count, plural, =0 {No backup codes left: create new ones.} one {# backup code left} other {# backup codes left}}",
+      "renew": "New backup codes",
+      "disable": "Turn off",
+      "setupTitle": "Turn on two-step verification",
+      "setupDescription": "You need your phone and an authentication app.",
+      "done": "Done",
+      "disableTitle": "Turn off two-step verification?",
+      "disableDescription": "Your password alone will sign you in again. Confirm with a code.",
+      "disabled": "Two-step verification is off.",
+      "renewTitle": "New backup codes",
+      "renewDescription": "The old codes will stop working. Confirm with a code from the app."
+    },
+    "sessions": {
+      "title": "Signed-in devices",
+      "description": "The browsers signed in to your account. Sign out any you don't recognize, then change your password.",
+      "current": "This device",
+      "unknownDevice": "Unknown device",
+      "lastUsed": "Last active: {date}",
+      "close": "Sign out",
+      "closeOthers": "Sign out all other devices",
+      "closed": "Device signed out.",
+      "closedOthers": "The other devices are signed out."
+    }
   }
 }
