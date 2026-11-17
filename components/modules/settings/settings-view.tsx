@@ -221,7 +221,7 @@ export async function SettingsView({ tab }: { tab?: string }) {
           />
         );
       case "security":
-        return security ? <SecurityView mfa={security.mfa} sessions={security.sessions} /> : null;
+        return security ? <SecurityView mfa={security.mfa} sessions={security.sessions} passkeys={security.passkeys} /> : null;
     }
     if (!settings) return null;
     switch (section) {

@@ -247,7 +247,7 @@ export const LEGAL_EN: LegalDocuments = {
         heading: "The data we process",
         body: [
           [
-            "Account: name, email, phone, password (stored as an irreversible hash), role, language. If you turn on two-step verification: your authentication app's key (encrypted) and your backup codes (irreversibly hashed).",
+            "Account: name, email, phone, password (stored as an irreversible hash), role, language. If you turn on two-step verification: your authentication app's key (encrypted) and your backup codes (irreversibly hashed). If you add a passkey: its public key, the name you give it and when it was added and used; the private key stays on your device.",
             "Signed-in devices: browser and system type, sign-in and last-activity dates, to list your sessions and warn you of a sign-in from a new device.",
             "Organization: name, logo, colors, country, payment methods shown to its clients, settings.",
             "Guests and clients (on the organization's behalf): name, email and/or phone, answer, ticket category, answers to questions, attendance, declared payment status.",
