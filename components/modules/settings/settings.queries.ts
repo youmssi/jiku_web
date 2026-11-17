@@ -3,6 +3,7 @@ import "server-only";
 import { serverFetch } from "@/lib/api-server";
 import { reportApiError } from "@/lib/action-result";
 import type {
+  AccountDeletionStatus,
   BrandingResponse,
   EmbeddedSignupConfig,
   PaymentMethodsInfo,
@@ -57,4 +58,9 @@ export async function loadVocabulary(): Promise<VocabularyEntry[]> {
 
 export async function loadTemplates(): Promise<TemplateSummary[]> {
   return (await read<TemplateSummary[]>("/settings/templates")) ?? [];
+}
+
+/** What deleting the account would take with it (JIKU-316). */
+export function loadAccountDeletion(): Promise<AccountDeletionStatus | null> {
+  return read("/auth/me/deletion");
 }

@@ -173,3 +173,15 @@ export const paymentMethodsSchema = z
   );
 
 export type PaymentMethodsInput = z.infer<typeof paymentMethodsSchema>;
+
+// ─── Account deletion (JIKU-316) ────────────────────────────────────────────
+
+export type AccountDeletionStatus = Schema<"AccountDeletionStatusView">;
+export type SoleOwnedOrganization = Schema<"SoleOwnedOrganization">;
+
+/** The password, or a fresh Google credential for accounts without one. */
+export interface AccountDeletionInput {
+  password?: string;
+  googleIdToken?: string;
+  deleteOrganizations: boolean;
+}

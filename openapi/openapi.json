@@ -13,6 +13,51 @@
         ],
         "type" : "object"
       },
+      "AccountDeletionRequest" : {
+        "properties" : {
+          "deleteOrganizations" : {
+            "type" : "boolean"
+          },
+          "googleIdToken" : {
+            "maxLength" : 4096,
+            "minLength" : 0,
+            "type" : [
+              "string",
+              "null"
+            ]
+          },
+          "password" : {
+            "maxLength" : 200,
+            "minLength" : 0,
+            "type" : [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type" : "object"
+      },
+      "AccountDeletionStatusView" : {
+        "properties" : {
+          "confirmWithPassword" : {
+            "type" : "boolean"
+          },
+          "scheduledFor" : {
+            "format" : "date-time",
+            "type" : [
+              "string",
+              "null"
+            ]
+          },
+          "soleOwnedOrganizations" : {
+            "items" : {
+              "$ref" : "#/components/schemas/SoleOwnedOrganization"
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
       "ActivateGiftRequest" : {
         "properties" : {
           "eventId" : {
@@ -2416,46 +2461,6 @@
         },
         "required" : [
           "idToken"
-        ],
-        "type" : "object"
-      },
-      "GrantTrialRequest" : {
-        "properties" : {
-          "eventId" : {
-            "format" : "uuid",
-            "type" : [
-              "string",
-              "null"
-            ]
-          },
-          "expiresAt" : {
-            "format" : "date-time",
-            "type" : [
-              "string",
-              "null"
-            ]
-          },
-          "guests" : {
-            "format" : "int64",
-            "minimum" : 1,
-            "type" : [
-              "integer",
-              "null"
-            ]
-          },
-          "tenantId" : {
-            "format" : "uuid",
-            "type" : [
-              "string",
-              "null"
-            ]
-          }
-        },
-        "required" : [
-          "eventId",
-          "expiresAt",
-          "guests",
-          "tenantId"
         ],
         "type" : "object"
       },
@@ -6498,6 +6503,17 @@
         },
         "type" : "object"
       },
+      "SoleOwnedOrganization" : {
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
       "SseEmitter" : {
         "properties" : {
           "timeout" : {
@@ -9300,34 +9316,6 @@
         "tags" : [
           "admin-trial-controller"
         ]
-      },
-      "post" : {
-        "operationId" : "adminTrialGrant",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/GrantTrialRequest"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/AdminTrialView"
-                }
-              }
-            },
-            "description" : "OK"
-          }
-        },
-        "tags" : [
-          "admin-trial-controller"
-        ]
       }
     },
     "/api/v1/admin/trials/stats" : {
@@ -10117,6 +10105,54 @@
         },
         "tags" : [
           "auth-controller"
+        ]
+      }
+    },
+    "/api/v1/auth/me/deletion" : {
+      "get" : {
+        "operationId" : "accountDeletionStatus",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountDeletionStatusView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [
+          "account-deletion-controller"
+        ]
+      },
+      "post" : {
+        "operationId" : "accountDeletionRequest",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AccountDeletionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountDeletionStatusView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [
+          "account-deletion-controller"
         ]
       }
     },
