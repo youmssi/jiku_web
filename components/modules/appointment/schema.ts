@@ -24,6 +24,12 @@ export interface AppointmentServiceView {
   logoUrl?: string | null;
   /** New bookings wait for the organization's renewal (JIKU-254); no times are offered. */
   bookingPaused?: boolean;
+  /** What the service card shows (JIKU-189). */
+  priceMinor?: number | null;
+  currency?: string | null;
+  durationMinutes?: number | null;
+  place?: string | null;
+  primaryColor?: string | null;
 }
 
 export interface AppointmentBookingView {

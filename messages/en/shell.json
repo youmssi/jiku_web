@@ -13,7 +13,8 @@
     "configuration": "Settings",
     "operators": "Operators",
     "orders": "Orders",
-    "openInvitation": "Open invitation"
+    "openInvitation": "Open invitation",
+    "share": "Share"
   },
   "sidebar": {
     "platform": "Platform",

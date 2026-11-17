@@ -16,7 +16,7 @@ import { fetchPublicOpenInvitation } from "./open-invitation.queries";
 export type CardFormat = "portrait" | "status" | "landscape";
 
 /** Reads an image into a data URL, or null when it cannot be read: a broken link never breaks the card. */
-async function inline(url: string | null | undefined): Promise<string | null> {
+export async function inline(url: string | null | undefined): Promise<string | null> {
   if (!url) return null;
   try {
     const response = await fetch(url);
@@ -78,12 +78,23 @@ export async function renderCard(
     },
     direction: localeDirection(locale),
   };
+  return renderCardArt(data, format);
+}
+
+/**
+ * Draws any card in one of the three formats (JIKU-194, JIKU-189): the open
+ * invitation's, and a service's, which fills the same layout with its own words.
+ */
+export async function renderCardArt(data: CardArtData, format: CardFormat): Promise<ImageResponse> {
   const size = format === "portrait" ? PORTRAIT : format === "status" ? STATUS : LANDSCAPE;
   const art =
     format === "portrait" ? <PortraitCard data={data} /> : format === "status" ? <StatusCard data={data} /> : <LandscapeCard data={data} />;
   return new ImageResponse(art, {
     ...size,
     // The Arabic face loads only for a card with Arabic on it, in its words or in what the organizer wrote.
-    fonts: await cardFonts(style, Object.values(data.labels).concat(data.eventName, data.organizerName, data.location ?? "").some(hasArabic)),
+    fonts: await cardFonts(
+      data.style,
+      Object.values(data.labels).concat(data.eventName, data.organizerName, data.location ?? "", data.answerBy ?? "").some(hasArabic),
+    ),
   });
 }

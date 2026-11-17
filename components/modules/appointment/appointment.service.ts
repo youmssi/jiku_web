@@ -1,6 +1,8 @@
 "use server";
 
+import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
+import { serviceCardSource, type ServiceCardSource } from "./service-card-link";
 import { publicFetch } from "@/lib/api-server";
 import { type ActionResult, fail, fromResponse, ok, reportApiError } from "@/lib/action-result";
 import type { LiveTicket } from "@/components/shared";
@@ -42,11 +44,12 @@ export async function loadAppointment(
 export async function bookAppointment(
   ref: AppointmentLinkRef,
   input: BookingInput,
+  source?: ServiceCardSource | null,
 ): Promise<ActionResult<AppointmentBookingView>> {
   const response = await publicFetch(basePath(ref) + "/book", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(input),
+    body: JSON.stringify({ ...input, source: serviceCardSource(source) }),
   });
   const t = await getTranslations("guest.appointment.errors");
   return fromResponse<AppointmentBookingView>(response, {
@@ -54,6 +57,23 @@ export async function bookAppointment(
     423: t("paused"),
     default: t("failed"),
   });
+}
+
+/**
+ * Counts an open of a service's shared link or card (JIKU-189). The page sends
+ * it once loaded in a browser; the API counts each visitor once a day from
+ * their address and browser, which this relays.
+ */
+export async function recordServiceOpenAction(code: string, source: string): Promise<void> {
+  const tag = serviceCardSource(source);
+  if (!tag || !/^[A-Za-z0-9]{4,16}$/.test(code)) return;
+  const agent = ((await headers()).get("user-agent") ?? "").slice(0, 500);
+  const response = await publicFetch(`/r/${encodeURIComponent(code)}/open`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ source: tag, agent }),
+  }).catch(() => null);
+  if (response && !response.ok && response.status !== 429) reportApiError(response, "service-card");
 }
 
 export async function loadBookingStatus(
