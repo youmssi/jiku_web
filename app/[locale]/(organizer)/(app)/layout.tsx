@@ -9,6 +9,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { GiftWelcome } from "@/components/modules/billing";
 import { BillingAttentionBanner, loadBillingStatus } from "@/components/modules/billing/server";
 import { ConfirmEmailBanner } from "@/components/modules/identity";
 import { NotificationBell } from "@/components/modules/notices";
@@ -80,6 +81,7 @@ export default async function OrganizerAppLayout({
           <div className="flex flex-1 flex-col pb-24 md:pb-16">{children}</div>
         </SidebarInset>
         <RatingPrompt />
+        <GiftWelcome canManage={BILLING_ROLES.includes(context.role)} />
         <ProductAnalytics userId={context.userId} organizationId={context.activeTenantId} role={context.role} />
       </SidebarProvider>
     </TooltipProvider>

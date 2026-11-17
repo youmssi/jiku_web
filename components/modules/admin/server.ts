@@ -8,6 +8,7 @@ export {
   loadBillingSettings,
   loadFeedback,
   loadFollowUps,
+  loadGifts,
   loadPayments,
   loadProspects,
   loadRatingSummary,

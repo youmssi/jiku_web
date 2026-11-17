@@ -77,3 +77,13 @@ export type CheckoutTarget =
   | { kind: "subscription"; plan: string; months: number }
   | { kind: "pack"; months: number }
   | { kind: "packExtra"; blocks: number };
+
+/** A gift the back office offered the organization (JIKU-315). */
+export type Gift = Schema<"GiftView">;
+export type GiftKind = "EVENT_GUESTS" | "SERVICES_PLAN" | "ORGANIZER_PACK";
+
+/** An event the guests of a gift may go to. */
+export interface GiftEventOption {
+  id: string;
+  name: string;
+}

@@ -155,6 +155,7 @@ export const ADMIN_ROUTES = {
   TENANTS: "/admin/tenants",
   PAYMENTS: "/admin/payments",
   TRIALS: "/admin/trials",
+  GIFTS: "/admin/gifts",
   AGREEMENTS: "/admin/agreements",
   AUDIT: "/admin/audit",
   WHATSAPP: "/admin/whatsapp",

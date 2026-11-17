@@ -9,6 +9,7 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGiftText } from "@/components/modules/billing";
 import { formatAmount } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 import { noticeMessage, safeNoticeLink, type OrganizerNotice } from "./schema";
@@ -188,6 +189,7 @@ function useNoticeText(notice: OrganizerNotice): string {
   const t = useTranslations("shell.notices.kinds");
   const format = useFormatter();
   const locale = useLocale();
+  const giftText = useGiftText();
   const params = notice.params;
   const message = noticeMessage(notice.kind);
   if (!message) return t("other");
@@ -206,5 +208,15 @@ function useNoticeText(notice: OrganizerNotice): string {
     months: Number(params.months ?? 0),
     number: params.number ?? "",
     note: params.note ?? "",
+    gift: params.giftKind
+      ? giftText({
+          kind: params.giftKind,
+          guests: Number(params.guests ?? 0),
+          days: Number(params.days ?? 0),
+          plan: params.plan ?? "",
+          months: Number(params.months ?? 0),
+        })
+      : "",
+    claimBy: date(params.claimBy),
   });
 }

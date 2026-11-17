@@ -44,7 +44,10 @@
     "consentRequired": "Confirm that the person agreed to receive your messages.",
     "usernameCharacters": "Use only lowercase letters, numbers and hyphens.",
     "usernameTooShort": "Use at least 3 characters.",
-    "usernameTooLong": "Use at most 32 characters."
+    "usernameTooLong": "Use at most 32 characters.",
+    "daysRange": "Enter a length between 1 and 90 days.",
+    "monthsRange": "Enter between 1 and 24 months.",
+    "pickPlan": "Choose a plan."
   },
   "roles": {
     "OWNER": "Owner",

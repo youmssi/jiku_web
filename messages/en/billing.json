@@ -291,5 +291,42 @@
       "gone": "This request is no longer waiting. Reload the page.",
       "failed": "The request couldn't be changed. Try again."
     }
+  },
+  "gifts": {
+    "title": "Gifts",
+    "intro": "What the Jikū team offered you. Activate a gift whenever you like, before its deadline: the countdown starts when you activate it.",
+    "claimBy": "Activate before {date}",
+    "activate": "Activate",
+    "activateNow": "Activate now",
+    "askOwner": "The organization's owner or an admin can activate it.",
+    "confirmTitle": "Activate this gift?",
+    "chooseEvent": "Event that gets the guests",
+    "noEvent": "Create an event first: the offered guests will be added to it.",
+    "later": "Later",
+    "confirm": "Activate",
+    "activating": "Activating…",
+    "activated": "Gift activated.",
+    "welcomeTitle": "You received a gift",
+    "welcomeText": "Activate it whenever you like, before {date}. It is waiting for you in Billing.",
+    "status": {
+      "ACTIVATED": "Activated",
+      "EXPIRED": "Expired",
+      "REVOKED": "Withdrawn"
+    },
+    "effect": {
+      "EVENT_GUESTS": "{gift}. The guests are added to the chosen event from now on. Buy them before the end to keep them.",
+      "SERVICES_PLAN": "{gift}. Your subscription is extended from now on, with no payment.",
+      "ORGANIZER_PACK": "{gift}. Pro Organizer starts or is extended from now on, with no payment."
+    },
+    "what": {
+      "EVENT_GUESTS": "{guests} guests offered for {days, plural, one {# day} other {# days}}",
+      "SERVICES_PLAN": "{months, plural, one {# month} other {# months}} of {plan} offered",
+      "ORGANIZER_PACK": "{months, plural, one {# month} other {# months}} of Pro Organizer offered"
+    },
+    "errors": {
+      "failed": "The gift could not be activated. Try again.",
+      "conflict": "This gift is no longer available: already activated, expired or withdrawn. Or the event already has trial guests running.",
+      "notFound": "This gift or event could not be found."
+    }
   }
 }

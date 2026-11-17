@@ -5,6 +5,7 @@ import { reportApiError } from "@/lib/action-result";
 import { adminFetch } from "@/lib/api-server";
 import { ADMIN_ROUTES } from "@/lib/constants";
 import type {
+  AdminGiftPage,
   AdminAgreement,
   AdminBillingSettingsView,
   AdminPayment,
@@ -87,6 +88,23 @@ export async function loadTrials(page: number) {
     }),
   ]);
   return { trialsPage, stats };
+}
+
+const GIFTS_PAGE_SIZE = 25;
+
+/** A page of gifts across organizations, and the paid plans a gift may give (JIKU-315). */
+export async function loadGifts(page: number) {
+  const [giftsPage, settings] = await Promise.all([
+    adminRead<AdminGiftPage>(`/admin/gifts?${query({ page, size: GIFTS_PAGE_SIZE })}`, {
+      entries: [],
+      total: 0,
+      page,
+      size: GIFTS_PAGE_SIZE,
+    }),
+    loadBillingSettings(),
+  ]);
+  const plans = (settings?.subscriptionPlans ?? []).filter((plan) => plan.monthly.gnf > 0).map((plan) => plan.name);
+  return { giftsPage, plans };
 }
 
 export async function loadAgreements() {
