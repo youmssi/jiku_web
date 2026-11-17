@@ -3,6 +3,7 @@
 import Script from "next/script";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import type { ActionResult } from "@/lib/action-result";
 import { googleLoginAction } from "@/components/modules/identity/identity.service";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -28,9 +29,17 @@ declare global {
 /**
  * The Google Identity Services button (JIKU-51). Renders nothing unless
  * NEXT_PUBLIC_GOOGLE_CLIENT_ID is configured; the credential (an ID token) is
- * exchanged server-side for the platform's own session.
+ * exchanged server-side for the platform's own session. With `onCredential`,
+ * the credential confirms the identity for another action instead, such as
+ * deleting the account (JIKU-316).
  */
-export function GoogleButton({ next }: { next?: string }) {
+export function GoogleButton({
+  next,
+  onCredential,
+}: {
+  next?: string;
+  onCredential?: (idToken: string) => Promise<ActionResult | void>;
+}) {
   const t = useTranslations();
   const container = useRef<HTMLDivElement>(null);
   const initialized = useRef(false);
@@ -55,7 +64,7 @@ export function GoogleButton({ next }: { next?: string }) {
       callback: (response) => {
         setError(null);
         setPending(true);
-        googleLoginAction(response.credential, next)
+        (onCredential ? onCredential(response.credential) : googleLoginAction(response.credential, next))
           .then((result) => {
             // Success redirects server-side; only a returned failure reaches us.
             if (result && !result.ok) {
@@ -78,7 +87,7 @@ export function GoogleButton({ next }: { next?: string }) {
       // button never overflows a narrow phone, which is most of this market.
       width: Math.min(320, Math.round(container.current.getBoundingClientRect().width) || 320),
     });
-  }, [next, t]);
+  }, [next, onCredential, t]);
 
   // `Script.onLoad` only fires the first time the script is fetched. Navigating
   // between /login and /register client-side reuses the already-loaded script,
@@ -95,13 +104,15 @@ export function GoogleButton({ next }: { next?: string }) {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="relative flex w-full items-center gap-3 text-xs text-muted-foreground">
-        <span className="h-px flex-1 bg-border" />
-        {t("auth.or")}
-        <span className="h-px flex-1 bg-border" />
-      </div>
+      {onCredential ? null : (
+        <div className="relative flex w-full items-center gap-3 text-xs text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
+          {t("auth.or")}
+          <span className="h-px flex-1 bg-border" />
+        </div>
+      )}
       <div ref={container} className={pending ? "pointer-events-none opacity-60" : undefined} />
-      {pending ? <p className="text-sm text-muted-foreground">{t("auth.google.signingIn")}</p> : null}
+      {pending && !onCredential ? <p className="text-sm text-muted-foreground">{t("auth.google.signingIn")}</p> : null}
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
       <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" onLoad={onLoad} />
     </div>

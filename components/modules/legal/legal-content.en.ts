@@ -191,8 +191,8 @@ export const LEGAL_EN: LegalDocuments = {
         id: "duree",
         heading: "11. Term, termination and export",
         body: [
-          "The contract lasts as long as the account exists. The organization can close its account at any time from its settings or by writing to us.",
-          "Before closing, the organization can export its guest lists and data. After closure, data stays exportable for thirty days and is then deleted or anonymized, except what the law requires us to keep (invoices in particular).",
+          "The contract lasts as long as the account exists. Each user can delete their account at any time from Settings, Account, or by writing to us. Organizations they own alone are closed with their account if they agree; an organization with another owner carries on without them.",
+          "Deletion takes effect thirty days after the request: meanwhile the organization stays closed to the public, its data stays exportable, and simply signing in again cancels the request. Then the account and the personal data of the closed organizations' guests and clients are erased, except what the law requires us to keep (invoices in particular).",
         ],
       },
       {
@@ -304,7 +304,7 @@ export const LEGAL_EN: LegalDocuments = {
           [
             "Guests and ticket buyers: during the event, then automatic anonymization twelve months after the event; immediately at the guest's request.",
             "Service clients (appointments, day line): their name and number are removed automatically twelve months after the appointment or ticket.",
-            "Accounts: while the account is open. On closure, requested by email, we send you an export of your data and then delete the account within thirty days.",
+            "Accounts: while the account is open. You can delete it from your settings; deletion becomes final thirty days after the request, and signing in again during that time cancels it. Invoices already issued are kept.",
             "Professionals who contact us and conversations with the Jikū team: twelve months after the first contact.",
             "Invoices and accounting records: ten years, as OHADA accounting law requires.",
             "Technical logs: twelve months at most.",

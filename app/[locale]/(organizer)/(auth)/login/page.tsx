@@ -25,10 +25,10 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
 }
 
 interface PageProps {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; deletion?: string }>;
 }
 
 export default async function LoginPage({ searchParams }: Readonly<PageProps>) {
-  const { next } = await searchParams;
-  return <LoginForm next={next} />;
+  const { next, deletion } = await searchParams;
+  return <LoginForm next={next} deletionScheduled={deletion === "scheduled"} />;
 }

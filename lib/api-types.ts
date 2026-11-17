@@ -397,7 +397,7 @@ export interface paths {
         };
         get: operations["adminTrialList"];
         put?: never;
-        post: operations["adminTrialGrant"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -750,6 +750,22 @@ export interface paths {
         get: operations["authMe"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/deletion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["accountDeletionStatus"];
+        put?: never;
+        post: operations["accountDeletionRequest"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4459,6 +4475,17 @@ export interface components {
         AcceptInvitationRequest: {
             token: string;
         };
+        AccountDeletionRequest: {
+            deleteOrganizations?: boolean;
+            googleIdToken?: string | null;
+            password?: string | null;
+        };
+        AccountDeletionStatusView: {
+            confirmWithPassword?: boolean;
+            /** Format: date-time */
+            scheduledFor?: string | null;
+            soleOwnedOrganizations?: components["schemas"]["SoleOwnedOrganization"][];
+        };
         ActivateGiftRequest: {
             /** Format: uuid */
             eventId?: string | null;
@@ -5219,16 +5246,6 @@ export interface components {
         };
         GoogleLoginRequest: {
             idToken: string;
-        };
-        GrantTrialRequest: {
-            /** Format: uuid */
-            eventId: string | null;
-            /** Format: date-time */
-            expiresAt: string | null;
-            /** Format: int64 */
-            guests: number | null;
-            /** Format: uuid */
-            tenantId: string | null;
         };
         GuestImportResult: {
             consentAttested?: boolean;
@@ -6424,6 +6441,10 @@ export interface components {
             /** Format: uuid */
             ticketTypeId?: string | null;
         };
+        SoleOwnedOrganization: {
+            id?: string;
+            name?: string;
+        };
         SseEmitter: {
             /** Format: int64 */
             timeout?: number;
@@ -7577,30 +7598,6 @@ export interface operations {
             };
         };
     };
-    adminTrialGrant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["GrantTrialRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["AdminTrialView"];
-                };
-            };
-        };
-    };
     adminTrialStats: {
         parameters: {
             query?: never;
@@ -8168,6 +8165,50 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["MeResponse"];
+                };
+            };
+        };
+    };
+    accountDeletionStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AccountDeletionStatusView"];
+                };
+            };
+        };
+    };
+    accountDeletionRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AccountDeletionRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AccountDeletionStatusView"];
                 };
             };
         };

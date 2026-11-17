@@ -1,7 +1,9 @@
 "use server";
 
 import { serverFetch } from "@/lib/api-server";
-import { type ActionResult, fail, ok, reportApiError } from "@/lib/action-result";
+import { type ActionResult, fail, ok, problemCode, reportApiError } from "@/lib/action-result";
+import { clearAuthCookies } from "@/lib/auth";
+import { localeRedirect } from "@/i18n/redirect";
 import { revalidatePath } from "next/cache";
 import { ROUTES } from "@/lib/constants";
 import { getTranslations } from "next-intl/server";
@@ -24,6 +26,7 @@ import type {
   TemplatePreviewRequest,
   TemplatePreviewResponse,
   TemplateUpdateRequest,
+  AccountDeletionInput,
 } from "./schema";
 
 // ─── Account ────────────────────────────────────────────────────────────────
@@ -42,6 +45,34 @@ export async function updateMarketingConsentAction(granted: boolean): Promise<Ac
   }
   revalidatePath("/settings");
   return ok(null);
+}
+
+/**
+ * Asks for the account to be deleted after the grace period (JIKU-316). The
+ * request ends every session, so a success signs out here too and lands on the
+ * sign-in page, which says how to change one's mind.
+ */
+export async function requestAccountDeletionAction(input: AccountDeletionInput): Promise<ActionResult> {
+  const t = await getTranslations("settings.account.deletion.errors");
+  if (!input.password?.trim() && !input.googleIdToken) return fail(t("confirm"));
+  const response = await serverFetch("/auth/me/deletion", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      password: input.password || null,
+      googleIdToken: input.googleIdToken || null,
+      deleteOrganizations: input.deleteOrganizations,
+    }),
+  });
+  if (!response.ok) {
+    if (response.status === 401) return fail(t(input.googleIdToken ? "google" : "password"));
+    if (response.status === 409 && (await problemCode(response)) === "account.sole-owner") return fail(t("soleOwner"));
+    if (response.status === 429) return fail(t("tooMany"));
+    reportApiError(response);
+    return fail(t("failed"));
+  }
+  await clearAuthCookies();
+  return localeRedirect(`${ROUTES.LOGIN}?deletion=scheduled`);
 }
 
 type SettingsErrorKey = keyof Messages["settings"]["errors"];
