@@ -11,7 +11,7 @@ const SEARCH_DELAY_MS = 250;
 
 /**
  * Search-as-you-type event picker scoped to one organization, replacing raw
- * event-id entry in the trial grant form. Disabled until a tenant is chosen —
+ * event-id entry in the gift form. Disabled until a tenant is chosen —
  * an event only makes sense once its organization is known. The caller is
  * responsible for clearing `value` when `tenantId` changes (from the same
  * event handler that changed the tenant), since a picked event never survives
