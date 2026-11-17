@@ -4,10 +4,12 @@ import { InfoIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AllPaymentsView,
+  GiftsSection,
   InvoicesTable,
   PackSection,
   PendingPayments,
   SubscriptionSection,
+  fetchGiftsAction,
   fetchInvoicesAction,
   fetchOpenRequestsAction,
   fetchPackAction,
@@ -15,7 +17,7 @@ import {
 } from "@/components/modules/billing";
 import { isOnlinePaymentEnabled } from "@/components/modules/billing/server";
 import { getOrganizerContext } from "@/components/modules/identity/server";
-import type { PaymentHistoryItem } from "@/components/modules/billing";
+import type { GiftEventOption, PaymentHistoryItem } from "@/components/modules/billing";
 import { serverFetch } from "@/lib/api-server";
 import { ROUTES } from "@/lib/constants";
 
@@ -28,17 +30,22 @@ const MANAGER_ROLES = ["ORGANIZER_OWNER", "ORGANIZER_ADMIN"];
  * Pro Organisateur (ADR 109), then payment history across every event in the
  * tenant and any accounting-grade invoices.
  */
-export default async function BillingPage() {
+export default async function BillingPage({
+  searchParams,
+}: Readonly<{ searchParams: Promise<{ gift?: string }> }>) {
+  const { gift: openGiftId } = await searchParams;
   const response = await serverFetch("/billing/payments");
   if (response.status === 401) {
     return localeRedirect(ROUTES.LOGIN);
   }
   const payments = response.ok ? ((await response.json()) as PaymentHistoryItem[]) : [];
-  const [invoices, subscription, pack, waiting, context, t] = await Promise.all([
+  const [invoices, subscription, pack, waiting, gifts, events, context, t] = await Promise.all([
     fetchInvoicesAction(),
     fetchSubscriptionAction(),
     fetchPackAction(),
     fetchOpenRequestsAction(),
+    fetchGiftsAction(),
+    loadEventOptions(),
     getOrganizerContext(),
     getTranslations("billing.page"),
   ]);
@@ -58,6 +65,12 @@ export default async function BillingPage() {
       {waiting.length > 0 ? (
         <div className="mb-10">
           <PendingPayments requests={waiting} canManage={canManage} />
+        </div>
+      ) : null}
+
+      {gifts.length > 0 ? (
+        <div className="mb-10">
+          <GiftsSection key={openGiftId ?? "gifts"} gifts={gifts} events={events} canManage={canManage} openGiftId={openGiftId} />
         </div>
       ) : null}
 
@@ -88,4 +101,12 @@ export default async function BillingPage() {
       </section>
     </div>
   );
+}
+
+/** The organization's events, for choosing where a gift's guests go (JIKU-315). */
+async function loadEventOptions(): Promise<GiftEventOption[]> {
+  const response = await serverFetch("/events");
+  if (!response.ok) return [];
+  const events = (await response.json().catch(() => [])) as { id: string; name: string }[];
+  return events.map((event) => ({ id: event.id, name: event.name }));
 }

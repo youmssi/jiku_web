@@ -303,3 +303,61 @@ export type FeedbackStatus = (typeof FEEDBACK_STATUSES)[number];
 
 export type AdminVerification = Schema<"AdminVerificationView">;
 export type VerificationDocumentLink = Schema<"VerificationDocumentLink">;
+
+// --- Gifts (JIKU-315) -------------------------------------------------------
+
+export type AdminGift = Schema<"AdminGiftView">;
+export type AdminGiftPage = Schema<"AdminGiftPage">;
+
+export const GIFT_KINDS = ["EVENT_GUESTS", "SERVICES_PLAN", "ORGANIZER_PACK"] as const;
+export type GiftKind = (typeof GIFT_KINDS)[number];
+
+/** Gift limits, kept in step with the backend's GIFT_MAX_DAYS / GIFT_MAX_MONTHS defaults. */
+export const GIFT_MAX_DAYS = 90;
+export const GIFT_MAX_MONTHS = 24;
+
+export const offerGiftSchema = z
+  .object({
+    tenant: z.union([adminTenantReferenceSchema, z.null()]).refine((tenant) => tenant !== null, "pickOrganization"),
+    kind: z.enum(GIFT_KINDS),
+    event: z.union([adminEventReferenceSchema, z.null()]),
+    guests: z.number().int().optional(),
+    days: z.number().int().optional(),
+    plan: z.string().optional(),
+    months: z.number().int().optional(),
+    message: z.string().trim().max(500, "tooLong"),
+    applyNow: z.boolean(),
+  })
+  .superRefine((values, ctx) => {
+    if (values.kind === "EVENT_GUESTS") {
+      if (!values.guests || values.guests < 1 || values.guests > 100_000) {
+        ctx.addIssue({ code: "custom", path: ["guests"], message: "guestsRange" });
+      }
+      if (!values.days || values.days < 1 || values.days > GIFT_MAX_DAYS) {
+        ctx.addIssue({ code: "custom", path: ["days"], message: "daysRange" });
+      }
+      if (values.applyNow && !values.event) {
+        ctx.addIssue({ code: "custom", path: ["event"], message: "pickEvent" });
+      }
+    } else {
+      if (!values.months || values.months < 1 || values.months > GIFT_MAX_MONTHS) {
+        ctx.addIssue({ code: "custom", path: ["months"], message: "monthsRange" });
+      }
+      if (values.kind === "SERVICES_PLAN" && !values.plan) {
+        ctx.addIssue({ code: "custom", path: ["plan"], message: "pickPlan" });
+      }
+    }
+  });
+
+export interface OfferGiftFormValues {
+  tenant: TenantDirectoryEntry | null;
+  kind: GiftKind;
+  event: AdminEventSummary | null;
+  guests?: number;
+  days?: number;
+  plan?: string;
+  months?: number;
+  message: string;
+  applyNow: boolean;
+}
+

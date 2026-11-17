@@ -8,6 +8,7 @@ import {
   ScrollText,
   Settings2,
   ShieldCheck,
+  Gift,
   Timer,
   PhoneCall,
   UserPlus,
@@ -55,6 +56,12 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         href: ADMIN_ROUTES.TRIALS,
         icon: Timer,
         match: (pathname) => pathname === ADMIN_ROUTES.TRIALS,
+      },
+      {
+        labelKey: "gifts",
+        href: ADMIN_ROUTES.GIFTS,
+        icon: Gift,
+        match: (pathname) => pathname === ADMIN_ROUTES.GIFTS,
       },
       {
         labelKey: "agreements",

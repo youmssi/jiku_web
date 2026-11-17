@@ -4,6 +4,7 @@ export { AdminLoginForm } from "./admin-login-form";
 export { TenantsView } from "./tenants-view";
 export { PaymentsView } from "./payments-view";
 export { TrialsView } from "./trials-view";
+export { GiftsView } from "./gifts-view";
 export { AgreementsView } from "./agreements-view";
 export { AuditView } from "./audit-view";
 export { BillingSettingsView } from "./billing-settings-view";

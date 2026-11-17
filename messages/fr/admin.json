@@ -18,7 +18,8 @@
     "feedback": "Retours",
     "diagnostics": "Diagnostic",
     "verifications": "Vérifications",
-    "followUps": "Relances"
+    "followUps": "Relances",
+    "gifts": "Cadeaux"
   },
   "pages": {
     "tenants": "Organisations",
@@ -33,7 +34,8 @@
     "diagnostics": "Diagnostic",
     "billingLoadFailed": "Impossible de charger les réglages de facturation.",
     "verifications": "Vérifications d'organisations",
-    "followUps": "Relances"
+    "followUps": "Relances",
+    "gifts": "Cadeaux"
   },
   "login": {
     "metaTitle": "Jikū - Administration",
@@ -402,5 +404,61 @@
     "marked": "Relance de {name} marquée comme faite.",
     "emptyTitle": "Personne à relancer",
     "emptyText": "Toutes les organisations avancent. Revenez demain."
+  },
+  "gifts": {
+    "intro": "Tous les cadeaux offerts aux organisations, du plus récent au plus ancien. Un cadeau attend que l’organisateur l’active, avant sa date limite.",
+    "emptyTitle": "Aucun cadeau pour l’instant",
+    "emptyText": "Offrez des invités, des mois de services ou de Pro Organisateur à une organisation.",
+    "offered": "Offert le",
+    "organization": "Organisation",
+    "gift": "Cadeau",
+    "claimBy": "À activer avant",
+    "revoke": "Retirer",
+    "revokeTitle": "Retirer ce cadeau ?",
+    "revokeText": "L’organisateur ne pourra plus l’activer et reçoit un e-mail. Indiquez la raison.",
+    "reason": "Raison",
+    "revokeConfirm": "Retirer le cadeau",
+    "showingAll": "{count, plural, one {# cadeau} other {# cadeaux}}",
+    "pagination": "Pages des cadeaux",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "page": "Page {page} sur {count}",
+    "offer": "Offrir un cadeau",
+    "offerText": "L’organisateur est prévenu par e-mail et dans sa cloche, puis active le cadeau quand il veut. Le décompte commence à l’activation.",
+    "kind": "Cadeau",
+    "kinds": {
+      "EVENT_GUESTS": "Invités pour un événement",
+      "SERVICES_PLAN": "Mois d’un plan de services",
+      "ORGANIZER_PACK": "Mois de Pro Organisateur"
+    },
+    "guests": "Invités",
+    "days": "Durée (jours)",
+    "event": "Événement (facultatif)",
+    "eventHint": "Sans événement, l’organisateur choisit le sien à l’activation.",
+    "plan": "Plan",
+    "months": "Mois",
+    "message": "Mot pour l’organisateur (facultatif)",
+    "messageHint": "Affiché avec le cadeau et dans l’e-mail. 500 caractères au plus.",
+    "applyNow": "Appliquer tout de suite",
+    "applyNowHint": "Pour un cas urgent : le cadeau est actif sans attendre l’organisateur, qui est prévenu.",
+    "previewTitle": "Ce que l’organisateur recevra",
+    "previewOffered": "{gift}, à activer quand il veut avant la date limite.",
+    "previewApplied": "{gift}, déjà appliqué à son compte.",
+    "cancel": "Annuler",
+    "offering": "Envoi…",
+    "applyConfirm": "Offrir et appliquer",
+    "offeredToast": "Cadeau offert. L’organisateur est prévenu.",
+    "appliedToast": "Cadeau offert et appliqué.",
+    "status": {
+      "OFFERED": "À activer",
+      "ACTIVATED": "Activé",
+      "EXPIRED": "Expiré",
+      "REVOKED": "Retiré"
+    },
+    "what": {
+      "EVENT_GUESTS": "{guests} invités pendant {days, plural, one {# jour} other {# jours}}",
+      "SERVICES_PLAN": "{months, plural, one {# mois} other {# mois}} de {plan}",
+      "ORGANIZER_PACK": "{months, plural, one {# mois} other {# mois}} de Pro Organisateur"
+    }
   }
 }

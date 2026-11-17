@@ -44,7 +44,10 @@
     "consentRequired": "Confirmez que la personne a accepté de recevoir vos messages.",
     "usernameCharacters": "Utilisez uniquement des lettres minuscules, des chiffres et des tirets.",
     "usernameTooShort": "Utilisez au moins 3 caractères.",
-    "usernameTooLong": "Utilisez au plus 32 caractères."
+    "usernameTooLong": "Utilisez au plus 32 caractères.",
+    "daysRange": "Indiquez une durée entre 1 et 90 jours.",
+    "monthsRange": "Indiquez entre 1 et 24 mois.",
+    "pickPlan": "Choisissez un plan."
   },
   "roles": {
     "OWNER": "Propriétaire",

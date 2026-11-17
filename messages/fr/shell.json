@@ -115,7 +115,12 @@
       "subscriptionExpired": "Votre abonnement {plan} est échu : vos services sont en pause jusqu’au renouvellement.",
       "paymentRequestExpired": "Votre demande de paiement {reference} ({amount}) a expiré sans virement reçu.",
       "invoiceIssued": "Facture {number} émise ({amount}).",
-      "other": "Nouvelle information sur votre compte."
+      "other": "Nouvelle information sur votre compte.",
+      "giftOffered": "Cadeau reçu : {gift}. Activez-le dans Facturation avant le {claimBy}.",
+      "giftApplied": "Cadeau appliqué à votre compte : {gift}.",
+      "giftExpiring": "Votre cadeau ({gift}) expire le {claimBy}. Activez-le dans Facturation.",
+      "giftExpired": "Votre cadeau ({gift}) a expiré sans être activé.",
+      "giftRevoked": "Un cadeau ({gift}) a été retiré par l’équipe Jikū."
     }
   }
 }
