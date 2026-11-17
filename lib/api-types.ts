@@ -212,6 +212,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/gifts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["adminGiftList"];
+        put?: never;
+        post: operations["adminGiftOffer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/gifts/{id}/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adminGiftRevoke"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/payments": {
         parameters: {
             query?: never;
@@ -846,6 +878,38 @@ export interface paths {
         get: operations["eventPricingPricing"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/gifts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["giftList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/gifts/{giftId}/activate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["giftActivate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4395,6 +4459,10 @@ export interface components {
         AcceptInvitationRequest: {
             token: string;
         };
+        ActivateGiftRequest: {
+            /** Format: uuid */
+            eventId?: string | null;
+        };
         ActivationFunnel: {
             /** Format: int32 */
             firstEventOrService?: number;
@@ -4410,6 +4478,44 @@ export interface components {
         AdminAuthResponse: {
             accessToken?: string;
             refreshToken?: string;
+        };
+        AdminGiftPage: {
+            entries?: components["schemas"]["AdminGiftView"][];
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            size?: number;
+            /** Format: int64 */
+            total?: number;
+        };
+        AdminGiftView: {
+            /** Format: date-time */
+            activatedAt?: string | null;
+            /** Format: uuid */
+            activatedEventId?: string | null;
+            /** Format: date-time */
+            claimBy?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            createdBy?: string | null;
+            /** Format: int32 */
+            days?: number | null;
+            /** Format: uuid */
+            eventId?: string | null;
+            eventName?: string | null;
+            /** Format: int64 */
+            guests?: number | null;
+            /** Format: uuid */
+            id?: string;
+            kind?: string;
+            message?: string | null;
+            /** Format: int32 */
+            months?: number | null;
+            plan?: string | null;
+            revokedReason?: string | null;
+            status?: string;
+            tenantId?: string;
+            tenantName?: string | null;
         };
         AdminLoginRequest: {
             email?: string;
@@ -5089,6 +5195,28 @@ export interface components {
         FreeSlotResponse: {
             free?: boolean;
         };
+        GiftView: {
+            /** Format: date-time */
+            activatedAt?: string | null;
+            /** Format: uuid */
+            activatedEventId?: string | null;
+            /** Format: date-time */
+            claimBy?: string;
+            /** Format: int32 */
+            days?: number | null;
+            /** Format: uuid */
+            eventId?: string | null;
+            /** Format: int64 */
+            guests?: number | null;
+            /** Format: uuid */
+            id?: string;
+            kind?: string;
+            message?: string | null;
+            /** Format: int32 */
+            months?: number | null;
+            plan?: string | null;
+            status?: string;
+        };
         GoogleLoginRequest: {
             idToken: string;
         };
@@ -5379,6 +5507,24 @@ export interface components {
         };
         NextResponse: {
             ticket?: components["schemas"]["LineTicket"] | null;
+        };
+        OfferGiftRequest: {
+            applyNow?: boolean;
+            /** Format: date-time */
+            claimBy?: string | null;
+            /** Format: int32 */
+            days?: number | null;
+            /** Format: uuid */
+            eventId?: string | null;
+            /** Format: int64 */
+            guests?: number | null;
+            kind: string;
+            message?: string | null;
+            /** Format: int32 */
+            months?: number | null;
+            plan?: string | null;
+            /** Format: uuid */
+            tenantId: string | null;
         };
         OpenBatchRequest: {
             manual?: boolean;
@@ -6079,6 +6225,9 @@ export interface components {
             timezone?: string;
             /** @enum {string} */
             type?: "PERSON" | "LOCATION" | "EQUIPMENT";
+        };
+        RevokeGiftRequest: {
+            reason: string;
         };
         RosterEntry: {
             /** Format: date-time */
@@ -7106,6 +7255,81 @@ export interface operations {
             };
         };
     };
+    adminGiftList: {
+        parameters: {
+            query?: {
+                status?: string;
+                tenantId?: string;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminGiftPage"];
+                };
+            };
+        };
+    };
+    adminGiftOffer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OfferGiftRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminGiftView"];
+                };
+            };
+        };
+    };
+    adminGiftRevoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RevokeGiftRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminGiftView"];
+                };
+            };
+        };
+    };
     adminPaymentList: {
         parameters: {
             query?: {
@@ -8120,6 +8344,52 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["EventPricingView"];
+                };
+            };
+        };
+    };
+    giftList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GiftView"][];
+                };
+            };
+        };
+    };
+    giftActivate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                giftId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ActivateGiftRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GiftView"];
                 };
             };
         };

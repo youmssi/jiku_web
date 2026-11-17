@@ -118,6 +118,24 @@ export async function grantTrialAction(input: {
   return adminMutation("/admin/trials", input);
 }
 
+export async function offerGiftAction(input: {
+  tenantId: string;
+  kind: string;
+  guests?: number;
+  days?: number;
+  plan?: string;
+  months?: number;
+  eventId?: string;
+  message?: string;
+  applyNow: boolean;
+}): Promise<ActionResult> {
+  return adminMutation("/admin/gifts", input);
+}
+
+export async function revokeGiftAction(giftId: string, reason: string): Promise<ActionResult> {
+  return adminMutation(`/admin/gifts/${giftId}/revoke`, { reason });
+}
+
 export async function endTrialAction(trialId: string, reason: string): Promise<ActionResult> {
   return adminMutation(`/admin/trials/${trialId}/end`, { reason });
 }

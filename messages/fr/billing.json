@@ -291,5 +291,42 @@
       "gone": "Cette demande n'est plus en attente. Rechargez la page.",
       "failed": "La demande n'a pas pu être modifiée. Réessayez."
     }
+  },
+  "gifts": {
+    "title": "Cadeaux",
+    "intro": "Ce que l’équipe Jikū vous a offert. Activez un cadeau quand vous le souhaitez, avant sa date limite : le décompte commence à l’activation.",
+    "claimBy": "À activer avant le {date}",
+    "activate": "Activer",
+    "activateNow": "Activer maintenant",
+    "askOwner": "Le propriétaire ou un administrateur de l’organisation peut l’activer.",
+    "confirmTitle": "Activer ce cadeau ?",
+    "chooseEvent": "Événement qui reçoit les invités",
+    "noEvent": "Créez d’abord un événement : les invités offerts s’y ajouteront.",
+    "later": "Plus tard",
+    "confirm": "Activer",
+    "activating": "Activation…",
+    "activated": "Cadeau activé.",
+    "welcomeTitle": "Vous avez reçu un cadeau",
+    "welcomeText": "Activez-le quand vous le souhaitez, avant le {date}. Il vous attend dans Facturation.",
+    "status": {
+      "ACTIVATED": "Activé",
+      "EXPIRED": "Expiré",
+      "REVOKED": "Retiré"
+    },
+    "effect": {
+      "EVENT_GUESTS": "{gift}. Les invités s’ajoutent dès maintenant à l’événement choisi. Achetez-les avant la fin pour les garder.",
+      "SERVICES_PLAN": "{gift}. Votre abonnement est prolongé dès maintenant, sans paiement.",
+      "ORGANIZER_PACK": "{gift}. Pro Organisateur démarre ou se prolonge dès maintenant, sans paiement."
+    },
+    "what": {
+      "EVENT_GUESTS": "{guests} invités offerts pendant {days, plural, one {# jour} other {# jours}}",
+      "SERVICES_PLAN": "{months, plural, one {# mois} other {# mois}} de {plan} offerts",
+      "ORGANIZER_PACK": "{months, plural, one {# mois} other {# mois}} de Pro Organisateur offerts"
+    },
+    "errors": {
+      "failed": "Le cadeau n’a pas pu être activé. Réessayez.",
+      "conflict": "Ce cadeau n’est plus disponible : déjà activé, expiré ou retiré. Ou l’événement a déjà des invités d’essai en cours.",
+      "notFound": "Ce cadeau ou cet événement est introuvable."
+    }
   }
 }

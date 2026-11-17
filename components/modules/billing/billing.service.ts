@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { serverFetch } from "@/lib/api-server";
 import { fail, ok, problemCode, reportApiError, type ActionResult } from "@/lib/action-result";
 import type {
+  Gift,
   CheckoutTarget,
   InvoiceSummary,
   ManualPaymentInstructions,
@@ -262,4 +263,30 @@ export async function fetchPaymentStatusAction(paymentId: string): Promise<Payme
     return null;
   }
   return (await response.json()) as PaymentStatusView;
+}
+
+/** The gifts the back office offered the organization, newest first (JIKU-315). */
+export async function fetchGiftsAction(): Promise<Gift[]> {
+  const response = await serverFetch("/billing/gifts");
+  if (!response.ok) {
+    if (response.status >= 500) reportApiError(response);
+    return [];
+  }
+  return (await response.json()) as Gift[];
+}
+
+/** Activates a gift, on [eventId] when the gift brings guests and names no event. */
+export async function activateGiftAction(giftId: string, eventId?: string): Promise<ActionResult<Gift>> {
+  const t = await getTranslations("billing.gifts.errors");
+  if (!UUID.test(giftId) || (eventId !== undefined && !UUID.test(eventId))) return fail(t("failed"));
+  const response = await serverFetch(`/billing/gifts/${giftId}/activate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(eventId ? { eventId } : {}),
+  });
+  if (response.ok) return ok((await response.json()) as Gift);
+  if (response.status === 409) return fail(t("conflict"));
+  if (response.status === 404) return fail(t("notFound"));
+  reportApiError(response);
+  return fail(t("failed"));
 }

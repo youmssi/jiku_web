@@ -18,7 +18,8 @@
     "feedback": "Feedback",
     "diagnostics": "Diagnostics",
     "verifications": "Verifications",
-    "followUps": "Follow-ups"
+    "followUps": "Follow-ups",
+    "gifts": "Gifts"
   },
   "pages": {
     "tenants": "Tenants",
@@ -33,7 +34,8 @@
     "diagnostics": "Diagnostics",
     "billingLoadFailed": "The billing settings couldn't be loaded.",
     "verifications": "Organization verifications",
-    "followUps": "Follow-ups"
+    "followUps": "Follow-ups",
+    "gifts": "Gifts"
   },
   "login": {
     "metaTitle": "Jikū - Administration",
@@ -402,5 +404,61 @@
     "marked": "Follow-up with {name} marked as done.",
     "emptyTitle": "Nobody to follow up",
     "emptyText": "Every organization is moving forward. Check again tomorrow."
+  },
+  "gifts": {
+    "intro": "Every gift offered to organizations, newest first. A gift waits for the organizer to activate it, before its claim date.",
+    "emptyTitle": "No gifts yet",
+    "emptyText": "Offer an organization guests, months of services or months of Pro Organizer.",
+    "offered": "Offered on",
+    "organization": "Organization",
+    "gift": "Gift",
+    "claimBy": "Activate before",
+    "revoke": "Withdraw",
+    "revokeTitle": "Withdraw this gift?",
+    "revokeText": "The organizer can no longer activate it and gets an email. Say why.",
+    "reason": "Reason",
+    "revokeConfirm": "Withdraw the gift",
+    "showingAll": "{count, plural, one {# gift} other {# gifts}}",
+    "pagination": "Gift pages",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page} of {count}",
+    "offer": "Offer a gift",
+    "offerText": "The organizer is told by email and in their bell, then activates the gift whenever they like. The countdown starts at activation.",
+    "kind": "Gift",
+    "kinds": {
+      "EVENT_GUESTS": "Guests for an event",
+      "SERVICES_PLAN": "Months of a services plan",
+      "ORGANIZER_PACK": "Months of Pro Organizer"
+    },
+    "guests": "Guests",
+    "days": "Length (days)",
+    "event": "Event (optional)",
+    "eventHint": "Without an event, the organizer picks theirs when activating.",
+    "plan": "Plan",
+    "months": "Months",
+    "message": "Note to the organizer (optional)",
+    "messageHint": "Shown with the gift and in the email. 500 characters at most.",
+    "applyNow": "Apply now",
+    "applyNowHint": "For an urgent case: the gift is active without waiting for the organizer, who is told.",
+    "previewTitle": "What the organizer will receive",
+    "previewOffered": "{gift}, to activate whenever they like before the claim date.",
+    "previewApplied": "{gift}, already applied to their account.",
+    "cancel": "Cancel",
+    "offering": "Sending…",
+    "applyConfirm": "Offer and apply",
+    "offeredToast": "Gift offered. The organizer is told.",
+    "appliedToast": "Gift offered and applied.",
+    "status": {
+      "OFFERED": "To activate",
+      "ACTIVATED": "Activated",
+      "EXPIRED": "Expired",
+      "REVOKED": "Withdrawn"
+    },
+    "what": {
+      "EVENT_GUESTS": "{guests} guests for {days, plural, one {# day} other {# days}}",
+      "SERVICES_PLAN": "{months, plural, one {# month} other {# months}} of {plan}",
+      "ORGANIZER_PACK": "{months, plural, one {# month} other {# months}} of Pro Organizer"
+    }
   }
 }

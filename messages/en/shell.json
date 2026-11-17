@@ -115,7 +115,12 @@
       "subscriptionExpired": "Your {plan} subscription has lapsed: your services are paused until it is renewed.",
       "paymentRequestExpired": "Your payment request {reference} ({amount}) expired with no transfer received.",
       "invoiceIssued": "Invoice {number} issued ({amount}).",
-      "other": "New information about your account."
+      "other": "New information about your account.",
+      "giftOffered": "Gift received: {gift}. Activate it in Billing before {claimBy}.",
+      "giftApplied": "Gift applied to your account: {gift}.",
+      "giftExpiring": "Your gift ({gift}) expires on {claimBy}. Activate it in Billing.",
+      "giftExpired": "Your gift ({gift}) expired without being activated.",
+      "giftRevoked": "A gift ({gift}) was withdrawn by the Jikū team."
     }
   }
 }

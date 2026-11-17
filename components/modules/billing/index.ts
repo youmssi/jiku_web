@@ -9,6 +9,9 @@ export { PayOnlineButton } from "./pay-online-button";
 export { PaymentReturn, PaymentReturnMissing } from "./payment-return";
 export { ActivationInstructions } from "./activation-instructions";
 export { PendingPayments } from "./pending-payments";
+export { GiftsSection } from "./gifts-section";
+export { GiftWelcome } from "./gift-welcome";
+export { useGiftText } from "./gift-text";
 export {
   fetchInvoicesAction,
   issueInvoiceAction,
@@ -16,8 +19,11 @@ export {
   fetchPackAction,
   fetchPaymentStatusAction,
   fetchOpenRequestsAction,
+  fetchGiftsAction,
 } from "./billing.service";
 export type {
+  Gift,
+  GiftEventOption,
   InvoiceSummary,
   ManualPaymentInstructions,
   PayeeDetails,

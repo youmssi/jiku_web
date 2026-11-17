@@ -24,6 +24,11 @@ export const NOTICE_MESSAGES = {
   "subscription.EXPIRED": "subscriptionExpired",
   "payment-request.EXPIRED": "paymentRequestExpired",
   "invoice.ISSUED": "invoiceIssued",
+  "gift.OFFERED": "giftOffered",
+  "gift.APPLIED": "giftApplied",
+  "gift.EXPIRING": "giftExpiring",
+  "gift.EXPIRED": "giftExpired",
+  "gift.REVOKED": "giftRevoked",
 } as const;
 
 export type NoticeMessage = (typeof NOTICE_MESSAGES)[keyof typeof NOTICE_MESSAGES];
