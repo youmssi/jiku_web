@@ -26,8 +26,12 @@ import {
   type LoginInput,
 } from "@/components/modules/identity/schema";
 
-/** Sign-in: credentials first, Google below the "or" separator, terms underneath. */
-export function LoginForm({ next }: { next?: string }) {
+/**
+ * Sign-in: credentials first, Google below the "or" separator, terms underneath.
+ * After asking for the account's deletion, a note says that signing in cancels
+ * it (JIKU-316).
+ */
+export function LoginForm({ next, deletionScheduled = false }: { next?: string; deletionScheduled?: boolean }) {
   const t = useTranslations("auth.login");
   const [formError, setFormError] = useState<string | null>(null);
   const {
@@ -53,6 +57,11 @@ export function LoginForm({ next }: { next?: string }) {
       <AuthCard title={t("title")} description={t("description")}>
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <FieldGroup>
+              {deletionScheduled && !formError ? (
+                <Alert>
+                  <AlertDescription>{t("deletionScheduled")}</AlertDescription>
+                </Alert>
+              ) : null}
               {formError ? (
                 <Alert variant="destructive">
                   <AlertTitle>{t("failed")}</AlertTitle>

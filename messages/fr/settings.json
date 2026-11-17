@@ -209,6 +209,37 @@
       "hint": "Par e-mail ou WhatsApp, quelques fois par mois au plus.",
       "saved": "Préférence enregistrée.",
       "failed": "Enregistrement impossible. Réessayez."
+    },
+    "deletion": {
+      "title": "Supprimer mon compte",
+      "description": "Votre compte, et les organisations dont vous êtes le seul propriétaire si vous l'acceptez.",
+      "scheduled": "Suppression prévue le {date}. Reconnectez-vous avant pour l'annuler.",
+      "whatGoes": {
+        "account": "Votre nom, votre e-mail et vos accès sont effacés. Les organisations dont vous êtes seul propriétaire sont fermées et les données de leurs invités effacées.",
+        "grace": "Vous avez 30 jours pour changer d'avis : il suffit de vous reconnecter.",
+        "invoices": "Les factures déjà émises sont conservées 10 ans, comme la loi l'exige."
+      },
+      "trigger": "Supprimer mon compte",
+      "dialog": {
+        "title": "Supprimer votre compte ?",
+        "description": "Vous serez déconnecté partout. Sans nouvelle connexion de votre part dans les 30 jours, la suppression sera définitive.",
+        "soleOwned": "{count, plural, one {Vous êtes le seul propriétaire de cette organisation :} other {Vous êtes le seul propriétaire de ces organisations :}}",
+        "shareFirst": "Pour la garder, nommez d'abord un autre propriétaire dans <members>Membres</members>.",
+        "agree": "{count, plural, one {Fermer cette organisation et effacer les données de ses invités} other {Fermer ces organisations et effacer les données de leurs invités}}",
+        "password": "Votre mot de passe",
+        "google": "Confirmez avec le compte Google qui vous sert à vous connecter.",
+        "cancel": "Annuler",
+        "confirm": "Supprimer mon compte"
+      },
+      "errors": {
+        "confirm": "Saisissez votre mot de passe.",
+        "password": "Mot de passe incorrect.",
+        "google": "Ce compte Google ne correspond pas au vôtre.",
+        "soleOwner": "Acceptez de fermer les organisations dont vous êtes seul propriétaire, ou nommez un autre propriétaire.",
+        "agree": "Cochez la case pour accepter la fermeture de vos organisations.",
+        "tooMany": "Trop de tentatives. Réessayez dans quelques minutes.",
+        "failed": "La demande n'a pas abouti. Réessayez."
+      }
     }
   },
   "members": {

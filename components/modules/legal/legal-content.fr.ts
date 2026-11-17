@@ -190,8 +190,8 @@ export const LEGAL_FR: LegalDocuments = {
         id: "duree",
         heading: "11. Durée, résiliation et export",
         body: [
-          "Le contrat dure tant que le compte existe. L'organisation peut fermer son compte à tout moment depuis ses paramètres ou en nous écrivant.",
-          "Avant la fermeture, l'organisation peut exporter ses listes d'invités et ses données. Après fermeture, les données restent exportables trente jours, puis sont supprimées ou anonymisées, sauf celles que la loi nous impose de conserver (factures notamment).",
+          "Le contrat dure tant que le compte existe. Chaque utilisateur peut supprimer son compte à tout moment depuis Paramètres, Compte, ou en nous écrivant. Les organisations dont il est seul propriétaire sont fermées avec son compte s'il l'accepte ; une organisation qui a un autre propriétaire continue sans lui.",
+          "La suppression prend effet trente jours après la demande : pendant ce délai, l'organisation reste fermée au public, ses données restent exportables, et une simple reconnexion annule la demande. Ensuite, le compte et les données personnelles des invités et clients des organisations fermées sont effacés, sauf ce que la loi nous impose de conserver (factures notamment).",
         ],
       },
       {
@@ -303,7 +303,7 @@ export const LEGAL_FR: LegalDocuments = {
           [
             "Invités et acheteurs de billets : pendant l'événement, puis anonymisation automatique douze mois après l'événement ; immédiatement à la demande de l'invité.",
             "Clients des services (rendez-vous, file du jour) : leur nom et leur numéro sont retirés automatiquement douze mois après le rendez-vous ou le ticket.",
-            "Comptes : tant que le compte est ouvert. À la fermeture, demandée par e-mail, nous envoyons l'export de vos données puis supprimons le compte sous trente jours.",
+            "Comptes : tant que le compte est ouvert. Vous pouvez le supprimer depuis vos paramètres ; la suppression devient définitive trente jours après la demande, délai pendant lequel une reconnexion l'annule. Les factures déjà émises restent conservées.",
             "Professionnels qui nous contactent et échanges avec l'équipe Jikū : douze mois après le premier contact.",
             "Factures et pièces comptables : dix ans, comme le prévoit le droit comptable OHADA.",
             "Journaux techniques : douze mois au plus.",

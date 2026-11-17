@@ -8,6 +8,7 @@ export { ResetPasswordForm } from "./reset-password-form";
 export { VerifyEmailView } from "./verify-email-view";
 export { OnboardingForm } from "./onboarding-form";
 export { ConfirmEmailBanner, ResendVerificationButton } from "./confirm-email";
+export { GoogleButton } from "./google-button";
 export { AcceptInvitationView, InvalidInvitationView } from "./accept-invitation-view";
 
 export { logoutAction, switchOrgAction } from "./identity.service";

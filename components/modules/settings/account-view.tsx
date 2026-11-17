@@ -9,22 +9,27 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { MarketingConsentSwitch } from "@/components/modules/settings/marketing-consent-switch";
+import { DeleteAccountSection } from "@/components/modules/settings/delete-account-section";
+import type { AccountDeletionStatus } from "@/components/modules/settings/schema";
 
 /**
  * The signed-in user's own identity, read-only (the backend has no profile
  * update endpoint yet), and the one preference they control: Jikū's news and
- * tips (JIKU-201).
+ * tips (JIKU-201). Deleting the account closes the page (JIKU-316); the section
+ * stays hidden when its status could not be read.
  */
 export function AccountView({
   fullName,
   email,
   role,
   marketingConsent,
+  deletion,
 }: {
   fullName: string | null;
   email: string;
   role: string;
   marketingConsent: boolean;
+  deletion: AccountDeletionStatus | null;
 }) {
   const t = useTranslations("settings.account");
   const roleLabel = useRoleLabel();
@@ -58,6 +63,7 @@ export function AccountView({
           <MarketingConsentSwitch initial={marketingConsent} />
         </CardContent>
       </Card>
+      {deletion ? <DeleteAccountSection status={deletion} /> : null}
     </div>
   );
 }

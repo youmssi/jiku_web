@@ -28,6 +28,7 @@ import {
   loadPaymentMethods,
   loadTemplates,
   loadVocabulary,
+  loadAccountDeletion,
 } from "@/components/modules/settings/settings.queries";
 import type {
   BrandingResponse,
@@ -135,6 +136,7 @@ export async function SettingsView({ tab }: { tab?: string }) {
   );
   const opened = groups.some((group) => group.sections.some((section) => section === tab)) ? (tab as Section) : null;
   const shown: Section = opened ?? "organization";
+  const deletion = shown === "account" ? await loadAccountDeletion() : null;
   const label = (section: Section) =>
     section === "verification" ? tPage("tabs.verification") : section === "sales" ? tSales("tab") : tPage(`tabs.${section}`);
 
@@ -212,6 +214,7 @@ export async function SettingsView({ tab }: { tab?: string }) {
             email={context?.email ?? ""}
             role={context?.role ?? ""}
             marketingConsent={context?.marketingConsent ?? false}
+            deletion={deletion}
           />
         );
     }
