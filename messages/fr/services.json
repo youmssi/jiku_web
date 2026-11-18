@@ -256,6 +256,13 @@
     "opensCard": "Ouvertures par la carte",
     "opensLink": "Ouvertures par le lien",
     "bookingsCard": "Réservations par la carte",
-    "bookingsLink": "Réservations par le lien"
+    "bookingsLink": "Réservations par le lien",
+    "mode": "Où mène la carte",
+    "modePresentation": "Présentation",
+    "modePresentationHelp": "Le client découvre le service, puis choisit un créneau.",
+    "modeSlot": "Créneau",
+    "modeSlotHelp": "Le client arrive directement sur le premier jour libre. La carte affiche les 3 prochains créneaux.",
+    "modeSaved": "Mode de la carte enregistré",
+    "modeFailed": "Impossible d'enregistrer le mode de la carte, réessayez"
   }
 }

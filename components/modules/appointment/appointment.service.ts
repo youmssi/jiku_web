@@ -32,8 +32,13 @@ function basePath(ref: AppointmentLinkRef): string {
 export async function loadAppointment(
   ref: AppointmentLinkRef,
   date?: string,
+  upcoming = false,
 ): Promise<AppointmentServiceView | null> {
-  const params = date ? `?date=${encodeURIComponent(date)}` : "";
+  const query = new URLSearchParams();
+  if (date) query.set("date", date);
+  // The next free times exist on a service's short link only (JIKU-190).
+  if (upcoming && "code" in ref) query.set("upcoming", "true");
+  const params = query.size > 0 ? `?${query}` : "";
   const response = await publicFetch(`${basePath(ref)}${params}`);
   if (!response.ok) {
     return null;

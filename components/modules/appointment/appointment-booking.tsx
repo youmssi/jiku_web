@@ -8,6 +8,8 @@ import { ar, enUS, fr } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { trackEvent } from "@/lib/analytics";
+import { bookingStep, slotStepDay } from "@/lib/booking-step";
+import { formatAmount } from "@/lib/currency";
 import { upperFirst } from "@/lib/text";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -118,6 +120,8 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [picked, setPicked] = useState<AppointmentSlot | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // A card in slot mode (JIKU-190) opens on the first free time's day; with none this week, on the presentation.
+  const [slotStep, setSlotStep] = useState<"jumped" | "none" | null>(null);
 
   const {
     control,
@@ -133,6 +137,20 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
   useEffect(() => {
     loadAppointment(link, date).then(setView);
   }, [link, date]);
+
+  useEffect(() => {
+    if (!("code" in link) || bookingStep(new URLSearchParams(window.location.search).get("step")) !== "slot") return;
+    let active = true;
+    loadAppointment(link, undefined, true).then((first) => {
+      if (!active || !first) return;
+      const day = slotStepDay(first.upcoming, first.timezone);
+      setSlotStep(day ? "jumped" : "none");
+      if (day) setDate(day);
+    });
+    return () => {
+      active = false;
+    };
+  }, [link]);
 
   const source = useCardSource(link);
 
@@ -161,6 +179,13 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
   const groupSessions = (view?.clientsPerSlot ?? 1) > 1;
   const periods = view ? byPeriod(view.slots, timeZone) : [];
   const time = (slot: AppointmentSlot) => format.dateTime(new Date(slot.startsAt), { timeZone, hour: "2-digit", minute: "2-digit" });
+  const facts = view
+    ? [
+        view.priceMinor != null && view.currency ? formatAmount(view.priceMinor, view.currency, locale) : null,
+        view.durationMinutes ? t("booking.minutes", { count: view.durationMinutes }) : null,
+        view.place ?? null,
+      ].filter(Boolean)
+    : [];
 
   return (
     <div className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-5 px-4 py-8">
@@ -178,7 +203,15 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
             {view ? (names ? t("booking.withNames", { names }) : t("booking.noAccount")) : t("booking.loading")}
           </p>
         </div>
+        {facts.length > 0 && slotStep !== "jumped" ? <p className="text-sm">{facts.join(" · ")}</p> : null}
       </header>
+
+      {slotStep === "none" && !view?.bookingPaused ? (
+        <Alert>
+          <AlertTitle>{t("booking.noSlotsThisWeek")}</AlertTitle>
+          <AlertDescription>{t("booking.noSlotsThisWeekHelp")}</AlertDescription>
+        </Alert>
+      ) : null}
 
       {view?.bookingPaused ? (
         <Alert>

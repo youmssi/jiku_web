@@ -5034,6 +5034,7 @@ export interface components {
         };
         AppointmentServiceView: {
             bookingPaused?: boolean;
+            cardMode?: string;
             /** Format: int32 */
             clientsPerSlot?: number;
             confirmationMode?: string;
@@ -5053,6 +5054,7 @@ export interface components {
             serviceId?: string;
             slots?: components["schemas"]["AppointmentSlotView"][];
             timezone?: string;
+            upcoming?: components["schemas"]["AppointmentSlotView"][] | null;
         };
         AppointmentSlotView: {
             /** Format: date-time */
@@ -6858,6 +6860,8 @@ export interface components {
             type?: "PERSON" | "LOCATION" | "EQUIPMENT";
         };
         ServiceResponse: {
+            /** @enum {string} */
+            cardMode?: "PRESENTATION" | "SLOT";
             currency?: string | null;
             /** Format: uuid */
             id?: string;
@@ -6872,6 +6876,8 @@ export interface components {
         ServiceShareView: {
             bookings?: components["schemas"]["ServiceCardCounts"];
             canShare?: boolean;
+            /** @enum {string} */
+            cardMode?: "PRESENTATION" | "SLOT";
             code?: string;
             opens?: components["schemas"]["ServiceCardCounts"];
             /** Format: int64 */
@@ -6903,6 +6909,8 @@ export interface components {
             serviceId?: string;
         };
         ServiceUpdateRequest: {
+            /** @enum {string|null} */
+            cardMode?: "PRESENTATION" | "SLOT" | null;
             name?: string | null;
             /** @enum {string|null} */
             paymentRule?: "FREE" | "BEFORE" | "AFTER_SERVICE" | null;
@@ -13679,6 +13687,7 @@ export interface operations {
         parameters: {
             query?: {
                 date?: string;
+                upcoming?: boolean;
             };
             header?: never;
             path: {

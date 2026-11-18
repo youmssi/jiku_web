@@ -12,6 +12,7 @@ import {
 } from "@/components/modules/open-invitation/public-server";
 import { DEFAULT_CARD_STYLE, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
 import { formatAmount } from "@/lib/currency";
+import { upcomingTimes } from "@/lib/short-dates";
 import { serviceCardLink } from "./service-card-link";
 import { loadAppointment } from "./appointment.service";
 
@@ -22,8 +23,10 @@ import { loadAppointment } from "./appointment.service";
  * an unknown code.
  */
 export async function renderServiceCard(code: string, format: CardFormat, locale: GuestLocale): Promise<ImageResponse | null> {
-  const view = await loadAppointment({ code });
+  // A card in slot mode lists its next free times (JIKU-190), worked out again on every download.
+  const view = await loadAppointment({ code }, undefined, true);
   if (!view) return null;
+  const slotMode = view.cardMode === "SLOT";
   const [t, logo] = await Promise.all([
     getTranslations({ locale, namespace: "guest.serviceCard" }),
     inlineCardImage(view.logoUrl),
@@ -36,6 +39,10 @@ export async function renderServiceCard(code: string, format: CardFormat, locale
     .filter(Boolean)
     .join(" · ");
   const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
+  const next =
+    slotMode && view.upcoming && view.upcoming.length > 0
+      ? t("next", { times: upcomingTimes(view.upcoming.map((slot) => slot.startsAt), view.timezone, locale) })
+      : null;
   const data: CardArtData = {
     style: DEFAULT_CARD_STYLE,
     color: view.primaryColor ?? FALLBACK_BRAND_COLOR,
@@ -48,14 +55,14 @@ export async function renderServiceCard(code: string, format: CardFormat, locale
     weekdayTime: null,
     when: facts || null,
     location: view.place ?? null,
-    answerBy: facts || null,
-    url: serviceCardLink(`${siteUrl()}${prefix}`, code, "card"),
+    answerBy: next ?? (facts || null),
+    url: serviceCardLink(`${siteUrl()}${prefix}`, code, "card", view.cardMode),
     signature: false,
     labels: { invites: t("by", { organizer }), scan: t("book"), via: t("via") },
     direction: localeDirection(locale),
   };
   // The landscape card lists `when`, the place and `answerBy` on one line: the facts once are enough there.
-  return renderCardArt(format === "landscape" ? { ...data, answerBy: null } : data, format);
+  return renderCardArt(format === "landscape" && !next ? { ...data, answerBy: null } : data, format);
 }
 
 /**

@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
-import { fullWhen, liveWhen, relativeDay, shortDay, shortTime, shortWhen } from "./short-dates.ts";
+import { fullWhen, liveWhen, relativeDay, shortDay, shortTime, shortWhen, upcomingTimes } from "./short-dates.ts";
 
 const CONAKRY = "Africa/Conakry";
 const now = new Date("2026-09-27T10:00:00Z");
@@ -58,4 +58,11 @@ test("a far or past day is not said relatively", () => {
 
 test("the full form keeps everything for a tooltip", () => {
   assert.match(fullWhen("2026-11-14T19:00:00Z", CONAKRY, "fr"), /samedi 14 novembre 2026/);
+});
+
+test("a card's next free times are grouped by day", () => {
+  const now = new Date("2026-11-18T12:00:00Z");
+  const slots = ["2026-11-19T10:00:00Z", "2026-11-19T11:00:00Z", "2026-11-19T14:30:00Z"];
+  assert.equal(upcomingTimes(slots, "Africa/Conakry", "fr", now), "demain 10 h, 11 h, 14 h 30");
+  assert.equal(upcomingTimes(["2026-11-18T16:00:00Z", "2026-11-19T09:00:00Z"], "Africa/Conakry", "fr", now), "aujourd’hui 16 h, demain 9 h");
 });

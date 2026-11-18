@@ -34,7 +34,10 @@ export async function ServiceShareView({ serviceId }: { serviceId: string }) {
       serviceName={service.name}
       place={service.place ?? ""}
       share={share}
-      link={serviceCardLink(base, share.code, "link")}
+      links={{
+        PRESENTATION: serviceCardLink(base, share.code, "link", "PRESENTATION"),
+        SLOT: serviceCardLink(base, share.code, "link", "SLOT"),
+      }}
       cardUrl={`/api/service-cards/${encodeURIComponent(share.code)}?format=portrait&lang=${locale}`}
     />
   );

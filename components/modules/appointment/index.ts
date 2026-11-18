@@ -13,3 +13,4 @@ export type {
   ClientLineTicketView,
 } from "./schema";
 export { serviceCardLink, serviceCardSource, type ServiceCardSource } from "./service-card-link";
+export type { ServiceCardMode } from "./schema";
