@@ -145,7 +145,10 @@
       },
       "pausedTitle": "Booking unavailable for now",
       "paused": "Booking is paused for now. If you already have an appointment, it stands.",
-      "pausedWithName": "{organizer} is not taking new appointments for now. If you already have one, it stands."
+      "pausedWithName": "{organizer} is not taking new appointments for now. If you already have one, it stands.",
+      "minutes": "{count} min",
+      "noSlotsThisWeek": "No times this week",
+      "noSlotsThisWeekHelp": "Pick another day below, or come back later."
     },
     "status": {
       "PENDING": "The professional still has to confirm it: you will be told.",
@@ -337,6 +340,7 @@
     "minutes": "{count} min",
     "by": "By {organizer}",
     "book": "Book your slot",
-    "via": "Booking via Jikū"
+    "via": "Booking via Jikū",
+    "next": "Next: {times}"
   }
 }

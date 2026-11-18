@@ -3,6 +3,7 @@
 import { useState, useSyncExternalStore, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { Fingerprint } from "lucide-react";
+import { noSubscription } from "@/components/shared/no-subscription";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { passkeyCancelled, passkeysSupported, signWithPasskey } from "@/lib/webauthn";
@@ -11,7 +12,6 @@ import {
   startPasskeySignInAction,
 } from "@/components/modules/identity/identity.service";
 
-const noSubscription = () => () => {};
 
 /**
  * Signing in with a passkey (JIKU-318): the device offers the passkeys it holds

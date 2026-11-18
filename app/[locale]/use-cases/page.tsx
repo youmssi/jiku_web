@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { USE_CASES_CONTENT, UseCasesPage } from "@/components/modules/landing";
 import { languageAlternates, SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
-import { routing } from "@/i18n/routing";
+import { routing, siteLocale } from "@/i18n/routing";
 import { SEO_ROUTES } from "@/lib/constants";
 
 interface PageProps {
@@ -16,7 +15,7 @@ interface PageProps {
  */
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
-  const resolved = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const resolved = siteLocale(locale);
   const content = USE_CASES_CONTENT[resolved];
   const canonical = resolved === routing.defaultLocale ? "/use-cases" : `/${resolved}/use-cases`;
 
@@ -47,7 +46,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function UseCasesPageRoute({ params }: Readonly<PageProps>) {
   const { locale } = await params;
-  const resolved = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const resolved = siteLocale(locale);
   setRequestLocale(resolved);
   const origin = siteUrl();
   return <UseCasesPage content={USE_CASES_CONTENT[resolved]} locale={resolved} siteUrl={origin} />;

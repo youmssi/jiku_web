@@ -3,6 +3,7 @@
 import { useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { MapPin } from "lucide-react";
+import { noSubscription } from "@/components/shared/no-subscription";
 import { CardHero, OrganizerMark } from "@/components/shared/card-hero";
 import { QrCode } from "@/components/shared/qr-code";
 import { CARD_STYLE_TOKENS, displayTitle, type CardStyle } from "@/lib/card-style";
@@ -165,9 +166,6 @@ export function TicketCard({
   );
 }
 
-function noSubscription() {
-  return () => {};
-}
 
 function viewerTimeZone(): string {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;

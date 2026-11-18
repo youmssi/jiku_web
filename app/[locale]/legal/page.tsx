@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { LegalPage, legalMetadata } from "@/components/modules/legal";
-import { routing } from "@/i18n/routing";
+import { siteLocale } from "@/i18n/routing";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -10,12 +9,12 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
-  return legalMetadata("legal", hasLocale(routing.locales, locale) ? locale : routing.defaultLocale);
+  return legalMetadata("legal", siteLocale(locale));
 }
 
 export default async function Page({ params }: Readonly<PageProps>) {
   const { locale } = await params;
-  const resolved = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const resolved = siteLocale(locale);
   setRequestLocale(resolved);
   return <LegalPage id="legal" locale={resolved} />;
 }
