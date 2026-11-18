@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { Check, ChevronDown, Copy, Download, ExternalLink, Loader2, MessageCircle, Send, Share2 } from "lucide-react";
 import { toast } from "sonner";
+import { noSubscription } from "@/components/shared/no-subscription";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -198,6 +199,3 @@ export function SharePanel({
   );
 }
 
-function noSubscription() {
-  return () => {};
-}

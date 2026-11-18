@@ -1,7 +1,8 @@
 import { getTranslations } from "next-intl/server";
+import { loadOrgUsername } from "@/components/shared/org-username.server";
 import { isOnlinePaymentEnabled } from "@/components/modules/billing/server";
 import { CommissionPanel } from "./commission-panel";
-import { loadCommission, loadEventOrders, loadOrgUsername } from "./sale.queries";
+import { loadCommission, loadEventOrders } from "./sale.queries";
 import { OrdersBoard } from "./orders-board";
 import { SaleLinkCard } from "./sale-link-card";
 

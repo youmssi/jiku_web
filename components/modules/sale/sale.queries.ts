@@ -34,15 +34,6 @@ export async function loadEventOrders(eventId: string): Promise<OrganizerOrder[]
   return (await response.json()) as OrganizerOrder[];
 }
 
-/** The organization's public username, which the sale link is built on; null until it picks one. */
-export async function loadOrgUsername(): Promise<string | null> {
-  const response = await serverFetch("/orgs/profile");
-  if (!response.ok) {
-    reportApiError(response, "sale");
-    return null;
-  }
-  return ((await response.json()) as { username?: string | null }).username ?? null;
-}
 
 /** The organization's ticket-sale settings; null when the read fails. */
 export async function loadSalesSettings(): Promise<SalesSettings | null> {
