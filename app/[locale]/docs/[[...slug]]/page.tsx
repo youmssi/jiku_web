@@ -1,18 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { DOCS_META, DocsArticle, docsPageMeta, docsStaticParams } from "@/components/modules/docs";
 import { languageAlternates, SHARE_IMAGE } from "@/components/modules/seo";
-import { routing } from "@/i18n/routing";
+import { siteLocale } from "@/i18n/routing";
 
 interface PageProps {
   params: Promise<{ locale: string; slug?: string[] }>;
 }
 
-function resolveLocale(locale: string) {
-  return hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
-}
 
 export function generateStaticParams() {
   return docsStaticParams();
@@ -20,7 +16,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale: raw, slug } = await params;
-  const locale = resolveLocale(raw);
+  const locale = siteLocale(raw);
   const meta = docsPageMeta(locale, slug);
   if (!meta) notFound();
   const path = meta.url.replace(/^\/en(?=\/)/, "");
@@ -38,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 /** One guide: /docs/... in French, /en/docs/... in English. */
 export default async function DocsRoute({ params }: PageProps) {
   const { locale: raw, slug } = await params;
-  const locale = resolveLocale(raw);
+  const locale = siteLocale(raw);
   setRequestLocale(locale);
   return <DocsArticle locale={locale} slug={slug} />;
 }

@@ -30,10 +30,6 @@ async function read<T>(path: string): Promise<T | null> {
   return (await response.json()) as T;
 }
 
-export async function loadOrgUsername(): Promise<string | null> {
-  const profile = await read<{ username?: string | null }>("/orgs/profile");
-  return profile?.username ?? null;
-}
 
 export function loadBranding(): Promise<BrandingResponse | null> {
   return read("/branding");

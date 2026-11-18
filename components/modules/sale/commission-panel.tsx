@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { webPageUrl } from "@/lib/safe-url";
 import { ActivationInstructions, type ManualPaymentInstructions } from "@/components/modules/billing";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -138,7 +139,7 @@ function OpenBatchDialog({
         toast.error(result.error);
         return;
       }
-      const redirect = result.data.payment?.instruction.type === "REDIRECT" ? safeUrl(result.data.payment.instruction.value) : null;
+      const redirect = result.data.payment?.instruction.type === "REDIRECT" ? webPageUrl(result.data.payment.instruction.value) : null;
       if (redirect) {
         window.location.assign(redirect);
         return;
@@ -221,12 +222,3 @@ function Line({ label, value, strong = false }: { label: string; value: string; 
   );
 }
 
-/** Only a web page is ever handed to the browser as a redirect. */
-function safeUrl(value: string): string | null {
-  try {
-    const url = new URL(value);
-    return url.protocol === "https:" || url.protocol === "http:" ? url.toString() : null;
-  } catch {
-    return null;
-  }
-}

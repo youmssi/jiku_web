@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { LANDING_CONTENT, LandingPage } from "@/components/modules/landing";
 import { languageAlternates, SHARE_IMAGE, siteUrl } from "@/components/modules/seo";
-import { routing } from "@/i18n/routing";
+import { routing, siteLocale } from "@/i18n/routing";
 import { visitorCurrency } from "@/lib/visitor-currency";
 
 interface PageProps {
@@ -19,9 +18,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { locale } = await params;
-  const resolved = hasLocale(routing.locales, locale)
-    ? locale
-    : routing.defaultLocale;
+  const resolved = siteLocale(locale);
   const content = LANDING_CONTENT[resolved];
   const canonical = resolved === routing.defaultLocale ? "/" : `/${resolved}`;
 
@@ -52,9 +49,7 @@ export async function generateMetadata({
 
 export default async function HomePage({ params }: Readonly<PageProps>) {
   const { locale } = await params;
-  const resolved = hasLocale(routing.locales, locale)
-    ? locale
-    : routing.defaultLocale;
+  const resolved = siteLocale(locale);
   setRequestLocale(resolved);
   return <LandingPage locale={resolved} siteUrl={siteUrl()} currency={await visitorCurrency(resolved)} />;
 }

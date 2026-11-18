@@ -128,8 +128,9 @@ export const config = {
     // rewriting those static URLs to /{locale}/... which would 404. `landing/`
     // holds the landing page's images, `email/` the images transactional emails
     // load, `fonts/` the self-hosted card face (JIKU-300), `guides/` the guide
-    // screenshots and `templates/` the guest import CSV. Every file in public/
+    // screenshots, `templates/` the guest import CSV and `.well-known/` the
+    // security contact (JIKU-321). Every file in public/
     // must be listed here: lib/proxy-matcher.test.ts fails otherwise (JIKU-301).
-    "/((?!api|_next/static|_next/image|landing/|email/|fonts/|guides/|templates/|jiku-logo\\.svg|jiku-widget\\.js|favicon\\.ico|sw\\.js|icon-192\\.png|icon-512\\.png|icon-maskable-512\\.png|apple-icon-180\\.png|jiku-logo-mark\\.png|jiku-logo-1024\\.png|robots\\.txt|llms\\.txt|indexnow-key\\.txt|sitemap\\.xml|manifest\\.webmanifest|opengraph-image).*)",
+    "/((?!api|_next/static|_next/image|\\.well-known/|landing/|email/|fonts/|guides/|templates/|jiku-logo\\.svg|jiku-widget\\.js|favicon\\.ico|sw\\.js|icon-192\\.png|icon-512\\.png|icon-maskable-512\\.png|apple-icon-180\\.png|jiku-logo-mark\\.png|jiku-logo-1024\\.png|robots\\.txt|llms\\.txt|indexnow-key\\.txt|sitemap\\.xml|manifest\\.webmanifest|opengraph-image).*)",
   ],
 };

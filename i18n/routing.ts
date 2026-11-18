@@ -1,3 +1,4 @@
+import { hasLocale } from "next-intl";
 import { defineRouting } from "next-intl/routing";
 
 /**
@@ -29,6 +30,11 @@ export const routing = defineRouting({
 });
 
 export type Locale = (typeof routing.locales)[number];
+
+/** The site's language for a page's `[locale]` segment: the default one for anything the site does not speak. */
+export function siteLocale(value: string): Locale {
+  return hasLocale(routing.locales, value) ? value : routing.defaultLocale;
+}
 
 /**
  * The guest screens (JIKU-292) also read in Arabic: the card, the RSVP page, the
