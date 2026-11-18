@@ -2,6 +2,7 @@ import "server-only";
 
 import { getTranslations } from "next-intl/server";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { loadOrgUsername } from "@/components/shared/org-username.server";
 import { Link } from "@/i18n/navigation";
 import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -23,7 +24,6 @@ import { ProviderSettingsView } from "@/components/modules/settings/provider-set
 import {
   loadBranding,
   loadLegalIdentity,
-  loadOrgUsername,
   loadProviderSettings,
   loadEmbeddedSignupConfig,
   loadPaymentMethods,

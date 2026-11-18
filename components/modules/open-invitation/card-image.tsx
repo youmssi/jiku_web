@@ -6,6 +6,7 @@ import { localeDirection, routing, type GuestLocale } from "@/i18n/routing";
 import { siteUrl } from "@/components/modules/seo";
 import { cardStyleOf, FALLBACK_BRAND_COLOR } from "@/lib/card-style";
 import { openInvitationRoute } from "@/lib/constants";
+import { fetchPublicImage } from "@/lib/public-image";
 import { datePart, shortDay, shortTime, shortWhen } from "@/lib/short-dates";
 import { taggedLink } from "./share";
 import { LANDSCAPE, LandscapeCard, PORTRAIT, PortraitCard, STATUS, StatusCard, type CardArtData } from "./card-art";
@@ -15,20 +16,8 @@ import { fetchPublicOpenInvitation } from "./open-invitation.queries";
 
 export type CardFormat = "portrait" | "status" | "landscape";
 
-/** Reads an image into a data URL, or null when it cannot be read: a broken link never breaks the card. */
-export async function inline(url: string | null | undefined): Promise<string | null> {
-  if (!url) return null;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) return null;
-    const type = response.headers.get("content-type") ?? "image/jpeg";
-    if (!type.startsWith("image/")) return null;
-    const bytes = Buffer.from(await response.arrayBuffer());
-    return `data:${type};base64,${bytes.toString("base64")}`;
-  } catch {
-    return null;
-  }
-}
+/** Reads an image into a data URL, or null when it cannot or must not be read: a broken link never breaks the card. */
+export const inline = fetchPublicImage;
 
 /**
  * The card of the open invitation [code] as a PNG (JIKU-194), in the style the

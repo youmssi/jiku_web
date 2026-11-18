@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { BIRTHDAY_TEXTS_CONTENT, BirthdayTextsPage } from "@/components/modules/landing";
 import { localizedPageMetadata, siteUrl } from "@/components/modules/seo";
-import { routing } from "@/i18n/routing";
+import { routing, siteLocale } from "@/i18n/routing";
 import { SEO_ROUTES } from "@/lib/constants";
 
 interface PageProps {
@@ -13,7 +12,7 @@ interface PageProps {
 /** Birthday invitation texts page (JIKU-220), fr unprefixed and en under /en. */
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
-  const resolved = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const resolved = siteLocale(locale);
   const { meta } = BIRTHDAY_TEXTS_CONTENT[resolved];
   return {
     ...localizedPageMetadata({
@@ -29,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BirthdayTextsPageRoute({ params }: Readonly<PageProps>) {
   const { locale } = await params;
-  const resolved = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const resolved = siteLocale(locale);
   setRequestLocale(resolved);
   return <BirthdayTextsPage content={BIRTHDAY_TEXTS_CONTENT[resolved]} locale={resolved} siteUrl={siteUrl()} />;
 }

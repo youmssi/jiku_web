@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { ORGANIZERS_CONTENT, OrganizersPage, organizersContent } from "@/components/modules/landing";
 import { localizedPageMetadata, siteUrl } from "@/components/modules/seo";
-import { routing } from "@/i18n/routing";
+import { routing, siteLocale } from "@/i18n/routing";
 import { SEO_ROUTES } from "@/lib/constants";
 import { visitorCurrency } from "@/lib/visitor-currency";
 
@@ -14,7 +13,7 @@ interface PageProps {
 /** The page for professional event organizers (JIKU-266), fr unprefixed and en under /en. */
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
-  const resolved = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const resolved = siteLocale(locale);
   const { meta } = ORGANIZERS_CONTENT[resolved];
   return {
     ...localizedPageMetadata({
@@ -30,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function OrganizersPageRoute({ params }: Readonly<PageProps>) {
   const { locale } = await params;
-  const resolved = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const resolved = siteLocale(locale);
   setRequestLocale(resolved);
   const content = organizersContent(resolved, await visitorCurrency(resolved));
   return <OrganizersPage content={content} locale={resolved} siteUrl={siteUrl()} />;

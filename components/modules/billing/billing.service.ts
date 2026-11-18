@@ -1,6 +1,7 @@
 "use server";
 
 import { getTranslations } from "next-intl/server";
+import { webPageUrl } from "@/lib/safe-url";
 import { serverFetch } from "@/lib/api-server";
 import { fail, ok, problemCode, reportApiError, type ActionResult } from "@/lib/action-result";
 import type {
@@ -239,20 +240,11 @@ export async function checkoutAction(target: CheckoutTarget): Promise<ActionResu
     return fail(t("failed"));
   }
   const started = (await response.json()) as PaymentInitiationResult;
-  const url = started.instruction.type === "REDIRECT" ? safeUrl(started.instruction.value) : null;
+  const url = started.instruction.type === "REDIRECT" ? webPageUrl(started.instruction.value) : null;
   if (!url) return fail(t("failed"));
   return ok(url);
 }
 
-/** Only a web page is ever handed to the browser as a redirect. */
-function safeUrl(value: string): string | null {
-  try {
-    const url = new URL(value);
-    return url.protocol === "https:" || url.protocol === "http:" ? url.toString() : null;
-  } catch {
-    return null;
-  }
-}
 
 /** Where one of the organization's payments stands; null when it is not theirs or does not exist. */
 export async function fetchPaymentStatusAction(paymentId: string): Promise<PaymentStatusView | null> {
