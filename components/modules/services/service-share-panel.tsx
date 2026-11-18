@@ -7,13 +7,18 @@ import { Download, Link2, MessageCircle, ShieldCheck } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Field, FieldContent, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { Stat, whatsappChatLink } from "@/components/shared";
 import { ROUTES } from "@/lib/constants";
-import { updateServicePlaceAction } from "@/components/modules/services/services.service";
+import { updateServiceCardModeAction, updateServicePlaceAction } from "@/components/modules/services/services.service";
 import type { ServiceShare } from "@/components/modules/services/schema";
+
+type CardMode = "PRESENTATION" | "SLOT";
+
+const CARD_MODES: readonly CardMode[] = ["PRESENTATION", "SLOT"];
 
 /**
  * The Share tab's screen (JIKU-189). `"use client"`: copying the link, sharing
@@ -26,20 +31,24 @@ export function ServiceSharePanel({
   serviceName,
   place,
   share,
-  link,
+  links,
   cardUrl,
 }: {
   serviceId: string;
   serviceName: string;
   place: string;
   share: ServiceShare;
-  link: string;
+  /** The shared link in each card mode (JIKU-190). */
+  links: Record<CardMode, string>;
   cardUrl: string;
 }) {
   const t = useTranslations("services.share");
   const [value, setValue] = useState(place);
   const [version, setVersion] = useState(0);
   const [pending, startTransition] = useTransition();
+  const [mode, setMode] = useState<CardMode>(share.cardMode ?? "PRESENTATION");
+  const [savingMode, startModeTransition] = useTransition();
+  const link = links[mode];
   const canShare = share.canShare ?? false;
   const message = t("message", { service: serviceName, link });
 
@@ -48,6 +57,21 @@ export function ServiceSharePanel({
       const result = await updateServicePlaceAction(serviceId, value);
       if (!result.ok) return void toast.error(result.error);
       toast.success(t("placeSaved"));
+      setVersion((current) => current + 1);
+    });
+  }
+
+  function changeMode(next: string) {
+    if (next !== "PRESENTATION" && next !== "SLOT") return;
+    const previous = mode;
+    setMode(next);
+    startModeTransition(async () => {
+      const result = await updateServiceCardModeAction(serviceId, next);
+      if (!result.ok) {
+        setMode(previous);
+        return void toast.error(result.error);
+      }
+      toast.success(t("modeSaved"));
       setVersion((current) => current + 1);
     });
   }
@@ -109,6 +133,22 @@ export function ServiceSharePanel({
                 </Button>
               </div>
             )}
+            <fieldset className="flex flex-col gap-2" disabled={savingMode}>
+              <legend className="mb-2 text-sm font-medium">{t("mode")}</legend>
+              <RadioGroup value={mode} onValueChange={changeMode}>
+                {CARD_MODES.map((option) => (
+                  <Field key={option} orientation="horizontal">
+                    <RadioGroupItem value={option} id={`card-mode-${option}`} />
+                    <FieldContent>
+                      <FieldLabel htmlFor={`card-mode-${option}`}>
+                        {t(option === "SLOT" ? "modeSlot" : "modePresentation")}
+                      </FieldLabel>
+                      <FieldDescription>{t(option === "SLOT" ? "modeSlotHelp" : "modePresentationHelp")}</FieldDescription>
+                    </FieldContent>
+                  </Field>
+                ))}
+              </RadioGroup>
+            </fieldset>
             <form
               onSubmit={(event) => {
                 event.preventDefault();

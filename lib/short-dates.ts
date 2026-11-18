@@ -134,3 +134,24 @@ export function datePart(
 ): string {
   return new Intl.DateTimeFormat(locale, { ...options, timeZone }).format(new Date(utcInstant));
 }
+
+/**
+ * A service card's next free times (JIKU-190), grouped by day: "demain 10 h, 11 h,
+ * jeu. 20 nov. 14 h". Days within the week read as "aujourd'hui", "demain"…
+ */
+export function upcomingTimes(
+  utcInstants: readonly string[],
+  timeZone: string,
+  locale: string,
+  now: Date = new Date(),
+): string {
+  const groups: { day: string; times: string[] }[] = [];
+  for (const instant of utcInstants) {
+    const label = relativeDay(instant, timeZone, locale, now) ?? shortDay(instant, timeZone, locale, { now });
+    const day = label.charAt(0).toLocaleLowerCase(locale) + label.slice(1);
+    const last = groups.at(-1);
+    if (last?.day === day) last.times.push(shortTime(instant, timeZone, locale));
+    else groups.push({ day, times: [shortTime(instant, timeZone, locale)] });
+  }
+  return groups.map(({ day, times }) => `${day} ${times.join(", ")}`).join(", ");
+}

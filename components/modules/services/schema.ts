@@ -16,6 +16,8 @@ export interface ServiceSummary {
   currency: string | null;
   /** Where the service takes place, shown on its card (JIKU-189). */
   place?: string | null;
+  /** Where the card and link lead (JIKU-190). */
+  cardMode?: "PRESENTATION" | "SLOT";
 }
 
 /** Canal de rappel d'un service (JIKU-89) : seul WhatsApp est livrable aujourd'hui. */

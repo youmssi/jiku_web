@@ -145,7 +145,10 @@
       },
       "pausedTitle": "Réservation momentanément indisponible",
       "paused": "La prise de rendez-vous est en pause pour l'instant. Si vous avez déjà un rendez-vous, il est maintenu.",
-      "pausedWithName": "{organizer} ne prend pas de nouveaux rendez-vous pour l'instant. Si vous avez déjà un rendez-vous, il est maintenu."
+      "pausedWithName": "{organizer} ne prend pas de nouveaux rendez-vous pour l'instant. Si vous avez déjà un rendez-vous, il est maintenu.",
+      "minutes": "{count} min",
+      "noSlotsThisWeek": "Aucun créneau cette semaine",
+      "noSlotsThisWeekHelp": "Choisissez un autre jour ci-dessous, ou revenez plus tard."
     },
     "status": {
       "PENDING": "Le professionnel doit encore le confirmer : vous serez prévenu.",
@@ -337,6 +340,7 @@
     "minutes": "{count} min",
     "by": "Par {organizer}",
     "book": "Réservez votre créneau",
-    "via": "Réservation via Jikū"
+    "via": "Réservation via Jikū",
+    "next": "Prochains : {times}"
   }
 }

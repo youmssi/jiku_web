@@ -30,7 +30,14 @@ export interface AppointmentServiceView {
   durationMinutes?: number | null;
   place?: string | null;
   primaryColor?: string | null;
+  /** Where the service's card and link lead (JIKU-190). */
+  cardMode?: ServiceCardMode;
+  /** The next free times over the coming days, only when asked for (JIKU-190). */
+  upcoming?: AppointmentSlot[] | null;
 }
+
+/** Where a service's card and link lead (JIKU-190): its presentation, or straight to the times. */
+export type ServiceCardMode = "PRESENTATION" | "SLOT";
 
 export interface AppointmentBookingView {
   bookingToken: string;

@@ -256,6 +256,13 @@
     "opensCard": "Opens from the card",
     "opensLink": "Opens from the link",
     "bookingsCard": "Bookings from the card",
-    "bookingsLink": "Bookings from the link"
+    "bookingsLink": "Bookings from the link",
+    "mode": "Where the card leads",
+    "modePresentation": "Presentation",
+    "modePresentationHelp": "The client discovers the service, then picks a time.",
+    "modeSlot": "Time",
+    "modeSlotHelp": "The client lands straight on the first free day. The card lists the next 3 free times.",
+    "modeSaved": "Card mode saved",
+    "modeFailed": "Couldn't save the card mode, try again"
   }
 }

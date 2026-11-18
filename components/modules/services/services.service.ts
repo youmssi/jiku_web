@@ -335,3 +335,21 @@ export async function updateServicePlaceAction(serviceId: string, place: string)
   revalidatePath("/services");
   return { ok: true, data: null };
 }
+
+/** Where the service's card and link lead (JIKU-190): its presentation, or straight to the times. */
+export async function updateServiceCardModeAction(
+  serviceId: string,
+  cardMode: "PRESENTATION" | "SLOT",
+): Promise<ActionResult<null>> {
+  const t = await getTranslations("services.share");
+  if (cardMode !== "PRESENTATION" && cardMode !== "SLOT") return fail(t("modeFailed"));
+  const response = await serverFetch(`/services/${serviceId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ cardMode }),
+  });
+  const result = await fromResponse<unknown>(response, { default: t("modeFailed") });
+  if (!result.ok) return result;
+  revalidatePath("/services");
+  return { ok: true, data: null };
+}
