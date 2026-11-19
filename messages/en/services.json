@@ -264,5 +264,41 @@
     "modeSlotHelp": "The client lands straight on the first free day. The card lists the next 3 free times.",
     "modeSaved": "Card mode saved",
     "modeFailed": "Couldn't save the card mode, try again"
+  },
+  "questions": {
+    "title": "Questions before the appointment",
+    "description": "Up to 3 choice questions, asked before the times on the booking page, then in WhatsApp. An answer can lead to another of your services.",
+    "empty": "No questions: the client picks a time straight away.",
+    "add": "Add a question",
+    "remove": "Remove the question",
+    "prompt": "Question",
+    "promptPlaceholder": "E.g. What do you need?",
+    "choices": "Answers",
+    "choicePlaceholder": "Answer {n}",
+    "addChoice": "Add an answer",
+    "removeChoice": "Remove the answer",
+    "route": "Lead to",
+    "routeNone": "This service",
+    "limits": "{count, plural, one {# character left} other {# characters left}}",
+    "asButtons": "Shown as buttons in WhatsApp",
+    "asList": "Shown as a list in WhatsApp",
+    "save": "Save the questions",
+    "saved": "Questions saved",
+    "loadFailed": "Couldn't load the questions",
+    "saveFailed": "Couldn't save the questions, try again",
+    "preview": "Preview in WhatsApp",
+    "previewEmpty": "Add a question to see the preview.",
+    "previewList": "See the answers",
+    "errors": {
+      "invalid": "Check the questions: at most 3, with 2 to 10 answers of 20 characters each, no duplicates.",
+      "promptRequired": "Write the question",
+      "promptTooLong": "At most 140 characters",
+      "labelRequired": "Write the answer",
+      "labelTooLong": "At most 20 characters (WhatsApp's limit)",
+      "tooFewChoices": "At least 2 answers",
+      "tooManyChoices": "At most 10 answers",
+      "duplicateLabels": "Two answers are the same",
+      "tooManyQuestions": "At most 3 questions"
+    }
   }
 }

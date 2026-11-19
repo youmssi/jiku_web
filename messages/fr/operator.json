@@ -164,6 +164,14 @@
       "requestsNotFound": "Aucune demande trouvée.",
       "requestsFailed": "Impossible de charger les demandes en attente.",
       "requestConflict": "Cette demande vient d'être traitée par un autre poste — la liste est à jour."
+    },
+    "export": {
+      "title": "Exporter les rendez-vous",
+      "description": "Un fichier CSV avec les rendez-vous de la période et les réponses des clients.",
+      "from": "Du",
+      "to": "Au",
+      "action": "Télécharger le CSV",
+      "tooLong": "92 jours au plus"
     }
   },
   "door": {

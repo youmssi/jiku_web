@@ -6,7 +6,7 @@ import { serverFetch } from "@/lib/api-server";
 import { fail, fromResponse } from "@/lib/action-result";
 import type { ActionResult } from "@/lib/action-result";
 import { getOrganizerContext } from "@/components/modules/identity/server";
-import { createServiceSchema, type CreateServiceInput } from "./schema";
+import { createServiceSchema, serviceQuestionsSchema, type CreateServiceInput, type ServiceQuestionsInput } from "./schema";
 import type {
   ReminderPolicyUpdate,
   ResourceAvailability,
@@ -14,6 +14,7 @@ import type {
   ResourceUnavailability,
   ServiceConfiguration,
   ServicePaymentRule,
+  ServiceQuestion,
   ServiceRequirement,
   ServiceResource,
   ServiceSummary,
@@ -352,4 +353,35 @@ export async function updateServiceCardModeAction(
   if (!result.ok) return result;
   revalidatePath("/services");
   return { ok: true, data: null };
+}
+
+/** A service's guided questions (JIKU-191); an empty list when it asks none. */
+export async function fetchServiceQuestions(serviceId: string): Promise<ActionResult<ServiceQuestion[]>> {
+  const t = await getTranslations("services.questions");
+  const response = await serverFetch(`/services/${encodeURIComponent(serviceId)}/questions`);
+  return fromResponse<ServiceQuestion[]>(response, { default: t("loadFailed") });
+}
+
+/** Replaces the service's guided questions at once (JIKU-191), checked again by the API. */
+export async function saveServiceQuestionsAction(
+  serviceId: string,
+  input: ServiceQuestionsInput,
+): Promise<ActionResult<ServiceQuestion[]>> {
+  const t = await getTranslations("services.questions");
+  const parsed = serviceQuestionsSchema.safeParse(input);
+  if (!parsed.success) return fail(t("errors.invalid"));
+  const response = await serverFetch(`/services/${encodeURIComponent(serviceId)}/questions`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(parsed.data),
+  });
+  const result = await fromResponse<ServiceQuestion[]>(response, { 400: t("errors.invalid"), default: t("saveFailed") });
+  if (result.ok) revalidatePath("/services");
+  return result;
+}
+
+/** The organization's services, for choosing where an answer leads (JIKU-191); empty when they cannot be read. */
+export async function listServices(): Promise<ServiceSummary[]> {
+  const response = await serverFetch("/services");
+  return response.ok ? ((await response.json()) as ServiceSummary[]) : [];
 }

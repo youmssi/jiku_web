@@ -45,6 +45,7 @@ import type {
 import { walkInSchema } from "@/components/modules/dayline/schema";
 import { useDayLine } from "@/components/modules/dayline/useDayLine";
 import { formatAmount } from "@/lib/currency";
+import { BookingAnswers } from "@/components/modules/dayline/booking-answers";
 import { cn } from "@/lib/utils";
 
 /** The camera loads lazily: scanning is only a second way to record an arrival. */
@@ -265,6 +266,7 @@ export function DayLineConsole({ auth, initial }: DayLineConsoleProps) {
                       </span>
                     ) : null}
                   </div>
+                  <BookingAnswers answers={view.answers?.[entry.id]} />
                 </div>
               </div>
               <div className="flex shrink-0 gap-2 pl-14 sm:pl-0">

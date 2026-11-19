@@ -164,6 +164,14 @@
       "requestsNotFound": "No requests found.",
       "requestsFailed": "Pending requests could not load.",
       "requestConflict": "Another counter just handled this request — the list is up to date."
+    },
+    "export": {
+      "title": "Export appointments",
+      "description": "A CSV file with the period's appointments and the clients' answers.",
+      "from": "From",
+      "to": "To",
+      "action": "Download the CSV",
+      "tooLong": "At most 92 days"
     }
   },
   "door": {

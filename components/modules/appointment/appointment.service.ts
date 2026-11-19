@@ -13,6 +13,7 @@ import type {
   BookingInput,
   ClientLineTicketView,
   TakeLineTicketInput,
+  BookingAnswerInput,
 } from "@/components/modules/appointment/schema";
 
 /**
@@ -50,14 +51,19 @@ export async function bookAppointment(
   ref: AppointmentLinkRef,
   input: BookingInput,
   source?: ServiceCardSource | null,
+  answers: BookingAnswerInput[] = [],
 ): Promise<ActionResult<AppointmentBookingView>> {
+  const t = await getTranslations("guest.appointment.errors");
+  // Ids only: what the client chose is checked against the service's questions by the API (JIKU-191).
+  const uuid = /^[0-9a-f-]{36}$/i;
+  if (answers.length > 3 || answers.some((a) => !uuid.test(a.questionId) || !uuid.test(a.choiceId))) return fail(t("failed"));
   const response = await publicFetch(basePath(ref) + "/book", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...input, source: serviceCardSource(source) }),
+    body: JSON.stringify({ ...input, source: serviceCardSource(source), answers }),
   });
-  const t = await getTranslations("guest.appointment.errors");
   return fromResponse<AppointmentBookingView>(response, {
+    400: t("answers"),
     409: t("taken"),
     423: t("paused"),
     default: t("failed"),
