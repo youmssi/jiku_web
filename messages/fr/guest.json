@@ -148,7 +148,13 @@
       "pausedWithName": "{organizer} ne prend pas de nouveaux rendez-vous pour l'instant. Si vous avez déjà un rendez-vous, il est maintenu.",
       "minutes": "{count} min",
       "noSlotsThisWeek": "Aucun créneau cette semaine",
-      "noSlotsThisWeekHelp": "Choisissez un autre jour ci-dessous, ou revenez plus tard."
+      "noSlotsThisWeekHelp": "Choisissez un autre jour ci-dessous, ou revenez plus tard.",
+      "questionsTitle": "Avant de choisir un créneau",
+      "questionStep": "Question {n} sur {total}",
+      "routeTitle": "Ce besoin a son propre service",
+      "routeAction": "Réserver ce service",
+      "changeAnswers": "Modifier mes réponses",
+      "questionsDone": "Voir les créneaux"
     },
     "status": {
       "PENDING": "Le professionnel doit encore le confirmer : vous serez prévenu.",
@@ -175,7 +181,8 @@
       "notFound": "Cette réservation est introuvable.",
       "notCancellable": "Ce rendez-vous ne peut plus être annulé.",
       "cancelFailed": "L'annulation a échoué. Réessayez.",
-      "paused": "La prise de rendez-vous est en pause pour l'instant."
+      "paused": "La prise de rendez-vous est en pause pour l'instant.",
+      "answers": "Répondez à chaque question avant de réserver."
     }
   },
   "verification": {

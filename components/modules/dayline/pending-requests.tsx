@@ -29,6 +29,7 @@ import {
   rejectPendingRequestAction,
 } from "@/components/modules/dayline/dayline.service";
 import { dayLineKey } from "@/components/modules/dayline/useDayLine";
+import { BookingAnswers } from "@/components/modules/dayline/booking-answers";
 import type {
   DayLineAuth,
   PendingAppointmentRequest,
@@ -136,6 +137,7 @@ export function PendingRequests({
                         }),
                       })}
                     </p>
+                    <BookingAnswers answers={request.answers} />
                   </div>
                   <div className="flex shrink-0 gap-2">
                     <Button

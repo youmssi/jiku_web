@@ -44,6 +44,14 @@ export interface DayLineView {
   /** The line's day, in the service's timezone. */
   date: string;
   entries: LineTicket[];
+  /** What each appointment's client answered before the times (JIKU-191), by entry id. */
+  answers?: Record<string, BookingAnswer[]>;
+}
+
+/** One answer a client gave before booking (JIKU-191). */
+export interface BookingAnswer {
+  question: string;
+  answer: string;
 }
 
 /** An entry only moves one way; its button follows from its state. */
@@ -85,4 +93,6 @@ export interface PendingAppointmentRequest {
   clientPhone: string | null;
   requestedAt: string;
   heldUntil: string | null;
+  /** What the client answered before the times (JIKU-191). */
+  answers?: BookingAnswer[];
 }

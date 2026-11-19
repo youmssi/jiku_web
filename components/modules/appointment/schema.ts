@@ -34,6 +34,21 @@ export interface AppointmentServiceView {
   cardMode?: ServiceCardMode;
   /** The next free times over the coming days, only when asked for (JIKU-190). */
   upcoming?: AppointmentSlot[] | null;
+  /** The choice questions asked before the times (JIKU-191). */
+  questions?: ServiceQuestionForClient[];
+}
+
+/** A question as the client sees it (JIKU-191); a choice with a route code leads to another service. */
+export interface ServiceQuestionForClient {
+  id: string;
+  prompt: string;
+  choices: { id: string; label: string; routeCode?: string | null }[];
+}
+
+/** One answer sent with the booking. */
+export interface BookingAnswerInput {
+  questionId: string;
+  choiceId: string;
 }
 
 /** Where a service's card and link lead (JIKU-190): its presentation, or straight to the times. */
