@@ -148,7 +148,13 @@
       "pausedWithName": "لا يقبل {organizer} مواعيد جديدة حاليًا. إذا كان لديك موعد، فهو قائم.",
       "minutes": "{count} د",
       "noSlotsThisWeek": "لا مواعيد هذا الأسبوع",
-      "noSlotsThisWeekHelp": "اختر يومًا آخر أدناه أو عد لاحقًا."
+      "noSlotsThisWeekHelp": "اختر يومًا آخر أدناه أو عد لاحقًا.",
+      "questionsTitle": "قبل اختيار الموعد",
+      "questionStep": "السؤال {n} من {total}",
+      "routeTitle": "لهذه الحاجة خدمة خاصة بها",
+      "routeAction": "احجز هذه الخدمة",
+      "changeAnswers": "تعديل إجاباتي",
+      "questionsDone": "عرض المواعيد"
     },
     "status": {
       "PENDING": "ما زال على المختص تأكيده: سنخبرك.",
@@ -175,7 +181,8 @@
       "notFound": "هذا الحجز غير موجود.",
       "notCancellable": "لم يعد ممكنًا إلغاء هذا الموعد.",
       "cancelFailed": "فشل الإلغاء. أعد المحاولة.",
-      "paused": "حجز المواعيد متوقف حاليًا."
+      "paused": "حجز المواعيد متوقف حاليًا.",
+      "answers": "أجب عن كل سؤال قبل الحجز."
     }
   },
   "verification": {

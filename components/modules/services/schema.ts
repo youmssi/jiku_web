@@ -137,3 +137,32 @@ export const RESOURCE_TYPES: readonly ResourceType[] = ["PERSON", "LOCATION", "E
 
 /** The Share tab of a service (JIKU-189): its short link, whether it may be shared, and how it did. */
 export type ServiceShare = Schema<"ServiceShareView">;
+
+/** A service's guided questions as the organizer edits them (JIKU-191). */
+export type ServiceQuestion = Schema<"ServiceQuestionView">;
+
+/** WhatsApp's limits (JIKU-191): three questions, two to ten answers of 20 characters. */
+export const QUESTION_LIMITS = { questions: 3, minChoices: 2, maxChoices: 10, label: 20, prompt: 140, buttons: 3 } as const;
+
+/** The questions editor's form; messages are `services.questions.errors` keys. */
+export const serviceQuestionsSchema = z.object({
+  questions: z
+    .array(
+      z.object({
+        prompt: z.string().trim().min(1, "promptRequired").max(QUESTION_LIMITS.prompt, "promptTooLong"),
+        choices: z
+          .array(
+            z.object({
+              label: z.string().trim().min(1, "labelRequired").max(QUESTION_LIMITS.label, "labelTooLong"),
+              routeServiceId: z.string().nullable(),
+            }),
+          )
+          .min(QUESTION_LIMITS.minChoices, "tooFewChoices")
+          .max(QUESTION_LIMITS.maxChoices, "tooManyChoices")
+          .refine((choices) => new Set(choices.map((c) => c.label.trim().toLowerCase())).size === choices.length, "duplicateLabels"),
+      }),
+    )
+    .max(QUESTION_LIMITS.questions, "tooManyQuestions"),
+});
+
+export type ServiceQuestionsInput = z.infer<typeof serviceQuestionsSchema>;

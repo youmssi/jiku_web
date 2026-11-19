@@ -264,5 +264,41 @@
     "modeSlotHelp": "Le client arrive directement sur le premier jour libre. La carte affiche les 3 prochains créneaux.",
     "modeSaved": "Mode de la carte enregistré",
     "modeFailed": "Impossible d'enregistrer le mode de la carte, réessayez"
+  },
+  "questions": {
+    "title": "Questions avant le rendez-vous",
+    "description": "Jusqu'à 3 questions à choix, posées avant les créneaux sur la page de réservation, puis dans WhatsApp. Un choix peut orienter vers un autre de vos services.",
+    "empty": "Aucune question : le client choisit directement son créneau.",
+    "add": "Ajouter une question",
+    "remove": "Retirer la question",
+    "prompt": "Question",
+    "promptPlaceholder": "Ex. Quel est votre besoin ?",
+    "choices": "Réponses",
+    "choicePlaceholder": "Réponse {n}",
+    "addChoice": "Ajouter une réponse",
+    "removeChoice": "Retirer la réponse",
+    "route": "Orienter vers",
+    "routeNone": "Ce service",
+    "limits": "{count, plural, one {# caractère restant} other {# caractères restants}}",
+    "asButtons": "Affichée en boutons dans WhatsApp",
+    "asList": "Affichée en liste dans WhatsApp",
+    "save": "Enregistrer les questions",
+    "saved": "Questions enregistrées",
+    "loadFailed": "Impossible de charger les questions",
+    "saveFailed": "Impossible d'enregistrer les questions, réessayez",
+    "preview": "Aperçu dans WhatsApp",
+    "previewEmpty": "Ajoutez une question pour voir l'aperçu.",
+    "previewList": "Voir les réponses",
+    "errors": {
+      "invalid": "Vérifiez les questions : 3 au plus, 2 à 10 réponses de 20 caractères chacune, sans doublon.",
+      "promptRequired": "Écrivez la question",
+      "promptTooLong": "140 caractères au plus",
+      "labelRequired": "Écrivez la réponse",
+      "labelTooLong": "20 caractères au plus (limite de WhatsApp)",
+      "tooFewChoices": "Au moins 2 réponses",
+      "tooManyChoices": "10 réponses au plus",
+      "duplicateLabels": "Deux réponses sont identiques",
+      "tooManyQuestions": "3 questions au plus"
+    }
   }
 }

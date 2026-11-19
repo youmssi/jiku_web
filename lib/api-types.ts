@@ -4212,6 +4212,22 @@ export interface paths {
         patch: operations["serviceUpdate"];
         trace?: never;
     };
+    "/api/v1/services/{id}/appointments/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["serviceExportAppointments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/services/{id}/booking-link": {
         parameters: {
             query?: never;
@@ -4237,6 +4253,22 @@ export interface paths {
         };
         get: operations["serviceConfiguration"];
         put: operations["serviceUpdateConfiguration"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/services/{id}/questions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["serviceQuestions"];
+        put: operations["serviceReplaceQuestions"];
         post?: never;
         delete?: never;
         options?: never;
@@ -5018,6 +5050,7 @@ export interface components {
             guestGrowth?: components["schemas"]["DateCount"][];
         };
         AppointmentBookingRequest: {
+            answers?: components["schemas"]["BookingAnswerInput"][];
             clientName: string;
             clientPhone: string;
             source?: string | null;
@@ -5050,6 +5083,7 @@ export interface components {
             priceMinor?: number | null;
             primaryColor?: string | null;
             professionals?: string[];
+            questions?: components["schemas"]["PublicQuestion"][];
             /** Format: uuid */
             serviceId?: string;
             slots?: components["schemas"]["AppointmentSlotView"][];
@@ -5141,6 +5175,16 @@ export interface components {
             packExpiresAt?: string | null;
             subscription?: components["schemas"]["SubscriptionStatusSummary"] | null;
             whatsAppReminders?: components["schemas"]["ReminderAllowance"];
+        };
+        BookingAnswerInput: {
+            /** Format: uuid */
+            choiceId?: string;
+            /** Format: uuid */
+            questionId?: string;
+        };
+        BookingAnswerView: {
+            answer?: string;
+            question?: string;
         };
         BookingLinkResponse: {
             shortCode?: string;
@@ -5359,6 +5403,9 @@ export interface components {
             date?: string;
         };
         DayLineView: {
+            answers?: {
+                [key: string]: components["schemas"]["BookingAnswerView"][];
+            };
             /** Format: date */
             date?: string;
             entries?: components["schemas"]["LineTicket"][];
@@ -6372,6 +6419,7 @@ export interface components {
             updatedAt?: string;
         };
         PendingAppointmentRequest: {
+            answers?: components["schemas"]["BookingAnswerView"][];
             clientName?: string | null;
             clientPhone?: string | null;
             /** Format: date-time */
@@ -6554,6 +6602,18 @@ export interface components {
             /** Format: uuid */
             serviceId?: string;
             shortCode?: string;
+        };
+        PublicQuestion: {
+            choices?: components["schemas"]["PublicQuestionChoice"][];
+            /** Format: uuid */
+            id?: string;
+            prompt?: string;
+        };
+        PublicQuestionChoice: {
+            /** Format: uuid */
+            id?: string;
+            label?: string;
+            routeCode?: string | null;
         };
         PublicSaleCategoryView: {
             /** Format: int32 */
@@ -6837,6 +6897,31 @@ export interface components {
             priceMinor?: number | null;
             quickSetup?: components["schemas"]["ServiceQuickSetup"] | null;
             timezone: string;
+        };
+        ServiceQuestionChoiceInput: {
+            label: string;
+            /** Format: uuid */
+            routeServiceId?: string | null;
+        };
+        ServiceQuestionChoiceView: {
+            /** Format: uuid */
+            id?: string;
+            label?: string;
+            /** Format: uuid */
+            routeServiceId?: string | null;
+        };
+        ServiceQuestionInput: {
+            choices?: components["schemas"]["ServiceQuestionChoiceInput"][];
+            prompt: string;
+        };
+        ServiceQuestionView: {
+            choices?: components["schemas"]["ServiceQuestionChoiceView"][];
+            /** Format: uuid */
+            id?: string;
+            prompt?: string;
+        };
+        ServiceQuestionsUpdate: {
+            questions?: components["schemas"]["ServiceQuestionInput"][];
         };
         ServiceQuickSetup: {
             /** Format: int32 */
@@ -14403,6 +14488,29 @@ export interface operations {
             };
         };
     };
+    serviceExportAppointments: {
+        parameters: {
+            query: {
+                from: string;
+                to: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     serviceBookingLink: {
         parameters: {
             query?: never;
@@ -14469,6 +14577,54 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["EffectiveServiceConfig"];
+                };
+            };
+        };
+    };
+    serviceQuestions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ServiceQuestionView"][];
+                };
+            };
+        };
+    };
+    serviceReplaceQuestions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ServiceQuestionsUpdate"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ServiceQuestionView"][];
                 };
             };
         };

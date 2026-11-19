@@ -148,7 +148,13 @@
       "pausedWithName": "{organizer} is not taking new appointments for now. If you already have one, it stands.",
       "minutes": "{count} min",
       "noSlotsThisWeek": "No times this week",
-      "noSlotsThisWeekHelp": "Pick another day below, or come back later."
+      "noSlotsThisWeekHelp": "Pick another day below, or come back later.",
+      "questionsTitle": "Before you pick a time",
+      "questionStep": "Question {n} of {total}",
+      "routeTitle": "This need has its own service",
+      "routeAction": "Book that service",
+      "changeAnswers": "Change my answers",
+      "questionsDone": "See the times"
     },
     "status": {
       "PENDING": "The professional still has to confirm it: you will be told.",
@@ -175,7 +181,8 @@
       "notFound": "This booking cannot be found.",
       "notCancellable": "This appointment can no longer be cancelled.",
       "cancelFailed": "The cancellation failed. Try again.",
-      "paused": "Booking is paused for now."
+      "paused": "Booking is paused for now.",
+      "answers": "Answer every question before booking."
     }
   },
   "verification": {

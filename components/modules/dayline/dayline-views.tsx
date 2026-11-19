@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { publicFetch, serverFetch } from "@/lib/api-server";
 import { DayLineConsole } from "@/components/modules/dayline/day-line-console";
+import { AppointmentsExport } from "@/components/modules/dayline/appointments-export";
 import { PendingRequests } from "@/components/modules/dayline/pending-requests";
 import type {
   DayLineView,
@@ -32,6 +33,9 @@ export async function DayLineOrganizerView({ serviceId }: { serviceId: string })
       <DayLineConsole auth={{ kind: "organizer", serviceId }} initial={view} />
       <div className="mx-auto w-full max-w-2xl px-4">
         <PendingRequests auth={{ kind: "organizer", serviceId }} timezone={view.timezone} initial={requests} />
+        <div className="mt-6">
+          <AppointmentsExport serviceId={serviceId} />
+        </div>
       </div>
     </div>
   );

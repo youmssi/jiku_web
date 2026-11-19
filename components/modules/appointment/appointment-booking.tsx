@@ -27,6 +27,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { FormFieldError, OrganizerMark, VerifiedBadge } from "@/components/shared";
+import { BookingQuestions, questionsAnswered } from "@/components/modules/appointment/booking-questions";
 import {
   bookAppointment,
   loadAppointment,
@@ -122,6 +123,9 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
   const [error, setError] = useState<string | null>(null);
   // A card in slot mode (JIKU-190) opens on the first free time's day; with none this week, on the presentation.
   const [slotStep, setSlotStep] = useState<"jumped" | "none" | null>(null);
+  // The service's questions come before the times (JIKU-191); a choice id per question id.
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [questionsOpen, setQuestionsOpen] = useState(true);
 
   const {
     control,
@@ -162,7 +166,12 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
 
   async function onSubmit(values: BookingInput) {
     setError(null);
-    const result = await bookAppointment(link, values, source);
+    const result = await bookAppointment(
+      link,
+      values,
+      source,
+      Object.entries(answers).map(([questionId, choiceId]) => ({ questionId, choiceId })),
+    );
     if (!result.ok) {
       setError(result.error);
       return;
@@ -179,6 +188,11 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
   const groupSessions = (view?.clientsPerSlot ?? 1) > 1;
   const periods = view ? byPeriod(view.slots, timeZone) : [];
   const time = (slot: AppointmentSlot) => format.dateTime(new Date(slot.startsAt), { timeZone, hour: "2-digit", minute: "2-digit" });
+  const questions = view?.questions ?? [];
+  const answered = questionsAnswered(questions, answers);
+  const chosenLabels = questions.flatMap((question) =>
+    question.choices.filter((choice) => choice.id === answers[question.id]).map((choice) => choice.label),
+  );
   const facts = view
     ? [
         view.priceMinor != null && view.currency ? formatAmount(view.priceMinor, view.currency, locale) : null,
@@ -213,6 +227,30 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
         </Alert>
       ) : null}
 
+      {view && !view.bookingPaused && questions.length > 0 && (questionsOpen || !answered) ? (
+        <>
+          <BookingQuestions
+            questions={questions}
+            answers={answers}
+            onAnswer={(questionId, choiceId) => setAnswers((current) => ({ ...current, [questionId]: choiceId }))}
+          />
+          {answered ? (
+            <Button className="self-start" onClick={() => setQuestionsOpen(false)}>
+              {t("booking.questionsDone")}
+            </Button>
+          ) : null}
+        </>
+      ) : null}
+
+      {view && questions.length > 0 && answered && !questionsOpen ? (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+          <span>{chosenLabels.join(" · ")}</span>
+          <Button variant="link" className="h-auto p-0" onClick={() => setQuestionsOpen(true)}>
+            {t("booking.changeAnswers")}
+          </Button>
+        </div>
+      ) : null}
+
       {view?.bookingPaused ? (
         <Alert>
           <AlertTitle>{t("booking.pausedTitle")}</AlertTitle>
@@ -220,7 +258,7 @@ export function AppointmentBooking({ link }: { link: AppointmentLinkRef }) {
             {view.organizerName ? t("booking.pausedWithName", { organizer: view.organizerName }) : t("booking.paused")}
           </AlertDescription>
         </Alert>
-      ) : (
+      ) : questions.length > 0 && (questionsOpen || !answered) ? null : (
         <>
         <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
           <div className="flex gap-2" role="listbox" aria-label={t("booking.day")}>
